@@ -1,0 +1,1443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrustLayer — The Authenticity Layer for the AI Age</title>
+    <meta name="description" content="Cryptographic proof of authenticity for every document, image, video, and communication. Trust infrastructure for the post-deepfake era.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #00D4AA;
+            --primary-dark: #00B894;
+            --secondary: #6C5CE7;
+            --dark: #0A0A0F;
+            --dark-2: #12121A;
+            --dark-3: #1A1A24;
+            --dark-4: #22222E;
+            --text: #FFFFFF;
+            --text-muted: #8888A0;
+            --danger: #FF6B6B;
+            --warning: #FFBE0B;
+            --success: #00D4AA;
+            --gradient-1: linear-gradient(135deg, #00D4AA 0%, #6C5CE7 100%);
+            --gradient-2: linear-gradient(135deg, #6C5CE7 0%, #00D4AA 100%);
+            --gradient-glow: radial-gradient(ellipse at center, rgba(0, 212, 170, 0.15) 0%, transparent 70%);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--dark);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1rem 2rem;
+            background: rgba(10, 10, 15, 0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 800;
+            text-decoration: none;
+            color: var(--text);
+        }
+        
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--text);
+        }
+        
+        .nav-cta {
+            background: var(--gradient-1);
+            color: var(--dark) !important;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600 !important;
+            transition: transform 0.3s, box-shadow 0.3s !important;
+        }
+        
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(0, 212, 170, 0.3);
+        }
+        
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 8rem 2rem 4rem;
+            overflow: hidden;
+        }
+        
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            background: var(--gradient-glow);
+            pointer-events: none;
+        }
+        
+        .hero-grid {
+            position: absolute;
+            inset: 0;
+            background-image: 
+                linear-gradient(rgba(0, 212, 170, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 212, 170, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            mask-image: radial-gradient(ellipse at center, black 0%, transparent 70%);
+        }
+        
+        .hero-content {
+            max-width: 900px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(0, 212, 170, 0.1);
+            border: 1px solid rgba(0, 212, 170, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 100px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--primary);
+            margin-bottom: 2rem;
+        }
+        
+        .badge-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        h1 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
+        }
+        
+        .gradient-text {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero-subtitle {
+            font-size: clamp(1.1rem, 2vw, 1.35rem);
+            color: var(--text-muted);
+            max-width: 700px;
+            margin: 0 auto 2.5rem;
+            line-height: 1.7;
+        }
+        
+        .hero-ctas {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 4rem;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .btn-primary {
+            background: var(--gradient-1);
+            color: var(--dark);
+            box-shadow: 0 4px 20px rgba(0, 212, 170, 0.3);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 40px rgba(0, 212, 170, 0.4);
+        }
+        
+        .btn-secondary {
+            background: var(--dark-3);
+            color: var(--text);
+            border: 1px solid var(--dark-4);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--dark-4);
+            border-color: var(--text-muted);
+        }
+        
+        /* Trust Badge Demo */
+        .trust-demo {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+        }
+        
+        .demo-card {
+            background: var(--dark-2);
+            border: 1px solid var(--dark-3);
+            border-radius: 16px;
+            padding: 1.5rem;
+            width: 280px;
+            text-align: left;
+        }
+        
+        .demo-card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+        
+        .demo-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+        
+        .demo-icon.verified {
+            background: rgba(0, 212, 170, 0.15);
+        }
+        
+        .demo-icon.unverified {
+            background: rgba(255, 107, 107, 0.15);
+        }
+        
+        .demo-status {
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 0.25rem 0.75rem;
+            border-radius: 100px;
+        }
+        
+        .demo-status.verified {
+            background: rgba(0, 212, 170, 0.15);
+            color: var(--primary);
+        }
+        
+        .demo-status.unverified {
+            background: rgba(255, 107, 107, 0.15);
+            color: var(--danger);
+        }
+        
+        .demo-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        
+        .demo-meta {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+        
+        /* Stats Section */
+        .stats {
+            padding: 4rem 2rem;
+            background: var(--dark-2);
+            border-top: 1px solid var(--dark-3);
+            border-bottom: 1px solid var(--dark-3);
+        }
+        
+        .stats-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+            text-align: center;
+        }
+        
+        .stat-item h3 {
+            font-size: 3rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-item p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+        
+        /* Problem Section */
+        .problem {
+            padding: 8rem 2rem;
+            position: relative;
+        }
+        
+        .section-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .section-label {
+            display: inline-block;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--danger);
+            margin-bottom: 1rem;
+        }
+        
+        .section-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 3rem;
+            line-height: 1.2;
+        }
+        
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+        
+        .problem-card {
+            background: var(--dark-2);
+            border: 1px solid var(--dark-3);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s;
+        }
+        
+        .problem-card:hover {
+            border-color: var(--danger);
+            transform: translateY(-4px);
+        }
+        
+        .problem-icon {
+            width: 56px;
+            height: 56px;
+            background: rgba(255, 107, 107, 0.1);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .problem-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+        
+        .problem-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+        
+        /* Solution Section */
+        .solution {
+            padding: 8rem 2rem;
+            background: var(--dark-2);
+        }
+        
+        .solution .section-label {
+            color: var(--primary);
+        }
+        
+        .solution-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+        
+        .solution-card {
+            background: var(--dark-3);
+            border: 1px solid var(--dark-4);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s;
+        }
+        
+        .solution-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-4px);
+        }
+        
+        .solution-icon {
+            width: 56px;
+            height: 56px;
+            background: rgba(0, 212, 170, 0.1);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .solution-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+        
+        .solution-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+        
+        /* API Demo Section */
+        .api-demo {
+            padding: 8rem 2rem;
+        }
+        
+        .api-demo .section-label {
+            color: var(--secondary);
+        }
+        
+        .code-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .code-block {
+            background: var(--dark-2);
+            border: 1px solid var(--dark-3);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+        
+        .code-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.5rem;
+            background: var(--dark-3);
+            border-bottom: 1px solid var(--dark-4);
+        }
+        
+        .code-dots {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .code-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        
+        .code-dot.red { background: #FF5F57; }
+        .code-dot.yellow { background: #FFBD2E; }
+        .code-dot.green { background: #28CA41; }
+        
+        .code-lang {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+        
+        pre {
+            padding: 2rem;
+            overflow-x: auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 1.8;
+        }
+        
+        .code-keyword { color: var(--secondary); }
+        .code-string { color: var(--primary); }
+        .code-number { color: var(--warning); }
+        .code-comment { color: var(--text-muted); }
+        .code-key { color: #F8F8F2; }
+        
+        /* How It Works */
+        .how-it-works {
+            padding: 8rem 2rem;
+            background: var(--dark-2);
+        }
+        
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+        
+        .step {
+            text-align: center;
+            position: relative;
+        }
+        
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--dark);
+            margin: 0 auto 1.5rem;
+        }
+        
+        .step h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+        
+        .step p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+        
+        /* Use Cases */
+        .use-cases {
+            padding: 8rem 2rem;
+        }
+        
+        .use-cases-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+        
+        .use-case {
+            background: linear-gradient(135deg, var(--dark-2) 0%, var(--dark-3) 100%);
+            border: 1px solid var(--dark-3);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.3s;
+        }
+        
+        .use-case:hover {
+            transform: translateY(-6px);
+            border-color: var(--primary);
+            box-shadow: 0 20px 60px rgba(0, 212, 170, 0.1);
+        }
+        
+        .use-case-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .use-case h3 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+        
+        .use-case p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+        
+        /* Trust Score Visual */
+        .trust-score-section {
+            padding: 8rem 2rem;
+            background: var(--dark-2);
+        }
+        
+        .trust-score-demo {
+            max-width: 600px;
+            margin: 3rem auto 0;
+            background: var(--dark-3);
+            border: 1px solid var(--dark-4);
+            border-radius: 20px;
+            padding: 3rem;
+        }
+        
+        .score-circle {
+            width: 180px;
+            height: 180px;
+            margin: 0 auto 2rem;
+            position: relative;
+        }
+        
+        .score-ring {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(var(--primary) 0deg 336deg, var(--dark-4) 336deg 360deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .score-inner {
+            width: 140px;
+            height: 140px;
+            background: var(--dark-3);
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .score-value {
+            font-size: 3rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .score-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+        
+        .score-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        
+        .score-detail {
+            background: var(--dark-4);
+            padding: 1rem;
+            border-radius: 10px;
+        }
+        
+        .score-detail-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.25rem;
+        }
+        
+        .score-detail-value {
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        /* Pricing Preview */
+        .pricing {
+            padding: 8rem 2rem;
+        }
+        
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            max-width: 1100px;
+            margin: 3rem auto 0;
+        }
+        
+        .pricing-card {
+            background: var(--dark-2);
+            border: 1px solid var(--dark-3);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.3s;
+        }
+        
+        .pricing-card.featured {
+            background: linear-gradient(135deg, rgba(0, 212, 170, 0.1) 0%, rgba(108, 92, 231, 0.1) 100%);
+            border-color: var(--primary);
+            transform: scale(1.02);
+        }
+        
+        .pricing-card:hover {
+            transform: translateY(-4px);
+        }
+        
+        .pricing-card.featured:hover {
+            transform: scale(1.02) translateY(-4px);
+        }
+        
+        .pricing-badge {
+            display: inline-block;
+            background: var(--gradient-1);
+            color: var(--dark);
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.35rem 1rem;
+            border-radius: 100px;
+            margin-bottom: 1rem;
+        }
+        
+        .pricing-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .pricing-price {
+            margin-bottom: 1.5rem;
+        }
+        
+        .pricing-amount {
+            font-size: 3rem;
+            font-weight: 800;
+        }
+        
+        .pricing-period {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+        
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+        
+        .pricing-features li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--dark-3);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.95rem;
+        }
+        
+        .pricing-features li:last-child {
+            border-bottom: none;
+        }
+        
+        .check-icon {
+            color: var(--primary);
+            font-weight: bold;
+        }
+        
+        /* CTA Section */
+        .cta {
+            padding: 8rem 2rem;
+            background: linear-gradient(135deg, var(--dark-2) 0%, var(--dark) 100%);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: var(--gradient-glow);
+            opacity: 0.5;
+            pointer-events: none;
+        }
+        
+        .cta-content {
+            position: relative;
+            z-index: 1;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .cta h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+        }
+        
+        .cta p {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            margin-bottom: 2.5rem;
+        }
+        
+        .cta-form {
+            display: flex;
+            gap: 1rem;
+            max-width: 500px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .cta-form input {
+            flex: 1;
+            min-width: 250px;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            border: 1px solid var(--dark-4);
+            background: var(--dark-3);
+            color: var(--text);
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        
+        .cta-form input:focus {
+            border-color: var(--primary);
+        }
+        
+        .cta-form input::placeholder {
+            color: var(--text-muted);
+        }
+        
+        /* Footer */
+        footer {
+            padding: 4rem 2rem 2rem;
+            background: var(--dark);
+            border-top: 1px solid var(--dark-3);
+        }
+        
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer-top {
+            display: grid;
+            grid-template-columns: 2fr repeat(3, 1fr);
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+        
+        .footer-brand p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-top: 1rem;
+            max-width: 300px;
+        }
+        
+        .footer-column h4 {
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+        
+        .footer-column ul {
+            list-style: none;
+        }
+        
+        .footer-column li {
+            margin-bottom: 0.75rem;
+        }
+        
+        .footer-column a {
+            color: var(--text);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+        
+        .footer-column a:hover {
+            color: var(--primary);
+        }
+        
+        .footer-bottom {
+            padding-top: 2rem;
+            border-top: 1px solid var(--dark-3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .footer-bottom p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        
+        .footer-socials {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .footer-socials a {
+            width: 40px;
+            height: 40px;
+            background: var(--dark-3);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .footer-socials a:hover {
+            background: var(--primary);
+            color: var(--dark);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero {
+                padding-top: 6rem;
+            }
+            
+            .trust-demo {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .footer-top {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .float {
+            animation: float 6s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <div class="logo-icon">🛡️</div>
+                TrustLayer
+            </a>
+            <div class="nav-links">
+                <a href="#problem">Problem</a>
+                <a href="#solution">Solution</a>
+                <a href="#how-it-works">How It Works</a>
+                <a href="#pricing">Pricing</a>
+                <a href="#" class="nav-cta">Get Early Access</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-grid"></div>
+        <div class="hero-content">
+            <div class="badge">
+                <span class="badge-dot"></span>
+                Trusted by enterprises worldwide
+            </div>
+            <h1>
+                The <span class="gradient-text">Authenticity Layer</span><br>
+                for the AI Age
+            </h1>
+            <p class="hero-subtitle">
+                Cryptographic proof that documents, images, videos, and communications came from verified sources. 
+                Trust infrastructure for the post-deepfake era.
+            </p>
+            <div class="hero-ctas">
+                <a href="#" class="btn btn-primary">
+                    Request Demo
+                    <span>→</span>
+                </a>
+                <a href="#" class="btn btn-secondary">
+                    View Documentation
+                </a>
+            </div>
+            
+            <div class="trust-demo">
+                <div class="demo-card float" style="animation-delay: 0s;">
+                    <div class="demo-card-header">
+                        <div class="demo-icon verified">📄</div>
+                        <span class="demo-status verified">✓ Verified</span>
+                    </div>
+                    <div class="demo-title">Merger_Agreement_Final.pdf</div>
+                    <div class="demo-meta">Created by Sarah Chen (ID verified) • Jan 31, 2026</div>
+                </div>
+                
+                <div class="demo-card float" style="animation-delay: 1s;">
+                    <div class="demo-card-header">
+                        <div class="demo-icon unverified">🎥</div>
+                        <span class="demo-status unverified">⚠ Unverified</span>
+                    </div>
+                    <div class="demo-title">CEO_Statement.mp4</div>
+                    <div class="demo-meta">AI-generated probability: 94% • Deepfake detected</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="stats-container">
+            <div class="stat-item">
+                <h3>$40B+</h3>
+                <p>Deepfake fraud losses expected in 2026</p>
+            </div>
+            <div class="stat-item">
+                <h3>94%</h3>
+                <p>Of executives worried about AI-generated fraud</p>
+            </div>
+            <div class="stat-item">
+                <h3>200B+</h3>
+                <p>TAM across document verification markets</p>
+            </div>
+            <div class="stat-item">
+                <h3>0.02s</h3>
+                <p>Average verification time via API</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="problem" id="problem">
+        <div class="section-container">
+            <span class="section-label">The Crisis</span>
+            <h2 class="section-title">Trust is collapsing.<br>You can't tell what's real anymore.</h2>
+            
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="problem-icon">🎭</div>
+                    <h3>Deepfakes Cross the Uncanny Valley</h3>
+                    <p>AI-generated video and audio are indistinguishable from real. A Hong Kong company lost $25M to a deepfake CFO video call. "Don't believe your eyes" is the new normal.</p>
+                </div>
+                
+                <div class="problem-card">
+                    <div class="problem-icon">📝</div>
+                    <h3>Document Forgery at Scale</h3>
+                    <p>AI can generate convincing contracts, medical records, and financial statements. Traditional signatures—even digital ones—can be fabricated. Due diligence is becoming impossible.</p>
+                </div>
+                
+                <div class="problem-card">
+                    <div class="problem-icon">🔗</div>
+                    <h3>Content Provenance is Broken</h3>
+                    <p>Viral misinformation spreads faster than corrections. Newsrooms can't verify user content. Academic research is plagued by fabricated data and AI-written papers.</p>
+                </div>
+                
+                <div class="problem-card">
+                    <div class="problem-icon">🏢</div>
+                    <h3>Enterprise Trust Eroding</h3>
+                    <p>Legal teams won't accept digital documents. HR can't verify credentials. Board communications are vulnerable to impersonation. Business is grinding to a halt.</p>
+                </div>
+                
+                <div class="problem-card">
+                    <div class="problem-icon">⚖️</div>
+                    <h3>Regulatory Pressure Mounting</h3>
+                    <p>EU AI Act mandates disclosure. Financial regulators demand proof. Healthcare compliance requires verified records. Non-compliance means liability.</p>
+                </div>
+                
+                <div class="problem-card">
+                    <div class="problem-icon">🎯</div>
+                    <h3>Detection Arms Race</h3>
+                    <p>AI detectors fail as generation improves. Watermarks get removed. Metadata is spoofed. We need proof at the source—not forensics after the fact.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="solution" id="solution">
+        <div class="section-container">
+            <span class="section-label">The Solution</span>
+            <h2 class="section-title">Authenticity baked in at creation.<br>Verifiable by anyone, anywhere.</h2>
+            
+            <div class="solution-grid">
+                <div class="solution-card">
+                    <div class="solution-icon">📱</div>
+                    <h3>TrustCapture SDK</h3>
+                    <p>Embed cryptographic proof at the moment content is created. Device attestation, GPS, timestamps—all sealed and tamper-evident.</p>
+                </div>
+                
+                <div class="solution-card">
+                    <div class="solution-icon">🔍</div>
+                    <h3>TrustVerify API</h3>
+                    <p>Verify anything instantly. Multi-model AI detection, provenance tracing, and trust scoring. One API for all content types.</p>
+                </div>
+                
+                <div class="solution-card">
+                    <div class="solution-icon">🌐</div>
+                    <h3>TrustAttest Network</h3>
+                    <p>Decentralized trust registry with legal standing. Cross-organization verification that works everywhere. Designed for courtroom admissibility.</p>
+                </div>
+                
+                <div class="solution-card">
+                    <div class="solution-icon">✅</div>
+                    <h3>TrustSeal Badge</h3>
+                    <p>The "HTTPS lock" for content. Embeddable badge, browser extension, and platform integrations. One-click verification for everyone.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- API Demo Section -->
+    <section class="api-demo">
+        <div class="section-container">
+            <span class="section-label">Developer Experience</span>
+            <h2 class="section-title" style="text-align: center;">Simple API. Powerful results.</h2>
+            
+            <div class="code-container">
+                <div class="code-block">
+                    <div class="code-header">
+                        <div class="code-dots">
+                            <div class="code-dot red"></div>
+                            <div class="code-dot yellow"></div>
+                            <div class="code-dot green"></div>
+                        </div>
+                        <span class="code-lang">verify.js</span>
+                    </div>
+                    <pre><code><span class="code-comment">// Verify any content with a single API call</span>
+<span class="code-keyword">const</span> response = <span class="code-keyword">await</span> trustlayer.verify({
+  content: documentBuffer,
+  type: <span class="code-string">'document'</span>
+});
+
+<span class="code-comment">// Response</span>
+{
+  <span class="code-key">trust_score</span>: <span class="code-number">94</span>,
+  <span class="code-key">verdict</span>: <span class="code-string">"AUTHENTIC"</span>,
+  <span class="code-key">provenance</span>: {
+    <span class="code-key">creator</span>: <span class="code-string">"John Smith (ID verified)"</span>,
+    <span class="code-key">created_at</span>: <span class="code-string">"2026-01-31T14:23:00Z"</span>,
+    <span class="code-key">device</span>: <span class="code-string">"MacBook Pro (attested)"</span>,
+    <span class="code-key">modifications</span>: []
+  },
+  <span class="code-key">ai_detection</span>: {
+    <span class="code-key">ai_generated_probability</span>: <span class="code-number">0.02</span>
+  }
+}</code></pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works" id="how-it-works">
+        <div class="section-container">
+            <span class="section-label" style="color: var(--primary);">How It Works</span>
+            <h2 class="section-title" style="text-align: center;">From creation to verification in three steps</h2>
+            
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Capture</h3>
+                    <p>Integrate TrustCapture SDK into your workflow. Every document, photo, or video gets cryptographic proof at the moment of creation.</p>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Attest</h3>
+                    <p>Content is registered in the TrustAttest Network with creator identity, timestamp, and provenance chain. Tamper-proof and legally admissible.</p>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Verify</h3>
+                    <p>Anyone can verify content authenticity via API, browser extension, or TrustSeal badge. Instant trust score with full provenance details.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Use Cases -->
+    <section class="use-cases">
+        <div class="section-container">
+            <span class="section-label" style="color: var(--secondary);">Use Cases</span>
+            <h2 class="section-title" style="text-align: center;">Built for high-stakes verification</h2>
+            
+            <div class="use-cases-grid">
+                <div class="use-case">
+                    <div class="use-case-icon">⚖️</div>
+                    <h3>Legal & Contracts</h3>
+                    <p>Verify contract authenticity, prove document provenance in litigation, and create admissible audit trails for M&A due diligence.</p>
+                </div>
+                
+                <div class="use-case">
+                    <div class="use-case-icon">🏦</div>
+                    <h3>Financial Services</h3>
+                    <p>Authenticate financial statements, verify wire transfer authorizations, and prevent BEC fraud with verified executive communications.</p>
+                </div>
+                
+                <div class="use-case">
+                    <div class="use-case-icon">🏥</div>
+                    <h3>Healthcare</h3>
+                    <p>Verify medical records, authenticate imaging studies, and ensure prescription authenticity for regulatory compliance.</p>
+                </div>
+                
+                <div class="use-case">
+                    <div class="use-case-icon">📰</div>
+                    <h3>Media & Journalism</h3>
+                    <p>Verify user-submitted content, authenticate breaking news footage, and build trust with verified source attribution.</p>
+                </div>
+                
+                <div class="use-case">
+                    <div class="use-case-icon">🏠</div>
+                    <h3>Real Estate</h3>
+                    <p>Authenticate property photos, verify inspection reports, and create tamper-proof documentation for closings.</p>
+                </div>
+                
+                <div class="use-case">
+                    <div class="use-case-icon">🛡️</div>
+                    <h3>Insurance</h3>
+                    <p>Verify claim documentation, detect manipulated damage photos, and reduce fraud with authenticated evidence chains.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trust Score Visual -->
+    <section class="trust-score-section">
+        <div class="section-container">
+            <span class="section-label" style="color: var(--primary);">Trust Score</span>
+            <h2 class="section-title" style="text-align: center;">Instant, comprehensive verification</h2>
+            
+            <div class="trust-score-demo">
+                <div class="score-circle">
+                    <div class="score-ring">
+                        <div class="score-inner">
+                            <div class="score-value">94</div>
+                            <div class="score-label">Trust Score</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="score-details">
+                    <div class="score-detail">
+                        <div class="score-detail-label">Creator</div>
+                        <div class="score-detail-value">ID Verified ✓</div>
+                    </div>
+                    <div class="score-detail">
+                        <div class="score-detail-label">Device</div>
+                        <div class="score-detail-value">Attested ✓</div>
+                    </div>
+                    <div class="score-detail">
+                        <div class="score-detail-label">AI Detection</div>
+                        <div class="score-detail-value">2% probability</div>
+                    </div>
+                    <div class="score-detail">
+                        <div class="score-detail-label">Modifications</div>
+                        <div class="score-detail-value">None detected</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section class="pricing" id="pricing">
+        <div class="section-container">
+            <span class="section-label" style="color: var(--secondary);">Pricing</span>
+            <h2 class="section-title" style="text-align: center;">Scale with confidence</h2>
+            
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <div class="pricing-name">Starter</div>
+                    <div class="pricing-price">
+                        <span class="pricing-amount">$10K</span>
+                        <span class="pricing-period">/year</span>
+                    </div>
+                    <ul class="pricing-features">
+                        <li><span class="check-icon">✓</span> 10,000 verifications/month</li>
+                        <li><span class="check-icon">✓</span> 5 team members</li>
+                        <li><span class="check-icon">✓</span> Document verification</li>
+                        <li><span class="check-icon">✓</span> Basic audit trails</li>
+                        <li><span class="check-icon">✓</span> Email support</li>
+                    </ul>
+                    <a href="#" class="btn btn-secondary" style="width: 100%; justify-content: center;">Get Started</a>
+                </div>
+                
+                <div class="pricing-card featured">
+                    <span class="pricing-badge">Most Popular</span>
+                    <div class="pricing-name">Enterprise</div>
+                    <div class="pricing-price">
+                        <span class="pricing-amount">$50K</span>
+                        <span class="pricing-period">/year</span>
+                    </div>
+                    <ul class="pricing-features">
+                        <li><span class="check-icon">✓</span> 100,000 verifications/month</li>
+                        <li><span class="check-icon">✓</span> 25 team members</li>
+                        <li><span class="check-icon">✓</span> All content types</li>
+                        <li><span class="check-icon">✓</span> Full API access</li>
+                        <li><span class="check-icon">✓</span> Legal-grade audit trails</li>
+                        <li><span class="check-icon">✓</span> Priority support</li>
+                    </ul>
+                    <a href="#" class="btn btn-primary" style="width: 100%; justify-content: center;">Request Demo</a>
+                </div>
+                
+                <div class="pricing-card">
+                    <div class="pricing-name">Custom</div>
+                    <div class="pricing-price">
+                        <span class="pricing-amount">Custom</span>
+                    </div>
+                    <ul class="pricing-features">
+                        <li><span class="check-icon">✓</span> Unlimited verifications</li>
+                        <li><span class="check-icon">✓</span> Unlimited team members</li>
+                        <li><span class="check-icon">✓</span> Custom integrations</li>
+                        <li><span class="check-icon">✓</span> On-premise deployment</li>
+                        <li><span class="check-icon">✓</span> SLA guarantee</li>
+                        <li><span class="check-icon">✓</span> Dedicated support</li>
+                    </ul>
+                    <a href="#" class="btn btn-secondary" style="width: 100%; justify-content: center;">Contact Sales</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="cta-content">
+            <h2>Ready to restore trust<br>in digital content?</h2>
+            <p>Join the waitlist for early access. Be among the first enterprises to build on the authenticity layer.</p>
+            <form class="cta-form">
+                <input type="email" placeholder="Enter your work email">
+                <button type="submit" class="btn btn-primary">Get Early Access</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <a href="#" class="logo">
+                        <div class="logo-icon">🛡️</div>
+                        TrustLayer
+                    </a>
+                    <p>The authenticity verification layer for the AI age. Cryptographic proof of truth.</p>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>Product</h4>
+                    <ul>
+                        <li><a href="#">TrustCapture SDK</a></li>
+                        <li><a href="#">TrustVerify API</a></li>
+                        <li><a href="#">TrustAttest Network</a></li>
+                        <li><a href="#">Pricing</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="#">Documentation</a></li>
+                        <li><a href="#">API Reference</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Case Studies</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="#">About</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Security</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>© 2026 TrustLayer, Inc. All rights reserved.</p>
+                <div class="footer-socials">
+                    <a href="#">𝕏</a>
+                    <a href="#">in</a>
+                    <a href="#">GH</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

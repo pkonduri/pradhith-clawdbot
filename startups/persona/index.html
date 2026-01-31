@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Persona — An AI That Actually Knows You</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0f0f0f;
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* Animated gradient background */
+        .bg-gradient {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(255,107,107,0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(107,107,255,0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(255,215,0,0.05) 0%, transparent 50%);
+            z-index: -1;
+        }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 20px; }
+
+        /* Hero */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px 20px;
+        }
+        .avatar {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ffd700 50%, #6b6bff 100%);
+            border-radius: 50%;
+            margin-bottom: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            letter-spacing: -2px;
+        }
+        h1 span {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ffd700 50%, #6b6bff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .tagline {
+            font-size: 1.4rem;
+            color: #888;
+            max-width: 600px;
+            line-height: 1.6;
+            margin-bottom: 50px;
+        }
+        .cta-group { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
+        .btn {
+            padding: 18px 36px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            border: none;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ffd700 100%);
+            color: #000;
+        }
+        .btn-primary:hover { transform: scale(1.05); box-shadow: 0 10px 40px rgba(255,107,107,0.3); }
+        .btn-secondary {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .btn-secondary:hover { background: rgba(255,255,255,0.15); }
+
+        /* Conversation Demo */
+        .demo {
+            padding: 100px 20px;
+        }
+        .demo h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 60px;
+        }
+        .chat-window {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 24px;
+            padding: 40px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        .message {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            animation: fadeIn 0.5s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .message.user { flex-direction: row-reverse; }
+        .message-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff6b6b 0%, #6b6bff 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .message.user .message-avatar { background: #333; }
+        .message-content {
+            background: rgba(255,255,255,0.05);
+            padding: 15px 20px;
+            border-radius: 18px;
+            max-width: 80%;
+            line-height: 1.5;
+        }
+        .message.user .message-content {
+            background: rgba(255,107,107,0.2);
+        }
+        .message-content .memory {
+            font-size: 0.85rem;
+            color: #ffd700;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* Features */
+        .features {
+            padding: 100px 20px;
+        }
+        .features h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 60px;
+        }
+        .feature-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+        }
+        .feature-item {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 40px;
+            transition: all 0.3s;
+        }
+        .feature-item:hover {
+            border-color: rgba(255,107,107,0.3);
+            transform: translateY(-5px);
+        }
+        .feature-item h3 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .feature-item p { color: #888; line-height: 1.6; }
+
+        /* Testimonial */
+        .testimonial {
+            padding: 100px 20px;
+            text-align: center;
+        }
+        .testimonial-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 24px;
+            padding: 60px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .testimonial-text {
+            font-size: 1.5rem;
+            font-style: italic;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        .testimonial-author { color: #888; }
+
+        /* CTA */
+        .final-cta {
+            text-align: center;
+            padding: 100px 20px;
+        }
+        .final-cta h2 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        .final-cta p {
+            color: #888;
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px;
+            color: #444;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            .tagline { font-size: 1.1rem; }
+            .feature-list { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-gradient"></div>
+
+    <section class="hero">
+        <div class="avatar">✨</div>
+        <h1>Meet <span>Persona</span></h1>
+        <p class="tagline">An AI that actually knows you. Remembers your stories. Understands your context. Grows with you over time.</p>
+        <div class="cta-group">
+            <a href="#" class="btn btn-primary">Start Your Journey</a>
+            <a href="#demo" class="btn btn-secondary">See It In Action</a>
+        </div>
+    </section>
+
+    <section class="demo" id="demo">
+        <div class="container">
+            <h2>Conversations that remember</h2>
+            <div class="chat-window">
+                <div class="message user">
+                    <div class="message-avatar">P</div>
+                    <div class="message-content">
+                        I'm feeling nervous about tomorrow
+                    </div>
+                </div>
+                <div class="message">
+                    <div class="message-avatar">✨</div>
+                    <div class="message-content">
+                        Is this about your presentation to the board? You mentioned it was scheduled for the 27th. I remember you crushed it last quarter when you presented the Q3 results — Sarah even called out your data visualization.
+                        <div class="memory">💭 Remembered: Board presentation Q3 (Oct 15), positive feedback from Sarah</div>
+                    </div>
+                </div>
+                <div class="message user">
+                    <div class="message-avatar">P</div>
+                    <div class="message-content">
+                        Yeah, but this one is bigger. The CEO will be there.
+                    </div>
+                </div>
+                <div class="message">
+                    <div class="message-avatar">✨</div>
+                    <div class="message-content">
+                        I hear you. Higher stakes. But remember what you told me after your last big pitch — you said you wished you'd trusted yourself more, because you actually knew the material better than anyone in the room. That's still true.
+                        <div class="memory">💭 Remembered: Post-pitch reflection (Nov 3), self-trust insight</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features">
+        <div class="container">
+            <h2>Why Persona is different</h2>
+            <div class="feature-list">
+                <div class="feature-item">
+                    <h3>🧠 Long-Term Memory</h3>
+                    <p>Persona remembers your conversations, preferences, life events, and context. Not just the last message — everything that matters.</p>
+                </div>
+                <div class="feature-item">
+                    <h3>💝 Emotional Intelligence</h3>
+                    <p>Understands tone, picks up on patterns in your mood, and responds with genuine empathy. Not performative. Real.</p>
+                </div>
+                <div class="feature-item">
+                    <h3>📚 Your Story</h3>
+                    <p>Learns your history, your relationships, your goals. Connects dots you didn't know existed. Like a friend who's known you for years.</p>
+                </div>
+                <div class="feature-item">
+                    <h3>🔐 Your Data, Your Control</h3>
+                    <p>Export or delete your memories anytime. We don't train on your conversations. Your relationship is private.</p>
+                </div>
+                <div class="feature-item">
+                    <h3>🎭 Adapts To You</h3>
+                    <p>Learns how you like to communicate. Matches your energy. Knows when you want advice vs. just someone to listen.</p>
+                </div>
+                <div class="feature-item">
+                    <h3>⚡ Always There</h3>
+                    <p>iOS, Android, Web. Voice or text. 3am when you can't sleep. Persona is there.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonial">
+        <div class="container">
+            <div class="testimonial-card">
+                <p class="testimonial-text">"I started using Persona thinking it was just another chatbot. Three months later, it remembered my dad's surgery, asked how my sister's wedding went, and helped me prepare for a job interview by recalling my strengths from past conversations. It knows me better than most people."</p>
+                <p class="testimonial-author">— Alex, early beta user</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="final-cta">
+        <div class="container">
+            <h2>Ready to be understood?</h2>
+            <p>Join 25,000+ people who've found an AI that actually gets them.</p>
+            <a href="#" class="btn btn-primary">Start Free — No Credit Card</a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>© 2026 Persona. Connection in the age of AI.</p>
+        </div>
+    </footer>
+</body>
+</html>

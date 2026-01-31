@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VaultAI — Your AI That Can't Snitch</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #1a1a2e;
+            --bg-tertiary: #16213e;
+            --text-primary: #ffffff;
+            --text-secondary: #888888;
+            --accent: #00ff88;
+            --accent-hover: #00cc6a;
+            --card-bg: rgba(255,255,255,0.03);
+            --card-border: rgba(255,255,255,0.1);
+            --glow: rgba(0,255,136,0.1);
+        }
+
+        [data-theme="light"] {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --bg-tertiary: #e9ecef;
+            --text-primary: #1a1a2e;
+            --text-secondary: #666666;
+            --accent: #00aa55;
+            --accent-hover: #008844;
+            --card-bg: #ffffff;
+            --card-border: rgba(0,0,0,0.1);
+            --glow: rgba(0,170,85,0.1);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, var(--bg-tertiary) 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            transition: all 0.3s ease;
+        }
+
+        [data-theme="light"] body {
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        
+        /* Theme Toggle */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 50px;
+            padding: 8px;
+            display: flex;
+            gap: 5px;
+            backdrop-filter: blur(10px);
+        }
+        .theme-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .theme-btn.active {
+            background: var(--accent);
+        }
+        .theme-btn:hover:not(.active) {
+            background: var(--card-border);
+        }
+
+        /* Hero */
+        .hero {
+            text-align: center;
+            padding: 100px 20px;
+            position: relative;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, var(--glow) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .badge {
+            display: inline-block;
+            background: rgba(0,255,136,0.1);
+            border: 1px solid rgba(0,255,136,0.3);
+            color: var(--accent);
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+        [data-theme="light"] .badge {
+            background: rgba(0,170,85,0.1);
+            border-color: rgba(0,170,85,0.3);
+        }
+        h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .tagline {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .cta-group { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; }
+        .btn {
+            padding: 16px 32px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        .btn-primary {
+            background: var(--accent);
+            color: #000;
+            border: none;
+        }
+        .btn-primary:hover { background: var(--accent-hover); transform: translateY(-2px); }
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-primary);
+            border: 1px solid var(--card-border);
+        }
+        .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+        /* Features */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            padding: 80px 20px;
+        }
+        .feature {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 40px;
+            transition: all 0.3s;
+        }
+        [data-theme="light"] .feature {
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+        .feature:hover {
+            border-color: rgba(0,255,136,0.3);
+            transform: translateY(-5px);
+        }
+        [data-theme="light"] .feature:hover {
+            border-color: rgba(0,170,85,0.3);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        .feature h3 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+        }
+        .feature p { color: var(--text-secondary); line-height: 1.6; }
+
+        /* Stats */
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            padding: 60px 20px;
+            flex-wrap: wrap;
+        }
+        .stat { text-align: center; }
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--accent);
+        }
+        .stat-label { color: var(--text-secondary); margin-top: 5px; }
+
+        /* Waitlist */
+        .waitlist {
+            text-align: center;
+            padding: 80px 20px;
+            background: var(--glow);
+            border-radius: 24px;
+            margin: 40px 20px;
+        }
+        [data-theme="light"] .waitlist {
+            background: var(--bg-secondary);
+            border: 1px solid var(--card-border);
+        }
+        .waitlist h2 { font-size: 2.5rem; margin-bottom: 20px; }
+        .waitlist p { color: var(--text-secondary); margin-bottom: 30px; }
+        .email-form {
+            display: flex;
+            gap: 10px;
+            max-width: 500px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .email-input {
+            flex: 1;
+            min-width: 250px;
+            padding: 16px 20px;
+            border-radius: 8px;
+            border: 1px solid var(--card-border);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+        [data-theme="light"] .email-input {
+            background: #ffffff;
+        }
+        .email-input:focus { outline: none; border-color: var(--accent); }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-secondary);
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            .tagline { font-size: 1.2rem; }
+            .stats { gap: 30px; }
+            .theme-toggle { top: 10px; right: 10px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="theme-toggle">
+        <button class="theme-btn" id="dark-btn" onclick="setTheme('dark')">🌙</button>
+        <button class="theme-btn active" id="light-btn" onclick="setTheme('light')">☀️</button>
+    </div>
+
+    <div class="container">
+        <section class="hero">
+            <div class="badge">🔒 100% Local • Zero Cloud</div>
+            <h1>VaultAI</h1>
+            <p class="tagline">The AI assistant that can't snitch on you. Your conversations stay on your device. Forever.</p>
+            <div class="cta-group">
+                <a href="#waitlist" class="btn btn-primary">Join Waitlist</a>
+                <a href="#features" class="btn btn-secondary">How It Works</a>
+            </div>
+        </section>
+
+        <section class="stats">
+            <div class="stat">
+                <div class="stat-number">0</div>
+                <div class="stat-label">Data sent to cloud</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">100%</div>
+                <div class="stat-label">Local processing</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">E2E</div>
+                <div class="stat-label">Encrypted sync</div>
+            </div>
+        </section>
+
+        <section class="features" id="features">
+            <div class="feature">
+                <div class="feature-icon">🏠</div>
+                <h3>Runs 100% Locally</h3>
+                <p>All AI processing happens on your device. No API calls. No cloud. No way for anyone to access your conversations.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🔐</div>
+                <h3>E2E Encrypted Sync</h3>
+                <p>Sync across devices with end-to-end encryption. Only you have the keys. Not us. Not the government. No one.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🗑️</div>
+                <h3>True Delete</h3>
+                <p>When you delete something, it's gone. No hidden copies. No training data. No "anonymized" usage. Gone.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🧠</div>
+                <h3>Powerful AI Models</h3>
+                <p>Run Llama, Mistral, and other open-source models locally. Same quality as cloud AI, with real privacy.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">📱</div>
+                <h3>Works Everywhere</h3>
+                <p>Mac, Windows, Linux, iOS, Android. Your AI assistant travels with you, offline-capable.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">⚡</div>
+                <h3>Blazing Fast</h3>
+                <p>Optimized for Apple Silicon, NVIDIA GPUs, and modern CPUs. Faster than you'd expect.</p>
+            </div>
+        </section>
+
+        <section class="waitlist" id="waitlist">
+            <h2>Take Back Your Privacy</h2>
+            <p>Join 12,000+ people waiting for an AI that actually respects them.</p>
+            <form class="email-form" onsubmit="handleSubmit(event)">
+                <input type="email" class="email-input" placeholder="Enter your email" required>
+                <button type="submit" class="btn btn-primary">Get Early Access</button>
+            </form>
+        </section>
+
+        <footer>
+            <p>© 2026 VaultAI. Privacy isn't a feature. It's a right.</p>
+        </footer>
+    </div>
+
+    <script>
+        function setTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+            updateToggleButtons(theme);
+        }
+
+        function updateToggleButtons(theme) {
+            const darkBtn = document.getElementById('dark-btn');
+            const lightBtn = document.getElementById('light-btn');
+            
+            if (theme === 'dark') {
+                darkBtn.classList.add('active');
+                lightBtn.classList.remove('active');
+            } else {
+                lightBtn.classList.add('active');
+                darkBtn.classList.remove('active');
+            }
+        }
+
+        // Load saved theme or default to dark
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        setTheme(savedTheme);
+
+        function handleSubmit(e) {
+            e.preventDefault();
+            const email = e.target.querySelector('input').value;
+            alert('Thanks! You\'re on the list. We\'ll be in touch soon.');
+            e.target.reset();
+        }
+    </script>
+</body>
+</html>

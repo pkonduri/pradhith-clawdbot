@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clawdbot Usage Dashboard 🎩</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #eee;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        h1 { 
+            text-align: center; 
+            margin-bottom: 30px; 
+            font-size: 2.5em;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .stat-card {
+            background: rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .stat-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .stat-label { color: #aaa; margin-top: 8px; font-size: 0.9em; }
+        .chart-container {
+            background: rgba(255,255,255,0.05);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .chart-title { margin-bottom: 16px; font-size: 1.2em; color: #ccc; }
+        .charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        @media (max-width: 768px) { .charts-grid { grid-template-columns: 1fr; } }
+        .footer { text-align: center; margin-top: 30px; color: #666; font-size: 0.9em; }
+        #lastUpdated { color: #888; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎩 Clawdbot Dashboard</h1>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value" id="totalTokens">-</div>
+                <div class="stat-label">Total Tokens</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="totalCost">-</div>
+                <div class="stat-label">Total Cost (USD)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="todayTokens">-</div>
+                <div class="stat-label">Today's Tokens</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="todayCost">-</div>
+                <div class="stat-label">Today's Cost</div>
+            </div>
+        </div>
+
+        <div class="charts-grid">
+            <div class="chart-container">
+                <div class="chart-title">📊 Daily Token Usage</div>
+                <canvas id="dailyTokensChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <div class="chart-title">💰 Daily Cost (USD)</div>
+                <canvas id="dailyCostChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <div class="chart-title">📈 Cumulative Tokens</div>
+                <canvas id="cumulativeTokensChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <div class="chart-title">💸 Cumulative Cost (USD)</div>
+                <canvas id="cumulativeCostChart"></canvas>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Last updated: <span id="lastUpdated">-</span></p>
+            <p style="margin-top: 8px;">The Godfather 🎩 • Pradhith's AI</p>
+        </div>
+    </div>
+
+    <script>
+        async function loadData() {
+            try {
+                const response = await fetch('usage-log.json');
+                const data = await response.json();
+                return data;
+            } catch (e) {
+                console.error('Failed to load usage data:', e);
+                return null;
+            }
+        }
+
+        function calculateCost(tokensIn, tokensOut, model, pricing) {
+            const p = pricing[model] || pricing['claude-opus-4-5'];
+            return (tokensIn / 1000000 * p.inputPer1M) + (tokensOut / 1000000 * p.outputPer1M);
+        }
+
+        function aggregateByDay(sessions, pricing) {
+            const daily = {};
+            sessions.forEach(s => {
+                const date = s.date;
+                if (!daily[date]) {
+                    daily[date] = { tokensIn: 0, tokensOut: 0, cost: 0 };
+                }
+                daily[date].tokensIn += s.tokensIn;
+                daily[date].tokensOut += s.tokensOut;
+                daily[date].cost += calculateCost(s.tokensIn, s.tokensOut, s.model, pricing);
+            });
+            return daily;
+        }
+
+        function formatNumber(n) {
+            if (n >= 1000000) return (n / 1000000).toFixed(2) + 'M';
+            if (n >= 1000) return (n / 1000).toFixed(1) + 'K';
+            return n.toString();
+        }
+
+        async function renderDashboard() {
+            const data = await loadData();
+            if (!data) return;
+
+            const { sessions, pricing } = data;
+            const daily = aggregateByDay(sessions, pricing);
+            const dates = Object.keys(daily).sort();
+            
+            // Calculate totals
+            let totalIn = 0, totalOut = 0, totalCost = 0;
+            sessions.forEach(s => {
+                totalIn += s.tokensIn;
+                totalOut += s.tokensOut;
+                totalCost += calculateCost(s.tokensIn, s.tokensOut, s.model, pricing);
+            });
+
+            // Today's stats
+            const today = new Date().toISOString().split('T')[0];
+            const todayData = daily[today] || { tokensIn: 0, tokensOut: 0, cost: 0 };
+
+            // Update stat cards
+            document.getElementById('totalTokens').textContent = formatNumber(totalIn + totalOut);
+            document.getElementById('totalCost').textContent = '$' + totalCost.toFixed(2);
+            document.getElementById('todayTokens').textContent = formatNumber(todayData.tokensIn + todayData.tokensOut);
+            document.getElementById('todayCost').textContent = '$' + todayData.cost.toFixed(2);
+            document.getElementById('lastUpdated').textContent = new Date().toLocaleString();
+
+            // Prepare chart data
+            const dailyTokens = dates.map(d => daily[d].tokensIn + daily[d].tokensOut);
+            const dailyCosts = dates.map(d => daily[d].cost);
+            
+            let cumTokens = 0, cumCost = 0;
+            const cumulativeTokens = dates.map(d => { cumTokens += daily[d].tokensIn + daily[d].tokensOut; return cumTokens; });
+            const cumulativeCosts = dates.map(d => { cumCost += daily[d].cost; return cumCost; });
+
+            const chartOptions = {
+                responsive: true,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { ticks: { color: '#888' }, grid: { color: 'rgba(255,255,255,0.1)' } },
+                    y: { ticks: { color: '#888' }, grid: { color: 'rgba(255,255,255,0.1)' } }
+                }
+            };
+
+            // Daily Tokens Chart
+            new Chart(document.getElementById('dailyTokensChart'), {
+                type: 'bar',
+                data: {
+                    labels: dates,
+                    datasets: [{ data: dailyTokens, backgroundColor: 'rgba(102, 126, 234, 0.8)', borderRadius: 8 }]
+                },
+                options: chartOptions
+            });
+
+            // Daily Cost Chart
+            new Chart(document.getElementById('dailyCostChart'), {
+                type: 'bar',
+                data: {
+                    labels: dates,
+                    datasets: [{ data: dailyCosts, backgroundColor: 'rgba(118, 75, 162, 0.8)', borderRadius: 8 }]
+                },
+                options: chartOptions
+            });
+
+            // Cumulative Tokens Chart
+            new Chart(document.getElementById('cumulativeTokensChart'), {
+                type: 'line',
+                data: {
+                    labels: dates,
+                    datasets: [{ data: cumulativeTokens, borderColor: '#667eea', backgroundColor: 'rgba(102, 126, 234, 0.2)', fill: true, tension: 0.4 }]
+                },
+                options: chartOptions
+            });
+
+            // Cumulative Cost Chart
+            new Chart(document.getElementById('cumulativeCostChart'), {
+                type: 'line',
+                data: {
+                    labels: dates,
+                    datasets: [{ data: cumulativeCosts, borderColor: '#764ba2', backgroundColor: 'rgba(118, 75, 162, 0.2)', fill: true, tension: 0.4 }]
+                },
+                options: chartOptions
+            });
+        }
+
+        renderDashboard();
+    </script>
+</body>
+</html>
