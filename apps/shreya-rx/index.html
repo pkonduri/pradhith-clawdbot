@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prescription: Kitty 🐱💊</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #e8f4f8 0%, #d1ecf1 50%, #bee5eb 100%);
+            font-family: 'Georgia', serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px 20px;
+            color: #2c3e50;
+        }
+        
+        .rx-pad {
+            background: #fff;
+            max-width: 450px;
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            overflow: hidden;
+            border: 1px solid #ccc;
+        }
+        
+        .rx-header {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .rx-header h1 {
+            font-size: 1.5em;
+            margin-bottom: 5px;
+        }
+        
+        .rx-header p {
+            font-size: 0.85em;
+            opacity: 0.9;
+        }
+        
+        .rx-symbol {
+            font-size: 3em;
+            font-weight: bold;
+            color: #3498db;
+            padding: 20px 25px 0;
+            font-family: serif;
+        }
+        
+        .rx-body {
+            padding: 0 25px 25px;
+        }
+        
+        .patient-info {
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .patient-info p {
+            margin: 5px 0;
+            font-size: 0.95em;
+        }
+        
+        .patient-name {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .cat-container {
+            width: 100%;
+            height: 250px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 15px 0;
+            border: 2px dashed #3498db;
+        }
+        
+        .cat-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .prescription-text {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #3498db;
+        }
+        
+        .prescription-text .dose {
+            font-weight: bold;
+            font-size: 1.1em;
+            color: #2980b9;
+        }
+        
+        .prescription-text .instructions {
+            margin-top: 10px;
+            font-style: italic;
+            color: #555;
+        }
+        
+        .message {
+            text-align: center;
+            padding: 15px;
+            background: linear-gradient(135deg, #fff5f5, #ffe0e6);
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+        
+        .message p {
+            font-size: 1.1em;
+            color: #e74c3c;
+            line-height: 1.5;
+        }
+        
+        .signature {
+            text-align: right;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+        
+        .signature .sig-line {
+            font-family: 'Brush Script MT', cursive;
+            font-size: 1.8em;
+            color: #2c3e50;
+        }
+        
+        .signature .title {
+            font-size: 0.8em;
+            color: #888;
+        }
+        
+        .refill-btn {
+            width: 100%;
+            padding: 18px;
+            font-size: 1.2em;
+            font-weight: bold;
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+        
+        .refill-btn:hover {
+            background: linear-gradient(135deg, #c0392b, #a93226);
+        }
+        
+        .refill-btn:active {
+            transform: scale(0.98);
+        }
+        
+        .footer {
+            margin-top: 20px;
+            text-align: center;
+            color: #888;
+            font-size: 0.85em;
+        }
+        
+        .kitty-status {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #666;
+        }
+        
+        .heart {
+            color: #e74c3c;
+            animation: pulse 1s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+        
+        .tulsa-time {
+            text-align: center;
+            margin-top: 15px;
+            padding: 10px;
+            background: #f0f0f0;
+            border-radius: 8px;
+            font-size: 0.85em;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="rx-pad">
+        <div class="rx-header">
+            <h1>🏥 Dr. Kitty's Clinic</h1>
+            <p>Tulsa's Premier Cat-Based Wellness Center</p>
+        </div>
+        
+        <div class="rx-symbol">℞</div>
+        
+        <div class="rx-body">
+            <div class="patient-info">
+                <p class="patient-name">Dr. Shreya</p>
+                <p>Diagnosis: <strong>Residency-Induced Exhaustion</strong></p>
+                <p>Date: <span id="today"></span></p>
+            </div>
+            
+            <div class="cat-container" id="catContainer">
+                <span style="color: #3498db;">Loading Kitty...</span>
+            </div>
+            
+            <div class="prescription-text">
+                <p class="dose" id="dose">Take 1 cat pic every 4 hours</p>
+                <p class="instructions" id="instructions">As needed for stress, exhaustion, or missing home</p>
+            </div>
+            
+            <div class="message">
+                <p id="loveNote">💕 Loading sweet message...</p>
+            </div>
+            
+            <div class="signature">
+                <p class="sig-line">Kitty 🐱</p>
+                <p class="title">Chief Meowdical Officer</p>
+                <p class="title">& Pradhith 💙</p>
+            </div>
+        </div>
+        
+        <button class="refill-btn" onclick="refillPrescription()">
+            🔄 REFILL PRESCRIPTION
+        </button>
+    </div>
+    
+    <div class="tulsa-time" id="tulsaTime"></div>
+    
+    <div class="footer">
+        <p>Made with <span class="heart">❤️</span> for the hardest-working resident</p>
+        <div class="kitty-status">
+            <span>Kitty misses you</span>
+            <span class="heart">♥</span>
+            <span>Pradhith does too</span>
+        </div>
+    </div>
+
+    <script>
+        const prescriptions = [
+            { dose: "Take 1 cat pic STAT", instructions: "For acute adorableness deficiency" },
+            { dose: "Apply cat directly to heart", instructions: "Repeat until smiling" },
+            { dose: "1 Kitty cuddle, PO, QID", instructions: "With or without snacks" },
+            { dose: "Cat therapy PRN", instructions: "No maximum dose. Side effects: happiness" },
+            { dose: "Dispense: Unlimited purrs", instructions: "Refills: ∞" },
+            { dose: "10mg of Kitty cuteness", instructions: "May cause uncontrollable 'awww'" },
+            { dose: "Cat snuggles TID", instructions: "Best administered during Netflix" },
+            { dose: "Emergency cat deployment", instructions: "For code: Bad Day" }
+        ];
+        
+        const loveNotes = [
+            "You're doing amazing, Shreya. Kitty and I are so proud of you. 💕",
+            "Every patient is lucky to have you as their doctor. Now take a break! 🌟",
+            "Kitty says: 'My human is a superhero in scrubs' 🦸‍♀️",
+            "Residency is temporary. Being a badass doctor is forever. 💪",
+            "Somewhere in Tulsa, Kitty is napping and dreaming of you. 😴",
+            "You survived another shift! Kitty demands celebratory treats (for her). 🐱",
+            "Dr. Shreya: Healing humans by day, loved by Kitty always. ❤️",
+            "Kitty's diagnosis: You need more naps and snacks. Doctor's orders! 💊",
+            "Long distance is hard, but you're worth every mile. Miss you! 🗽→✈️→🤠",
+            "Kitty fact: She knocked something off a table thinking of you today. 😂"
+        ];
+        
+        function updateTulsaTime() {
+            const now = new Date();
+            const tulsaTime = now.toLocaleString('en-US', { 
+                timeZone: 'America/Chicago',
+                weekday: 'long',
+                hour: 'numeric',
+                minute: '2-digit',
+                hour12: true
+            });
+            document.getElementById('tulsaTime').innerHTML = `🕐 Tulsa time: ${tulsaTime}<br>Kitty is probably napping.`;
+        }
+        
+        function setToday() {
+            const today = new Date().toLocaleDateString('en-US', { 
+                month: 'long', 
+                day: 'numeric', 
+                year: 'numeric' 
+            });
+            document.getElementById('today').textContent = today;
+        }
+        
+        async function loadCat() {
+            const container = document.getElementById('catContainer');
+            try {
+                const response = await fetch('https://api.thecatapi.com/v1/images/search');
+                const data = await response.json();
+                container.innerHTML = `<img src="${data[0].url}" alt="Kitty stand-in" onload="this.style.opacity=1" style="opacity:0;transition:opacity 0.5s">`;
+            } catch (e) {
+                // Fallback to picsum
+                const id = Math.floor(Math.random() * 50) + 1000;
+                container.innerHTML = `<img src="https://placekitten.com/400/300?image=${Math.floor(Math.random()*16)}" alt="Kitty stand-in">`;
+            }
+        }
+        
+        function setPrescription() {
+            const rx = prescriptions[Math.floor(Math.random() * prescriptions.length)];
+            document.getElementById('dose').textContent = rx.dose;
+            document.getElementById('instructions').textContent = rx.instructions;
+        }
+        
+        function setLoveNote() {
+            const note = loveNotes[Math.floor(Math.random() * loveNotes.length)];
+            document.getElementById('loveNote').textContent = note;
+        }
+        
+        function refillPrescription() {
+            loadCat();
+            setPrescription();
+            setLoveNote();
+        }
+        
+        // Initialize
+        window.onload = function() {
+            setToday();
+            updateTulsaTime();
+            refillPrescription();
+            setInterval(updateTulsaTime, 60000);
+        };
+    </script>
+</body>
+</html>
