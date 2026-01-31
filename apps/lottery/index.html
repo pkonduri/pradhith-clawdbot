@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lucky Numbers Generator 🎰</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            font-family: -apple-system, system-ui, sans-serif;
+            color: #fff;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        header {
+            padding: 30px 0 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #ffd700, #ffaa00, #ffd700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer 2s infinite;
+        }
+        
+        @keyframes shimmer {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.3); }
+        }
+        
+        .jackpot-display {
+            background: linear-gradient(135deg, #2d2d44, #1a1a2e);
+            padding: 15px 30px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border: 2px solid #ffd700;
+        }
+        
+        .jackpot-label {
+            font-size: 0.8em;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .jackpot-amount {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #ffd700;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+        
+        .lottery-select {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+        
+        .lottery-btn {
+            padding: 12px 20px;
+            border: 2px solid #333;
+            background: rgba(255,255,255,0.05);
+            color: #fff;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9em;
+        }
+        
+        .lottery-btn:hover, .lottery-btn.active {
+            border-color: #ffd700;
+            background: rgba(255, 215, 0, 0.2);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+        }
+        
+        .ritual-section {
+            background: rgba(255,255,255,0.05);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+        
+        .ritual-title {
+            font-size: 0.9em;
+            color: #888;
+            margin-bottom: 15px;
+        }
+        
+        .ritual-options {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .ritual-chip {
+            padding: 8px 15px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid #444;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.85em;
+        }
+        
+        .ritual-chip:hover, .ritual-chip.selected {
+            background: rgba(155, 89, 182, 0.3);
+            border-color: #9b59b6;
+        }
+        
+        .balls-container {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin: 30px 0;
+            min-height: 80px;
+        }
+        
+        .ball {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #fff;
+            background: linear-gradient(145deg, #3498db, #2980b9);
+            box-shadow: 
+                inset 0 -5px 15px rgba(0,0,0,0.3),
+                inset 0 5px 15px rgba(255,255,255,0.2),
+                0 5px 15px rgba(0,0,0,0.3);
+            opacity: 0;
+            transform: scale(0) rotate(180deg);
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        
+        .ball.revealed {
+            opacity: 1;
+            transform: scale(1) rotate(0deg);
+        }
+        
+        .ball.powerball {
+            background: linear-gradient(145deg, #e74c3c, #c0392b);
+        }
+        
+        .ball.megaball {
+            background: linear-gradient(145deg, #f39c12, #d68910);
+        }
+        
+        .generate-btn {
+            width: 100%;
+            padding: 20px;
+            font-size: 1.3em;
+            font-weight: bold;
+            background: linear-gradient(135deg, #ffd700, #ffaa00);
+            color: #1a1a2e;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 20px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .generate-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 40px rgba(255, 215, 0, 0.4);
+        }
+        
+        .generate-btn:disabled {
+            background: #555;
+            color: #888;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .generate-btn::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                transparent, 
+                rgba(255,255,255,0.3), 
+                transparent
+            );
+            transform: rotate(45deg);
+            animation: btnShine 3s infinite;
+        }
+        
+        @keyframes btnShine {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+        
+        .fortune {
+            background: linear-gradient(135deg, rgba(155, 89, 182, 0.2), rgba(142, 68, 173, 0.2));
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border: 1px solid #9b59b6;
+            display: none;
+        }
+        
+        .fortune.show { display: block; }
+        
+        .fortune-text {
+            font-style: italic;
+            color: #bb8fce;
+            line-height: 1.5;
+        }
+        
+        .fortune-numbers {
+            margin-top: 10px;
+            font-size: 0.85em;
+            color: #888;
+        }
+        
+        .luck-meter {
+            margin: 20px 0;
+        }
+        
+        .luck-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8em;
+            color: #888;
+            margin-bottom: 5px;
+        }
+        
+        .luck-bar {
+            height: 10px;
+            background: #222;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .luck-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #e74c3c, #f39c12, #2ecc71);
+            border-radius: 10px;
+            transition: width 1s ease-out;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #ffd700;
+        }
+        
+        .stat-label {
+            font-size: 0.7em;
+            color: #888;
+            text-transform: uppercase;
+        }
+        
+        .history {
+            margin-top: 30px;
+            text-align: left;
+        }
+        
+        .history h3 {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .history-item {
+            background: rgba(255,255,255,0.05);
+            padding: 12px 15px;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9em;
+        }
+        
+        .confetti {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+        }
+        
+        .disclaimer {
+            margin-top: 30px;
+            padding: 15px;
+            background: rgba(231, 76, 60, 0.1);
+            border: 1px solid rgba(231, 76, 60, 0.3);
+            border-radius: 10px;
+            font-size: 0.75em;
+            color: #888;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.1) rotate(5deg); }
+        }
+        
+        .celebrating .ball {
+            animation: bounce 0.5s infinite;
+        }
+    </style>
+</head>
+<body>
+    <canvas class="confetti" id="confetti"></canvas>
+    
+    <div class="container">
+        <header>
+            <h1>🎰 Lucky Numbers 🎰</h1>
+            <p style="color: #888;">Manifest that bag 💰</p>
+        </header>
+        
+        <div class="jackpot-display">
+            <p class="jackpot-label">Current Jackpot</p>
+            <p class="jackpot-amount" id="jackpot">$1.2 BILLION</p>
+        </div>
+        
+        <div class="lottery-select">
+            <button class="lottery-btn active" data-lottery="powerball">🔴 Powerball</button>
+            <button class="lottery-btn" data-lottery="mega">🟡 Mega Millions</button>
+            <button class="lottery-btn" data-lottery="lotto">🔵 Pick 6</button>
+            <button class="lottery-btn" data-lottery="pick3">🎯 Pick 3</button>
+        </div>
+        
+        <div class="ritual-section">
+            <p class="ritual-title">✨ Choose your lucky ritual ✨</p>
+            <div class="ritual-options">
+                <span class="ritual-chip selected" data-ritual="none">🎲 Pure Random</span>
+                <span class="ritual-chip" data-ritual="birthday">🎂 Birthday Vibes</span>
+                <span class="ritual-chip" data-ritual="lucky7">🍀 Lucky 7s</span>
+                <span class="ritual-chip" data-ritual="angel">👼 Angel Numbers</span>
+                <span class="ritual-chip" data-ritual="hot">🔥 Hot Numbers</span>
+            </div>
+        </div>
+        
+        <div class="balls-container" id="balls"></div>
+        
+        <button class="generate-btn" id="generateBtn" onclick="generate()">
+            🍀 GENERATE LUCKY NUMBERS 🍀
+        </button>
+        
+        <div class="luck-meter">
+            <div class="luck-label">
+                <span>Luck Meter</span>
+                <span id="luckPercent">???</span>
+            </div>
+            <div class="luck-bar">
+                <div class="luck-fill" id="luckFill"></div>
+            </div>
+        </div>
+        
+        <div class="fortune" id="fortune">
+            <p class="fortune-text" id="fortuneText"></p>
+            <p class="fortune-numbers" id="fortuneNums"></p>
+        </div>
+        
+        <div class="stats">
+            <div class="stat">
+                <p class="stat-value" id="genCount">0</p>
+                <p class="stat-label">Generated</p>
+            </div>
+            <div class="stat">
+                <p class="stat-value" id="luckiestNum">-</p>
+                <p class="stat-label">Your Luckiest</p>
+            </div>
+            <div class="stat">
+                <p class="stat-value" id="totalSpent">$0</p>
+                <p class="stat-label">Tickets "Saved"</p>
+            </div>
+        </div>
+        
+        <div class="history" id="historySection" style="display:none">
+            <h3>📜 Your Numbers</h3>
+            <div id="historyList"></div>
+        </div>
+        
+        <div class="disclaimer">
+            ⚠️ For entertainment only. These numbers are completely random and provide no actual advantage. Please gamble responsibly. The house always wins... but maybe not today? 🤞
+        </div>
+    </div>
+
+    <script>
+        let currentLottery = 'powerball';
+        let currentRitual = 'none';
+        let genCount = 0;
+        let history = [];
+        let numberFrequency = {};
+        
+        const lotteryConfig = {
+            powerball: { main: 5, mainMax: 69, bonus: 1, bonusMax: 26, bonusName: 'Powerball', jackpot: '$1.2 BILLION' },
+            mega: { main: 5, mainMax: 70, bonus: 1, bonusMax: 25, bonusName: 'Mega Ball', jackpot: '$875 MILLION' },
+            lotto: { main: 6, mainMax: 49, bonus: 0, bonusMax: 0, bonusName: '', jackpot: '$45 MILLION' },
+            pick3: { main: 3, mainMax: 9, bonus: 0, bonusMax: 0, bonusName: '', jackpot: '$500', allowDupes: true }
+        };
+        
+        const fortunes = [
+            "The universe is aligning in your favor... or it's just gas.",
+            "A wise fortune cookie once said: 'You miss 100% of the lotteries you don't play.'",
+            "Your lucky underwear knows something you don't.",
+            "The stars say: 'Maybe. Probably not. But maybe.'",
+            "A black cat crossing your path means... a cat walked by. These numbers are still random.",
+            "Your ancestors are watching... and they're judging your number picks.",
+            "Mercury is in retrograde, which means absolutely nothing for these numbers.",
+            "The magic 8-ball says 'Ask again later' but you're getting these numbers now.",
+            "Somewhere, a four-leaf clover is rooting for you.",
+            "Fun fact: You're more likely to be struck by lightning. But someone's gotta win!",
+            "These numbers came to me in a dream. A very random, statistically insignificant dream.",
+            "The algorithm whispers: 'Good luck, champ. You'll need it.'"
+        ];
+        
+        // Lottery selection
+        document.querySelectorAll('.lottery-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.lottery-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentLottery = btn.dataset.lottery;
+                document.getElementById('jackpot').textContent = lotteryConfig[currentLottery].jackpot;
+                document.getElementById('balls').innerHTML = '';
+            });
+        });
+        
+        // Ritual selection
+        document.querySelectorAll('.ritual-chip').forEach(chip => {
+            chip.addEventListener('click', () => {
+                document.querySelectorAll('.ritual-chip').forEach(c => c.classList.remove('selected'));
+                chip.classList.add('selected');
+                currentRitual = chip.dataset.ritual;
+            });
+        });
+        
+        function getRandomInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+        
+        function generateNumbers() {
+            const config = lotteryConfig[currentLottery];
+            let mainNumbers = [];
+            let bonusNumbers = [];
+            
+            // Apply rituals
+            if (currentRitual === 'birthday') {
+                // Favor numbers 1-31
+                while (mainNumbers.length < config.main) {
+                    let num = Math.random() < 0.7 ? getRandomInt(1, 31) : getRandomInt(1, config.mainMax);
+                    num = Math.min(num, config.mainMax);
+                    if (!mainNumbers.includes(num) || config.allowDupes) mainNumbers.push(num);
+                }
+            } else if (currentRitual === 'lucky7') {
+                // Include 7s and multiples
+                const lucky = [7, 14, 21, 28, 35, 42, 49, 56, 63, 70].filter(n => n <= config.mainMax);
+                while (mainNumbers.length < config.main) {
+                    let num = Math.random() < 0.4 ? lucky[getRandomInt(0, lucky.length - 1)] : getRandomInt(1, config.mainMax);
+                    if (!mainNumbers.includes(num) || config.allowDupes) mainNumbers.push(num);
+                }
+            } else if (currentRitual === 'angel') {
+                // Favor repeating digits: 11, 22, 33, etc.
+                const angels = [11, 22, 33, 44, 55, 66].filter(n => n <= config.mainMax);
+                while (mainNumbers.length < config.main) {
+                    let num = Math.random() < 0.3 && angels.length ? angels[getRandomInt(0, angels.length - 1)] : getRandomInt(1, config.mainMax);
+                    if (!mainNumbers.includes(num) || config.allowDupes) mainNumbers.push(num);
+                }
+            } else if (currentRitual === 'hot') {
+                // Slightly favor "hot" numbers (just random ones we pretend are hot)
+                const hotNums = [3, 7, 16, 23, 38, 42, 45, 58, 62].filter(n => n <= config.mainMax);
+                while (mainNumbers.length < config.main) {
+                    let num = Math.random() < 0.35 ? hotNums[getRandomInt(0, hotNums.length - 1)] : getRandomInt(1, config.mainMax);
+                    if (!mainNumbers.includes(num) || config.allowDupes) mainNumbers.push(num);
+                }
+            } else {
+                // Pure random
+                while (mainNumbers.length < config.main) {
+                    let num = getRandomInt(1, config.mainMax);
+                    if (!mainNumbers.includes(num) || config.allowDupes) mainNumbers.push(num);
+                }
+            }
+            
+            // Bonus balls
+            for (let i = 0; i < config.bonus; i++) {
+                bonusNumbers.push(getRandomInt(1, config.bonusMax));
+            }
+            
+            // Sort main numbers
+            if (!config.allowDupes) mainNumbers.sort((a, b) => a - b);
+            
+            return { main: mainNumbers, bonus: bonusNumbers };
+        }
+        
+        async function generate() {
+            const btn = document.getElementById('generateBtn');
+            const ballsContainer = document.getElementById('balls');
+            
+            btn.disabled = true;
+            btn.textContent = '🔮 Channeling luck...';
+            ballsContainer.innerHTML = '';
+            ballsContainer.classList.remove('celebrating');
+            
+            // Dramatic pause
+            await sleep(500);
+            
+            const numbers = generateNumbers();
+            const config = lotteryConfig[currentLottery];
+            
+            // Create balls
+            const allBalls = [];
+            numbers.main.forEach((num, i) => {
+                const ball = document.createElement('div');
+                ball.className = 'ball';
+                ball.textContent = num;
+                ballsContainer.appendChild(ball);
+                allBalls.push({ el: ball, num, delay: i * 300 });
+            });
+            
+            numbers.bonus.forEach((num, i) => {
+                const ball = document.createElement('div');
+                ball.className = 'ball ' + (currentLottery === 'powerball' ? 'powerball' : 'megaball');
+                ball.textContent = num;
+                ballsContainer.appendChild(ball);
+                allBalls.push({ el: ball, num, delay: (numbers.main.length + i) * 300 + 500 });
+            });
+            
+            // Reveal balls with drama
+            for (const ball of allBalls) {
+                await sleep(ball.delay > 0 ? 300 : 0);
+                playTick();
+                ball.el.classList.add('revealed');
+            }
+            
+            // Celebration
+            await sleep(300);
+            ballsContainer.classList.add('celebrating');
+            launchConfetti();
+            
+            // Update stats
+            genCount++;
+            document.getElementById('genCount').textContent = genCount;
+            document.getElementById('totalSpent').textContent = '$' + (genCount * 2);
+            
+            // Track frequency
+            [...numbers.main, ...numbers.bonus].forEach(n => {
+                numberFrequency[n] = (numberFrequency[n] || 0) + 1;
+            });
+            const luckiest = Object.entries(numberFrequency).sort((a, b) => b[1] - a[1])[0];
+            document.getElementById('luckiestNum').textContent = luckiest ? luckiest[0] : '-';
+            
+            // Luck meter
+            const luck = getRandomInt(30, 100);
+            document.getElementById('luckPercent').textContent = luck + '%';
+            document.getElementById('luckFill').style.width = luck + '%';
+            
+            // Fortune
+            document.getElementById('fortuneText').textContent = fortunes[getRandomInt(0, fortunes.length - 1)];
+            document.getElementById('fortuneNums').textContent = `Lucky numbers: ${numbers.main.join(' - ')}${numbers.bonus.length ? ' + ' + numbers.bonus.join(', ') : ''}`;
+            document.getElementById('fortune').classList.add('show');
+            
+            // History
+            const historyStr = numbers.main.join('-') + (numbers.bonus.length ? ' + ' + numbers.bonus.join(',') : '');
+            history.unshift({ numbers: historyStr, lottery: currentLottery, time: new Date().toLocaleTimeString() });
+            if (history.length > 5) history.pop();
+            updateHistory();
+            
+            btn.disabled = false;
+            btn.textContent = '🍀 GENERATE LUCKY NUMBERS 🍀';
+        }
+        
+        function updateHistory() {
+            const section = document.getElementById('historySection');
+            const list = document.getElementById('historyList');
+            section.style.display = 'block';
+            list.innerHTML = history.map(h => `
+                <div class="history-item">
+                    <span>${h.numbers}</span>
+                    <span style="color:#666">${h.time}</span>
+                </div>
+            `).join('');
+        }
+        
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+        
+        function playTick() {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.frequency.value = 800 + Math.random() * 400;
+                osc.type = 'sine';
+                gain.gain.setValueAtTime(0.1, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.1);
+            } catch(e) {}
+        }
+        
+        function launchConfetti() {
+            const canvas = document.getElementById('confetti');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            
+            const pieces = [];
+            const colors = ['#ffd700', '#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#ff8c00'];
+            
+            for (let i = 0; i < 100; i++) {
+                pieces.push({
+                    x: Math.random() * canvas.width,
+                    y: -20,
+                    size: Math.random() * 10 + 5,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    speedY: Math.random() * 3 + 2,
+                    speedX: Math.random() * 4 - 2,
+                    rotation: Math.random() * 360
+                });
+            }
+            
+            let frame = 0;
+            function animate() {
+                if (frame > 150) {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    return;
+                }
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                pieces.forEach(p => {
+                    ctx.save();
+                    ctx.translate(p.x, p.y);
+                    ctx.rotate(p.rotation * Math.PI / 180);
+                    ctx.fillStyle = p.color;
+                    ctx.fillRect(-p.size/2, -p.size/2, p.size, p.size);
+                    ctx.restore();
+                    p.y += p.speedY;
+                    p.x += p.speedX;
+                    p.rotation += 5;
+                });
+                frame++;
+                requestAnimationFrame(animate);
+            }
+            animate();
+        }
+    </script>
+</body>
+</html>
