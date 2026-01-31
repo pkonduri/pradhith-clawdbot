@@ -195,16 +195,29 @@
             "THINKING ABOUT HER"
         ];
         
-        // Using Unsplash for properly licensed photos
-        const imageKeywords = [
-            'portrait,fashion',
-            'model,portrait',
-            'fashion,style',
-            'portrait,person',
-            'headshot,model'
+        // Using Picsum (reliable) with specific portrait-oriented IDs that look good
+        const imageIds = [
+            1005, 1011, 1012, 1027, 64, 91, 177, 203, 219, 238,
+            257, 275, 306, 334, 338, 342, 349, 375, 399, 433,
+            447, 453, 473, 506, 517, 532, 557, 568, 593, 628,
+            633, 646, 660, 669, 689, 704, 718, 730, 752, 756,
+            764, 778, 804, 815, 836, 852, 858, 866, 883, 893
         ];
         
         let memeCount = 0;
+        let usedIds = [];
+        
+        function getRandomImageId() {
+            if (usedIds.length >= imageIds.length) {
+                usedIds = [];
+            }
+            let id;
+            do {
+                id = imageIds[Math.floor(Math.random() * imageIds.length)];
+            } while (usedIds.includes(id));
+            usedIds.push(id);
+            return id;
+        }
         
         async function generateMeme() {
             const btn = document.getElementById('generateBtn');
@@ -214,48 +227,39 @@
             btn.textContent = '🔄 Loading...';
             container.innerHTML = '<span class="loading">Finding a hottie...</span>';
             
-            try {
-                // Random keywords and cache-bust
-                const keywords = imageKeywords[Math.floor(Math.random() * imageKeywords.length)];
-                const cacheBust = Date.now();
-                const imageUrl = `https://source.unsplash.com/600x800/?${keywords}&t=${cacheBust}`;
+            // Random meme texts
+            const topText = topTexts[Math.floor(Math.random() * topTexts.length)];
+            const bottomText = bottomTexts[Math.floor(Math.random() * bottomTexts.length)];
+            
+            // Random image from Picsum
+            const imageId = getRandomImageId();
+            const imageUrl = `https://picsum.photos/id/${imageId}/450/600`;
+            
+            // Preload image
+            const img = new Image();
+            
+            img.onload = function() {
+                container.innerHTML = `
+                    <img src="${img.src}" alt="Photo">
+                    <div class="meme-text top">${topText}</div>
+                    <div class="meme-text bottom">${bottomText}</div>
+                `;
+                container.style.minHeight = 'auto';
                 
-                // Random meme texts
-                const topText = topTexts[Math.floor(Math.random() * topTexts.length)];
-                const bottomText = bottomTexts[Math.floor(Math.random() * bottomTexts.length)];
+                memeCount++;
+                document.getElementById('counter').textContent = memeCount;
                 
-                // Preload image
-                const img = new Image();
-                img.crossOrigin = "anonymous";
-                
-                img.onload = function() {
-                    container.innerHTML = `
-                        <img src="${img.src}" alt="Hottie">
-                        <div class="meme-text top">${topText}</div>
-                        <div class="meme-text bottom">${bottomText}</div>
-                    `;
-                    container.style.minHeight = 'auto';
-                    
-                    memeCount++;
-                    document.getElementById('counter').textContent = memeCount;
-                    
-                    btn.disabled = false;
-                    btn.textContent = '🔥 Generate Hottie Meme';
-                };
-                
-                img.onerror = function() {
-                    container.innerHTML = '<span class="loading">😅 Try again!</span>';
-                    btn.disabled = false;
-                    btn.textContent = '🔥 Generate Hottie Meme';
-                };
-                
-                img.src = imageUrl;
-                
-            } catch (error) {
-                container.innerHTML = '<span class="loading">😅 Failed. Try again!</span>';
                 btn.disabled = false;
                 btn.textContent = '🔥 Generate Hottie Meme';
-            }
+            };
+            
+            img.onerror = function() {
+                // Try another image on error
+                const newId = getRandomImageId();
+                img.src = `https://picsum.photos/id/${newId}/450/600`;
+            };
+            
+            img.src = imageUrl;
         }
         
         // Generate one on load
