@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Confessional Booth 🎬</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            min-height: 100vh;
+            background: #0a0a0a;
+            font-family: -apple-system, system-ui, sans-serif;
+            color: #fff;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 0;
+        }
+        
+        h1 {
+            font-size: 2em;
+            margin-bottom: 5px;
+        }
+        
+        .tagline {
+            color: #888;
+            font-style: italic;
+        }
+        
+        .show-select {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        
+        .show-btn {
+            padding: 10px 18px;
+            border: 2px solid #333;
+            background: transparent;
+            color: #fff;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9em;
+        }
+        
+        .show-btn:hover, .show-btn.active {
+            border-color: var(--show-color, #e91e63);
+            background: var(--show-color, #e91e63);
+        }
+        
+        .show-btn[data-show="bachelor"] { --show-color: #e91e63; }
+        .show-btn[data-show="housewives"] { --show-color: #9c27b0; }
+        .show-btn[data-show="loveisland"] { --show-color: #ff5722; }
+        .show-btn[data-show="survivor"] { --show-color: #4caf50; }
+        .show-btn[data-show="jersey"] { --show-color: #ff9800; }
+        
+        .confessional-box {
+            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+            border-radius: 20px;
+            padding: 25px;
+            margin: 20px 0;
+            position: relative;
+            border: 3px solid #333;
+        }
+        
+        .confessional-box::before {
+            content: "🔴 REC";
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            color: #ff0000;
+            font-size: 0.8em;
+            font-weight: bold;
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.3; }
+        }
+        
+        .name-input {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid #444;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 1em;
+            margin-bottom: 15px;
+        }
+        
+        .name-input::placeholder { color: #666; }
+        
+        .confession-input {
+            width: 100%;
+            height: 120px;
+            padding: 15px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid #444;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 1.1em;
+            resize: none;
+            font-family: inherit;
+        }
+        
+        .confession-input::placeholder { color: #666; }
+        
+        .generate-btn {
+            width: 100%;
+            padding: 18px;
+            margin-top: 20px;
+            font-size: 1.2em;
+            font-weight: bold;
+            background: linear-gradient(135deg, #e91e63, #9c27b0);
+            color: #fff;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .generate-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 30px rgba(233, 30, 99, 0.4);
+        }
+        
+        /* Output Card */
+        .output-card {
+            display: none;
+            background: #000;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 30px 0;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+        
+        .output-card.show { display: block; }
+        
+        .card-header {
+            padding: 15px 20px;
+            font-weight: bold;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .card-body {
+            padding: 30px;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .confession-text {
+            font-size: 1.4em;
+            line-height: 1.5;
+            font-style: italic;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .confession-text::before { content: '"'; }
+        .confession-text::after { content: '"'; }
+        
+        .person-name {
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 5px;
+        }
+        
+        .person-title {
+            text-align: center;
+            font-size: 0.85em;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .dramatic-tag {
+            position: absolute;
+            bottom: 15px;
+            right: 20px;
+            font-size: 0.75em;
+            color: #666;
+            font-style: italic;
+        }
+        
+        /* Show Themes */
+        .output-card.bachelor .card-header { background: linear-gradient(90deg, #e91e63, #f06292); }
+        .output-card.bachelor .card-body { background: linear-gradient(180deg, #1a0a10, #2d1520); }
+        
+        .output-card.housewives .card-header { background: linear-gradient(90deg, #9c27b0, #ba68c8); }
+        .output-card.housewives .card-body { background: linear-gradient(180deg, #1a0a1a, #2d152d); }
+        
+        .output-card.loveisland .card-header { background: linear-gradient(90deg, #ff5722, #ff8a65); }
+        .output-card.loveisland .card-body { background: linear-gradient(180deg, #1a0f0a, #2d1f15); }
+        
+        .output-card.survivor .card-header { background: linear-gradient(90deg, #4caf50, #81c784); }
+        .output-card.survivor .card-body { background: linear-gradient(180deg, #0a1a0a, #152d15); }
+        
+        .output-card.jersey .card-header { background: linear-gradient(90deg, #ff9800, #ffb74d); }
+        .output-card.jersey .card-body { background: linear-gradient(180deg, #1a140a, #2d2415); }
+        
+        .extras {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .extra-btn {
+            flex: 1;
+            padding: 12px;
+            background: #222;
+            border: 1px solid #444;
+            color: #fff;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s;
+        }
+        
+        .extra-btn:hover {
+            background: #333;
+            border-color: #666;
+        }
+        
+        .history {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #222;
+        }
+        
+        .history h3 {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .history-item {
+            background: #111;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            font-size: 0.9em;
+            border-left: 3px solid #e91e63;
+        }
+        
+        .sound-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #222;
+            border: 2px solid #444;
+            color: #fff;
+            font-size: 1.3em;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎬 The Confessional Booth</h1>
+            <p class="tagline">"Can I steal you for a sec?"</p>
+        </header>
+        
+        <div class="show-select">
+            <button class="show-btn active" data-show="bachelor">🌹 Bachelor</button>
+            <button class="show-btn" data-show="housewives">💎 Housewives</button>
+            <button class="show-btn" data-show="loveisland">🏝️ Love Island</button>
+            <button class="show-btn" data-show="survivor">🔥 Survivor</button>
+            <button class="show-btn" data-show="jersey">👊 Jersey Shore</button>
+        </div>
+        
+        <div class="confessional-box">
+            <input type="text" class="name-input" id="nameInput" placeholder="Your name...">
+            <textarea class="confession-input" id="confessionInput" placeholder="Spill the tea... what's on your mind?"></textarea>
+            <button class="generate-btn" onclick="generate()">🎬 Roll Confessional</button>
+        </div>
+        
+        <div class="output-card" id="outputCard">
+            <div class="card-header" id="cardHeader">THE BACHELOR • CONFESSIONAL</div>
+            <div class="card-body">
+                <p class="confession-text" id="outputText"></p>
+                <p class="person-name" id="outputName"></p>
+                <p class="person-title" id="outputTitle"></p>
+                <p class="dramatic-tag" id="dramaticTag"></p>
+            </div>
+        </div>
+        
+        <div class="extras" id="extras" style="display:none">
+            <button class="extra-btn" onclick="addDrama()">🌶️ More Drama</button>
+            <button class="extra-btn" onclick="generate()">🔄 New Take</button>
+            <button class="extra-btn" onclick="copyToClipboard()">📋 Copy</button>
+        </div>
+        
+        <div class="history" id="history" style="display:none">
+            <h3>📼 Previous Confessionals</h3>
+            <div id="historyList"></div>
+        </div>
+    </div>
+    
+    <button class="sound-btn" onclick="playDramaticSound()" title="Dramatic sound">🎵</button>
+
+    <script>
+        let currentShow = 'bachelor';
+        let history = [];
+        
+        const showData = {
+            bachelor: {
+                header: "THE BACHELOR • CONFESSIONAL",
+                titles: ["Contestant", "Here for the right reasons", "Week 3 Survivor", "Group Date Veteran", "Rose Holder", "Villain Edit Recipient"],
+                tags: ["*dramatic rose music*", "*wipes tear*", "*stares into distance*", "*champagne glass in hand*", "*ITM voice cracks*", "*producer question incoming*"],
+                intros: ["I'm not here to make friends, but...", "When I got that group date card...", "I didn't expect to feel this way...", "Look, at the end of the day...", "Can I be honest?", "I just feel like..."],
+                outros: ["...and that's my truth.", "...so yeah.", "...I said what I said.", "...and I don't regret it.", "...but we'll see.", "...I just need a moment."]
+            },
+            housewives: {
+                header: "THE REAL HOUSEWIVES • CONFESSIONAL",
+                titles: ["The OG", "Friend of the Show", "First Season Housewife", "Reunion Ready", "HBIC", "Chaos Agent"],
+                tags: ["*adjusts Chanel*", "*sips tea*", "*hair flip*", "*points with wine glass*", "*laughs in rich*", "*dramatic zoom*"],
+                intros: ["Let me tell you something...", "In this group, honey...", "I've been through too much to...", "The thing about her is...", "Chile, anyway...", "Now I don't like to gossip, but..."],
+                outros: ["...fix it, Jesus.", "...that's the word on the street.", "...PERIOD.", "...I'm just gonna leave that there.", "...and I said what I SAID.", "...but you didn't hear that from me."]
+            },
+            loveisland: {
+                header: "LOVE ISLAND • BEACH HUT",
+                titles: ["Islander", "Bombshell", "Casa Amor Survivor", "Recoupled", "Day 1", "Your Type on Paper"],
+                tags: ["*fans self*", "*100% my type*", "*head's been turned*", "*it is what it is*", "*crack on*", "*muggy behavior*"],
+                intros: ["Basically right...", "I'm not gonna lie...", "My head is SCRAMBLED because...", "So like obviously...", "I've got a text!!!! Just kidding but...", "The thing is yeah..."],
+                outros: ["...it is what it is, innit.", "...my head could still turn though.", "...I fancy them, not gonna lie.", "...we're just vibing.", "...and I'm here for it.", "...sorted."]
+            },
+            survivor: {
+                header: "SURVIVOR • TRIBAL COUNCIL",
+                titles: ["Castaway", "Immunity Holder", "Blindside Victim", "Alliance Leader", "Chaos Kass Energy", "Day 39 Club"],
+                tags: ["*torch flickers*", "*votes dramatically*", "*whispers at tribal*", "*immunity necklace gleams*", "*the tribe has spoken*", "*snuffs torch*"],
+                intros: ["In this game...", "At camp, tensions are high because...", "My strategy right now is...", "I came here to win, and...", "After that immunity challenge...", "Between you and me..."],
+                outros: ["...but blindsides happen.", "...the tribe has spoken.", "...that's Survivor, baby.", "...outwit, outplay, outlast.", "...I'm playing to WIN.", "...we'll see at tribal."]
+            },
+            jersey: {
+                header: "JERSEY SHORE • CONFESSION CAM",
+                titles: ["Guido/Guidette", "GTL Champion", "Smoosh Room Regular", "Duck Phone Operator", "T-Shirt Time", "Sunday Dinner VIP"],
+                tags: ["*fist pumps*", "*cabs are here*", "*it's t-shirt time*", "*gym tan laundry*", "*beat the beat*", "*note found*"],
+                intros: ["Yo, so check it...", "I'm not gonna lie to you...", "This is the thing...", "At the club last night...", "Bro, let me tell you...", "So I wake up and..."],
+                outros: ["...that's how we do.", "...CABS ARE HERE!", "...it's a Jersey thing.", "...that's the situation.", "...and that's what's up.", "...T-SHIRT TIIIIME!"]
+            }
+        };
+        
+        // Show selection
+        document.querySelectorAll('.show-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.show-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentShow = btn.dataset.show;
+            });
+        });
+        
+        function getRandom(arr) {
+            return arr[Math.floor(Math.random() * arr.length)];
+        }
+        
+        function generate() {
+            const name = document.getElementById('nameInput').value || 'Anonymous';
+            const confession = document.getElementById('confessionInput').value;
+            
+            if (!confession.trim()) {
+                alert('Spill some tea first! 🍵');
+                return;
+            }
+            
+            const show = showData[currentShow];
+            const title = getRandom(show.titles);
+            const tag = getRandom(show.tags);
+            const intro = getRandom(show.intros);
+            const outro = getRandom(show.outros);
+            
+            const fullConfession = `${intro} ${confession} ${outro}`;
+            
+            // Update output card
+            const card = document.getElementById('outputCard');
+            card.className = 'output-card show ' + currentShow;
+            document.getElementById('cardHeader').textContent = show.header;
+            document.getElementById('outputText').textContent = fullConfession;
+            document.getElementById('outputName').textContent = name;
+            document.getElementById('outputTitle').textContent = title;
+            document.getElementById('dramaticTag').textContent = tag;
+            
+            document.getElementById('extras').style.display = 'flex';
+            
+            // Add to history
+            history.unshift({ name, confession: fullConfession, show: currentShow });
+            if (history.length > 5) history.pop();
+            updateHistory();
+            
+            // Scroll to output
+            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            
+            playDramaticSound();
+        }
+        
+        function addDrama() {
+            const text = document.getElementById('outputText').textContent;
+            const dramatics = [
+                "👏 AND 👏 I 👏 MEAN 👏 THAT! ",
+                " *wipes single tear* ",
+                " ...and I will DIE on this hill. ",
+                " But that's just the beginning. ",
+                " *pauses for dramatic effect* "
+            ];
+            document.getElementById('outputText').textContent = text + getRandom(dramatics);
+        }
+        
+        function copyToClipboard() {
+            const name = document.getElementById('outputName').textContent;
+            const text = document.getElementById('outputText').textContent;
+            const title = document.getElementById('outputTitle').textContent;
+            const tag = document.getElementById('dramaticTag').textContent;
+            
+            const full = `🎬 CONFESSIONAL\n\n"${text}"\n\n— ${name}, ${title}\n${tag}`;
+            
+            navigator.clipboard.writeText(full).then(() => {
+                alert('Copied! Ready to share the drama 📋');
+            });
+        }
+        
+        function updateHistory() {
+            const historyDiv = document.getElementById('history');
+            const historyList = document.getElementById('historyList');
+            
+            if (history.length > 0) {
+                historyDiv.style.display = 'block';
+                historyList.innerHTML = history.map(h => `
+                    <div class="history-item" style="border-color: var(--show-color)">
+                        <strong>${h.name}:</strong> "${h.confession.substring(0, 80)}..."
+                    </div>
+                `).join('');
+            }
+        }
+        
+        function playDramaticSound() {
+            // Create dramatic "dun dun" effect with Web Audio
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                
+                // First note
+                const osc1 = ctx.createOscillator();
+                const gain1 = ctx.createGain();
+                osc1.connect(gain1);
+                gain1.connect(ctx.destination);
+                osc1.frequency.value = 130;
+                gain1.gain.setValueAtTime(0.3, ctx.currentTime);
+                gain1.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
+                osc1.start(ctx.currentTime);
+                osc1.stop(ctx.currentTime + 0.5);
+                
+                // Second note
+                const osc2 = ctx.createOscillator();
+                const gain2 = ctx.createGain();
+                osc2.connect(gain2);
+                gain2.connect(ctx.destination);
+                osc2.frequency.value = 98;
+                gain2.gain.setValueAtTime(0.3, ctx.currentTime + 0.3);
+                gain2.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.8);
+                osc2.start(ctx.currentTime + 0.3);
+                osc2.stop(ctx.currentTime + 0.8);
+            } catch(e) {}
+        }
+    </script>
+</body>
+</html>
