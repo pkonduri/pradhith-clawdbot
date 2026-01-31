@@ -1,0 +1,1353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sanctuary | Data Sovereignty, Simplified</title>
+    <meta name="description" content="One integration to make any company compliant with global data residency laws while keeping AI capabilities intact.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-primary: #0a0a0b;
+            --bg-secondary: #111113;
+            --bg-tertiary: #18181b;
+            --text-primary: #fafafa;
+            --text-secondary: #a1a1aa;
+            --text-muted: #71717a;
+            --accent: #6366f1;
+            --accent-light: #818cf8;
+            --accent-glow: rgba(99, 102, 241, 0.4);
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --border: #27272a;
+            --gradient-1: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
+            --gradient-2: linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        /* Animated Background */
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(99, 102, 241, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .bg-glow {
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 50% 50%, var(--accent-glow) 0%, transparent 50%);
+            animation: pulse 8s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.3;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.3; }
+            50% { transform: scale(1.1); opacity: 0.5; }
+        }
+        
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1rem 2rem;
+            background: rgba(10, 10, 11, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--gradient-1);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .logo-icon svg {
+            width: 20px;
+            height: 20px;
+            fill: white;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+        
+        .nav-cta {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        /* Buttons */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: all 0.2s;
+            cursor: pointer;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-primary {
+            background: var(--gradient-1);
+            color: white;
+            box-shadow: 0 4px 15px var(--accent-glow);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px var(--accent-glow);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--bg-tertiary);
+            border-color: var(--accent);
+        }
+        
+        .btn-large {
+            padding: 1rem 2rem;
+            font-size: 1rem;
+        }
+        
+        /* Hero Section */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 2rem 4rem;
+            z-index: 1;
+        }
+        
+        .hero-content {
+            max-width: 900px;
+            text-align: center;
+        }
+        
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+        
+        .badge-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--success);
+            border-radius: 50%;
+            animation: blink 2s ease-in-out infinite;
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        h1 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
+        }
+        
+        .gradient-text {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 2.5rem;
+            line-height: 1.7;
+        }
+        
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 4rem;
+        }
+        
+        /* Trusted By */
+        .trusted {
+            padding-top: 3rem;
+            border-top: 1px solid var(--border);
+        }
+        
+        .trusted-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1.5rem;
+        }
+        
+        .trusted-logos {
+            display: flex;
+            gap: 3rem;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            opacity: 0.5;
+        }
+        
+        .trusted-logos span {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+        
+        /* Problem Section */
+        .section {
+            position: relative;
+            padding: 6rem 2rem;
+            z-index: 1;
+        }
+        
+        .section-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .section-header {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 4rem;
+        }
+        
+        .section-label {
+            font-size: 0.85rem;
+            color: var(--accent-light);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+        
+        h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+        
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        
+        /* Problem Cards */
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .problem-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s;
+        }
+        
+        .problem-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-4px);
+        }
+        
+        .problem-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+        
+        .problem-card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+        
+        .problem-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+        
+        /* Solution Section */
+        .solution-section {
+            background: var(--bg-secondary);
+        }
+        
+        .solution-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+        
+        @media (max-width: 900px) {
+            .solution-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+        }
+        
+        .solution-content h2 {
+            text-align: left;
+            margin-bottom: 1.5rem;
+        }
+        
+        .solution-content p {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+        
+        .solution-features {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .solution-feature {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+        
+        .feature-check {
+            width: 24px;
+            height: 24px;
+            background: rgba(34, 197, 94, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--success);
+            font-weight: bold;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        
+        .solution-feature span {
+            color: var(--text-secondary);
+        }
+        
+        /* Code Block */
+        .code-block {
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+        
+        .code-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 1.5rem;
+            background: var(--bg-tertiary);
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .code-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        
+        .code-dot.red { background: #ef4444; }
+        .code-dot.yellow { background: #f59e0b; }
+        .code-dot.green { background: #22c55e; }
+        
+        .code-content {
+            padding: 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            line-height: 1.8;
+            overflow-x: auto;
+        }
+        
+        .code-comment {
+            color: var(--text-muted);
+        }
+        
+        .code-keyword {
+            color: #c084fc;
+        }
+        
+        .code-function {
+            color: #60a5fa;
+        }
+        
+        .code-string {
+            color: #4ade80;
+        }
+        
+        .code-error {
+            color: #ef4444;
+        }
+        
+        .code-success {
+            color: #22c55e;
+        }
+        
+        /* Features Section */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+        
+        .feature-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2.5rem;
+            transition: all 0.3s;
+        }
+        
+        .feature-card:hover {
+            border-color: var(--accent);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .feature-icon {
+            width: 56px;
+            height: 56px;
+            background: var(--gradient-1);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+        
+        .feature-card h3 {
+            font-size: 1.35rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .feature-card p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        
+        /* Stats Section */
+        .stats-section {
+            background: var(--gradient-1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stats-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        @media (max-width: 900px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        
+        /* How It Works */
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            position: relative;
+        }
+        
+        @media (max-width: 900px) {
+            .steps-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .step-card {
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .step-number {
+            width: 64px;
+            height: 64px;
+            background: var(--bg-tertiary);
+            border: 2px solid var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-light);
+            margin: 0 auto 1.5rem;
+        }
+        
+        .step-card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .step-card p {
+            color: var(--text-secondary);
+        }
+        
+        /* Pricing */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            align-items: start;
+        }
+        
+        @media (max-width: 900px) {
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .pricing-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.3s;
+        }
+        
+        .pricing-card.featured {
+            border-color: var(--accent);
+            transform: scale(1.05);
+            box-shadow: 0 20px 60px rgba(99, 102, 241, 0.2);
+        }
+        
+        .pricing-card:hover {
+            border-color: var(--accent);
+        }
+        
+        .pricing-badge {
+            display: inline-block;
+            background: var(--gradient-1);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+        }
+        
+        .pricing-card h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .pricing-desc {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .pricing-amount {
+            display: flex;
+            align-items: baseline;
+            gap: 0.25rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .pricing-currency {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+        
+        .pricing-value {
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1;
+        }
+        
+        .pricing-period {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        
+        .pricing-note {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-bottom: 2rem;
+        }
+        
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+        
+        .pricing-features li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+        
+        .pricing-features li:last-child {
+            border-bottom: none;
+        }
+        
+        .pricing-check {
+            color: var(--success);
+            font-weight: bold;
+        }
+        
+        /* CTA Section */
+        .cta-section {
+            background: var(--bg-secondary);
+            text-align: center;
+        }
+        
+        .cta-box {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 4rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .cta-box h2 {
+            margin-bottom: 1rem;
+        }
+        
+        .cta-box p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+        
+        /* Email Input */
+        .email-form {
+            display: flex;
+            gap: 1rem;
+            max-width: 500px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .email-input {
+            flex: 1;
+            min-width: 250px;
+            padding: 1rem 1.5rem;
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        
+        .email-input:focus {
+            border-color: var(--accent);
+        }
+        
+        .email-input::placeholder {
+            color: var(--text-muted);
+        }
+        
+        /* Footer */
+        footer {
+            padding: 4rem 2rem 2rem;
+            border-top: 1px solid var(--border);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr repeat(3, 1fr);
+            gap: 4rem;
+            margin-bottom: 4rem;
+        }
+        
+        @media (max-width: 900px) {
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 2rem;
+            }
+        }
+        
+        .footer-brand {
+            max-width: 300px;
+        }
+        
+        .footer-brand .logo {
+            margin-bottom: 1rem;
+        }
+        
+        .footer-brand p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .social-link {
+            width: 40px;
+            height: 40px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        
+        .social-link:hover {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: white;
+        }
+        
+        .footer-column h4 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.75rem;
+        }
+        
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+        
+        .footer-links a:hover {
+            color: var(--text-primary);
+        }
+        
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .footer-bottom p {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+        
+        .footer-legal {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .footer-legal a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: color 0.2s;
+        }
+        
+        .footer-legal a:hover {
+            color: var(--text-primary);
+        }
+        
+        /* Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .float {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        /* Mobile Menu */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links, .nav-cta {
+                display: none;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .pricing-card.featured {
+                transform: none;
+            }
+            
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-brand {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+    <div class="bg-glow"></div>
+    
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 24 24"><path d="M12 2L2 7v10l10 5 10-5V7L12 2zm0 2.5L19 8l-7 3.5L5 8l7-3.5zM4 9.5l7 3.5v6.5l-7-3.5V9.5zm16 6.5l-7 3.5V13l7-3.5v6.5z"/></svg>
+                </div>
+                Sanctuary
+            </div>
+            <ul class="nav-links">
+                <li><a href="#problem">Problem</a></li>
+                <li><a href="#solution">Solution</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+            </ul>
+            <div class="nav-cta">
+                <a href="#" class="btn btn-secondary">Log in</a>
+                <a href="#cta" class="btn btn-primary">Get Early Access</a>
+            </div>
+            <button class="mobile-menu-btn">☰</button>
+        </div>
+    </nav>
+    
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="badge">
+                <span class="badge-dot"></span>
+                Now accepting early access applications
+            </div>
+            <h1>Data Sovereignty,<br><span class="gradient-text">Simplified.</span></h1>
+            <p class="hero-subtitle">One integration to make any company compliant with global data residency laws — without sacrificing AI capabilities.</p>
+            <div class="hero-cta">
+                <a href="#cta" class="btn btn-primary btn-large">
+                    Request Early Access
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+                <a href="#solution" class="btn btn-secondary btn-large">
+                    See How It Works
+                </a>
+            </div>
+            <div class="trusted">
+                <p class="trusted-label">Trusted by forward-thinking teams</p>
+                <div class="trusted-logos">
+                    <span>Siemens</span>
+                    <span>BMW</span>
+                    <span>Allianz</span>
+                    <span>SAP</span>
+                    <span>Bosch</span>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Problem Section -->
+    <section class="section" id="problem">
+        <div class="section-container">
+            <div class="section-header">
+                <p class="section-label">The Problem</p>
+                <h2>Data Sovereignty is Breaking Companies</h2>
+                <p class="section-subtitle">EU firms must ditch US clouds. The AI Act demands compliance. But migration is a nightmare that destroys productivity.</p>
+            </div>
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="problem-icon">💸</div>
+                    <h3>$5M+ Migration Costs</h3>
+                    <p>Enterprise migrations from AWS/Azure take 12-18 months and cost millions in consulting fees alone.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">⚖️</div>
+                    <h3>€2.1B in GDPR Fines (2025)</h3>
+                    <p>Regulators are getting aggressive. One mistake can cost 4% of global revenue.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">🤖</div>
+                    <h3>AI Creates New Risks</h3>
+                    <p>Every API call to US-hosted LLMs is a potential compliance violation. The EU AI Act makes it worse.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">🔧</div>
+                    <h3>Fragmented Tooling</h3>
+                    <p>One tool for GDPR, another for AI Act, another for migration. Nothing works together.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Solution Section -->
+    <section class="section solution-section" id="solution">
+        <div class="section-container">
+            <div class="solution-grid">
+                <div class="solution-content">
+                    <p class="section-label">The Solution</p>
+                    <h2>Sanctuary Makes Compliance <span class="gradient-text">Invisible</span></h2>
+                    <p>One SDK. One dashboard. Complete data sovereignty. Sanctuary automatically routes data to compliant regions, redacts PII before it leaves, and generates audit trails — all without changing your code.</p>
+                    <div class="solution-features">
+                        <div class="solution-feature">
+                            <span class="feature-check">✓</span>
+                            <span><strong>Drop-in SDK</strong> — Works with your existing database and AI providers</span>
+                        </div>
+                        <div class="solution-feature">
+                            <span class="feature-check">✓</span>
+                            <span><strong>Automatic PII detection</strong> — Real-time classification of sensitive data</span>
+                        </div>
+                        <div class="solution-feature">
+                            <span class="feature-check">✓</span>
+                            <span><strong>Sovereign AI Gateway</strong> — Use any AI without compliance risk</span>
+                        </div>
+                        <div class="solution-feature">
+                            <span class="feature-check">✓</span>
+                            <span><strong>One-click audits</strong> — Generate GDPR/AI Act reports instantly</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="code-block float">
+                    <div class="code-header">
+                        <span class="code-dot red"></span>
+                        <span class="code-dot yellow"></span>
+                        <span class="code-dot green"></span>
+                    </div>
+                    <div class="code-content">
+<span class="code-comment">// Before: Compliance nightmare</span>
+<span class="code-keyword">const</span> user = <span class="code-keyword">await</span> db.<span class="code-function">query</span>(
+  <span class="code-string">'SELECT * FROM users'</span>
+);
+<span class="code-keyword">await</span> openai.<span class="code-function">chat</span>({
+  messages: [{ content: user.email }]
+}); <span class="code-error">// 🚨 GDPR violation</span>
+
+<span class="code-comment">// After: Sanctuary handles it</span>
+<span class="code-keyword">const</span> user = <span class="code-keyword">await</span> sanctuary.<span class="code-function">query</span>(
+  <span class="code-string">'SELECT * FROM users'</span>
+);
+<span class="code-keyword">await</span> sanctuary.ai.<span class="code-function">chat</span>({
+  messages: [{ content: user.email }]
+}); <span class="code-success">// ✅ Data never leaves EU</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Features Section -->
+    <section class="section" id="features">
+        <div class="section-container">
+            <div class="section-header">
+                <p class="section-label">Features</p>
+                <h2>Everything You Need for <span class="gradient-text">Global Compliance</span></h2>
+                <p class="section-subtitle">Built for the era of AI regulation and data localization mandates.</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🌍</div>
+                    <h3>Sovereign Data Layer</h3>
+                    <p>Automatic data residency routing based on user location. Region-locked encryption keys. Full audit trails.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🤖</div>
+                    <h3>Sovereign AI Gateway</h3>
+                    <p>Proxy any AI provider with automatic PII redaction. On-premise LLM fallback for sensitive queries.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📋</div>
+                    <h3>Compliance Autopilot</h3>
+                    <p>Real-time GDPR, AI Act, CCPA, LGPD scoring. Automated DPIA generation. Breach notification.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🚀</div>
+                    <h3>Migration Accelerator</h3>
+                    <p>Automated dependency mapping. Incremental migration with zero downtime. Instant rollback.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔐</div>
+                    <h3>Zero-Trust Security</h3>
+                    <p>SOC2 Type II certified. ISO 27001 compliant. End-to-end encryption. Bug bounty program.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Real-Time Dashboard</h3>
+                    <p>Monitor data flows, compliance scores, and AI usage across all regions in one unified view.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Stats Section -->
+    <section class="section stats-section">
+        <div class="section-container">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-value">99.9%</div>
+                    <div class="stat-label">Uptime SLA</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">&lt;5ms</div>
+                    <div class="stat-label">Added Latency</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">45+</div>
+                    <div class="stat-label">Countries Supported</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">100%</div>
+                    <div class="stat-label">Audit Pass Rate</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- How It Works -->
+    <section class="section">
+        <div class="section-container">
+            <div class="section-header">
+                <p class="section-label">How It Works</p>
+                <h2>Compliant in <span class="gradient-text">Three Steps</span></h2>
+                <p class="section-subtitle">Get from vulnerable to sovereign in days, not months.</p>
+            </div>
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h3>Install the SDK</h3>
+                    <p>One npm package. Drop-in replacement for your database and AI clients. Zero code changes required.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h3>Configure Policies</h3>
+                    <p>Define where data can go based on type, user location, and regulation. We handle the rest.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h3>Ship with Confidence</h3>
+                    <p>Real-time compliance monitoring. Instant audit reports. Sleep soundly knowing you're protected.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Pricing Section -->
+    <section class="section" id="pricing">
+        <div class="section-container">
+            <div class="section-header">
+                <p class="section-label">Pricing</p>
+                <h2>Simple, Transparent <span class="gradient-text">Pricing</span></h2>
+                <p class="section-subtitle">Start free. Scale as you grow. No hidden fees.</p>
+            </div>
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <h3>Starter</h3>
+                    <p class="pricing-desc">For small teams getting started</p>
+                    <div class="pricing-amount">
+                        <span class="pricing-currency">$</span>
+                        <span class="pricing-value">499</span>
+                    </div>
+                    <p class="pricing-period">per month</p>
+                    <p class="pricing-note">Up to 100K data subjects</p>
+                    <ul class="pricing-features">
+                        <li><span class="pricing-check">✓</span> Sovereign Data Layer</li>
+                        <li><span class="pricing-check">✓</span> Basic AI Gateway (10K calls/mo)</li>
+                        <li><span class="pricing-check">✓</span> GDPR Compliance</li>
+                        <li><span class="pricing-check">✓</span> Email Support</li>
+                        <li><span class="pricing-check">✓</span> 1 Region</li>
+                    </ul>
+                    <a href="#cta" class="btn btn-secondary" style="width: 100%; justify-content: center;">Get Started</a>
+                </div>
+                <div class="pricing-card featured">
+                    <span class="pricing-badge">Most Popular</span>
+                    <h3>Growth</h3>
+                    <p class="pricing-desc">For scaling companies</p>
+                    <div class="pricing-amount">
+                        <span class="pricing-currency">$</span>
+                        <span class="pricing-value">2,499</span>
+                    </div>
+                    <p class="pricing-period">per month</p>
+                    <p class="pricing-note">Up to 1M data subjects</p>
+                    <ul class="pricing-features">
+                        <li><span class="pricing-check">✓</span> Everything in Starter</li>
+                        <li><span class="pricing-check">✓</span> Unlimited AI Gateway</li>
+                        <li><span class="pricing-check">✓</span> EU AI Act Compliance</li>
+                        <li><span class="pricing-check">✓</span> Priority Support</li>
+                        <li><span class="pricing-check">✓</span> 5 Regions</li>
+                        <li><span class="pricing-check">✓</span> Migration Accelerator</li>
+                    </ul>
+                    <a href="#cta" class="btn btn-primary" style="width: 100%; justify-content: center;">Get Started</a>
+                </div>
+                <div class="pricing-card">
+                    <h3>Enterprise</h3>
+                    <p class="pricing-desc">For large organizations</p>
+                    <div class="pricing-amount">
+                        <span class="pricing-value">Custom</span>
+                    </div>
+                    <p class="pricing-period">contact us</p>
+                    <p class="pricing-note">Unlimited data subjects</p>
+                    <ul class="pricing-features">
+                        <li><span class="pricing-check">✓</span> Everything in Growth</li>
+                        <li><span class="pricing-check">✓</span> Unlimited Regions</li>
+                        <li><span class="pricing-check">✓</span> On-premise Deployment</li>
+                        <li><span class="pricing-check">✓</span> Dedicated Success Manager</li>
+                        <li><span class="pricing-check">✓</span> Custom SLAs</li>
+                        <li><span class="pricing-check">✓</span> SSO & Advanced Security</li>
+                    </ul>
+                    <a href="#cta" class="btn btn-secondary" style="width: 100%; justify-content: center;">Contact Sales</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- CTA Section -->
+    <section class="section cta-section" id="cta">
+        <div class="section-container">
+            <div class="cta-box">
+                <h2>Ready to Achieve <span class="gradient-text">Data Sovereignty</span>?</h2>
+                <p>Join the waitlist for early access. Be among the first to make compliance invisible.</p>
+                <form class="email-form" onsubmit="event.preventDefault(); alert('Thanks! We\'ll be in touch soon.');">
+                    <input type="email" class="email-input" placeholder="Enter your work email" required>
+                    <button type="submit" class="btn btn-primary btn-large">Request Access</button>
+                </form>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="logo">
+                        <div class="logo-icon">
+                            <svg viewBox="0 0 24 24"><path d="M12 2L2 7v10l10 5 10-5V7L12 2zm0 2.5L19 8l-7 3.5L5 8l7-3.5zM4 9.5l7 3.5v6.5l-7-3.5V9.5zm16 6.5l-7 3.5V13l7-3.5v6.5z"/></svg>
+                        </div>
+                        Sanctuary
+                    </div>
+                    <p>Making data sovereignty invisible for companies worldwide.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link">𝕏</a>
+                        <a href="#" class="social-link">in</a>
+                        <a href="#" class="social-link">▶</a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h4>Product</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Features</a></li>
+                        <li><a href="#">Pricing</a></li>
+                        <li><a href="#">Integrations</a></li>
+                        <li><a href="#">Changelog</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Resources</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Documentation</a></li>
+                        <li><a href="#">API Reference</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Case Studies</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Company</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">About</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Contact</a></li>
+                        <li><a href="#">Security</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 Sanctuary. All rights reserved.</p>
+                <div class="footer-legal">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Cookie Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

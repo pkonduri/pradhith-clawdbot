@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FleetMind AI — Autonomous Fleet Intelligence</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0066FF;
+            --primary-dark: #0052CC;
+            --accent: #00D4AA;
+            --dark: #0A1628;
+            --darker: #060D18;
+            --gray: #64748B;
+            --light: #F1F5F9;
+            --white: #FFFFFF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--darker);
+            color: var(--white);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(0, 102, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(0, 212, 170, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(0, 102, 255, 0.05) 0%, transparent 70%);
+            animation: bgPulse 20s ease-in-out infinite;
+        }
+
+        @keyframes bgPulse {
+            0%, 100% { transform: translate(-10%, -10%) rotate(0deg); }
+            50% { transform: translate(-15%, -5%) rotate(5deg); }
+        }
+
+        /* Grid Pattern */
+        .grid-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -1;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(20px);
+            background: rgba(6, 13, 24, 0.8);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 800;
+            font-size: 1.5rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--gray);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--white);
+        }
+
+        .nav-cta {
+            background: var(--primary);
+            color: var(--white);
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .nav-cta:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 5% 4rem;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            text-align: center;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(0, 102, 255, 0.15);
+            border: 1px solid rgba(0, 102, 255, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 100px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--primary);
+            margin-bottom: 2rem;
+        }
+
+        .badge::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        h1 {
+            font-size: clamp(3rem, 8vw, 5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--white) 0%, var(--gray) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            line-height: 1.8;
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: var(--white);
+            box-shadow: 0 4px 20px rgba(0, 102, 255, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 30px rgba(0, 102, 255, 0.5);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--white);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-3px);
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 2rem;
+            margin-top: 5rem;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--accent);
+        }
+
+        .stat-label {
+            color: var(--gray);
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+
+        /* Problem Section */
+        .section {
+            padding: 6rem 5%;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 4rem;
+        }
+
+        .section-label {
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+        }
+
+        h2 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .section-desc {
+            color: var(--gray);
+            font-size: 1.125rem;
+        }
+
+        .problems-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .problem-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            background: rgba(0, 102, 255, 0.05);
+        }
+
+        .problem-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, rgba(255, 100, 100, 0.2), rgba(255, 100, 100, 0.1));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .problem-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .problem-card p {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        /* Solution Section */
+        .solution-section {
+            background: linear-gradient(180deg, transparent 0%, rgba(0, 102, 255, 0.03) 50%, transparent 100%);
+        }
+
+        .solution-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .solution-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s;
+        }
+
+        .solution-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            transform: scaleX(0);
+            transition: transform 0.4s;
+        }
+
+        .solution-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .solution-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(0, 102, 255, 0.3);
+        }
+
+        .solution-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .solution-card h3 {
+            font-size: 1.375rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .solution-card p {
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-list {
+            list-style: none;
+        }
+
+        .feature-list li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-list li::before {
+            content: '✓';
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        /* ROI Section */
+        .roi-section {
+            background: var(--dark);
+        }
+
+        .roi-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .roi-visual {
+            position: relative;
+        }
+
+        .roi-circle {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: conic-gradient(
+                var(--accent) 0deg 144deg,
+                rgba(255,255,255,0.1) 144deg 360deg
+            );
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .roi-circle::before {
+            content: '';
+            position: absolute;
+            width: 240px;
+            height: 240px;
+            background: var(--dark);
+            border-radius: 50%;
+        }
+
+        .roi-center {
+            position: relative;
+            text-align: center;
+        }
+
+        .roi-percent {
+            font-size: 4rem;
+            font-weight: 900;
+            color: var(--accent);
+        }
+
+        .roi-label {
+            color: var(--gray);
+            font-size: 0.875rem;
+        }
+
+        .roi-content h2 {
+            margin-bottom: 1.5rem;
+        }
+
+        .roi-metrics {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .metric {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .metric-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(0, 212, 170, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .metric-text h4 {
+            font-size: 1.125rem;
+            font-weight: 700;
+        }
+
+        .metric-text p {
+            color: var(--gray);
+            font-size: 0.875rem;
+        }
+
+        /* Testimonial */
+        .testimonial-section {
+            text-align: center;
+        }
+
+        .testimonial {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 3rem;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .quote {
+            font-size: 1.5rem;
+            font-style: italic;
+            margin-bottom: 2rem;
+            color: var(--light);
+        }
+
+        .quote::before {
+            content: '"';
+            font-size: 4rem;
+            color: var(--primary);
+            line-height: 0;
+            vertical-align: middle;
+            margin-right: 0.5rem;
+        }
+
+        .author {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .author-avatar {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .author-info h4 {
+            font-weight: 700;
+        }
+
+        .author-info p {
+            color: var(--gray);
+            font-size: 0.875rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            text-align: center;
+            background: linear-gradient(180deg, transparent 0%, rgba(0, 102, 255, 0.05) 100%);
+        }
+
+        .cta-box {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 4rem;
+            background: linear-gradient(135deg, rgba(0, 102, 255, 0.1), rgba(0, 212, 170, 0.05));
+            border-radius: 32px;
+            border: 1px solid rgba(0, 102, 255, 0.2);
+        }
+
+        .cta-box h2 {
+            margin-bottom: 1rem;
+        }
+
+        .cta-box p {
+            color: var(--gray);
+            margin-bottom: 2rem;
+        }
+
+        .email-form {
+            display: flex;
+            gap: 1rem;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .email-input {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--white);
+            font-size: 1rem;
+        }
+
+        .email-input::placeholder {
+            color: var(--gray);
+        }
+
+        .email-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        /* Footer */
+        footer {
+            padding: 3rem 5%;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .footer-links a {
+            color: var(--gray);
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--white);
+        }
+
+        .copyright {
+            color: var(--gray);
+            font-size: 0.875rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .roi-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .email-form {
+                flex-direction: column;
+            }
+
+            .footer-content {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    <div class="grid-pattern"></div>
+
+    <nav>
+        <div class="logo">
+            <div class="logo-icon">🚚</div>
+            FleetMind
+        </div>
+        <ul class="nav-links">
+            <li><a href="#features">Features</a></li>
+            <li><a href="#roi">ROI</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+            <li><a href="#about">About</a></li>
+        </ul>
+        <a href="#demo" class="nav-cta">Request Demo</a>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <div class="badge">Now in Private Beta</div>
+            <h1>Make Every Delivery Fleet <span class="highlight">40% Smarter</span></h1>
+            <p class="hero-subtitle">
+                FleetMind is the AI-native operating system that brings autonomous dispatch, 
+                predictive maintenance, and real-time optimization to last-mile delivery fleets.
+            </p>
+            <div class="cta-group">
+                <a href="#demo" class="btn btn-primary">
+                    Get Early Access →
+                </a>
+                <a href="#features" class="btn btn-secondary">
+                    See How It Works
+                </a>
+            </div>
+            <div class="stats-bar">
+                <div class="stat">
+                    <div class="stat-value">40%</div>
+                    <div class="stat-label">Efficiency Gain</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">$200B</div>
+                    <div class="stat-label">Market Size</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">500ms</div>
+                    <div class="stat-label">Route Optimization</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">94%</div>
+                    <div class="stat-label">Forecast Accuracy</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="section-header">
+            <div class="section-label">The Problem</div>
+            <h2>Last-Mile Delivery is Broken</h2>
+            <p class="section-desc">
+                53% of shipping costs are in the last mile. Most fleets still use spreadsheets and gut instinct.
+            </p>
+        </div>
+        <div class="problems-grid">
+            <div class="problem-card">
+                <div class="problem-icon">📈</div>
+                <h3>Exploding Demand</h3>
+                <p>E-commerce volume has 5x'd since 2020. Fleets can't keep up with manual processes.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">💸</div>
+                <h3>Razor-Thin Margins</h3>
+                <p>Average delivery profit is $0.50-2.00 per package. Every inefficiency destroys profit.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">👷</div>
+                <h3>Driver Shortage</h3>
+                <p>80,000+ driver shortage in the US. You need to maximize every driver's productivity.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">⛽</div>
+                <h3>Fuel Volatility</h3>
+                <p>30% of operating costs are fuel. Inefficient routes burn money and carbon.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">⏱️</div>
+                <h3>Customer Expectations</h3>
+                <p>Same-day and 2-hour windows are table stakes. Miss them and you lose the customer.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">🔧</div>
+                <h3>Maintenance Surprises</h3>
+                <p>Unexpected breakdowns cost $400-$700 per incident. Predictability is survival.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="features" class="section solution-section">
+        <div class="section-header">
+            <div class="section-label">The Solution</div>
+            <h2>Intelligence at Every Level</h2>
+            <p class="section-desc">
+                Four AI engines working together to optimize your entire fleet operation in real-time.
+            </p>
+        </div>
+        <div class="solution-grid">
+            <div class="solution-card">
+                <div class="solution-icon">🧠</div>
+                <h3>Dispatch AI</h3>
+                <p>Autonomous routing that adapts to traffic, weather, and cancellations in real-time.</p>
+                <ul class="feature-list">
+                    <li>1000+ stops optimized in 500ms</li>
+                    <li>Dynamic re-routing mid-shift</li>
+                    <li>Smart driver assignment</li>
+                </ul>
+            </div>
+            <div class="solution-card">
+                <div class="solution-icon">🔮</div>
+                <h3>Predict AI</h3>
+                <p>72-hour demand forecasting and predictive vehicle maintenance.</p>
+                <ul class="feature-list">
+                    <li>94% forecast accuracy</li>
+                    <li>Prevent breakdowns before they happen</li>
+                    <li>Optimal staffing recommendations</li>
+                </ul>
+            </div>
+            <div class="solution-card">
+                <div class="solution-icon">🏆</div>
+                <h3>Coach AI</h3>
+                <p>Real-time driver performance coaching and safety optimization.</p>
+                <ul class="feature-list">
+                    <li>Behavior analysis & nudges</li>
+                    <li>Gamification & leaderboards</li>
+                    <li>Insurance score optimization</li>
+                </ul>
+            </div>
+            <div class="solution-card">
+                <div class="solution-icon">📊</div>
+                <h3>Command Center</h3>
+                <p>Unified operations dashboard with AI-powered exception handling.</p>
+                <ul class="feature-list">
+                    <li>Real-time fleet visibility</li>
+                    <li>Automated customer updates</li>
+                    <li>Performance benchmarking</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section id="roi" class="section roi-section">
+        <div class="roi-container">
+            <div class="roi-visual">
+                <div class="roi-circle">
+                    <div class="roi-center">
+                        <div class="roi-percent">40%</div>
+                        <div class="roi-label">Efficiency Gain</div>
+                    </div>
+                </div>
+            </div>
+            <div class="roi-content">
+                <div class="section-label">The ROI</div>
+                <h2>Results That Pay for Themselves</h2>
+                <div class="roi-metrics">
+                    <div class="metric">
+                        <div class="metric-icon">📦</div>
+                        <div class="metric-text">
+                            <h4>+35% More Deliveries</h4>
+                            <p>Per driver per day with optimized routing</p>
+                        </div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-icon">⛽</div>
+                        <div class="metric-text">
+                            <h4>-25% Fuel Costs</h4>
+                            <p>Smarter routes = less miles = less fuel</p>
+                        </div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-icon">🔧</div>
+                        <div class="metric-text">
+                            <h4>-60% Breakdowns</h4>
+                            <p>Predictive maintenance catches issues early</p>
+                        </div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-icon">⭐</div>
+                        <div class="metric-text">
+                            <h4>+40 NPS Points</h4>
+                            <p>On-time delivery = happy customers</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section testimonial-section">
+        <div class="testimonial">
+            <p class="quote">
+                FleetMind paid for itself in the first month. We went from 45 deliveries per driver 
+                to 62 — without adding a single vehicle to our fleet.
+            </p>
+            <div class="author">
+                <div class="author-avatar">MR</div>
+                <div class="author-info">
+                    <h4>Mike Rodriguez</h4>
+                    <p>VP Operations, Metro Grocery Delivery</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="demo" class="section cta-section">
+        <div class="cta-box">
+            <h2>Ready to Transform Your Fleet?</h2>
+            <p>Join our private beta and see 40% efficiency gains in 30 days — or we'll extend your trial free.</p>
+            <form class="email-form">
+                <input type="email" class="email-input" placeholder="Enter your work email">
+                <button type="submit" class="btn btn-primary">Get Early Access</button>
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="logo">
+                <div class="logo-icon">🚚</div>
+                FleetMind
+            </div>
+            <ul class="footer-links">
+                <li><a href="#">Features</a></li>
+                <li><a href="#">Pricing</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Contact</a></li>
+                <li><a href="#">Privacy</a></li>
+            </ul>
+            <p class="copyright">© 2026 FleetMind AI. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
