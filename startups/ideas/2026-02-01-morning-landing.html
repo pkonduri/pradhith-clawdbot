@@ -1,0 +1,1357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeuraBio — Personalized Longevity Intelligence</title>
+    <meta name="description" content="Your biology, decoded. Your lifespan, optimized. The AI-powered platform for living longer, healthier lives.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00D4AA;
+            --primary-dark: #00A88A;
+            --secondary: #7B61FF;
+            --accent: #FF6B9D;
+            --bg-dark: #0A0E17;
+            --bg-card: #111827;
+            --bg-gradient: linear-gradient(135deg, #0A0E17 0%, #1A1F2E 50%, #0F1419 100%);
+            --text-primary: #FFFFFF;
+            --text-secondary: #94A3B8;
+            --text-muted: #64748B;
+            --glow-primary: 0 0 60px rgba(0, 212, 170, 0.3);
+            --glow-secondary: 0 0 60px rgba(123, 97, 255, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+        }
+
+        /* Animated background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(ellipse at center, rgba(0, 212, 170, 0.08) 0%, transparent 50%),
+                        radial-gradient(ellipse at 80% 20%, rgba(123, 97, 255, 0.08) 0%, transparent 40%),
+                        radial-gradient(ellipse at 20% 80%, rgba(255, 107, 157, 0.05) 0%, transparent 40%);
+            animation: pulse 15s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.1) rotate(5deg); }
+        }
+
+        /* DNA Helix Animation */
+        .dna-container {
+            position: absolute;
+            right: 5%;
+            top: 20%;
+            height: 60%;
+            width: 100px;
+            opacity: 0.15;
+            pointer-events: none;
+        }
+
+        .dna-strand {
+            position: relative;
+            height: 100%;
+            animation: dna-rotate 20s linear infinite;
+        }
+
+        @keyframes dna-rotate {
+            0% { transform: rotateY(0deg); }
+            100% { transform: rotateY(360deg); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(20px);
+            background: rgba(10, 14, 23, 0.8);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-cta {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: var(--bg-dark) !important;
+            padding: 0.75rem 1.75rem;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: var(--glow-primary);
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 80px rgba(0, 212, 170, 0.5);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 8rem 5% 4rem;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 700px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(0, 212, 170, 0.1);
+            border: 1px solid rgba(0, 212, 170, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 7vw, 5rem);
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #FFFFFF 0%, #94A3B8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.35rem;
+            color: var(--text-secondary);
+            margin-bottom: 2.5rem;
+            max-width: 550px;
+        }
+
+        .hero-cta-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: var(--bg-dark);
+            padding: 1rem 2.5rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: var(--glow-primary);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 100px rgba(0, 212, 170, 0.5);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-primary);
+            padding: 1rem 2.5rem;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* Hero Visual */
+        .hero-visual {
+            position: absolute;
+            right: 5%;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 45%;
+            max-width: 600px;
+            z-index: 1;
+        }
+
+        .bio-age-card {
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 2rem;
+            box-shadow: var(--glow-secondary);
+            animation: card-float 6s ease-in-out infinite;
+        }
+
+        @keyframes card-float {
+            0%, 100% { transform: translateY(0) rotate(2deg); }
+            50% { transform: translateY(-20px) rotate(-1deg); }
+        }
+
+        .bio-age-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .bio-age-title {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .bio-age-live {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary);
+            font-size: 0.85rem;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: pulse-dot 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .bio-age-display {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .bio-age-number {
+            font-size: 5rem;
+            font-weight: 700;
+            font-family: 'Space Grotesk', sans-serif;
+            background: linear-gradient(135deg, var(--primary) 0%, #00FFD4 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+        }
+
+        .bio-age-unit {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+        }
+
+        .bio-age-comparison {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            align-items: center;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .bio-age-comparison strong {
+            color: var(--primary);
+        }
+
+        .bio-metrics {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .metric {
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .metric-value.positive { color: var(--primary); }
+        .metric-value.warning { color: #F59E0B; }
+
+        .metric-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            background: var(--bg-card);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 3rem 5%;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 3rem;
+            font-weight: 700;
+            font-family: 'Space Grotesk', sans-serif;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Problem Section */
+        .section {
+            padding: 6rem 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-badge {
+            display: inline-block;
+            background: rgba(123, 97, 255, 0.1);
+            border: 1px solid rgba(123, 97, 255, 0.3);
+            padding: 0.5rem 1.25rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--secondary);
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .section-title {
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Problem Cards */
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .problem-card {
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .problem-card:hover {
+            border-color: rgba(255, 107, 157, 0.3);
+            transform: translateY(-5px);
+        }
+
+        .problem-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 107, 157, 0.1);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .problem-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .problem-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Features Section */
+        .features-section {
+            background: linear-gradient(180deg, var(--bg-dark) 0%, var(--bg-card) 50%, var(--bg-dark) 100%);
+        }
+
+        .feature-showcase {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            margin-bottom: 6rem;
+        }
+
+        .feature-showcase:nth-child(even) {
+            direction: rtl;
+        }
+
+        .feature-showcase:nth-child(even) > * {
+            direction: ltr;
+        }
+
+        .feature-content h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-content p {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+
+        .feature-list {
+            list-style: none;
+        }
+
+        .feature-list li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .feature-list li::before {
+            content: '✓';
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        .feature-visual {
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 2rem;
+            box-shadow: var(--glow-primary);
+        }
+
+        /* How It Works */
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            position: relative;
+        }
+
+        .steps-grid::before {
+            content: '';
+            position: absolute;
+            top: 40px;
+            left: 10%;
+            right: 10%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent), var(--primary));
+            opacity: 0.3;
+        }
+
+        .step-card {
+            text-align: center;
+            position: relative;
+        }
+
+        .step-number {
+            width: 80px;
+            height: 80px;
+            background: var(--bg-card);
+            border: 2px solid var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 0 auto 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .step-card h4 {
+            font-size: 1.2rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .step-card p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Pricing Section */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 2.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pricing-card.featured {
+            border-color: var(--primary);
+            box-shadow: var(--glow-primary);
+        }
+
+        .pricing-card.featured::before {
+            content: 'Most Popular';
+            position: absolute;
+            top: 20px;
+            right: -35px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: var(--bg-dark);
+            padding: 0.5rem 3rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            transform: rotate(45deg);
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .pricing-tier {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+        }
+
+        .pricing-price {
+            font-size: 3.5rem;
+            font-weight: 700;
+            font-family: 'Space Grotesk', sans-serif;
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-price span {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        .pricing-desc {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-features li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .pricing-features li::before {
+            content: '✓';
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        .pricing-cta {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .pricing-card.featured .pricing-cta {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: var(--bg-dark);
+        }
+
+        .pricing-card:not(.featured) .pricing-cta {
+            background: transparent;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: var(--text-primary);
+        }
+
+        /* Testimonials */
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .testimonial-card {
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 2rem;
+        }
+
+        .testimonial-rating {
+            color: #F59E0B;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .testimonial-text {
+            color: var(--text-secondary);
+            font-style: italic;
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+
+        .author-name {
+            font-weight: 600;
+        }
+
+        .author-title {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            text-align: center;
+            padding: 8rem 5%;
+            background: linear-gradient(180deg, var(--bg-dark), var(--bg-card));
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(ellipse, rgba(0, 212, 170, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-section h2 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-section p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 2.5rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--bg-card);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 4rem 5% 2rem;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr repeat(3, 1fr);
+            gap: 4rem;
+            max-width: 1200px;
+            margin: 0 auto 3rem;
+        }
+
+        .footer-brand p {
+            color: var(--text-secondary);
+            margin-top: 1rem;
+            max-width: 300px;
+        }
+
+        .footer-links h4 {
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .footer-links ul {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 2rem;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero-visual {
+                display: none;
+            }
+
+            .feature-showcase {
+                grid-template-columns: 1fr;
+            }
+
+            .feature-showcase:nth-child(even) {
+                direction: ltr;
+            }
+
+            .steps-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .steps-grid::before {
+                display: none;
+            }
+
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .steps-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+        }
+
+        /* Animation on scroll */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">
+            <div class="logo-icon">🧬</div>
+            NeuraBio
+        </div>
+        <ul class="nav-links">
+            <li><a href="#features">Features</a></li>
+            <li><a href="#how-it-works">How It Works</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+            <li><a href="#" class="nav-cta">Get Early Access</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span>🧪</span> Now in Private Beta
+            </div>
+            <h1>Your Biology, <span>Decoded.</span><br>Your Lifespan, <span>Optimized.</span></h1>
+            <p class="hero-subtitle">The AI-powered longevity platform that transforms your multi-omics data into personalized protocols for living longer, healthier lives.</p>
+            <div class="hero-cta-group">
+                <a href="#" class="btn-primary">
+                    Calculate Your Bio Age →
+                </a>
+                <a href="#how-it-works" class="btn-secondary">
+                    See How It Works
+                </a>
+            </div>
+        </div>
+
+        <div class="hero-visual">
+            <div class="bio-age-card">
+                <div class="bio-age-header">
+                    <span class="bio-age-title">Biological Age</span>
+                    <span class="bio-age-live"><span class="live-dot"></span> Live</span>
+                </div>
+                <div class="bio-age-display">
+                    <span class="bio-age-number">34.2</span>
+                    <span class="bio-age-unit">years</span>
+                    <div class="bio-age-comparison">
+                        Chronological: 42 • <strong>7.8 years younger</strong>
+                    </div>
+                </div>
+                <div class="bio-metrics">
+                    <div class="metric">
+                        <div class="metric-value positive">-0.3</div>
+                        <div class="metric-label">Pace/Year</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">94</div>
+                        <div class="metric-label">Health Score</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value warning">2</div>
+                        <div class="metric-label">Alerts</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Bar -->
+    <div class="stats-bar">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-value">$600B</div>
+                <div class="stat-label">Longevity Market by 2027</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">50+</div>
+                <div class="stat-label">Data Sources Integrated</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">500K+</div>
+                <div class="stat-label">Research Papers Indexed</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">99.9%</div>
+                <div class="stat-label">Prediction Accuracy</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Problem Section -->
+    <section class="section" id="problem">
+        <div class="section-header">
+            <div class="section-badge">The Problem</div>
+            <h2 class="section-title">Healthcare Is Broken</h2>
+            <p class="section-subtitle">The $4.2 trillion system treats sickness, not aging. It's time for a new approach.</p>
+        </div>
+
+        <div class="problem-grid">
+            <div class="problem-card fade-in">
+                <div class="problem-icon">💊</div>
+                <h3>One-Size-Fits-All</h3>
+                <p>The same supplement that extends one person's life can harm another. Generic advice doesn't work.</p>
+            </div>
+            <div class="problem-card fade-in">
+                <div class="problem-icon">📊</div>
+                <h3>Data Silos Everywhere</h3>
+                <p>Your 23andMe, bloodwork, wearables, and medical records never talk to each other.</p>
+            </div>
+            <div class="problem-card fade-in">
+                <div class="problem-icon">📚</div>
+                <h3>Information Overload</h3>
+                <p>10,000+ longevity studies published yearly. Impossible for individuals to parse what applies to them.</p>
+            </div>
+            <div class="problem-card fade-in">
+                <div class="problem-icon">🔄</div>
+                <h3>No Feedback Loops</h3>
+                <p>People try interventions with no way to measure if they're actually working for their biology.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="section features-section" id="features">
+        <div class="section-header">
+            <div class="section-badge">The Solution</div>
+            <h2 class="section-title">Your Longevity Command Center</h2>
+            <p class="section-subtitle">Everything you need to optimize your healthspan, in one intelligent platform.</p>
+        </div>
+
+        <div class="feature-showcase fade-in">
+            <div class="feature-content">
+                <h3>🧬 Multi-Omics Integration</h3>
+                <p>Import from 50+ data sources—genomics, proteomics, metabolomics, wearables, labs—and see them unified in one beautiful profile.</p>
+                <ul class="feature-list">
+                    <li>23andMe, Ancestry, whole genome sequencing</li>
+                    <li>Continuous glucose monitors, Oura, Whoop, Apple Health</li>
+                    <li>Lab results from any provider</li>
+                    <li>Medical records via FHIR integration</li>
+                </ul>
+            </div>
+            <div class="feature-visual">
+                <div style="text-align: center; padding: 2rem;">
+                    <div style="font-size: 4rem; margin-bottom: 1rem;">🧬📊💉🩺</div>
+                    <div style="color: var(--text-secondary);">50+ data sources → One unified profile</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="feature-showcase fade-in">
+            <div class="feature-content">
+                <h3>⏱️ Real-Time Biological Age</h3>
+                <p>Our multi-clock algorithm combines epigenetic, proteomic, and metabolic aging signals to calculate your true biological age—updated with every new data point.</p>
+                <ul class="feature-list">
+                    <li>Horvath, PhenoAge, GrimAge clocks combined</li>
+                    <li>Pace-of-aging velocity tracking</li>
+                    <li>See exactly how fast you're aging</li>
+                    <li>Track improvements over time</li>
+                </ul>
+            </div>
+            <div class="feature-visual">
+                <div style="text-align: center; padding: 2rem;">
+                    <div style="font-size: 5rem; font-weight: bold; background: linear-gradient(135deg, var(--primary), #00FFD4); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">34.2</div>
+                    <div style="color: var(--text-secondary); margin-top: 0.5rem;">Biological Age (Chronological: 42)</div>
+                    <div style="color: var(--primary); margin-top: 0.5rem; font-weight: 600;">↓ 7.8 years younger</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="feature-showcase fade-in">
+            <div class="feature-content">
+                <h3>🔮 Intervention Simulator</h3>
+                <p>Predict YOUR response to any intervention—rapamycin, metformin, NAD+ precursors, fasting protocols—before you try them.</p>
+                <ul class="feature-list">
+                    <li>Causal inference modeling, not just correlations</li>
+                    <li>Based on your genetic variants + biomarkers</li>
+                    <li>Confidence intervals and risk warnings</li>
+                    <li>Citations to peer-reviewed research</li>
+                </ul>
+            </div>
+            <div class="feature-visual">
+                <div style="padding: 1rem;">
+                    <div style="background: rgba(0, 212, 170, 0.1); border-radius: 12px; padding: 1rem; margin-bottom: 1rem;">
+                        <div style="font-weight: 600; margin-bottom: 0.5rem;">Rapamycin (5mg/week)</div>
+                        <div style="color: var(--primary);">Predicted: -2.1 years bio age</div>
+                        <div style="color: var(--text-muted); font-size: 0.85rem;">Confidence: 78% | Your profile: Optimal responder</div>
+                    </div>
+                    <div style="background: rgba(245, 158, 11, 0.1); border-radius: 12px; padding: 1rem;">
+                        <div style="font-weight: 600; margin-bottom: 0.5rem;">Metformin (1g/day)</div>
+                        <div style="color: #F59E0B;">Predicted: -0.8 years bio age</div>
+                        <div style="color: var(--text-muted); font-size: 0.85rem;">Confidence: 65% | Your profile: Moderate responder</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="section" id="how-it-works">
+        <div class="section-header">
+            <div class="section-badge">How It Works</div>
+            <h2 class="section-title">Four Steps to Optimized Longevity</h2>
+        </div>
+
+        <div class="steps-grid">
+            <div class="step-card fade-in">
+                <div class="step-number">1</div>
+                <h4>Connect Your Data</h4>
+                <p>Import from 50+ sources—genomics, wearables, labs, medical records. Takes 5 minutes.</p>
+            </div>
+            <div class="step-card fade-in">
+                <div class="step-number">2</div>
+                <h4>Get Your Bio Age</h4>
+                <p>Our AI calculates your true biological age using multiple validated aging clocks.</p>
+            </div>
+            <div class="step-card fade-in">
+                <div class="step-number">3</div>
+                <h4>Simulate Interventions</h4>
+                <p>Predict how YOUR body will respond to supplements, protocols, and lifestyle changes.</p>
+            </div>
+            <div class="step-card fade-in">
+                <div class="step-number">4</div>
+                <h4>Track & Optimize</h4>
+                <p>Follow personalized protocols and watch your biological age improve over time.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section class="section" id="pricing">
+        <div class="section-header">
+            <div class="section-badge">Pricing</div>
+            <h2 class="section-title">Invest in Your Healthspan</h2>
+            <p class="section-subtitle">Choose the plan that fits your longevity journey.</p>
+        </div>
+
+        <div class="pricing-grid">
+            <div class="pricing-card fade-in">
+                <div class="pricing-tier">Free</div>
+                <div class="pricing-price">$0<span>/month</span></div>
+                <p class="pricing-desc">Get started with basic biological age tracking.</p>
+                <ul class="pricing-features">
+                    <li>Basic biological age estimate</li>
+                    <li>Connect 3 data sources</li>
+                    <li>Monthly insights</li>
+                    <li>Community access</li>
+                </ul>
+                <button class="pricing-cta">Get Started Free</button>
+            </div>
+
+            <div class="pricing-card featured fade-in">
+                <div class="pricing-tier">Optimize</div>
+                <div class="pricing-price">$199<span>/month</span></div>
+                <p class="pricing-desc">Full platform access for serious health optimizers.</p>
+                <ul class="pricing-features">
+                    <li>Multi-clock biological age</li>
+                    <li>Unlimited data sources</li>
+                    <li>Intervention simulator</li>
+                    <li>AI-generated protocols</li>
+                    <li>Priority support</li>
+                </ul>
+                <button class="pricing-cta">Start 14-Day Trial</button>
+            </div>
+
+            <div class="pricing-card fade-in">
+                <div class="pricing-tier">Premium</div>
+                <div class="pricing-price">$999<span>/month</span></div>
+                <p class="pricing-desc">Concierge longevity with quarterly testing included.</p>
+                <ul class="pricing-features">
+                    <li>Everything in Optimize</li>
+                    <li>Quarterly bloodwork kits</li>
+                    <li>1-on-1 longevity coaching</li>
+                    <li>Clinical trial matching</li>
+                    <li>VIP physician network</li>
+                </ul>
+                <button class="pricing-cta">Contact Sales</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="section">
+        <div class="section-header">
+            <div class="section-badge">Testimonials</div>
+            <h2 class="section-title">Trusted by Longevity Leaders</h2>
+        </div>
+
+        <div class="testimonials-grid">
+            <div class="testimonial-card fade-in">
+                <div class="testimonial-rating">★★★★★</div>
+                <p class="testimonial-text">"NeuraBio finally connected all my health data into one coherent picture. I've reduced my biological age by 4 years in 8 months following their protocols."</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">JM</div>
+                    <div>
+                        <div class="author-name">Dr. James Mitchell</div>
+                        <div class="author-title">Longevity Researcher, Stanford</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="testimonial-card fade-in">
+                <div class="testimonial-rating">★★★★★</div>
+                <p class="testimonial-text">"The intervention simulator predicted I'd be a non-responder to metformin, saving me months of useless supplementation. Game changer."</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">SK</div>
+                    <div>
+                        <div class="author-name">Sarah Kim</div>
+                        <div class="author-title">Tech Executive, 47</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="testimonial-card fade-in">
+                <div class="testimonial-rating">★★★★★</div>
+                <p class="testimonial-text">"We've integrated NeuraBio into our clinic and patient outcomes have never been better. The personalization is unmatched."</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">RP</div>
+                    <div>
+                        <div class="author-name">Dr. Robert Park</div>
+                        <div class="author-title">Founder, Longevity MD</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="cta-content">
+            <h2>Start Living Longer Today</h2>
+            <p>Join thousands of health optimizers who are taking control of their longevity with AI-powered insights.</p>
+            <div class="hero-cta-group" style="justify-content: center;">
+                <a href="#" class="btn-primary">
+                    Get Your Free Bio Age →
+                </a>
+            </div>
+            <p style="margin-top: 1.5rem; font-size: 0.9rem; color: var(--text-muted);">No credit card required • Takes 5 minutes • HIPAA compliant</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <div class="logo">
+                    <div class="logo-icon">🧬</div>
+                    NeuraBio
+                </div>
+                <p>The AI-powered platform for personalized longevity intelligence. Live longer, live better.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Product</h4>
+                <ul>
+                    <li><a href="#">Features</a></li>
+                    <li><a href="#">Pricing</a></li>
+                    <li><a href="#">Integrations</a></li>
+                    <li><a href="#">API</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Press</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Legal</h4>
+                <ul>
+                    <li><a href="#">Privacy</a></li>
+                    <li><a href="#">Terms</a></li>
+                    <li><a href="#">Security</a></li>
+                    <li><a href="#">HIPAA</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 NeuraBio Inc. All rights reserved. | The future of longevity is personalized.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Scroll animations
+        const fadeElements = document.querySelectorAll('.fade-in');
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        fadeElements.forEach(el => observer.observe(el));
+
+        // Smooth scroll for nav links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
