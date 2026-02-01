@@ -1,0 +1,1343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgentBank — Financial Infrastructure for Autonomous AI Agents</title>
+    <meta name="description" content="The Stripe for AI Agents. Programmable wallets, real-time controls, and agent-to-agent payments for the $2.3T agent economy.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #0ea5e9;
+            --accent: #22d3ee;
+            --dark: #0f172a;
+            --darker: #020617;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --success: #10b981;
+            --warning: #f59e0b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--darker);
+            color: var(--light);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(14, 165, 233, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(34, 211, 238, 0.05) 0%, transparent 70%);
+            animation: bgPulse 20s ease-in-out infinite;
+        }
+
+        @keyframes bgPulse {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(2%, 2%) scale(1.02); }
+            50% { transform: translate(-1%, 1%) scale(0.98); }
+            75% { transform: translate(1%, -2%) scale(1.01); }
+        }
+
+        /* Grid Pattern Overlay */
+        .grid-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-image: 
+                linear-gradient(rgba(99, 102, 241, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(2, 6, 23, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(99, 102, 241, 0.1);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .logo-icon {
+            width: 42px;
+            height: 42px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            -webkit-text-fill-color: white;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--gray);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--light);
+        }
+
+        .nav-cta {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.75rem;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--light);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-ghost:hover {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(99, 102, 241, 0.5);
+        }
+
+        .btn-large {
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 8rem 5%;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 720px;
+            z-index: 2;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0.5rem 1rem;
+            background: rgba(99, 102, 241, 0.15);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+        }
+
+        .badge-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--success);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 7vw, 5rem);
+            font-weight: 900;
+            line-height: 1.05;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.03em;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(135deg, var(--primary), var(--accent), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.35rem;
+            color: var(--gray);
+            margin-bottom: 2.5rem;
+            max-width: 600px;
+            line-height: 1.7;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 3.5rem;
+            flex-wrap: wrap;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            text-align: left;
+        }
+
+        .stat-value {
+            font-size: 2.2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--light), var(--gray));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* Hero Visual */
+        .hero-visual {
+            position: absolute;
+            right: 5%;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 45%;
+            max-width: 600px;
+            z-index: 1;
+        }
+
+        .wallet-card {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.8));
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 24px;
+            padding: 2rem;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(-50%) translateX(0); }
+            50% { transform: translateY(calc(-50% - 15px)) translateX(5px); }
+        }
+
+        .wallet-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .wallet-type {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .wallet-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .wallet-name {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .wallet-id {
+            font-size: 0.8rem;
+            color: var(--gray);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .wallet-status {
+            padding: 0.4rem 0.8rem;
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--success);
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .wallet-balance {
+            text-align: center;
+            padding: 1.5rem 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            margin-bottom: 1.5rem;
+        }
+
+        .balance-label {
+            font-size: 0.85rem;
+            color: var(--gray);
+            margin-bottom: 0.5rem;
+        }
+
+        .balance-amount {
+            font-size: 2.8rem;
+            font-weight: 800;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .wallet-activity {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .activity-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 10px;
+        }
+
+        .activity-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .activity-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+        }
+
+        .activity-icon.outgoing { background: rgba(239, 68, 68, 0.15); }
+        .activity-icon.incoming { background: rgba(16, 185, 129, 0.15); }
+        .activity-icon.pending { background: rgba(245, 158, 11, 0.15); }
+
+        .activity-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .activity-name {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .activity-time {
+            font-size: 0.75rem;
+            color: var(--gray);
+        }
+
+        .activity-amount {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .activity-amount.negative { color: #ef4444; }
+        .activity-amount.positive { color: var(--success); }
+        .activity-amount.pending { color: var(--warning); }
+
+        /* Problem Section */
+        .section {
+            padding: 8rem 5%;
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 5rem;
+        }
+
+        .section-tag {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-header h2 {
+            font-size: clamp(2.2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .section-header p {
+            font-size: 1.2rem;
+            color: var(--gray);
+        }
+
+        .problems-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .problem-card {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.6), rgba(30, 41, 59, 0.4));
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(239, 68, 68, 0.4);
+            box-shadow: 0 20px 60px rgba(239, 68, 68, 0.1);
+        }
+
+        .problem-icon {
+            width: 56px;
+            height: 56px;
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .problem-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .problem-card p {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        /* Solution Section */
+        .solution-section {
+            background: linear-gradient(180deg, transparent, rgba(99, 102, 241, 0.03), transparent);
+        }
+
+        .solutions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .solution-card {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.8), rgba(30, 41, 59, 0.5));
+            border: 1px solid rgba(99, 102, 241, 0.15);
+            border-radius: 24px;
+            padding: 2.5rem;
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .solution-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .solution-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(99, 102, 241, 0.3);
+            box-shadow: 0 25px 80px rgba(99, 102, 241, 0.15);
+        }
+
+        .solution-card:hover::before {
+            opacity: 1;
+        }
+
+        .solution-icon {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1.75rem;
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+        }
+
+        .solution-card h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .solution-card p {
+            color: var(--gray);
+            font-size: 1rem;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .solution-features {
+            list-style: none;
+        }
+
+        .solution-features li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 0.5rem 0;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .solution-features li::before {
+            content: '✓';
+            color: var(--success);
+            font-weight: bold;
+        }
+
+        /* Market Section */
+        .market-section {
+            background: var(--dark);
+        }
+
+        .market-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .market-chart {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .market-item {
+            text-align: center;
+            padding: 2.5rem;
+            background: rgba(99, 102, 241, 0.05);
+            border: 1px solid rgba(99, 102, 241, 0.1);
+            border-radius: 20px;
+            transition: all 0.3s;
+        }
+
+        .market-item:hover {
+            background: rgba(99, 102, 241, 0.1);
+            transform: scale(1.02);
+        }
+
+        .market-year {
+            font-size: 0.9rem;
+            color: var(--gray);
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .market-value {
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .market-label {
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+
+        .market-cta {
+            text-align: center;
+            padding: 3rem;
+            background: linear-gradient(145deg, rgba(99, 102, 241, 0.1), rgba(14, 165, 233, 0.05));
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 24px;
+        }
+
+        .market-cta h3 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .market-cta p {
+            color: var(--gray);
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+
+        /* How It Works */
+        .how-section {
+            background: linear-gradient(180deg, var(--dark), var(--darker));
+        }
+
+        .flow-diagram {
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .flow-step {
+            display: flex;
+            align-items: center;
+            gap: 3rem;
+            padding: 2rem 0;
+            position: relative;
+        }
+
+        .flow-step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            left: 44px;
+            bottom: 0;
+            width: 2px;
+            height: 60px;
+            background: linear-gradient(180deg, var(--primary), transparent);
+        }
+
+        .flow-number {
+            width: 90px;
+            height: 90px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 800;
+            flex-shrink: 0;
+            box-shadow: 0 15px 40px rgba(99, 102, 241, 0.4);
+        }
+
+        .flow-content {
+            flex: 1;
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid rgba(99, 102, 241, 0.15);
+            border-radius: 20px;
+            padding: 2rem;
+        }
+
+        .flow-content h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .flow-content p {
+            color: var(--gray);
+            font-size: 1rem;
+        }
+
+        /* Pricing Section */
+        .pricing-section {
+            background: var(--darker);
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            padding: 2.5rem;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .pricing-card.featured {
+            border-color: var(--primary);
+            background: linear-gradient(145deg, rgba(99, 102, 241, 0.1), rgba(15, 23, 42, 0.8));
+            transform: scale(1.02);
+        }
+
+        .pricing-card.featured::before {
+            content: 'Most Popular';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 0.4rem 1rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .pricing-header {
+            text-align: center;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            margin-bottom: 1.5rem;
+        }
+
+        .pricing-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--gray);
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-price {
+            font-size: 3rem;
+            font-weight: 800;
+        }
+
+        .pricing-price span {
+            font-size: 1rem;
+            color: var(--gray);
+            font-weight: 400;
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-features li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 0.75rem 0;
+            font-size: 0.95rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        .pricing-features li::before {
+            content: '✓';
+            color: var(--success);
+            font-weight: bold;
+        }
+
+        .pricing-card .btn {
+            width: 100%;
+            justify-content: center;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 10rem 5%;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.2) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cta-content h2 {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .cta-content p {
+            font-size: 1.3rem;
+            color: var(--gray);
+            margin-bottom: 3rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 5%;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .footer-tagline {
+            color: var(--gray);
+            font-size: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--gray);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--light);
+        }
+
+        .footer-bottom {
+            color: var(--gray);
+            font-size: 0.85rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero-visual {
+                display: none;
+            }
+            
+            .hero-content {
+                max-width: 100%;
+            }
+            
+            .market-chart {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem 5%;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .hero-stats {
+                gap: 2rem;
+            }
+            
+            .flow-step {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .flow-step:not(:last-child)::after {
+                display: none;
+            }
+            
+            .market-chart {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    <div class="grid-pattern"></div>
+
+    <nav>
+        <div class="logo">
+            <div class="logo-icon">🏦</div>
+            AgentBank
+        </div>
+        <ul class="nav-links">
+            <li><a href="#problem">Problem</a></li>
+            <li><a href="#solution">Solution</a></li>
+            <li><a href="#market">Market</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+        </ul>
+        <div class="nav-cta">
+            <a href="#" class="btn btn-ghost">Documentation</a>
+            <a href="#cta" class="btn btn-primary">Get Started</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span class="badge-dot"></span>
+                The Stripe for AI Agents
+            </div>
+            <h1>Financial Infrastructure for <span>Autonomous AI Agents</span></h1>
+            <p class="hero-subtitle">Programmable wallets, real-time spending controls, and agent-to-agent payments. Built for the $2.3 trillion agent economy.</p>
+            <div class="hero-cta">
+                <a href="#cta" class="btn btn-primary btn-large">Start Building →</a>
+                <a href="#solution" class="btn btn-ghost btn-large">View Documentation</a>
+            </div>
+            <div class="hero-stats">
+                <div class="stat">
+                    <div class="stat-value">$2.3T</div>
+                    <div class="stat-label">Agent Transactions by 2028</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">47M</div>
+                    <div class="stat-label">Agents Needing Identity</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">&lt;100ms</div>
+                    <div class="stat-label">Transaction Latency</div>
+                </div>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <div class="wallet-card">
+                <div class="wallet-header">
+                    <div class="wallet-type">
+                        <div class="wallet-icon">🤖</div>
+                        <div>
+                            <div class="wallet-name">Shopping Agent</div>
+                            <div class="wallet-id">agent_7x8k2m...f3</div>
+                        </div>
+                    </div>
+                    <div class="wallet-status">● Active</div>
+                </div>
+                <div class="wallet-balance">
+                    <div class="balance-label">Available Balance</div>
+                    <div class="balance-amount">$12,847.32</div>
+                </div>
+                <div class="wallet-activity">
+                    <div class="activity-item">
+                        <div class="activity-info">
+                            <div class="activity-icon outgoing">🛒</div>
+                            <div class="activity-details">
+                                <span class="activity-name">Amazon Purchase</span>
+                                <span class="activity-time">2 min ago</span>
+                            </div>
+                        </div>
+                        <span class="activity-amount negative">-$234.99</span>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-info">
+                            <div class="activity-icon incoming">🤝</div>
+                            <div class="activity-details">
+                                <span class="activity-name">A2A: Invoice Agent</span>
+                                <span class="activity-time">15 min ago</span>
+                            </div>
+                        </div>
+                        <span class="activity-amount positive">+$1,500.00</span>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-info">
+                            <div class="activity-icon pending">⏳</div>
+                            <div class="activity-details">
+                                <span class="activity-name">Pending Approval</span>
+                                <span class="activity-time">Awaiting owner</span>
+                            </div>
+                        </div>
+                        <span class="activity-amount pending">$8,900.00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="problem">
+        <div class="section-header">
+            <span class="section-tag">The Problem</span>
+            <h2>AI Agents Have a $2.3T Money Problem</h2>
+            <p>AI agents are executing billions in transactions—on infrastructure designed for humans. It's breaking.</p>
+        </div>
+        <div class="problems-grid">
+            <div class="problem-card">
+                <div class="problem-icon">🚫</div>
+                <h3>No Identity</h3>
+                <p>Agents can't open bank accounts. They're not people or companies—current financial systems don't recognize them.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">⚡</div>
+                <h3>No Controls</h3>
+                <p>When an agent has a credit card, there's no programmatic governance. Shopping agents over-order by 340%.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">🔗</div>
+                <h3>No Interoperability</h3>
+                <p>Agent A can't pay Agent B without human intermediation. Multi-agent workflows grind to a halt.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">⚖️</div>
+                <h3>No Compliance</h3>
+                <p>Who's liable when an agent commits fraud? Current frameworks have no answer. Regulators are circling.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">👁️</div>
+                <h3>No Audit Trail</h3>
+                <p>Agent financial decisions are opaque to businesses and regulators. Finance teams are blind to shadow spending.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">💸</div>
+                <h3>No Recovery</h3>
+                <p>Trading bots execute unauthorized transactions with no clawback mechanism. Mistakes become permanent losses.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section solution-section" id="solution">
+        <div class="section-header">
+            <span class="section-tag">The Solution</span>
+            <h2>Full-Stack Financial Infrastructure for Agents</h2>
+            <p>A programmable financial layer between AI agents and the global financial system.</p>
+        </div>
+        <div class="solutions-grid">
+            <div class="solution-card">
+                <div class="solution-icon">💳</div>
+                <h3>Agent Wallets</h3>
+                <p>Cryptographically-secured wallets with agent-specific identity and programmable spending rules.</p>
+                <ul class="solution-features">
+                    <li>Multi-sig controls (agent + owner + approver)</li>
+                    <li>Real-time balance & transaction APIs</li>
+                    <li>Category & velocity limits</li>
+                    <li>Instant provisioning</li>
+                </ul>
+            </div>
+            <div class="solution-card">
+                <div class="solution-icon">⚡</div>
+                <h3>AgentPay Rails</h3>
+                <p>Instant agent-to-agent payments with no human intermediation. Cross-platform settlement in milliseconds.</p>
+                <ul class="solution-features">
+                    <li>A2A instant transfers</li>
+                    <li>Escrow & conditional payments</li>
+                    <li>Multi-currency support</li>
+                    <li>Crypto & fiat rails</li>
+                </ul>
+            </div>
+            <div class="solution-card">
+                <div class="solution-icon">🏆</div>
+                <h3>Agent Credit</h3>
+                <p>Credit lines for high-trust agents based on performance history. Dynamic limits, automatic fraud detection.</p>
+                <ul class="solution-features">
+                    <li>Reputation-based credit scoring</li>
+                    <li>Automatic clawback mechanisms</li>
+                    <li>Enterprise billing integration</li>
+                    <li>Real-time risk assessment</li>
+                </ul>
+            </div>
+            <div class="solution-card">
+                <div class="solution-icon">🛡️</div>
+                <h3>Compliance Engine</h3>
+                <p>Real-time transaction monitoring, automated SAR filing, and chain-of-custody audit trails.</p>
+                <ul class="solution-features">
+                    <li>Pattern detection & flagging</li>
+                    <li>Regulatory reporting dashboard</li>
+                    <li>SOC 2 + PCI-DSS compliant</li>
+                    <li>Liability assignment</li>
+                </ul>
+            </div>
+            <div class="solution-card">
+                <div class="solution-icon">🪪</div>
+                <h3>AgentID Identity</h3>
+                <p>Verifiable agent credentials and provenance. Trust scores portable across platforms.</p>
+                <ul class="solution-features">
+                    <li>Owner attestation</li>
+                    <li>Transaction history scoring</li>
+                    <li>Cross-platform portability</li>
+                    <li>Cryptographic verification</li>
+                </ul>
+            </div>
+            <div class="solution-card">
+                <div class="solution-icon">🔌</div>
+                <h3>Universal SDKs</h3>
+                <p>Native integrations for every major agent framework. Add financial capabilities in minutes.</p>
+                <ul class="solution-features">
+                    <li>LangChain, CrewAI, AutoGPT</li>
+                    <li>Python, Node.js, Go, Rust</li>
+                    <li>REST & GraphQL APIs</li>
+                    <li>Webhook event streams</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="section market-section" id="market">
+        <div class="section-header">
+            <span class="section-tag">Market Opportunity</span>
+            <h2>The Agent Economy is Exploding</h2>
+            <p>Every agent needs financial infrastructure. We're building the standard.</p>
+        </div>
+        <div class="market-container">
+            <div class="market-chart">
+                <div class="market-item">
+                    <div class="market-year">2026</div>
+                    <div class="market-value">$340B</div>
+                    <div class="market-label">Agent Transaction Volume</div>
+                </div>
+                <div class="market-item">
+                    <div class="market-year">2027</div>
+                    <div class="market-value">$980B</div>
+                    <div class="market-label">Agent Transaction Volume</div>
+                </div>
+                <div class="market-item">
+                    <div class="market-year">2028</div>
+                    <div class="market-value">$2.3T</div>
+                    <div class="market-label">Agent Transaction Volume</div>
+                </div>
+                <div class="market-item">
+                    <div class="market-year">2030</div>
+                    <div class="market-value">$8.7T</div>
+                    <div class="market-label">Agent Transaction Volume</div>
+                </div>
+            </div>
+            <div class="market-cta">
+                <h3>47 Million Agents Will Need a Bank Account</h3>
+                <p>The infrastructure doesn't exist yet. We're building it.</p>
+                <a href="#cta" class="btn btn-primary btn-large">Join the Waitlist →</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="section how-section">
+        <div class="section-header">
+            <span class="section-tag">How It Works</span>
+            <h2>From Integration to First Transaction in Minutes</h2>
+        </div>
+        <div class="flow-diagram">
+            <div class="flow-step">
+                <div class="flow-number">1</div>
+                <div class="flow-content">
+                    <h3>Install the SDK</h3>
+                    <p>npm install @agentbank/sdk — drop-in integration for any agent framework.</p>
+                </div>
+            </div>
+            <div class="flow-step">
+                <div class="flow-number">2</div>
+                <div class="flow-content">
+                    <h3>Create Agent Wallet</h3>
+                    <p>Programmatically provision a wallet with your spending policies and controls.</p>
+                </div>
+            </div>
+            <div class="flow-step">
+                <div class="flow-number">3</div>
+                <div class="flow-content">
+                    <h3>Fund & Go Live</h3>
+                    <p>Deposit funds via bank transfer, card, or crypto. Your agent is ready to transact.</p>
+                </div>
+            </div>
+            <div class="flow-step">
+                <div class="flow-number">4</div>
+                <div class="flow-content">
+                    <h3>Monitor & Control</h3>
+                    <p>Real-time dashboard for all agent activity. Adjust limits, approve high-value transactions, audit trails.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section pricing-section" id="pricing">
+        <div class="section-header">
+            <span class="section-tag">Pricing</span>
+            <h2>Simple, Transparent Pricing</h2>
+            <p>Start free. Scale infinitely.</p>
+        </div>
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <div class="pricing-header">
+                    <div class="pricing-name">Starter</div>
+                    <div class="pricing-price">Free</div>
+                </div>
+                <ul class="pricing-features">
+                    <li>1 Agent Wallet</li>
+                    <li>$1,000/month limit</li>
+                    <li>Basic compliance</li>
+                    <li>Community support</li>
+                    <li>Public API access</li>
+                </ul>
+                <a href="#cta" class="btn btn-ghost">Get Started</a>
+            </div>
+            <div class="pricing-card featured">
+                <div class="pricing-header">
+                    <div class="pricing-name">Pro</div>
+                    <div class="pricing-price">$99<span>/mo</span></div>
+                </div>
+                <ul class="pricing-features">
+                    <li>10 Agent Wallets</li>
+                    <li>$50,000/month limit</li>
+                    <li>Full compliance suite</li>
+                    <li>Priority support</li>
+                    <li>A2A payments</li>
+                    <li>Webhook events</li>
+                </ul>
+                <a href="#cta" class="btn btn-primary">Start Free Trial</a>
+            </div>
+            <div class="pricing-card">
+                <div class="pricing-header">
+                    <div class="pricing-name">Enterprise</div>
+                    <div class="pricing-price">$999<span>/mo</span></div>
+                </div>
+                <ul class="pricing-features">
+                    <li>Unlimited Wallets</li>
+                    <li>Custom limits</li>
+                    <li>Dedicated compliance officer</li>
+                    <li>24/7 support</li>
+                    <li>Agent credit lines</li>
+                    <li>Custom integrations</li>
+                    <li>SLA guarantees</li>
+                </ul>
+                <a href="#cta" class="btn btn-ghost">Contact Sales</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section" id="cta">
+        <div class="cta-content">
+            <h2>Build the Future of Agent Finance</h2>
+            <p>Join the waitlist for early access. First 1,000 developers get lifetime Pro for free.</p>
+            <div class="cta-buttons">
+                <a href="mailto:founders@agentbank.io" class="btn btn-primary btn-large">Get Early Access →</a>
+                <a href="#" class="btn btn-ghost btn-large">View Documentation</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-logo">AgentBank</div>
+        <p class="footer-tagline">Financial Infrastructure for Autonomous AI Agents</p>
+        <div class="footer-links">
+            <a href="#">Documentation</a>
+            <a href="#">API Reference</a>
+            <a href="#">Pricing</a>
+            <a href="#">Blog</a>
+            <a href="#">Careers</a>
+            <a href="#">Contact</a>
+        </div>
+        <p class="footer-bottom">© 2026 AgentBank. Built for the agent economy.</p>
+    </footer>
+</body>
+</html>

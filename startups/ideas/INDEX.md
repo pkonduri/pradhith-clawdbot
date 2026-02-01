@@ -14,6 +14,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-01-31 | Evening | TrustLayer — Authenticity Verification for the AI Age | [Playbook](2026-01-31-evening.md) • [Landing](2026-01-31-evening-landing.html) • [PDF](2026-01-31-evening.pdf) |
 | 2026-01-31 | Morning | Sanctuary — AI-Native Data Sovereignty Platform | [Playbook](2026-01-31-morning.md) • [Landing](2026-01-31-morning-landing.html) • [PDF](2026-01-31-morning.pdf) |
 | 2026-01-31 | Afternoon | FleetMind AI — Autonomous Fleet Intelligence | [Playbook](2026-01-31-afternoon.md) • [Landing](2026-01-31-afternoon-landing.html) • [PDF](2026-01-31-afternoon.pdf) |
+| 2026-02-01 | Evening | AgentBank — Financial Infrastructure for AI Agents | [Playbook](2026-02-01-evening.md) • [Landing](2026-02-01-evening-landing.html) • [PDF](2026-02-01-evening.pdf) |
 <!-- New entries will be added above this line -->
 
 ---
