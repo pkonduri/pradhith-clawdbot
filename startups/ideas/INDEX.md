@@ -16,6 +16,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-01-31 | Afternoon | FleetMind AI — Autonomous Fleet Intelligence | [Playbook](2026-01-31-afternoon.md) • [Landing](2026-01-31-afternoon-landing.html) • [PDF](2026-01-31-afternoon.pdf) |
 | 2026-02-01 | Evening | AgentBank — Financial Infrastructure for AI Agents | [Playbook](2026-02-01-evening.md) • [Landing](2026-02-01-evening-landing.html) • [PDF](2026-02-01-evening.pdf) |
 | 2026-02-01 | Morning | NeuraBio — Personalized Longevity Intelligence | [Playbook](2026-02-01-morning.md) • [Landing](2026-02-01-morning-landing.html) • [PDF](2026-02-01-morning.pdf) |
+| 2026-02-01 | Afternoon | Sentinel AI — Zero Trust Security for AI Agents | [Playbook](2026-02-01-afternoon.md) • [Landing](2026-02-01-afternoon-landing.html) • [PDF](2026-02-01-afternoon.pdf) |
 <!-- New entries will be added above this line -->
 
 ---
