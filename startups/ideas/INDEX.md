@@ -19,6 +19,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-02-01 | Afternoon | Sentinel AI — Zero Trust Security for AI Agents | [Playbook](2026-02-01-afternoon.md) • [Landing](2026-02-01-afternoon-landing.html) • [PDF](2026-02-01-afternoon.pdf) |
 | 2026-02-02 | Evening | GridMind — AI-Powered Distributed Energy Intelligence | [Playbook](2026-02-02-evening.md) • [Landing](2026-02-02-evening-landing.html) • [PDF](2026-02-02-evening.pdf) |
 | 2026-02-02 | Morning | ForgeMind AI — Autonomous Manufacturing Intelligence | [Playbook](2026-02-02-morning.md) • [Landing](2026-02-02-morning-landing.html) • [PDF](2026-02-02-morning.pdf) |
+| 2026-02-02 | Afternoon | CareOS — Autonomous Elder Care Intelligence | [Playbook](2026-02-02-afternoon.md) • [Landing](2026-02-02-afternoon-landing.html) • [PDF](2026-02-02-afternoon.pdf) |
 <!-- New entries will be added above this line -->
 
 ---
