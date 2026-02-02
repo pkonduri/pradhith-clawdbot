@@ -17,6 +17,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-02-01 | Evening | AgentBank — Financial Infrastructure for AI Agents | [Playbook](2026-02-01-evening.md) • [Landing](2026-02-01-evening-landing.html) • [PDF](2026-02-01-evening.pdf) |
 | 2026-02-01 | Morning | NeuraBio — Personalized Longevity Intelligence | [Playbook](2026-02-01-morning.md) • [Landing](2026-02-01-morning-landing.html) • [PDF](2026-02-01-morning.pdf) |
 | 2026-02-01 | Afternoon | Sentinel AI — Zero Trust Security for AI Agents | [Playbook](2026-02-01-afternoon.md) • [Landing](2026-02-01-afternoon-landing.html) • [PDF](2026-02-01-afternoon.pdf) |
+| 2026-02-02 | Evening | GridMind — AI-Powered Distributed Energy Intelligence | [Playbook](2026-02-02-evening.md) • [Landing](2026-02-02-evening-landing.html) • [PDF](2026-02-02-evening.pdf) |
 <!-- New entries will be added above this line -->
 
 ---

@@ -1,0 +1,1267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GridMind — AI-Powered Distributed Energy Intelligence</title>
+    <meta name="description" content="The operating system for the decentralized grid. Every rooftop. Every battery. Every EV. Orchestrated by intelligence.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --electric-blue: #00D4FF;
+            --solar-yellow: #FFD93D;
+            --grid-green: #00E676;
+            --energy-purple: #7C4DFF;
+            --dark-core: #0A0E17;
+            --dark-surface: #111827;
+            --dark-elevated: #1F2937;
+            --white: #FFFFFF;
+            --gray-300: #D1D5DB;
+            --gray-400: #9CA3AF;
+            --gray-500: #6B7280;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--dark-core);
+            color: var(--white);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated Grid Background */
+        .grid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.15;
+            background-image: 
+                linear-gradient(var(--electric-blue) 1px, transparent 1px),
+                linear-gradient(90deg, var(--electric-blue) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridPulse 8s ease-in-out infinite;
+        }
+
+        @keyframes gridPulse {
+            0%, 100% { opacity: 0.1; }
+            50% { opacity: 0.2; }
+        }
+
+        /* Energy Flow Lines */
+        .energy-flow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .energy-line {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--electric-blue), transparent);
+            animation: flowRight 4s linear infinite;
+        }
+
+        .energy-line:nth-child(1) { top: 20%; animation-delay: 0s; width: 200px; }
+        .energy-line:nth-child(2) { top: 40%; animation-delay: 1s; width: 300px; }
+        .energy-line:nth-child(3) { top: 60%; animation-delay: 2s; width: 250px; }
+        .energy-line:nth-child(4) { top: 80%; animation-delay: 0.5s; width: 280px; }
+
+        @keyframes flowRight {
+            0% { left: -300px; opacity: 0; }
+            50% { opacity: 1; }
+            100% { left: 100%; opacity: 0; }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1.5rem 2rem;
+            background: rgba(10, 14, 23, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--electric-blue), var(--grid-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--electric-blue), var(--grid-green));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-icon svg {
+            width: 24px;
+            height: 24px;
+            fill: var(--dark-core);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--gray-300);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--electric-blue);
+        }
+
+        .nav-cta {
+            padding: 0.75rem 1.75rem;
+            background: linear-gradient(135deg, var(--electric-blue), var(--grid-green));
+            color: var(--dark-core) !important;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.4);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 2rem 4rem;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 1000px;
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--electric-blue);
+            margin-bottom: 2rem;
+        }
+
+        .hero-badge::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--grid-green);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.5); }
+        }
+
+        .hero h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(3rem, 8vw, 5.5rem);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(135deg, var(--electric-blue), var(--grid-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.2rem, 3vw, 1.5rem);
+            color: var(--gray-400);
+            max-width: 700px;
+            margin: 0 auto 3rem;
+            line-height: 1.6;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 4rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--solar-yellow), var(--electric-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--gray-500);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .hero-ctas {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--electric-blue), var(--grid-green));
+            color: var(--dark-core);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 212, 255, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--white);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--electric-blue);
+            color: var(--electric-blue);
+        }
+
+        /* Problem Section */
+        .problem {
+            padding: 8rem 2rem;
+            background: linear-gradient(180deg, transparent, rgba(0, 212, 255, 0.03));
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-label {
+            font-size: 0.85rem;
+            color: var(--electric-blue);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            color: var(--gray-400);
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .problem-card {
+            background: linear-gradient(135deg, rgba(255, 50, 50, 0.1), rgba(255, 50, 50, 0.02));
+            border: 1px solid rgba(255, 50, 50, 0.2);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 50, 50, 0.4);
+        }
+
+        .problem-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 50, 50, 0.1);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .problem-card h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+        }
+
+        .problem-card p {
+            color: var(--gray-400);
+            line-height: 1.7;
+        }
+
+        /* Solution Section */
+        .solution {
+            padding: 8rem 2rem;
+            position: relative;
+        }
+
+        .solution-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .solution-card {
+            background: var(--dark-surface);
+            border: 1px solid rgba(0, 212, 255, 0.1);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .solution-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--electric-blue), var(--grid-green));
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .solution-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .solution-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(0, 212, 255, 0.3);
+            box-shadow: 0 20px 60px rgba(0, 212, 255, 0.15);
+        }
+
+        .solution-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(0, 230, 118, 0.2));
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .solution-card h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--white);
+        }
+
+        .solution-card p {
+            color: var(--gray-400);
+            line-height: 1.7;
+            font-size: 0.95rem;
+        }
+
+        /* How It Works */
+        .how-it-works {
+            padding: 8rem 2rem;
+            background: linear-gradient(180deg, rgba(0, 212, 255, 0.03), transparent);
+        }
+
+        .steps {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .steps::before {
+            content: '';
+            position: absolute;
+            left: 30px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, var(--electric-blue), var(--grid-green), var(--solar-yellow));
+        }
+
+        .step {
+            display: flex;
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: var(--dark-surface);
+            border: 2px solid var(--electric-blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--electric-blue);
+            flex-shrink: 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .step-content h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .step-content p {
+            color: var(--gray-400);
+            line-height: 1.7;
+        }
+
+        /* Revenue Section */
+        .revenue {
+            padding: 8rem 2rem;
+        }
+
+        .revenue-card {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(0, 230, 118, 0.05));
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 30px;
+            padding: 4rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .revenue-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .revenue-header h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .revenue-header p {
+            color: var(--gray-400);
+            font-size: 1.1rem;
+        }
+
+        .revenue-breakdown {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .revenue-item {
+            text-align: center;
+            padding: 2rem;
+            background: var(--dark-surface);
+            border-radius: 20px;
+        }
+
+        .revenue-item .icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .revenue-item h4 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .revenue-item .amount {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--solar-yellow), var(--grid-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .revenue-item p {
+            color: var(--gray-500);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        .revenue-total {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .revenue-total h4 {
+            color: var(--gray-400);
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .revenue-total .amount {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 4rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--electric-blue), var(--grid-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Market Section */
+        .market {
+            padding: 8rem 2rem;
+            background: var(--dark-surface);
+        }
+
+        .market-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        @media (max-width: 768px) {
+            .market-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .market-text h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .market-text p {
+            color: var(--gray-400);
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .market-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        .market-stat {
+            background: var(--dark-elevated);
+            padding: 1.5rem;
+            border-radius: 15px;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .market-stat-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--electric-blue);
+        }
+
+        .market-stat-label {
+            color: var(--gray-500);
+            font-size: 0.9rem;
+        }
+
+        /* Traction */
+        .traction {
+            padding: 8rem 2rem;
+        }
+
+        .traction-timeline {
+            display: flex;
+            justify-content: space-between;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .traction-item {
+            flex: 1;
+            min-width: 200px;
+            text-align: center;
+            padding: 2rem;
+            background: var(--dark-surface);
+            border-radius: 20px;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+            position: relative;
+        }
+
+        .traction-item::after {
+            content: '→';
+            position: absolute;
+            right: -1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--electric-blue);
+            font-size: 1.5rem;
+        }
+
+        .traction-item:last-child::after {
+            display: none;
+        }
+
+        .traction-year {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.2rem;
+            color: var(--electric-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        .traction-metric {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--solar-yellow), var(--grid-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .traction-label {
+            color: var(--gray-500);
+            font-size: 0.9rem;
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 8rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(0, 212, 255, 0.15), transparent 70%);
+            z-index: -1;
+        }
+
+        .cta h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            margin-bottom: 1.5rem;
+        }
+
+        .cta h2 span {
+            background: linear-gradient(135deg, var(--electric-blue), var(--grid-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .cta p {
+            color: var(--gray-400);
+            font-size: 1.3rem;
+            max-width: 600px;
+            margin: 0 auto 3rem;
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 2rem 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .footer-logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--electric-blue), var(--grid-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--gray-500);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--electric-blue);
+        }
+
+        .footer-copy {
+            width: 100%;
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            color: var(--gray-500);
+            font-size: 0.9rem;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero-stats {
+                gap: 2rem;
+            }
+
+            .stat-value {
+                font-size: 2rem;
+            }
+
+            .steps::before {
+                left: 20px;
+            }
+
+            .step-number {
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+            }
+
+            .revenue-card {
+                padding: 2rem;
+            }
+
+            .traction-item::after {
+                display: none;
+            }
+        }
+
+        /* Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        /* Scroll Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="grid-bg"></div>
+    <div class="energy-flow">
+        <div class="energy-line"></div>
+        <div class="energy-line"></div>
+        <div class="energy-line"></div>
+        <div class="energy-line"></div>
+    </div>
+
+    <nav>
+        <div class="nav-container">
+            <div class="logo">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                </div>
+                GridMind
+            </div>
+            <div class="nav-links">
+                <a href="#problem">Problem</a>
+                <a href="#solution">Solution</a>
+                <a href="#earnings">Earnings</a>
+                <a href="#market">Market</a>
+                <a href="#contact" class="nav-cta">Get Early Access</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                🔋 The Grid Revolution Starts Here
+            </div>
+            <h1>
+                The Brain of the <span>Distributed Grid</span>
+            </h1>
+            <p class="hero-subtitle">
+                Every rooftop solar panel. Every home battery. Every EV. 
+                Orchestrated by AI to power the grid of the future—and pay you for it.
+            </p>
+            <div class="hero-stats">
+                <div class="stat">
+                    <div class="stat-value">$3K</div>
+                    <div class="stat-label">Avg Annual Earnings</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">500+</div>
+                    <div class="stat-label">Device Integrations</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">$50B+</div>
+                    <div class="stat-label">Market Opportunity</div>
+                </div>
+            </div>
+            <div class="hero-ctas">
+                <a href="#contact" class="btn btn-primary">
+                    ⚡ Join the Waitlist
+                </a>
+                <a href="#solution" class="btn btn-secondary">
+                    Learn How It Works →
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="problem" id="problem">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-label">The Problem</div>
+                <h2 class="section-title">The Grid Is Breaking</h2>
+                <p class="section-subtitle">
+                    The 20th century grid wasn't built for 47 million solar homes, 40 million EVs, 
+                    and extreme weather events every month.
+                </p>
+            </div>
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="problem-icon">🌅</div>
+                    <h3>The Duck Curve Crisis</h3>
+                    <p>
+                        Solar floods the grid midday, then crashes at sunset when everyone 
+                        comes home. Utilities scramble—and blackouts happen.
+                    </p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">💸</div>
+                    <h3>Stranded Value</h3>
+                    <p>
+                        $500B+ in consumer energy assets—batteries, EVs, solar—sit idle 95% 
+                        of the time. Your assets could be earning, but they're not.
+                    </p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">🔌</div>
+                    <h3>No Unified Brain</h3>
+                    <p>
+                        Your solar, battery, EV, and thermostat don't talk to each other—
+                        or to the grid. Chaos instead of coordination.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="solution" id="solution">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-label">The Solution</div>
+                <h2 class="section-title">One Platform. Total Intelligence.</h2>
+                <p class="section-subtitle">
+                    GridMind connects all your energy assets, optimizes them with AI, 
+                    and turns your home into a revenue-generating power plant.
+                </p>
+            </div>
+            <div class="solution-grid">
+                <div class="solution-card">
+                    <div class="solution-icon">🔗</div>
+                    <h3>Universal Integration</h3>
+                    <p>
+                        Works with everything—Tesla, Enphase, SolarEdge, LG, 
+                        ChargePoint, Nest, Ecobee. 500+ devices supported.
+                    </p>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon">🧠</div>
+                    <h3>AI Optimization</h3>
+                    <p>
+                        ML predicts your usage, grid prices, and weather. Automatically 
+                        charges low, discharges high, and maximizes savings.
+                    </p>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon">⚡</div>
+                    <h3>Virtual Power Plant</h3>
+                    <p>
+                        Your home joins a network of 100,000+ homes, creating utility-scale 
+                        capacity. Get paid when the grid needs power.
+                    </p>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon">💰</div>
+                    <h3>Passive Income</h3>
+                    <p>
+                        Earn $1,000-3,000/year from your existing assets. GridMind handles 
+                        everything—you just collect the checks.
+                    </p>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon">🛡️</div>
+                    <h3>Backup Power</h3>
+                    <p>
+                        During outages, GridMind coordinates your battery and EV to keep 
+                        critical loads running. Resilience built in.
+                    </p>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon">🌱</div>
+                    <h3>Carbon Credits</h3>
+                    <p>
+                        Every grid service you provide generates verified carbon credits. 
+                        Make money while saving the planet.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="how-it-works">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-label">How It Works</div>
+                <h2 class="section-title">From Setup to Savings in Minutes</h2>
+            </div>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Connect Your Devices</h3>
+                        <p>
+                            Download the app, link your solar inverter, battery, EV charger, 
+                            and smart thermostat. Takes 5 minutes.
+                        </p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>AI Learns Your Patterns</h3>
+                        <p>
+                            GridMind studies your energy usage, driving habits, and comfort 
+                            preferences. Within a week, it knows you.
+                        </p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Automatic Optimization</h3>
+                        <p>
+                            Watch your bills drop as GridMind shifts loads, arbitrages rates, 
+                            and maximizes solar self-consumption.
+                        </p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>Earn When Grid Needs You</h3>
+                        <p>
+                            When electricity prices spike or the grid calls for help, your 
+                            assets respond automatically—and you get paid.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="revenue" id="earnings">
+        <div class="container">
+            <div class="revenue-card">
+                <div class="revenue-header">
+                    <h3>💸 Your Home, Your Revenue</h3>
+                    <p>See what your assets could earn annually with GridMind</p>
+                </div>
+                <div class="revenue-breakdown">
+                    <div class="revenue-item">
+                        <div class="icon">☀️</div>
+                        <h4>10kW Solar Array</h4>
+                        <div class="amount">$300-600</div>
+                        <p>Optimized export timing</p>
+                    </div>
+                    <div class="revenue-item">
+                        <div class="icon">🔋</div>
+                        <h4>13kWh Battery</h4>
+                        <div class="amount">$400-1,200</div>
+                        <p>Grid services + arbitrage</p>
+                    </div>
+                    <div class="revenue-item">
+                        <div class="icon">🚗</div>
+                        <h4>EV with V2G</h4>
+                        <div class="amount">$500-1,500</div>
+                        <p>Vehicle-to-grid dispatch</p>
+                    </div>
+                    <div class="revenue-item">
+                        <div class="icon">🌡️</div>
+                        <h4>Smart Thermostat</h4>
+                        <div class="amount">$50-150</div>
+                        <p>Demand response events</p>
+                    </div>
+                </div>
+                <div class="revenue-total">
+                    <h4>TYPICAL HOME TOTAL</h4>
+                    <div class="amount">$1,000 - $3,000/yr</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="market" id="market">
+        <div class="container">
+            <div class="market-content">
+                <div class="market-text">
+                    <h2>The Grid Is Being Rebuilt—From the Edges In</h2>
+                    <p>
+                        By 2030, distributed energy resources will exceed centralized generation 
+                        capacity. The homes of today are the power plants of tomorrow.
+                    </p>
+                    <p>
+                        GridMind is positioned at the center of this transformation, connecting 
+                        millions of homes into the world's most intelligent, resilient grid.
+                    </p>
+                </div>
+                <div class="market-stats">
+                    <div class="market-stat">
+                        <div class="market-stat-value">47M</div>
+                        <div class="market-stat-label">Solar homes by 2030</div>
+                    </div>
+                    <div class="market-stat">
+                        <div class="market-stat-value">40M</div>
+                        <div class="market-stat-label">EVs on US roads</div>
+                    </div>
+                    <div class="market-stat">
+                        <div class="market-stat-value">$50B+</div>
+                        <div class="market-stat-label">DER software market</div>
+                    </div>
+                    <div class="market-stat">
+                        <div class="market-stat-value">200+</div>
+                        <div class="market-stat-label">Grid emergencies in 2025</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="traction">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-label">Growth Trajectory</div>
+                <h2 class="section-title">Building to $1B+ ARR</h2>
+            </div>
+            <div class="traction-timeline">
+                <div class="traction-item">
+                    <div class="traction-year">Year 1</div>
+                    <div class="traction-metric">25K</div>
+                    <div class="traction-label">Homes</div>
+                </div>
+                <div class="traction-item">
+                    <div class="traction-year">Year 2</div>
+                    <div class="traction-metric">150K</div>
+                    <div class="traction-label">Homes</div>
+                </div>
+                <div class="traction-item">
+                    <div class="traction-year">Year 3</div>
+                    <div class="traction-metric">500K</div>
+                    <div class="traction-label">Homes</div>
+                </div>
+                <div class="traction-item">
+                    <div class="traction-year">Year 5</div>
+                    <div class="traction-metric">4M</div>
+                    <div class="traction-label">Homes</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta" id="contact">
+        <div class="container">
+            <h2>Ready to Power the <span>Future</span>?</h2>
+            <p>
+                Join thousands of homeowners turning their solar, batteries, and EVs 
+                into income-generating assets.
+            </p>
+            <div class="hero-ctas">
+                <a href="mailto:founders@gridmind.ai" class="btn btn-primary">
+                    ⚡ Get Early Access
+                </a>
+                <a href="mailto:investors@gridmind.ai" class="btn btn-secondary">
+                    📊 Investor Deck
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">⚡ GridMind</div>
+            <div class="footer-links">
+                <a href="mailto:founders@gridmind.ai">Contact</a>
+                <a href="#">Privacy</a>
+                <a href="#">Terms</a>
+            </div>
+            <div class="footer-copy">
+                © 2026 GridMind. Intelligence for Every Electron.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.problem-card, .solution-card, .step, .revenue-item, .market-stat, .traction-item').forEach(el => {
+            el.classList.add('fade-in');
+            observer.observe(el);
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
