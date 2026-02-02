@@ -1,0 +1,1443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ForgeMind AI — The Factory Brain</title>
+    <meta name="description" content="Autonomous Manufacturing Intelligence. The operating system for lights-out factories.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-tertiary: #1a1a25;
+            --accent-orange: #ff6b35;
+            --accent-orange-light: #ff8c5a;
+            --accent-blue: #3b82f6;
+            --accent-cyan: #22d3ee;
+            --accent-purple: #a855f7;
+            --text-primary: #ffffff;
+            --text-secondary: #a1a1aa;
+            --text-muted: #71717a;
+            --border-color: #27272a;
+            --gradient-orange: linear-gradient(135deg, #ff6b35 0%, #ff8c5a 50%, #fbbf24 100%);
+            --gradient-blue: linear-gradient(135deg, #3b82f6 0%, #22d3ee 100%);
+            --gradient-purple: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+            --glow-orange: 0 0 60px rgba(255, 107, 53, 0.4);
+            --glow-blue: 0 0 60px rgba(59, 130, 246, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(255, 107, 53, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 107, 53, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .bg-radial {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse 80% 50% at 50% -20%, rgba(255, 107, 53, 0.15), transparent),
+                radial-gradient(ellipse 60% 40% at 80% 60%, rgba(59, 130, 246, 0.1), transparent);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Floating Particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--accent-orange);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.3; }
+            90% { opacity: 0.3; }
+            100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1rem 2rem;
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-orange);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-orange);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: var(--gradient-orange);
+            color: var(--bg-primary);
+            box-shadow: var(--glow-orange);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 80px rgba(255, 107, 53, 0.5);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--accent-orange);
+            background: rgba(255, 107, 53, 0.1);
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 8rem 2rem 4rem;
+        }
+
+        .hero-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(255, 107, 53, 0.1);
+            border: 1px solid rgba(255, 107, 53, 0.3);
+            border-radius: 100px;
+            font-size: 0.875rem;
+            color: var(--accent-orange);
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-badge::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--accent-orange);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #ffffff 0%, #a1a1aa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero h1 span {
+            background: var(--gradient-orange);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            max-width: 500px;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 3rem;
+        }
+
+        .stat {
+            text-align: left;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent-orange);
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        /* Factory Visualization */
+        .factory-viz {
+            position: relative;
+            height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .factory-core {
+            position: relative;
+            width: 300px;
+            height: 300px;
+        }
+
+        .core-brain {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120px;
+            height: 120px;
+            background: var(--gradient-orange);
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            box-shadow: var(--glow-orange);
+            animation: brain-pulse 3s infinite ease-in-out;
+            z-index: 10;
+        }
+
+        @keyframes brain-pulse {
+            0%, 100% { box-shadow: 0 0 60px rgba(255, 107, 53, 0.4); }
+            50% { box-shadow: 0 0 100px rgba(255, 107, 53, 0.6); }
+        }
+
+        .orbit {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            border: 1px dashed rgba(255, 107, 53, 0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .orbit-1 { width: 200px; height: 200px; animation: spin 20s linear infinite; }
+        .orbit-2 { width: 280px; height: 280px; animation: spin 30s linear infinite reverse; }
+        .orbit-3 { width: 360px; height: 360px; animation: spin 40s linear infinite; }
+
+        @keyframes spin {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .machine {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            animation: machine-glow 2s infinite ease-in-out;
+        }
+
+        .machine.active {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 20px rgba(34, 211, 238, 0.3);
+        }
+
+        @keyframes machine-glow {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+
+        .machine-cnc { top: 0; left: 50%; transform: translateX(-50%); }
+        .machine-robot { top: 50%; right: 0; transform: translateY(-50%); }
+        .machine-conveyor { bottom: 0; left: 50%; transform: translateX(-50%); }
+        .machine-sensor { top: 50%; left: 0; transform: translateY(-50%); }
+
+        .data-flow {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        }
+
+        .data-pulse {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: var(--accent-cyan);
+            border-radius: 50%;
+            animation: data-flow 3s infinite linear;
+        }
+
+        @keyframes data-flow {
+            0% { top: 25px; left: 50%; opacity: 1; }
+            25% { top: 50%; left: calc(100% - 25px); }
+            50% { top: calc(100% - 25px); left: 50%; }
+            75% { top: 50%; left: 25px; }
+            100% { top: 25px; left: 50%; opacity: 1; }
+        }
+
+        /* Problem Section */
+        .section {
+            position: relative;
+            z-index: 10;
+            padding: 6rem 2rem;
+        }
+
+        .section-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-label {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(255, 107, 53, 0.1);
+            border-radius: 100px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--accent-orange);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1rem;
+        }
+
+        .section h2 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            max-width: 700px;
+        }
+
+        .section-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin-bottom: 3rem;
+        }
+
+        /* Stats Grid */
+        .crisis-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .crisis-stat {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .crisis-stat:hover {
+            border-color: var(--accent-orange);
+            transform: translateY(-4px);
+        }
+
+        .crisis-stat-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .crisis-stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: var(--gradient-orange);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .crisis-stat-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+        }
+
+        /* Solution Features */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-orange);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .feature-card:hover {
+            border-color: var(--accent-orange);
+            transform: translateY(-4px);
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 107, 53, 0.1);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .feature-tag {
+            padding: 0.35rem 0.75rem;
+            background: rgba(255, 107, 53, 0.1);
+            border-radius: 6px;
+            font-size: 0.75rem;
+            color: var(--accent-orange);
+            font-weight: 500;
+        }
+
+        /* How It Works */
+        .process-flow {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-top: 4rem;
+            position: relative;
+        }
+
+        .process-flow::before {
+            content: '';
+            position: absolute;
+            top: 50px;
+            left: 10%;
+            right: 10%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent-orange), var(--accent-cyan), var(--accent-purple), var(--accent-orange));
+            z-index: 0;
+        }
+
+        .process-step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .process-number {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 1.5rem;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+        }
+
+        .process-step:nth-child(1) .process-number { border-color: var(--accent-orange); color: var(--accent-orange); }
+        .process-step:nth-child(2) .process-number { border-color: var(--accent-cyan); color: var(--accent-cyan); }
+        .process-step:nth-child(3) .process-number { border-color: var(--accent-purple); color: var(--accent-purple); }
+        .process-step:nth-child(4) .process-number { border-color: var(--accent-orange); color: var(--accent-orange); }
+
+        .process-step h4 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .process-step p {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            max-width: 200px;
+            margin: 0 auto;
+        }
+
+        /* Market Section */
+        .market-visual {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .market-chart {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2.5rem;
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .chart-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .chart-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent-orange);
+        }
+
+        .chart-bars {
+            display: flex;
+            align-items: flex-end;
+            gap: 1rem;
+            height: 200px;
+        }
+
+        .chart-bar {
+            flex: 1;
+            background: linear-gradient(180deg, var(--accent-orange) 0%, rgba(255, 107, 53, 0.2) 100%);
+            border-radius: 8px 8px 0 0;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .chart-bar:hover {
+            filter: brightness(1.2);
+        }
+
+        .chart-bar span {
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .market-drivers {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .driver {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .driver-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(255, 107, 53, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .driver h4 {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .driver p {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        /* Business Model */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .pricing-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2.5rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .pricing-card.featured {
+            border-color: var(--accent-orange);
+            position: relative;
+        }
+
+        .pricing-card.featured::before {
+            content: 'Most Popular';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 0.35rem 1rem;
+            background: var(--gradient-orange);
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--bg-primary);
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .pricing-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .pricing-name {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-price {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent-orange);
+            margin-bottom: 0.25rem;
+        }
+
+        .pricing-unit {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+
+        .pricing-features {
+            list-style: none;
+            text-align: left;
+        }
+
+        .pricing-features li {
+            padding: 0.5rem 0;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .pricing-features li::before {
+            content: '✓';
+            color: var(--accent-orange);
+            font-weight: 600;
+        }
+
+        /* Traction / Roadmap */
+        .roadmap {
+            position: relative;
+            padding-left: 3rem;
+        }
+
+        .roadmap::before {
+            content: '';
+            position: absolute;
+            left: 7px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, var(--accent-orange) 0%, var(--accent-cyan) 50%, var(--accent-purple) 100%);
+        }
+
+        .roadmap-item {
+            position: relative;
+            margin-bottom: 3rem;
+            padding-left: 2rem;
+        }
+
+        .roadmap-item::before {
+            content: '';
+            position: absolute;
+            left: -2.5rem;
+            top: 8px;
+            width: 16px;
+            height: 16px;
+            background: var(--bg-primary);
+            border: 3px solid var(--accent-orange);
+            border-radius: 50%;
+        }
+
+        .roadmap-item:nth-child(2)::before { border-color: var(--accent-cyan); }
+        .roadmap-item:nth-child(3)::before { border-color: var(--accent-purple); }
+        .roadmap-item:nth-child(4)::before { border-color: var(--accent-orange); }
+
+        .roadmap-date {
+            font-size: 0.875rem;
+            color: var(--accent-orange);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .roadmap-item:nth-child(2) .roadmap-date { color: var(--accent-cyan); }
+        .roadmap-item:nth-child(3) .roadmap-date { color: var(--accent-purple); }
+
+        .roadmap-item h4 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .roadmap-item p {
+            color: var(--text-secondary);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%);
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .cta-content {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .cta-content h2 {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-content p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        /* Footer */
+        footer {
+            position: relative;
+            z-index: 10;
+            padding: 4rem 2rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 600;
+            font-size: 1.25rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-orange);
+        }
+
+        .footer-copy {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero h1 {
+                font-size: 3rem;
+            }
+
+            .hero-subtitle {
+                margin: 0 auto 2rem;
+            }
+
+            .hero-cta {
+                justify-content: center;
+            }
+
+            .hero-stats {
+                justify-content: center;
+            }
+
+            .factory-viz {
+                display: none;
+            }
+
+            .crisis-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .process-flow {
+                flex-direction: column;
+                gap: 2rem;
+            }
+
+            .process-flow::before {
+                display: none;
+            }
+
+            .market-visual {
+                grid-template-columns: 1fr;
+            }
+
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2.25rem;
+            }
+
+            .section h2 {
+                font-size: 2rem;
+            }
+
+            .crisis-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                gap: 2rem;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+    <div class="bg-radial"></div>
+    <div class="particles">
+        <div class="particle" style="left: 10%; animation-delay: 0s;"></div>
+        <div class="particle" style="left: 20%; animation-delay: 2s;"></div>
+        <div class="particle" style="left: 30%; animation-delay: 4s;"></div>
+        <div class="particle" style="left: 50%; animation-delay: 1s;"></div>
+        <div class="particle" style="left: 70%; animation-delay: 3s;"></div>
+        <div class="particle" style="left: 85%; animation-delay: 5s;"></div>
+        <div class="particle" style="left: 95%; animation-delay: 2.5s;"></div>
+    </div>
+
+    <nav>
+        <div class="nav-content">
+            <a href="#" class="logo">
+                <div class="logo-icon">🧠</div>
+                ForgeMind
+            </a>
+            <div class="nav-links">
+                <a href="#problem">Problem</a>
+                <a href="#solution">Solution</a>
+                <a href="#market">Market</a>
+                <a href="#roadmap">Roadmap</a>
+                <a href="#contact" class="btn btn-primary">Request Demo</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <div class="hero-badge">Now Recruiting Design Partners</div>
+                <h1>The Operating System for <span>Lights-Out</span> Factories</h1>
+                <p class="hero-subtitle">ForgeMind AI transforms any factory into an autonomous production powerhouse. No more labor shortages. No more rigid automation. Just intelligent manufacturing that runs 24/7.</p>
+                <div class="hero-cta">
+                    <a href="#contact" class="btn btn-primary">Get Early Access →</a>
+                    <a href="#solution" class="btn btn-secondary">See How It Works</a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <div class="stat-value">$15T</div>
+                        <div class="stat-label">Global Manufacturing</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">2.1M</div>
+                        <div class="stat-label">Unfilled Jobs by 2030</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">95%</div>
+                        <div class="stat-label">Autonomous Operation</div>
+                    </div>
+                </div>
+            </div>
+            <div class="factory-viz">
+                <div class="factory-core">
+                    <div class="orbit orbit-1"></div>
+                    <div class="orbit orbit-2"></div>
+                    <div class="orbit orbit-3"></div>
+                    <div class="core-brain">🧠</div>
+                    <div class="machine machine-cnc active">⚙️</div>
+                    <div class="machine machine-robot">🤖</div>
+                    <div class="machine machine-conveyor active">📦</div>
+                    <div class="machine machine-sensor">📡</div>
+                    <div class="data-flow">
+                        <div class="data-pulse"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="problem" class="section">
+        <div class="section-content">
+            <span class="section-label">The Problem</span>
+            <h2>Manufacturing is Facing an Existential Crisis</h2>
+            <p class="section-subtitle">Labor shortages, reshoring pressure, and complexity explosion are breaking traditional manufacturing models.</p>
+            
+            <div class="crisis-stats">
+                <div class="crisis-stat">
+                    <div class="crisis-stat-icon">👷</div>
+                    <div class="crisis-stat-value">2.1M</div>
+                    <div class="crisis-stat-label">Jobs Unfilled by 2030</div>
+                </div>
+                <div class="crisis-stat">
+                    <div class="crisis-stat-icon">🏭</div>
+                    <div class="crisis-stat-value">$4T</div>
+                    <div class="crisis-stat-label">Reshoring Wave</div>
+                </div>
+                <div class="crisis-stat">
+                    <div class="crisis-stat-icon">📉</div>
+                    <div class="crisis-stat-value">65%</div>
+                    <div class="crisis-stat-label">Avg. Equipment Utilization</div>
+                </div>
+                <div class="crisis-stat">
+                    <div class="crisis-stat-icon">⏱️</div>
+                    <div class="crisis-stat-value">6mo</div>
+                    <div class="crisis-stat-label">Typical Automation Integration</div>
+                </div>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🚫</div>
+                    <h3>Traditional Automation Fails</h3>
+                    <p>Months of integration, rigid programming, breaks with every product change. Built for the mass production era, not today's mass customization reality.</p>
+                    <div class="feature-tags">
+                        <span class="feature-tag">Inflexible</span>
+                        <span class="feature-tag">Expensive</span>
+                        <span class="feature-tag">Slow</span>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>IoT Platforms Don't Act</h3>
+                    <p>They collect data and build dashboards, but dashboards don't run factories. You still need humans to interpret and execute.</p>
+                    <div class="feature-tags">
+                        <span class="feature-tag">Passive</span>
+                        <span class="feature-tag">Insights Only</span>
+                        <span class="feature-tag">No Execution</span>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🧩</div>
+                    <h3>Point Solutions Fragment</h3>
+                    <p>AI for vision here, scheduling there, maintenance somewhere else. No unified intelligence orchestrating the entire production process.</p>
+                    <div class="feature-tags">
+                        <span class="feature-tag">Siloed</span>
+                        <span class="feature-tag">Narrow</span>
+                        <span class="feature-tag">Uncoordinated</span>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💸</div>
+                    <h3>$1.2T Stranded Assets</h3>
+                    <p>Companies buy robots and machines but can't program them effectively. Massive capital investment sits underutilized at 65% OEE.</p>
+                    <div class="feature-tags">
+                        <span class="feature-tag">Wasted Potential</span>
+                        <span class="feature-tag">Poor ROI</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="solution" class="section" style="background: var(--bg-secondary);">
+        <div class="section-content">
+            <span class="section-label">The Solution</span>
+            <h2>ForgeMind: The Factory Brain</h2>
+            <p class="section-subtitle">An AI platform that perceives, reasons, plans, and executes across your entire production process. Like Tesla FSD, but for factories.</p>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🔌</div>
+                    <h3>Universal Machine Interface</h3>
+                    <p>Connects to ANY manufacturing equipment regardless of vendor. Uses computer vision + digital twins for equipment without APIs. Plug and produce in hours, not months.</p>
+                    <div class="feature-tags">
+                        <span class="feature-tag">OPC-UA</span>
+                        <span class="feature-tag">MQTT</span>
+                        <span class="feature-tag">Modbus</span>
+                        <span class="feature-tag">Vision</span>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Production Intelligence Engine</h3>
+                    <p>Real-time optimization of entire production flow. Autonomous scheduling, routing, and resource allocation. Gets smarter with every run.</p>
+                    <div class="feature-tags">
+                        <span class="feature-tag">RL Optimization</span>
+                        <span class="feature-tag">Predictive</span>
+                        <span class="feature-tag">Self-Learning</span>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Adaptive Manufacturing Programs</h3>
+                    <p>AI generates machine programs from CAD + natural language. Self-correcting quality control. Zero-shot production of new products.</p>
+                    <div class="feature-tags">
+                        <span class="feature-tag">CAD → Code</span>
+                        <span class="feature-tag">Auto-Correction</span>
+                        <span class="feature-tag">Zero-Shot</span>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">👥</div>
+                    <h3>Human-AI Collaboration</h3>
+                    <p>AR interfaces for maintenance. Natural language commands: "Increase throughput 10%" and AI figures out how. Always explainable.</p>
+                    <div class="feature-tags">
+                        <span class="feature-tag">AR Interface</span>
+                        <span class="feature-tag">NL Commands</span>
+                        <span class="feature-tag">Explainable</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="process-flow">
+                <div class="process-step">
+                    <div class="process-number">👁️</div>
+                    <h4>Perceive</h4>
+                    <p>Vision, sensors, and digital twins understand factory state</p>
+                </div>
+                <div class="process-step">
+                    <div class="process-number">🧠</div>
+                    <h4>Reason</h4>
+                    <p>Causal AI and physics simulation predict outcomes</p>
+                </div>
+                <div class="process-step">
+                    <div class="process-number">📐</div>
+                    <h4>Plan</h4>
+                    <p>RL-based optimizer finds optimal production strategy</p>
+                </div>
+                <div class="process-step">
+                    <div class="process-number">⚙️</div>
+                    <h4>Execute</h4>
+                    <p>Real-time control with safety monitoring</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="market" class="section">
+        <div class="section-content">
+            <span class="section-label">Market Opportunity</span>
+            <h2>$347B Market by 2030</h2>
+            <p class="section-subtitle">The convergence of AI capabilities, economic pressure, and infrastructure readiness creates a once-in-a-generation opportunity.</p>
+
+            <div class="market-visual">
+                <div class="market-chart">
+                    <div class="chart-header">
+                        <span class="chart-title">Total Addressable Market</span>
+                        <span class="chart-value">43% CAGR</span>
+                    </div>
+                    <div class="chart-bars">
+                        <div class="chart-bar" style="height: 24%;"><span>2026</span></div>
+                        <div class="chart-bar" style="height: 38%;"><span>2027</span></div>
+                        <div class="chart-bar" style="height: 55%;"><span>2028</span></div>
+                        <div class="chart-bar" style="height: 78%;"><span>2029</span></div>
+                        <div class="chart-bar" style="height: 100%;"><span>2030</span></div>
+                    </div>
+                </div>
+
+                <div class="market-drivers">
+                    <div class="driver">
+                        <div class="driver-icon">🤖</div>
+                        <div>
+                            <h4>AI Capabilities Ready</h4>
+                            <p>Foundation models + robotics AI finally capable of general manufacturing reasoning</p>
+                        </div>
+                    </div>
+                    <div class="driver">
+                        <div class="driver-icon">💰</div>
+                        <div>
+                            <h4>Economic Pressure</h4>
+                            <p>Labor costs up 23% since 2020, reshoring mandates accelerating</p>
+                        </div>
+                    </div>
+                    <div class="driver">
+                        <div class="driver-icon">🏗️</div>
+                        <div>
+                            <h4>Infrastructure Ready</h4>
+                            <p>Most factories now have basic connectivity and sensor coverage</p>
+                        </div>
+                    </div>
+                    <div class="driver">
+                        <div class="driver-icon">📜</div>
+                        <div>
+                            <h4>Regulatory Tailwinds</h4>
+                            <p>CHIPS Act, IRA, EU Green Deal all incentivize smart manufacturing</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" style="background: var(--bg-secondary);">
+        <div class="section-content">
+            <span class="section-label">Business Model</span>
+            <h2>SaaS + Consumption Hybrid</h2>
+            <p class="section-subtitle">Aligned incentives: we win when your factory wins.</p>
+
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <div class="pricing-icon">🏭</div>
+                    <div class="pricing-name">Platform Fee</div>
+                    <div class="pricing-price">$25K-100K</div>
+                    <div class="pricing-unit">per month</div>
+                    <ul class="pricing-features">
+                        <li>Core AI platform</li>
+                        <li>Unlimited machines</li>
+                        <li>Standard integrations</li>
+                        <li>24/7 support</li>
+                    </ul>
+                </div>
+                <div class="pricing-card featured">
+                    <div class="pricing-icon">⚡</div>
+                    <div class="pricing-name">Consumption</div>
+                    <div class="pricing-price">$0.001-0.01</div>
+                    <div class="pricing-unit">per AI decision</div>
+                    <ul class="pricing-features">
+                        <li>Scales with volume</li>
+                        <li>Pay for value</li>
+                        <li>~$10K-100K/mo typical</li>
+                        <li>No hidden fees</li>
+                    </ul>
+                </div>
+                <div class="pricing-card">
+                    <div class="pricing-icon">🛠️</div>
+                    <div class="pricing-name">Services</div>
+                    <div class="pricing-price">$500</div>
+                    <div class="pricing-unit">per hour</div>
+                    <ul class="pricing-features">
+                        <li>Custom integrations</li>
+                        <li>Legacy equipment</li>
+                        <li>Training</li>
+                        <li>Change management</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="roadmap" class="section">
+        <div class="section-content">
+            <span class="section-label">Roadmap</span>
+            <h2>Path to $400M ARR</h2>
+            <p class="section-subtitle">Deliberate expansion from beachhead to platform dominance.</p>
+
+            <div class="roadmap">
+                <div class="roadmap-item">
+                    <div class="roadmap-date">2026 — Pilot</div>
+                    <h4>5 Design Partners</h4>
+                    <p>Deploy at select discrete manufacturers. Prove 95% autonomous operation for 8-hour shifts. Core platform development.</p>
+                </div>
+                <div class="roadmap-item">
+                    <div class="roadmap-date">2027 — Launch</div>
+                    <h4>50 Customers • $15M ARR</h4>
+                    <p>General availability for discrete manufacturing. Self-serve onboarding. App marketplace for industry modules.</p>
+                </div>
+                <div class="roadmap-item">
+                    <div class="roadmap-date">2028 — Expand</div>
+                    <h4>200 Customers • $80M ARR</h4>
+                    <p>Process manufacturing expansion (food, chemicals, pharma). Multi-site orchestration. Supply chain integration.</p>
+                </div>
+                <div class="roadmap-item">
+                    <div class="roadmap-date">2029+ — Platform</div>
+                    <h4>1,000 Customers • $300M+ ARR</h4>
+                    <p>Manufacturing network marketplace. ForgeMind-certified equipment. Autonomous factory design service.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="section cta-section">
+        <div class="cta-content">
+            <h2>Ready to Build the Future of Manufacturing?</h2>
+            <p>We're looking for visionary design partners, world-class talent, and investors who understand deep tech.</p>
+            <div class="cta-buttons">
+                <a href="mailto:founders@forgemind.ai" class="btn btn-primary">Become a Design Partner →</a>
+                <a href="mailto:founders@forgemind.ai" class="btn btn-secondary">Join the Team</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">
+                <div class="logo-icon" style="width: 32px; height: 32px; font-size: 1rem;">🧠</div>
+                ForgeMind AI
+            </div>
+            <div class="footer-links">
+                <a href="#problem">Problem</a>
+                <a href="#solution">Solution</a>
+                <a href="#market">Market</a>
+                <a href="#roadmap">Roadmap</a>
+                <a href="mailto:founders@forgemind.ai">Contact</a>
+            </div>
+            <div class="footer-copy">© 2026 ForgeMind AI. The Factory Brain.</div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scroll for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Add scroll effect to navbar
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 50) {
+                nav.style.background = 'rgba(10, 10, 15, 0.95)';
+            } else {
+                nav.style.background = 'rgba(10, 10, 15, 0.8)';
+            }
+        });
+
+        // Animate elements on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.feature-card, .crisis-stat, .pricing-card, .roadmap-item').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
