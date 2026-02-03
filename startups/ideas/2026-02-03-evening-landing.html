@@ -1,0 +1,1652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus AI — The AI-Native CRM</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #0ea5e9;
+            --accent: #f59e0b;
+            --dark: #0f172a;
+            --darker: #020617;
+            --gray: #64748b;
+            --light: #f8fafc;
+            --success: #10b981;
+            --gradient-1: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%);
+            --gradient-2: linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%);
+            --gradient-3: linear-gradient(180deg, rgba(99, 102, 241, 0.1) 0%, transparent 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--darker);
+            color: var(--light);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Animated Background */
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(99, 102, 241, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -2;
+        }
+
+        .bg-glow {
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 30%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 70%, rgba(14, 165, 233, 0.1) 0%, transparent 50%);
+            z-index: -1;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(2%, 2%) rotate(1deg); }
+            50% { transform: translate(0, 4%) rotate(0deg); }
+            75% { transform: translate(-2%, 2%) rotate(-1deg); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(2, 6, 23, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(99, 102, 241, 0.1);
+        }
+
+        .logo {
+            font-size: 1.75rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            -webkit-text-fill-color: white;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--gray);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--light);
+        }
+
+        .btn {
+            padding: 0.875rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--gradient-1);
+            color: white;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(99, 102, 241, 0.5);
+        }
+
+        .btn-secondary {
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--primary);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(99, 102, 241, 0.2);
+            border-color: rgba(99, 102, 241, 0.5);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 10rem 5% 6rem;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-badge::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--success);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        .hero h1 {
+            font-size: 4.5rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.03em;
+        }
+
+        .hero h1 span {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.35rem;
+            color: var(--gray);
+            margin-bottom: 2.5rem;
+            line-height: 1.7;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .hero-visual {
+            position: relative;
+        }
+
+        .crm-preview {
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.9));
+            border-radius: 24px;
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            padding: 2rem;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .crm-preview::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: rgba(99, 102, 241, 0.1);
+            border-bottom: 1px solid rgba(99, 102, 241, 0.2);
+        }
+
+        .crm-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .crm-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .crm-dot.red { background: #ef4444; }
+        .crm-dot.yellow { background: #f59e0b; }
+        .crm-dot.green { background: #10b981; }
+
+        .crm-content {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .crm-card {
+            background: rgba(30, 41, 59, 0.6);
+            border-radius: 12px;
+            padding: 1.25rem;
+            border: 1px solid rgba(99, 102, 241, 0.1);
+        }
+
+        .crm-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .crm-card-title {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .crm-card-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        .badge-green { background: rgba(16, 185, 129, 0.2); color: #10b981; }
+        .badge-blue { background: rgba(14, 165, 233, 0.2); color: #0ea5e9; }
+        .badge-purple { background: rgba(139, 92, 246, 0.2); color: #8b5cf6; }
+
+        .crm-metric {
+            font-size: 1.75rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .crm-sublabel {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        .ai-suggestion {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(139, 92, 246, 0.1));
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 12px;
+            padding: 1rem;
+            display: flex;
+            gap: 0.75rem;
+            align-items: flex-start;
+        }
+
+        .ai-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--gradient-1);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .ai-text {
+            font-size: 0.85rem;
+            color: var(--light);
+        }
+
+        .ai-text strong {
+            color: var(--primary);
+        }
+
+        .floating-element {
+            position: absolute;
+            background: rgba(30, 41, 59, 0.9);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 12px;
+            padding: 0.75rem 1rem;
+            font-size: 0.8rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            animation: floatElement 4s ease-in-out infinite;
+        }
+
+        .floating-1 {
+            top: -30px;
+            right: -20px;
+            animation-delay: 0s;
+        }
+
+        .floating-2 {
+            bottom: 60px;
+            left: -40px;
+            animation-delay: 1s;
+        }
+
+        .floating-3 {
+            bottom: -20px;
+            right: 40px;
+            animation-delay: 2s;
+        }
+
+        @keyframes floatElement {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Stats Section */
+        .stats {
+            padding: 4rem 5%;
+            background: rgba(15, 23, 42, 0.5);
+            border-top: 1px solid rgba(99, 102, 241, 0.1);
+            border-bottom: 1px solid rgba(99, 102, 241, 0.1);
+        }
+
+        .stats-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 3rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--gray);
+            font-size: 1rem;
+        }
+
+        /* Problem Section */
+        .problem {
+            padding: 8rem 5%;
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 4rem;
+        }
+
+        .section-label {
+            display: inline-block;
+            padding: 0.5rem 1.25rem;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: #ef4444;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .section-label.solution {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+
+        .section-label.features {
+            background: rgba(99, 102, 241, 0.1);
+            border-color: rgba(99, 102, 241, 0.2);
+            color: var(--primary);
+        }
+
+        .section-title {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .section-subtitle {
+            font-size: 1.25rem;
+            color: var(--gray);
+            line-height: 1.7;
+        }
+
+        .problem-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .problem-card {
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.6), rgba(15, 23, 42, 0.8));
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .problem-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, #ef4444, #f97316);
+        }
+
+        .problem-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .problem-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+            color: var(--light);
+        }
+
+        .problem-card p {
+            color: var(--gray);
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        .problem-stat {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: #f87171;
+            margin-top: 1rem;
+            font-weight: 600;
+        }
+
+        /* Solution Section */
+        .solution {
+            padding: 8rem 5%;
+            background: var(--gradient-3);
+        }
+
+        .solution-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .solution-main {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            margin-bottom: 4rem;
+        }
+
+        .solution-visual {
+            position: relative;
+        }
+
+        .solution-diagram {
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.9));
+            border-radius: 24px;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            padding: 2.5rem;
+            position: relative;
+        }
+
+        .diagram-center {
+            width: 120px;
+            height: 120px;
+            background: var(--gradient-1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 2rem;
+            font-size: 3rem;
+            box-shadow: 0 0 60px rgba(99, 102, 241, 0.4);
+            position: relative;
+        }
+
+        .diagram-center::after {
+            content: '';
+            position: absolute;
+            width: 150%;
+            height: 150%;
+            border: 2px dashed rgba(99, 102, 241, 0.3);
+            border-radius: 50%;
+            animation: spin 20s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .diagram-nodes {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+
+        .diagram-node {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .diagram-node:hover {
+            border-color: rgba(99, 102, 241, 0.5);
+            transform: translateY(-3px);
+        }
+
+        .diagram-node-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .diagram-node-text {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        .solution-text h3 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        .solution-text h3 span {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .solution-text p {
+            color: var(--gray);
+            font-size: 1.15rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .solution-benefits {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .benefit-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(16, 185, 129, 0.05);
+            border: 1px solid rgba(16, 185, 129, 0.1);
+            border-radius: 12px;
+        }
+
+        .benefit-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #10b981;
+            font-size: 1.25rem;
+        }
+
+        .benefit-text {
+            font-size: 1rem;
+            color: var(--light);
+        }
+
+        /* Features Section */
+        .features {
+            padding: 8rem 5%;
+        }
+
+        .features-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.6), rgba(15, 23, 42, 0.8));
+            border: 1px solid rgba(99, 102, 241, 0.1);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-1);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(99, 102, 241, 0.3);
+            box-shadow: 0 20px 60px rgba(99, 102, 241, 0.15);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-1);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.35rem;
+            margin-bottom: 1rem;
+            color: var(--light);
+        }
+
+        .feature-card p {
+            color: var(--gray);
+            line-height: 1.7;
+        }
+
+        /* Comparison Section */
+        .comparison {
+            padding: 8rem 5%;
+            background: rgba(15, 23, 42, 0.5);
+        }
+
+        .comparison-table {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.9));
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 24px;
+            overflow: hidden;
+        }
+
+        .comparison-header {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            background: rgba(99, 102, 241, 0.1);
+            border-bottom: 1px solid rgba(99, 102, 241, 0.2);
+        }
+
+        .comparison-header > div {
+            padding: 1.5rem 2rem;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .comparison-header > div:last-child {
+            background: var(--gradient-1);
+        }
+
+        .comparison-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            border-bottom: 1px solid rgba(99, 102, 241, 0.1);
+        }
+
+        .comparison-row:last-child {
+            border-bottom: none;
+        }
+
+        .comparison-row > div {
+            padding: 1.25rem 2rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .comparison-row > div:first-child {
+            color: var(--gray);
+        }
+
+        .comparison-row > div:last-child {
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        .check {
+            color: #10b981;
+            font-size: 1.25rem;
+        }
+
+        .cross {
+            color: #ef4444;
+            font-size: 1.25rem;
+        }
+
+        .partial {
+            color: #f59e0b;
+            font-size: 0.9rem;
+        }
+
+        /* Market Section */
+        .market {
+            padding: 8rem 5%;
+        }
+
+        .market-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .market-visual {
+            position: relative;
+        }
+
+        .tam-circles {
+            position: relative;
+            width: 400px;
+            height: 400px;
+            margin: 0 auto;
+        }
+
+        .tam-circle {
+            position: absolute;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .tam {
+            width: 400px;
+            height: 400px;
+            background: rgba(99, 102, 241, 0.1);
+            border: 2px solid rgba(99, 102, 241, 0.3);
+            top: 0;
+            left: 0;
+        }
+
+        .sam {
+            width: 280px;
+            height: 280px;
+            background: rgba(99, 102, 241, 0.2);
+            border: 2px solid rgba(99, 102, 241, 0.4);
+            top: 60px;
+            left: 60px;
+        }
+
+        .som {
+            width: 160px;
+            height: 160px;
+            background: var(--gradient-1);
+            top: 120px;
+            left: 120px;
+            box-shadow: 0 0 60px rgba(99, 102, 241, 0.5);
+        }
+
+        .tam-label {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .tam-sublabel {
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+
+        .som .tam-label, .som .tam-sublabel {
+            color: white;
+        }
+
+        .market-text h3 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        .market-text p {
+            color: var(--gray);
+            font-size: 1.15rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .market-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        .market-stat {
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 16px;
+            padding: 1.5rem;
+        }
+
+        .market-stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .market-stat-label {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* Pricing Section */
+        .pricing {
+            padding: 8rem 5%;
+            background: var(--gradient-3);
+        }
+
+        .pricing-grid {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .pricing-card {
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.9));
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 24px;
+            padding: 3rem 2rem;
+            text-align: center;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .pricing-card.featured {
+            border-color: var(--primary);
+            transform: scale(1.05);
+            box-shadow: 0 30px 80px rgba(99, 102, 241, 0.25);
+        }
+
+        .pricing-card.featured::before {
+            content: 'MOST POPULAR';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--gradient-1);
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .pricing-card.featured:hover {
+            transform: scale(1.05) translateY(-5px);
+        }
+
+        .pricing-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-desc {
+            color: var(--gray);
+            margin-bottom: 2rem;
+        }
+
+        .pricing-price {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-price span {
+            font-size: 1rem;
+            color: var(--gray);
+            font-weight: 400;
+        }
+
+        .pricing-features {
+            list-style: none;
+            text-align: left;
+            margin: 2rem 0;
+        }
+
+        .pricing-features li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(99, 102, 241, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--gray);
+        }
+
+        .pricing-features li::before {
+            content: '✓';
+            color: #10b981;
+            font-weight: 700;
+        }
+
+        .pricing-cta {
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 8rem 5%;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
+            z-index: 0;
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cta h2 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta p {
+            font-size: 1.35rem;
+            color: var(--gray);
+            margin-bottom: 2.5rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 5% 2rem;
+            border-top: 1px solid rgba(99, 102, 241, 0.1);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--gray);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--light);
+        }
+
+        .footer-copyright {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero-content,
+            .solution-main,
+            .market-content {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .hero h1 {
+                font-size: 3rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .problem-grid,
+            .features-grid,
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pricing-card.featured {
+                transform: none;
+            }
+
+            .pricing-card.featured:hover {
+                transform: translateY(-5px);
+            }
+
+            .comparison-header,
+            .comparison-row {
+                grid-template-columns: 1.5fr 1fr 1fr;
+            }
+
+            .tam-circles {
+                width: 300px;
+                height: 300px;
+            }
+
+            .tam { width: 300px; height: 300px; }
+            .sam { width: 210px; height: 210px; top: 45px; left: 45px; }
+            .som { width: 120px; height: 120px; top: 90px; left: 90px; }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem 5%;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero {
+                padding: 8rem 5% 4rem;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .cta h2 {
+                font-size: 2.5rem;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                gap: 2rem;
+                text-align: center;
+            }
+
+            .footer-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+    <div class="bg-glow"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">
+            <div class="logo-icon">🧠</div>
+            Nexus AI
+        </div>
+        <div class="nav-links">
+            <a href="#problem">Problem</a>
+            <a href="#solution">Solution</a>
+            <a href="#features">Features</a>
+            <a href="#pricing">Pricing</a>
+            <a href="#" class="btn btn-primary">Get Early Access</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <div class="hero-badge">AI-Native CRM • Now in Beta</div>
+                <h1>The Last CRM<br>You'll <span>Ever Need</span></h1>
+                <p>Stop chasing your sales team for data entry. Nexus AI automatically captures every interaction, understands every relationship, and takes action — so your reps can focus on selling.</p>
+                <div class="hero-buttons">
+                    <a href="#" class="btn btn-primary">
+                        Request Early Access
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </a>
+                    <a href="#" class="btn btn-secondary">Watch Demo</a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="crm-preview">
+                    <div class="crm-header">
+                        <div class="crm-dot red"></div>
+                        <div class="crm-dot yellow"></div>
+                        <div class="crm-dot green"></div>
+                    </div>
+                    <div class="crm-content">
+                        <div class="crm-card">
+                            <div class="crm-card-header">
+                                <span class="crm-card-title">Pipeline Health</span>
+                                <span class="crm-card-badge badge-green">+23% MoM</span>
+                            </div>
+                            <div class="crm-metric">$4.2M</div>
+                            <div class="crm-sublabel">Weighted pipeline value</div>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <div class="crm-card">
+                                <div class="crm-card-header">
+                                    <span class="crm-card-title">Win Rate</span>
+                                    <span class="crm-card-badge badge-blue">AI Predicted</span>
+                                </div>
+                                <div class="crm-metric">34%</div>
+                            </div>
+                            <div class="crm-card">
+                                <div class="crm-card-header">
+                                    <span class="crm-card-title">Activities</span>
+                                    <span class="crm-card-badge badge-purple">Auto-Logged</span>
+                                </div>
+                                <div class="crm-metric">1,247</div>
+                            </div>
+                        </div>
+                        <div class="ai-suggestion">
+                            <div class="ai-icon">✨</div>
+                            <div class="ai-text">
+                                <strong>AI Insight:</strong> The Acme deal is at risk — no executive engagement in 14 days. I've drafted a re-engagement email for your review.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="floating-element floating-1">
+                    ✅ Activity auto-logged
+                </div>
+                <div class="floating-element floating-2">
+                    🎯 Deal score: 78%
+                </div>
+                <div class="floating-element floating-3">
+                    📧 Follow-up drafted
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-value">70%</div>
+                <div class="stat-label">CRM data is inaccurate or outdated</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">65%</div>
+                <div class="stat-label">Sales time spent NOT selling</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">18%</div>
+                <div class="stat-label">Reps who consistently log activities</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">$120B</div>
+                <div class="stat-label">CRM market waiting for disruption</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="problem" id="problem">
+        <div class="section-header">
+            <div class="section-label">The Problem</div>
+            <h2 class="section-title">Your CRM is Broken</h2>
+            <p class="section-subtitle">Traditional CRMs were built for a world where salespeople would manually log every interaction. They don't. They never did. They never will.</p>
+        </div>
+        <div class="problem-grid">
+            <div class="problem-card">
+                <div class="problem-icon">📉</div>
+                <h3>Data Decay is Killing You</h3>
+                <p>Your CRM becomes outdated the moment data is entered. Contact info changes, deals stall, relationships evolve — but your system doesn't know.</p>
+                <div class="problem-stat">70% of CRM data goes stale within 1 year</div>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">⏰</div>
+                <h3>Manual Entry is Fantasy</h3>
+                <p>You pay sales reps to sell, but they spend 65% of their time on admin work. Data entry, status updates, notes — death by a thousand clicks.</p>
+                <div class="problem-stat">Only 18% of reps log activities consistently</div>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">🔮</div>
+                <h3>GIGO Forecasting</h3>
+                <p>Garbage in, garbage out. Your AI-powered forecasting tools can't work when the underlying data is incomplete, outdated, or simply wrong.</p>
+                <div class="problem-stat">$1M+ lost per year to forecast misses</div>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">🏝️</div>
+                <h3>Siloed Interactions</h3>
+                <p>Emails in Outlook. Calls in Gong. LinkedIn in LinkedIn. Your CRM sees 20% of what actually happens with customers.</p>
+                <div class="problem-stat">80% of customer touchpoints invisible</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="solution" id="solution">
+        <div class="solution-content">
+            <div class="section-header">
+                <div class="section-label solution">The Solution</div>
+                <h2 class="section-title">Meet Nexus AI</h2>
+                <p class="section-subtitle">The first CRM built from the ground up for the AI era. Where AI does the work and humans focus on relationships.</p>
+            </div>
+            <div class="solution-main">
+                <div class="solution-visual">
+                    <div class="solution-diagram">
+                        <div class="diagram-center">🧠</div>
+                        <div class="diagram-nodes">
+                            <div class="diagram-node">
+                                <div class="diagram-node-icon">📧</div>
+                                <div class="diagram-node-text">Email</div>
+                            </div>
+                            <div class="diagram-node">
+                                <div class="diagram-node-icon">📞</div>
+                                <div class="diagram-node-text">Calls</div>
+                            </div>
+                            <div class="diagram-node">
+                                <div class="diagram-node-icon">📅</div>
+                                <div class="diagram-node-text">Calendar</div>
+                            </div>
+                            <div class="diagram-node">
+                                <div class="diagram-node-icon">💼</div>
+                                <div class="diagram-node-text">LinkedIn</div>
+                            </div>
+                            <div class="diagram-node">
+                                <div class="diagram-node-icon">💬</div>
+                                <div class="diagram-node-text">Slack</div>
+                            </div>
+                            <div class="diagram-node">
+                                <div class="diagram-node-icon">🌐</div>
+                                <div class="diagram-node-text">Web</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="solution-text">
+                    <h3>The <span>Self-Driving</span> CRM</h3>
+                    <p>Nexus doesn't ask salespeople to log anything. It observes, understands, and acts. Every interaction is automatically captured. Every relationship is deeply understood. Every action is intelligently recommended or autonomously executed.</p>
+                    <div class="solution-benefits">
+                        <div class="benefit-item">
+                            <div class="benefit-icon">✓</div>
+                            <div class="benefit-text"><strong>Zero manual entry</strong> — every touchpoint captured automatically</div>
+                        </div>
+                        <div class="benefit-item">
+                            <div class="benefit-icon">✓</div>
+                            <div class="benefit-text"><strong>Relationship intelligence</strong> — know who knows whom</div>
+                        </div>
+                        <div class="benefit-item">
+                            <div class="benefit-icon">✓</div>
+                            <div class="benefit-text"><strong>Predictive insights</strong> — AI-powered deal scoring</div>
+                        </div>
+                        <div class="benefit-item">
+                            <div class="benefit-icon">✓</div>
+                            <div class="benefit-text"><strong>Autonomous actions</strong> — AI drafts follow-ups for you</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="section-header">
+            <div class="section-label features">Features</div>
+            <h2 class="section-title">Everything Your CRM Should Be</h2>
+            <p class="section-subtitle">Built AI-native from day one. Not bolted on as an afterthought.</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🔄</div>
+                <h3>Universal Capture</h3>
+                <p>Automatically ingests every email, call, meeting, and message across all your tools. No manual logging required.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🕸️</div>
+                <h3>Relationship Graph</h3>
+                <p>Maps the web of relationships across accounts. Who knows whom? Who are the real decision makers? Who's your champion?</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <h3>Deal Intelligence</h3>
+                <p>AI-powered scoring based on actual behavior — not rep optimism. Know which deals will close and which are at risk.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🤖</div>
+                <h3>Autonomous Actions</h3>
+                <p>AI drafts follow-ups, schedules meetings, prepares briefings, and executes workflows automatically.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💬</div>
+                <h3>Natural Language</h3>
+                <p>Ask anything in plain English: "Show me all enterprise deals that haven't had exec engagement this month."</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>True Forecasting</h3>
+                <p>Forecasts you can actually trust, based on complete data and behavioral signals — not sandbagging.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Comparison Section -->
+    <section class="comparison">
+        <div class="section-header">
+            <h2 class="section-title">How Nexus Compares</h2>
+            <p class="section-subtitle">The difference between AI bolted on and AI built in.</p>
+        </div>
+        <div class="comparison-table">
+            <div class="comparison-header">
+                <div>Capability</div>
+                <div>Legacy CRMs</div>
+                <div>Nexus AI</div>
+            </div>
+            <div class="comparison-row">
+                <div>Activity Capture</div>
+                <div><span class="partial">Manual</span></div>
+                <div><span class="check">✓</span> Automatic</div>
+            </div>
+            <div class="comparison-row">
+                <div>Data Quality</div>
+                <div><span class="cross">✗</span> 30% accurate</div>
+                <div><span class="check">✓</span> 95%+ accurate</div>
+            </div>
+            <div class="comparison-row">
+                <div>Relationship Mapping</div>
+                <div><span class="partial">Contact records</span></div>
+                <div><span class="check">✓</span> Intelligence graph</div>
+            </div>
+            <div class="comparison-row">
+                <div>Forecasting</div>
+                <div><span class="cross">✗</span> Rep-submitted</div>
+                <div><span class="check">✓</span> Behavior-based ML</div>
+            </div>
+            <div class="comparison-row">
+                <div>Actions</div>
+                <div><span class="partial">Human executes</span></div>
+                <div><span class="check">✓</span> AI drafts/executes</div>
+            </div>
+            <div class="comparison-row">
+                <div>Interface</div>
+                <div><span class="cross">✗</span> Forms & clicks</div>
+                <div><span class="check">✓</span> Natural language</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Market Section -->
+    <section class="market">
+        <div class="market-content">
+            <div class="market-visual">
+                <div class="tam-circles">
+                    <div class="tam-circle tam">
+                        <div class="tam-label">$120B</div>
+                        <div class="tam-sublabel">TAM</div>
+                    </div>
+                    <div class="tam-circle sam">
+                        <div class="tam-label">$45B</div>
+                        <div class="tam-sublabel">SAM</div>
+                    </div>
+                    <div class="tam-circle som">
+                        <div class="tam-label">$4.5B</div>
+                        <div class="tam-sublabel">SOM</div>
+                    </div>
+                </div>
+            </div>
+            <div class="market-text">
+                <h3>A $120B Market Ready for Disruption</h3>
+                <p>The CRM market hasn't seen a true disruptor since Salesforce moved it to the cloud 25 years ago. Every subsequent player has built on the same architecture: forms, fields, and manual data entry. Until now.</p>
+                <div class="market-stats">
+                    <div class="market-stat">
+                        <div class="market-stat-value">12%</div>
+                        <div class="market-stat-label">Annual market growth</div>
+                    </div>
+                    <div class="market-stat">
+                        <div class="market-stat-value">34%</div>
+                        <div class="market-stat-label">Salesforce customers evaluating alternatives</div>
+                    </div>
+                    <div class="market-stat">
+                        <div class="market-stat-value">60%</div>
+                        <div class="market-stat-label">Salesforce price increase (5yr)</div>
+                    </div>
+                    <div class="market-stat">
+                        <div class="market-stat-value">2.1M</div>
+                        <div class="market-stat-label">B2B sales roles in US alone</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="pricing" id="pricing">
+        <div class="section-header">
+            <h2 class="section-title">Simple, Transparent Pricing</h2>
+            <p class="section-subtitle">No hidden add-ons. No surprise fees. Intelligence included.</p>
+        </div>
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <div class="pricing-name">Starter</div>
+                <div class="pricing-desc">For growing teams</div>
+                <div class="pricing-price">$99<span>/user/mo</span></div>
+                <ul class="pricing-features">
+                    <li>Universal activity capture</li>
+                    <li>Basic relationship graph</li>
+                    <li>AI activity summaries</li>
+                    <li>Email + calendar integration</li>
+                    <li>Standard support</li>
+                </ul>
+                <a href="#" class="btn btn-secondary pricing-cta">Get Started</a>
+            </div>
+            <div class="pricing-card featured">
+                <div class="pricing-name">Professional</div>
+                <div class="pricing-desc">For scaling organizations</div>
+                <div class="pricing-price">$199<span>/user/mo</span></div>
+                <ul class="pricing-features">
+                    <li>Everything in Starter</li>
+                    <li>Advanced deal intelligence</li>
+                    <li>Autonomous follow-ups</li>
+                    <li>Natural language queries</li>
+                    <li>Call + LinkedIn integration</li>
+                    <li>Priority support</li>
+                </ul>
+                <a href="#" class="btn btn-primary pricing-cta">Get Started</a>
+            </div>
+            <div class="pricing-card">
+                <div class="pricing-name">Enterprise</div>
+                <div class="pricing-desc">For large organizations</div>
+                <div class="pricing-price">$349<span>/user/mo</span></div>
+                <ul class="pricing-features">
+                    <li>Everything in Professional</li>
+                    <li>Custom AI workflows</li>
+                    <li>Salesforce migration tools</li>
+                    <li>SSO & advanced security</li>
+                    <li>Dedicated success manager</li>
+                    <li>SLA guarantee</li>
+                </ul>
+                <a href="#" class="btn btn-secondary pricing-cta">Contact Sales</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="cta-content">
+            <h2>Ready to Transform Your Sales?</h2>
+            <p>Join the waitlist for early access. Be among the first to experience the future of CRM.</p>
+            <div class="cta-buttons">
+                <a href="#" class="btn btn-primary">
+                    Request Early Access
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
+                <a href="#" class="btn btn-secondary">Schedule a Demo</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="logo">
+                <div class="logo-icon">🧠</div>
+                Nexus AI
+            </div>
+            <div class="footer-links">
+                <a href="#">Product</a>
+                <a href="#">Pricing</a>
+                <a href="#">About</a>
+                <a href="#">Blog</a>
+                <a href="#">Careers</a>
+                <a href="#">Contact</a>
+            </div>
+            <div class="footer-copyright">
+                © 2026 Nexus AI. All rights reserved.
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
