@@ -1,0 +1,1624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JurisAI — Autonomous Legal Intelligence Platform</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Crimson+Pro:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --midnight: #0a0f1c;
+            --deep-navy: #111827;
+            --slate: #1e293b;
+            --gold: #d4af37;
+            --gold-light: #f0d78c;
+            --gold-dark: #b8960c;
+            --cream: #fef9e7;
+            --silver: #94a3b8;
+            --ice: #e2e8f0;
+            --white: #ffffff;
+            --gradient-gold: linear-gradient(135deg, #d4af37 0%, #f0d78c 50%, #d4af37 100%);
+            --gradient-dark: linear-gradient(180deg, #0a0f1c 0%, #111827 50%, #1e293b 100%);
+            --gradient-radial: radial-gradient(ellipse at center, rgba(212,175,55,0.15) 0%, transparent 70%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--midnight);
+            color: var(--ice);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-pattern::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-dark);
+        }
+
+        .bg-pattern::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 150vw;
+            height: 150vh;
+            background: var(--gradient-radial);
+            animation: pulse 8s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; transform: translate(-50%, -50%) scale(1); }
+            50% { opacity: 0.6; transform: translate(-50%, -50%) scale(1.1); }
+        }
+
+        /* Legal scales floating animation */
+        .floating-scales {
+            position: fixed;
+            font-size: 400px;
+            opacity: 0.02;
+            z-index: -1;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .scales-1 { top: 10%; left: -10%; }
+        .scales-2 { bottom: 10%; right: -10%; animation-delay: -10s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(-5deg); }
+            50% { transform: translateY(-30px) rotate(5deg); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 1.5rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(10, 15, 28, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--white);
+        }
+
+        .logo-icon {
+            width: 44px;
+            height: 44px;
+            background: var(--gradient-gold);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.3);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--silver);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-links a:hover {
+            color: var(--gold);
+        }
+
+        .nav-cta {
+            background: var(--gradient-gold);
+            color: var(--midnight);
+            padding: 0.75rem 1.75rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.3);
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(212, 175, 55, 0.4);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 4rem 4rem;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            padding: 0.5rem 1.25rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--gold);
+            margin-bottom: 2rem;
+            font-weight: 500;
+        }
+
+        .hero-badge span {
+            animation: blink 2s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 7vw, 5rem);
+            font-weight: 900;
+            line-height: 1.05;
+            margin-bottom: 1.5rem;
+            letter-spacing: -2px;
+        }
+
+        .hero h1 .highlight {
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-family: 'Crimson Pro', Georgia, serif;
+            font-size: 1.5rem;
+            color: var(--silver);
+            margin-bottom: 2.5rem;
+            font-weight: 400;
+            font-style: italic;
+        }
+
+        .hero-description {
+            font-size: 1.2rem;
+            color: var(--ice);
+            max-width: 700px;
+            margin: 0 auto 3rem;
+            line-height: 1.8;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: var(--gradient-gold);
+            color: var(--midnight);
+            padding: 1.1rem 2.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1rem;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 8px 30px rgba(212, 175, 55, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(212, 175, 55, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--white);
+            padding: 1.1rem 2.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            border: 2px solid rgba(255,255,255,0.2);
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            background: rgba(30, 41, 59, 0.5);
+            border-top: 1px solid rgba(212, 175, 55, 0.1);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+            padding: 3rem 4rem;
+        }
+
+        .stats-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 900;
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--silver);
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        /* Problem Section */
+        .problem {
+            padding: 8rem 4rem;
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 5rem;
+        }
+
+        .section-label {
+            color: var(--gold);
+            font-weight: 700;
+            font-size: 0.85rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .section-header h2 {
+            font-size: clamp(2.5rem, 4vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            letter-spacing: -1px;
+        }
+
+        .section-header p {
+            color: var(--silver);
+            font-size: 1.15rem;
+            line-height: 1.8;
+        }
+
+        .problem-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .problem-card {
+            background: linear-gradient(180deg, rgba(30, 41, 59, 0.6) 0%, rgba(17, 24, 39, 0.6) 100%);
+            border: 1px solid rgba(212, 175, 55, 0.15);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .problem-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--gradient-gold);
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(212, 175, 55, 0.4);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+        }
+
+        .problem-card:hover::before {
+            opacity: 1;
+        }
+
+        .problem-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .problem-card h3 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--white);
+        }
+
+        .problem-card p {
+            color: var(--silver);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .problem-stat {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(212, 175, 55, 0.1);
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--gold);
+        }
+
+        .problem-stat span {
+            display: block;
+            font-size: 0.8rem;
+            color: var(--silver);
+            font-weight: 500;
+            margin-top: 0.25rem;
+        }
+
+        /* Solution Section */
+        .solution {
+            padding: 8rem 4rem;
+            background: linear-gradient(180deg, rgba(212, 175, 55, 0.03) 0%, transparent 100%);
+        }
+
+        .solution-showcase {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .solution-main {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            margin-bottom: 5rem;
+        }
+
+        .solution-visual {
+            position: relative;
+        }
+
+        .solution-mockup {
+            background: linear-gradient(135deg, var(--slate) 0%, var(--deep-navy) 100%);
+            border-radius: 20px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            padding: 2rem;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.4);
+        }
+
+        .mockup-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .mockup-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .mockup-dot.red { background: #ff5f57; }
+        .mockup-dot.yellow { background: #ffbd2e; }
+        .mockup-dot.green { background: #28c840; }
+
+        .mockup-content {
+            background: var(--midnight);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .mockup-analysis {
+            margin-bottom: 1rem;
+        }
+
+        .analysis-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .analysis-title {
+            font-weight: 700;
+            color: var(--white);
+        }
+
+        .analysis-badge {
+            background: rgba(40, 200, 64, 0.2);
+            color: #28c840;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .risk-bars {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .risk-bar {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .risk-label {
+            font-size: 0.8rem;
+            color: var(--silver);
+            width: 100px;
+        }
+
+        .risk-track {
+            flex: 1;
+            height: 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .risk-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 1s ease;
+        }
+
+        .risk-fill.low { background: #28c840; width: 25%; }
+        .risk-fill.medium { background: var(--gold); width: 55%; }
+        .risk-fill.high { background: #ff5f57; width: 85%; }
+
+        .mockup-clauses {
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 1rem;
+        }
+
+        .clause-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .clause-name {
+            font-size: 0.85rem;
+            color: var(--ice);
+        }
+
+        .clause-status {
+            font-size: 0.75rem;
+            padding: 0.2rem 0.6rem;
+            border-radius: 12px;
+            font-weight: 600;
+        }
+
+        .clause-status.good {
+            background: rgba(40, 200, 64, 0.15);
+            color: #28c840;
+        }
+
+        .clause-status.warning {
+            background: rgba(212, 175, 55, 0.15);
+            color: var(--gold);
+        }
+
+        .clause-status.danger {
+            background: rgba(255, 95, 87, 0.15);
+            color: #ff5f57;
+        }
+
+        .solution-text h3 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            letter-spacing: -1px;
+        }
+
+        .solution-text p {
+            color: var(--silver);
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .solution-features {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .feature-check {
+            width: 28px;
+            height: 28px;
+            background: rgba(212, 175, 55, 0.15);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gold);
+            font-weight: bold;
+        }
+
+        .feature-item span {
+            font-size: 1rem;
+            color: var(--ice);
+        }
+
+        /* Capabilities Grid */
+        .capabilities-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .capability-card {
+            background: linear-gradient(180deg, rgba(30, 41, 59, 0.4) 0%, rgba(17, 24, 39, 0.4) 100%);
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.3s;
+        }
+
+        .capability-card:hover {
+            border-color: rgba(212, 175, 55, 0.3);
+            transform: translateY(-5px);
+        }
+
+        .capability-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.2) 0%, rgba(212, 175, 55, 0.1) 100%);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .capability-card h4 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            color: var(--white);
+        }
+
+        .capability-card p {
+            color: var(--silver);
+            font-size: 0.9rem;
+            line-height: 1.7;
+        }
+
+        /* Market Section */
+        .market {
+            padding: 8rem 4rem;
+        }
+
+        .market-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .market-visual {
+            position: relative;
+        }
+
+        .market-chart {
+            background: linear-gradient(180deg, rgba(30, 41, 59, 0.5) 0%, rgba(17, 24, 39, 0.5) 100%);
+            border: 1px solid rgba(212, 175, 55, 0.15);
+            border-radius: 24px;
+            padding: 3rem;
+        }
+
+        .chart-header {
+            margin-bottom: 2rem;
+        }
+
+        .chart-header h4 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .chart-header p {
+            color: var(--silver);
+            font-size: 0.9rem;
+        }
+
+        .chart-bars {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .chart-bar {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .bar-label {
+            width: 140px;
+            font-size: 0.9rem;
+            color: var(--ice);
+        }
+
+        .bar-track {
+            flex: 1;
+            height: 35px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .bar-fill {
+            height: 100%;
+            background: var(--gradient-gold);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 1rem;
+            font-weight: 700;
+            color: var(--midnight);
+            font-size: 0.85rem;
+        }
+
+        .market-text h3 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            letter-spacing: -1px;
+        }
+
+        .market-text p {
+            color: var(--silver);
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .market-highlights {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .highlight-item {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .highlight-number {
+            font-size: 2rem;
+            font-weight: 900;
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+        }
+
+        .highlight-text h5 {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+            color: var(--white);
+        }
+
+        .highlight-text p {
+            font-size: 0.9rem;
+            color: var(--silver);
+            margin: 0;
+        }
+
+        /* Use Cases Section */
+        .use-cases {
+            padding: 8rem 4rem;
+            background: linear-gradient(180deg, transparent 0%, rgba(212, 175, 55, 0.03) 50%, transparent 100%);
+        }
+
+        .use-cases-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .use-case-card {
+            background: linear-gradient(180deg, rgba(30, 41, 59, 0.5) 0%, rgba(17, 24, 39, 0.5) 100%);
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            border-radius: 24px;
+            padding: 3rem;
+            transition: all 0.3s;
+        }
+
+        .use-case-card:hover {
+            border-color: rgba(212, 175, 55, 0.3);
+        }
+
+        .use-case-persona {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .persona-avatar {
+            width: 56px;
+            height: 56px;
+            background: var(--gradient-gold);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .persona-info h4 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--white);
+        }
+
+        .persona-info p {
+            font-size: 0.85rem;
+            color: var(--gold);
+        }
+
+        .use-case-quote {
+            font-family: 'Crimson Pro', Georgia, serif;
+            font-size: 1.3rem;
+            font-style: italic;
+            color: var(--ice);
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+            padding-left: 1.5rem;
+            border-left: 3px solid var(--gold);
+        }
+
+        .use-case-results {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .result-item {
+            text-align: center;
+        }
+
+        .result-value {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--gold);
+        }
+
+        .result-label {
+            font-size: 0.8rem;
+            color: var(--silver);
+        }
+
+        /* Pricing Section */
+        .pricing {
+            padding: 8rem 4rem;
+        }
+
+        .pricing-grid {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .pricing-card {
+            background: linear-gradient(180deg, rgba(30, 41, 59, 0.5) 0%, rgba(17, 24, 39, 0.5) 100%);
+            border: 1px solid rgba(212, 175, 55, 0.15);
+            border-radius: 24px;
+            padding: 3rem 2rem;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .pricing-card.featured {
+            border-color: var(--gold);
+            transform: scale(1.05);
+            box-shadow: 0 20px 60px rgba(212, 175, 55, 0.15);
+        }
+
+        .pricing-card.featured::before {
+            content: 'MOST POPULAR';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--gradient-gold);
+            color: var(--midnight);
+            font-size: 0.7rem;
+            font-weight: 800;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            letter-spacing: 1px;
+        }
+
+        .pricing-card:hover {
+            border-color: rgba(212, 175, 55, 0.4);
+        }
+
+        .pricing-header {
+            text-align: center;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .pricing-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--white);
+        }
+
+        .pricing-price {
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--gold);
+        }
+
+        .pricing-price span {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--silver);
+        }
+
+        .pricing-description {
+            font-size: 0.9rem;
+            color: var(--silver);
+            margin-top: 0.5rem;
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-features li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 0;
+            color: var(--ice);
+            font-size: 0.9rem;
+        }
+
+        .pricing-features li::before {
+            content: '✓';
+            color: var(--gold);
+            font-weight: bold;
+        }
+
+        .pricing-cta {
+            display: block;
+            text-align: center;
+            padding: 1rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+
+        .pricing-card.featured .pricing-cta {
+            background: var(--gradient-gold);
+            color: var(--midnight);
+        }
+
+        .pricing-card:not(.featured) .pricing-cta {
+            border: 2px solid rgba(212, 175, 55, 0.3);
+            color: var(--gold);
+        }
+
+        .pricing-card:not(.featured) .pricing-cta:hover {
+            background: rgba(212, 175, 55, 0.1);
+        }
+
+        /* CTA Section */
+        .final-cta {
+            padding: 8rem 4rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .cta-content {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .cta-icon {
+            font-size: 4rem;
+            margin-bottom: 2rem;
+        }
+
+        .final-cta h2 {
+            font-size: clamp(2.5rem, 4vw, 3.5rem);
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            letter-spacing: -1px;
+        }
+
+        .final-cta p {
+            color: var(--silver);
+            font-size: 1.2rem;
+            margin-bottom: 3rem;
+            line-height: 1.8;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem;
+            border-top: 1px solid rgba(212, 175, 55, 0.1);
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--white);
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-tagline {
+            font-family: 'Crimson Pro', Georgia, serif;
+            font-size: 1.2rem;
+            font-style: italic;
+            color: var(--gold);
+            margin-bottom: 2rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--silver);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--gold);
+        }
+
+        .footer-bottom {
+            color: var(--silver);
+            font-size: 0.85rem;
+        }
+
+        .footer-bottom a {
+            color: var(--gold);
+            text-decoration: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .problem-grid { grid-template-columns: repeat(2, 1fr); }
+            .capabilities-grid { grid-template-columns: repeat(2, 1fr); }
+            .solution-main { grid-template-columns: 1fr; }
+            .market-content { grid-template-columns: 1fr; }
+            .pricing-grid { grid-template-columns: 1fr; }
+            .pricing-card.featured { transform: none; }
+        }
+
+        @media (max-width: 768px) {
+            nav { padding: 1rem 1.5rem; }
+            .nav-links { display: none; }
+            .hero { padding: 6rem 1.5rem 3rem; }
+            .stats-grid { grid-template-columns: 1fr 1fr; }
+            .problem-grid { grid-template-columns: 1fr; }
+            .capabilities-grid { grid-template-columns: 1fr; }
+            .use-cases-grid { grid-template-columns: 1fr; }
+            section { padding: 4rem 1.5rem; }
+            .hero-cta { flex-direction: column; align-items: center; }
+            .cta-buttons { flex-direction: column; align-items: center; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-pattern"></div>
+    <div class="floating-scales scales-1">⚖️</div>
+    <div class="floating-scales scales-2">⚖️</div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">
+            <div class="logo-icon">⚖️</div>
+            JurisAI
+        </div>
+        <ul class="nav-links">
+            <li><a href="#problem">Problem</a></li>
+            <li><a href="#solution">Solution</a></li>
+            <li><a href="#market">Market</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+        </ul>
+        <a href="#cta" class="nav-cta">Get Early Access</a>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span>⚡</span> $1 Trillion Industry, Finally Disrupted
+            </div>
+            <h1>Legal Intelligence<br>That <span class="highlight">Never Sleeps</span></h1>
+            <p class="hero-subtitle">"Like having a 1000-lawyer firm working 24/7"</p>
+            <p class="hero-description">
+                JurisAI is the autonomous legal intelligence platform that handles contracts, compliance, research, and litigation—at a fraction of the cost. Enterprise-grade legal AI for every organization.
+            </p>
+            <div class="hero-cta">
+                <a href="#cta" class="btn-primary">Start Free Trial →</a>
+                <a href="#solution" class="btn-secondary">See It Work ▶</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Bar -->
+    <div class="stats-bar">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-number">$1T+</div>
+                <div class="stat-label">Legal Services Market</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">80%</div>
+                <div class="stat-label">Legal Needs Unmet</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">35%</div>
+                <div class="stat-label">Lawyer Time Automatable</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">$1,500</div>
+                <div class="stat-label">Avg. Partner Rate/Hour</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Problem Section -->
+    <section class="problem" id="problem">
+        <div class="section-header">
+            <div class="section-label">The Problem</div>
+            <h2>The $1 Trillion Inefficiency</h2>
+            <p>Every major business function has been transformed by AI—except legal. Still billing by the hour, still drowning in documents, still inaccessible to most businesses.</p>
+        </div>
+        <div class="problem-grid">
+            <div class="problem-card">
+                <div class="problem-icon">📜</div>
+                <h3>Contract Chaos</h3>
+                <p>Fortune 500 companies manage 20,000-40,000 contracts with no visibility into risks, obligations, or renewal dates. Manual review is impossible.</p>
+                <div class="problem-stat">23%<span>of contract value lost to poor management</span></div>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">⚠️</div>
+                <h3>Compliance Nightmares</h3>
+                <p>Regulations change daily across jurisdictions. Keeping up requires armies of lawyers. Non-compliance can be existential—GDPR fines reach 4% of global revenue.</p>
+                <div class="problem-stat">$10B+<span>in compliance penalties annually</span></div>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">💸</div>
+                <h3>Prohibitive Costs</h3>
+                <p>Average large company spends $20M+ annually on outside legal. Partners bill $1,500/hour. 70% of that work is research and document review.</p>
+                <div class="problem-stat">$250B<span>wasted on legal inefficiency yearly</span></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="solution" id="solution">
+        <div class="section-header">
+            <div class="section-label">The Solution</div>
+            <h2>AI That Thinks Like Your Best Lawyer</h2>
+            <p>Purpose-built legal intelligence with specialized models, multi-agent architecture, and proprietary knowledge graphs.</p>
+        </div>
+        <div class="solution-showcase">
+            <div class="solution-main">
+                <div class="solution-visual">
+                    <div class="solution-mockup">
+                        <div class="mockup-header">
+                            <div class="mockup-dot red"></div>
+                            <div class="mockup-dot yellow"></div>
+                            <div class="mockup-dot green"></div>
+                        </div>
+                        <div class="mockup-content">
+                            <div class="mockup-analysis">
+                                <div class="analysis-header">
+                                    <span class="analysis-title">📄 Contract Analysis</span>
+                                    <span class="analysis-badge">Analysis Complete</span>
+                                </div>
+                                <div class="risk-bars">
+                                    <div class="risk-bar">
+                                        <span class="risk-label">Liability Risk</span>
+                                        <div class="risk-track"><div class="risk-fill low"></div></div>
+                                    </div>
+                                    <div class="risk-bar">
+                                        <span class="risk-label">IP Exposure</span>
+                                        <div class="risk-track"><div class="risk-fill medium"></div></div>
+                                    </div>
+                                    <div class="risk-bar">
+                                        <span class="risk-label">Termination Risk</span>
+                                        <div class="risk-track"><div class="risk-fill high"></div></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mockup-clauses">
+                                <div class="clause-item">
+                                    <span class="clause-name">Indemnification</span>
+                                    <span class="clause-status good">Standard</span>
+                                </div>
+                                <div class="clause-item">
+                                    <span class="clause-name">Non-Compete</span>
+                                    <span class="clause-status warning">Review</span>
+                                </div>
+                                <div class="clause-item">
+                                    <span class="clause-name">Auto-Renewal</span>
+                                    <span class="clause-status danger">High Risk</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="solution-text">
+                    <h3>Instant Contract Intelligence</h3>
+                    <p>Upload any contract and get comprehensive risk analysis in minutes, not days. JurisAI understands context, identifies hidden risks, and provides actionable recommendations.</p>
+                    <div class="solution-features">
+                        <div class="feature-item">
+                            <div class="feature-check">✓</div>
+                            <span>Risk scoring across 500+ clause types</span>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-check">✓</div>
+                            <span>Playbook compliance checking</span>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-check">✓</div>
+                            <span>Obligation & deadline extraction</span>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-check">✓</div>
+                            <span>Negotiation recommendations</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Capabilities Grid -->
+            <div class="capabilities-grid">
+                <div class="capability-card">
+                    <div class="capability-icon">🔍</div>
+                    <h4>Legal Research Engine</h4>
+                    <p>Ask any legal question, get comprehensive research memos in minutes. Find relevant precedents, analyze arguments, predict outcomes.</p>
+                </div>
+                <div class="capability-card">
+                    <div class="capability-icon">🔒</div>
+                    <h4>Compliance Autopilot</h4>
+                    <p>Continuous monitoring of regulatory changes. Automatic gap analysis. Policy generation. Instant audit-ready documentation.</p>
+                </div>
+                <div class="capability-card">
+                    <div class="capability-icon">📊</div>
+                    <h4>Due Diligence Engine</h4>
+                    <p>Upload entire data rooms, get comprehensive risk reports in hours. AI-powered red flag detection and deal-breaker identification.</p>
+                </div>
+                <div class="capability-card">
+                    <div class="capability-icon">⚔️</div>
+                    <h4>Litigation Intelligence</h4>
+                    <p>Predict outcomes based on facts, jurisdiction, and judge history. Data-driven strategy recommendations and settlement analysis.</p>
+                </div>
+                <div class="capability-card">
+                    <div class="capability-icon">✍️</div>
+                    <h4>Auto-Drafting</h4>
+                    <p>Generate first drafts of any standard contract type with company-specific playbooks. Real-time negotiation assist.</p>
+                </div>
+                <div class="capability-card">
+                    <div class="capability-icon">📈</div>
+                    <h4>Portfolio Analytics</h4>
+                    <p>See your entire contract portfolio. Identify risks, opportunities, and patterns across thousands of documents.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Market Section -->
+    <section class="market" id="market">
+        <div class="market-content">
+            <div class="market-visual">
+                <div class="market-chart">
+                    <div class="chart-header">
+                        <h4>5-Year Revenue Projection</h4>
+                        <p>Conservative growth trajectory to unicorn status</p>
+                    </div>
+                    <div class="chart-bars">
+                        <div class="chart-bar">
+                            <span class="bar-label">Year 1</span>
+                            <div class="bar-track">
+                                <div class="bar-fill" style="width: 10%;">$5M</div>
+                            </div>
+                        </div>
+                        <div class="chart-bar">
+                            <span class="bar-label">Year 2</span>
+                            <div class="bar-track">
+                                <div class="bar-fill" style="width: 25%;">$25M</div>
+                            </div>
+                        </div>
+                        <div class="chart-bar">
+                            <span class="bar-label">Year 3</span>
+                            <div class="bar-track">
+                                <div class="bar-fill" style="width: 48%;">$80M</div>
+                            </div>
+                        </div>
+                        <div class="chart-bar">
+                            <span class="bar-label">Year 4</span>
+                            <div class="bar-track">
+                                <div class="bar-fill" style="width: 72%;">$200M</div>
+                            </div>
+                        </div>
+                        <div class="chart-bar">
+                            <span class="bar-label">Year 5</span>
+                            <div class="bar-track">
+                                <div class="bar-fill" style="width: 100%;">$500M</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="market-text">
+                <div class="section-label">Market Opportunity</div>
+                <h3>The Last Trillion-Dollar Industry to be Disrupted</h3>
+                <p>While every other business function has been transformed by software and AI, legal remains stuck in the billable hour dark ages. JurisAI changes that.</p>
+                <div class="market-highlights">
+                    <div class="highlight-item">
+                        <div class="highlight-number">$1T+</div>
+                        <div class="highlight-text">
+                            <h5>Total Addressable Market</h5>
+                            <p>Global legal services spending annually</p>
+                        </div>
+                    </div>
+                    <div class="highlight-item">
+                        <div class="highlight-number">$300B</div>
+                        <div class="highlight-text">
+                            <h5>Contract-Related Legal Work</h5>
+                            <p>Our primary wedge into the market</p>
+                        </div>
+                    </div>
+                    <div class="highlight-item">
+                        <div class="highlight-number">80%</div>
+                        <div class="highlight-text">
+                            <h5>Unmet Legal Needs</h5>
+                            <p>Businesses can't afford proper legal counsel</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Use Cases -->
+    <section class="use-cases">
+        <div class="section-header">
+            <div class="section-label">Use Cases</div>
+            <h2>Built for Every Legal Challenge</h2>
+            <p>From overwhelmed in-house teams to underserved SMBs, JurisAI delivers enterprise-grade legal intelligence.</p>
+        </div>
+        <div class="use-cases-grid">
+            <div class="use-case-card">
+                <div class="use-case-persona">
+                    <div class="persona-avatar">👩‍💼</div>
+                    <div class="persona-info">
+                        <h4>Sarah, General Counsel</h4>
+                        <p>Fortune 500 Tech Company</p>
+                    </div>
+                </div>
+                <p class="use-case-quote">"We analyzed our entire contract portfolio of 15,000 documents in two days. JurisAI found $4M in missed obligations and auto-renewals we didn't know about."</p>
+                <div class="use-case-results">
+                    <div class="result-item">
+                        <div class="result-value">$4M</div>
+                        <div class="result-label">Savings Found</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-value">95%</div>
+                        <div class="result-label">Time Reduction</div>
+                    </div>
+                </div>
+            </div>
+            <div class="use-case-card">
+                <div class="use-case-persona">
+                    <div class="persona-avatar">👨‍💻</div>
+                    <div class="persona-info">
+                        <h4>Marcus, CEO</h4>
+                        <p>Series B SaaS Startup</p>
+                    </div>
+                </div>
+                <p class="use-case-quote">"We used to spend $50K/month on outside counsel for contract review. JurisAI handles 80% of it automatically. My one legal hire is now 10x more effective."</p>
+                <div class="use-case-results">
+                    <div class="result-item">
+                        <div class="result-value">80%</div>
+                        <div class="result-label">Cost Reduction</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-value">10x</div>
+                        <div class="result-label">Team Leverage</div>
+                    </div>
+                </div>
+            </div>
+            <div class="use-case-card">
+                <div class="use-case-persona">
+                    <div class="persona-avatar">⚖️</div>
+                    <div class="persona-info">
+                        <h4>David, Managing Partner</h4>
+                        <p>Mid-Size Law Firm</p>
+                    </div>
+                </div>
+                <p class="use-case-quote">"We embedded JurisAI into our M&A practice. Due diligence that took two weeks now takes two days. Our clients love the speed and we've expanded capacity 5x."</p>
+                <div class="use-case-results">
+                    <div class="result-item">
+                        <div class="result-value">7x</div>
+                        <div class="result-label">Faster DD</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-value">5x</div>
+                        <div class="result-label">Capacity Gain</div>
+                    </div>
+                </div>
+            </div>
+            <div class="use-case-card">
+                <div class="use-case-persona">
+                    <div class="persona-avatar">🏥</div>
+                    <div class="persona-info">
+                        <h4>Dr. Chen, Compliance Officer</h4>
+                        <p>Regional Healthcare System</p>
+                    </div>
+                </div>
+                <p class="use-case-quote">"Healthcare compliance is a nightmare—HIPAA, state regulations, payer contracts. JurisAI monitors everything and alerts us before issues become problems."</p>
+                <div class="use-case-results">
+                    <div class="result-item">
+                        <div class="result-value">Zero</div>
+                        <div class="result-label">Compliance Violations</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-value">24/7</div>
+                        <div class="result-label">Monitoring</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section class="pricing" id="pricing">
+        <div class="section-header">
+            <div class="section-label">Pricing</div>
+            <h2>Enterprise Intelligence, Accessible Pricing</h2>
+            <p>Legal AI that scales with your needs. Start free, grow confidently.</p>
+        </div>
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <div class="pricing-header">
+                    <div class="pricing-name">Starter</div>
+                    <div class="pricing-price">$500<span>/mo</span></div>
+                    <div class="pricing-description">For growing businesses</div>
+                </div>
+                <ul class="pricing-features">
+                    <li>100 contracts analyzed/month</li>
+                    <li>Basic legal research (500 queries)</li>
+                    <li>Standard clause library</li>
+                    <li>Email support</li>
+                    <li>Core integrations</li>
+                </ul>
+                <a href="#cta" class="pricing-cta">Start Free Trial</a>
+            </div>
+            <div class="pricing-card featured">
+                <div class="pricing-header">
+                    <div class="pricing-name">Professional</div>
+                    <div class="pricing-price">$2,500<span>/mo</span></div>
+                    <div class="pricing-description">For scaling legal teams</div>
+                </div>
+                <ul class="pricing-features">
+                    <li>500 contracts analyzed/month</li>
+                    <li>Unlimited legal research</li>
+                    <li>Custom playbook creation</li>
+                    <li>Compliance monitoring (1 jurisdiction)</li>
+                    <li>API access</li>
+                    <li>Priority support</li>
+                </ul>
+                <a href="#cta" class="pricing-cta">Start Free Trial</a>
+            </div>
+            <div class="pricing-card">
+                <div class="pricing-header">
+                    <div class="pricing-name">Enterprise</div>
+                    <div class="pricing-price">Custom</div>
+                    <div class="pricing-description">For large organizations</div>
+                </div>
+                <ul class="pricing-features">
+                    <li>Unlimited contract analysis</li>
+                    <li>Full platform access</li>
+                    <li>Multi-jurisdictional compliance</li>
+                    <li>Custom model training</li>
+                    <li>Dedicated CSM</li>
+                    <li>On-premise deployment</li>
+                </ul>
+                <a href="#cta" class="pricing-cta">Contact Sales</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="final-cta" id="cta">
+        <div class="cta-content">
+            <div class="cta-icon">⚖️</div>
+            <h2>Legal Intelligence That Never Sleeps</h2>
+            <p>Join the companies replacing $1,500/hour lawyers with AI that works 24/7. Start your free trial today—no credit card required.</p>
+            <div class="cta-buttons">
+                <a href="#" class="btn-primary">Start Free Trial →</a>
+                <a href="#" class="btn-secondary">Schedule Demo</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">
+                <div class="logo-icon">⚖️</div>
+                JurisAI
+            </div>
+            <p class="footer-tagline">"The AI that thinks like your best lawyer"</p>
+            <div class="footer-links">
+                <a href="#">Product</a>
+                <a href="#">Pricing</a>
+                <a href="#">Documentation</a>
+                <a href="#">Company</a>
+                <a href="#">Careers</a>
+            </div>
+            <p class="footer-bottom">
+                Evening Drop — February 4, 2026 | <a href="#">Pradhith's Startup Ideas Lab</a>
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Animate risk bars on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.querySelectorAll('.risk-fill').forEach(bar => {
+                        bar.style.width = bar.classList.contains('low') ? '25%' : 
+                                          bar.classList.contains('medium') ? '55%' : '85%';
+                    });
+                }
+            });
+        }, { threshold: 0.5 });
+
+        document.querySelectorAll('.solution-mockup').forEach(el => observer.observe(el));
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
