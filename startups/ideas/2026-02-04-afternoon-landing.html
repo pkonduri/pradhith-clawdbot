@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BuildOS — The AI-Native Operating System for Construction</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --orange: #FF6B35;
+            --orange-dark: #E85A2A;
+            --orange-light: #FF8A5C;
+            --navy: #1A1F36;
+            --navy-light: #2D3555;
+            --steel: #6B7280;
+            --concrete: #F3F4F6;
+            --white: #FFFFFF;
+            --warning: #F59E0B;
+            --success: #10B981;
+            --gradient: linear-gradient(135deg, #FF6B35 0%, #F59E0B 100%);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--navy);
+            color: var(--white);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        /* Animated construction grid background */
+        .grid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.03;
+            background-image: 
+                linear-gradient(var(--orange) 1px, transparent 1px),
+                linear-gradient(90deg, var(--orange) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridMove 20s linear infinite;
+        }
+        
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(60px, 60px); }
+        }
+        
+        /* Floating construction elements */
+        .float-element {
+            position: absolute;
+            opacity: 0.1;
+            animation: float 15s ease-in-out infinite;
+        }
+        
+        .float-element.crane {
+            font-size: 120px;
+            top: 10%;
+            right: 5%;
+            animation-delay: -2s;
+        }
+        
+        .float-element.building {
+            font-size: 100px;
+            top: 60%;
+            left: 3%;
+            animation-delay: -5s;
+        }
+        
+        .float-element.hard-hat {
+            font-size: 80px;
+            top: 30%;
+            left: 10%;
+            animation-delay: -8s;
+        }
+        
+        .float-element.gear {
+            font-size: 90px;
+            bottom: 20%;
+            right: 8%;
+            animation-delay: -3s;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-20px) rotate(2deg); }
+            50% { transform: translateY(0) rotate(0deg); }
+            75% { transform: translateY(20px) rotate(-2deg); }
+        }
+        
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: linear-gradient(180deg, rgba(26, 31, 54, 0.98) 0%, transparent 100%);
+            backdrop-filter: blur(10px);
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: var(--gradient);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 40px;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            color: var(--steel);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 15px;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--white);
+        }
+        
+        .btn {
+            padding: 14px 32px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 15px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            border: none;
+        }
+        
+        .btn-primary {
+            background: var(--gradient);
+            color: var(--white);
+            box-shadow: 0 10px 40px rgba(255, 107, 53, 0.3);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 50px rgba(255, 107, 53, 0.4);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: var(--white);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+        
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 160px 60px 100px;
+            position: relative;
+            text-align: center;
+        }
+        
+        .hero-content {
+            max-width: 1000px;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 107, 53, 0.15);
+            border: 1px solid rgba(255, 107, 53, 0.3);
+            padding: 10px 20px;
+            border-radius: 100px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--orange-light);
+            margin-bottom: 30px;
+        }
+        
+        .badge-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--orange);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+        
+        h1 {
+            font-size: 72px;
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            letter-spacing: -2px;
+        }
+        
+        h1 span {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero-subtitle {
+            font-size: 22px;
+            color: var(--steel);
+            max-width: 700px;
+            margin: 0 auto 50px;
+            font-weight: 400;
+            line-height: 1.6;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        /* Stats bar */
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 80px;
+            margin-top: 80px;
+            padding-top: 60px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 48px;
+            font-weight: 800;
+            color: var(--orange);
+            margin-bottom: 8px;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: var(--steel);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        /* Problem Section */
+        .section {
+            padding: 120px 60px;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 80px;
+        }
+        
+        .section-label {
+            color: var(--orange);
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 16px;
+        }
+        
+        h2 {
+            font-size: 48px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+        }
+        
+        .section-desc {
+            color: var(--steel);
+            font-size: 18px;
+            line-height: 1.7;
+        }
+        
+        /* Crisis Cards */
+        .crisis-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .crisis-card {
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.1) 0%, rgba(245, 158, 11, 0.05) 100%);
+            border: 1px solid rgba(255, 107, 53, 0.2);
+            border-radius: 20px;
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .crisis-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient);
+        }
+        
+        .crisis-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        
+        .crisis-card h3 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+        
+        .crisis-card p {
+            color: var(--steel);
+            font-size: 15px;
+            line-height: 1.6;
+        }
+        
+        .crisis-stat {
+            display: inline-block;
+            background: rgba(255, 107, 53, 0.2);
+            color: var(--orange-light);
+            font-size: 28px;
+            font-weight: 800;
+            padding: 8px 16px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        
+        /* Platform Section */
+        .platform-section {
+            background: linear-gradient(180deg, var(--navy) 0%, var(--navy-light) 50%, var(--navy) 100%);
+        }
+        
+        .platform-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .platform-card {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 50px;
+            position: relative;
+            transition: all 0.4s ease;
+        }
+        
+        .platform-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--orange);
+            box-shadow: 0 30px 60px rgba(255, 107, 53, 0.15);
+        }
+        
+        .platform-number {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: var(--gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: 800;
+        }
+        
+        .platform-icon {
+            font-size: 56px;
+            margin-bottom: 24px;
+        }
+        
+        .platform-card h3 {
+            font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+        
+        .platform-card p {
+            color: var(--steel);
+            font-size: 16px;
+            line-height: 1.7;
+            margin-bottom: 24px;
+        }
+        
+        .feature-list {
+            list-style: none;
+        }
+        
+        .feature-list li {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 0;
+            font-size: 15px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .feature-list li::before {
+            content: '✓';
+            color: var(--success);
+            font-weight: 700;
+        }
+        
+        /* How It Works */
+        .timeline {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 100%;
+            background: var(--gradient);
+            border-radius: 4px;
+        }
+        
+        .timeline-item {
+            display: flex;
+            align-items: center;
+            gap: 60px;
+            margin-bottom: 60px;
+            position: relative;
+        }
+        
+        .timeline-item:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+        
+        .timeline-content {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+        }
+        
+        .timeline-item:hover .timeline-content {
+            border-color: var(--orange);
+        }
+        
+        .timeline-dot {
+            width: 60px;
+            height: 60px;
+            background: var(--navy);
+            border: 4px solid var(--orange);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--orange);
+            position: relative;
+            z-index: 10;
+            flex-shrink: 0;
+        }
+        
+        .timeline-content h3 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+        
+        .timeline-content p {
+            color: var(--steel);
+            font-size: 16px;
+            line-height: 1.7;
+        }
+        
+        /* ROI Section */
+        .roi-section {
+            background: linear-gradient(135deg, var(--orange) 0%, var(--warning) 100%);
+            text-align: center;
+        }
+        
+        .roi-section h2, .roi-section p {
+            color: var(--white);
+        }
+        
+        .roi-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+            max-width: 1000px;
+            margin: 60px auto 0;
+        }
+        
+        .roi-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px 30px;
+        }
+        
+        .roi-value {
+            font-size: 52px;
+            font-weight: 900;
+            margin-bottom: 8px;
+        }
+        
+        .roi-label {
+            font-size: 15px;
+            opacity: 0.9;
+        }
+        
+        /* Competitors Section */
+        .compare-table {
+            max-width: 1000px;
+            margin: 0 auto;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .compare-row {
+            display: grid;
+            grid-template-columns: 2fr repeat(3, 1fr);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .compare-row:last-child {
+            border-bottom: none;
+        }
+        
+        .compare-cell {
+            padding: 24px 30px;
+            font-size: 15px;
+        }
+        
+        .compare-header {
+            background: rgba(255, 107, 53, 0.1);
+            font-weight: 700;
+        }
+        
+        .compare-header .compare-cell {
+            color: var(--orange-light);
+        }
+        
+        .compare-row:not(.compare-header) .compare-cell:first-child {
+            color: var(--steel);
+        }
+        
+        .compare-buildos {
+            background: rgba(255, 107, 53, 0.05);
+            color: var(--success) !important;
+        }
+        
+        /* CTA Section */
+        .cta-section {
+            text-align: center;
+            padding: 150px 60px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(255, 107, 53, 0.15) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        
+        .cta-section h2 {
+            font-size: 56px;
+            margin-bottom: 24px;
+        }
+        
+        .cta-section p {
+            font-size: 20px;
+            color: var(--steel);
+            max-width: 600px;
+            margin: 0 auto 50px;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        /* Footer */
+        footer {
+            padding: 60px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .footer-links {
+            display: flex;
+            gap: 40px;
+        }
+        
+        .footer-links a {
+            color: var(--steel);
+            text-decoration: none;
+            font-size: 14px;
+        }
+        
+        .footer-links a:hover {
+            color: var(--white);
+        }
+        
+        .footer-copy {
+            color: var(--steel);
+            font-size: 14px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 1024px) {
+            h1 { font-size: 52px; }
+            h2 { font-size: 38px; }
+            .platform-grid { grid-template-columns: 1fr; }
+            .roi-grid { grid-template-columns: repeat(2, 1fr); }
+            .compare-table { overflow-x: auto; }
+        }
+        
+        @media (max-width: 768px) {
+            nav { padding: 20px 30px; }
+            .nav-links { display: none; }
+            .section, .hero { padding: 80px 30px; }
+            h1 { font-size: 40px; }
+            h2 { font-size: 32px; }
+            .stats-bar { flex-direction: column; gap: 40px; }
+            .timeline::before { left: 30px; }
+            .timeline-item, .timeline-item:nth-child(even) {
+                flex-direction: column;
+                align-items: flex-start;
+                padding-left: 80px;
+            }
+            .timeline-dot {
+                position: absolute;
+                left: 0;
+            }
+            footer { flex-direction: column; gap: 30px; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    <div class="grid-bg"></div>
+    <div class="float-element crane">🏗️</div>
+    <div class="float-element building">🏢</div>
+    <div class="float-element hard-hat">⛑️</div>
+    <div class="float-element gear">⚙️</div>
+    
+    <nav>
+        <div class="logo">
+            <div class="logo-icon">🏗️</div>
+            BuildOS
+        </div>
+        <div class="nav-links">
+            <a href="#problem">The Problem</a>
+            <a href="#platform">Platform</a>
+            <a href="#how">How It Works</a>
+            <a href="#roi">ROI</a>
+            <a href="#" class="btn btn-primary">Request Demo</a>
+        </div>
+    </nav>
+    
+    <section class="hero">
+        <div class="hero-content">
+            <div class="badge">
+                <span class="badge-dot"></span>
+                Transforming a $13T Industry
+            </div>
+            <h1>Build Faster.<br><span>Build Smarter.</span><br>Build Autonomously.</h1>
+            <p class="hero-subtitle">The AI-native operating system that transforms construction chaos into predictive precision. Prevent delays before they happen. Optimize resources in real-time. Keep every site safe.</p>
+            <div class="hero-buttons">
+                <a href="#" class="btn btn-primary">
+                    🚀 Request Demo
+                </a>
+                <a href="#platform" class="btn btn-secondary">
+                    See How It Works →
+                </a>
+            </div>
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <div class="stat-value">40%</div>
+                    <div class="stat-label">Reduced Delays</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">$2M</div>
+                    <div class="stat-label">Avg. Project Savings</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">90%</div>
+                    <div class="stat-label">Safety Compliance</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">24h</div>
+                    <div class="stat-label">Digital Twin Updates</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="problem" class="section">
+        <div class="section-header">
+            <div class="section-label">The Crisis</div>
+            <h2>Construction is Broken</h2>
+            <p class="section-desc">A $13 trillion industry operating on 19th-century management. It's time for autonomous intelligence.</p>
+        </div>
+        <div class="crisis-grid">
+            <div class="crisis-card">
+                <div class="crisis-icon">💸</div>
+                <h3>Catastrophic Waste</h3>
+                <p>40% of all materials end up as waste. 35% of time spent on non-optimal activities.</p>
+                <div class="crisis-stat">80%</div>
+                <p style="color: var(--orange-light); font-size: 13px; margin-top: 8px;">Projects Over Budget</p>
+            </div>
+            <div class="crisis-card">
+                <div class="crisis-icon">📅</div>
+                <h3>Endless Delays</h3>
+                <p>Average project runs 20 months behind schedule. Change orders cascade unpredictably.</p>
+                <div class="crisis-stat">$177B</div>
+                <p style="color: var(--orange-light); font-size: 13px; margin-top: 8px;">Lost to Miscommunication</p>
+            </div>
+            <div class="crisis-card">
+                <div class="crisis-icon">⚠️</div>
+                <h3>Safety Nightmares</h3>
+                <p>1,000+ deaths annually in US construction. 150,000 accidents per year.</p>
+                <div class="crisis-stat">$5B</div>
+                <p style="color: var(--orange-light); font-size: 13px; margin-top: 8px;">In OSHA Penalties</p>
+            </div>
+            <div class="crisis-card">
+                <div class="crisis-icon">🔍</div>
+                <h3>Complete Blindness</h3>
+                <p>Paper-based tracking. Weekly site visits. Problems found days late when fixes cost 10x more.</p>
+                <div class="crisis-stat">-10%</div>
+                <p style="color: var(--orange-light); font-size: 13px; margin-top: 8px;">Productivity Since 1990</p>
+            </div>
+        </div>
+    </section>
+    
+    <section id="platform" class="section platform-section">
+        <div class="section-header">
+            <div class="section-label">The Platform</div>
+            <h2>Four Engines of Intelligence</h2>
+            <p class="section-desc">BuildOS combines autonomous monitoring, predictive AI, intelligent coordination, and proactive safety into one unified platform.</p>
+        </div>
+        <div class="platform-grid">
+            <div class="platform-card">
+                <div class="platform-number">01</div>
+                <div class="platform-icon">📡</div>
+                <h3>SiteIntelligence™</h3>
+                <p>Continuous autonomous monitoring via drones, IoT sensors, and computer vision. Your digital twin updates daily, not weekly.</p>
+                <ul class="feature-list">
+                    <li>Daily autonomous drone flyovers</li>
+                    <li>Real-time equipment & material tracking</li>
+                    <li>As-built vs. planned comparison</li>
+                    <li>Automatic defect detection</li>
+                </ul>
+            </div>
+            <div class="platform-card">
+                <div class="platform-number">02</div>
+                <div class="platform-icon">🔮</div>
+                <h3>PredictEngine™</h3>
+                <p>AI-powered forecasting that predicts delays 2-4 weeks before they occur and identifies root causes automatically.</p>
+                <ul class="feature-list">
+                    <li>Delay prediction with cause analysis</li>
+                    <li>Resource optimization recommendations</li>
+                    <li>Continuous cost forecasting</li>
+                    <li>Value engineering suggestions</li>
+                </ul>
+            </div>
+            <div class="platform-card">
+                <div class="platform-number">03</div>
+                <div class="platform-icon">🎯</div>
+                <h3>CommandCenter™</h3>
+                <p>Autonomous coordination replacing email chaos with intelligent scheduling, unified communication, and document intelligence.</p>
+                <ul class="feature-list">
+                    <li>Auto-generated daily work plans</li>
+                    <li>Multi-language translation (EN/ES/PT)</li>
+                    <li>Automatic spec & code compliance</li>
+                    <li>Change order impact tracking</li>
+                </ul>
+            </div>
+            <div class="platform-card">
+                <div class="platform-number">04</div>
+                <div class="platform-icon">🛡️</div>
+                <h3>SafetyShield™</h3>
+                <p>Proactive safety management with real-time monitoring, instant alerts, and automated compliance documentation.</p>
+                <ul class="feature-list">
+                    <li>Continuous PPE compliance monitoring</li>
+                    <li>Unsafe behavior detection</li>
+                    <li>Automatic OSHA reporting</li>
+                    <li>Insurance-grade incident records</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+    
+    <section id="how" class="section">
+        <div class="section-header">
+            <div class="section-label">How It Works</div>
+            <h2>From Chaos to Clarity in 30 Days</h2>
+            <p class="section-desc">Deploy BuildOS on your next project and see results immediately.</p>
+        </div>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <h3>Week 1: Deploy Sensors</h3>
+                    <p>We install IoT sensors across your site, configure autonomous drone schedules, and connect your existing systems (BIM, schedules, documents).</p>
+                </div>
+                <div class="timeline-dot">1</div>
+                <div style="flex: 1;"></div>
+            </div>
+            <div class="timeline-item">
+                <div style="flex: 1;"></div>
+                <div class="timeline-dot">2</div>
+                <div class="timeline-content">
+                    <h3>Week 2: Digital Twin Live</h3>
+                    <p>Your site's digital twin goes live with daily updates. Compare as-built to planned instantly. Spot issues before they become problems.</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <h3>Week 3: Predictions Begin</h3>
+                    <p>PredictEngine starts forecasting based on your project data + our historical models. First delay predictions arrive with root cause analysis.</p>
+                </div>
+                <div class="timeline-dot">3</div>
+                <div style="flex: 1;"></div>
+            </div>
+            <div class="timeline-item">
+                <div style="flex: 1;"></div>
+                <div class="timeline-dot">4</div>
+                <div class="timeline-content">
+                    <h3>Week 4+: Full Autonomy</h3>
+                    <p>Daily work plans auto-generate. Safety compliance runs continuously. Your team focuses on building—BuildOS handles the coordination.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="roi" class="section roi-section">
+        <div class="section-header">
+            <div class="section-label" style="color: rgba(255,255,255,0.8);">The ROI</div>
+            <h2>Numbers That Build the Case</h2>
+            <p style="color: rgba(255,255,255,0.9);">BuildOS pays for itself on the first prevented delay.</p>
+        </div>
+        <div class="roi-grid">
+            <div class="roi-card">
+                <div class="roi-value">40%</div>
+                <div class="roi-label">Reduction in Delays</div>
+            </div>
+            <div class="roi-card">
+                <div class="roi-value">25%</div>
+                <div class="roi-label">Material Waste Saved</div>
+            </div>
+            <div class="roi-card">
+                <div class="roi-value">60%</div>
+                <div class="roi-label">Fewer Safety Incidents</div>
+            </div>
+            <div class="roi-card">
+                <div class="roi-value">10x</div>
+                <div class="roi-label">ROI in Year One</div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="section">
+        <div class="section-header">
+            <div class="section-label">The Difference</div>
+            <h2>Why BuildOS Wins</h2>
+            <p class="section-desc">Not just another project management tool. The only full-stack autonomous platform for construction.</p>
+        </div>
+        <div class="compare-table">
+            <div class="compare-row compare-header">
+                <div class="compare-cell">Capability</div>
+                <div class="compare-cell compare-buildos">BuildOS</div>
+                <div class="compare-cell">Procore</div>
+                <div class="compare-cell">Others</div>
+            </div>
+            <div class="compare-row">
+                <div class="compare-cell">AI Delay Prediction</div>
+                <div class="compare-cell compare-buildos">✓ 2-4 weeks ahead</div>
+                <div class="compare-cell">✗</div>
+                <div class="compare-cell">Limited</div>
+            </div>
+            <div class="compare-row">
+                <div class="compare-cell">Autonomous Monitoring</div>
+                <div class="compare-cell compare-buildos">✓ Daily drone + IoT</div>
+                <div class="compare-cell">✗</div>
+                <div class="compare-cell">Manual only</div>
+            </div>
+            <div class="compare-row">
+                <div class="compare-cell">Real-Time Safety</div>
+                <div class="compare-cell compare-buildos">✓ Computer vision</div>
+                <div class="compare-cell">Checklist-based</div>
+                <div class="compare-cell">✗</div>
+            </div>
+            <div class="compare-row">
+                <div class="compare-cell">Auto-Scheduling</div>
+                <div class="compare-cell compare-buildos">✓ Dynamic daily plans</div>
+                <div class="compare-cell">Manual</div>
+                <div class="compare-cell">Manual</div>
+            </div>
+            <div class="compare-row">
+                <div class="compare-cell">Construction-Native AI</div>
+                <div class="compare-cell compare-buildos">✓ Purpose-built models</div>
+                <div class="compare-cell">✗</div>
+                <div class="compare-cell">Generic</div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="cta-section">
+        <h2>Ready to <span style="background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Build Smarter?</span></h2>
+        <p>Join the contractors who've discovered that construction doesn't have to be chaos.</p>
+        <div class="cta-buttons">
+            <a href="#" class="btn btn-primary">
+                🏗️ Request Free Pilot
+            </a>
+            <a href="#" class="btn btn-secondary">
+                📄 Download Playbook
+            </a>
+        </div>
+    </section>
+    
+    <footer>
+        <div class="logo">
+            <div class="logo-icon">🏗️</div>
+            BuildOS
+        </div>
+        <div class="footer-links">
+            <a href="#">Platform</a>
+            <a href="#">Pricing</a>
+            <a href="#">Case Studies</a>
+            <a href="#">Contact</a>
+        </div>
+        <div class="footer-copy">
+            © 2026 BuildOS. All rights reserved. • The Godfather 🎩
+        </div>
+    </footer>
+</body>
+</html>

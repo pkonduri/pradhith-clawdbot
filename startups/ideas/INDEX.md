@@ -24,6 +24,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-02-03 | Morning | Conductor — AI Agent Orchestration & Governance | [Playbook](2026-02-03-morning.md) • [Landing](2026-02-03-morning-landing.html) • [PDF](2026-02-03-morning.pdf) |
 | 2026-02-04 | Evening | JurisAI — Autonomous Legal Intelligence Platform | [Playbook](2026-02-04-evening.md) • [Landing](2026-02-04-evening-landing.html) • [PDF](2026-02-04-evening.pdf) |
 | 2026-02-04 | Morning | SkillForge — The App Store for AI Agents | [Playbook](2026-02-04-morning.md) • [Landing](2026-02-04-morning-landing.html) • [PDF](2026-02-04-morning.pdf) |
+| 2026-02-04 | Afternoon | BuildOS — Autonomous Construction Intelligence | [Playbook](2026-02-04-afternoon.md) • [Landing](2026-02-04-afternoon-landing.html) • [PDF](2026-02-04-afternoon.pdf) |
 <!-- New entries will be added above this line -->
 
 ---
