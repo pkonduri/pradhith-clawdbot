@@ -1,0 +1,1350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoverAI - Your AI Agent That Fights Insurance Companies</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --primary-light: #3b82f6;
+            --secondary: #0f172a;
+            --accent: #10b981;
+            --accent-gold: #f59e0b;
+            --danger: #ef4444;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --bg: #ffffff;
+            --bg-subtle: #f8fafc;
+            --gradient-primary: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+            --gradient-shield: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #2563eb 100%);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* Shield Animation */
+        @keyframes shieldPulse {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 20px rgba(37, 99, 235, 0.4)); }
+            50% { transform: scale(1.05); filter: drop-shadow(0 0 40px rgba(37, 99, 235, 0.6)); }
+        }
+
+        @keyframes floatShield {
+            0%, 100% { transform: translateY(0px) rotate(-2deg); }
+            50% { transform: translateY(-20px) rotate(2deg); }
+        }
+
+        @keyframes scanLine {
+            0% { transform: translateY(-100%); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateY(100%); opacity: 0; }
+        }
+
+        @keyframes dataStream {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+
+        @keyframes countUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes swordSlash {
+            0% { transform: rotate(-45deg) translateX(-100px); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: rotate(45deg) translateX(100px); opacity: 0; }
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            background: var(--gradient-shield);
+            position: relative;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(37, 99, 235, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(124, 58, 237, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        /* Grid pattern overlay */
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+        }
+
+        .hero-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 120px 40px 80px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-content h1 {
+            font-size: clamp(3rem, 5vw, 4.5rem);
+            font-weight: 900;
+            color: white;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            text-shadow: 0 4px 30px rgba(0,0,0,0.3);
+        }
+
+        .hero-content h1 .gradient-text {
+            background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 50%, #34d399 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-tagline {
+            font-size: 1.5rem;
+            color: rgba(255,255,255,0.9);
+            margin-bottom: 32px;
+            font-weight: 500;
+            line-height: 1.5;
+        }
+
+        .hero-description {
+            font-size: 1.15rem;
+            color: rgba(255,255,255,0.75);
+            margin-bottom: 40px;
+            line-height: 1.8;
+        }
+
+        /* Shield Visual */
+        .hero-visual {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .shield-container {
+            width: 450px;
+            height: 500px;
+            position: relative;
+            animation: floatShield 6s ease-in-out infinite;
+        }
+
+        .shield {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .shield-main {
+            width: 300px;
+            height: 360px;
+            background: linear-gradient(180deg, #3b82f6 0%, #1d4ed8 50%, #1e40af 100%);
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 50% 50% 50% 50% / 30% 30% 70% 70%;
+            box-shadow: 
+                0 0 60px rgba(59, 130, 246, 0.5),
+                inset 0 -40px 80px rgba(0,0,0,0.3),
+                inset 0 40px 60px rgba(255,255,255,0.2);
+            animation: shieldPulse 3s ease-in-out infinite;
+            overflow: hidden;
+        }
+
+        .shield-main::before {
+            content: '';
+            position: absolute;
+            top: 10%;
+            left: 10%;
+            right: 10%;
+            bottom: 30%;
+            border: 4px solid rgba(255,255,255,0.3);
+            border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+        }
+
+        .shield-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 100px;
+            color: white;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            z-index: 2;
+        }
+
+        .shield-scan {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent);
+            animation: scanLine 2s linear infinite;
+        }
+
+        /* Data orbs around shield */
+        .data-orb {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            backdrop-filter: blur(10px);
+            animation: floatShield 4s ease-in-out infinite;
+        }
+
+        .data-orb:nth-child(1) { top: 10%; left: -10%; animation-delay: 0s; }
+        .data-orb:nth-child(2) { top: 30%; right: -10%; animation-delay: 1s; }
+        .data-orb:nth-child(3) { bottom: 20%; left: -15%; animation-delay: 2s; }
+        .data-orb:nth-child(4) { bottom: 10%; right: -5%; animation-delay: 0.5s; }
+
+        /* CTA Buttons */
+        .cta-group {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 18px 40px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            box-shadow: 0 10px 40px rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 50px rgba(16, 185, 129, 0.5);
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border: 2px solid rgba(255,255,255,0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.2);
+            border-color: rgba(255,255,255,0.5);
+        }
+
+        /* Problem Section */
+        .problem-section {
+            padding: 120px 40px;
+            background: var(--bg);
+        }
+
+        .section-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-label {
+            display: inline-block;
+            padding: 8px 20px;
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(239, 68, 68, 0.05) 100%);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--danger);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 24px;
+        }
+
+        .section-title {
+            font-size: clamp(2.5rem, 4vw, 3.5rem);
+            font-weight: 800;
+            color: var(--secondary);
+            margin-bottom: 24px;
+            line-height: 1.2;
+        }
+
+        .section-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-light);
+            max-width: 700px;
+            margin-bottom: 60px;
+        }
+
+        /* Problem Cards */
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .problem-card {
+            background: linear-gradient(135deg, #fef2f2 0%, #fff 100%);
+            border: 1px solid rgba(239, 68, 68, 0.15);
+            border-radius: 20px;
+            padding: 32px;
+            transition: all 0.3s ease;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(239, 68, 68, 0.1);
+        }
+
+        .problem-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 20px rgba(239, 68, 68, 0.3);
+        }
+
+        .problem-card h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--secondary);
+            margin-bottom: 12px;
+        }
+
+        .problem-card p {
+            color: var(--text-light);
+            font-size: 1rem;
+        }
+
+        .problem-stat {
+            display: inline-block;
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 6px;
+            margin-top: 12px;
+            font-size: 0.9rem;
+        }
+
+        /* Stats Banner */
+        .stats-banner {
+            background: var(--gradient-shield);
+            padding: 80px 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stats-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        .stats-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: clamp(3rem, 5vw, 4rem);
+            font-weight: 900;
+            color: white;
+            line-height: 1;
+            margin-bottom: 8px;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            color: rgba(255,255,255,0.8);
+            font-weight: 500;
+        }
+
+        /* Solution Section */
+        .solution-section {
+            padding: 120px 40px;
+            background: var(--bg-subtle);
+        }
+
+        .solution-label {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(16, 185, 129, 0.05) 100%);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            color: var(--accent);
+        }
+
+        .solution-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 32px;
+        }
+
+        .solution-card {
+            background: white;
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            transition: all 0.4s ease;
+            border: 1px solid rgba(0,0,0,0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .solution-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .solution-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .solution-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(37, 99, 235, 0.15);
+        }
+
+        .solution-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary) 0%, #7c3aed 100%);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            margin-bottom: 24px;
+            box-shadow: 0 10px 30px rgba(37, 99, 235, 0.3);
+        }
+
+        .solution-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--secondary);
+            margin-bottom: 16px;
+        }
+
+        .solution-card p {
+            color: var(--text-light);
+            margin-bottom: 20px;
+        }
+
+        .solution-features {
+            list-style: none;
+        }
+
+        .solution-features li {
+            padding: 8px 0;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.95rem;
+        }
+
+        .solution-features li::before {
+            content: '✓';
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(135deg, var(--accent) 0%, #059669 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        /* How It Works */
+        .how-section {
+            padding: 120px 40px;
+            background: white;
+        }
+
+        .how-label {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(37, 99, 235, 0.05) 100%);
+            border: 1px solid rgba(37, 99, 235, 0.2);
+            color: var(--primary);
+        }
+
+        .how-steps {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+            margin-top: 60px;
+            position: relative;
+        }
+
+        .how-steps::before {
+            content: '';
+            position: absolute;
+            top: 50px;
+            left: 15%;
+            right: 15%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 50%, var(--accent-gold) 100%);
+            border-radius: 2px;
+            z-index: 0;
+        }
+
+        .step {
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .step-number {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, var(--primary) 0%, #7c3aed 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            font-size: 40px;
+            color: white;
+            box-shadow: 0 10px 40px rgba(37, 99, 235, 0.4);
+            border: 5px solid white;
+        }
+
+        .step h4 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--secondary);
+            margin-bottom: 12px;
+        }
+
+        .step p {
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
+        /* Testimonial Section */
+        .testimonial-section {
+            padding: 120px 40px;
+            background: var(--gradient-shield);
+            position: relative;
+        }
+
+        .testimonial-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 32px;
+        }
+
+        .testimonial-card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 24px;
+            padding: 40px;
+            color: white;
+        }
+
+        .testimonial-quote {
+            font-size: 1.2rem;
+            line-height: 1.7;
+            margin-bottom: 24px;
+            font-style: italic;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .author-avatar {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, var(--accent) 0%, #059669 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .author-info h5 {
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .author-info span {
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+
+        .savings-badge {
+            position: absolute;
+            top: -10px;
+            right: 20px;
+            background: linear-gradient(135deg, var(--accent) 0%, #059669 100%);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+        }
+
+        /* Pricing Section */
+        .pricing-section {
+            padding: 120px 40px;
+            background: var(--bg-subtle);
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 32px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            background: white;
+            border-radius: 24px;
+            padding: 48px;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.4s ease;
+            position: relative;
+        }
+
+        .pricing-card.featured {
+            border-color: var(--primary);
+            transform: scale(1.05);
+            box-shadow: 0 20px 60px rgba(37, 99, 235, 0.2);
+        }
+
+        .pricing-card.featured::before {
+            content: 'MOST POPULAR';
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--primary) 0%, #7c3aed 100%);
+            color: white;
+            padding: 8px 24px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .pricing-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--secondary);
+            margin-bottom: 8px;
+        }
+
+        .pricing-card .price {
+            font-size: 4rem;
+            font-weight: 900;
+            color: var(--primary);
+            line-height: 1;
+            margin: 24px 0;
+        }
+
+        .pricing-card .price span {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: var(--text-light);
+        }
+
+        .pricing-features {
+            list-style: none;
+            text-align: left;
+            margin: 32px 0;
+        }
+
+        .pricing-features li {
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .pricing-features li::before {
+            content: '✓';
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        .guarantee-badge {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(16, 185, 129, 0.05) 100%);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 24px;
+        }
+
+        .guarantee-badge p {
+            color: var(--accent);
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        /* Market Section */
+        .market-section {
+            padding: 120px 40px;
+            background: white;
+        }
+
+        .market-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+
+        .market-content h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--secondary);
+            margin-bottom: 24px;
+        }
+
+        .market-content p {
+            font-size: 1.15rem;
+            color: var(--text-light);
+            margin-bottom: 32px;
+        }
+
+        .market-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        .market-stat {
+            background: var(--bg-subtle);
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .market-stat .value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .market-stat .label {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .market-visual {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .market-chart {
+            width: 100%;
+            max-width: 450px;
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, var(--bg-subtle) 0%, white 100%);
+            border-radius: 50%;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+        }
+
+        .chart-segment {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 180px;
+            height: 180px;
+            background: linear-gradient(135deg, var(--primary) 0%, #7c3aed 100%);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            box-shadow: 0 10px 40px rgba(37, 99, 235, 0.4);
+        }
+
+        .chart-segment .big-number {
+            font-size: 3rem;
+            font-weight: 900;
+            line-height: 1;
+        }
+
+        .chart-segment .chart-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 120px 40px;
+            background: var(--gradient-shield);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 50%);
+            animation: pulse 10s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cta-content h2 {
+            font-size: clamp(2.5rem, 4vw, 3.5rem);
+            font-weight: 900;
+            color: white;
+            margin-bottom: 24px;
+        }
+
+        .cta-content p {
+            font-size: 1.3rem;
+            color: rgba(255,255,255,0.9);
+            margin-bottom: 40px;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--secondary);
+            padding: 60px 40px;
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-size: 2rem;
+            font-weight: 900;
+            color: white;
+            margin-bottom: 16px;
+        }
+
+        .footer-tagline {
+            color: rgba(255,255,255,0.6);
+            margin-bottom: 32px;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            margin-top: 40px;
+            padding-top: 40px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.5);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-visual {
+                order: -1;
+            }
+
+            .shield-container {
+                width: 300px;
+                height: 350px;
+            }
+
+            .shield-main {
+                width: 200px;
+                height: 240px;
+            }
+
+            .shield-icon {
+                font-size: 60px;
+            }
+
+            .cta-group {
+                justify-content: center;
+            }
+
+            .how-steps {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .how-steps::before {
+                display: none;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .market-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .how-steps {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pricing-card.featured {
+                transform: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1>Your AI Agent That <span class="gradient-text">Fights Insurance</span> Companies</h1>
+                <p class="hero-tagline">Stop overpaying. Start winning claims. Let AI handle the battle.</p>
+                <p class="hero-description">CoverAI is your autonomous insurance agent that finds better rates, files claims, negotiates settlements, and switches providers automatically. In a $5.5 trillion industry built to confuse you, we're your unfair advantage.</p>
+                <div class="cta-group">
+                    <a href="#pricing" class="btn btn-primary">
+                        🛡️ Get Protected
+                    </a>
+                    <a href="#how" class="btn btn-secondary">
+                        See How It Works
+                    </a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="shield-container">
+                    <div class="shield">
+                        <div class="shield-main">
+                            <div class="shield-scan"></div>
+                            <div class="shield-icon">🛡️</div>
+                        </div>
+                        <div class="data-orb">💰</div>
+                        <div class="data-orb">📋</div>
+                        <div class="data-orb">⚖️</div>
+                        <div class="data-orb">🔍</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Banner -->
+    <section class="stats-banner">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-number">$5.5T</div>
+                <div class="stat-label">Global Insurance Market</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">30%</div>
+                <div class="stat-label">Claims Initially Denied</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">$2,400</div>
+                <div class="stat-label">Avg Annual Savings</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">24/7</div>
+                <div class="stat-label">AI Protection</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="problem-section">
+        <div class="section-container">
+            <span class="section-label">The Problem</span>
+            <h2 class="section-title">Insurance Companies Are Designed to Beat You</h2>
+            <p class="section-subtitle">They have armies of actuaries, adjusters, and lawyers. You have hold music and fine print.</p>
+            
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="problem-icon">📜</div>
+                    <h3>Deliberate Complexity</h3>
+                    <p>The average policy is 14,000+ words of jargon designed to confuse. 78% of consumers don't understand their coverage.</p>
+                    <span class="problem-stat">Hidden Exclusions Everywhere</span>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">⚔️</div>
+                    <h3>Adversarial Claims</h3>
+                    <p>"Delay, deny, defend" — insurers profit by rejecting legitimate claims and wearing you down until you give up.</p>
+                    <span class="problem-stat">30% Claims Denied or Underpaid</span>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">💸</div>
+                    <h3>Price Discrimination</h3>
+                    <p>Loyal customers pay 20-40% more than new ones. Algorithms target people unlikely to shop around.</p>
+                    <span class="problem-stat">$100B+ Loyalty Tax Annually</span>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">🧩</div>
+                    <h3>Fragmented Chaos</h3>
+                    <p>6+ separate policies, different renewal dates, overlapping coverage, dangerous gaps. No unified view.</p>
+                    <span class="problem-stat">Average Household Reality</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="solution-section">
+        <div class="section-container">
+            <span class="section-label solution-label">The Solution</span>
+            <h2 class="section-title">CoverAI: Your Autonomous Insurance Agent</h2>
+            <p class="section-subtitle">AI that reads every word of your policies, continuously shops for better rates, and fights for every dollar you're owed.</p>
+            
+            <div class="solution-grid">
+                <div class="solution-card">
+                    <div class="solution-icon">🔍</div>
+                    <h3>Insurance X-Ray</h3>
+                    <p>Upload any policy. Our AI reads and understands every clause, translates to plain English, and identifies gaps.</p>
+                    <ul class="solution-features">
+                        <li>Full policy analysis in seconds</li>
+                        <li>Plain English coverage summary</li>
+                        <li>Gap & redundancy detection</li>
+                        <li>Life event alerts</li>
+                    </ul>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon">💰</div>
+                    <h3>Rate Optimizer</h3>
+                    <p>Continuous monitoring across 200+ insurers. When we find better rates, we handle the entire switch.</p>
+                    <ul class="solution-features">
+                        <li>24/7 market scanning</li>
+                        <li>Automatic switching</li>
+                        <li>Bundle optimization</li>
+                        <li>Loyalty negotiation first</li>
+                    </ul>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon">⚔️</div>
+                    <h3>Claims Warrior</h3>
+                    <p>AI-powered claims filing and negotiation. We fight back against lowball offers and denied claims.</p>
+                    <ul class="solution-features">
+                        <li>Instant claim filing</li>
+                        <li>Evidence optimization</li>
+                        <li>Settlement negotiation</li>
+                        <li>Automatic appeals</li>
+                    </ul>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon">🛡️</div>
+                    <h3>Risk Intelligence</h3>
+                    <p>Predictive protection that alerts you to risks before they become claims, and optimizes coverage proactively.</p>
+                    <ul class="solution-features">
+                        <li>Weather & disaster alerts</li>
+                        <li>Smart home integration</li>
+                        <li>Driving behavior rewards</li>
+                        <li>Proactive recommendations</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-section" id="how">
+        <div class="section-container">
+            <span class="section-label how-label">How It Works</span>
+            <h2 class="section-title">Protection in Four Simple Steps</h2>
+            
+            <div class="how-steps">
+                <div class="step">
+                    <div class="step-number">📤</div>
+                    <h4>Connect</h4>
+                    <p>Upload your policies or connect your insurance accounts. CoverAI reads and understands everything.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">🔬</div>
+                    <h4>Analyze</h4>
+                    <p>Get a complete picture: coverage gaps, overpayments, and optimization opportunities across all insurance.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">⚡</div>
+                    <h4>Optimize</h4>
+                    <p>We find better rates, negotiate with current insurers, or switch you automatically—whatever saves most.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">🛡️</div>
+                    <h4>Protect</h4>
+                    <p>Continuous monitoring, instant claims support, and AI negotiation whenever you need it.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonial-section">
+        <div class="testimonial-grid">
+            <div class="testimonial-card">
+                <div class="savings-badge">Saved $3,200/year</div>
+                <p class="testimonial-quote">"CoverAI found that I'd been overpaying for car insurance for 6 years. They switched me in 10 minutes and saved me $267 a month. Why didn't this exist before?"</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">👨</div>
+                    <div class="author-info">
+                        <h5>Marcus T.</h5>
+                        <span>Denver, CO</span>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <div class="savings-badge">Claim: $8K → $24K</div>
+                <p class="testimonial-quote">"My water damage claim was valued at $8,400 by the adjuster. CoverAI's negotiation AI got it increased to $23,700—the actual repair cost. Game changer."</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">👩</div>
+                    <div class="author-info">
+                        <h5>Jennifer L.</h5>
+                        <span>Austin, TX</span>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <div class="savings-badge">Found $15K Gap</div>
+                <p class="testimonial-quote">"CoverAI read my 47-page homeowner's policy and found I had no coverage for my home office equipment. That's $15,000 in electronics I thought was protected."</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">👨</div>
+                    <div class="author-info">
+                        <h5>David K.</h5>
+                        <span>Seattle, WA</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section class="pricing-section" id="pricing">
+        <div class="section-container">
+            <span class="section-label how-label">Pricing</span>
+            <h2 class="section-title">Simple, Transparent Pricing</h2>
+            <p class="section-subtitle">Save at least 10x your subscription, or it's free. Guaranteed.</p>
+            
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <h3>Individual</h3>
+                    <div class="price">$19<span>/mo</span></div>
+                    <ul class="pricing-features">
+                        <li>Unlimited policy analysis</li>
+                        <li>Continuous rate optimization</li>
+                        <li>AI claims filing & negotiation</li>
+                        <li>Risk monitoring & alerts</li>
+                        <li>Document vault</li>
+                    </ul>
+                    <a href="#" class="btn btn-primary" style="width: 100%; justify-content: center;">Get Started</a>
+                    <div class="guarantee-badge">
+                        <p>🛡️ 10x Savings Guarantee</p>
+                    </div>
+                </div>
+                <div class="pricing-card featured">
+                    <h3>Family</h3>
+                    <div class="price">$29<span>/mo</span></div>
+                    <ul class="pricing-features">
+                        <li>Everything in Individual</li>
+                        <li>Up to 6 family members</li>
+                        <li>Household coverage dashboard</li>
+                        <li>Multi-policy bundle optimizer</li>
+                        <li>Priority claims support</li>
+                    </ul>
+                    <a href="#" class="btn btn-primary" style="width: 100%; justify-content: center;">Get Family Plan</a>
+                    <div class="guarantee-badge">
+                        <p>🛡️ 10x Savings Guarantee</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Market Section -->
+    <section class="market-section">
+        <div class="section-container">
+            <div class="market-grid">
+                <div class="market-content">
+                    <h2>The Insurance Industry's $5.5 Trillion Problem</h2>
+                    <p>Insurance companies have built their empires on information asymmetry. They have data scientists, actuaries, and algorithms optimizing against you. Until now, consumers fought alone.</p>
+                    <p>CoverAI flips the equation. For the first time, everyone gets their own AI insurance expert—one that never sleeps, never gets frustrated, and never accepts the first offer.</p>
+                    <div class="market-stats">
+                        <div class="market-stat">
+                            <div class="value">$1.4T</div>
+                            <div class="label">US Premiums/Year</div>
+                        </div>
+                        <div class="market-stat">
+                            <div class="value">$200B+</div>
+                            <div class="label">Consumer Overpayment</div>
+                        </div>
+                        <div class="market-stat">
+                            <div class="value">130M</div>
+                            <div class="label">US Households</div>
+                        </div>
+                        <div class="market-stat">
+                            <div class="value">$8,200</div>
+                            <div class="label">Avg Annual Spend</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="market-visual">
+                    <div class="market-chart">
+                        <div class="chart-segment">
+                            <div class="big-number">$5.5T</div>
+                            <div class="chart-label">Global Market</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="cta-content">
+            <h2>Stop Fighting Insurance Companies Alone</h2>
+            <p>Join thousands of consumers who've saved millions with their AI insurance agent. Your policies. Your advocate. Your money back where it belongs.</p>
+            <a href="#pricing" class="btn btn-primary" style="font-size: 1.3rem; padding: 24px 60px;">
+                🛡️ Get Your AI Agent
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-logo">CoverAI</div>
+        <p class="footer-tagline">Your AI Agent That Fights Insurance Companies</p>
+        <div class="footer-links">
+            <a href="#">How It Works</a>
+            <a href="#">Pricing</a>
+            <a href="#">Claims</a>
+            <a href="#">About</a>
+            <a href="#">Blog</a>
+            <a href="#">Contact</a>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 CoverAI. All rights reserved.</p>
+            <p style="margin-top: 12px; font-size: 0.85rem;">Evening Drop — February 5, 2026</p>
+        </div>
+    </footer>
+</body>
+</html>
