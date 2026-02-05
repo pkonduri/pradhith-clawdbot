@@ -1,0 +1,1351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TalentOS — Your AI Recruiting Army</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #818cf8;
+            --accent: #06b6d4;
+            --accent-light: #22d3ee;
+            --dark: #0f172a;
+            --dark-secondary: #1e293b;
+            --gray: #64748b;
+            --gray-light: #94a3b8;
+            --light: #f8fafc;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--dark);
+            color: white;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Animated Background */
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(99, 102, 241, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            z-index: -2;
+        }
+
+        .bg-gradient {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse 80% 50% at 50% -20%, rgba(99, 102, 241, 0.15), transparent),
+                radial-gradient(ellipse 60% 40% at 80% 50%, rgba(6, 182, 212, 0.08), transparent),
+                radial-gradient(ellipse 60% 40% at 20% 80%, rgba(139, 92, 246, 0.08), transparent);
+            z-index: -1;
+        }
+
+        /* Floating Orbs */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+            z-index: -1;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .orb-1 {
+            width: 600px;
+            height: 600px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            top: -200px;
+            right: -200px;
+        }
+
+        .orb-2 {
+            width: 400px;
+            height: 400px;
+            background: linear-gradient(135deg, var(--accent) 0%, #8b5cf6 100%);
+            bottom: -100px;
+            left: -100px;
+            animation-delay: -10s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(20px, -20px) rotate(5deg); }
+            50% { transform: translate(-10px, 20px) rotate(-5deg); }
+            75% { transform: translate(-20px, -10px) rotate(3deg); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1.5rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.75rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-light), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--gray-light);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: white;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-cta {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 0.75rem 1.75rem;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 30px rgba(99, 102, 241, 0.4);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 8rem 2rem 4rem;
+            position: relative;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            padding: 0.5rem 1.25rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            color: var(--primary-light);
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .badge-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--success);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        .hero h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(3rem, 8vw, 5.5rem);
+            font-weight: 800;
+            line-height: 1.05;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.8s ease 0.1s both;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(135deg, var(--primary-light), var(--accent-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.25rem, 2.5vw, 1.5rem);
+            color: var(--gray-light);
+            max-width: 700px;
+            margin-bottom: 3rem;
+            animation: fadeInUp 0.8s ease 0.2s both;
+            line-height: 1.7;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            animation: fadeInUp 0.8s ease 0.3s both;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 25px rgba(99, 102, 241, 0.4);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 40px rgba(99, 102, 241, 0.5);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 4rem;
+            margin-top: 5rem;
+            padding-top: 4rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            animation: fadeInUp 0.8s ease 0.5s both;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, white, var(--gray-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            color: var(--gray);
+            font-size: 0.95rem;
+            margin-top: 0.25rem;
+        }
+
+        /* Problem Section */
+        .section {
+            padding: 8rem 4rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--primary-light);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-subtitle {
+            font-size: 1.25rem;
+            color: var(--gray-light);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Problem Cards */
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .problem-card {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(239, 68, 68, 0.02));
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .problem-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--danger), #f97316);
+        }
+
+        .problem-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(239, 68, 68, 0.4);
+        }
+
+        .problem-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(239, 68, 68, 0.15);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .problem-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            color: white;
+        }
+
+        .problem-stat {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--danger);
+            margin-bottom: 0.5rem;
+        }
+
+        .problem-card p {
+            color: var(--gray-light);
+            line-height: 1.7;
+        }
+
+        /* Solution Section */
+        .solution-section {
+            background: linear-gradient(180deg, transparent, rgba(99, 102, 241, 0.03), transparent);
+        }
+
+        .agent-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .agent-card {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(6, 182, 212, 0.04));
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 24px;
+            padding: 2.5rem;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .agent-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+        }
+
+        .agent-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: rgba(99, 102, 241, 0.4);
+            box-shadow: 0 20px 60px rgba(99, 102, 241, 0.2);
+        }
+
+        .agent-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+        }
+
+        .agent-card h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .agent-card h3 span {
+            color: var(--primary-light);
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: block;
+            margin-top: 0.25rem;
+        }
+
+        .agent-card p {
+            color: var(--gray-light);
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .agent-features {
+            list-style: none;
+        }
+
+        .agent-features li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--gray-light);
+            font-size: 0.95rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .agent-features li::before {
+            content: '✓';
+            color: var(--success);
+            font-weight: 700;
+        }
+
+        /* Comparison Section */
+        .comparison-section {
+            background: var(--dark-secondary);
+            border-radius: 30px;
+            margin: 4rem;
+            padding: 4rem;
+        }
+
+        .comparison-table {
+            display: grid;
+            grid-template-columns: 2fr repeat(3, 1fr);
+            gap: 1px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            overflow: hidden;
+            margin-top: 3rem;
+        }
+
+        .comparison-cell {
+            background: var(--dark-secondary);
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .comparison-cell.header {
+            background: rgba(99, 102, 241, 0.1);
+            font-weight: 600;
+            color: white;
+        }
+
+        .comparison-cell.feature {
+            justify-content: flex-start;
+            color: var(--gray-light);
+        }
+
+        .comparison-cell.highlight {
+            background: rgba(99, 102, 241, 0.15);
+        }
+
+        .check-yes {
+            color: var(--success);
+            font-size: 1.5rem;
+        }
+
+        .check-no {
+            color: var(--danger);
+            font-size: 1.5rem;
+        }
+
+        .check-partial {
+            color: var(--warning);
+            font-size: 1.5rem;
+        }
+
+        /* Metrics Section */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+
+        .metric-card {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.02));
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(16, 185, 129, 0.4);
+        }
+
+        .metric-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--success), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .metric-label {
+            color: var(--gray-light);
+            font-size: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Pricing Section */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+
+        .pricing-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            padding: 3rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .pricing-card.featured {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(6, 182, 212, 0.05));
+            border-color: var(--primary);
+            transform: scale(1.05);
+        }
+
+        .pricing-card.featured::before {
+            content: 'MOST POPULAR';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .pricing-card.featured:hover {
+            transform: scale(1.05) translateY(-5px);
+        }
+
+        .pricing-name {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-price {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin: 1rem 0;
+        }
+
+        .pricing-price span {
+            font-size: 1rem;
+            color: var(--gray);
+            font-weight: 400;
+        }
+
+        .pricing-desc {
+            color: var(--gray-light);
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-features li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            color: var(--gray-light);
+        }
+
+        .pricing-features li::before {
+            content: '✓';
+            color: var(--success);
+            font-weight: 700;
+        }
+
+        .pricing-cta {
+            display: block;
+            width: 100%;
+            text-align: center;
+            padding: 1rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .pricing-card .pricing-cta {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .pricing-card .pricing-cta:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .pricing-card.featured .pricing-cta {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border: none;
+            color: white;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .pricing-card.featured .pricing-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 30px rgba(99, 102, 241, 0.4);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            text-align: center;
+            padding: 8rem 4rem;
+            background: linear-gradient(180deg, transparent, rgba(99, 102, 241, 0.05));
+            position: relative;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 1px;
+            height: 100px;
+            background: linear-gradient(180deg, transparent, var(--primary));
+        }
+
+        .cta-section h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-section p {
+            font-size: 1.25rem;
+            color: var(--gray-light);
+            max-width: 600px;
+            margin: 0 auto 3rem;
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        footer p {
+            color: var(--gray);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--gray);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        /* Pipeline Animation */
+        .pipeline-container {
+            margin: 6rem 0;
+            position: relative;
+        }
+
+        .pipeline {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            padding: 2rem 0;
+        }
+
+        .pipeline::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 60px;
+            right: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            transform: translateY(-50%);
+            z-index: 0;
+        }
+
+        .pipeline-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .pipeline-node {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 10px 40px rgba(99, 102, 241, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .pipeline-step:hover .pipeline-node {
+            transform: scale(1.15);
+            box-shadow: 0 15px 50px rgba(99, 102, 241, 0.5);
+        }
+
+        .pipeline-label {
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .pipeline-sublabel {
+            color: var(--gray);
+            font-size: 0.85rem;
+            text-align: center;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            nav {
+                padding: 1rem 2rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .section {
+                padding: 4rem 2rem;
+            }
+
+            .stats-bar {
+                gap: 2rem;
+                flex-wrap: wrap;
+            }
+
+            .metrics-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .comparison-section {
+                margin: 2rem;
+                padding: 2rem;
+                overflow-x: auto;
+            }
+
+            .comparison-table {
+                min-width: 600px;
+            }
+
+            .pipeline {
+                flex-direction: column;
+                gap: 2rem;
+            }
+
+            .pipeline::before {
+                display: none;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .hero {
+                padding: 6rem 1.5rem 3rem;
+            }
+
+            .hero-cta {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .btn-primary, .btn-secondary {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .stats-bar {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pricing-card.featured {
+                transform: none;
+            }
+
+            .pricing-card.featured:hover {
+                transform: translateY(-5px);
+            }
+
+            footer {
+                flex-direction: column;
+                gap: 2rem;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+    <div class="bg-gradient"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+
+    <nav>
+        <div class="logo">
+            <div class="logo-icon">🎯</div>
+            TalentOS
+        </div>
+        <ul class="nav-links">
+            <li><a href="#problem">Problem</a></li>
+            <li><a href="#solution">Solution</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+            <li><a href="#results">Results</a></li>
+        </ul>
+        <a href="#cta" class="nav-cta">Get Early Access →</a>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-badge">
+            <span class="badge-dot"></span>
+            The Future of Recruiting is Autonomous
+        </div>
+        <h1>Your <span>AI Recruiting Army</span></h1>
+        <p class="hero-subtitle">
+            Zero bias. Zero busywork. 100% results. TalentOS deploys intelligent agents that source, screen, interview, and close candidates—so you can focus on building your company.
+        </p>
+        <div class="hero-cta">
+            <a href="#cta" class="btn-primary">
+                Start Free Trial
+                <span>→</span>
+            </a>
+            <a href="#demo" class="btn-secondary">
+                <span>▶</span>
+                Watch Demo
+            </a>
+        </div>
+
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div class="stat-number">80%</div>
+                <div class="stat-label">Cost Reduction</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">3x</div>
+                <div class="stat-label">Faster Hiring</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">0%</div>
+                <div class="stat-label">Candidates Ghosted</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">46%</div>
+                <div class="stat-label">Better Quality Hires</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="problem">
+        <div class="section-header">
+            <div class="section-label">The Problem</div>
+            <h2 class="section-title">Recruiting is Fundamentally Broken</h2>
+            <p class="section-subtitle">
+                A $500B industry built on 1990s technology and 1950s processes
+            </p>
+        </div>
+
+        <div class="problem-grid">
+            <div class="problem-card">
+                <div class="problem-icon">🕳️</div>
+                <h3>The 75% Black Hole</h3>
+                <div class="problem-stat">75%</div>
+                <p>of qualified candidates are rejected by keyword-matching ATS systems before a human ever sees them. Top talent gets filtered out because their resume doesn't say "synergy."</p>
+            </div>
+
+            <div class="problem-card">
+                <div class="problem-icon">💸</div>
+                <h3>The $4,700 Tax</h3>
+                <div class="problem-stat">$4,700</div>
+                <p>Average cost-per-hire. Senior roles cost $15K-$30K+. External agencies charge 20-30% of annual salary. It's a tax on growth.</p>
+            </div>
+
+            <div class="problem-card">
+                <div class="problem-icon">⏰</div>
+                <h3>The 44-Day Wait</h3>
+                <div class="problem-stat">44 days</div>
+                <p>Average time-to-hire. In that time, your best candidates accept other offers. Every day of delay costs you in productivity and competitive advantage.</p>
+            </div>
+
+            <div class="problem-card">
+                <div class="problem-icon">👻</div>
+                <h3>The Ghosting Epidemic</h3>
+                <div class="problem-stat">60%</div>
+                <p>of candidates never hear back after applying. Your employer brand takes the hit. Top talent talks—one bad experience ripples through networks.</p>
+            </div>
+
+            <div class="problem-card">
+                <div class="problem-icon">⚖️</div>
+                <h3>The Bias Machine</h3>
+                <div class="problem-stat">50%</div>
+                <p>fewer callbacks for resumes with "ethnic-sounding names." Women are 30% less likely to be contacted for tech roles. "Culture fit" often means "looks like us."</p>
+            </div>
+
+            <div class="problem-card">
+                <div class="problem-icon">🔄</div>
+                <h3>The Bad Hire Epidemic</h3>
+                <div class="problem-stat">46%</div>
+                <p>of new hires fail within 18 months. Each bad hire costs $50,000+. The traditional process optimizes for speed, not quality.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section solution-section" id="solution">
+        <div class="section-header">
+            <div class="section-label">The Solution</div>
+            <h2 class="section-title">Meet Your AI Recruiting Force</h2>
+            <p class="section-subtitle">
+                Five specialized agents working 24/7 to find, vet, and secure the perfect candidates
+            </p>
+        </div>
+
+        <div class="pipeline-container">
+            <div class="pipeline">
+                <div class="pipeline-step">
+                    <div class="pipeline-node">🔍</div>
+                    <div class="pipeline-label">Scout</div>
+                    <div class="pipeline-sublabel">Find talent</div>
+                </div>
+                <div class="pipeline-step">
+                    <div class="pipeline-node">🎯</div>
+                    <div class="pipeline-label">Match</div>
+                    <div class="pipeline-sublabel">Semantic fit</div>
+                </div>
+                <div class="pipeline-step">
+                    <div class="pipeline-node">📞</div>
+                    <div class="pipeline-label">Screen</div>
+                    <div class="pipeline-sublabel">First contact</div>
+                </div>
+                <div class="pipeline-step">
+                    <div class="pipeline-node">🎤</div>
+                    <div class="pipeline-label">Interview</div>
+                    <div class="pipeline-sublabel">Deep assess</div>
+                </div>
+                <div class="pipeline-step">
+                    <div class="pipeline-node">🤝</div>
+                    <div class="pipeline-label">Close</div>
+                    <div class="pipeline-sublabel">Seal the deal</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="agent-grid">
+            <div class="agent-card">
+                <div class="agent-icon">🔍</div>
+                <h3>Scout Agents
+                    <span>Proactive Talent Discovery</span>
+                </h3>
+                <p>Continuously scan 50+ talent sources to find candidates before they're on the market.</p>
+                <ul class="agent-features">
+                    <li>LinkedIn, GitHub, conferences, publications</li>
+                    <li>Build profiles on passive candidates</li>
+                    <li>Map competitor organizations</li>
+                    <li>Predict attrition before it happens</li>
+                </ul>
+            </div>
+
+            <div class="agent-card">
+                <div class="agent-icon">🎯</div>
+                <h3>Match Agents
+                    <span>Beyond Keyword Matching</span>
+                </h3>
+                <p>Deep semantic understanding of roles and candidates—not just job descriptions.</p>
+                <ul class="agent-features">
+                    <li>Skills, trajectory, and potential analysis</li>
+                    <li>Team dynamics compatibility scoring</li>
+                    <li>Identify "hidden gem" candidates</li>
+                    <li>Transparent, explainable reasoning</li>
+                </ul>
+            </div>
+
+            <div class="agent-card">
+                <div class="agent-icon">📞</div>
+                <h3>Screen Agents
+                    <span>Intelligent First Contact</span>
+                </h3>
+                <p>Natural, conversational outreach that pre-qualifies without wasting anyone's time.</p>
+                <ul class="agent-features">
+                    <li>Email, LinkedIn, text outreach</li>
+                    <li>Instant answers to candidate questions</li>
+                    <li>Communication skills assessment</li>
+                    <li>Zero ghosting—everyone gets a response</li>
+                </ul>
+            </div>
+
+            <div class="agent-card">
+                <div class="agent-icon">🎤</div>
+                <h3>Interview Agents
+                    <span>Structured, Bias-Free Assessment</span>
+                </h3>
+                <p>Preliminary interviews at the candidate's convenience with scientifically-validated frameworks.</p>
+                <ul class="agent-features">
+                    <li>Video/audio interviews 24/7</li>
+                    <li>Live coding & case study simulations</li>
+                    <li>Blind, objective scoring</li>
+                    <li>Identical experience for every candidate</li>
+                </ul>
+            </div>
+
+            <div class="agent-card">
+                <div class="agent-icon">🤝</div>
+                <h3>Close Agents
+                    <span>Predictive Offer Management</span>
+                </h3>
+                <p>Model candidate decision factors and secure acceptances with personalized approaches.</p>
+                <ul class="agent-features">
+                    <li>Decision factor modeling</li>
+                    <li>Counteroffer risk prediction</li>
+                    <li>Personalized offer narratives</li>
+                    <li>Real-time acceptance probability alerts</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <div class="comparison-section">
+        <div class="section-header">
+            <div class="section-label">Comparison</div>
+            <h2 class="section-title">TalentOS vs. The Competition</h2>
+        </div>
+
+        <div class="comparison-table">
+            <div class="comparison-cell header">Feature</div>
+            <div class="comparison-cell header highlight">TalentOS</div>
+            <div class="comparison-cell header">Traditional ATS</div>
+            <div class="comparison-cell header">Recruiting Agencies</div>
+
+            <div class="comparison-cell feature">Autonomous End-to-End</div>
+            <div class="comparison-cell highlight"><span class="check-yes">✓</span></div>
+            <div class="comparison-cell"><span class="check-no">✗</span></div>
+            <div class="comparison-cell"><span class="check-partial">◐</span></div>
+
+            <div class="comparison-cell feature">24/7 Availability</div>
+            <div class="comparison-cell highlight"><span class="check-yes">✓</span></div>
+            <div class="comparison-cell"><span class="check-no">✗</span></div>
+            <div class="comparison-cell"><span class="check-no">✗</span></div>
+
+            <div class="comparison-cell feature">Bias-Free Decisions</div>
+            <div class="comparison-cell highlight"><span class="check-yes">✓</span></div>
+            <div class="comparison-cell"><span class="check-no">✗</span></div>
+            <div class="comparison-cell"><span class="check-no">✗</span></div>
+
+            <div class="comparison-cell feature">Zero Candidate Ghosting</div>
+            <div class="comparison-cell highlight"><span class="check-yes">✓</span></div>
+            <div class="comparison-cell"><span class="check-no">✗</span></div>
+            <div class="comparison-cell"><span class="check-partial">◐</span></div>
+
+            <div class="comparison-cell feature">Predictive Close Management</div>
+            <div class="comparison-cell highlight"><span class="check-yes">✓</span></div>
+            <div class="comparison-cell"><span class="check-no">✗</span></div>
+            <div class="comparison-cell"><span class="check-partial">◐</span></div>
+
+            <div class="comparison-cell feature">Cost per Hire</div>
+            <div class="comparison-cell highlight" style="color: var(--success); font-weight: 600;">< $1,000</div>
+            <div class="comparison-cell">$2,000-5,000</div>
+            <div class="comparison-cell" style="color: var(--danger);">$15,000-50,000</div>
+
+            <div class="comparison-cell feature">Time to Deploy</div>
+            <div class="comparison-cell highlight" style="color: var(--success); font-weight: 600;">1 Day</div>
+            <div class="comparison-cell">2-4 Weeks</div>
+            <div class="comparison-cell">1-2 Weeks</div>
+        </div>
+    </div>
+
+    <section class="section" id="results">
+        <div class="section-header">
+            <div class="section-label">Results</div>
+            <h2 class="section-title">The TalentOS Difference</h2>
+            <p class="section-subtitle">
+                Early customers are already seeing transformative results
+            </p>
+        </div>
+
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-value">80%</div>
+                <div class="metric-label">Reduction in recruiting costs</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">3x</div>
+                <div class="metric-label">Faster time-to-hire</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">46%</div>
+                <div class="metric-label">Improvement in quality-of-hire</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">100%</div>
+                <div class="metric-label">Candidate response rate</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="pricing">
+        <div class="section-header">
+            <div class="section-label">Pricing</div>
+            <h2 class="section-title">Simple, Transparent Pricing</h2>
+            <p class="section-subtitle">
+                Pay for what you use. Scale as you grow.
+            </p>
+        </div>
+
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <div class="pricing-name">Starter</div>
+                <div class="pricing-price">$2,500<span>/month</span></div>
+                <p class="pricing-desc">Perfect for startups building their first team</p>
+                <ul class="pricing-features">
+                    <li>Up to 50 hires/year</li>
+                    <li>5 concurrent roles</li>
+                    <li>Scout + Match + Screen agents</li>
+                    <li>ATS integrations</li>
+                    <li>Basic analytics</li>
+                    <li>Email support</li>
+                </ul>
+                <a href="#cta" class="pricing-cta">Start Free Trial</a>
+            </div>
+
+            <div class="pricing-card featured">
+                <div class="pricing-name">Growth</div>
+                <div class="pricing-price">$7,500<span>/month</span></div>
+                <p class="pricing-desc">For scale-ups hiring aggressively</p>
+                <ul class="pricing-features">
+                    <li>Up to 200 hires/year</li>
+                    <li>25 concurrent roles</li>
+                    <li>All 5 agent types</li>
+                    <li>Interview Intelligence</li>
+                    <li>DEI dashboards</li>
+                    <li>Priority support</li>
+                    <li>Custom workflows</li>
+                </ul>
+                <a href="#cta" class="pricing-cta">Start Free Trial</a>
+            </div>
+
+            <div class="pricing-card">
+                <div class="pricing-name">Enterprise</div>
+                <div class="pricing-price">Custom</div>
+                <p class="pricing-desc">For large organizations with complex needs</p>
+                <ul class="pricing-features">
+                    <li>Unlimited hires</li>
+                    <li>Unlimited roles</li>
+                    <li>Custom integrations</li>
+                    <li>Dedicated success team</li>
+                    <li>SLA guarantee</li>
+                    <li>Compliance audit support</li>
+                    <li>On-premise option</li>
+                </ul>
+                <a href="#cta" class="pricing-cta">Contact Sales</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section" id="cta">
+        <h2>Ready to Transform Your Hiring?</h2>
+        <p>Join the waitlist for early access and be among the first to deploy your AI recruiting army.</p>
+        <div class="hero-cta">
+            <a href="mailto:founder@talentos.ai" class="btn-primary">
+                Get Early Access
+                <span>→</span>
+            </a>
+            <a href="#demo" class="btn-secondary">
+                <span>📅</span>
+                Book a Demo
+            </a>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2026 TalentOS. Recruiting reimagined.</p>
+        <div class="footer-links">
+            <a href="#">Privacy</a>
+            <a href="#">Terms</a>
+            <a href="#">Security</a>
+            <a href="mailto:hello@talentos.ai">Contact</a>
+        </div>
+    </footer>
+</body>
+</html>
