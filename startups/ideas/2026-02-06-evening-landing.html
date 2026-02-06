@@ -1,0 +1,1371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SupplyMind AI — See Everything. Predict Everything. Control Everything.</title>
+    <meta name="description" content="Autonomous AI platform for real-time supply chain visibility, predictive intelligence, and autonomous optimization across your entire multi-tier network.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0ea5e9;
+            --primary-dark: #0284c7;
+            --secondary: #6366f1;
+            --accent: #22c55e;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #0f172a;
+            --darker: #020617;
+            --gray-900: #1e293b;
+            --gray-800: #334155;
+            --gray-600: #64748b;
+            --gray-400: #94a3b8;
+            --gray-200: #e2e8f0;
+            --white: #ffffff;
+            --gradient-primary: linear-gradient(135deg, #0ea5e9 0%, #6366f1 50%, #8b5cf6 100%);
+            --gradient-glow: linear-gradient(135deg, rgba(14, 165, 233, 0.4) 0%, rgba(99, 102, 241, 0.4) 100%);
+            --gradient-dark: linear-gradient(180deg, #0f172a 0%, #020617 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--darker);
+            color: var(--white);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* Animated Grid Background */
+        .grid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(14, 165, 233, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(14, 165, 233, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Floating Particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: float 20s infinite linear;
+        }
+
+        .particle:nth-child(1) { left: 10%; animation-delay: 0s; animation-duration: 25s; }
+        .particle:nth-child(2) { left: 20%; animation-delay: 2s; animation-duration: 20s; }
+        .particle:nth-child(3) { left: 30%; animation-delay: 4s; animation-duration: 28s; }
+        .particle:nth-child(4) { left: 40%; animation-delay: 1s; animation-duration: 22s; }
+        .particle:nth-child(5) { left: 50%; animation-delay: 3s; animation-duration: 24s; }
+        .particle:nth-child(6) { left: 60%; animation-delay: 5s; animation-duration: 26s; }
+        .particle:nth-child(7) { left: 70%; animation-delay: 2s; animation-duration: 21s; }
+        .particle:nth-child(8) { left: 80%; animation-delay: 4s; animation-duration: 23s; }
+        .particle:nth-child(9) { left: 90%; animation-delay: 1s; animation-duration: 27s; }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.3; }
+            90% { opacity: 0.3; }
+            100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(14, 165, 233, 0.1);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            -webkit-text-fill-color: white;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--gray-400);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--white);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.875rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: var(--white);
+            box-shadow: 0 4px 24px rgba(14, 165, 233, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(14, 165, 233, 0.5);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--white);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary);
+            background: rgba(14, 165, 233, 0.1);
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 5% 6rem;
+            z-index: 10;
+        }
+
+        .hero-glow {
+            position: absolute;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(14, 165, 233, 0.15) 0%, transparent 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+        }
+
+        .hero-content {
+            text-align: center;
+            max-width: 1000px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(14, 165, 233, 0.1);
+            border: 1px solid rgba(14, 165, 233, 0.3);
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--primary);
+            margin-bottom: 2rem;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(14, 165, 233, 0.4); }
+            50% { box-shadow: 0 0 0 15px rgba(14, 165, 233, 0); }
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 5.5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #ffffff 0%, #94a3b8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero h1 span {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            background-clip: text;
+        }
+
+        .hero-tagline {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .hero-description {
+            font-size: 1.25rem;
+            color: var(--gray-400);
+            max-width: 700px;
+            margin: 0 auto 3rem;
+            line-height: 1.8;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 4rem;
+        }
+
+        /* Supply Chain Visualization */
+        .supply-chain-viz {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .viz-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            position: relative;
+        }
+
+        .viz-node {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.75rem;
+            animation: nodeFloat 3s ease-in-out infinite;
+        }
+
+        .viz-node:nth-child(2) { animation-delay: 0.3s; }
+        .viz-node:nth-child(3) { animation-delay: 0.6s; }
+        .viz-node:nth-child(4) { animation-delay: 0.9s; }
+        .viz-node:nth-child(5) { animation-delay: 1.2s; }
+
+        @keyframes nodeFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .viz-icon {
+            width: 70px;
+            height: 70px;
+            background: var(--gray-900);
+            border: 2px solid var(--primary);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            box-shadow: 0 0 30px rgba(14, 165, 233, 0.3);
+            position: relative;
+        }
+
+        .viz-icon::after {
+            content: '';
+            position: absolute;
+            inset: -3px;
+            border-radius: 18px;
+            background: var(--gradient-primary);
+            z-index: -1;
+            opacity: 0.5;
+            filter: blur(10px);
+        }
+
+        .viz-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--gray-400);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .viz-connector {
+            flex: 1;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            position: relative;
+            border-radius: 3px;
+        }
+
+        .viz-connector::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: inherit;
+            filter: blur(8px);
+            opacity: 0.5;
+        }
+
+        .viz-pulse {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: var(--accent);
+            border-radius: 50%;
+            top: 50%;
+            transform: translateY(-50%);
+            animation: movePulse 2s ease-in-out infinite;
+            box-shadow: 0 0 20px var(--accent);
+        }
+
+        @keyframes movePulse {
+            0% { left: 0; }
+            100% { left: calc(100% - 12px); }
+        }
+
+        /* Problem Section */
+        .problem {
+            position: relative;
+            padding: 8rem 5%;
+            z-index: 10;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 5rem;
+        }
+
+        .section-label {
+            display: inline-block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #ffffff 0%, #94a3b8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-subtitle {
+            font-size: 1.25rem;
+            color: var(--gray-400);
+            line-height: 1.8;
+        }
+
+        .crisis-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .crisis-card {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.05) 0%, rgba(15, 23, 42, 0.8) 100%);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 20px;
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .crisis-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(239, 68, 68, 0.5);
+            box-shadow: 0 20px 60px rgba(239, 68, 68, 0.1);
+        }
+
+        .crisis-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .crisis-stat {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: var(--danger);
+            margin-bottom: 0.5rem;
+        }
+
+        .crisis-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 1rem;
+        }
+
+        .crisis-desc {
+            font-size: 1rem;
+            color: var(--gray-400);
+            line-height: 1.7;
+        }
+
+        /* Solution Section */
+        .solution {
+            position: relative;
+            padding: 8rem 5%;
+            background: linear-gradient(180deg, transparent 0%, rgba(14, 165, 233, 0.03) 50%, transparent 100%);
+            z-index: 10;
+        }
+
+        .agents-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .agent-card {
+            background: var(--gray-900);
+            border: 1px solid var(--gray-800);
+            border-radius: 24px;
+            padding: 3rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .agent-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .agent-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--primary);
+            box-shadow: 0 25px 80px rgba(14, 165, 233, 0.15);
+        }
+
+        .agent-card:hover::before {
+            opacity: 1;
+        }
+
+        .agent-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(14, 165, 233, 0.1);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .agent-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 0.5rem;
+        }
+
+        .agent-subtitle {
+            font-size: 1rem;
+            color: var(--primary);
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+        }
+
+        .agent-desc {
+            color: var(--gray-400);
+            margin-bottom: 2rem;
+            line-height: 1.8;
+        }
+
+        .agent-features {
+            list-style: none;
+        }
+
+        .agent-features li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            color: var(--gray-400);
+            margin-bottom: 0.75rem;
+            font-size: 0.95rem;
+        }
+
+        .agent-features li::before {
+            content: '✓';
+            color: var(--accent);
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        /* Digital Twin Section */
+        .twin-section {
+            position: relative;
+            padding: 8rem 5%;
+            z-index: 10;
+        }
+
+        .twin-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .twin-visual {
+            position: relative;
+            background: var(--gray-900);
+            border: 1px solid var(--gray-800);
+            border-radius: 24px;
+            padding: 3rem;
+            overflow: hidden;
+        }
+
+        .twin-glow {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.3) 0%, transparent 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+        }
+
+        .twin-network {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            z-index: 1;
+        }
+
+        .network-node {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background: var(--gray-800);
+            border: 2px solid var(--secondary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            animation: networkPulse 2s ease-in-out infinite;
+        }
+
+        .network-node:nth-child(1) { top: 10%; left: 10%; animation-delay: 0s; }
+        .network-node:nth-child(2) { top: 10%; right: 10%; animation-delay: 0.3s; }
+        .network-node:nth-child(3) { top: 50%; left: 40%; animation-delay: 0.6s; }
+        .network-node:nth-child(4) { bottom: 10%; left: 20%; animation-delay: 0.9s; }
+        .network-node:nth-child(5) { bottom: 10%; right: 20%; animation-delay: 1.2s; }
+
+        @keyframes networkPulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(99, 102, 241, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(99, 102, 241, 0.6); }
+        }
+
+        .twin-content h3 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+        }
+
+        .twin-content p {
+            font-size: 1.125rem;
+            color: var(--gray-400);
+            margin-bottom: 2rem;
+            line-height: 1.8;
+        }
+
+        .twin-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        .twin-stat {
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .twin-stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--secondary);
+            margin-bottom: 0.25rem;
+        }
+
+        .twin-stat-label {
+            font-size: 0.875rem;
+            color: var(--gray-400);
+        }
+
+        /* Market Section */
+        .market {
+            position: relative;
+            padding: 8rem 5%;
+            background: linear-gradient(180deg, transparent 0%, rgba(34, 197, 94, 0.03) 50%, transparent 100%);
+            z-index: 10;
+        }
+
+        .market-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto 4rem;
+        }
+
+        .market-card {
+            background: var(--gray-900);
+            border: 1px solid var(--gray-800);
+            border-radius: 20px;
+            padding: 2.5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .market-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+        }
+
+        .market-label {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--gray-400);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1rem;
+        }
+
+        .market-value {
+            font-size: 4rem;
+            font-weight: 900;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .market-desc {
+            color: var(--gray-400);
+            font-size: 0.95rem;
+        }
+
+        .timing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .timing-card {
+            background: rgba(34, 197, 94, 0.05);
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            border-radius: 16px;
+            padding: 2rem;
+        }
+
+        .timing-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .timing-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 0.75rem;
+        }
+
+        .timing-desc {
+            color: var(--gray-400);
+            line-height: 1.7;
+        }
+
+        /* Comparison Section */
+        .comparison {
+            position: relative;
+            padding: 8rem 5%;
+            z-index: 10;
+        }
+
+        .comparison-table {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: var(--gray-900);
+            border-radius: 24px;
+            overflow: hidden;
+            border: 1px solid var(--gray-800);
+        }
+
+        .comparison-header {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            padding: 1.5rem 2rem;
+            background: rgba(14, 165, 233, 0.1);
+            border-bottom: 1px solid var(--gray-800);
+            font-weight: 700;
+            color: var(--white);
+        }
+
+        .comparison-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            padding: 1.25rem 2rem;
+            border-bottom: 1px solid var(--gray-800);
+            transition: background 0.3s ease;
+        }
+
+        .comparison-row:last-child {
+            border-bottom: none;
+        }
+
+        .comparison-row:hover {
+            background: rgba(14, 165, 233, 0.05);
+        }
+
+        .comparison-feature {
+            color: var(--white);
+            font-weight: 500;
+        }
+
+        .comparison-legacy {
+            color: var(--danger);
+            text-align: center;
+        }
+
+        .comparison-supplymind {
+            color: var(--accent);
+            text-align: center;
+            font-weight: 600;
+        }
+
+        /* CTA Section */
+        .cta {
+            position: relative;
+            padding: 8rem 5%;
+            text-align: center;
+            z-index: 10;
+        }
+
+        .cta-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, var(--gray-900) 0%, var(--dark) 100%);
+            border: 1px solid var(--gray-800);
+            border-radius: 32px;
+            padding: 5rem 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-glow {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(14, 165, 233, 0.2) 0%, transparent 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta p {
+            font-size: 1.25rem;
+            color: var(--gray-400);
+            margin-bottom: 2.5rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Footer */
+        footer {
+            position: relative;
+            padding: 4rem 5%;
+            border-top: 1px solid var(--gray-800);
+            z-index: 10;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .footer-brand span {
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--gray-400);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--white);
+        }
+
+        .footer-copy {
+            color: var(--gray-600);
+            font-size: 0.875rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .twin-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .market-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem 5%;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero {
+                padding: 7rem 5% 4rem;
+            }
+
+            .supply-chain-viz {
+                display: none;
+            }
+
+            .comparison-table {
+                font-size: 0.875rem;
+            }
+
+            .comparison-header,
+            .comparison-row {
+                padding: 1rem;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="grid-bg"></div>
+    <div class="particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+
+    <nav>
+        <div class="logo">
+            <div class="logo-icon">🔗</div>
+            SupplyMind
+        </div>
+        <div class="nav-links">
+            <a href="#problem">Problem</a>
+            <a href="#solution">Solution</a>
+            <a href="#market">Market</a>
+            <a class="btn btn-primary" href="#cta">Get Early Access</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-glow"></div>
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span>🚀</span> Autonomous Supply Chain Intelligence
+            </div>
+            <h1>See <span>Everything</span>.<br>Predict <span>Everything</span>.<br>Control <span>Everything</span>.</h1>
+            <p class="hero-tagline">Your Supply Chain Command Center</p>
+            <p class="hero-description">
+                AI agents that map, monitor, and manage your entire multi-tier supply chain in real-time. 
+                Predict disruptions before they happen. Optimize autonomously. Never be surprised again.
+            </p>
+            <div class="hero-cta">
+                <a href="#cta" class="btn btn-primary">Request Demo →</a>
+                <a href="#solution" class="btn btn-secondary">See How It Works</a>
+            </div>
+            
+            <div class="supply-chain-viz">
+                <div class="viz-container">
+                    <div class="viz-node">
+                        <div class="viz-icon">🏭</div>
+                        <div class="viz-label">Suppliers</div>
+                    </div>
+                    <div class="viz-connector">
+                        <div class="viz-pulse"></div>
+                    </div>
+                    <div class="viz-node">
+                        <div class="viz-icon">🔧</div>
+                        <div class="viz-label">Factory</div>
+                    </div>
+                    <div class="viz-connector">
+                        <div class="viz-pulse" style="animation-delay: 0.5s;"></div>
+                    </div>
+                    <div class="viz-node">
+                        <div class="viz-icon">📦</div>
+                        <div class="viz-label">Warehouse</div>
+                    </div>
+                    <div class="viz-connector">
+                        <div class="viz-pulse" style="animation-delay: 1s;"></div>
+                    </div>
+                    <div class="viz-node">
+                        <div class="viz-icon">🚚</div>
+                        <div class="viz-label">Transport</div>
+                    </div>
+                    <div class="viz-connector">
+                        <div class="viz-pulse" style="animation-delay: 1.5s;"></div>
+                    </div>
+                    <div class="viz-node">
+                        <div class="viz-icon">🏪</div>
+                        <div class="viz-label">Retail</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="problem" class="problem">
+        <div class="section-header">
+            <div class="section-label">The $4 Trillion Problem</div>
+            <h2 class="section-title">Supply Chains Are Flying Blind</h2>
+            <p class="section-subtitle">
+                Global supply chain disruptions cost the economy $4 trillion annually. 
+                Yet most companies have zero visibility beyond their direct suppliers.
+            </p>
+        </div>
+        
+        <div class="crisis-stats">
+            <div class="crisis-card">
+                <div class="crisis-icon">🔍</div>
+                <div class="crisis-stat">65%</div>
+                <div class="crisis-title">Zero Visibility Beyond Tier 1</div>
+                <div class="crisis-desc">
+                    Most enterprises can't see past their direct suppliers. A single Tier 3 failure 
+                    can cascade across entire industries—like the chip shortage that crippled automotive for 2+ years.
+                </div>
+            </div>
+            
+            <div class="crisis-card">
+                <div class="crisis-icon">📊</div>
+                <div class="crisis-stat">100+</div>
+                <div class="crisis-title">Disconnected Systems</div>
+                <div class="crisis-desc">
+                    Supply chain data scattered across EDI, ERP, TMS, WMS, spreadsheets, and emails. 
+                    Managers spend 60% of their time hunting for data instead of making decisions.
+                </div>
+            </div>
+            
+            <div class="crisis-card">
+                <div class="crisis-icon">⚠️</div>
+                <div class="crisis-stat">95%</div>
+                <div class="crisis-title">Disruptions Found Too Late</div>
+                <div class="crisis-desc">
+                    Weather events, geopolitical risks, supplier bankruptcies—all predictable, all ignored.
+                    By the time a port closure makes headlines, it's already too late to adapt.
+                </div>
+            </div>
+            
+            <div class="crisis-card">
+                <div class="crisis-icon">💰</div>
+                <div class="crisis-stat">$1.1T</div>
+                <div class="crisis-title">Capital Tied in Inventory</div>
+                <div class="crisis-desc">
+                    Companies stockpile inventory as insurance against uncertainty. 
+                    This dead capital could be deployed for growth—if only they had visibility.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="solution" class="solution">
+        <div class="section-header">
+            <div class="section-label">The SupplyMind Platform</div>
+            <h2 class="section-title">Autonomous AI Agents for Your Supply Chain</h2>
+            <p class="section-subtitle">
+                Deploy intelligent agents that work 24/7—mapping your network, predicting disruptions, 
+                and making optimal decisions before humans even know there's a problem.
+            </p>
+        </div>
+        
+        <div class="agents-grid">
+            <div class="agent-card">
+                <div class="agent-icon">🔍</div>
+                <div class="agent-name">Discovery Agents</div>
+                <div class="agent-subtitle">Map the Unmappable</div>
+                <div class="agent-desc">
+                    Automatically discover and map your entire supplier network through Tier 4+.
+                    Cross-reference shipping records, financial data, and regulatory filings.
+                </div>
+                <ul class="agent-features">
+                    <li>Discover 300% more suppliers than you knew existed</li>
+                    <li>Build complete supplier profiles with risk scores</li>
+                    <li>Continuous validation and monitoring</li>
+                    <li>Alert on ownership changes and financial distress</li>
+                </ul>
+            </div>
+            
+            <div class="agent-card">
+                <div class="agent-icon">🛡️</div>
+                <div class="agent-name">Sentinel Agents</div>
+                <div class="agent-subtitle">See the Future</div>
+                <div class="agent-desc">
+                    Predictive intelligence that monitors weather, geopolitical risks, financial health, 
+                    and capacity—alerting you 2-6 weeks before disruptions hit.
+                </div>
+                <ul class="agent-features">
+                    <li>Weather intelligence across all supplier locations</li>
+                    <li>Geopolitical and sanctions monitoring</li>
+                    <li>Supplier financial distress detection</li>
+                    <li>Port and factory congestion prediction</li>
+                </ul>
+            </div>
+            
+            <div class="agent-card">
+                <div class="agent-icon">⚡</div>
+                <div class="agent-name">Optimizer Agents</div>
+                <div class="agent-subtitle">Autonomous Decision-Making</div>
+                <div class="agent-desc">
+                    AI agents that make optimal decisions in real-time—routing shipments, balancing inventory, 
+                    activating backup suppliers, and optimizing for cost, speed, and sustainability.
+                </div>
+                <ul class="agent-features">
+                    <li>Dynamic rerouting around disruptions</li>
+                    <li>Autonomous inventory balancing</li>
+                    <li>Instant supplier switching when needed</li>
+                    <li>Carbon-optimized path selection</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="twin-section">
+        <div class="twin-container">
+            <div class="twin-visual">
+                <div class="twin-glow"></div>
+                <div class="twin-network">
+                    <div class="network-node">🏭</div>
+                    <div class="network-node">🚢</div>
+                    <div class="network-node">🧠</div>
+                    <div class="network-node">📦</div>
+                    <div class="network-node">🏪</div>
+                </div>
+            </div>
+            <div class="twin-content">
+                <div class="section-label">Real-Time Intelligence</div>
+                <h3>Your Supply Chain Digital Twin</h3>
+                <p>
+                    A living, breathing digital model of your entire global network. 
+                    Track every shipment, every node, every flow in real-time. 
+                    Run what-if scenarios in seconds. Answer "where is it?" and "what if?" instantly.
+                </p>
+                <div class="twin-stats">
+                    <div class="twin-stat">
+                        <div class="twin-stat-value">Real-Time</div>
+                        <div class="twin-stat-label">Location Tracking</div>
+                    </div>
+                    <div class="twin-stat">
+                        <div class="twin-stat-value">< 1 sec</div>
+                        <div class="twin-stat-label">Query Response</div>
+                    </div>
+                    <div class="twin-stat">
+                        <div class="twin-stat-value">100%</div>
+                        <div class="twin-stat-label">Network Visibility</div>
+                    </div>
+                    <div class="twin-stat">
+                        <div class="twin-stat-value">∞</div>
+                        <div class="twin-stat-label">What-If Scenarios</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="market" class="market">
+        <div class="section-header">
+            <div class="section-label">Market Opportunity</div>
+            <h2 class="section-title">A Massive Market in Transformation</h2>
+            <p class="section-subtitle">
+                Supply chain software is a $85B market—but no one has built the AI-native platform 
+                that enterprises desperately need.
+            </p>
+        </div>
+        
+        <div class="market-grid">
+            <div class="market-card">
+                <div class="market-label">Total Addressable Market</div>
+                <div class="market-value">$85B</div>
+                <div class="market-desc">Global supply chain software and analytics</div>
+            </div>
+            <div class="market-card">
+                <div class="market-label">Serviceable Market</div>
+                <div class="market-value">$32B</div>
+                <div class="market-desc">AI-native visibility and optimization</div>
+            </div>
+            <div class="market-card">
+                <div class="market-label">Target (7 Years)</div>
+                <div class="market-value">$3.2B</div>
+                <div class="market-desc">10% market capture potential</div>
+            </div>
+        </div>
+        
+        <div class="section-header" style="margin-top: 5rem;">
+            <h3 class="section-title" style="font-size: 2rem;">Why Now?</h3>
+        </div>
+        
+        <div class="timing-grid">
+            <div class="timing-card">
+                <div class="timing-icon">🌪️</div>
+                <div class="timing-title">Chaos is the New Normal</div>
+                <div class="timing-desc">
+                    COVID, Suez Canal, Ukraine, Red Sea—disruptions are accelerating. 
+                    "Just-in-time" is dead. Companies need AI-powered resilience.
+                </div>
+            </div>
+            <div class="timing-card">
+                <div class="timing-icon">🤖</div>
+                <div class="timing-title">AI Has Reached Critical Mass</div>
+                <div class="timing-desc">
+                    Foundation models can finally reason about complex systems. 
+                    Agent architectures enable true autonomous decision-making.
+                </div>
+            </div>
+            <div class="timing-card">
+                <div class="timing-icon">📡</div>
+                <div class="timing-title">Data Availability Explosion</div>
+                <div class="timing-desc">
+                    IoT sensors, satellite imagery, digital shipping documents—
+                    the data to power supply chain AI finally exists.
+                </div>
+            </div>
+            <div class="timing-card">
+                <div class="timing-icon">📋</div>
+                <div class="timing-title">Regulatory Pressure</div>
+                <div class="timing-desc">
+                    EU CSRD/CBAM require full supply chain transparency by 2027. 
+                    Non-compliance means fines and market access loss.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="comparison">
+        <div class="section-header">
+            <div class="section-label">Why SupplyMind Wins</div>
+            <h2 class="section-title">Legacy vs. Autonomous</h2>
+        </div>
+        
+        <div class="comparison-table">
+            <div class="comparison-header">
+                <div>Capability</div>
+                <div>Legacy Tools</div>
+                <div>SupplyMind</div>
+            </div>
+            <div class="comparison-row">
+                <div class="comparison-feature">Supplier Visibility</div>
+                <div class="comparison-legacy">Tier 1 only ❌</div>
+                <div class="comparison-supplymind">Through Tier 4+ ✓</div>
+            </div>
+            <div class="comparison-row">
+                <div class="comparison-feature">Disruption Detection</div>
+                <div class="comparison-legacy">After impact ❌</div>
+                <div class="comparison-supplymind">2-6 weeks ahead ✓</div>
+            </div>
+            <div class="comparison-row">
+                <div class="comparison-feature">Decision Making</div>
+                <div class="comparison-legacy">Human-dependent ❌</div>
+                <div class="comparison-supplymind">Autonomous AI ✓</div>
+            </div>
+            <div class="comparison-row">
+                <div class="comparison-feature">Data Integration</div>
+                <div class="comparison-legacy">5-7 tools required ❌</div>
+                <div class="comparison-supplymind">Single platform ✓</div>
+            </div>
+            <div class="comparison-row">
+                <div class="comparison-feature">Carbon Tracking</div>
+                <div class="comparison-legacy">Separate tool ❌</div>
+                <div class="comparison-supplymind">Built-in ✓</div>
+            </div>
+            <div class="comparison-row">
+                <div class="comparison-feature">Time to Value</div>
+                <div class="comparison-legacy">6-12 months ❌</div>
+                <div class="comparison-supplymind">< 30 days ✓</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="cta" class="cta">
+        <div class="cta-container">
+            <div class="cta-glow"></div>
+            <div class="cta-content">
+                <div class="section-label">Join the Revolution</div>
+                <h2>Never Be Surprised By Your Supply Chain Again</h2>
+                <p>
+                    Be among the first enterprises to deploy autonomous supply chain intelligence. 
+                    Limited design partner spots available.
+                </p>
+                <div class="cta-buttons">
+                    <a href="mailto:founders@supplymind.ai" class="btn btn-primary">Request Demo →</a>
+                    <a href="mailto:founders@supplymind.ai?subject=Design Partner Interest" class="btn btn-secondary">Become a Design Partner</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <div class="logo-icon" style="width: 32px; height: 32px; font-size: 1rem;">🔗</div>
+                <span>SupplyMind AI</span>
+            </div>
+            <div class="footer-links">
+                <a href="mailto:founders@supplymind.ai">Contact</a>
+                <a href="#">Privacy</a>
+                <a href="#">Terms</a>
+            </div>
+            <div class="footer-copy">
+                © 2026 SupplyMind AI • Built with 🎩 by The Godfather
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
