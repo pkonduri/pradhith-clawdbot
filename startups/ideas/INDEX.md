@@ -30,6 +30,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-02-05 | Afternoon | TalentOS — Autonomous Recruiting Intelligence | [Playbook](2026-02-05-afternoon.md) • [Landing](2026-02-05-afternoon-landing.html) • [PDF](2026-02-05-afternoon.pdf) |
 | 2026-02-06 | Evening | SupplyMind AI — Autonomous Supply Chain Intelligence | [Playbook](2026-02-06-evening.md) • [Landing](2026-02-06-evening-landing.html) • [PDF](2026-02-06-evening.pdf) |
 | 2026-02-06 | Morning | BioForge — Autonomous Biomaterials Discovery | [Playbook](2026-02-06-morning.md) • [Landing](2026-02-06-morning-landing.html) • [PDF](2026-02-06-morning.pdf) |
+| 2026-02-06 | Afternoon | RobotOS — Autonomous Humanoid Robot Intelligence | [Playbook](2026-02-06-afternoon.md) • [Landing](2026-02-06-afternoon-landing.html) • [PDF](2026-02-06-afternoon.pdf) |
 <!-- New entries will be added above this line -->
 
 ---

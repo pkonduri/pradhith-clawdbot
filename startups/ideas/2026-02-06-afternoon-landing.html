@@ -1,0 +1,1639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RobotOS — The Operating System for Humanoid Robots</title>
+    <meta name="description" content="RobotOS powers the humanoid robot revolution. Universal AI platform for perception, manipulation, and safety across all robot hardware.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00D4FF;
+            --primary-dark: #00A8CC;
+            --secondary: #FF6B35;
+            --accent: #7B2FFF;
+            --dark: #0A0A0F;
+            --darker: #050508;
+            --card: #12121A;
+            --card-border: #1E1E2E;
+            --text: #FFFFFF;
+            --text-secondary: #A0A0B0;
+            --gradient-1: linear-gradient(135deg, #00D4FF 0%, #7B2FFF 50%, #FF6B35 100%);
+            --gradient-2: linear-gradient(180deg, #00D4FF 0%, #00A8CC 100%);
+            --glow: 0 0 60px rgba(0, 212, 255, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--darker);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(0, 212, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(123, 47, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(255, 107, 53, 0.05) 0%, transparent 50%);
+            animation: bgPulse 20s ease-in-out infinite;
+        }
+
+        @keyframes bgPulse {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(2%, 2%) rotate(1deg); }
+            50% { transform: translate(0, 4%) rotate(0deg); }
+            75% { transform: translate(-2%, 2%) rotate(-1deg); }
+        }
+
+        /* Grid Pattern */
+        .grid-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 212, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -1;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1rem 2rem;
+            background: rgba(5, 5, 8, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            -webkit-text-fill-color: white;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: var(--gradient-1);
+            color: white;
+            box-shadow: var(--glow);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 80px rgba(0, 212, 255, 0.4);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: var(--dark);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 2rem 4rem;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 50px;
+            font-size: 0.9rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(0, 212, 255, 0.4); }
+            50% { box-shadow: 0 0 20px 5px rgba(0, 212, 255, 0.2); }
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero h1 span {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-description {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            max-width: 540px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 3rem;
+        }
+
+        .stat {
+            text-align: left;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* Robot Visualization */
+        .hero-visual {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .robot-container {
+            position: relative;
+            width: 400px;
+            height: 500px;
+        }
+
+        .robot-body {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: 350px;
+            background: linear-gradient(180deg, #1a1a2e 0%, #0a0a15 100%);
+            border-radius: 100px 100px 80px 80px;
+            border: 2px solid var(--primary);
+            box-shadow: 
+                0 0 50px rgba(0, 212, 255, 0.3),
+                inset 0 0 50px rgba(0, 212, 255, 0.1);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(-50%, -50%) translateY(0); }
+            50% { transform: translate(-50%, -50%) translateY(-20px); }
+        }
+
+        .robot-head {
+            position: absolute;
+            top: -60px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 100px;
+            background: linear-gradient(180deg, #1a1a2e 0%, #0a0a15 100%);
+            border-radius: 60px 60px 40px 40px;
+            border: 2px solid var(--primary);
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+        }
+
+        .robot-eyes {
+            position: absolute;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+        }
+
+        .robot-eye {
+            width: 25px;
+            height: 25px;
+            background: var(--primary);
+            border-radius: 50%;
+            box-shadow: 0 0 20px var(--primary);
+            animation: blink 4s ease-in-out infinite;
+        }
+
+        @keyframes blink {
+            0%, 90%, 100% { transform: scaleY(1); }
+            95% { transform: scaleY(0.1); }
+        }
+
+        .robot-chest {
+            position: absolute;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 80px;
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid var(--primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .robot-core {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-1);
+            border-radius: 50%;
+            animation: corePulse 2s ease-in-out infinite;
+        }
+
+        @keyframes corePulse {
+            0%, 100% { box-shadow: 0 0 20px var(--primary); transform: scale(1); }
+            50% { box-shadow: 0 0 40px var(--primary), 0 0 60px var(--accent); transform: scale(1.1); }
+        }
+
+        .robot-arm {
+            position: absolute;
+            top: 60px;
+            width: 30px;
+            height: 180px;
+            background: linear-gradient(180deg, #1a1a2e 0%, #0a0a15 100%);
+            border: 2px solid var(--primary);
+            border-radius: 15px;
+        }
+
+        .robot-arm.left {
+            left: -45px;
+            transform: rotate(15deg);
+            animation: armSwing 4s ease-in-out infinite;
+        }
+
+        .robot-arm.right {
+            right: -45px;
+            transform: rotate(-15deg);
+            animation: armSwing 4s ease-in-out infinite reverse;
+        }
+
+        @keyframes armSwing {
+            0%, 100% { transform: rotate(15deg); }
+            50% { transform: rotate(5deg); }
+        }
+
+        .robot-leg {
+            position: absolute;
+            bottom: -100px;
+            width: 40px;
+            height: 120px;
+            background: linear-gradient(180deg, #1a1a2e 0%, #0a0a15 100%);
+            border: 2px solid var(--primary);
+            border-radius: 20px;
+        }
+
+        .robot-leg.left { left: 30px; }
+        .robot-leg.right { right: 30px; }
+
+        /* Floating elements */
+        .floating-element {
+            position: absolute;
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 1rem;
+            animation: floatElement 8s ease-in-out infinite;
+        }
+
+        @keyframes floatElement {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(2deg); }
+        }
+
+        .floating-element.top-left {
+            top: 0;
+            left: -80px;
+            animation-delay: 0s;
+        }
+
+        .floating-element.top-right {
+            top: 20px;
+            right: -60px;
+            animation-delay: 2s;
+        }
+
+        .floating-element.bottom-left {
+            bottom: 80px;
+            left: -100px;
+            animation-delay: 4s;
+        }
+
+        .floating-element.bottom-right {
+            bottom: 60px;
+            right: -80px;
+            animation-delay: 6s;
+        }
+
+        .float-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .float-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .float-value {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        /* Section Styles */
+        section {
+            padding: 6rem 2rem;
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 4rem;
+        }
+
+        .section-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .section-header h2 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+        }
+
+        /* Problem Section */
+        .problem-section {
+            background: linear-gradient(180deg, var(--darker) 0%, var(--dark) 100%);
+        }
+
+        .problem-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .problem-card {
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .problem-card:hover {
+            border-color: var(--secondary);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(255, 107, 53, 0.1);
+        }
+
+        .problem-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 107, 53, 0.1);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .problem-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            color: var(--secondary);
+        }
+
+        .problem-card p {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .problem-stat {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--secondary);
+        }
+
+        /* Solution Section */
+        .solution-section {
+            background: var(--dark);
+        }
+
+        .solution-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .solution-features {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .feature-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1.5rem;
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .feature-item:hover {
+            border-color: var(--primary);
+            background: rgba(0, 212, 255, 0.05);
+        }
+
+        .feature-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(0, 212, 255, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .feature-content h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-content p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* Architecture Diagram */
+        .architecture-visual {
+            position: relative;
+        }
+
+        .arch-diagram {
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 2rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .arch-layer {
+            background: rgba(0, 212, 255, 0.05);
+            border: 1px solid var(--primary);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .arch-layer:last-child {
+            margin-bottom: 0;
+        }
+
+        .arch-layer-title {
+            font-size: 0.75rem;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .arch-layer-content {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .arch-chip {
+            background: var(--dark);
+            border: 1px solid var(--card-border);
+            border-radius: 5px;
+            padding: 0.3rem 0.6rem;
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+        }
+
+        /* Market Section */
+        .market-section {
+            background: linear-gradient(180deg, var(--dark) 0%, var(--darker) 100%);
+        }
+
+        .market-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .market-chart {
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .chart-title {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            color: var(--text-secondary);
+        }
+
+        .chart-bars {
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-end;
+            height: 300px;
+            gap: 2rem;
+        }
+
+        .chart-bar-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+        }
+
+        .chart-bar {
+            width: 60px;
+            background: var(--gradient-1);
+            border-radius: 10px 10px 0 0;
+            position: relative;
+            transition: all 0.5s ease;
+        }
+
+        .chart-bar:hover {
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.5);
+        }
+
+        .chart-bar-label {
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--primary);
+            white-space: nowrap;
+        }
+
+        .chart-year {
+            margin-top: 1rem;
+            font-size: 1rem;
+            color: var(--text-secondary);
+        }
+
+        .market-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+
+        .market-stat {
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .market-stat:hover {
+            border-color: var(--accent);
+            transform: translateY(-5px);
+        }
+
+        .market-stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .market-stat-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* Business Model Section */
+        .business-section {
+            background: var(--darker);
+        }
+
+        .pricing-tiers {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .pricing-card {
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .pricing-card.featured {
+            border-color: var(--primary);
+            transform: scale(1.05);
+            box-shadow: 0 0 50px rgba(0, 212, 255, 0.2);
+        }
+
+        .pricing-card.featured::before {
+            content: 'MOST POPULAR';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--gradient-1);
+            color: white;
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .pricing-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+        }
+
+        .pricing-card.featured:hover {
+            transform: scale(1.05) translateY(-5px);
+        }
+
+        .pricing-tier {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .pricing-price {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-unit {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .pricing-features {
+            list-style: none;
+            text-align: left;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-features li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--card-border);
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .pricing-features li::before {
+            content: '✓';
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        /* Traction Section */
+        .traction-section {
+            background: linear-gradient(180deg, var(--darker) 0%, var(--dark) 100%);
+        }
+
+        .traction-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 3rem;
+        }
+
+        .milestone-card {
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 2rem;
+        }
+
+        .milestone-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .milestone-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(0, 212, 255, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .milestone-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .milestone-list {
+            list-style: none;
+        }
+
+        .milestone-list li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--card-border);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: var(--text-secondary);
+        }
+
+        .milestone-list li:last-child {
+            border-bottom: none;
+        }
+
+        .milestone-check {
+            width: 24px;
+            height: 24px;
+            background: rgba(0, 212, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 0.8rem;
+        }
+
+        /* Team Section */
+        .team-section {
+            background: var(--dark);
+        }
+
+        .team-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+
+        .team-card {
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .team-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+        }
+
+        .team-avatar {
+            width: 100px;
+            height: 100px;
+            background: var(--gradient-1);
+            border-radius: 50%;
+            margin: 0 auto 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+        }
+
+        .team-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .team-role {
+            font-size: 0.9rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .team-background {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(180deg, var(--dark) 0%, var(--darker) 100%);
+            text-align: center;
+            padding: 8rem 2rem;
+        }
+
+        .cta-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cta-content h2 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-content h2 span {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .cta-content p {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            margin-bottom: 2.5rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .cta-contact {
+            font-size: 1rem;
+            color: var(--text-secondary);
+        }
+
+        .cta-contact a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--darker);
+            border-top: 1px solid var(--card-border);
+            padding: 3rem 2rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-logo {
+            font-size: 1.2rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        .footer-copyright {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-visual {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 3rem;
+            }
+
+            .hero-stats {
+                justify-content: center;
+            }
+
+            .solution-content {
+                grid-template-columns: 1fr;
+            }
+
+            .market-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .pricing-tiers {
+                grid-template-columns: 1fr;
+            }
+
+            .pricing-card.featured {
+                transform: none;
+            }
+
+            .team-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .problem-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .traction-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .team-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                gap: 1.5rem;
+                text-align: center;
+            }
+
+            .cta-content h2 {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    <div class="grid-pattern"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-content">
+            <div class="logo">
+                <div class="logo-icon">🤖</div>
+                RobotOS
+            </div>
+            <div class="nav-links">
+                <a href="#problem">Problem</a>
+                <a href="#solution">Solution</a>
+                <a href="#market">Market</a>
+                <a href="#team">Team</a>
+                <a href="#contact" class="btn btn-primary">Get in Touch</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <div class="hero-badge">
+                    <span>🚀</span> The Android for Humanoid Robots
+                </div>
+                <h1>Intelligence for <span>Every Robot</span></h1>
+                <p class="hero-description">
+                    RobotOS is the universal operating system that transforms humanoid robot hardware into production-ready enterprise workforce. We power perception, manipulation, and safety across all platforms.
+                </p>
+                <div class="hero-buttons">
+                    <a href="#contact" class="btn btn-primary">Request Demo →</a>
+                    <a href="#solution" class="btn btn-outline">How It Works</a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <div class="stat-value">5+</div>
+                        <div class="stat-label">Robot Platforms</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">1000+</div>
+                        <div class="stat-label">Manipulation Skills</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">$180B</div>
+                        <div class="stat-label">TAM by 2035</div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="robot-container">
+                    <div class="robot-body">
+                        <div class="robot-head">
+                            <div class="robot-eyes">
+                                <div class="robot-eye"></div>
+                                <div class="robot-eye"></div>
+                            </div>
+                        </div>
+                        <div class="robot-chest">
+                            <div class="robot-core"></div>
+                        </div>
+                        <div class="robot-arm left"></div>
+                        <div class="robot-arm right"></div>
+                        <div class="robot-leg left"></div>
+                        <div class="robot-leg right"></div>
+                    </div>
+                    <div class="floating-element top-left">
+                        <div class="float-icon">👁️</div>
+                        <div class="float-label">Perception</div>
+                        <div class="float-value">Active</div>
+                    </div>
+                    <div class="floating-element top-right">
+                        <div class="float-icon">🧠</div>
+                        <div class="float-label">AI Core</div>
+                        <div class="float-value">Online</div>
+                    </div>
+                    <div class="floating-element bottom-left">
+                        <div class="float-icon">🛡️</div>
+                        <div class="float-label">Safety</div>
+                        <div class="float-value">100%</div>
+                    </div>
+                    <div class="floating-element bottom-right">
+                        <div class="float-icon">⚡</div>
+                        <div class="float-label">Latency</div>
+                        <div class="float-value">&lt;10ms</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="problem-section" id="problem">
+        <div class="section-header">
+            <span class="section-badge">The Problem</span>
+            <h2>$150B Hardware Problem Without Software</h2>
+            <p>100+ companies are building humanoid robots. But without standardized software, each deployment is a costly, custom nightmare.</p>
+        </div>
+        <div class="problem-grid">
+            <div class="problem-card">
+                <div class="problem-icon">🏭</div>
+                <h3>The Integration Nightmare</h3>
+                <p>Each humanoid deployment requires 6-18 months of custom software development and $300K/year robotics engineers.</p>
+                <div class="problem-stat">$100-300K</div>
+                <p class="stat-context">Per deployment integration cost</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">⚠️</div>
+                <h3>Safety & Compliance Gap</h3>
+                <p>No humanoid-specific safety standards. Insurance companies refusing coverage. One accident could set the industry back years.</p>
+                <div class="problem-stat">0</div>
+                <p class="stat-context">OSHA humanoid standards exist</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">💸</div>
+                <h3>Economics Don't Work</h3>
+                <p>Hardware + integration + maintenance = $250-450K Year 1 cost. ROI timeline of 3-5 years is too long for most enterprises.</p>
+                <div class="problem-stat">3-5 yrs</div>
+                <p class="stat-context">Current ROI timeline</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">🔄</div>
+                <h3>No Transferable Skills</h3>
+                <p>Every facility is a snowflake. Skills don't transfer between platforms. Enterprises are locked into single vendors.</p>
+                <div class="problem-stat">100+</div>
+                <p class="stat-context">Fragmented robot vendors</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="solution-section" id="solution">
+        <div class="section-header">
+            <span class="section-badge">The Solution</span>
+            <h2>Full-Stack Humanoid Intelligence</h2>
+            <p>Not a robot company. The company that makes every robot company successful.</p>
+        </div>
+        <div class="solution-content">
+            <div class="solution-features">
+                <div class="feature-item">
+                    <div class="feature-icon">👁️</div>
+                    <div class="feature-content">
+                        <h4>Universal Perception Layer</h4>
+                        <p>Multi-modal sensor fusion, real-time 3D scene understanding, human pose estimation, and dynamic obstacle avoidance.</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🦾</div>
+                    <div class="feature-content">
+                        <h4>Foundation Manipulation Models</h4>
+                        <p>Pre-trained on 10M+ trajectories. Transfer learning across 100+ object categories. 95%+ sim-to-real success rate.</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🤝</div>
+                    <div class="feature-content">
+                        <h4>Natural Human Collaboration</h4>
+                        <p>Voice + gesture commands, predictive safety zones, transparent action explanation, graceful failure modes.</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🎛️</div>
+                    <div class="feature-content">
+                        <h4>Enterprise Orchestration</h4>
+                        <p>Fleet management for 1000+ robots, predictive maintenance, WMS/ERP/MES integrations out of the box.</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🛡️</div>
+                    <div class="feature-content">
+                        <h4>Safety & Compliance Engine</h4>
+                        <p>ISO 10218/13482 compliance, force limiting, continuous monitoring, insurance-grade risk scoring.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="architecture-visual">
+                <div class="arch-diagram">
+                    <div class="arch-layer">
+                        <div class="arch-layer-title">☁️ RobotOS Cloud Platform</div>
+                        <div class="arch-layer-content">
+                            <span class="arch-chip">Fleet Manager</span>
+                            <span class="arch-chip">Model Registry</span>
+                            <span class="arch-chip">Telemetry</span>
+                            <span class="arch-chip">Compliance</span>
+                        </div>
+                    </div>
+                    <div class="arch-layer">
+                        <div class="arch-layer-title">⚡ Edge Runtime (Per Robot)</div>
+                        <div class="arch-layer-content">
+                            <span class="arch-chip">Perception</span>
+                            <span class="arch-chip">Planning</span>
+                            <span class="arch-chip">Manipulation</span>
+                            <span class="arch-chip">Safety Guardian</span>
+                        </div>
+                    </div>
+                    <div class="arch-layer">
+                        <div class="arch-layer-title">🔌 Hardware Abstraction Layer</div>
+                        <div class="arch-layer-content">
+                            <span class="arch-chip">Tesla Optimus</span>
+                            <span class="arch-chip">Figure</span>
+                            <span class="arch-chip">Boston Dynamics</span>
+                            <span class="arch-chip">Unitree</span>
+                            <span class="arch-chip">Agility</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Market Section -->
+    <section class="market-section" id="market">
+        <div class="section-header">
+            <span class="section-badge">Market Opportunity</span>
+            <h2>The $180B Humanoid Software Market</h2>
+            <p>Goldman Sachs projects humanoid robots will be a $154B market by 2035. We're building the software layer.</p>
+        </div>
+        <div class="market-content">
+            <div class="market-chart">
+                <div class="chart-title">Humanoid Robot Software Market Growth</div>
+                <div class="chart-bars">
+                    <div class="chart-bar-group">
+                        <div class="chart-bar" style="height: 30px;">
+                            <span class="chart-bar-label">$270M</span>
+                        </div>
+                        <span class="chart-year">2026</span>
+                    </div>
+                    <div class="chart-bar-group">
+                        <div class="chart-bar" style="height: 80px;">
+                            <span class="chart-bar-label">$2.2B</span>
+                        </div>
+                        <span class="chart-year">2028</span>
+                    </div>
+                    <div class="chart-bar-group">
+                        <div class="chart-bar" style="height: 150px;">
+                            <span class="chart-bar-label">$12B</span>
+                        </div>
+                        <span class="chart-year">2030</span>
+                    </div>
+                    <div class="chart-bar-group">
+                        <div class="chart-bar" style="height: 250px;">
+                            <span class="chart-bar-label">$68B</span>
+                        </div>
+                        <span class="chart-year">2033</span>
+                    </div>
+                    <div class="chart-bar-group">
+                        <div class="chart-bar" style="height: 300px;">
+                            <span class="chart-bar-label">$180B</span>
+                        </div>
+                        <span class="chart-year">2035</span>
+                    </div>
+                </div>
+            </div>
+            <div class="market-stats">
+                <div class="market-stat">
+                    <div class="market-stat-value">1M+</div>
+                    <div class="market-stat-label">Humanoid robots by 2030</div>
+                </div>
+                <div class="market-stat">
+                    <div class="market-stat-value">40%</div>
+                    <div class="market-stat-label">Target platform share</div>
+                </div>
+                <div class="market-stat">
+                    <div class="market-stat-value">$36K</div>
+                    <div class="market-stat-label">Annual revenue per robot</div>
+                </div>
+                <div class="market-stat">
+                    <div class="market-stat-value">85%</div>
+                    <div class="market-stat-label">Gross margin (software)</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Business Model Section -->
+    <section class="business-section">
+        <div class="section-header">
+            <span class="section-badge">Business Model</span>
+            <h2>Platform Licensing + Services</h2>
+            <p>Recurring revenue per robot deployed, plus implementation services.</p>
+        </div>
+        <div class="pricing-tiers">
+            <div class="pricing-card">
+                <div class="pricing-tier">Starter</div>
+                <div class="pricing-price">$500</div>
+                <div class="pricing-unit">per robot / month</div>
+                <ul class="pricing-features">
+                    <li>Basic perception stack</li>
+                    <li>Core manipulation library</li>
+                    <li>Cloud dashboard</li>
+                    <li>Community support</li>
+                    <li>Standard safety features</li>
+                </ul>
+                <a href="#contact" class="btn btn-outline" style="width: 100%;">Get Started</a>
+            </div>
+            <div class="pricing-card featured">
+                <div class="pricing-tier">Professional</div>
+                <div class="pricing-price">$1,500</div>
+                <div class="pricing-unit">per robot / month</div>
+                <ul class="pricing-features">
+                    <li>Advanced AI models</li>
+                    <li>Fleet management (100 robots)</li>
+                    <li>Priority support</li>
+                    <li>Custom skill fine-tuning</li>
+                    <li>Integration APIs</li>
+                </ul>
+                <a href="#contact" class="btn btn-primary" style="width: 100%;">Contact Sales</a>
+            </div>
+            <div class="pricing-card">
+                <div class="pricing-tier">Enterprise</div>
+                <div class="pricing-price">$3,000</div>
+                <div class="pricing-unit">per robot / month</div>
+                <ul class="pricing-features">
+                    <li>Custom model development</li>
+                    <li>Unlimited fleet size</li>
+                    <li>On-premise deployment</li>
+                    <li>99.9% SLA guarantee</li>
+                    <li>Dedicated success manager</li>
+                </ul>
+                <a href="#contact" class="btn btn-outline" style="width: 100%;">Contact Sales</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Traction Section -->
+    <section class="traction-section">
+        <div class="section-header">
+            <span class="section-badge">Traction</span>
+            <h2>Building the Foundation</h2>
+            <p>World-class team with working technology and enterprise interest.</p>
+        </div>
+        <div class="traction-grid">
+            <div class="milestone-card">
+                <div class="milestone-header">
+                    <div class="milestone-icon">🎯</div>
+                    <div class="milestone-title">Technical Milestones</div>
+                </div>
+                <ul class="milestone-list">
+                    <li><span class="milestone-check">✓</span> Universal HAL supporting 5 platforms</li>
+                    <li><span class="milestone-check">✓</span> 500+ manipulation primitives</li>
+                    <li><span class="milestone-check">✓</span> Real-time safety (&lt;10ms response)</li>
+                    <li><span class="milestone-check">✓</span> First pilot deployment live</li>
+                </ul>
+            </div>
+            <div class="milestone-card">
+                <div class="milestone-header">
+                    <div class="milestone-icon">🤝</div>
+                    <div class="milestone-title">Partnerships</div>
+                </div>
+                <ul class="milestone-list">
+                    <li><span class="milestone-check">✓</span> NVIDIA Isaac integration</li>
+                    <li><span class="milestone-check">✓</span> 3 Fortune 500 LOIs</li>
+                    <li><span class="milestone-check">✓</span> Munich Re safety partnership</li>
+                    <li><span class="milestone-check">✓</span> Accenture SI partnership</li>
+                </ul>
+            </div>
+            <div class="milestone-card">
+                <div class="milestone-header">
+                    <div class="milestone-icon">📈</div>
+                    <div class="milestone-title">Revenue Projections</div>
+                </div>
+                <ul class="milestone-list">
+                    <li><span class="milestone-check">→</span> 2026: $12M (500 robots)</li>
+                    <li><span class="milestone-check">→</span> 2027: $72M (3K robots)</li>
+                    <li><span class="milestone-check">→</span> 2028: $288M (12K robots)</li>
+                    <li><span class="milestone-check">→</span> 2030: $1.92B (80K robots)</li>
+                </ul>
+            </div>
+            <div class="milestone-card">
+                <div class="milestone-header">
+                    <div class="milestone-icon">💰</div>
+                    <div class="milestone-title">The Ask</div>
+                </div>
+                <ul class="milestone-list">
+                    <li><span class="milestone-check">→</span> Raising $30M Series A</li>
+                    <li><span class="milestone-check">→</span> 55% Engineering</li>
+                    <li><span class="milestone-check">→</span> 25% Go-to-Market</li>
+                    <li><span class="milestone-check">→</span> 20% Ops + G&A</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="team-section" id="team">
+        <div class="section-header">
+            <span class="section-badge">The Team</span>
+            <h2>Built by Robotics Veterans</h2>
+            <p>Founders from Tesla Optimus, Boston Dynamics, Google DeepMind, and Amazon Robotics.</p>
+        </div>
+        <div class="team-grid">
+            <div class="team-card">
+                <div class="team-avatar">👨‍💼</div>
+                <div class="team-name">CEO</div>
+                <div class="team-role">Chief Executive Officer</div>
+                <div class="team-background">Former Director of Autonomy, Tesla Optimus • PhD Robotics, CMU</div>
+            </div>
+            <div class="team-card">
+                <div class="team-avatar">👨‍🔬</div>
+                <div class="team-name">CTO</div>
+                <div class="team-role">Chief Technology Officer</div>
+                <div class="team-background">Former Principal Engineer, Boston Dynamics Atlas • 30+ robotics papers</div>
+            </div>
+            <div class="team-card">
+                <div class="team-avatar">👩‍💻</div>
+                <div class="team-name">VP Engineering</div>
+                <div class="team-role">Engineering Leadership</div>
+                <div class="team-background">Former Tech Lead, Google DeepMind Robotics • Built RT-2 models</div>
+            </div>
+            <div class="team-card">
+                <div class="team-avatar">👨‍🚀</div>
+                <div class="team-name">VP Sales</div>
+                <div class="team-role">Go-to-Market</div>
+                <div class="team-background">Former Enterprise Sales Director, UiPath • $10M → $200M ARR growth</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section" id="contact">
+        <div class="cta-content">
+            <h2>Join the <span>Robot Revolution</span></h2>
+            <p>We're building the operating system for the humanoid age. Whether you're an enterprise, investor, or robot manufacturer — let's talk.</p>
+            <div class="cta-buttons">
+                <a href="mailto:founders@robotos.ai" class="btn btn-primary">Schedule a Demo →</a>
+                <a href="mailto:investors@robotos.ai" class="btn btn-outline">Investor Deck</a>
+            </div>
+            <p class="cta-contact">
+                📧 <a href="mailto:founders@robotos.ai">founders@robotos.ai</a> • 🌐 robotos.ai
+            </p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">🤖 RobotOS</div>
+            <div class="footer-links">
+                <a href="#problem">Problem</a>
+                <a href="#solution">Solution</a>
+                <a href="#market">Market</a>
+                <a href="#team">Team</a>
+                <a href="#contact">Contact</a>
+            </div>
+            <div class="footer-copyright">© 2026 RobotOS. Intelligence for Every Robot.</div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth reveal animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.problem-card, .feature-item, .pricing-card, .milestone-card, .team-card, .market-stat').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'all 0.6s ease';
+            observer.observe(el);
+        });
+
+        // Navbar background on scroll
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 50) {
+                nav.style.background = 'rgba(5, 5, 8, 0.95)';
+            } else {
+                nav.style.background = 'rgba(5, 5, 8, 0.8)';
+            }
+        });
+    </script>
+</body>
+</html>
