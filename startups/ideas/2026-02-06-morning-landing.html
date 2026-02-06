@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BioForge — Autonomous Biomaterials Discovery</title>
+    <meta name="description" content="The AI lab designing sustainable materials that replace plastics, concrete, and textiles. From years to weeks.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --forest: #1a4d2e;
+            --emerald: #2d8a4e;
+            --lime: #4ade80;
+            --mint: #bbf7d0;
+            --cream: #f8faf5;
+            --bark: #2c1810;
+            --moss: #3d5a45;
+            --gold: #fbbf24;
+            --white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--cream);
+            color: var(--bark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, h5 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            line-height: 1.2;
+        }
+
+        /* Animated organic background */
+        .hero {
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--forest) 0%, var(--emerald) 50%, var(--moss) 100%);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(77, 173, 128, 0.4) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(187, 247, 208, 0.2) 0%, transparent 40%),
+                radial-gradient(circle at 40% 40%, rgba(45, 138, 78, 0.3) 0%, transparent 60%);
+            animation: organicPulse 15s ease-in-out infinite;
+        }
+
+        @keyframes organicPulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.05); }
+        }
+
+        /* Floating molecules */
+        .molecule {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .molecule:nth-child(1) { top: 10%; left: 10%; animation-delay: 0s; }
+        .molecule:nth-child(2) { top: 60%; left: 80%; animation-delay: -5s; width: 150px; height: 150px; }
+        .molecule:nth-child(3) { top: 80%; left: 20%; animation-delay: -10s; width: 100px; height: 100px; }
+        .molecule:nth-child(4) { top: 20%; left: 70%; animation-delay: -15s; width: 120px; height: 120px; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-20px) rotate(90deg); }
+            50% { transform: translateY(0) rotate(180deg); }
+            75% { transform: translateY(20px) rotate(270deg); }
+        }
+
+        /* Molecular bonds animation */
+        .bonds {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.1;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            animation: scrollBonds 30s linear infinite;
+        }
+
+        @keyframes scrollBonds {
+            0% { background-position: 0 0; }
+            100% { background-position: 60px 60px; }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 2rem;
+            max-width: 1000px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            color: var(--mint);
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .badge::before {
+            content: '🧬';
+            font-size: 1rem;
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.8s ease-out 0.2s backwards;
+            letter-spacing: -2px;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(135deg, var(--lime) 0%, var(--mint) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.25rem, 3vw, 1.75rem);
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 700px;
+            margin: 0 auto 2.5rem;
+            font-weight: 300;
+            animation: fadeInUp 0.8s ease-out 0.4s backwards;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 4rem;
+            flex-wrap: wrap;
+            margin-bottom: 3rem;
+            animation: fadeInUp 0.8s ease-out 0.6s backwards;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--lime);
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 0.5rem;
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.8s ease-out 0.8s backwards;
+        }
+
+        .btn {
+            padding: 16px 36px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--white);
+            color: var(--forest);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--white);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Scroll indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255, 255, 255, 0.5);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(10px); }
+        }
+
+        /* Problem Section */
+        .problem {
+            padding: 8rem 2rem;
+            background: var(--white);
+            position: relative;
+        }
+
+        .section-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-label {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--emerald);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            color: var(--bark);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .problem-card {
+            background: linear-gradient(135deg, var(--cream) 0%, var(--white) 100%);
+            border-radius: 20px;
+            padding: 2.5rem;
+            border: 1px solid rgba(45, 138, 78, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(26, 77, 46, 0.1);
+            border-color: var(--emerald);
+        }
+
+        .problem-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, var(--emerald) 0%, var(--forest) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .problem-card h3 {
+            font-size: 1.5rem;
+            color: var(--bark);
+            margin-bottom: 1rem;
+        }
+
+        .problem-card p {
+            color: var(--moss);
+            font-size: 1rem;
+        }
+
+        .problem-stat {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(45, 138, 78, 0.1);
+        }
+
+        .problem-stat-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--emerald);
+        }
+
+        .problem-stat-label {
+            font-size: 0.875rem;
+            color: var(--moss);
+        }
+
+        /* Solution Section */
+        .solution {
+            padding: 8rem 2rem;
+            background: linear-gradient(180deg, var(--cream) 0%, var(--white) 100%);
+        }
+
+        .solution-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        @media (max-width: 900px) {
+            .solution-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .solution-text h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            color: var(--bark);
+            margin-bottom: 1.5rem;
+        }
+
+        .solution-text p {
+            font-size: 1.125rem;
+            color: var(--moss);
+            margin-bottom: 2rem;
+        }
+
+        .feature-list {
+            list-style: none;
+        }
+
+        .feature-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, var(--lime) 0%, var(--emerald) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            color: var(--white);
+            font-size: 1rem;
+        }
+
+        .feature-content h4 {
+            font-size: 1.125rem;
+            color: var(--bark);
+            margin-bottom: 0.25rem;
+        }
+
+        .feature-content p {
+            font-size: 0.95rem;
+            color: var(--moss);
+            margin: 0;
+        }
+
+        /* Platform visualization */
+        .platform-visual {
+            background: var(--bark);
+            border-radius: 24px;
+            padding: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .platform-visual::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 30% 20%, rgba(74, 222, 128, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 70% 80%, rgba(45, 138, 78, 0.1) 0%, transparent 40%);
+        }
+
+        .platform-layers {
+            position: relative;
+            z-index: 1;
+        }
+
+        .layer {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .layer:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--lime);
+        }
+
+        .layer-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 0.75rem;
+        }
+
+        .layer-icon {
+            font-size: 1.5rem;
+        }
+
+        .layer-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--lime);
+        }
+
+        .layer-desc {
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .layer-connector {
+            width: 2px;
+            height: 20px;
+            background: linear-gradient(to bottom, var(--lime), transparent);
+            margin: 0 auto;
+        }
+
+        /* Market Section */
+        .market {
+            padding: 8rem 2rem;
+            background: var(--forest);
+            color: var(--white);
+        }
+
+        .market-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+
+        .market-card {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .market-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: scale(1.05);
+        }
+
+        .market-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .market-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--lime);
+        }
+
+        .market-label {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-top: 0.5rem;
+        }
+
+        .tam-banner {
+            margin-top: 4rem;
+            text-align: center;
+            padding: 3rem;
+            background: linear-gradient(135deg, rgba(74, 222, 128, 0.2) 0%, rgba(45, 138, 78, 0.2) 100%);
+            border-radius: 24px;
+            border: 1px solid rgba(74, 222, 128, 0.3);
+        }
+
+        .tam-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--lime) 0%, var(--mint) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .tam-label {
+            font-size: 1.25rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Why Now Section */
+        .why-now {
+            padding: 8rem 2rem;
+            background: var(--white);
+        }
+
+        .timeline {
+            max-width: 800px;
+            margin: 4rem auto 0;
+            position: relative;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 24px;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(to bottom, var(--lime), var(--emerald), var(--forest));
+            border-radius: 2px;
+        }
+
+        .timeline-item {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .timeline-marker {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: var(--white);
+            border: 4px solid var(--emerald);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+            z-index: 1;
+        }
+
+        .timeline-content {
+            background: var(--cream);
+            border-radius: 16px;
+            padding: 2rem;
+            flex: 1;
+        }
+
+        .timeline-content h3 {
+            font-size: 1.25rem;
+            color: var(--bark);
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-content p {
+            color: var(--moss);
+            font-size: 1rem;
+        }
+
+        /* Business Model */
+        .business-model {
+            padding: 8rem 2rem;
+            background: var(--cream);
+        }
+
+        .revenue-streams {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+
+        @media (max-width: 900px) {
+            .revenue-streams {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .revenue-card {
+            background: var(--white);
+            border-radius: 24px;
+            padding: 2.5rem;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .revenue-card.featured {
+            border-color: var(--emerald);
+            transform: scale(1.05);
+        }
+
+        .revenue-card.featured::before {
+            content: 'PRIMARY';
+            position: absolute;
+            top: 16px;
+            right: -32px;
+            background: var(--emerald);
+            color: var(--white);
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 4px 40px;
+            transform: rotate(45deg);
+        }
+
+        .revenue-card:hover {
+            box-shadow: 0 20px 40px rgba(26, 77, 46, 0.15);
+        }
+
+        .revenue-percentage {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 4rem;
+            font-weight: 700;
+            color: var(--emerald);
+            line-height: 1;
+        }
+
+        .revenue-title {
+            font-size: 1.5rem;
+            color: var(--bark);
+            margin: 1rem 0;
+        }
+
+        .revenue-desc {
+            color: var(--moss);
+            font-size: 0.95rem;
+        }
+
+        /* Projections */
+        .projections {
+            padding: 8rem 2rem;
+            background: linear-gradient(135deg, var(--bark) 0%, #1a1a2e 100%);
+            color: var(--white);
+        }
+
+        .projections .section-title {
+            color: var(--white);
+        }
+
+        .projection-chart {
+            max-width: 900px;
+            margin: 4rem auto 0;
+        }
+
+        .chart-bars {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            height: 300px;
+            gap: 1rem;
+            padding-bottom: 3rem;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .chart-bar {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .bar {
+            width: 100%;
+            max-width: 80px;
+            background: linear-gradient(to top, var(--emerald), var(--lime));
+            border-radius: 8px 8px 0 0;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .chart-bar:nth-child(1) .bar { height: 30px; }
+        .chart-bar:nth-child(2) .bar { height: 60px; }
+        .chart-bar:nth-child(3) .bar { height: 120px; }
+        .chart-bar:nth-child(4) .bar { height: 200px; }
+        .chart-bar:nth-child(5) .bar { height: 280px; }
+
+        .bar-value {
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            color: var(--lime);
+            white-space: nowrap;
+        }
+
+        .bar-label {
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 8rem 2rem;
+            background: linear-gradient(135deg, var(--emerald) 0%, var(--forest) 100%);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+            animation: rotate 30s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-section h2 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            color: var(--white);
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-section p {
+            font-size: 1.25rem;
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 600px;
+            margin: 0 auto 2.5rem;
+        }
+
+        .cta-section .btn-primary {
+            font-size: 1.125rem;
+            padding: 20px 48px;
+        }
+
+        .funding-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-size: 1rem;
+            color: var(--mint);
+            margin-top: 2rem;
+        }
+
+        /* Footer */
+        footer {
+            padding: 3rem 2rem;
+            background: var(--bark);
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--lime);
+            margin-bottom: 1rem;
+        }
+
+        .footer-text {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.875rem;
+        }
+
+        .footer-brand {
+            margin-top: 1rem;
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-stats {
+                gap: 2rem;
+            }
+            
+            .stat-value {
+                font-size: 2rem;
+            }
+
+            .market-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .tam-value {
+                font-size: 3rem;
+            }
+
+            .revenue-card.featured {
+                transform: none;
+            }
+
+            .timeline::before {
+                left: 20px;
+            }
+
+            .timeline-marker {
+                width: 44px;
+                height: 44px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="molecule"></div>
+        <div class="molecule"></div>
+        <div class="molecule"></div>
+        <div class="molecule"></div>
+        <div class="bonds"></div>
+        
+        <div class="hero-content">
+            <div class="badge">Autonomous Biomaterials Discovery</div>
+            <h1>Bio<span>Forge</span></h1>
+            <p class="hero-subtitle">The AI lab designing sustainable materials that replace plastics, concrete, and textiles. From years to weeks.</p>
+            
+            <div class="hero-stats">
+                <div class="stat">
+                    <div class="stat-value">$5.3T</div>
+                    <div class="stat-label">Materials Market</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">100x</div>
+                    <div class="stat-label">Faster Discovery</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">82%</div>
+                    <div class="stat-label">Gross Margin</div>
+                </div>
+            </div>
+            
+            <div class="cta-group">
+                <a href="#solution" class="btn btn-primary">Explore the Platform →</a>
+                <a href="#market" class="btn btn-secondary">View Market Opportunity</a>
+            </div>
+        </div>
+        
+        <div class="scroll-indicator">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 5v14M5 12l7 7 7-7"/>
+            </svg>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="problem">
+        <div class="section-container">
+            <div class="section-header">
+                <div class="section-label">The Problem</div>
+                <h2 class="section-title">The $5 Trillion Materials Crisis</h2>
+            </div>
+            
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="problem-icon">⚠️</div>
+                    <h3>Regulatory Tsunami</h3>
+                    <p>EU's PPWR, CSRD, SEC climate rules, and California's SB 253 create non-negotiable 2025-2030 compliance deadlines.</p>
+                    <div class="problem-stat">
+                        <div class="problem-stat-value">65%</div>
+                        <div class="problem-stat-label">Packaging recyclability mandated by 2025</div>
+                    </div>
+                </div>
+                
+                <div class="problem-card">
+                    <div class="problem-icon">⏰</div>
+                    <h3>Innovation Bottleneck</h3>
+                    <p>Traditional materials R&D takes 15-20 years and $1B+ per material. 99% of promising compounds never reach production.</p>
+                    <div class="problem-stat">
+                        <div class="problem-stat-value">15-20yr</div>
+                        <div class="problem-stat-label">Average time to market</div>
+                    </div>
+                </div>
+                
+                <div class="problem-card">
+                    <div class="problem-icon">🌍</div>
+                    <h3>Environmental Emergency</h3>
+                    <p>400M tons of plastic produced annually, 8M tons ending up in oceans. Concrete alone produces 8% of global CO2.</p>
+                    <div class="problem-stat">
+                        <div class="problem-stat-value">8M tons</div>
+                        <div class="problem-stat-label">Plastic in oceans yearly</div>
+                    </div>
+                </div>
+                
+                <div class="problem-card">
+                    <div class="problem-icon">💰</div>
+                    <h3>Stranded R&D Spend</h3>
+                    <p>$1.2T spent annually on unsustainable materials that will face regulatory obsolescence within the decade.</p>
+                    <div class="problem-stat">
+                        <div class="problem-stat-value">$1.2T</div>
+                        <div class="problem-stat-label">Annual spend at risk</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="solution" id="solution">
+        <div class="section-container">
+            <div class="solution-content">
+                <div class="solution-text">
+                    <div class="section-label">The Solution</div>
+                    <h2>Compress 20 Years of R&D Into Weeks</h2>
+                    <p>BioForge combines generative AI with autonomous laboratory systems to discover, design, and validate novel biomaterials at unprecedented speed.</p>
+                    
+                    <ul class="feature-list">
+                        <li>
+                            <div class="feature-icon">🧬</div>
+                            <div class="feature-content">
+                                <h4>Molecular Genesis Engine</h4>
+                                <p>Input requirements, get ranked candidate molecules with synthesis pathways instantly.</p>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="feature-icon">🔬</div>
+                            <div class="feature-content">
+                                <h4>Autonomous Experimentation</h4>
+                                <p>Cloud lab integration runs 10,000+ experiments/month with real-time learning.</p>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="feature-icon">🏭</div>
+                            <div class="feature-content">
+                                <h4>Scale-Up Intelligence</h4>
+                                <p>Predict manufacturing challenges before first pilot batch ships.</p>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="feature-icon">📋</div>
+                            <div class="feature-content">
+                                <h4>Compliance Autopilot</h4>
+                                <p>Auto-generate LCA documentation for CSRD, PPWR, FDA, and EPA.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="platform-visual">
+                    <div class="platform-layers">
+                        <div class="layer">
+                            <div class="layer-header">
+                                <span class="layer-icon">🧬</span>
+                                <span class="layer-title">Molecular Genesis</span>
+                            </div>
+                            <div class="layer-desc">Generate novel material candidates from natural language requirements</div>
+                        </div>
+                        <div class="layer-connector"></div>
+                        <div class="layer">
+                            <div class="layer-header">
+                                <span class="layer-icon">🔮</span>
+                                <span class="layer-title">Property Predictor</span>
+                            </div>
+                            <div class="layer-desc">Predict strength, flexibility, degradation, cost at scale</div>
+                        </div>
+                        <div class="layer-connector"></div>
+                        <div class="layer">
+                            <div class="layer-header">
+                                <span class="layer-icon">🏭</span>
+                                <span class="layer-title">Scale Simulator</span>
+                            </div>
+                            <div class="layer-desc">Model manufacturing viability and supply chain integration</div>
+                        </div>
+                        <div class="layer-connector"></div>
+                        <div class="layer">
+                            <div class="layer-header">
+                                <span class="layer-icon">🌍</span>
+                                <span class="layer-title">Lifecycle Analyzer</span>
+                            </div>
+                            <div class="layer-desc">Full LCA with regulatory compliance scoring</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Market Section -->
+    <section class="market" id="market">
+        <div class="section-container">
+            <div class="section-header">
+                <div class="section-label" style="color: var(--lime);">Market Opportunity</div>
+                <h2 class="section-title" style="color: var(--white);">Every Industry Needs New Materials</h2>
+            </div>
+            
+            <div class="market-grid">
+                <div class="market-card">
+                    <div class="market-icon">📦</div>
+                    <div class="market-value">$1.2T</div>
+                    <div class="market-label">Packaging Materials</div>
+                </div>
+                <div class="market-card">
+                    <div class="market-icon">🏗️</div>
+                    <div class="market-value">$1.5T</div>
+                    <div class="market-label">Construction</div>
+                </div>
+                <div class="market-card">
+                    <div class="market-icon">👕</div>
+                    <div class="market-value">$1.7T</div>
+                    <div class="market-label">Textiles</div>
+                </div>
+                <div class="market-card">
+                    <div class="market-icon">💻</div>
+                    <div class="market-value">$500B</div>
+                    <div class="market-label">Electronics</div>
+                </div>
+                <div class="market-card">
+                    <div class="market-icon">🚗</div>
+                    <div class="market-value">$400B</div>
+                    <div class="market-label">Automotive</div>
+                </div>
+            </div>
+            
+            <div class="tam-banner">
+                <div class="tam-value">$5.3T</div>
+                <div class="tam-label">Total Addressable Market</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Now Section -->
+    <section class="why-now">
+        <div class="section-container">
+            <div class="section-header">
+                <div class="section-label">Why Now</div>
+                <h2 class="section-title">The Perfect Storm for Materials Innovation</h2>
+            </div>
+            
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-marker">🤖</div>
+                    <div class="timeline-content">
+                        <h3>AI Maturation</h3>
+                        <p>Large language models can now reason about molecular structures, enabling generative materials design that was impossible even 2 years ago.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-marker">🔬</div>
+                    <div class="timeline-content">
+                        <h3>Robotics Advancement</h3>
+                        <p>Cloud laboratories enable 100x experiment throughput with automated synthesis and characterization at fraction of the cost.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-marker">📜</div>
+                    <div class="timeline-content">
+                        <h3>Policy Forcing Function</h3>
+                        <p>2025-2030 compliance deadlines are non-negotiable. Companies must find sustainable alternatives or face massive penalties.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-marker">💵</div>
+                    <div class="timeline-content">
+                        <h3>Economics Flip</h3>
+                        <p>Oil price volatility and carbon pricing make bio-based materials cost-competitive with petroleum-derived alternatives.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Business Model Section -->
+    <section class="business-model">
+        <div class="section-container">
+            <div class="section-header">
+                <div class="section-label">Business Model</div>
+                <h2 class="section-title">Three Revenue Streams, One Platform</h2>
+            </div>
+            
+            <div class="revenue-streams">
+                <div class="revenue-card featured">
+                    <div class="revenue-percentage">70%</div>
+                    <h3 class="revenue-title">Platform Subscription</h3>
+                    <p class="revenue-desc">$250K to $5M/year tiers based on projects, simulations, and lab integration depth.</p>
+                </div>
+                
+                <div class="revenue-card">
+                    <div class="revenue-percentage">20%</div>
+                    <h3 class="revenue-title">Success Fees</h3>
+                    <p class="revenue-desc">2-5% of value captured from successful material launches. Aligned incentives.</p>
+                </div>
+                
+                <div class="revenue-card">
+                    <div class="revenue-percentage">10%</div>
+                    <h3 class="revenue-title">Material Licensing</h3>
+                    <p class="revenue-desc">License BioForge-discovered materials to non-competing industries. Passive IP revenue.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projections Section -->
+    <section class="projections">
+        <div class="section-container">
+            <div class="section-header">
+                <div class="section-label" style="color: var(--lime);">Financial Projections</div>
+                <h2 class="section-title">Path to $500M ARR</h2>
+            </div>
+            
+            <div class="projection-chart">
+                <div class="chart-bars">
+                    <div class="chart-bar">
+                        <div class="bar">
+                            <div class="bar-value">$5M</div>
+                        </div>
+                        <div class="bar-label">Year 1</div>
+                    </div>
+                    <div class="chart-bar">
+                        <div class="bar">
+                            <div class="bar-value">$25M</div>
+                        </div>
+                        <div class="bar-label">Year 2</div>
+                    </div>
+                    <div class="chart-bar">
+                        <div class="bar">
+                            <div class="bar-value">$80M</div>
+                        </div>
+                        <div class="bar-label">Year 3</div>
+                    </div>
+                    <div class="chart-bar">
+                        <div class="bar">
+                            <div class="bar-value">$200M</div>
+                        </div>
+                        <div class="bar-label">Year 4</div>
+                    </div>
+                    <div class="chart-bar">
+                        <div class="bar">
+                            <div class="bar-value">$500M</div>
+                        </div>
+                        <div class="bar-label">Year 5</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="cta-content">
+            <h2>Build the Future of Materials</h2>
+            <p>We're raising an $8M seed round to build the platform that will replace plastics, decarbonize construction, and transform textiles.</p>
+            <a href="mailto:pradhith@example.com?subject=BioForge Investment Inquiry" class="btn btn-primary">Get the Full Deck →</a>
+            <div class="funding-badge">
+                <span>🎯</span>
+                <span>Targeting: Lux Capital, DCVC, Khosla Ventures</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-logo">🧬 BioForge</div>
+        <p class="footer-text">Autonomous Biomaterials Discovery Platform</p>
+        <p class="footer-brand">Built with conviction by The Godfather 🎩 • February 6, 2026</p>
+    </footer>
+</body>
+</html>
