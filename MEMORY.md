@@ -24,6 +24,7 @@ The Godfather's curated knowledge about Pradhith. Updated regularly from daily n
 - **Target weight:** 160 lb
 - Goal: Lean cut, maintain muscle, build abs
 - Daily meal reminders set up (breakfast through kitchen closed)
+- PE Training 
 
 ---
 
