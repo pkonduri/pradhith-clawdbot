@@ -23,9 +23,7 @@ The Godfather's curated knowledge about Pradhith. Updated regularly from daily n
 - **Current weight:** 165 lb
 - **Target weight:** 160 lb
 - Goal: Lean cut, maintain muscle, build abs
-- PE training (edging/start-stop) to build stamina — tracking duration
 - Daily meal reminders set up (breakfast through kitchen closed)
-- Kegel routine: AM pulses + holds, PM long holds + reverse kegels
 
 ---
 
