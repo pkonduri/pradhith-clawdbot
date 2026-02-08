@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeArmy — Autonomous Software Engineering at Scale</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --army-green: #22c55e;
+            --army-green-dark: #16a34a;
+            --army-green-glow: rgba(34, 197, 94, 0.4);
+            --tactical-black: #0a0f0a;
+            --tactical-dark: #111811;
+            --tactical-gray: #1a231a;
+            --command-gold: #facc15;
+            --danger-red: #ef4444;
+            --steel: #94a3b8;
+            --white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--tactical-black);
+            color: var(--white);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Tactical Grid Background */
+        .grid-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(34, 197, 94, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(34, 197, 94, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Scanning Line Effect */
+        .scan-line {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--army-green), transparent);
+            animation: scan 4s linear infinite;
+            opacity: 0.5;
+            z-index: 1000;
+            pointer-events: none;
+        }
+
+        @keyframes scan {
+            0% { top: 0; }
+            100% { top: 100%; }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1rem 2rem;
+            background: rgba(10, 15, 10, 0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(34, 197, 94, 0.2);
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 800;
+            font-size: 1.5rem;
+            color: var(--white);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--army-green), var(--army-green-dark));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--steel);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .nav-links a:hover {
+            color: var(--army-green);
+        }
+
+        .cta-button {
+            background: var(--army-green);
+            color: var(--tactical-black);
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 0.95rem;
+        }
+
+        .cta-button:hover {
+            background: var(--army-green-dark);
+            box-shadow: 0 0 30px var(--army-green-glow);
+            transform: translateY(-2px);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 2rem 4rem;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 100px;
+            font-size: 0.875rem;
+            color: var(--army-green);
+            margin-bottom: 2rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .badge::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--army-green);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 900;
+            line-height: 1.05;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.03em;
+        }
+
+        .hero h1 .gradient {
+            background: linear-gradient(135deg, var(--army-green) 0%, var(--command-gold) 50%, var(--army-green) 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradient-shift 3s linear infinite;
+        }
+
+        @keyframes gradient-shift {
+            0% { background-position: 0% center; }
+            100% { background-position: 200% center; }
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.25rem, 3vw, 1.75rem);
+            color: var(--steel);
+            max-width: 800px;
+            margin: 0 auto 3rem;
+            font-weight: 400;
+            line-height: 1.5;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 4rem;
+        }
+
+        .primary-cta {
+            background: var(--army-green);
+            color: var(--tactical-black);
+            padding: 1rem 2.5rem;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .primary-cta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px var(--army-green-glow);
+        }
+
+        .secondary-cta {
+            background: transparent;
+            color: var(--white);
+            padding: 1rem 2.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-decoration: none;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .secondary-cta:hover {
+            border-color: var(--army-green);
+            color: var(--army-green);
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 4rem;
+            flex-wrap: wrap;
+            padding: 2rem;
+            background: rgba(17, 24, 17, 0.5);
+            border-radius: 16px;
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--army-green);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--steel);
+            margin-top: 0.25rem;
+        }
+
+        /* Army Visualization */
+        .army-visual {
+            padding: 6rem 2rem;
+            background: linear-gradient(180deg, transparent, var(--tactical-dark), transparent);
+        }
+
+        .army-visual-content {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-header h2 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            color: var(--steel);
+            font-size: 1.25rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .army-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .squad-card {
+            background: var(--tactical-gray);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid rgba(34, 197, 94, 0.1);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .squad-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--army-green), var(--command-gold));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .squad-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--army-green);
+            box-shadow: 0 20px 60px rgba(34, 197, 94, 0.15);
+        }
+
+        .squad-card:hover::before {
+            opacity: 1;
+        }
+
+        .squad-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(34, 197, 94, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .squad-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .squad-role {
+            color: var(--army-green);
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .squad-card p {
+            color: var(--steel);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* How It Works */
+        .how-it-works {
+            padding: 6rem 2rem;
+        }
+
+        .how-it-works-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .timeline {
+            position: relative;
+            margin-top: 4rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--army-green), var(--army-green-dark));
+        }
+
+        .timeline-item {
+            display: flex;
+            justify-content: flex-end;
+            padding-right: calc(50% + 40px);
+            position: relative;
+            margin-bottom: 4rem;
+        }
+
+        .timeline-item:nth-child(even) {
+            justify-content: flex-start;
+            padding-right: 0;
+            padding-left: calc(50% + 40px);
+        }
+
+        .timeline-content {
+            background: var(--tactical-gray);
+            border-radius: 16px;
+            padding: 2rem;
+            max-width: 450px;
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            position: relative;
+        }
+
+        .timeline-number {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 60px;
+            background: var(--tactical-black);
+            border: 3px solid var(--army-green);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.25rem;
+            color: var(--army-green);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .timeline-content h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .timeline-content p {
+            color: var(--steel);
+            line-height: 1.7;
+        }
+
+        /* War Room Preview */
+        .war-room {
+            padding: 6rem 2rem;
+            background: var(--tactical-dark);
+        }
+
+        .war-room-content {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .war-room-preview {
+            background: var(--tactical-black);
+            border-radius: 24px;
+            padding: 2rem;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            margin-top: 3rem;
+            overflow: hidden;
+        }
+
+        .war-room-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .window-controls {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .window-control {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .window-control.red { background: #ff5f56; }
+        .window-control.yellow { background: #ffbd2e; }
+        .window-control.green { background: #27ca40; }
+
+        .war-room-title {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--steel);
+            font-size: 0.875rem;
+        }
+
+        .war-room-dashboard {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+        }
+
+        .mission-panel {
+            background: var(--tactical-gray);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .mission-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+
+        .mission-title .status {
+            background: var(--army-green);
+            color: var(--tactical-black);
+            padding: 0.25rem 0.75rem;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .agent-activity {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .agent-row {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem;
+            background: var(--tactical-black);
+            border-radius: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+        }
+
+        .agent-icon {
+            font-size: 1.25rem;
+        }
+
+        .agent-name {
+            color: var(--army-green);
+            font-weight: 600;
+        }
+
+        .agent-task {
+            color: var(--steel);
+            flex: 1;
+        }
+
+        .agent-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--army-green);
+            animation: pulse 1.5s infinite;
+        }
+
+        .status-dot.working { background: var(--command-gold); }
+        .status-dot.testing { background: #3b82f6; }
+
+        .metrics-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .metric-card {
+            background: var(--tactical-gray);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+
+        .metric-label {
+            color: var(--steel);
+            font-size: 0.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .metric-value.green { color: var(--army-green); }
+        .metric-value.gold { color: var(--command-gold); }
+
+        /* Economics */
+        .economics {
+            padding: 6rem 2rem;
+        }
+
+        .economics-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .comparison-table {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+
+        .comparison-card {
+            background: var(--tactical-gray);
+            border-radius: 20px;
+            padding: 2.5rem;
+            border: 2px solid transparent;
+        }
+
+        .comparison-card.traditional {
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+
+        .comparison-card.codearmy {
+            border-color: var(--army-green);
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), transparent);
+        }
+
+        .comparison-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .comparison-card h3 span {
+            font-size: 1.5rem;
+        }
+
+        .comparison-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .comparison-list li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 1.25rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .comparison-list li:last-child {
+            border-bottom: none;
+        }
+
+        .comparison-label {
+            color: var(--steel);
+        }
+
+        .comparison-value {
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .traditional .comparison-value {
+            color: var(--danger-red);
+        }
+
+        .codearmy .comparison-value {
+            color: var(--army-green);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 8rem 2rem;
+            background: linear-gradient(180deg, var(--tactical-dark), var(--tactical-black));
+            position: relative;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, var(--army-green-glow), transparent 70%);
+            pointer-events: none;
+        }
+
+        .cta-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .cta-content h2 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-content p {
+            font-size: 1.25rem;
+            color: var(--steel);
+            margin-bottom: 3rem;
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 2rem;
+            border-top: 1px solid rgba(34, 197, 94, 0.2);
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--steel);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--army-green);
+        }
+
+        .footer-copy {
+            color: var(--steel);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .nav-links {
+                display: none;
+            }
+
+            .comparison-table {
+                grid-template-columns: 1fr;
+            }
+
+            .war-room-dashboard {
+                grid-template-columns: 1fr;
+            }
+
+            .timeline::before {
+                left: 30px;
+            }
+
+            .timeline-item,
+            .timeline-item:nth-child(even) {
+                padding-left: 80px;
+                padding-right: 0;
+                justify-content: flex-start;
+            }
+
+            .timeline-number {
+                left: 30px;
+            }
+
+            .stats-bar {
+                gap: 2rem;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                gap: 2rem;
+                text-align: center;
+            }
+        }
+
+        /* Animation on scroll */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="grid-background"></div>
+    <div class="scan-line"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-content">
+            <a href="#" class="logo">
+                <div class="logo-icon">⚔️</div>
+                CodeArmy
+            </a>
+            <ul class="nav-links">
+                <li><a href="#squads">Squads</a></li>
+                <li><a href="#how-it-works">How It Works</a></li>
+                <li><a href="#war-room">War Room</a></li>
+                <li><a href="#economics">Economics</a></li>
+            </ul>
+            <a href="#deploy" class="cta-button">Deploy Your Army →</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="badge">🔴 LIVE — Software Factories Are Here</div>
+            <h1>
+                Your Software.<br>
+                <span class="gradient">Built by AI.</span><br>
+                Ready for Battle.
+            </h1>
+            <p class="hero-subtitle">
+                Deploy an autonomous army of specialized AI engineers to build, test, ship, and maintain your software. 24/7. At 1% of the cost.
+            </p>
+            <div class="hero-cta">
+                <a href="#deploy" class="primary-cta">
+                    🚀 Request Early Access
+                </a>
+                <a href="#how-it-works" class="secondary-cta">
+                    📖 See How It Works
+                </a>
+            </div>
+            <div class="stats-bar">
+                <div class="stat">
+                    <div class="stat-value">10x</div>
+                    <div class="stat-label">Faster Development</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">90%</div>
+                    <div class="stat-label">Cost Reduction</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">24/7</div>
+                    <div class="stat-label">Continuous Shipping</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">0</div>
+                    <div class="stat-label">Burned Out Engineers</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Army Squads -->
+    <section class="army-visual" id="squads">
+        <div class="army-visual-content">
+            <div class="section-header fade-in">
+                <h2>Meet Your <span style="color: var(--army-green)">Army</span></h2>
+                <p>Specialized AI squads working in perfect coordination to deliver production-ready software.</p>
+            </div>
+            <div class="army-grid">
+                <div class="squad-card fade-in">
+                    <div class="squad-icon">🎖️</div>
+                    <h3>Commander</h3>
+                    <div class="squad-role">Product Owner</div>
+                    <p>Interprets requirements, writes detailed specs, prioritizes backlog, and coordinates all squads toward the mission objective.</p>
+                </div>
+                <div class="squad-card fade-in">
+                    <div class="squad-icon">🗺️</div>
+                    <h3>General</h3>
+                    <div class="squad-role">System Architect</div>
+                    <p>Designs system architecture, defines service boundaries, creates API contracts, and resolves technical conflicts.</p>
+                </div>
+                <div class="squad-card fade-in">
+                    <div class="squad-icon">🎨</div>
+                    <h3>Frontend Squad</h3>
+                    <div class="squad-role">UI Engineers</div>
+                    <p>React, Vue, mobile apps, accessibility, design systems, animations. Pixel-perfect interfaces at scale.</p>
+                </div>
+                <div class="squad-card fade-in">
+                    <div class="squad-icon">⚙️</div>
+                    <h3>Backend Squad</h3>
+                    <div class="squad-role">API Engineers</div>
+                    <p>Services, databases, integrations, performance optimization. Robust APIs that scale to millions.</p>
+                </div>
+                <div class="squad-card fade-in">
+                    <div class="squad-icon">🗄️</div>
+                    <h3>Data Squad</h3>
+                    <div class="squad-role">Data Engineers</div>
+                    <p>Data pipelines, ML models, analytics, warehousing. Turn your data into actionable intelligence.</p>
+                </div>
+                <div class="squad-card fade-in">
+                    <div class="squad-icon">🧪</div>
+                    <h3>QA Squad</h3>
+                    <div class="squad-role">Test Engineers</div>
+                    <p>Unit, integration, E2E, performance, chaos testing. Every commit validated before merge.</p>
+                </div>
+                <div class="squad-card fade-in">
+                    <div class="squad-icon">🔒</div>
+                    <h3>Security Squad</h3>
+                    <div class="squad-role">Security Engineers</div>
+                    <p>SAST, DAST, penetration testing, compliance audits. Enterprise security built-in, not bolted-on.</p>
+                </div>
+                <div class="squad-card fade-in">
+                    <div class="squad-icon">📊</div>
+                    <h3>DevOps Squad</h3>
+                    <div class="squad-role">Platform Engineers</div>
+                    <p>Infrastructure as code, CI/CD, monitoring, incident response. Ship with confidence.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works" id="how-it-works">
+        <div class="how-it-works-content">
+            <div class="section-header fade-in">
+                <h2>Deploy in <span style="color: var(--army-green)">5 Steps</span></h2>
+                <p>From mission briefing to production in days, not months.</p>
+            </div>
+            <div class="timeline">
+                <div class="timeline-item fade-in">
+                    <div class="timeline-content">
+                        <h3>📋 Mission Briefing</h3>
+                        <p>Define your objectives, constraints, and success criteria. Our Commander analyzes your requirements and creates a battle plan.</p>
+                    </div>
+                    <div class="timeline-number">01</div>
+                </div>
+                <div class="timeline-item fade-in">
+                    <div class="timeline-content">
+                        <h3>🎖️ Army Mobilization</h3>
+                        <p>The General designs architecture. Specialized squads spin up in secure sandboxes, ready to execute.</p>
+                    </div>
+                    <div class="timeline-number">02</div>
+                </div>
+                <div class="timeline-item fade-in">
+                    <div class="timeline-content">
+                        <h3>⚔️ Autonomous Development</h3>
+                        <p>Agents work in parallel across your codebase. Continuous integration, testing, and security scanning—all automated.</p>
+                    </div>
+                    <div class="timeline-number">03</div>
+                </div>
+                <div class="timeline-item fade-in">
+                    <div class="timeline-content">
+                        <h3>👁️ Human Checkpoints</h3>
+                        <p>Review architecture decisions, security sign-offs, and business validation at key milestones. Full audit trail for compliance.</p>
+                    </div>
+                    <div class="timeline-number">04</div>
+                </div>
+                <div class="timeline-item fade-in">
+                    <div class="timeline-content">
+                        <h3>🚀 Continuous Deployment</h3>
+                        <p>Auto-deploy to staging, canary releases to production. Agents monitor and respond to incidents 24/7.</p>
+                    </div>
+                    <div class="timeline-number">05</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- War Room -->
+    <section class="war-room" id="war-room">
+        <div class="war-room-content">
+            <div class="section-header fade-in">
+                <h2>The <span style="color: var(--army-green)">War Room</span></h2>
+                <p>Real-time visibility into every agent, every commit, every deployment.</p>
+            </div>
+            <div class="war-room-preview fade-in">
+                <div class="war-room-header">
+                    <div class="window-controls">
+                        <div class="window-control red"></div>
+                        <div class="window-control yellow"></div>
+                        <div class="window-control green"></div>
+                    </div>
+                    <div class="war-room-title">codearmy.ai/war-room/customer-portal-v2</div>
+                </div>
+                <div class="war-room-dashboard">
+                    <div class="mission-panel">
+                        <div class="mission-title">
+                            Mission: Customer Portal v2
+                            <span class="status">IN PROGRESS</span>
+                        </div>
+                        <div class="agent-activity">
+                            <div class="agent-row">
+                                <span class="agent-icon">🎨</span>
+                                <span class="agent-name">frontend-07</span>
+                                <span class="agent-task">Building dashboard components...</span>
+                                <div class="agent-status">
+                                    <div class="status-dot working"></div>
+                                    <span>coding</span>
+                                </div>
+                            </div>
+                            <div class="agent-row">
+                                <span class="agent-icon">⚙️</span>
+                                <span class="agent-name">backend-03</span>
+                                <span class="agent-task">Implementing auth middleware...</span>
+                                <div class="agent-status">
+                                    <div class="status-dot working"></div>
+                                    <span>coding</span>
+                                </div>
+                            </div>
+                            <div class="agent-row">
+                                <span class="agent-icon">🧪</span>
+                                <span class="agent-name">qa-12</span>
+                                <span class="agent-task">Running E2E test suite...</span>
+                                <div class="agent-status">
+                                    <div class="status-dot testing"></div>
+                                    <span>testing</span>
+                                </div>
+                            </div>
+                            <div class="agent-row">
+                                <span class="agent-icon">🔒</span>
+                                <span class="agent-name">security-01</span>
+                                <span class="agent-task">SAST scan complete ✓</span>
+                                <div class="agent-status">
+                                    <div class="status-dot"></div>
+                                    <span>idle</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="metrics-panel">
+                        <div class="metric-card">
+                            <div class="metric-label">Commits Today</div>
+                            <div class="metric-value green">247</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-label">Test Coverage</div>
+                            <div class="metric-value green">94.2%</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-label">Agent Hours</div>
+                            <div class="metric-value gold">156.4</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-label">Est. Completion</div>
+                            <div class="metric-value">3.2 days</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Economics -->
+    <section class="economics" id="economics">
+        <div class="economics-content">
+            <div class="section-header fade-in">
+                <h2>The <span style="color: var(--army-green)">Economics</span></h2>
+                <p>Build enterprise software at a fraction of traditional costs.</p>
+            </div>
+            <div class="comparison-table">
+                <div class="comparison-card traditional fade-in">
+                    <h3><span>👥</span> Traditional Dev Team</h3>
+                    <ul class="comparison-list">
+                        <li>
+                            <span class="comparison-label">Team Size</span>
+                            <span class="comparison-value">8-12 engineers</span>
+                        </li>
+                        <li>
+                            <span class="comparison-label">Annual Cost</span>
+                            <span class="comparison-value">$2.5M+</span>
+                        </li>
+                        <li>
+                            <span class="comparison-label">Time to Ship</span>
+                            <span class="comparison-value">18-24 months</span>
+                        </li>
+                        <li>
+                            <span class="comparison-label">Availability</span>
+                            <span class="comparison-value">40 hrs/week</span>
+                        </li>
+                        <li>
+                            <span class="comparison-label">Turnover Risk</span>
+                            <span class="comparison-value">High</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="comparison-card codearmy fade-in">
+                    <h3><span>⚔️</span> CodeArmy</h3>
+                    <ul class="comparison-list">
+                        <li>
+                            <span class="comparison-label">Squad Size</span>
+                            <span class="comparison-value">Unlimited agents</span>
+                        </li>
+                        <li>
+                            <span class="comparison-label">Annual Cost</span>
+                            <span class="comparison-value">$300K</span>
+                        </li>
+                        <li>
+                            <span class="comparison-label">Time to Ship</span>
+                            <span class="comparison-value">2-4 months</span>
+                        </li>
+                        <li>
+                            <span class="comparison-label">Availability</span>
+                            <span class="comparison-value">24/7/365</span>
+                        </li>
+                        <li>
+                            <span class="comparison-label">Turnover Risk</span>
+                            <span class="comparison-value">Zero</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section" id="deploy">
+        <div class="cta-content fade-in">
+            <h2>Ready to Deploy<br>Your <span style="color: var(--army-green)">Army</span>?</h2>
+            <p>Join the waitlist for early access. Limited spots for founding customers with dedicated support and custom pricing.</p>
+            <div class="hero-cta">
+                <a href="mailto:founders@codearmy.ai?subject=Early%20Access%20Request" class="primary-cta">
+                    📧 Request Early Access
+                </a>
+                <a href="mailto:founders@codearmy.ai?subject=Schedule%20Demo" class="secondary-cta">
+                    📅 Schedule Demo
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <a href="#" class="logo">
+                <div class="logo-icon">⚔️</div>
+                CodeArmy
+            </a>
+            <div class="footer-links">
+                <a href="#">Documentation</a>
+                <a href="#">Pricing</a>
+                <a href="#">Blog</a>
+                <a href="#">Careers</a>
+            </div>
+            <div class="footer-copy">
+                © 2026 CodeArmy. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Intersection Observer for fade-in animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
