@@ -34,6 +34,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-02-07 | Evening | FarmOS — Autonomous Agricultural Intelligence | [Playbook](2026-02-07-evening.md) • [Landing](2026-02-07-evening-landing.html) • [PDF](2026-02-07-evening.pdf) |
 | 2026-02-07 | Morning | QuantumShield — Post-Quantum Cryptography Migration | [Playbook](2026-02-07-morning.md) • [Landing](2026-02-07-morning-landing.html) • [PDF](2026-02-07-morning.pdf) |
 | 2026-02-07 | Afternoon | PropertyOS — Autonomous Real Estate Intelligence | [Playbook](2026-02-07-afternoon.md) • [Landing](2026-02-07-afternoon-landing.html) • [PDF](2026-02-07-afternoon.pdf) |
+| 2026-02-08 | Evening | SpaceMind AI — Autonomous Space Asset Intelligence | [Playbook](2026-02-08-evening.md) • [Landing](2026-02-08-evening-landing.html) • [PDF](2026-02-08-evening.pdf) |
 <!-- New entries will be added above this line -->
 
 ---

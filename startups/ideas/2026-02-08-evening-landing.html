@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpaceMind AI — Autonomous Space Asset Intelligence</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --space-black: #0a0a0f;
+            --deep-space: #0f0f1a;
+            --nebula-purple: #7c3aed;
+            --cosmic-blue: #3b82f6;
+            --starlight: #f0f0ff;
+            --aurora-green: #10b981;
+            --solar-orange: #f59e0b;
+            --meteor-red: #ef4444;
+            --lunar-gray: #6b7280;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--space-black);
+            color: var(--starlight);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+        
+        h1, h2, h3, h4 {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        
+        /* Animated star field */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+        
+        /* Generate stars dynamically via CSS */
+        .stars::before,
+        .stars::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(2px 2px at 20px 30px, white, transparent),
+                radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.8), transparent),
+                radial-gradient(1px 1px at 90px 40px, white, transparent),
+                radial-gradient(2px 2px at 130px 80px, rgba(255,255,255,0.6), transparent),
+                radial-gradient(1px 1px at 160px 120px, white, transparent),
+                radial-gradient(2px 2px at 200px 60px, rgba(255,255,255,0.8), transparent),
+                radial-gradient(1px 1px at 250px 150px, white, transparent),
+                radial-gradient(2px 2px at 300px 90px, rgba(255,255,255,0.7), transparent);
+            background-repeat: repeat;
+            background-size: 350px 200px;
+            animation: starsMove 100s linear infinite;
+        }
+        
+        .stars::after {
+            background-size: 500px 300px;
+            animation-duration: 150s;
+            opacity: 0.5;
+        }
+        
+        @keyframes starsMove {
+            from { transform: translateY(0); }
+            to { transform: translateY(-200px); }
+        }
+        
+        /* Orbiting satellites animation */
+        .orbit-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 600px;
+            height: 600px;
+            margin-left: -300px;
+            margin-top: -300px;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .orbit {
+            position: absolute;
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            border-radius: 50%;
+            animation: spin 20s linear infinite;
+        }
+        
+        .orbit-1 {
+            width: 400px;
+            height: 400px;
+            top: 100px;
+            left: 100px;
+        }
+        
+        .orbit-2 {
+            width: 500px;
+            height: 500px;
+            top: 50px;
+            left: 50px;
+            animation-duration: 30s;
+            animation-direction: reverse;
+        }
+        
+        .orbit-3 {
+            width: 600px;
+            height: 600px;
+            top: 0;
+            left: 0;
+            animation-duration: 40s;
+        }
+        
+        .satellite {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--cosmic-blue);
+            border-radius: 50%;
+            box-shadow: 0 0 20px var(--cosmic-blue);
+        }
+        
+        .orbit-1 .satellite { top: -4px; left: 50%; }
+        .orbit-2 .satellite { top: 50%; right: -4px; }
+        .orbit-3 .satellite { bottom: -4px; left: 30%; }
+        
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Hero Section */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            overflow: hidden;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            max-width: 900px;
+            text-align: center;
+        }
+        
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(124, 58, 237, 0.2);
+            border: 1px solid rgba(124, 58, 237, 0.4);
+            border-radius: 50px;
+            font-size: 0.875rem;
+            margin-bottom: 2rem;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(124, 58, 237, 0.4); }
+            50% { box-shadow: 0 0 0 10px rgba(124, 58, 237, 0); }
+        }
+        
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 5rem);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--starlight), var(--cosmic-blue), var(--nebula-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero-subtitle {
+            font-size: clamp(1.25rem, 3vw, 1.75rem);
+            color: var(--lunar-gray);
+            margin-bottom: 2rem;
+            font-weight: 300;
+        }
+        
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin: 3rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--nebula-purple);
+        }
+        
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--lunar-gray);
+            margin-top: 0.25rem;
+        }
+        
+        .cta-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+        
+        .btn {
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--nebula-purple), var(--cosmic-blue));
+            color: white;
+            border: none;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(124, 58, 237, 0.4);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: var(--starlight);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+        
+        /* Problem Section */
+        .section {
+            position: relative;
+            z-index: 10;
+            padding: 6rem 2rem;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        
+        .section-label {
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--nebula-purple);
+            margin-bottom: 1rem;
+        }
+        
+        .section-title {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .section-subtitle {
+            font-size: 1.125rem;
+            color: var(--lunar-gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        /* Crisis stats */
+        .crisis-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .crisis-card {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(239, 68, 68, 0.02));
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .crisis-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(239, 68, 68, 0.1);
+        }
+        
+        .crisis-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .crisis-number {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--meteor-red);
+        }
+        
+        .crisis-label {
+            color: var(--lunar-gray);
+            margin-top: 0.5rem;
+        }
+        
+        /* Solution Section */
+        .solution-section {
+            background: linear-gradient(180deg, transparent, rgba(124, 58, 237, 0.05), transparent);
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .feature-card {
+            background: rgba(15, 15, 26, 0.8);
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            border-color: var(--nebula-purple);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(124, 58, 237, 0.2);
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .feature-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+        
+        .feature-description {
+            color: var(--lunar-gray);
+            font-size: 0.9375rem;
+            line-height: 1.7;
+        }
+        
+        /* How It Works */
+        .how-it-works {
+            background: var(--deep-space);
+        }
+        
+        .steps-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .step {
+            position: relative;
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--nebula-purple), var(--cosmic-blue));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0 auto 1.5rem;
+        }
+        
+        .step-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+        
+        .step-description {
+            color: var(--lunar-gray);
+            font-size: 0.9375rem;
+        }
+        
+        /* Market Section */
+        .market-section {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.05), transparent);
+        }
+        
+        .market-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        @media (max-width: 768px) {
+            .market-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .market-card {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .market-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--aurora-green);
+        }
+        
+        .market-label {
+            font-size: 1.125rem;
+            margin-top: 0.5rem;
+        }
+        
+        .market-description {
+            color: var(--lunar-gray);
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+        }
+        
+        /* Customers Section */
+        .customers-section {
+            padding: 6rem 2rem;
+        }
+        
+        .customer-logos {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 4rem;
+            flex-wrap: wrap;
+            margin-top: 3rem;
+            opacity: 0.6;
+        }
+        
+        .customer-logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--lunar-gray);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        /* Traction Section */
+        .traction-section {
+            background: var(--deep-space);
+        }
+        
+        .traction-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .traction-card {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .traction-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--solar-orange);
+        }
+        
+        .traction-label {
+            color: var(--lunar-gray);
+            margin-top: 0.5rem;
+        }
+        
+        /* CTA Section */
+        .cta-section {
+            padding: 8rem 2rem;
+            text-align: center;
+            background: linear-gradient(180deg, transparent, rgba(124, 58, 237, 0.1));
+        }
+        
+        .cta-section h2 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            margin-bottom: 1rem;
+        }
+        
+        .cta-section p {
+            color: var(--lunar-gray);
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+        }
+        
+        /* Footer */
+        footer {
+            position: relative;
+            z-index: 10;
+            padding: 3rem 2rem;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .footer-brand {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .footer-tagline {
+            color: var(--lunar-gray);
+            margin-bottom: 2rem;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-links a {
+            color: var(--lunar-gray);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: var(--starlight);
+        }
+        
+        .footer-copyright {
+            color: var(--lunar-gray);
+            font-size: 0.875rem;
+        }
+        
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeIn 0.8s ease forwards;
+        }
+        
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+        
+        /* Earth glow effect */
+        .earth-glow {
+            position: absolute;
+            bottom: -200px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            height: 400px;
+            background: radial-gradient(ellipse at center, rgba(59, 130, 246, 0.15), transparent 70%);
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Star field background -->
+    <div class="stars"></div>
+    
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="orbit-container">
+            <div class="orbit orbit-1"><div class="satellite"></div></div>
+            <div class="orbit orbit-2"><div class="satellite"></div></div>
+            <div class="orbit orbit-3"><div class="satellite"></div></div>
+        </div>
+        <div class="earth-glow"></div>
+        
+        <div class="hero-content">
+            <div class="hero-badge fade-in">
+                🛰️ The Future of Space Operations
+            </div>
+            
+            <h1 class="fade-in delay-1">SpaceMind AI</h1>
+            
+            <p class="hero-subtitle fade-in delay-2">
+                Autonomous intelligence for managing the next generation of space assets
+            </p>
+            
+            <div class="hero-stats fade-in delay-3">
+                <div class="stat">
+                    <div class="stat-value">50K+</div>
+                    <div class="stat-label">Satellites by 2030</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">$1T+</div>
+                    <div class="stat-label">Space Economy</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">36K+</div>
+                    <div class="stat-label">Tracked Debris Objects</div>
+                </div>
+            </div>
+            
+            <div class="cta-group fade-in delay-4">
+                <a href="#contact" class="btn btn-primary">
+                    Request Demo 🚀
+                </a>
+                <a href="#how-it-works" class="btn btn-secondary">
+                    See How It Works
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Problem Section -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-label">The Crisis</div>
+                <h2 class="section-title">Space is Getting Crowded — and Chaotic</h2>
+                <p class="section-subtitle">
+                    Manual mission control can't scale to tens of thousands of satellites. 
+                    The space economy needs autonomous intelligence.
+                </p>
+            </div>
+            
+            <div class="crisis-grid">
+                <div class="crisis-card">
+                    <div class="crisis-icon">💥</div>
+                    <div class="crisis-number">$2B+</div>
+                    <div class="crisis-label">Annual debris avoidance cost</div>
+                </div>
+                <div class="crisis-card">
+                    <div class="crisis-icon">⚠️</div>
+                    <div class="crisis-number">1000s</div>
+                    <div class="crisis-label">Conjunction warnings per day</div>
+                </div>
+                <div class="crisis-card">
+                    <div class="crisis-icon">🌙</div>
+                    <div class="crisis-number">24/7</div>
+                    <div class="crisis-label">Monitoring with skeleton crews</div>
+                </div>
+                <div class="crisis-card">
+                    <div class="crisis-icon">🔥</div>
+                    <div class="crisis-number">$550M</div>
+                    <div class="crisis-label">Lost to operational failures (2024-25)</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Solution Section -->
+    <section class="section solution-section" id="solution">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-label">The Solution</div>
+                <h2 class="section-title">AI Mission Control That Never Sleeps</h2>
+                <p class="section-subtitle">
+                    SpaceMind manages your entire constellation with superhuman precision, 
+                    making millions of optimizations per day autonomously.
+                </p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🛰️</div>
+                    <h3 class="feature-title">Constellation Orchestration</h3>
+                    <p class="feature-description">
+                        Autonomous management of thousands of satellites simultaneously. 
+                        Real-time health monitoring, anomaly detection, and instant recovery.
+                    </p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🚨</div>
+                    <h3 class="feature-title">Collision Avoidance Intelligence</h3>
+                    <p class="feature-description">
+                        Predictive debris tracking with 99.7% accuracy. Automated avoidance 
+                        maneuvers executed in milliseconds, not hours.
+                    </p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3 class="feature-title">Operational Optimization</h3>
+                    <p class="feature-description">
+                        40% fuel savings through AI-optimized orbit maintenance. 
+                        Maximize satellite lifetime and reduce operational costs.
+                    </p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🤝</div>
+                    <h3 class="feature-title">Multi-Operator Coordination</h3>
+                    <p class="feature-description">
+                        Industry-wide space traffic management network. Secure coordination 
+                        with other operators to prevent conflicts.
+                    </p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🔮</div>
+                    <h3 class="feature-title">Predictive Intelligence</h3>
+                    <p class="feature-description">
+                        Digital twin simulations predict failures before they happen. 
+                        Lifetime forecasting and replacement planning.
+                    </p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🛡️</div>
+                    <h3 class="feature-title">Insurance Integration</h3>
+                    <p class="feature-description">
+                        Real-time risk scoring for lower premiums. Automated incident 
+                        documentation and compliance reporting.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- How It Works Section -->
+    <section class="section how-it-works" id="how-it-works">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-label">How It Works</div>
+                <h2 class="section-title">From Chaos to Control in Weeks</h2>
+            </div>
+            
+            <div class="steps-container">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3 class="step-title">Connect</h3>
+                    <p class="step-description">
+                        Integrate with your ground stations and telemetry systems via our secure API
+                    </p>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3 class="step-title">Learn</h3>
+                    <p class="step-description">
+                        SpaceMind builds a digital twin of your constellation and learns operational patterns
+                    </p>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3 class="step-title">Optimize</h3>
+                    <p class="step-description">
+                        AI begins suggesting optimizations, gradually earning autonomous authority
+                    </p>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3 class="step-title">Automate</h3>
+                    <p class="step-description">
+                        Full autonomous operations within defined safety bounds — humans supervise, AI executes
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Market Section -->
+    <section class="section market-section">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-label">Market Opportunity</div>
+                <h2 class="section-title">The $50 Billion Space Operations Market</h2>
+            </div>
+            
+            <div class="market-grid">
+                <div class="market-card">
+                    <div class="market-value">$50B</div>
+                    <div class="market-label">TAM</div>
+                    <div class="market-description">Total space ops market by 2030</div>
+                </div>
+                <div class="market-card">
+                    <div class="market-value">$12B</div>
+                    <div class="market-label">SAM</div>
+                    <div class="market-description">Satellite operations software</div>
+                </div>
+                <div class="market-card">
+                    <div class="market-value">$1.2B</div>
+                    <div class="market-label">SOM</div>
+                    <div class="market-description">10% market share by 2032</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Customers Section -->
+    <section class="customers-section">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-label">Trusted By</div>
+                <h2 class="section-title">Built for the Leaders of New Space</h2>
+            </div>
+            
+            <div class="customer-logos">
+                <div class="customer-logo">🛰️ Constellation Operators</div>
+                <div class="customer-logo">📡 Imaging Companies</div>
+                <div class="customer-logo">🌐 IoT Networks</div>
+                <div class="customer-logo">🏛️ Government Agencies</div>
+                <div class="customer-logo">🛡️ Space Insurers</div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Traction Section -->
+    <section class="section traction-section">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-label">Traction</div>
+                <h2 class="section-title">Early Validation from Industry Leaders</h2>
+            </div>
+            
+            <div class="traction-grid">
+                <div class="traction-card">
+                    <div class="traction-value">3</div>
+                    <div class="traction-label">LOIs from constellation operators</div>
+                </div>
+                <div class="traction-card">
+                    <div class="traction-value">99.7%</div>
+                    <div class="traction-label">Collision prediction accuracy</div>
+                </div>
+                <div class="traction-card">
+                    <div class="traction-value">40%</div>
+                    <div class="traction-label">Fuel savings demonstrated</div>
+                </div>
+                <div class="traction-card">
+                    <div class="traction-value">$15M</div>
+                    <div class="traction-label">Seed round raising</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- CTA Section -->
+    <section class="cta-section" id="contact">
+        <div class="container">
+            <h2>Ready to Automate Your Space Operations?</h2>
+            <p>Join the operators building the future of autonomous space.</p>
+            <div class="cta-group">
+                <a href="mailto:founders@spacemind.ai" class="btn btn-primary">
+                    Contact Founders 📧
+                </a>
+                <a href="#" class="btn btn-secondary">
+                    Download Deck 📄
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="footer-brand">🛰️ SpaceMind AI</div>
+        <p class="footer-tagline">The operating system for the new space economy</p>
+        <div class="footer-links">
+            <a href="#">About</a>
+            <a href="#">Technology</a>
+            <a href="#">Careers</a>
+            <a href="#">Blog</a>
+            <a href="mailto:founders@spacemind.ai">Contact</a>
+        </div>
+        <p class="footer-copyright">
+            © 2026 SpaceMind AI, Inc. All rights reserved. | Palo Alto, CA
+        </p>
+    </footer>
+    
+    <!-- Smooth scroll -->
+    <script>
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
