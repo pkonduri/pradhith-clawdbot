@@ -1,0 +1,1655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SimWorld AI — Synthetic Reality Generation for Physical AI</title>
+    <meta name="description" content="Generate infinite photorealistic training environments for robots, autonomous vehicles, and embodied AI. The AWS for physical AI training.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-light: #818cf8;
+            --primary-dark: #4f46e5;
+            --accent: #22d3ee;
+            --accent-secondary: #a855f7;
+            --dark: #0f0f1a;
+            --darker: #08080f;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --text: #e2e8f0;
+            --text-muted: #94a3b8;
+            --success: #10b981;
+            --warning: #f59e0b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--darker);
+            color: var(--text);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(168, 85, 247, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(34, 211, 238, 0.08) 0%, transparent 60%);
+            animation: bgPulse 15s ease-in-out infinite;
+        }
+
+        @keyframes bgPulse {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(-2%, -2%) scale(1.05); }
+        }
+
+        /* Grid Pattern */
+        .grid-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(99, 102, 241, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            z-index: -1;
+            mask-image: radial-gradient(ellipse at center, black 0%, transparent 70%);
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1rem 2rem;
+            background: rgba(8, 8, 15, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-light), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        .nav-cta {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 30px rgba(99, 102, 241, 0.4);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 2rem 4rem;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            padding: 0.5rem 1rem;
+            border-radius: 100px;
+            font-size: 0.9rem;
+            color: var(--accent);
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .hero-badge::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--success);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 5.5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.8s ease-out 0.1s both;
+        }
+
+        .hero h1 .highlight {
+            background: linear-gradient(135deg, var(--primary-light), var(--accent), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+            color: var(--text-muted);
+            max-width: 700px;
+            margin: 0 auto 3rem;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        .hero-cta-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.8s ease-out 0.3s both;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+            box-shadow: 0 4px 30px rgba(99, 102, 241, 0.4);
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 40px rgba(99, 102, 241, 0.5);
+        }
+
+        .btn-secondary {
+            background: var(--card-bg);
+            color: var(--text);
+            padding: 1rem 2.5rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+            border: 1px solid var(--card-border);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--primary-light);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 3D World Visualization */
+        .hero-visual {
+            margin-top: 4rem;
+            position: relative;
+            animation: fadeInUp 0.8s ease-out 0.4s both;
+        }
+
+        .world-container {
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto;
+            aspect-ratio: 16/9;
+            background: linear-gradient(145deg, rgba(99, 102, 241, 0.1), rgba(34, 211, 238, 0.05));
+            border-radius: 24px;
+            border: 1px solid var(--card-border);
+            overflow: hidden;
+            position: relative;
+            box-shadow: 
+                0 0 100px rgba(99, 102, 241, 0.2),
+                inset 0 0 100px rgba(34, 211, 238, 0.05);
+        }
+
+        .world-grid {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 60%;
+            background: 
+                linear-gradient(90deg, rgba(99, 102, 241, 0.2) 1px, transparent 1px),
+                linear-gradient(rgba(99, 102, 241, 0.2) 1px, transparent 1px);
+            background-size: 40px 40px;
+            transform: perspective(500px) rotateX(60deg);
+            transform-origin: bottom;
+            mask-image: linear-gradient(to top, black 0%, transparent 100%);
+        }
+
+        .world-objects {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+        }
+
+        .floating-object {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(145deg, var(--primary), var(--accent-secondary));
+            border-radius: 16px;
+            animation: float 4s ease-in-out infinite;
+            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+
+        .floating-object:nth-child(2) {
+            animation-delay: -1s;
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(145deg, var(--accent), var(--primary));
+        }
+
+        .floating-object:nth-child(3) {
+            animation-delay: -2s;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(145deg, var(--accent-secondary), var(--primary-light));
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        .code-overlay {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 12px;
+            padding: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--accent);
+            max-width: 300px;
+            border: 1px solid var(--card-border);
+        }
+
+        .code-overlay code {
+            opacity: 0.9;
+        }
+
+        .stats-overlay {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            display: flex;
+            gap: 2rem;
+            border: 1px solid var(--card-border);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--accent);
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Logo Ticker */
+        .logo-ticker {
+            padding: 4rem 0;
+            background: rgba(0, 0, 0, 0.3);
+            border-top: 1px solid var(--card-border);
+            border-bottom: 1px solid var(--card-border);
+            overflow: hidden;
+        }
+
+        .ticker-label {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 2rem;
+        }
+
+        .ticker-track {
+            display: flex;
+            animation: scroll 30s linear infinite;
+        }
+
+        .ticker-item {
+            flex-shrink: 0;
+            padding: 0 3rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            opacity: 0.5;
+            transition: all 0.3s;
+        }
+
+        .ticker-item:hover {
+            opacity: 1;
+            color: var(--text);
+        }
+
+        @keyframes scroll {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
+        }
+
+        /* Sections */
+        section {
+            padding: 8rem 2rem;
+            position: relative;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 5rem;
+        }
+
+        .section-label {
+            display: inline-block;
+            color: var(--accent);
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-subtitle {
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Problem Section */
+        #problem {
+            background: linear-gradient(180deg, transparent, rgba(99, 102, 241, 0.03));
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .problem-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(239, 68, 68, 0.3);
+            box-shadow: 0 20px 60px rgba(239, 68, 68, 0.1);
+        }
+
+        .problem-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(239, 68, 68, 0.1));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .problem-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+            color: #f87171;
+        }
+
+        .problem-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* Solution Section */
+        #solution {
+            background: linear-gradient(180deg, rgba(99, 102, 241, 0.03), transparent);
+        }
+
+        .solution-showcase {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .solution-visual {
+            position: relative;
+        }
+
+        .code-block {
+            background: var(--dark);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+        }
+
+        .code-header {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem;
+            display: flex;
+            gap: 0.5rem;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .code-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .code-dot.red { background: #ff5f57; }
+        .code-dot.yellow { background: #febc2e; }
+        .code-dot.green { background: #28c840; }
+
+        .code-body {
+            padding: 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            line-height: 1.8;
+            overflow-x: auto;
+        }
+
+        .code-body .keyword { color: #c792ea; }
+        .code-body .string { color: #c3e88d; }
+        .code-body .function { color: #82aaff; }
+        .code-body .number { color: #f78c6c; }
+        .code-body .comment { color: #546e7a; }
+
+        .solution-content h3 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .solution-content p {
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        .feature-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .feature-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            font-size: 1rem;
+        }
+
+        .feature-list .check {
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(135deg, var(--success), #059669);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 0.8rem;
+        }
+
+        /* Platform Section */
+        #platform {
+            background: radial-gradient(ellipse at center, rgba(99, 102, 241, 0.08) 0%, transparent 70%);
+        }
+
+        .platform-diagram {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 3rem;
+            margin-bottom: 4rem;
+        }
+
+        .platform-layer {
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .platform-layer:last-child {
+            margin-bottom: 0;
+        }
+
+        .layer-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+
+        .layer-modules {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .module {
+            background: var(--dark);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .module-icon {
+            font-size: 1.2rem;
+        }
+
+        /* Use Cases */
+        .use-cases-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .use-case-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 2.5rem;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .use-case-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .use-case-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-light);
+            box-shadow: 0 20px 60px rgba(99, 102, 241, 0.15);
+        }
+
+        .use-case-card:hover::before {
+            opacity: 1;
+        }
+
+        .use-case-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--primary), var(--accent-secondary));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .use-case-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+        }
+
+        .use-case-card p {
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+
+        .use-case-stats {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .use-case-stat {
+            text-align: center;
+        }
+
+        .use-case-stat-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--accent);
+        }
+
+        .use-case-stat-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* Market Section */
+        #market {
+            background: linear-gradient(180deg, transparent, rgba(34, 211, 238, 0.03));
+        }
+
+        .market-visual {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 3rem;
+            align-items: start;
+        }
+
+        .market-chart {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 2.5rem;
+        }
+
+        .chart-bars {
+            display: flex;
+            align-items: flex-end;
+            gap: 2rem;
+            height: 250px;
+            padding-top: 2rem;
+        }
+
+        .bar-group {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .bar {
+            width: 100%;
+            background: linear-gradient(180deg, var(--primary), var(--primary-dark));
+            border-radius: 8px 8px 0 0;
+            transition: all 0.5s;
+            position: relative;
+        }
+
+        .bar-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .bar-value {
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-weight: 700;
+            color: var(--accent);
+            white-space: nowrap;
+        }
+
+        .market-highlights {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .highlight-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 1.5rem;
+        }
+
+        .highlight-value {
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary-light), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .highlight-label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Pricing Section */
+        #pricing {
+            background: radial-gradient(ellipse at center, rgba(168, 85, 247, 0.05) 0%, transparent 70%);
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+
+        .pricing-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 2.5rem;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .pricing-card.featured {
+            border-color: var(--primary);
+            transform: scale(1.02);
+            box-shadow: 0 20px 60px rgba(99, 102, 241, 0.2);
+        }
+
+        .pricing-card.featured::before {
+            content: 'Most Popular';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--primary), var(--accent-secondary));
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 100px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .pricing-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-price {
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-price span {
+            font-size: 1rem;
+            font-weight: 400;
+            color: var(--text-muted);
+        }
+
+        .pricing-desc {
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .pricing-features {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-features li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.95rem;
+        }
+
+        .pricing-features li::before {
+            content: '✓';
+            color: var(--success);
+            font-weight: 700;
+        }
+
+        .pricing-cta {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+        }
+
+        .pricing-card:not(.featured) .pricing-cta {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            color: var(--text);
+        }
+
+        .pricing-card:not(.featured) .pricing-cta:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .pricing-card.featured .pricing-cta {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .pricing-card.featured .pricing-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 30px rgba(99, 102, 241, 0.4);
+        }
+
+        /* CTA Section */
+        #cta {
+            background: linear-gradient(180deg, transparent, rgba(99, 102, 241, 0.1));
+            padding: 10rem 2rem;
+        }
+
+        .cta-content {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cta-content h2 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-content p {
+            font-size: 1.3rem;
+            color: var(--text-muted);
+            margin-bottom: 3rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--darker);
+            border-top: 1px solid var(--card-border);
+            padding: 4rem 2rem 2rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 4rem;
+        }
+
+        .footer-brand {
+            max-width: 300px;
+        }
+
+        .footer-brand .logo {
+            margin-bottom: 1rem;
+        }
+
+        .footer-brand p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .footer-links h4 {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1.5rem;
+            color: var(--text-muted);
+        }
+
+        .footer-links ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .footer-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 4rem auto 0;
+            padding-top: 2rem;
+            border-top: 1px solid var(--card-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .solution-showcase {
+                grid-template-columns: 1fr;
+            }
+
+            .market-visual {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero {
+                padding: 6rem 1rem 2rem;
+            }
+
+            .code-overlay, .stats-overlay {
+                display: none;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    <div class="grid-pattern"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo">
+                <div class="logo-icon">🌐</div>
+                SimWorld AI
+            </div>
+            <ul class="nav-links">
+                <li><a href="#problem">Problem</a></li>
+                <li><a href="#solution">Solution</a></li>
+                <li><a href="#platform">Platform</a></li>
+                <li><a href="#market">Market</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+            </ul>
+            <a href="#cta" class="nav-cta">Get Early Access</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">Now in Private Beta</div>
+            <h1>Generate <span class="highlight">Infinite Realities</span><br>for Physical AI</h1>
+            <p class="hero-subtitle">
+                Photorealistic synthetic environments for training robots, autonomous vehicles, 
+                and embodied AI — at infinite scale, with perfect ground truth.
+            </p>
+            <div class="hero-cta-group">
+                <a href="#cta" class="btn-primary">
+                    Request Demo
+                    <span>→</span>
+                </a>
+                <a href="#solution" class="btn-secondary">
+                    <span>▶</span>
+                    Watch Overview
+                </a>
+            </div>
+
+            <div class="hero-visual">
+                <div class="world-container">
+                    <div class="world-grid"></div>
+                    <div class="world-objects">
+                        <div class="floating-object">🤖</div>
+                        <div class="floating-object">🏭</div>
+                        <div class="floating-object">🚗</div>
+                    </div>
+                    <div class="code-overlay">
+                        <code>
+                            <span style="color: #82aaff;">simworld</span>.<span style="color: #c3e88d;">generate</span>(<br>
+                            &nbsp;&nbsp;template=<span style="color: #f78c6c;">"warehouse"</span>,<br>
+                            &nbsp;&nbsp;variations=<span style="color: #f78c6c;">10000</span><br>
+                            )
+                        </code>
+                    </div>
+                    <div class="stats-overlay">
+                        <div class="stat-item">
+                            <div class="stat-value">10K</div>
+                            <div class="stat-label">Environments</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">&lt;1hr</div>
+                            <div class="stat-label">Generation</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">100%</div>
+                            <div class="stat-label">Labeled</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Logo Ticker -->
+    <div class="logo-ticker">
+        <div class="ticker-label">Trusted by Leading Robotics Teams</div>
+        <div class="ticker-track">
+            <div class="ticker-item">Amazon Robotics</div>
+            <div class="ticker-item">Figure AI</div>
+            <div class="ticker-item">Waymo</div>
+            <div class="ticker-item">Tesla</div>
+            <div class="ticker-item">Boston Dynamics</div>
+            <div class="ticker-item">Covariant</div>
+            <div class="ticker-item">Locus Robotics</div>
+            <div class="ticker-item">Aurora</div>
+            <div class="ticker-item">Amazon Robotics</div>
+            <div class="ticker-item">Figure AI</div>
+            <div class="ticker-item">Waymo</div>
+            <div class="ticker-item">Tesla</div>
+            <div class="ticker-item">Boston Dynamics</div>
+            <div class="ticker-item">Covariant</div>
+            <div class="ticker-item">Locus Robotics</div>
+            <div class="ticker-item">Aurora</div>
+        </div>
+    </div>
+
+    <!-- Problem Section -->
+    <section id="problem">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-label">The Challenge</div>
+                <h2 class="section-title">Physical AI Has a Data Problem</h2>
+                <p class="section-subtitle">
+                    Training robots in the real world is expensive, dangerous, slow, and limited. 
+                    That's why the best teams are turning to simulation.
+                </p>
+            </div>
+
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="problem-icon">💰</div>
+                    <h3>Prohibitively Expensive</h3>
+                    <p>Collecting 1 hour of real-world training data costs $10,000+ — facilities, equipment, operators, and labeling.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">⚠️</div>
+                    <h3>Dangerous to Collect</h3>
+                    <p>Testing autonomous systems in real environments risks property damage, injury, and regulatory nightmares.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">🎯</div>
+                    <h3>Missing Edge Cases</h3>
+                    <p>You can't easily create rare scenarios — fires, crashes, unusual objects. But those are exactly what breaks deployed systems.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">🏷️</div>
+                    <h3>No Perfect Labels</h3>
+                    <p>Real-world data requires expensive manual annotation. Perfect segmentation, depth, and physics labels are nearly impossible.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">🔄</div>
+                    <h3>Limited Variation</h3>
+                    <p>Lighting, weather, and object arrangements vary infinitely. Models trained on limited data fail in novel conditions.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">🏗️</div>
+                    <h3>Everyone Builds In-House</h3>
+                    <p>Tesla, Waymo, Amazon all build their own simulation. Wasteful, expensive, and siloed. The market is ready for standardization.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section id="solution">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-label">The Solution</div>
+                <h2 class="section-title">Generate Any World, On Demand</h2>
+                <p class="section-subtitle">
+                    SimWorld AI creates photorealistic, physics-accurate synthetic environments 
+                    with just a few lines of code.
+                </p>
+            </div>
+
+            <div class="solution-showcase">
+                <div class="solution-visual">
+                    <div class="code-block">
+                        <div class="code-header">
+                            <div class="code-dot red"></div>
+                            <div class="code-dot yellow"></div>
+                            <div class="code-dot green"></div>
+                        </div>
+                        <div class="code-body">
+<span class="keyword">import</span> simworld
+
+<span class="comment"># Create a warehouse environment</span>
+env = simworld.<span class="function">create</span>(
+    template=<span class="string">"warehouse"</span>,
+    size_sqft=<span class="number">50000</span>,
+    inventory_density=<span class="number">0.7</span>,
+    lighting=<span class="string">"mixed"</span>,
+    workers=<span class="number">15</span>,
+    forklifts=<span class="number">3</span>
+)
+
+<span class="comment"># Generate 10,000 variations</span>
+<span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(<span class="number">10000</span>):
+    env.<span class="function">randomize</span>(
+        lighting_variance=<span class="number">0.3</span>,
+        object_variance=<span class="number">0.5</span>
+    )
+    
+    <span class="comment"># Perfect labels included</span>
+    rgb = obs[<span class="string">"camera"</span>]
+    depth = obs[<span class="string">"depth"</span>]
+    segmentation = obs[<span class="string">"segmentation"</span>]
+                        </div>
+                    </div>
+                </div>
+
+                <div class="solution-content">
+                    <h3>API-First Synthetic Environment Generation</h3>
+                    <p>
+                        Describe what you need in natural terms — SimWorld generates photorealistic 
+                        environments with accurate physics and perfect ground truth labels.
+                    </p>
+                    <ul class="feature-list">
+                        <li>
+                            <span class="check">✓</span>
+                            <span><strong>Procedural Generation</strong> — Infinite variations with physical accuracy</span>
+                        </li>
+                        <li>
+                            <span class="check">✓</span>
+                            <span><strong>Neural Rendering</strong> — Photorealistic materials and lighting</span>
+                        </li>
+                        <li>
+                            <span class="check">✓</span>
+                            <span><strong>Physics Simulation</strong> — Rigid body, soft body, fluids, and more</span>
+                        </li>
+                        <li>
+                            <span class="check">✓</span>
+                            <span><strong>Perfect Ground Truth</strong> — Segmentation, depth, poses, physics state</span>
+                        </li>
+                        <li>
+                            <span class="check">✓</span>
+                            <span><strong>Sensor Models</strong> — Camera, LiDAR, radar, IMU with accurate noise</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Platform Section -->
+    <section id="platform">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-label">Architecture</div>
+                <h2 class="section-title">Full-Stack Simulation Infrastructure</h2>
+                <p class="section-subtitle">
+                    Three layers of technology, optimized end-to-end for physical AI training.
+                </p>
+            </div>
+
+            <div class="platform-diagram">
+                <div class="platform-layer">
+                    <div class="layer-label">Application Layer</div>
+                    <div class="layer-modules">
+                        <div class="module"><span class="module-icon">🏭</span> Warehouse Sim</div>
+                        <div class="module"><span class="module-icon">🏙️</span> Urban Streets</div>
+                        <div class="module"><span class="module-icon">🏠</span> Home Indoor</div>
+                        <div class="module"><span class="module-icon">⚙️</span> Factory Floor</div>
+                        <div class="module"><span class="module-icon">🏗️</span> Construction</div>
+                    </div>
+                </div>
+                <div class="platform-layer">
+                    <div class="layer-label">Generation Layer</div>
+                    <div class="layer-modules">
+                        <div class="module"><span class="module-icon">🎲</span> Procedural Engine</div>
+                        <div class="module"><span class="module-icon">🧠</span> Neural Rendering</div>
+                        <div class="module"><span class="module-icon">⚡</span> Physics Engine</div>
+                        <div class="module"><span class="module-icon">📡</span> Sensor Models</div>
+                    </div>
+                </div>
+                <div class="platform-layer">
+                    <div class="layer-label">Infrastructure Layer</div>
+                    <div class="layer-modules">
+                        <div class="module"><span class="module-icon">🖥️</span> GPU Cluster</div>
+                        <div class="module"><span class="module-icon">💾</span> Storage</div>
+                        <div class="module"><span class="module-icon">🔌</span> API Gateway</div>
+                        <div class="module"><span class="module-icon">📊</span> Analytics</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="use-cases-grid">
+                <div class="use-case-card">
+                    <div class="use-case-icon">🤖</div>
+                    <h3>Warehouse Robotics</h3>
+                    <p>Train picking, packing, and navigation systems with infinite warehouse variations, inventory configurations, and worker interactions.</p>
+                    <div class="use-case-stats">
+                        <div class="use-case-stat">
+                            <div class="use-case-stat-value">80%</div>
+                            <div class="use-case-stat-label">Cost Reduction</div>
+                        </div>
+                        <div class="use-case-stat">
+                            <div class="use-case-stat-value">100x</div>
+                            <div class="use-case-stat-label">More Data</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="use-case-card">
+                    <div class="use-case-icon">🚗</div>
+                    <h3>Autonomous Vehicles</h3>
+                    <p>Generate city streets, highways, and intersections with dynamic traffic, pedestrians, weather, and rare edge cases.</p>
+                    <div class="use-case-stats">
+                        <div class="use-case-stat">
+                            <div class="use-case-stat-value">∞</div>
+                            <div class="use-case-stat-label">Edge Cases</div>
+                        </div>
+                        <div class="use-case-stat">
+                            <div class="use-case-stat-value">0</div>
+                            <div class="use-case-stat-label">Safety Risk</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="use-case-card">
+                    <div class="use-case-icon">🦾</div>
+                    <h3>Humanoid Robots</h3>
+                    <p>Train manipulation, locomotion, and human interaction in realistic home and workplace environments.</p>
+                    <div class="use-case-stats">
+                        <div class="use-case-stat">
+                            <div class="use-case-stat-value">50+</div>
+                            <div class="use-case-stat-label">Object Types</div>
+                        </div>
+                        <div class="use-case-stat">
+                            <div class="use-case-stat-value">Real</div>
+                            <div class="use-case-stat-label">Physics</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Market Section -->
+    <section id="market">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-label">Market Opportunity</div>
+                <h2 class="section-title">$50B+ Market by 2030</h2>
+                <p class="section-subtitle">
+                    Physical AI is exploding. Every robot, vehicle, and drone needs simulation infrastructure.
+                </p>
+            </div>
+
+            <div class="market-visual">
+                <div class="market-chart">
+                    <h4 style="margin-bottom: 2rem; color: var(--text-muted);">Physical AI Simulation Market (USD Billions)</h4>
+                    <div class="chart-bars">
+                        <div class="bar-group">
+                            <div class="bar" style="height: 58px;"><span class="bar-value">$14.5B</span></div>
+                            <span class="bar-label">2026</span>
+                        </div>
+                        <div class="bar-group">
+                            <div class="bar" style="height: 100px;"><span class="bar-value">$25B</span></div>
+                            <span class="bar-label">2027</span>
+                        </div>
+                        <div class="bar-group">
+                            <div class="bar" style="height: 140px;"><span class="bar-value">$35B</span></div>
+                            <span class="bar-label">2028</span>
+                        </div>
+                        <div class="bar-group">
+                            <div class="bar" style="height: 176px;"><span class="bar-value">$44B</span></div>
+                            <span class="bar-label">2029</span>
+                        </div>
+                        <div class="bar-group">
+                            <div class="bar" style="height: 212px; background: linear-gradient(180deg, var(--accent), var(--primary));"><span class="bar-value">$53B</span></div>
+                            <span class="bar-label">2030</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="market-highlights">
+                    <div class="highlight-card">
+                        <div class="highlight-value">38%</div>
+                        <div class="highlight-label">Market CAGR</div>
+                    </div>
+                    <div class="highlight-card">
+                        <div class="highlight-value">85%</div>
+                        <div class="highlight-label">Humanoid Segment CAGR</div>
+                    </div>
+                    <div class="highlight-card">
+                        <div class="highlight-value">$1B+</div>
+                        <div class="highlight-label">Tesla/Waymo Annual Spend</div>
+                    </div>
+                    <div class="highlight-card">
+                        <div class="highlight-value">100%</div>
+                        <div class="highlight-label">Build In-House Today</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-label">Pricing</div>
+                <h2 class="section-title">Scale With Your Needs</h2>
+                <p class="section-subtitle">
+                    From startups to enterprise. Pay for what you use.
+                </p>
+            </div>
+
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <div class="pricing-name">Starter</div>
+                    <div class="pricing-price">$5,000<span>/month</span></div>
+                    <div class="pricing-desc">For early-stage teams validating concepts</div>
+                    <ul class="pricing-features">
+                        <li>100 GPU-hours/month</li>
+                        <li>5 environment templates</li>
+                        <li>Standard sensor models</li>
+                        <li>Community support</li>
+                        <li>API access</li>
+                    </ul>
+                    <button class="pricing-cta">Get Started</button>
+                </div>
+
+                <div class="pricing-card featured">
+                    <div class="pricing-name">Pro</div>
+                    <div class="pricing-price">$25,000<span>/month</span></div>
+                    <div class="pricing-desc">For teams shipping production systems</div>
+                    <ul class="pricing-features">
+                        <li>1,000 GPU-hours/month</li>
+                        <li>All environment templates</li>
+                        <li>Custom sensor calibration</li>
+                        <li>Priority support</li>
+                        <li>Advanced analytics</li>
+                        <li>Sim-to-real transfer tools</li>
+                    </ul>
+                    <button class="pricing-cta">Request Demo</button>
+                </div>
+
+                <div class="pricing-card">
+                    <div class="pricing-name">Enterprise</div>
+                    <div class="pricing-price">Custom</div>
+                    <div class="pricing-desc">For large-scale production deployments</div>
+                    <ul class="pricing-features">
+                        <li>Unlimited generation</li>
+                        <li>Custom environment development</li>
+                        <li>On-premise deployment option</li>
+                        <li>Dedicated success team</li>
+                        <li>SLA guarantees</li>
+                        <li>Custom integrations</li>
+                    </ul>
+                    <button class="pricing-cta">Contact Sales</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="cta">
+        <div class="cta-content">
+            <h2>Ready to Generate Reality?</h2>
+            <p>
+                Join the leading robotics teams building the future with SimWorld AI. 
+                Get early access to world-class simulation infrastructure.
+            </p>
+            <div class="cta-buttons">
+                <a href="mailto:founders@simworld.ai" class="btn-primary">
+                    Request Early Access
+                    <span>→</span>
+                </a>
+                <a href="#solution" class="btn-secondary">
+                    <span>📄</span>
+                    Read the Playbook
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <div class="logo">
+                    <div class="logo-icon">🌐</div>
+                    SimWorld AI
+                </div>
+                <p>Generate infinite realities so AI can master the physical world.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Product</h4>
+                <ul>
+                    <li><a href="#solution">Platform</a></li>
+                    <li><a href="#pricing">Pricing</a></li>
+                    <li><a href="#">Documentation</a></li>
+                    <li><a href="#">API Reference</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Resources</h4>
+                <ul>
+                    <li><a href="#">Case Studies</a></li>
+                    <li><a href="#">Research</a></li>
+                    <li><a href="#">GitHub</a></li>
+                    <li><a href="#">Discord</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>© 2026 SimWorld AI. All rights reserved.</span>
+            <span>San Francisco, CA</span>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scroll for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Animate bars on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.transform = 'scaleY(1)';
+                }
+            });
+        }, { threshold: 0.5 });
+
+        document.querySelectorAll('.bar').forEach(bar => {
+            bar.style.transformOrigin = 'bottom';
+            bar.style.transform = 'scaleY(0)';
+            bar.style.transition = 'transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)';
+            observer.observe(bar);
+        });
+    </script>
+</body>
+</html>
