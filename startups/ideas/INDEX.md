@@ -39,6 +39,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-02-08 | Afternoon | GovOS — Autonomous Government Intelligence | [Playbook](2026-02-08-afternoon.md) • [Landing](2026-02-08-afternoon-landing.html) • [PDF](2026-02-08-afternoon.pdf) |
 | 2026-02-09 | Evening | SynthLife — Autonomous Protein Design Intelligence | [Playbook](2026-02-09-evening.md) • [Landing](2026-02-09-evening-landing.html) • [PDF](2026-02-09-evening.pdf) |
 | 2026-02-09 | Morning | SimWorld AI — Synthetic Reality Generation for Physical AI | [Playbook](2026-02-09-morning.md) • [Landing](2026-02-09-morning-landing.html) • [PDF](2026-02-09-morning.pdf) |
+| 2026-02-09 | Afternoon | MemoryOS — The Persistent Memory Layer for AI Agents | [Playbook](2026-02-09-afternoon.md) • [Landing](2026-02-09-afternoon-landing.html) • [PDF](2026-02-09-afternoon.pdf) |
 <!-- New entries will be added above this line -->
 
 ---

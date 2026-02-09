@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MemoryOS — The Persistent Memory Layer for AI Agents</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #8b5cf6;
+            --accent: #06b6d4;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --dark: #0f172a;
+            --darker: #020617;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --gradient-1: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #06b6d4 100%);
+            --gradient-2: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            --gradient-3: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+            --glow: 0 0 60px rgba(99, 102, 241, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--darker);
+            color: var(--light);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Animated Background */
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(99, 102, 241, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .floating-orbs {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .orb-1 {
+            width: 600px;
+            height: 600px;
+            background: var(--primary);
+            top: -200px;
+            right: -200px;
+            animation-delay: 0s;
+        }
+
+        .orb-2 {
+            width: 500px;
+            height: 500px;
+            background: var(--secondary);
+            bottom: -150px;
+            left: -150px;
+            animation-delay: -7s;
+        }
+
+        .orb-3 {
+            width: 400px;
+            height: 400px;
+            background: var(--accent);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation-delay: -14s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(50px, -50px) scale(1.1); }
+            50% { transform: translate(-30px, 30px) scale(0.95); }
+            75% { transform: translate(-50px, -30px) scale(1.05); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 1.5rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(2, 6, 23, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(99, 102, 241, 0.1);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: var(--gradient-1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            -webkit-text-fill-color: white;
+            box-shadow: var(--glow);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--gray);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--light);
+        }
+
+        .btn {
+            padding: 0.875rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: var(--gradient-1);
+            color: white;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 30px rgba(99, 102, 241, 0.5);
+        }
+
+        .btn-secondary {
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--primary);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(99, 102, 241, 0.2);
+            border-color: var(--primary);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 4rem 4rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            text-align: center;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1.25rem;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 100px;
+            font-size: 0.875rem;
+            color: var(--primary);
+            margin-bottom: 2rem;
+            animation: pulse-border 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-border {
+            0%, 100% { border-color: rgba(99, 102, 241, 0.3); }
+            50% { border-color: rgba(99, 102, 241, 0.6); }
+        }
+
+        .badge span {
+            width: 8px;
+            height: 8px;
+            background: var(--success);
+            border-radius: 50%;
+            animation: blink 1.5s ease-in-out infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        h1 {
+            font-size: 4.5rem;
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.03em;
+        }
+
+        h1 .gradient {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-description {
+            font-size: 1.375rem;
+            color: var(--gray);
+            margin-bottom: 3rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.7;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 4rem;
+        }
+
+        /* Code Preview */
+        .code-preview {
+            background: var(--gradient-2);
+            border-radius: 20px;
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            overflow: hidden;
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: left;
+            box-shadow: var(--glow);
+        }
+
+        .code-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 1.5rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid rgba(99, 102, 241, 0.1);
+        }
+
+        .code-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .code-dot.red { background: #ef4444; }
+        .code-dot.yellow { background: #f59e0b; }
+        .code-dot.green { background: #10b981; }
+
+        .code-title {
+            margin-left: 1rem;
+            color: var(--gray);
+            font-size: 0.875rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .code-content {
+            padding: 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
+            line-height: 1.8;
+            overflow-x: auto;
+        }
+
+        .code-content .comment { color: #6b7280; }
+        .code-content .keyword { color: #c084fc; }
+        .code-content .string { color: #34d399; }
+        .code-content .function { color: #60a5fa; }
+        .code-content .variable { color: #f9fafb; }
+        .code-content .number { color: #fbbf24; }
+
+        /* Features Section */
+        .features {
+            padding: 8rem 4rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 5rem;
+        }
+
+        .section-header h2 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            font-size: 1.25rem;
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: var(--gradient-2);
+            border-radius: 24px;
+            padding: 2.5rem;
+            border: 1px solid rgba(99, 102, 241, 0.15);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-1);
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(99, 102, 241, 0.3);
+            box-shadow: var(--glow);
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(99, 102, 241, 0.2);
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card p {
+            color: var(--gray);
+            line-height: 1.7;
+        }
+
+        /* Memory Types Section */
+        .memory-types {
+            padding: 8rem 4rem;
+            background: linear-gradient(180deg, transparent 0%, rgba(99, 102, 241, 0.03) 50%, transparent 100%);
+            position: relative;
+            z-index: 1;
+        }
+
+        .memory-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .memory-card {
+            background: var(--gradient-2);
+            border-radius: 24px;
+            padding: 2rem;
+            border: 1px solid rgba(99, 102, 241, 0.15);
+            text-align: center;
+            transition: all 0.4s;
+        }
+
+        .memory-card:hover {
+            transform: scale(1.02);
+            border-color: rgba(99, 102, 241, 0.4);
+        }
+
+        .memory-emoji {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .memory-card h4 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            color: var(--light);
+        }
+
+        .memory-card p {
+            color: var(--gray);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Stats Section */
+        .stats {
+            padding: 6rem 4rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 4rem;
+            font-weight: 900;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--gray);
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        /* Pricing Section */
+        .pricing {
+            padding: 8rem 4rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            background: var(--gradient-2);
+            border-radius: 24px;
+            padding: 2.5rem;
+            border: 1px solid rgba(99, 102, 241, 0.15);
+            transition: all 0.4s;
+        }
+
+        .pricing-card.featured {
+            border-color: var(--primary);
+            box-shadow: var(--glow);
+            transform: scale(1.02);
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .pricing-card.featured:hover {
+            transform: scale(1.02) translateY(-5px);
+        }
+
+        .pricing-tier {
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-price {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 0.25rem;
+        }
+
+        .pricing-price span {
+            font-size: 1rem;
+            color: var(--gray);
+            font-weight: 400;
+        }
+
+        .pricing-memories {
+            color: var(--gray);
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid rgba(99, 102, 241, 0.1);
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-features li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 0;
+            color: var(--gray);
+        }
+
+        .pricing-features li::before {
+            content: '✓';
+            color: var(--success);
+            font-weight: 700;
+        }
+
+        /* Architecture Section */
+        .architecture {
+            padding: 8rem 4rem;
+            background: linear-gradient(180deg, transparent 0%, rgba(99, 102, 241, 0.03) 50%, transparent 100%);
+            position: relative;
+            z-index: 1;
+        }
+
+        .arch-diagram {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--gradient-2);
+            border-radius: 24px;
+            padding: 3rem;
+            border: 1px solid rgba(99, 102, 241, 0.2);
+        }
+
+        .arch-layer {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .arch-box {
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 12px;
+            padding: 1.25rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .arch-box:hover {
+            background: rgba(99, 102, 241, 0.2);
+            border-color: var(--primary);
+        }
+
+        .arch-box h5 {
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+            color: var(--light);
+        }
+
+        .arch-box span {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        .arch-arrow {
+            text-align: center;
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .arch-center {
+            display: flex;
+            justify-content: center;
+        }
+
+        .arch-center .arch-box {
+            width: 50%;
+            background: var(--gradient-1);
+            border: none;
+        }
+
+        .arch-center .arch-box h5 {
+            color: white;
+        }
+
+        .arch-center .arch-box span {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 8rem 4rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-box {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--gradient-1);
+            border-radius: 32px;
+            padding: 5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-box::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta h2 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .cta p {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            margin-bottom: 2.5rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta .btn {
+            background: white;
+            color: var(--primary);
+            font-size: 1.1rem;
+            padding: 1rem 2.5rem;
+        }
+
+        .cta .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem;
+            text-align: center;
+            border-top: 1px solid rgba(99, 102, 241, 0.1);
+            position: relative;
+            z-index: 1;
+        }
+
+        footer p {
+            color: var(--gray);
+        }
+
+        footer .tagline {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+            color: var(--light);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .memory-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem 1.5rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .hero, .features, .memory-types, .stats, .pricing, .architecture, .cta {
+                padding: 4rem 1.5rem;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero-description {
+                font-size: 1.1rem;
+            }
+            
+            .section-header h2 {
+                font-size: 2rem;
+            }
+            
+            .memory-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stat-value {
+                font-size: 3rem;
+            }
+            
+            .arch-layer {
+                grid-template-columns: 1fr;
+            }
+            
+            .arch-center .arch-box {
+                width: 100%;
+            }
+            
+            .cta-box {
+                padding: 3rem 1.5rem;
+            }
+            
+            .cta h2 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+    <div class="floating-orbs">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <nav>
+        <div class="logo">
+            <div class="logo-icon">🧠</div>
+            MemoryOS
+        </div>
+        <div class="nav-links">
+            <a href="#features">Features</a>
+            <a href="#architecture">Architecture</a>
+            <a href="#pricing">Pricing</a>
+            <a href="#" class="btn btn-primary">Get Early Access →</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <div class="badge">
+                <span></span>
+                Now in Private Beta
+            </div>
+            <h1>The <span class="gradient">Memory Layer</span><br>for AI Agents</h1>
+            <p class="hero-description">
+                Every AI agent wakes up with amnesia. MemoryOS fixes that. Persistent, intelligent memory infrastructure that makes your agents truly remember — preferences, context, and history.
+            </p>
+            <div class="hero-buttons">
+                <a href="#" class="btn btn-primary">Start Building Free →</a>
+                <a href="#" class="btn btn-secondary">Read the Docs</a>
+            </div>
+            
+            <div class="code-preview">
+                <div class="code-header">
+                    <div class="code-dot red"></div>
+                    <div class="code-dot yellow"></div>
+                    <div class="code-dot green"></div>
+                    <span class="code-title">quickstart.py</span>
+                </div>
+                <div class="code-content">
+<span class="keyword">from</span> <span class="variable">memoryos</span> <span class="keyword">import</span> <span class="function">MemoryClient</span>
+
+<span class="comment"># Initialize with any AI platform</span>
+<span class="variable">memory</span> = <span class="function">MemoryClient</span>(<span class="string">"my-agent"</span>, <span class="string">"user-123"</span>)
+
+<span class="comment"># Store a memory</span>
+<span class="variable">memory</span>.<span class="function">remember</span>(<span class="string">"User is training for a marathon"</span>)
+
+<span class="comment"># Retrieve relevant context</span>
+<span class="variable">context</span> = <span class="variable">memory</span>.<span class="function">recall</span>(<span class="string">"fitness goals"</span>)
+
+<span class="comment"># GDPR-compliant forget</span>
+<span class="variable">memory</span>.<span class="function">forget</span>(<span class="variable">user_id</span>=<span class="string">"user-123"</span>)
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="memory-types" id="memory-types">
+        <div class="section-header">
+            <h2>Cognitive Memory Architecture</h2>
+            <p>Built on human memory science — four types working together</p>
+        </div>
+        <div class="memory-grid">
+            <div class="memory-card">
+                <div class="memory-emoji">📅</div>
+                <h4>Episodic Memory</h4>
+                <p>"What Happened" — Specific events, conversations, and interactions with timestamps</p>
+            </div>
+            <div class="memory-card">
+                <div class="memory-emoji">📚</div>
+                <h4>Semantic Memory</h4>
+                <p>"What I Know" — Facts, preferences, and learned information in knowledge graphs</p>
+            </div>
+            <div class="memory-card">
+                <div class="memory-emoji">⚙️</div>
+                <h4>Procedural Memory</h4>
+                <p>"How To Do Things" — Learned workflows, patterns, and skills</p>
+            </div>
+            <div class="memory-card">
+                <div class="memory-emoji">💭</div>
+                <h4>Working Memory</h4>
+                <p>"Active Context" — Optimized short-term store for the current session</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="features" id="features">
+        <div class="section-header">
+            <h2>Everything Your Agents Need</h2>
+            <p>Enterprise-grade memory infrastructure, developer-friendly APIs</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>Sub-10ms Retrieval</h3>
+                <p>Globally distributed infrastructure ensures your agents get context instantly. No waiting, no latency spikes.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔒</div>
+                <h3>Privacy-First Design</h3>
+                <p>GDPR/CCPA compliant out of the box. Consent management, retention policies, right-to-delete, and data residency controls.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🤝</div>
+                <h3>Multi-Agent Sharing</h3>
+                <p>Enable agent teams to share context. Team memory, org-wide knowledge, and fine-grained access controls.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <h3>Intelligent Retrieval</h3>
+                <p>Not just vector search — our Memory Router understands context, recency, importance, and relevance.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>Memory Analytics</h3>
+                <p>Understand which memories drive value. Track utilization, recall quality, and coverage gaps.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔄</div>
+                <h3>Auto-Consolidation</h3>
+                <p>Old memories are automatically compressed and consolidated. Long-term storage without the bloat.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="stats">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-value">&lt;10ms</div>
+                <div class="stat-label">Global Retrieval</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">99.99%</div>
+                <div class="stat-label">Uptime SLA</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">100B+</div>
+                <div class="stat-label">Memories Stored</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">90%+</div>
+                <div class="stat-label">Gross Margin</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="architecture" id="architecture">
+        <div class="section-header">
+            <h2>Built for Scale</h2>
+            <p>Production-grade architecture from day one</p>
+        </div>
+        <div class="arch-diagram">
+            <div class="arch-layer">
+                <div class="arch-box">
+                    <h5>Episodic Store</h5>
+                    <span>Events & Interactions</span>
+                </div>
+                <div class="arch-box">
+                    <h5>Semantic Store</h5>
+                    <span>Facts & Knowledge</span>
+                </div>
+                <div class="arch-box">
+                    <h5>Procedural Store</h5>
+                    <span>Skills & Workflows</span>
+                </div>
+            </div>
+            <div class="arch-arrow">↓</div>
+            <div class="arch-center">
+                <div class="arch-box">
+                    <h5>Memory Router</h5>
+                    <span>Intelligent Retrieval & Ranking</span>
+                </div>
+            </div>
+            <div class="arch-arrow">↓</div>
+            <div class="arch-layer">
+                <div class="arch-box">
+                    <h5>Privacy Engine</h5>
+                    <span>Consent & Compliance</span>
+                </div>
+                <div class="arch-box">
+                    <h5>Sharing Layer</h5>
+                    <span>Multi-Agent Access</span>
+                </div>
+                <div class="arch-box">
+                    <h5>Analytics</h5>
+                    <span>Insights & Metrics</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="pricing" id="pricing">
+        <div class="section-header">
+            <h2>Simple, Transparent Pricing</h2>
+            <p>Start free, scale as you grow</p>
+        </div>
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <div class="pricing-tier">Free</div>
+                <div class="pricing-price">$0</div>
+                <div class="pricing-memories">10K memories/month</div>
+                <ul class="pricing-features">
+                    <li>Core API access</li>
+                    <li>30-day retention</li>
+                    <li>Community support</li>
+                    <li>Basic analytics</li>
+                </ul>
+                <a href="#" class="btn btn-secondary" style="width: 100%; justify-content: center;">Get Started</a>
+            </div>
+            <div class="pricing-card featured">
+                <div class="pricing-tier">Pro</div>
+                <div class="pricing-price">$49<span>/mo</span></div>
+                <div class="pricing-memories">500K memories/month</div>
+                <ul class="pricing-features">
+                    <li>Everything in Free</li>
+                    <li>Privacy Suite</li>
+                    <li>1-year retention</li>
+                    <li>Priority support</li>
+                    <li>Advanced analytics</li>
+                </ul>
+                <a href="#" class="btn btn-primary" style="width: 100%; justify-content: center;">Start Pro Trial</a>
+            </div>
+            <div class="pricing-card">
+                <div class="pricing-tier">Team</div>
+                <div class="pricing-price">$199<span>/mo</span></div>
+                <div class="pricing-memories">5M memories/month</div>
+                <ul class="pricing-features">
+                    <li>Everything in Pro</li>
+                    <li>Multi-agent sharing</li>
+                    <li>Team management</li>
+                    <li>Custom retention</li>
+                    <li>Dedicated support</li>
+                </ul>
+                <a href="#" class="btn btn-secondary" style="width: 100%; justify-content: center;">Contact Sales</a>
+            </div>
+            <div class="pricing-card">
+                <div class="pricing-tier">Enterprise</div>
+                <div class="pricing-price">Custom</div>
+                <div class="pricing-memories">Unlimited memories</div>
+                <ul class="pricing-features">
+                    <li>Everything in Team</li>
+                    <li>Dedicated infrastructure</li>
+                    <li>On-premise option</li>
+                    <li>99.99% SLA</li>
+                    <li>24/7 support</li>
+                </ul>
+                <a href="#" class="btn btn-secondary" style="width: 100%; justify-content: center;">Talk to Us</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta">
+        <div class="cta-box">
+            <div class="cta-content">
+                <h2>AI Shouldn't Forget</h2>
+                <p>Join hundreds of developers building smarter AI agents with persistent memory. Get started in minutes.</p>
+                <a href="#" class="btn">Get Early Access →</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p class="tagline">MemoryOS — Because AI Shouldn't Forget 🧠</p>
+        <p>© 2026 MemoryOS. All rights reserved.</p>
+    </footer>
+</body>
+</html>
