@@ -37,6 +37,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-02-08 | Evening | SpaceMind AI — Autonomous Space Asset Intelligence | [Playbook](2026-02-08-evening.md) • [Landing](2026-02-08-evening-landing.html) • [PDF](2026-02-08-evening.pdf) |
 | 2026-02-08 | Morning | CodeArmy — Autonomous Software Engineering at Scale | [Playbook](2026-02-08-morning.md) • [Landing](2026-02-08-morning-landing.html) • [PDF](2026-02-08-morning.pdf) |
 | 2026-02-08 | Afternoon | GovOS — Autonomous Government Intelligence | [Playbook](2026-02-08-afternoon.md) • [Landing](2026-02-08-afternoon-landing.html) • [PDF](2026-02-08-afternoon.pdf) |
+| 2026-02-09 | Evening | SynthLife — Autonomous Protein Design Intelligence | [Playbook](2026-02-09-evening.md) • [Landing](2026-02-09-evening-landing.html) • [PDF](2026-02-09-evening.pdf) |
 <!-- New entries will be added above this line -->
 
 ---
