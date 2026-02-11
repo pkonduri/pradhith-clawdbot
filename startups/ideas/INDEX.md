@@ -42,6 +42,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-02-09 | Afternoon | MemoryOS — The Persistent Memory Layer for AI Agents | [Playbook](2026-02-09-afternoon.md) • [Landing](2026-02-09-afternoon-landing.html) • [PDF](2026-02-09-afternoon.pdf) |
 | 2026-02-10 | Evening | WealthMind AI — Autonomous Personal Wealth Intelligence | [Playbook](2026-02-10-evening.md) • [Landing](2026-02-10-evening-landing.html) • [PDF](2026-02-10-evening.pdf) |
 | 2026-02-11 | Evening | BrainLink AI — The Intelligence Layer for BCIs | [Playbook](2026-02-11-evening.md) • [Landing](2026-02-11-evening-landing.html) • [PDF](2026-02-11-evening.pdf) |
+| 2026-02-11 | Morning | DiagnosticOS — Autonomous Medical Diagnostics Intelligence | [Playbook](2026-02-11-morning.md) • [Landing](2026-02-11-morning-landing.html) • [PDF](2026-02-11-morning.pdf) |
 <!-- New entries will be added above this line -->
 
 ---

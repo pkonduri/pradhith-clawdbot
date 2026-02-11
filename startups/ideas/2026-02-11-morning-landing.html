@@ -1,0 +1,1618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DiagnosticOS — Autonomous Medical Diagnostics Intelligence</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0066FF;
+            --primary-dark: #0052CC;
+            --secondary: #00D4AA;
+            --accent: #FF6B35;
+            --dark: #0A1628;
+            --darker: #050D1A;
+            --light: #F8FAFF;
+            --gray: #64748B;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --gradient-1: linear-gradient(135deg, #0066FF 0%, #00D4AA 100%);
+            --gradient-2: linear-gradient(135deg, #0A1628 0%, #1E3A5F 100%);
+            --gradient-3: linear-gradient(180deg, rgba(0,102,255,0.1) 0%, transparent 100%);
+            --glass: rgba(255,255,255,0.05);
+            --glass-border: rgba(255,255,255,0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--darker);
+            color: white;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(0,102,255,0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(0,212,170,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(255,107,53,0.05) 0%, transparent 50%);
+            animation: bgPulse 15s ease-in-out infinite;
+        }
+
+        @keyframes bgPulse {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(-2%, -2%) scale(1.05); }
+        }
+
+        /* DNA Helix Animation */
+        .dna-container {
+            position: fixed;
+            right: 5%;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 80px;
+            height: 400px;
+            opacity: 0.3;
+            z-index: 0;
+        }
+
+        .dna-strand {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .dna-dot {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            animation: dnaRotate 4s ease-in-out infinite;
+        }
+
+        @keyframes dnaRotate {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(40px); }
+        }
+
+        /* Pulse Grid Background */
+        .pulse-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0,102,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,102,255,0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -1;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(5,13,26,0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 800;
+            font-size: 1.5rem;
+        }
+
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: var(--gradient-1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            box-shadow: 0 4px 20px rgba(0,102,255,0.4);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--gray);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .nav-links a:hover {
+            color: white;
+        }
+
+        .nav-cta {
+            background: var(--gradient-1);
+            color: white !important;
+            padding: 12px 28px;
+            border-radius: 50px;
+            font-weight: 600;
+            box-shadow: 0 4px 20px rgba(0,102,255,0.4);
+            transition: all 0.3s ease;
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0,102,255,0.5);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 120px 5% 80px;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .hero-badge span {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 600;
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 7vw, 5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.03em;
+        }
+
+        .hero h1 .gradient-text {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            font-size: 1.4rem;
+            color: var(--gray);
+            margin-bottom: 2.5rem;
+            max-width: 600px;
+            line-height: 1.7;
+        }
+
+        .hero-ctas {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 18px 36px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: var(--gradient-1);
+            color: white;
+            box-shadow: 0 4px 25px rgba(0,102,255,0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 40px rgba(0,102,255,0.5);
+        }
+
+        .btn-secondary {
+            background: var(--glass);
+            color: white;
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: var(--primary);
+        }
+
+        /* Floating Medical UI */
+        .hero-visual {
+            position: absolute;
+            right: 5%;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 45%;
+            max-width: 600px;
+            z-index: 5;
+        }
+
+        .diagnostic-card {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+            animation: floatCard 6s ease-in-out infinite;
+        }
+
+        @keyframes floatCard {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .diagnostic-card:nth-child(2) {
+            animation-delay: -2s;
+            margin-left: 40px;
+        }
+
+        .diagnostic-card:nth-child(3) {
+            animation-delay: -4s;
+            margin-left: 20px;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .card-badge {
+            background: rgba(16,185,129,0.2);
+            color: var(--success);
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .card-badge.warning {
+            background: rgba(245,158,11,0.2);
+            color: var(--warning);
+        }
+
+        .card-badge.processing {
+            background: rgba(0,102,255,0.2);
+            color: var(--primary);
+        }
+
+        .scan-visualization {
+            height: 120px;
+            background: linear-gradient(180deg, rgba(0,102,255,0.1) 0%, transparent 100%);
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        .scan-line {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--gradient-1);
+            animation: scanMove 2s ease-in-out infinite;
+        }
+
+        @keyframes scanMove {
+            0%, 100% { top: 0; opacity: 1; }
+            50% { top: 100%; opacity: 0.5; }
+        }
+
+        .scan-dots {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .scan-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--secondary);
+            border-radius: 50%;
+            animation: dotPulse 1.5s ease-in-out infinite;
+        }
+
+        .scan-dot:nth-child(2) { animation-delay: 0.2s; }
+        .scan-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes dotPulse {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.3); }
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+        }
+
+        .result-label {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        .result-value {
+            font-weight: 600;
+            color: var(--secondary);
+        }
+
+        .result-value.alert {
+            color: var(--accent);
+        }
+
+        /* Stats Section */
+        .stats {
+            padding: 80px 5%;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .stat-card {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 35px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: 0 20px 60px rgba(0,102,255,0.2);
+        }
+
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            color: var(--gray);
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        /* Problem Section */
+        .problem {
+            padding: 120px 5%;
+            background: var(--gradient-2);
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 80px;
+        }
+
+        .section-badge {
+            display: inline-block;
+            background: rgba(255,107,53,0.15);
+            color: var(--accent);
+            padding: 10px 24px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title {
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .section-subtitle {
+            color: var(--gray);
+            font-size: 1.2rem;
+            line-height: 1.7;
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .problem-card {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,107,53,0.2);
+            border-radius: 24px;
+            padding: 40px;
+            transition: all 0.3s ease;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+            box-shadow: 0 20px 60px rgba(255,107,53,0.15);
+        }
+
+        .problem-icon {
+            width: 70px;
+            height: 70px;
+            background: rgba(255,107,53,0.15);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 25px;
+        }
+
+        .problem-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .problem-text {
+            color: var(--gray);
+            line-height: 1.7;
+        }
+
+        .problem-stat {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--glass-border);
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--accent);
+        }
+
+        /* Solution Section */
+        .solution {
+            padding: 120px 5%;
+            position: relative;
+        }
+
+        .solution .section-badge {
+            background: rgba(0,212,170,0.15);
+            color: var(--secondary);
+        }
+
+        .solution-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .solution-card {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 50px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .solution-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient-1);
+        }
+
+        .solution-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 30px 80px rgba(0,102,255,0.15);
+        }
+
+        .solution-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--gradient-1);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.2rem;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0,102,255,0.3);
+        }
+
+        .solution-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .solution-text {
+            color: var(--gray);
+            line-height: 1.8;
+            margin-bottom: 25px;
+        }
+
+        .solution-features {
+            list-style: none;
+        }
+
+        .solution-features li {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+            color: rgba(255,255,255,0.9);
+        }
+
+        .solution-features li::before {
+            content: '✓';
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            background: rgba(0,212,170,0.2);
+            color: var(--secondary);
+            border-radius: 50%;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        /* Market Section */
+        .market {
+            padding: 120px 5%;
+            background: var(--gradient-2);
+        }
+
+        .market-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+
+        .market-visual {
+            position: relative;
+        }
+
+        .market-circle {
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            position: relative;
+            margin: 0 auto;
+        }
+
+        .market-ring {
+            position: absolute;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: ringPulse 3s ease-in-out infinite;
+        }
+
+        .market-ring.outer {
+            width: 100%;
+            height: 100%;
+            border-color: rgba(0,102,255,0.2);
+        }
+
+        .market-ring.middle {
+            width: 75%;
+            height: 75%;
+            top: 12.5%;
+            left: 12.5%;
+            border-color: rgba(0,212,170,0.3);
+            animation-delay: -1s;
+        }
+
+        .market-ring.inner {
+            width: 50%;
+            height: 50%;
+            top: 25%;
+            left: 25%;
+            border-color: rgba(255,107,53,0.4);
+            animation-delay: -2s;
+        }
+
+        @keyframes ringPulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.8; }
+        }
+
+        .market-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 10;
+        }
+
+        .market-center-value {
+            font-size: 4rem;
+            font-weight: 900;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .market-center-label {
+            color: var(--gray);
+            font-size: 1.2rem;
+            font-weight: 500;
+        }
+
+        .market-labels {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .market-label {
+            position: absolute;
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            padding: 15px 25px;
+            border-radius: 12px;
+            white-space: nowrap;
+        }
+
+        .market-label-value {
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .market-label-text {
+            color: var(--gray);
+            font-size: 0.85rem;
+        }
+
+        .market-label.top { top: -10px; left: 50%; transform: translateX(-50%); }
+        .market-label.right { right: -30px; top: 50%; transform: translateY(-50%); }
+        .market-label.bottom { bottom: -10px; left: 50%; transform: translateX(-50%); }
+        .market-label.left { left: -30px; top: 50%; transform: translateY(-50%); }
+
+        .market-info h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+        }
+
+        .market-info p {
+            color: var(--gray);
+            font-size: 1.15rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .market-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .market-stat {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            padding: 25px;
+            border-radius: 16px;
+        }
+
+        .market-stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--secondary);
+            margin-bottom: 5px;
+        }
+
+        .market-stat-label {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        /* Tech Section */
+        .tech {
+            padding: 120px 5%;
+        }
+
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .tech-card {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .tech-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+        }
+
+        .tech-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .tech-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .tech-text {
+            color: var(--gray);
+            line-height: 1.7;
+        }
+
+        /* Traction Section */
+        .traction {
+            padding: 120px 5%;
+            background: linear-gradient(180deg, var(--darker) 0%, var(--dark) 100%);
+        }
+
+        .timeline {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 100%;
+            background: var(--gradient-1);
+            border-radius: 2px;
+        }
+
+        .timeline-item {
+            display: flex;
+            justify-content: flex-end;
+            padding-right: 50%;
+            padding-bottom: 60px;
+            position: relative;
+        }
+
+        .timeline-item:nth-child(even) {
+            justify-content: flex-start;
+            padding-right: 0;
+            padding-left: 50%;
+        }
+
+        .timeline-content {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 400px;
+            position: relative;
+            margin-right: 40px;
+        }
+
+        .timeline-item:nth-child(even) .timeline-content {
+            margin-right: 0;
+            margin-left: 40px;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            background: var(--gradient-1);
+            border-radius: 50%;
+            top: 30px;
+            right: -52px;
+            box-shadow: 0 0 20px rgba(0,102,255,0.5);
+        }
+
+        .timeline-item:nth-child(even) .timeline-dot {
+            right: auto;
+            left: -52px;
+        }
+
+        .timeline-year {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--secondary);
+            margin-bottom: 10px;
+        }
+
+        .timeline-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .timeline-text {
+            color: var(--gray);
+            line-height: 1.6;
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 120px 5%;
+            text-align: center;
+            position: relative;
+        }
+
+        .cta::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(0,102,255,0.2) 0%, transparent 70%);
+            z-index: 0;
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 10;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cta h2 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .cta p {
+            color: var(--gray);
+            font-size: 1.3rem;
+            margin-bottom: 2.5rem;
+            line-height: 1.7;
+        }
+
+        /* Footer */
+        footer {
+            padding: 60px 5%;
+            border-top: 1px solid var(--glass-border);
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            font-weight: 800;
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--gray);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .footer-copy {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .hero-visual {
+                display: none;
+            }
+            
+            .hero-content {
+                max-width: 100%;
+            }
+            
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .problem-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .market-content {
+                grid-template-columns: 1fr;
+                gap: 60px;
+            }
+            
+            .market-visual {
+                order: 2;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .problem-grid,
+            .solution-grid,
+            .tech-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero-ctas {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .timeline::before {
+                left: 20px;
+            }
+            
+            .timeline-item,
+            .timeline-item:nth-child(even) {
+                padding-left: 60px;
+                padding-right: 0;
+                justify-content: flex-start;
+            }
+            
+            .timeline-content,
+            .timeline-item:nth-child(even) .timeline-content {
+                margin-left: 0;
+                margin-right: 0;
+            }
+            
+            .timeline-dot,
+            .timeline-item:nth-child(even) .timeline-dot {
+                left: 8px;
+                right: auto;
+            }
+            
+            .market-circle {
+                width: 300px;
+                height: 300px;
+            }
+            
+            .market-center-value {
+                font-size: 2.5rem;
+            }
+            
+            .market-label {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    <div class="pulse-grid"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">
+            <div class="logo-icon">🧬</div>
+            DiagnosticOS
+        </div>
+        <div class="nav-links">
+            <a href="#problem">Problem</a>
+            <a href="#solution">Solution</a>
+            <a href="#market">Market</a>
+            <a href="#technology">Technology</a>
+            <a href="#contact" class="nav-cta">Get Early Access</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span>🎯 $4M Pre-Seed</span>
+                <span>|</span>
+                <span>Now Raising</span>
+            </div>
+            <h1>
+                The <span class="gradient-text">AI Brain</span> for<br>
+                Healthcare Diagnostics
+            </h1>
+            <p class="hero-subtitle">
+                From sample to diagnosis in seconds, not days. DiagnosticOS unifies lab, imaging, and pathology data with real-time AI intelligence that catches what humans miss.
+            </p>
+            <div class="hero-ctas">
+                <a href="#contact" class="btn btn-primary">
+                    Request Demo
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
+                <a href="#solution" class="btn btn-secondary">
+                    Learn More
+                </a>
+            </div>
+        </div>
+
+        <div class="hero-visual">
+            <div class="diagnostic-card">
+                <div class="card-header">
+                    <span class="card-title">CT Brain Analysis</span>
+                    <span class="card-badge processing">Processing</span>
+                </div>
+                <div class="scan-visualization">
+                    <div class="scan-line"></div>
+                    <div class="scan-dots">
+                        <div class="scan-dot"></div>
+                        <div class="scan-dot"></div>
+                        <div class="scan-dot"></div>
+                    </div>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Stroke Detection</span>
+                    <span class="result-value">No findings</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Processing Time</span>
+                    <span class="result-value">47 seconds</span>
+                </div>
+            </div>
+
+            <div class="diagnostic-card">
+                <div class="card-header">
+                    <span class="card-title">Lab Panel Results</span>
+                    <span class="card-badge warning">Review Required</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Troponin-I</span>
+                    <span class="result-value alert">0.08 ng/mL ↑</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Creatinine</span>
+                    <span class="result-value">1.2 mg/dL</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">AI Risk Score</span>
+                    <span class="result-value alert">High - Cardiac Event</span>
+                </div>
+            </div>
+
+            <div class="diagnostic-card">
+                <div class="card-header">
+                    <span class="card-title">Mammography AI</span>
+                    <span class="card-badge">Completed</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">BI-RADS</span>
+                    <span class="result-value">Category 1</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Confidence</span>
+                    <span class="result-value">99.2%</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="stat-card">
+            <div class="stat-number">12M</div>
+            <div class="stat-label">Diagnostic Errors/Year (US)</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">$100B</div>
+            <div class="stat-label">Wasted on Redundant Tests</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">5-7</div>
+            <div class="stat-label">Days from Test to Diagnosis</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">70K</div>
+            <div class="stat-label">Pathologist Shortage by 2030</div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="problem" id="problem">
+        <div class="section-header">
+            <div class="section-badge">THE CRISIS</div>
+            <h2 class="section-title">Healthcare's Diagnostic Nightmare</h2>
+            <p class="section-subtitle">
+                70% of medical decisions depend on diagnostics. Yet the industry is stuck in the 1990s — siloed systems, manual workflows, and deadly errors.
+            </p>
+        </div>
+
+        <div class="problem-grid">
+            <div class="problem-card">
+                <div class="problem-icon">🔀</div>
+                <h3 class="problem-title">Siloed Systems</h3>
+                <p class="problem-text">
+                    Lab data, imaging, pathology, and EHR records don't talk to each other. Clinicians manually piece together fragmented information.
+                </p>
+                <div class="problem-stat">4+ Systems</div>
+            </div>
+
+            <div class="problem-card">
+                <div class="problem-icon">⏱️</div>
+                <h3 class="problem-title">Manual Workflows</h3>
+                <p class="problem-text">
+                    Pathologists manually review slides. Radiologists scroll through thousands of images. 40% of reads happen overnight by fatigued doctors.
+                </p>
+                <div class="problem-stat">4.4% Error Rate</div>
+            </div>
+
+            <div class="problem-card">
+                <div class="problem-icon">⚠️</div>
+                <h3 class="problem-title">Reactive Care</h3>
+                <p class="problem-text">
+                    Diagnostics happen after symptoms appear, not before. By the time cancer is detected, it's often too late for early intervention.
+                </p>
+                <div class="problem-stat">1.3M Missed/Year</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="solution" id="solution">
+        <div class="section-header">
+            <div class="section-badge">THE SOLUTION</div>
+            <h2 class="section-title">Intelligence Layer for Diagnostics</h2>
+            <p class="section-subtitle">
+                DiagnosticOS unifies all diagnostic data and runs AI analysis in real-time. Every test. Every image. Every pathology slide. One intelligent platform.
+            </p>
+        </div>
+
+        <div class="solution-grid">
+            <div class="solution-card">
+                <div class="solution-icon">🔬</div>
+                <h3 class="solution-title">Radiology AI Suite</h3>
+                <p class="solution-text">
+                    FDA-cleared AI models that analyze medical images in seconds, not hours. From chest X-rays to brain MRIs.
+                </p>
+                <ul class="solution-features">
+                    <li>Chest X-Ray: 14+ pathology detection</li>
+                    <li>CT/MRI: Stroke detection in 60 seconds</li>
+                    <li>Mammography: 99.2% cancer sensitivity</li>
+                    <li>Lung CT: Nodule risk scoring</li>
+                </ul>
+            </div>
+
+            <div class="solution-card">
+                <div class="solution-icon">🧫</div>
+                <h3 class="solution-title">Pathology AI Suite</h3>
+                <p class="solution-text">
+                    Digital pathology analysis that augments pathologists and eliminates backlogs. Whole slide imaging at scale.
+                </p>
+                <ul class="solution-features">
+                    <li>Cancer detection and grading</li>
+                    <li>Automated differential counts</li>
+                    <li>IHC scoring (HER2, PD-L1)</li>
+                    <li>Cytology screening</li>
+                </ul>
+            </div>
+
+            <div class="solution-card">
+                <div class="solution-icon">🧪</div>
+                <h3 class="solution-title">Lab Chemistry AI</h3>
+                <p class="solution-text">
+                    Pattern recognition across millions of lab values. Identifies disease signatures humans can't see.
+                </p>
+                <ul class="solution-features">
+                    <li>Multi-analyte pattern analysis</li>
+                    <li>Critical value prediction</li>
+                    <li>Longitudinal trend detection</li>
+                    <li>Drug interaction alerts</li>
+                </ul>
+            </div>
+
+            <div class="solution-card">
+                <div class="solution-icon">🎯</div>
+                <h3 class="solution-title">Predictive Diagnostics</h3>
+                <p class="solution-text">
+                    Move from reactive to predictive. Catch disease before symptoms appear with population-scale intelligence.
+                </p>
+                <ul class="solution-features">
+                    <li>Multi-cancer early detection</li>
+                    <li>Cardiovascular risk prediction</li>
+                    <li>Sepsis warning (6hr advance)</li>
+                    <li>Diabetes progression modeling</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Market Section -->
+    <section class="market" id="market">
+        <div class="market-content">
+            <div class="market-info">
+                <h2>Massive Market, Perfect Timing</h2>
+                <p>
+                    The global diagnostics market is $650B+ and growing. AI penetration is still under 1%. We're building the platform that will capture this transformation.
+                </p>
+                <div class="market-stats">
+                    <div class="market-stat">
+                        <div class="market-stat-value">52%</div>
+                        <div class="market-stat-label">AI Diagnostics CAGR</div>
+                    </div>
+                    <div class="market-stat">
+                        <div class="market-stat-value">$45B</div>
+                        <div class="market-stat-label">AI Diagnostics by 2030</div>
+                    </div>
+                    <div class="market-stat">
+                        <div class="market-stat-value">700+</div>
+                        <div class="market-stat-label">FDA AI Clearances</div>
+                    </div>
+                    <div class="market-stat">
+                        <div class="market-stat-value">14B</div>
+                        <div class="market-stat-label">Tests/Year Globally</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="market-visual">
+                <div class="market-circle">
+                    <div class="market-ring outer"></div>
+                    <div class="market-ring middle"></div>
+                    <div class="market-ring inner"></div>
+                    <div class="market-center">
+                        <div class="market-center-value">$650B</div>
+                        <div class="market-center-label">Total Market</div>
+                    </div>
+                    <div class="market-labels">
+                        <div class="market-label top">
+                            <div class="market-label-value">$280B</div>
+                            <div class="market-label-text">Clinical Lab</div>
+                        </div>
+                        <div class="market-label right">
+                            <div class="market-label-value">$185B</div>
+                            <div class="market-label-text">Imaging</div>
+                        </div>
+                        <div class="market-label bottom">
+                            <div class="market-label-value">$95B</div>
+                            <div class="market-label-text">Pathology</div>
+                        </div>
+                        <div class="market-label left">
+                            <div class="market-label-value">$90B</div>
+                            <div class="market-label-text">Point-of-Care</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technology Section -->
+    <section class="tech" id="technology">
+        <div class="section-header">
+            <div class="section-badge">TECHNOLOGY</div>
+            <h2 class="section-title">Built for Medical AI at Scale</h2>
+            <p class="section-subtitle">
+                Foundation models trained on 500M+ medical images. Multi-modal architecture. Continuous learning with clinical validation.
+            </p>
+        </div>
+
+        <div class="tech-grid">
+            <div class="tech-card">
+                <div class="tech-icon">🧠</div>
+                <h3 class="tech-title">Foundation Models</h3>
+                <p class="tech-text">
+                    Custom-trained medical AI models combining imaging, pathology, labs, and clinical text in unified representations.
+                </p>
+            </div>
+
+            <div class="tech-card">
+                <div class="tech-icon">🔒</div>
+                <h3 class="tech-title">Federated Learning</h3>
+                <p class="tech-text">
+                    Models improve from every health system while data never leaves the hospital. Privacy-preserving by design.
+                </p>
+            </div>
+
+            <div class="tech-card">
+                <div class="tech-icon">⚡</div>
+                <h3 class="tech-title">Edge + Cloud</h3>
+                <p class="tech-text">
+                    On-premise inference for latency-critical applications. Cloud for heavy compute. Seamlessly integrated.
+                </p>
+            </div>
+
+            <div class="tech-card">
+                <div class="tech-icon">🔗</div>
+                <h3 class="tech-title">FHIR-Native</h3>
+                <p class="tech-text">
+                    Native integration with Epic, Oracle Health, and modern EHRs. HL7/DICOM for legacy system compatibility.
+                </p>
+            </div>
+
+            <div class="tech-card">
+                <div class="tech-icon">✅</div>
+                <h3 class="tech-title">FDA Strategy</h3>
+                <p class="tech-text">
+                    50+ planned clearances across modalities. Experienced regulatory team with proven track record.
+                </p>
+            </div>
+
+            <div class="tech-card">
+                <div class="tech-icon">📊</div>
+                <h3 class="tech-title">Explainable AI</h3>
+                <p class="tech-text">
+                    Every diagnosis comes with evidence chains. Clinicians see why the AI reached its conclusion.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Traction Section -->
+    <section class="traction">
+        <div class="section-header">
+            <div class="section-badge">ROADMAP</div>
+            <h2 class="section-title">Path to $1B+ ARR</h2>
+            <p class="section-subtitle">
+                From pilot to platform dominance in 5 years.
+            </p>
+        </div>
+
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-year">Year 1</div>
+                    <div class="timeline-title">Foundation</div>
+                    <div class="timeline-text">
+                        5 FDA clearances, 10 pilot health systems, $8M ARR. Prove clinical outcomes with published studies.
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-year">Year 2</div>
+                    <div class="timeline-title">Scale</div>
+                    <div class="timeline-text">
+                        12 FDA clearances, 165 customers, $45M ARR. Add pathology and lab modules. Series A.
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-year">Year 3</div>
+                    <div class="timeline-title">Platform</div>
+                    <div class="timeline-text">
+                        20 FDA clearances, 530 customers, $180M ARR. Full suite deployment. International expansion.
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-year">Year 5</div>
+                    <div class="timeline-title">Dominance</div>
+                    <div class="timeline-text">
+                        50+ FDA clearances, 2,600+ customers, $1.2B ARR, 28% EBITDA margin. Category leader.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta" id="contact">
+        <div class="cta-content">
+            <h2>Join the Diagnostic Revolution</h2>
+            <p>
+                We're raising $4M to build the intelligence layer for healthcare diagnostics. If you believe AI should save lives, not just optimize ads — let's talk.
+            </p>
+            <div class="hero-ctas" style="justify-content: center;">
+                <a href="mailto:founders@diagnosticos.ai" class="btn btn-primary">
+                    Contact Founders
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
+                <a href="2026-02-11-morning.pdf" class="btn btn-secondary">
+                    Download Deck
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">
+                <div class="logo-icon" style="width: 35px; height: 35px; font-size: 1.1rem;">🧬</div>
+                DiagnosticOS
+            </div>
+            <div class="footer-links">
+                <a href="#problem">Problem</a>
+                <a href="#solution">Solution</a>
+                <a href="#market">Market</a>
+                <a href="#technology">Technology</a>
+                <a href="mailto:founders@diagnosticos.ai">Contact</a>
+            </div>
+            <p class="footer-copy">
+                © 2026 DiagnosticOS. The AI Operating System for Healthcare Diagnostics.<br>
+                <span style="opacity: 0.6; font-size: 0.85rem;">Generated by The Godfather 🎩</span>
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scroll for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Navbar background on scroll
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 50) {
+                nav.style.background = 'rgba(5,13,26,0.98)';
+            } else {
+                nav.style.background = 'rgba(5,13,26,0.9)';
+            }
+        });
+
+        // Animate elements on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.stat-card, .problem-card, .solution-card, .tech-card, .timeline-item').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'all 0.6s ease-out';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
