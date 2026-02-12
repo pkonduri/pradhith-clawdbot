@@ -45,6 +45,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-02-11 | Morning | DiagnosticOS — Autonomous Medical Diagnostics Intelligence | [Playbook](2026-02-11-morning.md) • [Landing](2026-02-11-morning-landing.html) • [PDF](2026-02-11-morning.pdf) |
 | 2026-02-11 | Afternoon | ComplianceOS — Autonomous AI Regulatory Intelligence | [Playbook](2026-02-11-afternoon.md) • [Landing](2026-02-11-afternoon-landing.html) • [PDF](2026-02-11-afternoon.pdf) |
 | 2026-02-12 | Evening | NutritionOS — Autonomous Personalized Nutrition Intelligence | [Playbook](2026-02-12-evening.md) • [Landing](2026-02-12-evening-landing.html) • [PDF](2026-02-12-evening.pdf) |
+| 2026-02-12 | Morning | AthleteOS — Autonomous Sports Performance Intelligence | [Playbook](2026-02-12-morning.md) • [Landing](2026-02-12-morning-landing.html) • [PDF](2026-02-12-morning.pdf) |
 <!-- New entries will be added above this line -->
 
 ---
