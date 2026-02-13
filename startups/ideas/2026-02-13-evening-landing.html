@@ -1,0 +1,1476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ContractOS — Autonomous Contract Intelligence for the AI Era</title>
+    <meta name="description" content="The operating system for machine-readable, AI-negotiable contracts. Enable autonomous contract drafting, negotiation, and execution at scale.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #818cf8;
+            --secondary: #0ea5e9;
+            --accent: #f472b6;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --dark: #0f172a;
+            --darker: #020617;
+            --gray-900: #1e293b;
+            --gray-800: #334155;
+            --gray-700: #475569;
+            --gray-600: #64748b;
+            --gray-400: #94a3b8;
+            --gray-300: #cbd5e1;
+            --gray-200: #e2e8f0;
+            --white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--darker);
+            color: var(--gray-200);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(99, 102, 241, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            z-index: -2;
+        }
+
+        .bg-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .glow-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .glow-orb-1 {
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.25) 0%, transparent 70%);
+            top: -200px;
+            right: -100px;
+            animation-delay: 0s;
+        }
+
+        .glow-orb-2 {
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(14, 165, 233, 0.2) 0%, transparent 70%);
+            bottom: -150px;
+            left: -100px;
+            animation-delay: -7s;
+        }
+
+        .glow-orb-3 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(244, 114, 182, 0.15) 0%, transparent 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation-delay: -14s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(30px, -30px) scale(1.05); }
+            50% { transform: translate(-20px, 20px) scale(0.95); }
+            75% { transform: translate(-30px, -20px) scale(1.02); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1.25rem 2rem;
+            background: rgba(2, 6, 23, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(99, 102, 241, 0.1);
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--white);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--gray-400);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--white);
+        }
+
+        .nav-cta {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: var(--white) !important;
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(99, 102, 241, 0.4);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 8rem 2rem 4rem;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--primary-light);
+            margin-bottom: 1.5rem;
+            animation: pulse-border 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse-border {
+            0%, 100% { border-color: rgba(99, 102, 241, 0.3); }
+            50% { border-color: rgba(99, 102, 241, 0.6); }
+        }
+
+        .hero-badge span {
+            animation: blink 2s ease-in-out infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--white) 0%, var(--gray-300) 50%, var(--primary-light) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero h1 .highlight {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.35rem;
+            color: var(--gray-400);
+            margin-bottom: 2.5rem;
+            line-height: 1.7;
+            max-width: 540px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: var(--white);
+            box-shadow: 0 4px 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 50px rgba(99, 102, 241, 0.5);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--white);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 3rem;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stat {
+            text-align: left;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-light), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--gray-500);
+            margin-top: 0.25rem;
+        }
+
+        /* Hero Visual */
+        .hero-visual {
+            position: relative;
+            height: 500px;
+        }
+
+        .contract-flow {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .contract-card {
+            position: absolute;
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 16px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+            animation: float-card 6s ease-in-out infinite;
+        }
+
+        .contract-card-1 {
+            top: 5%;
+            left: 10%;
+            width: 280px;
+            animation-delay: 0s;
+        }
+
+        .contract-card-2 {
+            top: 35%;
+            right: 5%;
+            width: 300px;
+            animation-delay: -2s;
+        }
+
+        .contract-card-3 {
+            bottom: 10%;
+            left: 20%;
+            width: 260px;
+            animation-delay: -4s;
+        }
+
+        @keyframes float-card {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .card-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .card-title {
+            font-weight: 600;
+            color: var(--white);
+            font-size: 0.95rem;
+        }
+
+        .card-subtitle {
+            font-size: 0.8rem;
+            color: var(--gray-500);
+        }
+
+        .card-code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            padding: 0.75rem;
+            color: var(--gray-400);
+            line-height: 1.6;
+        }
+
+        .card-code .key { color: var(--primary-light); }
+        .card-code .value { color: var(--success); }
+        .card-code .string { color: var(--secondary); }
+
+        .connection-line {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            animation: flow 3s linear infinite;
+        }
+
+        @keyframes flow {
+            0% { opacity: 0.3; }
+            50% { opacity: 1; }
+            100% { opacity: 0.3; }
+        }
+
+        .line-1 {
+            width: 150px;
+            top: 25%;
+            left: 50%;
+            transform: rotate(30deg);
+        }
+
+        .line-2 {
+            width: 120px;
+            top: 55%;
+            left: 35%;
+            transform: rotate(-20deg);
+            animation-delay: -1s;
+        }
+
+        /* Problem Section */
+        .problem-section {
+            padding: 8rem 2rem;
+            background: linear-gradient(180deg, transparent, rgba(99, 102, 241, 0.03), transparent);
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 4rem;
+        }
+
+        .section-tag {
+            display: inline-block;
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .section-header h2 {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--white);
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            font-size: 1.2rem;
+            color: var(--gray-400);
+        }
+
+        .problem-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .problem-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(239, 68, 68, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .problem-card:hover {
+            border-color: rgba(239, 68, 68, 0.3);
+            transform: translateY(-5px);
+        }
+
+        .problem-icon {
+            width: 56px;
+            height: 56px;
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .problem-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 0.75rem;
+        }
+
+        .problem-card p {
+            color: var(--gray-400);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .problem-stat {
+            display: inline-block;
+            background: rgba(239, 68, 68, 0.1);
+            color: #f87171;
+            padding: 0.25rem 0.75rem;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            margin-top: 1rem;
+        }
+
+        /* Solution Section */
+        .solution-section {
+            padding: 8rem 2rem;
+        }
+
+        .solution-header .section-tag {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+        .platform-visual {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 24px;
+            padding: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .platform-visual::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+        }
+
+        .platform-layers {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .platform-layer {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 16px;
+            padding: 1.5rem;
+        }
+
+        .layer-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--gray-500);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .layer-modules {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .module {
+            flex: 1;
+            min-width: 180px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(14, 165, 233, 0.1));
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 12px;
+            padding: 1.25rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .module:hover {
+            border-color: var(--primary);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.2);
+        }
+
+        .module-icon {
+            font-size: 2rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .module-name {
+            font-weight: 600;
+            color: var(--white);
+            margin-bottom: 0.25rem;
+        }
+
+        .module-desc {
+            font-size: 0.8rem;
+            color: var(--gray-500);
+        }
+
+        .ucl-highlight {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border: none;
+            padding: 2rem;
+        }
+
+        .ucl-highlight .module-name {
+            font-size: 1.1rem;
+        }
+
+        .ucl-highlight .module-desc {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Features Section */
+        .features-section {
+            padding: 8rem 2rem;
+            background: linear-gradient(180deg, transparent, rgba(99, 102, 241, 0.03), transparent);
+        }
+
+        .features-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(99, 102, 241, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.05), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .feature-card:hover {
+            border-color: rgba(99, 102, 241, 0.3);
+            transform: translateY(-5px);
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .feature-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 0.75rem;
+            position: relative;
+        }
+
+        .feature-card p {
+            color: var(--gray-400);
+            font-size: 0.95rem;
+            line-height: 1.7;
+            position: relative;
+        }
+
+        /* How It Works */
+        .how-section {
+            padding: 8rem 2rem;
+        }
+
+        .steps-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .steps-line {
+            position: absolute;
+            left: 40px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, var(--primary), var(--secondary), var(--accent));
+        }
+
+        .step {
+            display: flex;
+            gap: 2.5rem;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .step-number {
+            width: 80px;
+            height: 80px;
+            background: var(--dark);
+            border: 2px solid var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--primary-light);
+            flex-shrink: 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .step-content {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(99, 102, 241, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            flex: 1;
+        }
+
+        .step-content h3 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 0.75rem;
+        }
+
+        .step-content p {
+            color: var(--gray-400);
+            line-height: 1.7;
+        }
+
+        .step-demo {
+            margin-top: 1.25rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+        }
+
+        .demo-input {
+            color: var(--gray-400);
+            margin-bottom: 0.5rem;
+        }
+
+        .demo-output {
+            color: var(--success);
+        }
+
+        /* Market Section */
+        .market-section {
+            padding: 8rem 2rem;
+            background: linear-gradient(180deg, transparent, rgba(99, 102, 241, 0.03), transparent);
+        }
+
+        .market-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .market-visual {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        .market-stat-card {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .market-stat-card:hover {
+            border-color: var(--primary);
+            transform: scale(1.02);
+        }
+
+        .market-value {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-light), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.2;
+        }
+
+        .market-label {
+            font-size: 0.9rem;
+            color: var(--gray-400);
+            margin-top: 0.5rem;
+        }
+
+        .market-stat-card.highlight {
+            grid-column: span 2;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(14, 165, 233, 0.2));
+        }
+
+        .market-text h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--white);
+            margin-bottom: 1.5rem;
+        }
+
+        .market-text p {
+            color: var(--gray-400);
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .market-list {
+            list-style: none;
+        }
+
+        .market-list li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--gray-300);
+            margin-bottom: 0.75rem;
+            font-size: 1rem;
+        }
+
+        .market-list li::before {
+            content: '✓';
+            color: var(--success);
+            font-weight: bold;
+        }
+
+        /* Testimonial/Vision */
+        .vision-section {
+            padding: 8rem 2rem;
+            text-align: center;
+        }
+
+        .vision-quote {
+            max-width: 900px;
+            margin: 0 auto;
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: var(--white);
+            line-height: 1.4;
+            position: relative;
+        }
+
+        .vision-quote::before {
+            content: '"';
+            position: absolute;
+            top: -40px;
+            left: -40px;
+            font-size: 8rem;
+            color: var(--primary);
+            opacity: 0.3;
+            font-family: Georgia, serif;
+        }
+
+        .vision-author {
+            margin-top: 2rem;
+            color: var(--gray-500);
+            font-size: 1.1rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 8rem 2rem;
+        }
+
+        .cta-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(14, 165, 233, 0.2));
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 32px;
+            padding: 4rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, transparent 50%);
+            animation: rotate 30s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-container h2 {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--white);
+            margin-bottom: 1rem;
+        }
+
+        .cta-container p {
+            font-size: 1.2rem;
+            color: var(--gray-300);
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-form {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cta-input {
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.3);
+            color: var(--white);
+            font-size: 1rem;
+            min-width: 300px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .cta-input:focus {
+            border-color: var(--primary);
+        }
+
+        .cta-input::placeholder {
+            color: var(--gray-600);
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 700;
+            color: var(--white);
+            font-size: 1.25rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--gray-500);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--white);
+        }
+
+        .footer-copy {
+            color: var(--gray-600);
+            font-size: 0.85rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-subtitle {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .hero-buttons {
+                justify-content: center;
+            }
+
+            .hero-stats {
+                justify-content: center;
+            }
+
+            .hero-visual {
+                display: none;
+            }
+
+            .problem-grid,
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .market-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .section-header h2 {
+                font-size: 2rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cta-container {
+                padding: 2.5rem 1.5rem;
+            }
+
+            .cta-container h2 {
+                font-size: 2rem;
+            }
+
+            .vision-quote {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+    <div class="bg-glow">
+        <div class="glow-orb glow-orb-1"></div>
+        <div class="glow-orb glow-orb-2"></div>
+        <div class="glow-orb glow-orb-3"></div>
+    </div>
+
+    <nav>
+        <div class="nav-content">
+            <a href="#" class="logo">
+                <div class="logo-icon">📜</div>
+                ContractOS
+            </a>
+            <div class="nav-links">
+                <a href="#problem">Problem</a>
+                <a href="#solution">Solution</a>
+                <a href="#features">Features</a>
+                <a href="#market">Market</a>
+                <a href="#cta" class="nav-cta">Get Early Access</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <div class="hero-badge">
+                    <span>⚡</span> The Future of Legal Infrastructure
+                </div>
+                <h1>Contracts That <span class="highlight">Think, Negotiate & Execute</span> Themselves</h1>
+                <p class="hero-subtitle">ContractOS is the autonomous intelligence layer for machine-readable, AI-negotiable contracts. Enable AI-to-AI commerce at internet scale.</p>
+                <div class="hero-buttons">
+                    <a href="#cta" class="btn btn-primary">
+                        Request Early Access
+                        <span>→</span>
+                    </a>
+                    <a href="#solution" class="btn btn-secondary">
+                        See How It Works
+                    </a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <div class="stat-value">$2T+</div>
+                        <div class="stat-label">Legal Industry Value</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">3.4 wks</div>
+                        <div class="stat-label">Avg. Contract Time</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">99%</div>
+                        <div class="stat-label">Contracts Unstructured</div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="contract-flow">
+                    <div class="contract-card contract-card-1">
+                        <div class="card-header">
+                            <div class="card-icon">✍️</div>
+                            <div>
+                                <div class="card-title">Contract Composer</div>
+                                <div class="card-subtitle">Drafting in progress...</div>
+                            </div>
+                        </div>
+                        <div class="card-code">
+                            <span class="key">type:</span> <span class="string">service_agreement</span><br>
+                            <span class="key">sla:</span> <span class="value">99.9%</span><br>
+                            <span class="key">rate:</span> <span class="string">$0.001/call</span>
+                        </div>
+                    </div>
+                    <div class="contract-card contract-card-2">
+                        <div class="card-header">
+                            <div class="card-icon">🤝</div>
+                            <div>
+                                <div class="card-title">Negotiation Active</div>
+                                <div class="card-subtitle">Round 3 of 5</div>
+                            </div>
+                        </div>
+                        <div class="card-code">
+                            <span class="key">proposed:</span> <span class="value">$0.0008</span><br>
+                            <span class="key">counter:</span> <span class="value">$0.0012</span><br>
+                            <span class="key">confidence:</span> <span class="string">87%</span>
+                        </div>
+                    </div>
+                    <div class="contract-card contract-card-3">
+                        <div class="card-header">
+                            <div class="card-icon">⚡</div>
+                            <div>
+                                <div class="card-title">Auto-Executing</div>
+                                <div class="card-subtitle">5,234 events today</div>
+                            </div>
+                        </div>
+                        <div class="card-code">
+                            <span class="key">trigger:</span> <span class="string">milestone_reached</span><br>
+                            <span class="key">action:</span> <span class="value">release_payment</span><br>
+                            <span class="key">status:</span> <span class="value">✓ complete</span>
+                        </div>
+                    </div>
+                    <div class="connection-line line-1"></div>
+                    <div class="connection-line line-2"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="problem-section" id="problem">
+        <div class="section-header">
+            <span class="section-tag">🚨 The Problem</span>
+            <h2>Legal Infrastructure is Broken</h2>
+            <p>The $2 trillion legal industry operates at human speed in an AI-powered world</p>
+        </div>
+        <div class="problem-grid">
+            <div class="problem-card">
+                <div class="problem-icon">🐌</div>
+                <h3>Human-Speed Contracts in an AI World</h3>
+                <p>AI agents can identify 1,000+ deals per day, but contracts still take 3.4 weeks to negotiate. Legal teams are the bottleneck.</p>
+                <div class="problem-stat">$1.2T lost annually to delays</div>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">📄</div>
+                <h3>Contracts Aren't Machine-Readable</h3>
+                <p>99% of contracts exist as unstructured PDFs. AI agents can't parse, understand, or execute them without manual extraction.</p>
+                <div class="problem-stat">Zero automation possible</div>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">🤖</div>
+                <h3>No Framework for AI Commerce</h3>
+                <p>When AI Agent A hires AI Agent B, what's the contract? No standards exist for agent identity, capabilities, or liability.</p>
+                <div class="problem-stat">$47B agent economy coming</div>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">🧩</div>
+                <h3>Fragmented Contract Lifecycle</h3>
+                <p>Drafting, signing, analytics, compliance — all separate tools with no unified intelligence layer. Enforcement requires expensive lawyers.</p>
+                <div class="problem-stat">5+ tools per contract</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="solution-section" id="solution">
+        <div class="section-header solution-header">
+            <span class="section-tag">✨ The Solution</span>
+            <h2>ContractOS Platform</h2>
+            <p>The operating system for autonomous contract intelligence</p>
+        </div>
+        <div class="platform-visual">
+            <div class="platform-layers">
+                <div class="platform-layer">
+                    <div class="layer-label">AI Intelligence Layer</div>
+                    <div class="layer-modules">
+                        <div class="module">
+                            <div class="module-icon">✍️</div>
+                            <div class="module-name">Contract Composer</div>
+                            <div class="module-desc">Natural language → contracts</div>
+                        </div>
+                        <div class="module">
+                            <div class="module-icon">🤝</div>
+                            <div class="module-name">Contract Negotiator</div>
+                            <div class="module-desc">Autonomous deal-making</div>
+                        </div>
+                        <div class="module">
+                            <div class="module-icon">⚡</div>
+                            <div class="module-name">Contract Executor</div>
+                            <div class="module-desc">Self-executing agreements</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="platform-layer">
+                    <div class="layer-label">Universal Contract Language (UCL)</div>
+                    <div class="layer-modules">
+                        <div class="module ucl-highlight" style="flex: 1;">
+                            <div class="module-icon">📜</div>
+                            <div class="module-name">Machine-Readable • Legally-Binding • Executable</div>
+                            <div class="module-desc">The HTML of legal agreements — structured, versionable, and automatable</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="platform-layer">
+                    <div class="layer-label">Trust & Compliance Infrastructure</div>
+                    <div class="layer-modules">
+                        <div class="module">
+                            <div class="module-icon">🪪</div>
+                            <div class="module-name">Agent Identity</div>
+                            <div class="module-desc">Verified agent registry</div>
+                        </div>
+                        <div class="module">
+                            <div class="module-icon">⚖️</div>
+                            <div class="module-name">Dispute Resolution</div>
+                            <div class="module-desc">Algorithmic arbitration</div>
+                        </div>
+                        <div class="module">
+                            <div class="module-icon">🛡️</div>
+                            <div class="module-name">Compliance Monitor</div>
+                            <div class="module-desc">Real-time obligation tracking</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features-section" id="features">
+        <div class="section-header">
+            <span class="section-tag" style="background: rgba(99, 102, 241, 0.1); color: var(--primary-light);">🚀 Capabilities</span>
+            <h2>Built for the AI Era</h2>
+            <p>Everything you need for autonomous contract management</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🧠</div>
+                <h3>Intent to Agreement in Seconds</h3>
+                <p>Describe what you need in plain English. ContractOS generates legally-sound, machine-readable contracts instantly.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <h3>Autonomous Negotiation</h3>
+                <p>Set your parameters. AI negotiates within guardrails, handling multi-party deals and knowing when to escalate.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⚙️</div>
+                <h3>Self-Executing Contracts</h3>
+                <p>Contracts that monitor themselves, trigger actions on events, and automatically enforce terms and payments.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔗</div>
+                <h3>500+ Integrations</h3>
+                <p>Connect to CRMs, ERPs, payment rails, and AI agent frameworks. Contracts flow into your existing stack.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🌐</div>
+                <h3>Multi-Jurisdiction Support</h3>
+                <p>Automatic compliance checking across jurisdictions. Localized templates for 50+ countries and regulatory frameworks.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>Contract Intelligence</h3>
+                <p>Analytics across your entire contract portfolio. Risk detection, obligation tracking, and optimization insights.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="how-section">
+        <div class="section-header">
+            <span class="section-tag" style="background: rgba(99, 102, 241, 0.1); color: var(--primary-light);">📋 How It Works</span>
+            <h2>From Intent to Execution</h2>
+            <p>Four steps to autonomous contract intelligence</p>
+        </div>
+        <div class="steps-container">
+            <div class="steps-line"></div>
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h3>Describe Your Agreement</h3>
+                    <p>Tell ContractOS what you need in plain language. Our AI understands business context and legal requirements.</p>
+                    <div class="step-demo">
+                        <div class="demo-input">→ "Create an SLA for our API with 99.9% uptime, usage-based billing at $0.001/call"</div>
+                        <div class="demo-output">✓ Generated UCL contract with 47 clauses, compliance verified for US/EU</div>
+                    </div>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h3>AI Negotiates the Terms</h3>
+                    <p>Set your boundaries and let ContractOS negotiate. It optimizes for your goals while maintaining relationship value.</p>
+                    <div class="step-demo">
+                        <div class="demo-input">→ Counterparty proposes: 99.5% uptime, $0.0015/call</div>
+                        <div class="demo-output">✓ Counter-offered: 99.7% uptime, $0.0012/call — accepted in round 3</div>
+                    </div>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h3>Contract Self-Executes</h3>
+                    <p>Once signed, the contract monitors itself. It triggers actions, releases payments, and enforces terms automatically.</p>
+                    <div class="step-demo">
+                        <div class="demo-input">→ Event: Monthly usage = 2.4M API calls</div>
+                        <div class="demo-output">✓ Invoice generated: $2,880 — payment released via Stripe</div>
+                    </div>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <h3>Continuous Compliance</h3>
+                    <p>ContractOS monitors obligations, detects potential breaches early, and handles disputes through algorithmic resolution.</p>
+                    <div class="step-demo">
+                        <div class="demo-input">→ Alert: Uptime dropped to 99.2% (3rd consecutive month)</div>
+                        <div class="demo-output">✓ Escalation initiated — remediation plan requested per clause 7.2</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="market-section" id="market">
+        <div class="market-content">
+            <div class="market-visual">
+                <div class="market-stat-card">
+                    <div class="market-value">$180B</div>
+                    <div class="market-label">Total Addressable Market</div>
+                </div>
+                <div class="market-stat-card">
+                    <div class="market-value">$47B</div>
+                    <div class="market-label">AI Agent Economy (2028)</div>
+                </div>
+                <div class="market-stat-card highlight">
+                    <div class="market-value">1M+</div>
+                    <div class="market-label">Contracts/day between AI agents by 2028</div>
+                </div>
+            </div>
+            <div class="market-text">
+                <h2>The Infrastructure Layer for AI Commerce</h2>
+                <p>As AI agents conduct more business autonomously, they need contract infrastructure that operates at machine speed. ContractOS is the protocol that makes AI-to-AI commerce possible.</p>
+                <ul class="market-list">
+                    <li>Contract lifecycle management growing 25% YoY</li>
+                    <li>83% of enterprises cite contracts as critical pain point</li>
+                    <li>AI agent services projected at $47B by 2028</li>
+                    <li>No incumbent built for autonomous agents</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="vision-section">
+        <div class="vision-quote">
+            The best contracts are the ones you never have to think about. We're making legal infrastructure invisible — so business can move at the speed of AI.
+        </div>
+        <div class="vision-author">— ContractOS Vision</div>
+    </section>
+
+    <section class="cta-section" id="cta">
+        <div class="cta-container">
+            <div class="cta-content">
+                <h2>Ready to Automate Your Contracts?</h2>
+                <p>Join the waitlist for early access to ContractOS. Be among the first to experience autonomous contract intelligence.</p>
+                <form class="cta-form">
+                    <input type="email" class="cta-input" placeholder="Enter your work email">
+                    <button type="submit" class="btn btn-primary">Get Early Access</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">
+                <div class="logo-icon" style="width: 36px; height: 36px; font-size: 1.2rem;">📜</div>
+                ContractOS
+            </div>
+            <div class="footer-links">
+                <a href="#">Documentation</a>
+                <a href="#">API Reference</a>
+                <a href="#">UCL Specification</a>
+                <a href="#">Blog</a>
+                <a href="#">Careers</a>
+            </div>
+            <div class="footer-copy">© 2026 ContractOS. Making legal infrastructure invisible.</div>
+        </div>
+    </footer>
+</body>
+</html>
