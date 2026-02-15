@@ -1,0 +1,1276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CreatorOS — The AI Operating System for Professional Creators</title>
+    <meta name="description" content="The autonomous AI platform that handles everything except the actual creating. Manage content, brand deals, finances, and audience — all in one AI-powered OS.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --creator-gradient: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 25%, #FFC857 50%, #6BCB77 75%, #4D96FF 100%);
+            --dark-bg: #0A0A0F;
+            --card-bg: #12121A;
+            --card-hover: #1A1A25;
+            --text-primary: #FFFFFF;
+            --text-secondary: #A0A0B0;
+            --accent-pink: #FF6B6B;
+            --accent-orange: #FF8E53;
+            --accent-yellow: #FFC857;
+            --accent-green: #6BCB77;
+            --accent-blue: #4D96FF;
+            --accent-purple: #9B59B6;
+            --glow-pink: rgba(255, 107, 107, 0.4);
+            --glow-orange: rgba(255, 142, 83, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(ellipse at 20% 80%, rgba(255, 107, 107, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(77, 150, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(255, 200, 87, 0.1) 0%, transparent 60%);
+            animation: bgMove 20s ease-in-out infinite;
+        }
+
+        @keyframes bgMove {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(2%, 2%) rotate(2deg); }
+            66% { transform: translate(-2%, 1%) rotate(-1deg); }
+        }
+
+        /* Floating Social Icons Animation */
+        .floating-icons {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .float-icon {
+            position: absolute;
+            font-size: 24px;
+            opacity: 0.15;
+            animation: floatIcon 15s ease-in-out infinite;
+        }
+
+        .float-icon:nth-child(1) { top: 15%; left: 10%; animation-delay: 0s; }
+        .float-icon:nth-child(2) { top: 25%; right: 15%; animation-delay: -3s; }
+        .float-icon:nth-child(3) { top: 60%; left: 5%; animation-delay: -6s; }
+        .float-icon:nth-child(4) { top: 70%; right: 10%; animation-delay: -9s; }
+        .float-icon:nth-child(5) { top: 40%; left: 15%; animation-delay: -12s; }
+        .float-icon:nth-child(6) { top: 80%; left: 20%; animation-delay: -2s; }
+        .float-icon:nth-child(7) { top: 10%; right: 25%; animation-delay: -5s; }
+        .float-icon:nth-child(8) { top: 50%; right: 5%; animation-delay: -8s; }
+
+        @keyframes floatIcon {
+            0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.15; }
+            50% { transform: translateY(-30px) rotate(10deg); opacity: 0.25; }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: var(--creator-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-cta {
+            padding: 0.75rem 2rem;
+            background: var(--creator-gradient);
+            border: none;
+            border-radius: 50px;
+            color: #000;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-cta:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 40px var(--glow-pink);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 120px 5% 80px;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 107, 107, 0.1);
+            border: 1px solid rgba(255, 107, 107, 0.3);
+            padding: 0.5rem 1.25rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            color: var(--accent-pink);
+            margin-bottom: 2rem;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255, 107, 107, 0.4); }
+            50% { box-shadow: 0 0 0 10px rgba(255, 107, 107, 0); }
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 7vw, 5rem);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero h1 span {
+            background: var(--creator-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.35rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto 3rem;
+            line-height: 1.7;
+        }
+
+        .hero-cta-group {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cta-primary {
+            padding: 1.1rem 2.5rem;
+            background: var(--creator-gradient);
+            border: none;
+            border-radius: 50px;
+            color: #000;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .cta-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 60px var(--glow-pink);
+        }
+
+        .cta-secondary {
+            padding: 1.1rem 2.5rem;
+            background: transparent;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            color: var(--text-primary);
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .cta-secondary:hover {
+            border-color: var(--accent-pink);
+            background: rgba(255, 107, 107, 0.1);
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 4rem;
+            margin-top: 4rem;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: var(--creator-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: 0.25rem;
+        }
+
+        /* Problem Section */
+        .problem-section {
+            padding: 100px 5%;
+            background: linear-gradient(180deg, transparent 0%, rgba(255, 107, 107, 0.03) 100%);
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 4rem;
+        }
+
+        .section-label {
+            display: inline-block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent-pink);
+            margin-bottom: 1rem;
+        }
+
+        .section-header h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            color: var(--text-secondary);
+            font-size: 1.15rem;
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .problem-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .problem-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--creator-gradient);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 107, 107, 0.3);
+        }
+
+        .problem-card:hover::before {
+            opacity: 1;
+        }
+
+        .problem-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .problem-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .problem-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .problem-stat {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.5rem 1rem;
+            background: rgba(255, 107, 107, 0.1);
+            border-radius: 8px;
+            font-weight: 600;
+            color: var(--accent-pink);
+            font-size: 0.9rem;
+        }
+
+        /* Features Section */
+        .features-section {
+            padding: 100px 5%;
+            position: relative;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            padding: 2.5rem;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+        }
+
+        .feature-card:nth-child(1) { --card-accent: var(--accent-pink); }
+        .feature-card:nth-child(2) { --card-accent: var(--accent-orange); }
+        .feature-card:nth-child(3) { --card-accent: var(--accent-yellow); }
+        .feature-card:nth-child(4) { --card-accent: var(--accent-green); }
+        .feature-card:nth-child(5) { --card-accent: var(--accent-blue); }
+        .feature-card:nth-child(6) { --card-accent: var(--accent-purple); }
+
+        .feature-card:hover {
+            border-color: var(--card-accent);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, var(--card-accent), transparent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+
+        .feature-benefits {
+            list-style: none;
+        }
+
+        .feature-benefits li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 0;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .feature-benefits li::before {
+            content: '✓';
+            color: var(--card-accent);
+            font-weight: 700;
+        }
+
+        /* How It Works */
+        .how-section {
+            padding: 100px 5%;
+            background: linear-gradient(180deg, transparent 0%, rgba(77, 150, 255, 0.03) 100%);
+        }
+
+        .how-steps {
+            display: flex;
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .how-step {
+            flex: 1;
+            min-width: 280px;
+            max-width: 350px;
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .step-number {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--creator-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #000;
+            margin: 0 auto 1.5rem;
+            position: relative;
+        }
+
+        .step-number::after {
+            content: '';
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 2px dashed rgba(255, 255, 255, 0.1);
+            animation: spinSlow 20s linear infinite;
+        }
+
+        @keyframes spinSlow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .how-step h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .how-step p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Social Proof */
+        .social-proof {
+            padding: 100px 5%;
+            text-align: center;
+        }
+
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .testimonial-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: left;
+            transition: all 0.3s ease;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 200, 87, 0.3);
+        }
+
+        .testimonial-quote {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .testimonial-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--creator-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .testimonial-info h4 {
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .testimonial-info p {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        .testimonial-result {
+            margin-top: 1rem;
+            padding: 0.75rem 1rem;
+            background: rgba(107, 203, 119, 0.1);
+            border-radius: 10px;
+            color: var(--accent-green);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        /* Pricing Section */
+        .pricing-section {
+            padding: 100px 5%;
+            background: linear-gradient(180deg, transparent 0%, rgba(107, 203, 119, 0.03) 100%);
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            padding: 2.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .pricing-card.featured {
+            border: 2px solid var(--accent-pink);
+            transform: scale(1.05);
+        }
+
+        .pricing-card.featured::before {
+            content: 'MOST POPULAR';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--creator-gradient);
+            padding: 0.4rem 1.2rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #000;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-8px);
+        }
+
+        .pricing-card.featured:hover {
+            transform: scale(1.05) translateY(-8px);
+        }
+
+        .pricing-tier {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-price {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .pricing-card.featured .pricing-price {
+            background: var(--creator-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .pricing-period {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-features {
+            list-style: none;
+            text-align: left;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-features li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.95rem;
+        }
+
+        .pricing-features li:last-child {
+            border-bottom: none;
+        }
+
+        .pricing-features li::before {
+            content: '✓';
+            color: var(--accent-green);
+            font-weight: 700;
+        }
+
+        .pricing-cta {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .pricing-card.featured .pricing-cta {
+            background: var(--creator-gradient);
+            border: none;
+            color: #000;
+        }
+
+        .pricing-card:not(.featured) .pricing-cta {
+            background: transparent;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: var(--text-primary);
+        }
+
+        .pricing-cta:hover {
+            transform: scale(1.02);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 120px 5%;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 150%;
+            height: 150%;
+            transform: translate(-50%, -50%);
+            background: radial-gradient(ellipse, rgba(255, 107, 107, 0.15) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .cta-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+        }
+
+        .cta-content h2 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-content h2 span {
+            background: var(--creator-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .cta-content p {
+            color: var(--text-secondary);
+            font-size: 1.25rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .email-capture {
+            display: flex;
+            gap: 1rem;
+            max-width: 500px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .email-capture input {
+            flex: 1;
+            min-width: 250px;
+            padding: 1.1rem 1.5rem;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .email-capture input:focus {
+            outline: none;
+            border-color: var(--accent-pink);
+            background: rgba(255, 107, 107, 0.05);
+        }
+
+        .email-capture input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .email-capture button {
+            padding: 1.1rem 2.5rem;
+            background: var(--creator-gradient);
+            border: none;
+            border-radius: 12px;
+            color: #000;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .email-capture button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px var(--glow-pink);
+        }
+
+        /* Footer */
+        footer {
+            padding: 60px 5% 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--creator-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .footer-tagline {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-pink);
+        }
+
+        .footer-copyright {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .stats-bar {
+                gap: 2rem;
+            }
+
+            .pricing-card.featured {
+                transform: scale(1);
+            }
+
+            .pricing-card.featured:hover {
+                transform: translateY(-8px);
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeIn 0.8s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+        .delay-5 { animation-delay: 0.5s; }
+    </style>
+</head>
+<body>
+    <!-- Background Animation -->
+    <div class="bg-animation">
+        <div class="floating-icons">
+            <span class="float-icon">📸</span>
+            <span class="float-icon">🎬</span>
+            <span class="float-icon">🎵</span>
+            <span class="float-icon">✨</span>
+            <span class="float-icon">🔥</span>
+            <span class="float-icon">💰</span>
+            <span class="float-icon">🚀</span>
+            <span class="float-icon">❤️</span>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">CreatorOS</div>
+        <button class="nav-cta">Get Early Access</button>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge fade-in">
+                <span>🤖</span>
+                <span>AI-Powered Creator Management</span>
+            </div>
+            <h1 class="fade-in delay-1">The AI That Runs Your <span>Creator Business</span></h1>
+            <p class="fade-in delay-2">Stop juggling 20+ tools. CreatorOS is the autonomous AI platform that handles content strategy, brand deals, finances, and audience growth — so you can focus on what you do best: creating.</p>
+            <div class="hero-cta-group fade-in delay-3">
+                <button class="cta-primary">
+                    <span>Join the Waitlist</span>
+                    <span>→</span>
+                </button>
+                <button class="cta-secondary">
+                    <span>▶</span>
+                    <span>Watch Demo</span>
+                </button>
+            </div>
+            <div class="stats-bar fade-in delay-4">
+                <div class="stat-item">
+                    <div class="stat-value">60%</div>
+                    <div class="stat-label">of time saved on admin</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">$50K+</div>
+                    <div class="stat-label">avg revenue increase</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">40%</div>
+                    <div class="stat-label">better brand deal rates</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="problem-section">
+        <div class="section-header">
+            <span class="section-label">The Problem</span>
+            <h2>Creators Are Drowning in Complexity</h2>
+            <p>You didn't become a creator to manage spreadsheets, negotiate contracts, and juggle 20 different tools. Yet that's where most of your time goes.</p>
+        </div>
+        <div class="problem-grid">
+            <div class="problem-card">
+                <div class="problem-icon">⏰</div>
+                <h3>38+ Hours Lost Weekly</h3>
+                <p>Scheduling, analytics, brand outreach, invoicing, taxes — the admin work never ends.</p>
+                <span class="problem-stat">60% of time NOT creating</span>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">💸</div>
+                <h3>Money Left on the Table</h3>
+                <p>Underpriced brand deals, missed opportunities, poor negotiation — you're losing $50K+/year.</p>
+                <span class="problem-stat">40-60% undervalued</span>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">🧩</div>
+                <h3>Tool Chaos</h3>
+                <p>20+ fragmented tools that don't talk to each other. No single source of truth.</p>
+                <span class="problem-stat">$500/mo on subscriptions</span>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">📋</div>
+                <h3>Legal Landmines</h3>
+                <p>65% of creators sign contracts without review. Usage rights, exclusivity — it's a minefield.</p>
+                <span class="problem-stat">$10K+ in exposure</span>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">📊</div>
+                <h3>Analytics Paralysis</h3>
+                <p>Data everywhere, insights nowhere. What's actually working across platforms?</p>
+                <span class="problem-stat">5+ analytics dashboards</span>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">🔥</div>
+                <h3>Burnout Is Real</h3>
+                <p>The constant grind of creating AND running a business. Something's gotta give.</p>
+                <span class="problem-stat">71% report burnout</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section">
+        <div class="section-header">
+            <span class="section-label">The Solution</span>
+            <h2>One AI Brain for Your Entire Business</h2>
+            <p>CreatorOS is your autonomous business partner — handling the complexity while you focus on creating.</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <h3>Content Intelligence</h3>
+                <p>AI that analyzes your performance across every platform and tells you exactly what to create next.</p>
+                <ul class="feature-benefits">
+                    <li>Predictive content calendars</li>
+                    <li>Auto-generate thumbnails & captions</li>
+                    <li>Trend alerts in your niche</li>
+                    <li>Performance predictions before posting</li>
+                </ul>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🤝</div>
+                <h3>Brand Deal Agent</h3>
+                <p>Your AI agent that finds, negotiates, and manages brand partnerships — getting you 40%+ better rates.</p>
+                <ul class="feature-benefits">
+                    <li>50K+ brand database</li>
+                    <li>Real-time pricing intelligence</li>
+                    <li>Autonomous negotiation</li>
+                    <li>Contract AI with legal review</li>
+                </ul>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📈</div>
+                <h3>Audience Intelligence</h3>
+                <p>Unified view of your audience across all platforms. Know your superfans. Predict growth.</p>
+                <ul class="feature-benefits">
+                    <li>Cross-platform analytics</li>
+                    <li>Superfan identification</li>
+                    <li>Churn prediction</li>
+                    <li>Collaboration matching</li>
+                </ul>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💰</div>
+                <h3>Revenue Optimization</h3>
+                <p>Find every dollar you're leaving on the table. Diversify income. Maximize value.</p>
+                <ul class="feature-benefits">
+                    <li>Revenue mix analysis</li>
+                    <li>Product recommendations</li>
+                    <li>Pricing optimization</li>
+                    <li>Platform arbitrage insights</li>
+                </ul>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📑</div>
+                <h3>Legal & Finance</h3>
+                <p>AI lawyer and accountant built for creators. Contracts, taxes, bookkeeping — automated.</p>
+                <ul class="feature-benefits">
+                    <li>Contract review in seconds</li>
+                    <li>Automated bookkeeping</li>
+                    <li>Creator-specific tax optimization</li>
+                    <li>Copyright protection</li>
+                </ul>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💬</div>
+                <h3>Community Intelligence</h3>
+                <p>Scale your community without losing authenticity. Smart moderation, DM prioritization, superfan programs.</p>
+                <ul class="feature-benefits">
+                    <li>AI-powered responses</li>
+                    <li>Smart moderation</li>
+                    <li>DM prioritization</li>
+                    <li>Superfan programs</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-section">
+        <div class="section-header">
+            <span class="section-label">How It Works</span>
+            <h2>From Chaos to Control in 3 Steps</h2>
+        </div>
+        <div class="how-steps">
+            <div class="how-step">
+                <div class="step-number">1</div>
+                <h3>Connect Everything</h3>
+                <p>Link all your platforms, tools, and accounts. CreatorOS syncs your entire creator ecosystem in minutes.</p>
+            </div>
+            <div class="how-step">
+                <div class="step-number">2</div>
+                <h3>Let AI Analyze</h3>
+                <p>Our AI learns your content, audience, and business patterns. It identifies opportunities you're missing.</p>
+            </div>
+            <div class="how-step">
+                <div class="step-number">3</div>
+                <h3>Approve & Create</h3>
+                <p>CreatorOS handles the busy work autonomously. You review and approve while focusing on creating.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Social Proof -->
+    <section class="social-proof">
+        <div class="section-header">
+            <span class="section-label">Early Results</span>
+            <h2>Creators Already Winning with AI</h2>
+        </div>
+        <div class="testimonial-grid">
+            <div class="testimonial-card">
+                <p class="testimonial-quote">"I was spending 30 hours a week on brand deal admin. CreatorOS got me a better rate on my last deal AND handled all the negotiation. Game changer."</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">🎨</div>
+                    <div class="testimonial-info">
+                        <h4>Sarah Chen</h4>
+                        <p>Lifestyle Creator • 450K followers</p>
+                    </div>
+                </div>
+                <div class="testimonial-result">💰 +$28K in brand deal value (3 months)</div>
+            </div>
+            <div class="testimonial-card">
+                <p class="testimonial-quote">"Finally one place to see all my analytics. The AI actually tells me what's working instead of just showing charts. My growth doubled."</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">🎬</div>
+                    <div class="testimonial-info">
+                        <h4>Marcus James</h4>
+                        <p>Tech YouTuber • 280K subscribers</p>
+                    </div>
+                </div>
+                <div class="testimonial-result">📈 2x subscriber growth in 4 months</div>
+            </div>
+            <div class="testimonial-card">
+                <p class="testimonial-quote">"The contract AI caught exclusivity terms that would've locked me out of 3 other deals. Saved me $40K I didn't even know I was giving up."</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">💪</div>
+                    <div class="testimonial-info">
+                        <h4>Taylor Martinez</h4>
+                        <p>Fitness Creator • 1.2M followers</p>
+                    </div>
+                </div>
+                <div class="testimonial-result">🛡️ $40K saved from bad contract terms</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="pricing-section">
+        <div class="section-header">
+            <span class="section-label">Simple Pricing</span>
+            <h2>Plans That Grow With You</h2>
+            <p>No hidden fees. Cancel anytime. 14-day free trial on all plans.</p>
+        </div>
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <div class="pricing-tier">Starter</div>
+                <div class="pricing-price">$49</div>
+                <div class="pricing-period">per month</div>
+                <ul class="pricing-features">
+                    <li>3 platform connections</li>
+                    <li>Content calendar & scheduling</li>
+                    <li>Basic analytics dashboard</li>
+                    <li>5 brand deal matches/month</li>
+                    <li>Email support</li>
+                </ul>
+                <button class="pricing-cta">Start Free Trial</button>
+            </div>
+            <div class="pricing-card featured">
+                <div class="pricing-tier">Pro</div>
+                <div class="pricing-price">$199</div>
+                <div class="pricing-period">per month</div>
+                <ul class="pricing-features">
+                    <li>10 platform connections</li>
+                    <li>Full Content Intelligence</li>
+                    <li>Unlimited brand deal matching</li>
+                    <li>Contract AI review</li>
+                    <li>Financial automation</li>
+                    <li>Priority support</li>
+                </ul>
+                <button class="pricing-cta">Start Free Trial</button>
+            </div>
+            <div class="pricing-card">
+                <div class="pricing-tier">Business</div>
+                <div class="pricing-price">$499</div>
+                <div class="pricing-period">per month</div>
+                <ul class="pricing-features">
+                    <li>Unlimited everything</li>
+                    <li>Autonomous AI agent</li>
+                    <li>Dedicated success manager</li>
+                    <li>API access</li>
+                    <li>Team features</li>
+                    <li>White-glove onboarding</li>
+                </ul>
+                <button class="pricing-cta">Contact Sales</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="cta-section">
+        <div class="cta-content">
+            <h2>Ready to <span>10x Your Creator Business</span>?</h2>
+            <p>Join 10,000+ creators on the waitlist. Be first to experience AI-powered creator management.</p>
+            <div class="email-capture">
+                <input type="email" placeholder="Enter your email">
+                <button>Get Early Access</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-logo">CreatorOS</div>
+        <p class="footer-tagline">The AI that runs your creator business.</p>
+        <div class="footer-links">
+            <a href="#">Features</a>
+            <a href="#">Pricing</a>
+            <a href="#">About</a>
+            <a href="#">Blog</a>
+            <a href="#">Contact</a>
+            <a href="#">Privacy</a>
+            <a href="#">Terms</a>
+        </div>
+        <p class="footer-copyright">© 2026 CreatorOS. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Intersection Observer for fade-in animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.problem-card, .feature-card, .how-step, .testimonial-card, .pricing-card').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'all 0.6s ease';
+            observer.observe(el);
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>

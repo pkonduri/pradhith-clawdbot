@@ -54,6 +54,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-02-14 | Morning | EverAfter — AI-Powered Legacy & Memory Preservation | [Playbook](2026-02-14-morning.md) • [Landing](2026-02-14-morning-landing.html) • [PDF](2026-02-14-morning.pdf) |
 | 2026-02-15 | Evening | FusionOS — Autonomous Fusion Energy Intelligence | [Playbook](2026-02-15-evening.md) • [Landing](2026-02-15-evening-landing.html) • [PDF](2026-02-15-evening.pdf) |
 | 2026-02-15 | Morning | NegotiateOS — Autonomous Negotiation Intelligence | [Playbook](2026-02-15-morning.md) • [Landing](2026-02-15-morning-landing.html) • [PDF](2026-02-15-morning.pdf) |
+| 2026-02-15 | Afternoon | CreatorOS — Autonomous Creator Economy Intelligence | [Playbook](2026-02-15-afternoon.md) • [Landing](2026-02-15-afternoon-landing.html) • [PDF](2026-02-15-afternoon.pdf) |
 <!-- New entries will be added above this line -->
 
 ---
