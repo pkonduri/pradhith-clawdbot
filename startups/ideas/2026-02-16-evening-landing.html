@@ -1,0 +1,1410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaxOS — Autonomous Tax Intelligence Platform</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #10B981;
+            --primary-dark: #059669;
+            --primary-light: #34D399;
+            --accent: #6366F1;
+            --accent-light: #818CF8;
+            --warning: #F59E0B;
+            --dark: #0F172A;
+            --darker: #020617;
+            --card-bg: rgba(15, 23, 42, 0.8);
+            --text: #F8FAFC;
+            --text-secondary: #94A3B8;
+            --border: rgba(16, 185, 129, 0.2);
+            --glow: rgba(16, 185, 129, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--darker);
+            color: var(--text);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Animated background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(16, 185, 129, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(99, 102, 241, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(245, 158, 11, 0.08) 0%, transparent 50%);
+            animation: bgPulse 15s ease-in-out infinite;
+        }
+
+        @keyframes bgPulse {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(-5%, 5%) scale(1.1); }
+            66% { transform: translate(5%, -5%) scale(0.95); }
+        }
+
+        /* Grid pattern overlay */
+        .grid-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(16, 185, 129, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(16, 185, 129, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            z-index: -1;
+        }
+
+        /* Floating tax numbers animation */
+        .floating-numbers {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+            opacity: 0.4;
+        }
+
+        .tax-number {
+            position: absolute;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: var(--primary);
+            opacity: 0;
+            animation: floatNumber 20s linear infinite;
+        }
+
+        @keyframes floatNumber {
+            0% {
+                opacity: 0;
+                transform: translateY(100vh) rotate(0deg);
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-100vh) rotate(360deg);
+            }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 1.5rem 5%;
+            z-index: 1000;
+            backdrop-filter: blur(20px);
+            background: rgba(2, 6, 23, 0.8);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--text);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-cta {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 0.75rem 1.75rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px var(--glow);
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 30px var(--glow);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 8rem 5% 4rem;
+        }
+
+        .hero-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .hero-text h1 {
+            font-size: 4rem;
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--text) 0%, var(--primary-light) 50%, var(--accent-light) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-text .tagline {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            font-weight: 400;
+        }
+
+        .hero-text .tagline strong {
+            color: var(--primary);
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 25px var(--glow);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 40px var(--glow);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text);
+            padding: 1rem 2.5rem;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            border: 2px solid var(--border);
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary);
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        /* Hero Visual */
+        .hero-visual {
+            position: relative;
+        }
+
+        .dashboard-preview {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2rem;
+            backdrop-filter: blur(20px);
+            box-shadow: 
+                0 0 60px rgba(16, 185, 129, 0.1),
+                0 0 120px rgba(99, 102, 241, 0.05);
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .dashboard-title {
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .status-badge {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--primary);
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .savings-display {
+            text-align: center;
+            padding: 2rem 0;
+            margin-bottom: 1.5rem;
+        }
+
+        .savings-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 0.5rem;
+        }
+
+        .savings-amount {
+            font-size: 4rem;
+            font-weight: 900;
+            font-family: 'JetBrains Mono', monospace;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .savings-period {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .opportunity-list {
+            list-style: none;
+        }
+
+        .opportunity-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: rgba(16, 185, 129, 0.05);
+            border-radius: 10px;
+            margin-bottom: 0.75rem;
+            border-left: 3px solid var(--primary);
+        }
+
+        .opportunity-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .opportunity-icon {
+            width: 36px;
+            height: 36px;
+            background: rgba(16, 185, 129, 0.2);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .opportunity-name {
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .opportunity-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        /* Problem Section */
+        .problem-section {
+            padding: 6rem 5%;
+            background: linear-gradient(180deg, transparent, rgba(16, 185, 129, 0.03), transparent);
+        }
+
+        .section-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-label {
+            color: var(--primary);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .problem-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--warning);
+            box-shadow: 0 10px 40px rgba(245, 158, 11, 0.1);
+        }
+
+        .problem-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(245, 158, 11, 0.15);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .problem-card h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--warning);
+        }
+
+        .problem-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .problem-stat {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--warning);
+            margin-top: 1rem;
+        }
+
+        /* Solution Section */
+        .solution-section {
+            padding: 6rem 5%;
+        }
+
+        .solution-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .solution-text h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+        }
+
+        .solution-text p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+
+        .feature-list {
+            list-style: none;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-check {
+            width: 28px;
+            height: 28px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 0.2rem;
+        }
+
+        .feature-item h4 {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .feature-item p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        /* How It Works */
+        .how-section {
+            padding: 6rem 5%;
+            background: linear-gradient(180deg, transparent, rgba(99, 102, 241, 0.03), transparent);
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+
+        .step-card {
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .step-card::after {
+            content: '→';
+            position: absolute;
+            right: -1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2rem;
+            color: var(--border);
+        }
+
+        .step-card:last-child::after {
+            display: none;
+        }
+
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin: 0 auto 1.5rem;
+        }
+
+        .step-card h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .step-card p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Pricing Section */
+        .pricing-section {
+            padding: 6rem 5%;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .pricing-card.featured {
+            border-color: var(--primary);
+            transform: scale(1.05);
+            box-shadow: 0 0 60px var(--glow);
+        }
+
+        .pricing-card.featured::before {
+            content: 'MOST POPULAR';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 0.4rem 1.5rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .pricing-tier {
+            font-size: 0.9rem;
+            color: var(--primary);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .pricing-price {
+            font-size: 3rem;
+            font-weight: 800;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--primary);
+        }
+
+        .pricing-period {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .pricing-description {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin: 1rem 0 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-features li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .pricing-features li::before {
+            content: '✓';
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .pricing-cta {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 10px;
+            font-weight: 600;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+            transition: all 0.3s ease;
+        }
+
+        .pricing-card.featured .pricing-cta {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+        }
+
+        .pricing-card:not(.featured) .pricing-cta {
+            background: transparent;
+            border: 2px solid var(--border);
+            color: var(--text);
+        }
+
+        .pricing-cta:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Market Section */
+        .market-section {
+            padding: 6rem 5%;
+            background: linear-gradient(180deg, transparent, rgba(16, 185, 129, 0.03), transparent);
+        }
+
+        .market-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+
+        .market-stat {
+            text-align: center;
+            padding: 2.5rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .market-stat:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+        }
+
+        .market-stat-value {
+            font-size: 3.5rem;
+            font-weight: 900;
+            font-family: 'JetBrains Mono', monospace;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .market-stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Testimonial/Quote Section */
+        .quote-section {
+            padding: 6rem 5%;
+            text-align: center;
+        }
+
+        .quote-content {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .quote-text {
+            font-size: 2.5rem;
+            font-weight: 600;
+            font-style: italic;
+            line-height: 1.4;
+            color: var(--text);
+            margin-bottom: 2rem;
+        }
+
+        .quote-text span {
+            color: var(--primary);
+        }
+
+        .quote-author {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 6rem 5%;
+        }
+
+        .cta-box {
+            max-width: 900px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(99, 102, 241, 0.1));
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 4rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-box::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, var(--glow) 0%, transparent 50%);
+            opacity: 0.3;
+            animation: ctaGlow 8s ease-in-out infinite;
+        }
+
+        @keyframes ctaGlow {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(10%, 10%); }
+        }
+
+        .cta-box h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+
+        .cta-box p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            position: relative;
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 5%;
+            border-top: 1px solid var(--border);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--text);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        .footer-copy {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-text h1 {
+                font-size: 3rem;
+            }
+
+            .hero-stats {
+                justify-content: center;
+            }
+
+            .hero-cta {
+                justify-content: center;
+            }
+
+            .problem-grid,
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pricing-card.featured {
+                transform: none;
+            }
+
+            .steps-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .step-card::after {
+                display: none;
+            }
+
+            .market-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .solution-content {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                display: none;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .hero-text h1 {
+                font-size: 2.2rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .hero-stats {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .hero-cta {
+                flex-direction: column;
+            }
+
+            .steps-grid,
+            .market-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .cta-box {
+                padding: 2rem;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                gap: 1.5rem;
+                text-align: center;
+            }
+
+            .quote-text {
+                font-size: 1.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    <div class="grid-overlay"></div>
+    <div class="floating-numbers" id="floatingNumbers"></div>
+
+    <nav>
+        <div class="nav-content">
+            <a href="#" class="logo">
+                <span class="logo-icon">💰</span>
+                TaxOS
+            </a>
+            <ul class="nav-links">
+                <li><a href="#problem">Problem</a></li>
+                <li><a href="#solution">Solution</a></li>
+                <li><a href="#how">How It Works</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+            </ul>
+            <a href="#cta" class="nav-cta">Get Early Access</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1>Never Overpay Taxes Again</h1>
+                <p class="tagline">The AI that masters <strong>every tax code on Earth</strong> so you pay exactly what you owe — not a dollar more.</p>
+                
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">$1T+</div>
+                        <div class="stat-label">Overpaid Annually</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">7.5M</div>
+                        <div class="stat-label">Words in US Tax Code</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">190+</div>
+                        <div class="stat-label">Countries Covered</div>
+                    </div>
+                </div>
+
+                <div class="hero-cta">
+                    <a href="#cta" class="btn-primary">
+                        🚀 Join Waitlist
+                    </a>
+                    <a href="#how" class="btn-secondary">
+                        ▶ See How It Works
+                    </a>
+                </div>
+            </div>
+
+            <div class="hero-visual">
+                <div class="dashboard-preview">
+                    <div class="dashboard-header">
+                        <span class="dashboard-title">TaxOS Dashboard</span>
+                        <span class="status-badge">
+                            <span class="status-dot"></span>
+                            AI Optimizing
+                        </span>
+                    </div>
+                    <div class="savings-display">
+                        <div class="savings-label">Found Savings This Year</div>
+                        <div class="savings-amount">$47,832</div>
+                        <div class="savings-period">Updated 2 minutes ago</div>
+                    </div>
+                    <ul class="opportunity-list">
+                        <li class="opportunity-item">
+                            <div class="opportunity-info">
+                                <div class="opportunity-icon">📊</div>
+                                <span class="opportunity-name">R&D Tax Credit</span>
+                            </div>
+                            <span class="opportunity-value">+$28,500</span>
+                        </li>
+                        <li class="opportunity-item">
+                            <div class="opportunity-info">
+                                <div class="opportunity-icon">🏠</div>
+                                <span class="opportunity-name">Home Office Deduction</span>
+                            </div>
+                            <span class="opportunity-value">+$12,400</span>
+                        </li>
+                        <li class="opportunity-item">
+                            <div class="opportunity-info">
+                                <div class="opportunity-icon">📈</div>
+                                <span class="opportunity-name">Tax-Loss Harvest</span>
+                            </div>
+                            <span class="opportunity-value">+$6,932</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="problem-section" id="problem">
+        <div class="section-container">
+            <div class="section-header">
+                <div class="section-label">The Problem</div>
+                <h2 class="section-title">Tax Complexity is a Hidden Tax on Everyone</h2>
+                <p class="section-subtitle">The tax code wasn't designed to be understood. It was designed to be navigated by expensive experts.</p>
+            </div>
+
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="problem-icon">📚</div>
+                    <h3>Incomprehensible Complexity</h3>
+                    <p>The US tax code alone contains 7.5 million words with 74,000+ pages of regulations. No human can master it all.</p>
+                    <div class="problem-stat">74,000+ pages</div>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">💸</div>
+                    <h3>Missed Opportunities</h3>
+                    <p>Americans overpay $1 trillion+ annually in taxes due to missed deductions, credits, and optimization strategies.</p>
+                    <div class="problem-stat">$1T+ lost</div>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">⏰</div>
+                    <h3>Wasted Time</h3>
+                    <p>6.1 billion hours spent annually on tax compliance. That's 2,900 human lifetimes every single year.</p>
+                    <div class="problem-stat">6.1B hours</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="solution-section" id="solution">
+        <div class="section-container">
+            <div class="solution-content">
+                <div class="solution-text">
+                    <div class="section-label">The Solution</div>
+                    <h2>Your Personal Tax Genius, Always On</h2>
+                    <p>TaxOS is an AI that has read and understood every tax law, regulation, and ruling across every jurisdiction. It works 24/7 to find every legitimate opportunity and ensure perfect compliance.</p>
+                    
+                    <ul class="feature-list">
+                        <li class="feature-item">
+                            <div class="feature-check">✓</div>
+                            <div>
+                                <h4>Universal Tax Intelligence</h4>
+                                <p>Every tax code, all 190+ countries, continuously updated in real-time</p>
+                            </div>
+                        </li>
+                        <li class="feature-item">
+                            <div class="feature-check">✓</div>
+                            <div>
+                                <h4>Proactive Optimization</h4>
+                                <p>Identifies savings before deadlines pass — not just at tax time</p>
+                            </div>
+                        </li>
+                        <li class="feature-item">
+                            <div class="feature-check">✓</div>
+                            <div>
+                                <h4>Autonomous Filing</h4>
+                                <p>Prepares and files returns automatically (with your approval)</p>
+                            </div>
+                        </li>
+                        <li class="feature-item">
+                            <div class="feature-check">✓</div>
+                            <div>
+                                <h4>Audit Defense</h4>
+                                <p>Documents everything meticulously, ready if questions arise</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="solution-visual">
+                    <div class="dashboard-preview">
+                        <div class="dashboard-header">
+                            <span class="dashboard-title">Tax Knowledge Engine</span>
+                            <span class="status-badge">
+                                <span class="status-dot"></span>
+                                Live
+                            </span>
+                        </div>
+                        <div style="padding: 1rem 0; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem;">
+                            <div style="margin-bottom: 1rem; padding: 0.75rem; background: rgba(16, 185, 129, 0.1); border-radius: 8px;">
+                                <span style="color: var(--primary);">→</span> Analyzing IRC §179 deduction limits...
+                            </div>
+                            <div style="margin-bottom: 1rem; padding: 0.75rem; background: rgba(99, 102, 241, 0.1); border-radius: 8px;">
+                                <span style="color: var(--accent);">→</span> Cross-referencing state nexus rules...
+                            </div>
+                            <div style="margin-bottom: 1rem; padding: 0.75rem; background: rgba(16, 185, 129, 0.1); border-radius: 8px;">
+                                <span style="color: var(--primary);">✓</span> Found: QSBS exclusion eligible
+                            </div>
+                            <div style="padding: 0.75rem; background: rgba(245, 158, 11, 0.1); border-radius: 8px;">
+                                <span style="color: var(--warning);">!</span> R&D credit deadline: 47 days
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="how-section" id="how">
+        <div class="section-container">
+            <div class="section-header">
+                <div class="section-label">How It Works</div>
+                <h2 class="section-title">Set It Up Once, Save Forever</h2>
+                <p class="section-subtitle">TaxOS integrates with your financial life and works autonomously</p>
+            </div>
+
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h3>Connect</h3>
+                    <p>Link your bank accounts, investments, and income sources securely</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h3>Analyze</h3>
+                    <p>TaxOS maps your entire financial situation against every applicable tax rule</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h3>Optimize</h3>
+                    <p>Continuous identification of deductions, credits, and tax-saving strategies</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">4</div>
+                    <h3>File</h3>
+                    <p>Automated return preparation and filing when you're ready</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="pricing-section" id="pricing">
+        <div class="section-container">
+            <div class="section-header">
+                <div class="section-label">Pricing</div>
+                <h2 class="section-title">Pay Less Than You Save</h2>
+                <p class="section-subtitle">TaxOS typically finds 10-50x its cost in savings</p>
+            </div>
+
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <div class="pricing-tier">Personal</div>
+                    <div class="pricing-name">Individual & Family</div>
+                    <div class="pricing-price">$199<span class="pricing-period">/year</span></div>
+                    <p class="pricing-description">For W-2 employees, freelancers, and families with investments</p>
+                    <ul class="pricing-features">
+                        <li>Federal + all state returns</li>
+                        <li>Investment tax optimization</li>
+                        <li>Year-round monitoring</li>
+                        <li>Crypto & multi-state support</li>
+                        <li>Plain-English explanations</li>
+                    </ul>
+                    <a href="#cta" class="pricing-cta">Get Started</a>
+                </div>
+                <div class="pricing-card featured">
+                    <div class="pricing-tier">Business</div>
+                    <div class="pricing-name">Startups & SMBs</div>
+                    <div class="pricing-price">$499<span class="pricing-period">/month</span></div>
+                    <p class="pricing-description">For growing companies with complex tax needs</p>
+                    <ul class="pricing-features">
+                        <li>Everything in Personal</li>
+                        <li>Full entity management</li>
+                        <li>R&D credit optimization</li>
+                        <li>Sales tax automation</li>
+                        <li>Equity compensation planning</li>
+                        <li>Dedicated support</li>
+                    </ul>
+                    <a href="#cta" class="pricing-cta">Get Started</a>
+                </div>
+                <div class="pricing-card">
+                    <div class="pricing-tier">Enterprise</div>
+                    <div class="pricing-name">Multinationals</div>
+                    <div class="pricing-price">Custom</div>
+                    <p class="pricing-description">For organizations with global operations</p>
+                    <ul class="pricing-features">
+                        <li>Everything in Business</li>
+                        <li>Global tax compliance</li>
+                        <li>Transfer pricing optimization</li>
+                        <li>M&A tax intelligence</li>
+                        <li>Pillar Two compliance</li>
+                        <li>White-glove onboarding</li>
+                    </ul>
+                    <a href="#cta" class="pricing-cta">Contact Sales</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="market-section">
+        <div class="section-container">
+            <div class="section-header">
+                <div class="section-label">The Opportunity</div>
+                <h2 class="section-title">A Massive Market Ready for Disruption</h2>
+            </div>
+
+            <div class="market-stats">
+                <div class="market-stat">
+                    <div class="market-stat-value">$145B</div>
+                    <div class="market-stat-label">Global Tax Services Market</div>
+                </div>
+                <div class="market-stat">
+                    <div class="market-stat-value">150M+</div>
+                    <div class="market-stat-label">US Tax Returns Filed Annually</div>
+                </div>
+                <div class="market-stat">
+                    <div class="market-stat-value">$500/hr</div>
+                    <div class="market-stat-label">Avg. Big 4 Tax Rate</div>
+                </div>
+                <div class="market-stat">
+                    <div class="market-stat-value">32%</div>
+                    <div class="market-stat-label">CPA Pipeline Decline</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="quote-section">
+        <div class="quote-content">
+            <p class="quote-text">"In this world nothing can be said to be certain, except <span>death and taxes</span>."</p>
+            <p class="quote-author">— Benjamin Franklin</p>
+            <p style="margin-top: 1.5rem; color: var(--primary); font-weight: 600; font-size: 1.1rem;">TaxOS can't help with the first one. We're revolutionizing the second.</p>
+        </div>
+    </section>
+
+    <section class="cta-section" id="cta">
+        <div class="cta-box">
+            <h2>Stop Overpaying. Start Optimizing.</h2>
+            <p>Join the waitlist for early access and be among the first to experience autonomous tax intelligence.</p>
+            <div class="cta-buttons">
+                <a href="mailto:founders@taxos.ai" class="btn-primary">
+                    🚀 Request Early Access
+                </a>
+                <a href="mailto:investors@taxos.ai" class="btn-secondary">
+                    📊 Investor Deck
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <a href="#" class="footer-logo">
+                <span class="logo-icon">💰</span>
+                TaxOS
+            </a>
+            <div class="footer-links">
+                <a href="#">About</a>
+                <a href="#">Careers</a>
+                <a href="#">Privacy</a>
+                <a href="#">Security</a>
+                <a href="#">Contact</a>
+            </div>
+            <p class="footer-copy">© 2026 TaxOS. The IRS has rules. We have intelligence.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Generate floating tax numbers
+        const taxItems = ['§179', '1040', 'IRC', 'W-2', 'QSBS', '401k', 'IRA', 'FICA', 'AMT', 'LTCG', 'STCG', '83(b)', 'R&D', 'SALT', '§1031', 'GILTI'];
+        const container = document.getElementById('floatingNumbers');
+        
+        for (let i = 0; i < 30; i++) {
+            const span = document.createElement('span');
+            span.className = 'tax-number';
+            span.textContent = taxItems[Math.floor(Math.random() * taxItems.length)];
+            span.style.left = Math.random() * 100 + '%';
+            span.style.animationDelay = Math.random() * 20 + 's';
+            span.style.animationDuration = (15 + Math.random() * 10) + 's';
+            container.appendChild(span);
+        }
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Nav background on scroll
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 100) {
+                nav.style.background = 'rgba(2, 6, 23, 0.95)';
+            } else {
+                nav.style.background = 'rgba(2, 6, 23, 0.8)';
+            }
+        });
+    </script>
+</body>
+</html>
