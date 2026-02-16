@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InferenceOS — The Cloudflare for AI</title>
+    <meta name="description" content="Make AI inference 10x cheaper and 100x faster. The intelligent infrastructure layer for AI workloads.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #818cf8;
+            --accent: #22d3ee;
+            --accent-green: #10b981;
+            --bg-dark: #0a0a0f;
+            --bg-card: #111118;
+            --bg-card-hover: #1a1a24;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --border: #1e293b;
+            --gradient-1: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%);
+            --gradient-2: linear-gradient(135deg, #22d3ee 0%, #6366f1 100%);
+            --gradient-3: linear-gradient(180deg, rgba(99, 102, 241, 0.15) 0%, transparent 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated background */
+        .bg-gradient {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(ellipse 80% 50% at 50% -20%, rgba(99, 102, 241, 0.3), transparent),
+                radial-gradient(ellipse 60% 40% at 100% 0%, rgba(139, 92, 246, 0.2), transparent),
+                radial-gradient(ellipse 50% 30% at 0% 100%, rgba(34, 211, 238, 0.15), transparent);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Grid pattern overlay */
+        .grid-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                linear-gradient(rgba(99, 102, 241, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 20px 0;
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: var(--gradient-1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            -webkit-text-fill-color: white;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--gradient-1);
+            color: white;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(99, 102, 241, 0.5);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--primary-light);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 120px 0 80px;
+            position: relative;
+        }
+
+        .hero-content {
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--primary-light);
+            margin-bottom: 24px;
+        }
+
+        .badge-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent-green);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        h1 {
+            font-size: clamp(3rem, 8vw, 5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            letter-spacing: -0.03em;
+        }
+
+        .gradient-text {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.35rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto 40px;
+            line-height: 1.7;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 60px;
+        }
+
+        /* Stats bar */
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            flex-wrap: wrap;
+            padding: 40px 0;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            margin-top: 40px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: var(--gradient-2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        /* Problem Section */
+        .section {
+            padding: 120px 0;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 60px;
+        }
+
+        .section-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--primary-light);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 16px;
+        }
+
+        h2 {
+            font-size: 2.75rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            letter-spacing: -0.02em;
+        }
+
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+        }
+
+        /* Problem cards */
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .problem-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px;
+            transition: all 0.3s ease;
+        }
+
+        .problem-card:hover {
+            background: var(--bg-card-hover);
+            border-color: rgba(99, 102, 241, 0.3);
+            transform: translateY(-4px);
+        }
+
+        .problem-icon {
+            width: 56px;
+            height: 56px;
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        .problem-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .problem-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Solution Section */
+        .solution-section {
+            background: var(--gradient-3);
+        }
+
+        .solution-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 32px;
+        }
+
+        .solution-card {
+            background: rgba(17, 17, 24, 0.8);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 40px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .solution-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-1);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .solution-card:hover::before {
+            opacity: 1;
+        }
+
+        .solution-card:hover {
+            border-color: rgba(99, 102, 241, 0.4);
+            transform: translateY(-4px);
+        }
+
+        .solution-icon {
+            width: 64px;
+            height: 64px;
+            background: var(--gradient-1);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 24px;
+        }
+
+        .solution-card h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .solution-card p {
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        .solution-stat {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--accent-green);
+        }
+
+        /* Architecture Diagram */
+        .architecture {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 48px;
+            margin-top: 60px;
+        }
+
+        .architecture h3 {
+            text-align: center;
+            font-size: 1.5rem;
+            margin-bottom: 40px;
+        }
+
+        .arch-diagram {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            background: rgba(0, 0, 0, 0.3);
+            padding: 32px;
+            border-radius: 12px;
+            overflow-x: auto;
+            white-space: pre;
+            line-height: 1.5;
+        }
+
+        .arch-diagram .highlight {
+            color: var(--primary-light);
+        }
+
+        .arch-diagram .accent {
+            color: var(--accent);
+        }
+
+        .arch-diagram .green {
+            color: var(--accent-green);
+        }
+
+        /* Code Example */
+        .code-section {
+            margin-top: 80px;
+        }
+
+        .code-block {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .code-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 16px 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .code-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .code-dot.red { background: #ef4444; }
+        .code-dot.yellow { background: #eab308; }
+        .code-dot.green { background: #22c55e; }
+
+        .code-title {
+            margin-left: 12px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .code-content {
+            padding: 24px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 1.7;
+            overflow-x: auto;
+        }
+
+        .code-content .comment { color: var(--text-muted); }
+        .code-content .keyword { color: #c084fc; }
+        .code-content .string { color: #34d399; }
+        .code-content .function { color: #60a5fa; }
+        .code-content .variable { color: var(--accent); }
+
+        /* Market Section */
+        .market-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        @media (max-width: 768px) {
+            .market-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .market-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px;
+            text-align: center;
+        }
+
+        .market-value {
+            font-size: 3rem;
+            font-weight: 900;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .market-label {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 8px 0;
+        }
+
+        .market-desc {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 40px;
+            font-size: 0.95rem;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 16px 20px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .comparison-table th {
+            background: var(--bg-card);
+            font-weight: 600;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .comparison-table tr:hover td {
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        .comparison-table .company {
+            font-weight: 600;
+        }
+
+        .comparison-table .highlight-row td {
+            background: rgba(99, 102, 241, 0.1);
+            border-color: rgba(99, 102, 241, 0.3);
+        }
+
+        .comparison-table .highlight-row .company {
+            color: var(--primary-light);
+        }
+
+        .check { color: var(--accent-green); }
+        .cross { color: #ef4444; }
+
+        /* Pricing Section */
+        .pricing-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 48px;
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pricing-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-1);
+        }
+
+        .pricing-badge {
+            display: inline-block;
+            padding: 6px 14px;
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--primary-light);
+            margin-bottom: 20px;
+        }
+
+        .pricing-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .pricing-price {
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin: 20px 0;
+        }
+
+        .pricing-price span {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text-muted);
+        }
+
+        .pricing-features {
+            list-style: none;
+            text-align: left;
+            margin: 32px 0;
+        }
+
+        .pricing-features li {
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .pricing-features li:last-child {
+            border-bottom: none;
+        }
+
+        .pricing-features .icon {
+            color: var(--accent-green);
+            font-size: 1.2rem;
+        }
+
+        /* Team Section */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .team-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .team-card:hover {
+            border-color: rgba(99, 102, 241, 0.4);
+            transform: translateY(-4px);
+        }
+
+        .team-avatar {
+            width: 80px;
+            height: 80px;
+            background: var(--gradient-1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto 20px;
+        }
+
+        .team-card h4 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .team-card .role {
+            color: var(--primary-light);
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 12px;
+        }
+
+        .team-card p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            text-align: center;
+            padding: 120px 0;
+            position: relative;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.2) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-section h2 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .cta-section p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 40px;
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 60px 0;
+            text-align: center;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .footer-copy {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            h2 {
+                font-size: 2rem;
+            }
+
+            .stats-bar {
+                gap: 30px;
+            }
+
+            .stat-value {
+                font-size: 2rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        /* Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .float {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-dark);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-gradient"></div>
+    <div class="grid-pattern"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="container nav-content">
+            <div class="logo">
+                <div class="logo-icon">⚡</div>
+                InferenceOS
+            </div>
+            <div class="nav-links">
+                <a href="#problem">Problem</a>
+                <a href="#solution">Solution</a>
+                <a href="#market">Market</a>
+                <a href="#pricing">Pricing</a>
+                <a href="#contact" class="btn btn-primary">Get Early Access</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="badge">
+                    <span class="badge-dot"></span>
+                    Now accepting early access applications
+                </div>
+                <h1>
+                    Make AI Inference<br>
+                    <span class="gradient-text">10x Cheaper</span>
+                </h1>
+                <p class="hero-subtitle">
+                    The intelligent infrastructure layer that optimizes, routes, caches, and scales your AI workloads automatically. Think Cloudflare, but for AI.
+                </p>
+                <div class="hero-buttons">
+                    <a href="#contact" class="btn btn-primary">
+                        <span>🚀</span> Request Early Access
+                    </a>
+                    <a href="#solution" class="btn btn-secondary">
+                        <span>📖</span> Learn More
+                    </a>
+                </div>
+
+                <div class="stats-bar">
+                    <div class="stat">
+                        <div class="stat-value">60%</div>
+                        <div class="stat-label">Cost Reduction</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">100x</div>
+                        <div class="stat-label">Faster Cache Hits</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">99.99%</div>
+                        <div class="stat-label">Uptime SLA</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">&lt;10ms</div>
+                        <div class="stat-label">Routing Latency</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="section" id="problem">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-label">The Problem</div>
+                <h2>AI Inference is Broken at Scale</h2>
+                <p class="section-subtitle">
+                    Companies are burning through budgets on inefficient AI infrastructure. $50B+ wasted annually.
+                </p>
+            </div>
+
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="problem-icon">💸</div>
+                    <h3>Cost Explosion</h3>
+                    <p>GPT-4 costs $60/M tokens. A single AI feature can cost $500K-$5M/year. 60-80% of AI budgets go to inference.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">🐌</div>
+                    <h3>Performance Chaos</h3>
+                    <p>Cold start delays, no intelligent caching, 5-10x latency spikes during peak hours. Users abandon slow AI features.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">🔧</div>
+                    <h3>Operational Nightmare</h3>
+                    <p>Managing multiple providers, no unified observability, manual model versioning, unexpected rate limit failures.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">🎰</div>
+                    <h3>Wasted Compute</h3>
+                    <p>Same queries hit GPUs repeatedly. No semantic deduplication. Complex queries use simple models, simple queries burn expensive ones.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="section solution-section" id="solution">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-label">The Solution</div>
+                <h2>Intelligent Infrastructure for AI</h2>
+                <p class="section-subtitle">
+                    InferenceOS automatically optimizes every aspect of your AI inference — saving money and improving performance.
+                </p>
+            </div>
+
+            <div class="solution-grid">
+                <div class="solution-card">
+                    <div class="solution-icon">🧠</div>
+                    <h3>Semantic Caching</h3>
+                    <p>Embedding-based similarity matching catches semantically identical queries. "Weather in NYC" = "NYC weather today"</p>
+                    <div class="solution-stat">↓ 60% cost reduction</div>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon">🎯</div>
+                    <h3>Intelligent Routing</h3>
+                    <p>Real-time model selection based on query complexity. Simple questions → fast models. Complex reasoning → capable models.</p>
+                    <div class="solution-stat">↓ 30% latency</div>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon">⚡</div>
+                    <h3>Request Optimization</h3>
+                    <p>Automatic prompt compression, batch aggregation, and token-efficient reformatting. Same output, fewer tokens.</p>
+                    <div class="solution-stat">↓ 40% token usage</div>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon">🌍</div>
+                    <h3>Global Edge Network</h3>
+                    <p>200+ points of presence worldwide. Cache at the edge. Route to nearest inference point. Sub-10ms response for cache hits.</p>
+                    <div class="solution-stat">↓ 100x faster hits</div>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon">🛡️</div>
+                    <h3>Automatic Failover</h3>
+                    <p>Provider issues? Rate limited? We automatically route to backup providers. Zero downtime, zero intervention required.</p>
+                    <div class="solution-stat">99.99% uptime</div>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon">📊</div>
+                    <h3>Unified Observability</h3>
+                    <p>Real-time cost tracking, latency monitoring, quality metrics, and full audit trail. One dashboard for all providers.</p>
+                    <div class="solution-stat">Complete visibility</div>
+                </div>
+            </div>
+
+            <!-- Architecture Diagram -->
+            <div class="architecture">
+                <h3>How It Works</h3>
+                <div class="arch-diagram">
+<span class="highlight">┌─────────────────────────────────────────────────────────────┐</span>
+<span class="highlight">│</span>                    <span class="accent">Your Application</span>                         <span class="highlight">│</span>
+<span class="highlight">└─────────────────────────────────────────────────────────────┘</span>
+                              │
+                              ▼
+<span class="green">┌─────────────────────────────────────────────────────────────┐</span>
+<span class="green">│</span>                      <span class="accent">INFERENCE OS</span>                           <span class="green">│</span>
+<span class="green">│</span>  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐       <span class="green">│</span>
+<span class="green">│</span>  │ <span class="highlight">Smart</span>    │ │ <span class="highlight">Semantic</span> │ │ <span class="highlight">Model</span>    │ │ <span class="highlight">Global</span>   │       <span class="green">│</span>
+<span class="green">│</span>  │ <span class="highlight">Routing</span>  │ │ <span class="highlight">Cache</span>    │ │ <span class="highlight">Optimizer</span>│ │ <span class="highlight">Edge</span>     │       <span class="green">│</span>
+<span class="green">│</span>  └──────────┘ └──────────┘ └──────────┘ └──────────┘       <span class="green">│</span>
+<span class="green">└─────────────────────────────────────────────────────────────┘</span>
+                              │
+          ┌───────────────────┼───────────────────┐
+          ▼                   ▼                   ▼
+    ┌──────────┐        ┌──────────┐        ┌──────────┐
+    │ <span class="accent">OpenAI</span>   │        │<span class="accent">Anthropic</span> │        │ <span class="accent">Self-</span>    │
+    │          │        │          │        │ <span class="accent">Hosted</span>   │
+    └──────────┘        └──────────┘        └──────────┘
+                </div>
+            </div>
+
+            <!-- Code Example -->
+            <div class="code-section">
+                <div class="section-header" style="margin-bottom: 40px;">
+                    <h3>Drop-in Replacement</h3>
+                    <p class="section-subtitle">One line change. Instant optimization.</p>
+                </div>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-dot red"></span>
+                        <span class="code-dot yellow"></span>
+                        <span class="code-dot green"></span>
+                        <span class="code-title">app.py</span>
+                    </div>
+                    <div class="code-content">
+<span class="comment"># Before: Direct API calls, no optimization</span>
+<span class="keyword">from</span> openai <span class="keyword">import</span> OpenAI
+client = OpenAI()
+
+<span class="comment"># After: One line change, 10x cheaper</span>
+<span class="keyword">from</span> openai <span class="keyword">import</span> OpenAI
+client = OpenAI(<span class="variable">base_url</span>=<span class="string">"https://api.inferenceos.ai/v1"</span>)
+
+<span class="comment"># That's it. Everything else works exactly the same.</span>
+response = client.chat.completions.<span class="function">create</span>(
+    <span class="variable">model</span>=<span class="string">"gpt-4"</span>,  <span class="comment"># InferenceOS auto-routes to optimal model</span>
+    <span class="variable">messages</span>=[{<span class="string">"role"</span>: <span class="string">"user"</span>, <span class="string">"content"</span>: <span class="string">"Hello!"</span>}]
+)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Market Section -->
+    <section class="section" id="market">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-label">Market Opportunity</div>
+                <h2>A $45B Market Waiting to be Optimized</h2>
+                <p class="section-subtitle">
+                    AI inference is the fastest-growing infrastructure category. And the most inefficient.
+                </p>
+            </div>
+
+            <div class="market-cards">
+                <div class="market-card">
+                    <div class="market-value">$180B</div>
+                    <div class="market-label">TAM by 2028</div>
+                    <div class="market-desc">Total AI infrastructure market</div>
+                </div>
+                <div class="market-card">
+                    <div class="market-value">$45B</div>
+                    <div class="market-label">SAM by 2028</div>
+                    <div class="market-desc">AI inference infrastructure</div>
+                </div>
+                <div class="market-card">
+                    <div class="market-value">$50B+</div>
+                    <div class="market-label">Wasted Annually</div>
+                    <div class="market-desc">On inefficient inference</div>
+                </div>
+            </div>
+
+            <!-- Comparison Table -->
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Solution</th>
+                        <th>Multi-Provider</th>
+                        <th>Semantic Cache</th>
+                        <th>Smart Routing</th>
+                        <th>Global Edge</th>
+                        <th>Unified Analytics</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="company">OpenAI / Anthropic</td>
+                        <td><span class="cross">✗</span></td>
+                        <td><span class="cross">✗</span></td>
+                        <td><span class="cross">✗</span></td>
+                        <td><span class="cross">✗</span></td>
+                        <td><span class="cross">✗</span></td>
+                    </tr>
+                    <tr>
+                        <td class="company">AWS Bedrock</td>
+                        <td><span class="check">✓</span></td>
+                        <td><span class="cross">✗</span></td>
+                        <td><span class="cross">✗</span></td>
+                        <td><span class="cross">✗</span></td>
+                        <td><span class="check">✓</span></td>
+                    </tr>
+                    <tr>
+                        <td class="company">Vercel AI SDK</td>
+                        <td><span class="check">✓</span></td>
+                        <td><span class="cross">✗</span></td>
+                        <td><span class="cross">✗</span></td>
+                        <td><span class="cross">✗</span></td>
+                        <td><span class="cross">✗</span></td>
+                    </tr>
+                    <tr class="highlight-row">
+                        <td class="company">InferenceOS</td>
+                        <td><span class="check">✓</span></td>
+                        <td><span class="check">✓</span></td>
+                        <td><span class="check">✓</span></td>
+                        <td><span class="check">✓</span></td>
+                        <td><span class="check">✓</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="section" id="pricing">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-label">Simple Pricing</div>
+                <h2>Pay for Value, Not Markup</h2>
+                <p class="section-subtitle">
+                    We pass through AI costs at cost. You pay for optimization, not middleman fees.
+                </p>
+            </div>
+
+            <div class="pricing-card">
+                <div class="pricing-badge">Most Popular</div>
+                <div class="pricing-title">Usage-Based</div>
+                <div class="pricing-price">$2<span> / 1M requests</span></div>
+                <p style="color: var(--text-secondary);">Plus passthrough AI costs at cost</p>
+                
+                <ul class="pricing-features">
+                    <li><span class="icon">✓</span> Semantic caching (60% cost savings)</li>
+                    <li><span class="icon">✓</span> Intelligent routing</li>
+                    <li><span class="icon">✓</span> Multi-provider orchestration</li>
+                    <li><span class="icon">✓</span> Global edge network</li>
+                    <li><span class="icon">✓</span> Real-time analytics</li>
+                    <li><span class="icon">✓</span> Automatic failover</li>
+                    <li><span class="icon">✓</span> 99.9% uptime SLA</li>
+                </ul>
+
+                <a href="#contact" class="btn btn-primary" style="width: 100%;">
+                    Start Free Trial
+                </a>
+                <p style="margin-top: 16px; font-size: 0.85rem; color: var(--text-muted);">
+                    10M requests/month free • No credit card required
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="section" id="team">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-label">Founding Team</div>
+                <h2>Built by Infrastructure Veterans</h2>
+                <p class="section-subtitle">
+                    We've scaled infrastructure at the world's largest companies. Now we're fixing AI.
+                </p>
+            </div>
+
+            <div class="team-grid">
+                <div class="team-card">
+                    <div class="team-avatar">👤</div>
+                    <h4>CEO / Product</h4>
+                    <div class="role">Hire #1</div>
+                    <p>Developer tools experience at scale. Technical credibility with AI/ML ecosystem.</p>
+                </div>
+                <div class="team-card">
+                    <div class="team-avatar">👤</div>
+                    <h4>CTO / Infrastructure</h4>
+                    <div class="role">Hire #2</div>
+                    <p>Built distributed systems at scale. CDN, edge computing, systems programming.</p>
+                </div>
+                <div class="team-card">
+                    <div class="team-avatar">👤</div>
+                    <h4>Head of AI</h4>
+                    <div class="role">Hire #3</div>
+                    <p>ML infrastructure background. Inference optimization, embedding models, caching.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section" id="contact">
+        <div class="container">
+            <div class="cta-content">
+                <div class="section-label">Ready to Start?</div>
+                <h2>Join the AI Infrastructure Revolution</h2>
+                <p>
+                    Stop burning money on inefficient inference. Start saving 60%+ on your AI costs today.
+                </p>
+                <div class="hero-buttons">
+                    <a href="mailto:founders@inferenceos.ai" class="btn btn-primary">
+                        <span>📧</span> Contact Us
+                    </a>
+                    <a href="#" class="btn btn-secondary">
+                        <span>📄</span> Read Full Strategy
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container footer-content">
+            <div class="logo">
+                <div class="logo-icon">⚡</div>
+                InferenceOS
+            </div>
+            <div class="footer-links">
+                <a href="#">Documentation</a>
+                <a href="#">Blog</a>
+                <a href="#">GitHub</a>
+                <a href="#">Twitter</a>
+            </div>
+            <div class="footer-copy">
+                © 2026 InferenceOS. The Cloudflare for AI.
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
