@@ -57,6 +57,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-02-15 | Afternoon | CreatorOS — Autonomous Creator Economy Intelligence | [Playbook](2026-02-15-afternoon.md) • [Landing](2026-02-15-afternoon-landing.html) • [PDF](2026-02-15-afternoon.pdf) |
 | 2026-02-16 | Evening | TaxOS — Autonomous Tax Intelligence Platform | [Playbook](2026-02-16-evening.md) • [Landing](2026-02-16-evening-landing.html) • [PDF](2026-02-16-evening.pdf) |
 | 2026-02-16 | Afternoon | InferenceOS — Autonomous AI Inference Optimization | [Playbook](2026-02-16-afternoon.md) • [Landing](2026-02-16-afternoon-landing.html) • [PDF](2026-02-16-afternoon.pdf) |
+| 2026-02-17 | Evening | AquaOS — Autonomous Water Intelligence Platform | [Playbook](2026-02-17-evening.md) • [Landing](2026-02-17-evening-landing.html) • [PDF](2026-02-17-evening.pdf) |
 <!-- New entries will be added above this line -->
 
 ---

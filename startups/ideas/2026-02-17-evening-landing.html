@@ -1,0 +1,1258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AquaOS — Autonomous Water Intelligence Platform</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --aqua-deep: #0a1628;
+            --aqua-dark: #0d2137;
+            --aqua-primary: #00b4d8;
+            --aqua-secondary: #0077b6;
+            --aqua-light: #48cae4;
+            --aqua-glow: #90e0ef;
+            --aqua-foam: #caf0f8;
+            --white: #ffffff;
+            --text-muted: #8ba3b5;
+            --success: #00d9a5;
+            --warning: #f4a261;
+            --danger: #ef476f;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--aqua-deep);
+            color: var(--white);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Animated Water Background */
+        .water-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .water-bg::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            background: 
+                radial-gradient(ellipse at 20% 80%, rgba(0, 180, 216, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(0, 119, 182, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(72, 202, 228, 0.05) 0%, transparent 70%);
+            animation: waterFlow 20s linear infinite;
+        }
+
+        @keyframes waterFlow {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Ripple Effect */
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            border: 1px solid rgba(0, 180, 216, 0.3);
+            animation: rippleExpand 4s ease-out infinite;
+        }
+
+        .ripple:nth-child(1) { top: 20%; left: 30%; animation-delay: 0s; }
+        .ripple:nth-child(2) { top: 60%; left: 70%; animation-delay: 1s; }
+        .ripple:nth-child(3) { top: 40%; left: 50%; animation-delay: 2s; }
+        .ripple:nth-child(4) { top: 80%; left: 20%; animation-delay: 3s; }
+
+        @keyframes rippleExpand {
+            0% { width: 0; height: 0; opacity: 1; }
+            100% { width: 400px; height: 400px; margin-left: -200px; margin-top: -200px; opacity: 0; }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1.5rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(to bottom, rgba(10, 22, 40, 0.95), transparent);
+            backdrop-filter: blur(10px);
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, var(--aqua-primary), var(--aqua-secondary));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0, 180, 216, 0.4);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--aqua-light);
+        }
+
+        .nav-cta {
+            background: linear-gradient(135deg, var(--aqua-primary), var(--aqua-secondary));
+            color: var(--white);
+            padding: 0.75rem 1.75rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 4px 20px rgba(0, 180, 216, 0.3);
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 30px rgba(0, 180, 216, 0.5);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 8rem 2rem 4rem;
+            position: relative;
+        }
+
+        .hero-badge {
+            background: rgba(0, 180, 216, 0.15);
+            border: 1px solid rgba(0, 180, 216, 0.3);
+            padding: 0.5rem 1.25rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            color: var(--aqua-light);
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .badge-pulse {
+            width: 8px;
+            height: 8px;
+            background: var(--success);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        .hero h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--white) 0%, var(--aqua-glow) 50%, var(--aqua-light) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            max-width: 700px;
+            margin-bottom: 3rem;
+            line-height: 1.7;
+        }
+
+        .hero-ctas {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 4rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--aqua-primary), var(--aqua-secondary));
+            color: var(--white);
+            padding: 1.1rem 2.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: all 0.3s;
+            box-shadow: 0 4px 30px rgba(0, 180, 216, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 40px rgba(0, 180, 216, 0.6);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--white);
+            padding: 1.1rem 2.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: all 0.3s;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Hero Stats */
+        .hero-stats {
+            display: flex;
+            gap: 4rem;
+            padding-top: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--aqua-light);
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Crisis Section */
+        .crisis {
+            padding: 8rem 4rem;
+            position: relative;
+        }
+
+        .section-label {
+            color: var(--aqua-primary);
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            max-width: 800px;
+        }
+
+        .section-subtitle {
+            color: var(--text-muted);
+            font-size: 1.25rem;
+            max-width: 700px;
+            margin-bottom: 4rem;
+        }
+
+        .crisis-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .crisis-card {
+            background: linear-gradient(145deg, rgba(13, 33, 55, 0.8), rgba(10, 22, 40, 0.9));
+            border: 1px solid rgba(0, 180, 216, 0.15);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .crisis-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--danger), var(--warning));
+        }
+
+        .crisis-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(0, 180, 216, 0.3);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .crisis-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, rgba(239, 71, 111, 0.2), rgba(244, 162, 97, 0.2));
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .crisis-card h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .crisis-card p {
+            color: var(--text-muted);
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        .crisis-stat {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--danger);
+            margin-top: 1rem;
+        }
+
+        /* Solution Section */
+        .solution {
+            padding: 8rem 4rem;
+            background: linear-gradient(180deg, transparent, rgba(0, 119, 182, 0.05), transparent);
+        }
+
+        .solution-content {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .solution-header {
+            text-align: center;
+            margin-bottom: 5rem;
+        }
+
+        .platform-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .platform-card {
+            background: linear-gradient(145deg, rgba(13, 33, 55, 0.9), rgba(10, 22, 40, 0.95));
+            border: 1px solid rgba(0, 180, 216, 0.2);
+            border-radius: 24px;
+            padding: 3rem;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .platform-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--aqua-primary), var(--aqua-secondary));
+        }
+
+        .platform-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 80px rgba(0, 180, 216, 0.15);
+            border-color: rgba(0, 180, 216, 0.4);
+        }
+
+        .platform-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--aqua-primary), var(--aqua-secondary));
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 180, 216, 0.3);
+        }
+
+        .platform-card h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .platform-card p {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .platform-features {
+            list-style: none;
+        }
+
+        .platform-features li {
+            padding: 0.5rem 0;
+            color: var(--aqua-foam);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.95rem;
+        }
+
+        .platform-features li::before {
+            content: '✓';
+            color: var(--success);
+            font-weight: 700;
+        }
+
+        /* Market Section */
+        .market {
+            padding: 8rem 4rem;
+        }
+
+        .market-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .market-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .market-visual {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .tam-visual {
+            position: relative;
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tam-circle {
+            position: absolute;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .tam-outer {
+            width: 350px;
+            height: 350px;
+            background: linear-gradient(135deg, rgba(0, 180, 216, 0.1), rgba(0, 119, 182, 0.05));
+            border: 2px solid rgba(0, 180, 216, 0.2);
+        }
+
+        .tam-middle {
+            width: 240px;
+            height: 240px;
+            background: linear-gradient(135deg, rgba(0, 180, 216, 0.2), rgba(0, 119, 182, 0.1));
+            border: 2px solid rgba(0, 180, 216, 0.3);
+        }
+
+        .tam-inner {
+            width: 130px;
+            height: 130px;
+            background: linear-gradient(135deg, var(--aqua-primary), var(--aqua-secondary));
+            border: none;
+            box-shadow: 0 10px 40px rgba(0, 180, 216, 0.4);
+        }
+
+        .tam-label {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            font-size: 0.8rem;
+            color: var(--aqua-light);
+            position: absolute;
+        }
+
+        .tam-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            color: var(--white);
+        }
+
+        .tam-outer .tam-value { font-size: 1.2rem; margin-top: 120px; }
+        .tam-middle .tam-value { font-size: 1.1rem; margin-top: 80px; }
+        .tam-inner .tam-value { font-size: 1rem; }
+
+        .market-details {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .market-item {
+            background: rgba(13, 33, 55, 0.6);
+            border: 1px solid rgba(0, 180, 216, 0.15);
+            border-radius: 16px;
+            padding: 1.5rem 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .market-item-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--aqua-light);
+            min-width: 100px;
+        }
+
+        .market-item-text h4 {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .market-item-text p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Segments Section */
+        .segments {
+            padding: 8rem 4rem;
+            background: linear-gradient(180deg, rgba(0, 119, 182, 0.03), transparent);
+        }
+
+        .segments-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .segment-card {
+            background: linear-gradient(145deg, rgba(13, 33, 55, 0.9), rgba(10, 22, 40, 0.95));
+            border: 1px solid rgba(0, 180, 216, 0.15);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.4s ease;
+        }
+
+        .segment-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--aqua-primary);
+            box-shadow: 0 20px 60px rgba(0, 180, 216, 0.15);
+        }
+
+        .segment-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, rgba(0, 180, 216, 0.2), rgba(0, 119, 182, 0.1));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin: 0 auto 1.5rem;
+        }
+
+        .segment-card h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .segment-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .segment-stats {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+        }
+
+        .segment-stat {
+            text-align: center;
+        }
+
+        .segment-stat-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--aqua-light);
+        }
+
+        .segment-stat-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* Traction Section */
+        .traction {
+            padding: 8rem 4rem;
+        }
+
+        .traction-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .traction-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .traction-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+
+        .traction-card {
+            background: linear-gradient(145deg, rgba(0, 180, 216, 0.1), rgba(0, 119, 182, 0.05));
+            border: 1px solid rgba(0, 180, 216, 0.2);
+            border-radius: 20px;
+            padding: 2.5rem;
+            text-align: center;
+        }
+
+        .traction-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--aqua-light), var(--aqua-primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .traction-label {
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 8rem 4rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .cta::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 600px;
+            height: 600px;
+            transform: translate(-50%, -50%);
+            background: radial-gradient(circle, rgba(0, 180, 216, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--white), var(--aqua-glow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .cta p {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto 3rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .footer-tagline {
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--aqua-light);
+        }
+
+        .footer-copy {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .platform-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .segments-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .traction-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .market-visual {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem 2rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .hero {
+                padding: 6rem 1.5rem 3rem;
+            }
+            
+            .hero-ctas {
+                flex-direction: column;
+            }
+            
+            .hero-stats {
+                flex-direction: column;
+                gap: 2rem;
+            }
+            
+            .crisis, .solution, .market, .segments, .traction, .cta {
+                padding: 4rem 1.5rem;
+            }
+            
+            .segments-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .traction-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .footer-links {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="water-bg">
+        <div class="ripple"></div>
+        <div class="ripple"></div>
+        <div class="ripple"></div>
+        <div class="ripple"></div>
+    </div>
+
+    <nav>
+        <div class="logo">
+            <div class="logo-icon">💧</div>
+            AquaOS
+        </div>
+        <ul class="nav-links">
+            <li><a href="#crisis">The Crisis</a></li>
+            <li><a href="#solution">Solution</a></li>
+            <li><a href="#market">Market</a></li>
+            <li><a href="#segments">Segments</a></li>
+        </ul>
+        <a href="#cta" class="nav-cta">Get Early Access</a>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-badge">
+            <span class="badge-pulse"></span>
+            Now Raising Seed Round
+        </div>
+        <h1>Every Drop<br>Counts</h1>
+        <p class="hero-subtitle">
+            The autonomous intelligence platform that makes water infrastructure smarter, more resilient, and 10x more efficient. AI-powered management for humanity's most critical resource.
+        </p>
+        <div class="hero-ctas">
+            <a href="#cta" class="btn-primary">
+                Request Demo
+                <span>→</span>
+            </a>
+            <a href="#solution" class="btn-secondary">
+                <span>▶</span>
+                See How It Works
+            </a>
+        </div>
+        <div class="hero-stats">
+            <div class="stat">
+                <div class="stat-value">40%</div>
+                <div class="stat-label">Supply-Demand Gap by 2030</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">$1T</div>
+                <div class="stat-label">Infrastructure Investment Gap</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">6B</div>
+                <div class="stat-label">Gallons Lost Daily (US Leaks)</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">$180B</div>
+                <div class="stat-label">Total Addressable Market</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="crisis" id="crisis">
+        <div class="section-label">The Crisis</div>
+        <h2 class="section-title">Water Is Running Out — And Nobody's Ready</h2>
+        <p class="section-subtitle">
+            Climate change is rewriting the rules. Infrastructure is crumbling. The $1 trillion water industry is flying blind with 50-year-old systems.
+        </p>
+        <div class="crisis-grid">
+            <div class="crisis-card">
+                <div class="crisis-icon">🏜️</div>
+                <h3>Supply Collapse</h3>
+                <p>Lake Mead at historic lows. Colorado River in crisis. 50% of world's largest aquifers past sustainability.</p>
+                <div class="crisis-stat">40M+ people at risk</div>
+            </div>
+            <div class="crisis-card">
+                <div class="crisis-icon">📈</div>
+                <h3>Demand Explosion</h3>
+                <p>Data centers now consume 660B gallons/year. AI training alone is accelerating water demand exponentially.</p>
+                <div class="crisis-stat">+1% annual growth</div>
+            </div>
+            <div class="crisis-card">
+                <div class="crisis-icon">🔧</div>
+                <h3>Infrastructure Decay</h3>
+                <p>Average water main is 45+ years old. 240,000 water main breaks per year in the US alone.</p>
+                <div class="crisis-stat">$2.6B annual damage</div>
+            </div>
+            <div class="crisis-card">
+                <div class="crisis-icon">💸</div>
+                <h3>Massive Waste</h3>
+                <p>16% of treated water lost to leaks. Agricultural and industrial water use wildly inefficient.</p>
+                <div class="crisis-stat">$80B+ wasted annually</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="solution" id="solution">
+        <div class="solution-content">
+            <div class="solution-header">
+                <div class="section-label">The Solution</div>
+                <h2 class="section-title">The Operating System for Water Intelligence</h2>
+                <p class="section-subtitle">
+                    AquaOS is the AI-native platform that transforms how humanity manages water — from source to tap, from storm drain to treatment plant.
+                </p>
+            </div>
+            <div class="platform-grid">
+                <div class="platform-card">
+                    <div class="platform-icon">📡</div>
+                    <h3>AquaSense</h3>
+                    <p>Universal water monitoring that ingests data from any source — SCADA, IoT sensors, satellites, weather stations — into one unified view.</p>
+                    <ul class="platform-features">
+                        <li>Real-time anomaly detection</li>
+                        <li>Works with existing infrastructure</li>
+                        <li>Unified data model for quality, flow, pressure</li>
+                    </ul>
+                </div>
+                <div class="platform-card">
+                    <div class="platform-icon">🔮</div>
+                    <h3>AquaPredict</h3>
+                    <p>Predictive intelligence trained on 50+ years of hydrological data. See problems before they happen.</p>
+                    <ul class="platform-features">
+                        <li>98% demand forecast accuracy</li>
+                        <li>Leak prediction 72 hours ahead</li>
+                        <li>Flood risk at neighborhood level</li>
+                    </ul>
+                </div>
+                <div class="platform-card">
+                    <div class="platform-icon">⚡</div>
+                    <h3>AquaControl</h3>
+                    <p>Autonomous optimization that acts in real-time — reducing energy, preventing failures, ensuring compliance.</p>
+                    <ul class="platform-features">
+                        <li>15-30% energy reduction</li>
+                        <li>20% treatment cost savings</li>
+                        <li>Automated regulatory reporting</li>
+                    </ul>
+                </div>
+                <div class="platform-card">
+                    <div class="platform-icon">💱</div>
+                    <h3>AquaMarket</h3>
+                    <p>Water rights tracking, trading, and compliance in one platform. The future of water markets.</p>
+                    <ul class="platform-features">
+                        <li>Real-time water rights valuation</li>
+                        <li>Automated trading for ag markets</li>
+                        <li>Carbon/water credit verification</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="market" id="market">
+        <div class="market-content">
+            <div class="market-header">
+                <div class="section-label">Market Opportunity</div>
+                <h2 class="section-title">Water Is the Last Frontier</h2>
+                <p class="section-subtitle">
+                    Energy, transportation, telecom — all transformed by software. Water is next.
+                </p>
+            </div>
+            <div class="market-visual">
+                <div class="tam-visual">
+                    <div class="tam-circle tam-outer">
+                        <span class="tam-label" style="top: 20px;">TAM</span>
+                        <span class="tam-value">$180B</span>
+                    </div>
+                    <div class="tam-circle tam-middle">
+                        <span class="tam-label" style="top: 15px;">SAM</span>
+                        <span class="tam-value">$45B</span>
+                    </div>
+                    <div class="tam-circle tam-inner">
+                        <span class="tam-value">$900M</span>
+                        <span style="font-size: 0.7rem; color: rgba(255,255,255,0.7);">Year 5</span>
+                    </div>
+                </div>
+                <div class="market-details">
+                    <div class="market-item">
+                        <div class="market-item-value">8%</div>
+                        <div class="market-item-text">
+                            <h4>Infrastructure CAGR</h4>
+                            <p>Water infrastructure investment growing steadily</p>
+                        </div>
+                    </div>
+                    <div class="market-item">
+                        <div class="market-item-value">$55B</div>
+                        <div class="market-item-text">
+                            <h4>Federal Water Funding</h4>
+                            <p>Infrastructure Investment and Jobs Act allocation</p>
+                        </div>
+                    </div>
+                    <div class="market-item">
+                        <div class="market-item-value">16:1</div>
+                        <div class="market-item-text">
+                            <h4>LTV:CAC Ratio</h4>
+                            <p>Best-in-class unit economics with 135% NRR</p>
+                        </div>
+                    </div>
+                    <div class="market-item">
+                        <div class="market-item-value">82%</div>
+                        <div class="market-item-text">
+                            <h4>Gross Margin</h4>
+                            <p>SaaS-leading profitability at scale</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="segments" id="segments">
+        <div class="section-label" style="text-align: center;">Target Segments</div>
+        <h2 class="section-title" style="text-align: center; margin: 0 auto 4rem;">Four Markets, One Platform</h2>
+        <div class="segments-grid">
+            <div class="segment-card">
+                <div class="segment-icon">🏛️</div>
+                <h3>Utilities</h3>
+                <p>Municipal water systems serving 50K-500K+ populations</p>
+                <div class="segment-stats">
+                    <div class="segment-stat">
+                        <div class="segment-stat-value">50K+</div>
+                        <div class="segment-stat-label">US Utilities</div>
+                    </div>
+                    <div class="segment-stat">
+                        <div class="segment-stat-value">$45B</div>
+                        <div class="segment-stat-label">Market Size</div>
+                    </div>
+                </div>
+            </div>
+            <div class="segment-card">
+                <div class="segment-icon">🏭</div>
+                <h3>Industrial</h3>
+                <p>Data centers, semiconductors, food & beverage, chemicals</p>
+                <div class="segment-stats">
+                    <div class="segment-stat">
+                        <div class="segment-stat-value">10M</div>
+                        <div class="segment-stat-label">Gal/Day per Fab</div>
+                    </div>
+                    <div class="segment-stat">
+                        <div class="segment-stat-value">$55B</div>
+                        <div class="segment-stat-label">Market Size</div>
+                    </div>
+                </div>
+            </div>
+            <div class="segment-card">
+                <div class="segment-icon">🌾</div>
+                <h3>Agriculture</h3>
+                <p>Large farms and irrigation districts (500+ acres)</p>
+                <div class="segment-stats">
+                    <div class="segment-stat">
+                        <div class="segment-stat-value">70%</div>
+                        <div class="segment-stat-label">of Water Use</div>
+                    </div>
+                    <div class="segment-stat">
+                        <div class="segment-stat-value">$30B</div>
+                        <div class="segment-stat-label">Market Size</div>
+                    </div>
+                </div>
+            </div>
+            <div class="segment-card">
+                <div class="segment-icon">🌊</div>
+                <h3>Municipal</h3>
+                <p>Stormwater, flood control, climate adaptation</p>
+                <div class="segment-stats">
+                    <div class="segment-stat">
+                        <div class="segment-stat-value">$32B</div>
+                        <div class="segment-stat-label">Annual Flood Loss</div>
+                    </div>
+                    <div class="segment-stat">
+                        <div class="segment-stat-value">$25B</div>
+                        <div class="segment-stat-label">Market Size</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="traction">
+        <div class="traction-content">
+            <div class="traction-header">
+                <div class="section-label">Financial Projections</div>
+                <h2 class="section-title">Path to $1B+ Valuation</h2>
+            </div>
+            <div class="traction-grid">
+                <div class="traction-card">
+                    <div class="traction-value">$160M</div>
+                    <div class="traction-label">Year 5 ARR</div>
+                </div>
+                <div class="traction-card">
+                    <div class="traction-value">600</div>
+                    <div class="traction-label">Customers by Year 5</div>
+                </div>
+                <div class="traction-card">
+                    <div class="traction-value">135%</div>
+                    <div class="traction-label">Net Revenue Retention</div>
+                </div>
+                <div class="traction-card">
+                    <div class="traction-value">83%</div>
+                    <div class="traction-label">Gross Margin at Scale</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta" id="cta">
+        <div class="cta-content">
+            <h2>Water Security Is<br>Human Security</h2>
+            <p>
+                Join us in building the intelligence layer for humanity's most critical resource. The crisis is now. The opportunity is massive.
+            </p>
+            <div class="cta-buttons">
+                <a href="mailto:founders@aquaos.ai" class="btn-primary">
+                    Request Early Access
+                    <span>→</span>
+                </a>
+                <a href="mailto:investors@aquaos.ai" class="btn-secondary">
+                    Investor Deck
+                    <span>📊</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">
+                <span>💧</span>
+                AquaOS
+            </div>
+            <p class="footer-tagline">"When the well is dry, we know the worth of water." — Benjamin Franklin</p>
+            <div class="footer-links">
+                <a href="mailto:founders@aquaos.ai">Contact</a>
+                <a href="#solution">Product</a>
+                <a href="#market">Market</a>
+                <a href="#">Careers</a>
+            </div>
+            <p class="footer-copy">© 2026 AquaOS. All rights reserved. | Generated by The Godfather 🎩</p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Nav background on scroll
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 50) {
+                nav.style.background = 'rgba(10, 22, 40, 0.98)';
+            } else {
+                nav.style.background = 'linear-gradient(to bottom, rgba(10, 22, 40, 0.95), transparent)';
+            }
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.crisis-card, .platform-card, .segment-card, .traction-card, .market-item').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'all 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
