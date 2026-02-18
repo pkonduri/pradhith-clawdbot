@@ -61,6 +61,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-02-17 | Morning | VoiceOS — The AWS for Real-Time AI Voice Agents | [Playbook](2026-02-17-morning.md) • [Landing](2026-02-17-morning-landing.html) • [PDF](2026-02-17-morning.pdf) |
 | 2026-02-17 | Afternoon | MineralOS — Autonomous Critical Mineral Intelligence | [Playbook](2026-02-17-afternoon.md) • [Landing](2026-02-17-afternoon-landing.html) • [PDF](2026-02-17-afternoon.pdf) |
 | 2026-02-18 | Evening | OceanOS — Autonomous Ocean Intelligence Platform | [Playbook](2026-02-18-evening.md) • [Landing](2026-02-18-evening-landing.html) • [PDF](2026-02-18-evening.pdf) |
+| 2026-02-18 | Morning | TwinOS — The Operating System for Digital Twins | [Playbook](2026-02-18-morning.md) • [Landing](2026-02-18-morning-landing.html) • [PDF](2026-02-18-morning.pdf) |
 <!-- New entries will be added above this line -->
 
 ---
