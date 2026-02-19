@@ -63,6 +63,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-02-18 | Evening | OceanOS — Autonomous Ocean Intelligence Platform | [Playbook](2026-02-18-evening.md) • [Landing](2026-02-18-evening-landing.html) • [PDF](2026-02-18-evening.pdf) |
 | 2026-02-18 | Morning | TwinOS — The Operating System for Digital Twins | [Playbook](2026-02-18-morning.md) • [Landing](2026-02-18-morning-landing.html) • [PDF](2026-02-18-morning.pdf) |
 | 2026-02-18 | Afternoon | ClimateShift AI — Autonomous Climate Migration Intelligence | [Playbook](2026-02-18-afternoon.md) • [Landing](2026-02-18-afternoon-landing.html) • [PDF](2026-02-18-afternoon.pdf) |
+| 2026-02-19 | Evening | ScienceOS — Autonomous Scientific Discovery Intelligence | [Playbook](2026-02-19-evening.md) • [Landing](2026-02-19-evening-landing.html) • [PDF](2026-02-19-evening.pdf) |
 <!-- New entries will be added above this line -->
 
 ---

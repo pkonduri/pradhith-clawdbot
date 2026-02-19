@@ -1,0 +1,1226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ScienceOS — Autonomous Scientific Discovery Intelligence</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #7C3AED;
+            --primary-dark: #5B21B6;
+            --secondary: #06B6D4;
+            --accent: #F59E0B;
+            --dark: #0F0F23;
+            --darker: #070714;
+            --light: #F8FAFC;
+            --gray: #94A3B8;
+            --success: #10B981;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--darker);
+            color: var(--light);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Animated background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(124, 58, 237, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(6, 182, 212, 0.12) 0%, transparent 50%),
+                radial-gradient(ellipse at 40% 60%, rgba(245, 158, 11, 0.08) 0%, transparent 50%);
+            animation: bgPulse 20s ease-in-out infinite;
+        }
+
+        @keyframes bgPulse {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(-2%, -2%) scale(1.05); }
+            66% { transform: translate(2%, 2%) scale(0.95); }
+        }
+
+        /* DNA Helix Animation */
+        .dna-container {
+            position: fixed;
+            right: -100px;
+            top: 50%;
+            transform: translateY(-50%);
+            height: 600px;
+            width: 200px;
+            opacity: 0.15;
+            z-index: -1;
+        }
+
+        .dna-strand {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .nucleotide {
+            position: absolute;
+            width: 60px;
+            height: 4px;
+            border-radius: 2px;
+            left: 50%;
+            transform-origin: left center;
+            animation: rotate3d 4s linear infinite;
+        }
+
+        .nucleotide:nth-child(odd) {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+
+        .nucleotide:nth-child(even) {
+            background: linear-gradient(90deg, var(--secondary), var(--accent));
+        }
+
+        @keyframes rotate3d {
+            from { transform: rotateY(0deg); }
+            to { transform: rotateY(360deg); }
+        }
+
+        /* Molecule particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: float 15s infinite ease-in-out;
+        }
+
+        .particle::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 1px;
+            background: linear-gradient(90deg, var(--primary), transparent);
+            left: 100%;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); opacity: 0.3; }
+            25% { transform: translate(100px, -50px) rotate(90deg); opacity: 0.5; }
+            50% { transform: translate(50px, -100px) rotate(180deg); opacity: 0.2; }
+            75% { transform: translate(-50px, -50px) rotate(270deg); opacity: 0.4; }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(7, 7, 20, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(124, 58, 237, 0.1);
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--gray);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .nav-links a:hover {
+            color: var(--light);
+        }
+
+        .cta-nav {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            color: white !important;
+            font-weight: 600 !important;
+            transition: transform 0.3s, box-shadow 0.3s !important;
+        }
+
+        .cta-nav:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(124, 58, 237, 0.4);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 8rem 5% 4rem;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 800px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(124, 58, 237, 0.15);
+            border: 1px solid rgba(124, 58, 237, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .badge-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--success);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 4.5rem;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.8s ease 0.2s backwards;
+        }
+
+        h1 span {
+            background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 200% 200%;
+            animation: gradientShift 5s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .hero-subtitle {
+            font-size: 1.4rem;
+            color: var(--gray);
+            margin-bottom: 2rem;
+            max-width: 600px;
+            animation: fadeInUp 0.8s ease 0.4s backwards;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            animation: fadeInUp 0.8s ease 0.6s backwards;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            box-shadow: 0 4px 20px rgba(124, 58, 237, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(124, 58, 237, 0.5);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--light);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            display: flex;
+            gap: 3rem;
+            margin-top: 4rem;
+            animation: fadeInUp 0.8s ease 0.8s backwards;
+        }
+
+        .stat {
+            text-align: left;
+        }
+
+        .stat-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--light);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--gray);
+            margin-top: 0.25rem;
+        }
+
+        /* Floating Lab Animation */
+        .hero-visual {
+            position: absolute;
+            right: 5%;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 500px;
+            height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lab-illustration {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .orbit {
+            position: absolute;
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            border-radius: 50%;
+            animation: spin 20s linear infinite;
+        }
+
+        .orbit-1 { width: 300px; height: 300px; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+        .orbit-2 { width: 400px; height: 400px; top: 50%; left: 50%; transform: translate(-50%, -50%); animation-duration: 30s; animation-direction: reverse; }
+        .orbit-3 { width: 500px; height: 500px; top: 50%; left: 50%; transform: translate(-50%, -50%); animation-duration: 40s; }
+
+        @keyframes spin {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .orbit-item {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 10px 40px rgba(124, 58, 237, 0.4);
+            animation: counterSpin 20s linear infinite;
+        }
+
+        @keyframes counterSpin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(-360deg); }
+        }
+
+        .center-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            box-shadow: 0 20px 60px rgba(124, 58, 237, 0.5);
+            animation: float-center 3s ease-in-out infinite;
+        }
+
+        @keyframes float-center {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -55%) scale(1.05); }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Problem Section */
+        .section {
+            padding: 6rem 5%;
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 4rem;
+        }
+
+        .section-badge {
+            display: inline-block;
+            background: rgba(124, 58, 237, 0.1);
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: var(--gray);
+        }
+
+        /* Problem Cards */
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .problem-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(124, 58, 237, 0.3);
+        }
+
+        .problem-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(239, 68, 68, 0.1));
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .problem-card h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.4rem;
+            margin-bottom: 0.75rem;
+            color: var(--light);
+        }
+
+        .problem-card p {
+            color: var(--gray);
+            font-size: 1rem;
+        }
+
+        /* Solution Section */
+        .solution-section {
+            background: linear-gradient(180deg, transparent, rgba(124, 58, 237, 0.05), transparent);
+        }
+
+        .solution-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .solution-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s;
+        }
+
+        .solution-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transform: scaleX(0);
+            transition: transform 0.4s;
+        }
+
+        .solution-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .solution-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(124, 58, 237, 0.3);
+            box-shadow: 0 20px 60px rgba(124, 58, 237, 0.15);
+        }
+
+        .solution-number {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 4rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            opacity: 0.3;
+            position: absolute;
+            top: 1rem;
+            right: 1.5rem;
+        }
+
+        .solution-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 10px 30px rgba(124, 58, 237, 0.3);
+        }
+
+        .solution-card h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--light);
+        }
+
+        .solution-card p {
+            color: var(--gray);
+            line-height: 1.7;
+        }
+
+        /* Process Flow */
+        .process-section {
+            padding: 6rem 5%;
+        }
+
+        .process-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+        }
+
+        .process-step {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 1.5rem 2rem;
+            text-align: center;
+            min-width: 160px;
+            transition: all 0.3s;
+        }
+
+        .process-step:hover {
+            transform: scale(1.05);
+            background: rgba(124, 58, 237, 0.1);
+            border-color: var(--primary);
+        }
+
+        .process-step-icon {
+            font-size: 2rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .process-step-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--light);
+        }
+
+        .process-arrow {
+            font-size: 1.5rem;
+            color: var(--primary);
+            opacity: 0.5;
+        }
+
+        /* Market Section */
+        .market-section {
+            background: linear-gradient(180deg, transparent, rgba(6, 182, 212, 0.05), transparent);
+        }
+
+        .market-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .market-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .market-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(6, 182, 212, 0.4);
+        }
+
+        .market-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .market-label {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        /* Use Cases */
+        .usecase-section {
+            padding: 6rem 5%;
+        }
+
+        .usecase-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .usecase-card {
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.1), rgba(6, 182, 212, 0.05));
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            border-radius: 24px;
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .usecase-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(124, 58, 237, 0.1), transparent 70%);
+            pointer-events: none;
+        }
+
+        .usecase-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .usecase-card h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.4rem;
+            margin-bottom: 0.75rem;
+            color: var(--light);
+        }
+
+        .usecase-card p {
+            color: var(--gray);
+            margin-bottom: 1rem;
+        }
+
+        .usecase-stat {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--success);
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 8rem 5%;
+            text-align: center;
+            position: relative;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(124, 58, 237, 0.15), transparent 70%);
+            pointer-events: none;
+        }
+
+        .cta-content {
+            max-width: 700px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .cta-content h2 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-content p {
+            font-size: 1.3rem;
+            color: var(--gray);
+            margin-bottom: 2.5rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        /* Footer */
+        footer {
+            padding: 3rem 5%;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--gray);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--light);
+        }
+
+        .footer-copy {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .hero-visual {
+                display: none;
+            }
+            
+            .solution-grid, .usecase-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .market-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.8rem;
+            }
+            
+            h2 {
+                font-size: 2.2rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .stats-bar {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+            
+            .solution-grid, .usecase-grid, .market-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .process-flow {
+                flex-direction: column;
+            }
+            
+            .process-arrow {
+                transform: rotate(90deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    
+    <!-- Particles -->
+    <div class="particles">
+        <div class="particle" style="top: 10%; left: 10%; animation-delay: 0s;"></div>
+        <div class="particle" style="top: 20%; left: 80%; animation-delay: 2s;"></div>
+        <div class="particle" style="top: 60%; left: 15%; animation-delay: 4s;"></div>
+        <div class="particle" style="top: 80%; left: 70%; animation-delay: 6s;"></div>
+        <div class="particle" style="top: 40%; left: 90%; animation-delay: 8s;"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">
+            <div class="logo-icon">🧬</div>
+            ScienceOS
+        </div>
+        <ul class="nav-links">
+            <li><a href="#problem">Problem</a></li>
+            <li><a href="#solution">Solution</a></li>
+            <li><a href="#market">Market</a></li>
+            <li><a href="#usecases">Use Cases</a></li>
+            <li><a href="#contact" class="cta-nav">Get Early Access</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="badge">
+                <span class="badge-dot"></span>
+                The Future of Scientific Discovery
+            </div>
+            <h1>Science at the <span>Speed of AI</span></h1>
+            <p class="hero-subtitle">
+                The autonomous operating system for scientific discovery. From hypothesis to breakthrough—100x faster than traditional R&D.
+            </p>
+            <div class="hero-cta">
+                <a href="#contact" class="btn btn-primary">
+                    Request Demo
+                    <span>→</span>
+                </a>
+                <a href="#solution" class="btn btn-secondary">
+                    Learn More
+                    <span>↓</span>
+                </a>
+            </div>
+            <div class="stats-bar">
+                <div class="stat">
+                    <div class="stat-value">100x</div>
+                    <div class="stat-label">Faster Discovery</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">200M+</div>
+                    <div class="stat-label">Papers Analyzed</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">$2.5T</div>
+                    <div class="stat-label">R&D Market</div>
+                </div>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <div class="lab-illustration">
+                <div class="orbit orbit-1">
+                    <div class="orbit-item" style="top: 0; left: 50%; transform: translateX(-50%);">📊</div>
+                </div>
+                <div class="orbit orbit-2">
+                    <div class="orbit-item" style="top: 50%; right: 0; transform: translateY(-50%);">🧪</div>
+                    <div class="orbit-item" style="bottom: 0; left: 50%; transform: translateX(-50%);">📖</div>
+                </div>
+                <div class="orbit orbit-3">
+                    <div class="orbit-item" style="top: 0; left: 30%;">🤖</div>
+                    <div class="orbit-item" style="bottom: 20%; right: 10%;">💊</div>
+                </div>
+                <div class="center-icon">🧬</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="section" id="problem">
+        <div class="section-header">
+            <span class="section-badge">The Problem</span>
+            <h2>Scientific Discovery is Broken</h2>
+            <p class="section-subtitle">The research process hasn't fundamentally changed in centuries—it's slow, wasteful, and bottlenecked by human limitations.</p>
+        </div>
+        <div class="problem-grid">
+            <div class="problem-card">
+                <div class="problem-icon">⏱️</div>
+                <h3>Glacial Pace</h3>
+                <p>Average drug: 12-15 years from discovery to market. New materials take decades. Academic papers take years to publish.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">💸</div>
+                <h3>Massive Waste</h3>
+                <p>90%+ of pharmaceutical R&D spend fails. Scientists spend 70% of time on admin tasks, not discovery.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">🧠</div>
+                <h3>Human Bottlenecks</h3>
+                <p>Not enough trained scientists. Impossible for any human to read all relevant literature in any field.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">🔬</div>
+                <h3>Reproducibility Crisis</h3>
+                <p>70%+ of experiments cannot be reproduced. Human error and bias plague research worldwide.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="section solution-section" id="solution">
+        <div class="section-header">
+            <span class="section-badge">The Solution</span>
+            <h2>The Autonomous Scientist</h2>
+            <p class="section-subtitle">AI that reads all knowledge, generates novel hypotheses, designs experiments, executes them autonomously, and iterates at superhuman speed.</p>
+        </div>
+        <div class="solution-grid">
+            <div class="solution-card">
+                <span class="solution-number">01</span>
+                <div class="solution-icon">📚</div>
+                <h3>Omniscient Reader</h3>
+                <p>Ingests and understands 200M+ scientific papers, patents, and datasets. Builds dynamic knowledge graphs across all disciplines.</p>
+            </div>
+            <div class="solution-card">
+                <span class="solution-number">02</span>
+                <div class="solution-icon">💡</div>
+                <h3>Hypothesis Generator</h3>
+                <p>Generates novel, testable hypotheses using knowledge synthesis. Identifies cross-disciplinary opportunities humans miss.</p>
+            </div>
+            <div class="solution-card">
+                <span class="solution-number">03</span>
+                <div class="solution-icon">📋</div>
+                <h3>Experiment Designer</h3>
+                <p>Translates hypotheses into optimal experimental protocols. Designs for statistical power and reproducibility.</p>
+            </div>
+            <div class="solution-card">
+                <span class="solution-number">04</span>
+                <div class="solution-icon">🤖</div>
+                <h3>Robotic Executor</h3>
+                <p>Integrates with automated lab equipment. Executes experiments 24/7 with perfect reproducibility.</p>
+            </div>
+            <div class="solution-card">
+                <span class="solution-number">05</span>
+                <div class="solution-icon">📊</div>
+                <h3>Result Analyzer</h3>
+                <p>ML-powered analysis with automatic statistical validation. Anomaly detection and insight extraction.</p>
+            </div>
+            <div class="solution-card">
+                <span class="solution-number">06</span>
+                <div class="solution-icon">🏆</div>
+                <h3>Discovery Engine</h3>
+                <p>Drafts papers, files patents automatically. Maintains complete reproducibility records.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Process Flow -->
+    <section class="process-section">
+        <div class="section-header">
+            <span class="section-badge">The Process</span>
+            <h2>From Question to Breakthrough</h2>
+        </div>
+        <div class="process-flow">
+            <div class="process-step">
+                <div class="process-step-icon">📖</div>
+                <div class="process-step-title">Read All Literature</div>
+            </div>
+            <span class="process-arrow">→</span>
+            <div class="process-step">
+                <div class="process-step-icon">💡</div>
+                <div class="process-step-title">Generate Hypothesis</div>
+            </div>
+            <span class="process-arrow">→</span>
+            <div class="process-step">
+                <div class="process-step-icon">📋</div>
+                <div class="process-step-title">Design Experiment</div>
+            </div>
+            <span class="process-arrow">→</span>
+            <div class="process-step">
+                <div class="process-step-icon">🧪</div>
+                <div class="process-step-title">Execute in Lab</div>
+            </div>
+            <span class="process-arrow">→</span>
+            <div class="process-step">
+                <div class="process-step-icon">📊</div>
+                <div class="process-step-title">Analyze Results</div>
+            </div>
+            <span class="process-arrow">→</span>
+            <div class="process-step">
+                <div class="process-step-icon">🔄</div>
+                <div class="process-step-title">Iterate & Refine</div>
+            </div>
+            <span class="process-arrow">→</span>
+            <div class="process-step">
+                <div class="process-step-icon">🏆</div>
+                <div class="process-step-title">Discovery!</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Market Section -->
+    <section class="section market-section" id="market">
+        <div class="section-header">
+            <span class="section-badge">The Opportunity</span>
+            <h2>A $2.5 Trillion Market</h2>
+            <p class="section-subtitle">Global R&D spending continues to accelerate, and everyone needs faster discovery.</p>
+        </div>
+        <div class="market-grid">
+            <div class="market-card">
+                <div class="market-value">$220B</div>
+                <div class="market-label">Pharmaceutical R&D</div>
+            </div>
+            <div class="market-card">
+                <div class="market-value">$180B</div>
+                <div class="market-label">Biotechnology</div>
+            </div>
+            <div class="market-card">
+                <div class="market-value">$150B</div>
+                <div class="market-label">Materials Science</div>
+            </div>
+            <div class="market-card">
+                <div class="market-value">$700B</div>
+                <div class="market-label">Academic Research</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Use Cases -->
+    <section class="section usecase-section" id="usecases">
+        <div class="section-header">
+            <span class="section-badge">Use Cases</span>
+            <h2>Breakthrough Potential</h2>
+            <p class="section-subtitle">ScienceOS accelerates discovery across every scientific domain.</p>
+        </div>
+        <div class="usecase-grid">
+            <div class="usecase-card">
+                <div class="usecase-icon">💊</div>
+                <h3>Drug Discovery</h3>
+                <p>Identify novel drug candidates, optimize molecules, and accelerate clinical development.</p>
+                <div class="usecase-stat">
+                    <span>✓</span> 6 months vs. 5+ years typical
+                </div>
+            </div>
+            <div class="usecase-card">
+                <div class="usecase-icon">🔋</div>
+                <h3>Materials Science</h3>
+                <p>Discover new alloys, superconductors, and advanced materials for energy and computing.</p>
+                <div class="usecase-stat">
+                    <span>✓</span> 50,000 simulations/day
+                </div>
+            </div>
+            <div class="usecase-card">
+                <div class="usecase-icon">🧬</div>
+                <h3>Synthetic Biology</h3>
+                <p>Engineer proteins, design metabolic pathways, and create novel organisms.</p>
+                <div class="usecase-stat">
+                    <span>✓</span> 10x faster iteration
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section" id="contact">
+        <div class="cta-content">
+            <span class="section-badge">Get Started</span>
+            <h2>The Future of Science Starts Now</h2>
+            <p>Join the waitlist for early access to ScienceOS and accelerate your research by 100x.</p>
+            <div class="cta-buttons">
+                <a href="mailto:founders@scienceos.ai" class="btn btn-primary">
+                    Request Demo
+                    <span>→</span>
+                </a>
+                <a href="mailto:investors@scienceos.ai" class="btn btn-secondary">
+                    Investor Deck
+                    <span>📄</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="logo">
+            <div class="logo-icon">🧬</div>
+            ScienceOS
+        </div>
+        <div class="footer-links">
+            <a href="mailto:founders@scienceos.ai">Contact</a>
+            <a href="#">Privacy</a>
+            <a href="#">Terms</a>
+        </div>
+        <div class="footer-copy">© 2026 ScienceOS. Accelerating Discovery.</div>
+    </footer>
+
+    <script>
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Generate DNA helix
+        const dnaContainer = document.createElement('div');
+        dnaContainer.className = 'dna-container';
+        const dnaStrand = document.createElement('div');
+        dnaStrand.className = 'dna-strand';
+
+        for (let i = 0; i < 20; i++) {
+            const nucleotide = document.createElement('div');
+            nucleotide.className = 'nucleotide';
+            nucleotide.style.top = `${i * 30}px`;
+            nucleotide.style.animationDelay = `${i * 0.2}s`;
+            dnaStrand.appendChild(nucleotide);
+        }
+
+        dnaContainer.appendChild(dnaStrand);
+        document.body.appendChild(dnaContainer);
+
+        // Intersection Observer for animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.problem-card, .solution-card, .market-card, .usecase-card').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'all 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
