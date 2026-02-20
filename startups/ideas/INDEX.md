@@ -68,6 +68,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-02-19 | Afternoon | CircularOS — Autonomous Circular Economy Intelligence | [Playbook](2026-02-19-afternoon.md) • [Landing](2026-02-19-afternoon-landing.html) • [PDF](2026-02-19-afternoon.pdf) |
 | 2026-02-20 | Evening | DroneOS — The Operating System for Autonomous Drone Fleets | [Playbook](2026-02-20-evening.md) • [Landing](2026-02-20-evening-landing.html) • [PDF](2026-02-20-evening.pdf) |
 | 2026-02-20 | Morning | AgentForge — The Stripe for AI Agents | [Playbook](2026-02-20-morning.md) • [Landing](2026-02-20-morning-landing.html) • [PDF](2026-02-20-morning.pdf) |
+| 2026-02-20 | Afternoon | AlphaOS — The Intelligence Layer for Alternative Data | [Playbook](2026-02-20-afternoon.md) • [Landing](2026-02-20-afternoon-landing.html) • [PDF](2026-02-20-afternoon.pdf) |
 <!-- New entries will be added above this line -->
 
 ---

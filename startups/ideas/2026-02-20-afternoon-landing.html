@@ -1,0 +1,1378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlphaOS — The Intelligence Layer for Alternative Data</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00D4AA;
+            --primary-dark: #00B894;
+            --secondary: #6C5CE7;
+            --accent: #FD79A8;
+            --dark: #0A0A0F;
+            --darker: #050508;
+            --card: #12121A;
+            --card-border: #1E1E2E;
+            --text: #E8E8F0;
+            --text-muted: #8888A0;
+            --success: #00D4AA;
+            --warning: #FDCB6E;
+            --gradient-1: linear-gradient(135deg, #00D4AA 0%, #6C5CE7 100%);
+            --gradient-2: linear-gradient(135deg, #6C5CE7 0%, #FD79A8 100%);
+            --gradient-3: linear-gradient(180deg, rgba(0,212,170,0.1) 0%, transparent 50%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--dark);
+            color: var(--text);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: var(--darker);
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(0, 212, 170, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(108, 92, 231, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(253, 121, 168, 0.05) 0%, transparent 60%);
+            animation: bgPulse 15s ease-in-out infinite;
+        }
+
+        @keyframes bgPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        /* Grid Lines */
+        .grid-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-image: 
+                linear-gradient(rgba(0, 212, 170, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 212, 170, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridMove 30s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(60px, 60px); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1.5rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            -webkit-text-fill-color: white;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-cta {
+            background: var(--gradient-1);
+            color: var(--dark) !important;
+            padding: 0.8rem 1.8rem;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 212, 170, 0.3);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 8rem 3rem 4rem;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(0, 212, 170, 0.1);
+            border: 1px solid rgba(0, 212, 170, 0.3);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .hero-badge::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.8s ease-out 0.1s backwards;
+        }
+
+        .hero h1 .highlight {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: var(--text-muted);
+            margin-bottom: 2.5rem;
+            max-width: 500px;
+            animation: fadeInUp 0.8s ease-out 0.2s backwards;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            animation: fadeInUp 0.8s ease-out 0.3s backwards;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--gradient-1);
+            color: var(--dark);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 212, 170, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text);
+            border: 2px solid var(--card-border);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* Terminal Visualization */
+        .hero-visual {
+            position: relative;
+            animation: fadeInUp 0.8s ease-out 0.4s backwards;
+        }
+
+        .terminal {
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 
+                0 25px 80px rgba(0, 0, 0, 0.5),
+                0 0 0 1px rgba(0, 212, 170, 0.1);
+        }
+
+        .terminal-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 1.5rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .terminal-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .terminal-dot.red { background: #FF5F57; }
+        .terminal-dot.yellow { background: #FFBD2E; }
+        .terminal-dot.green { background: #28CA41; }
+
+        .terminal-title {
+            margin-left: 1rem;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .terminal-body {
+            padding: 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 1.8;
+        }
+
+        .terminal-line {
+            margin-bottom: 0.5rem;
+            opacity: 0;
+            animation: typeIn 0.5s ease-out forwards;
+        }
+
+        .terminal-line:nth-child(1) { animation-delay: 0.5s; }
+        .terminal-line:nth-child(2) { animation-delay: 1s; }
+        .terminal-line:nth-child(3) { animation-delay: 1.5s; }
+        .terminal-line:nth-child(4) { animation-delay: 2s; }
+        .terminal-line:nth-child(5) { animation-delay: 2.5s; }
+        .terminal-line:nth-child(6) { animation-delay: 3s; }
+        .terminal-line:nth-child(7) { animation-delay: 3.5s; }
+        .terminal-line:nth-child(8) { animation-delay: 4s; }
+
+        @keyframes typeIn {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .terminal-prompt { color: var(--primary); }
+        .terminal-keyword { color: var(--secondary); }
+        .terminal-string { color: var(--accent); }
+        .terminal-comment { color: var(--text-muted); }
+        .terminal-function { color: var(--warning); }
+        .terminal-success { color: var(--success); }
+
+        /* Floating Stats */
+        .floating-stats {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .floating-stats.left {
+            left: -120px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .floating-stats.right {
+            right: -120px;
+            top: 30%;
+        }
+
+        .floating-stat {
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .floating-stat:nth-child(2) { animation-delay: 1s; }
+        .floating-stat:nth-child(3) { animation-delay: 2s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .floating-stat .value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .floating-stat .label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Problem Section */
+        .problem {
+            padding: 8rem 3rem;
+            background: var(--gradient-3);
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 4rem;
+        }
+
+        .section-tag {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(253, 121, 168, 0.1);
+            border: 1px solid rgba(253, 121, 168, 0.3);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .section-header h2 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            color: var(--text-muted);
+            font-size: 1.2rem;
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .problem-card {
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .problem-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-2);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+        }
+
+        .problem-card:hover::before {
+            opacity: 1;
+        }
+
+        .problem-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(253, 121, 168, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .problem-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.75rem;
+            color: var(--text);
+        }
+
+        .problem-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* Solution Section */
+        .solution {
+            padding: 8rem 3rem;
+        }
+
+        .solution-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .solution-showcase {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            margin-top: 4rem;
+        }
+
+        .solution-features {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .solution-feature {
+            display: flex;
+            gap: 1rem;
+            padding: 1.5rem;
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            transition: all 0.3s;
+        }
+
+        .solution-feature:hover {
+            border-color: var(--primary);
+            transform: translateX(10px);
+        }
+
+        .feature-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(0, 212, 170, 0.1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            flex-shrink: 0;
+        }
+
+        .feature-content h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .feature-content p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Data Flow Visualization */
+        .data-flow {
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .data-flow-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .data-flow-header h3 {
+            font-size: 1.2rem;
+            color: var(--primary);
+        }
+
+        .flow-diagram {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .flow-row {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .flow-node {
+            padding: 0.6rem 1rem;
+            background: rgba(108, 92, 231, 0.15);
+            border: 1px solid rgba(108, 92, 231, 0.3);
+            border-radius: 8px;
+            font-size: 0.8rem;
+            color: var(--secondary);
+            animation: flowPulse 3s ease-in-out infinite;
+        }
+
+        .flow-node:nth-child(odd) { animation-delay: 0.5s; }
+
+        @keyframes flowPulse {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+
+        .flow-arrow {
+            text-align: center;
+            color: var(--primary);
+            font-size: 1.5rem;
+            animation: arrowBounce 1.5s ease-in-out infinite;
+        }
+
+        @keyframes arrowBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(5px); }
+        }
+
+        .flow-center {
+            background: var(--gradient-1);
+            color: var(--dark);
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            text-align: center;
+        }
+
+        .flow-output {
+            background: rgba(0, 212, 170, 0.15);
+            border: 1px solid rgba(0, 212, 170, 0.3);
+            color: var(--primary);
+        }
+
+        /* Market Section */
+        .market {
+            padding: 8rem 3rem;
+            background: var(--gradient-3);
+        }
+
+        .market-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .market-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+
+        .market-stat {
+            text-align: center;
+            padding: 2rem;
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .market-stat::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-1);
+        }
+
+        .market-stat .number {
+            font-size: 3rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .market-stat .label {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Traction Section */
+        .traction {
+            padding: 8rem 3rem;
+        }
+
+        .traction-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .traction-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+
+        .traction-card {
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 2.5rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .traction-card:hover {
+            transform: scale(1.05);
+            border-color: var(--primary);
+        }
+
+        .traction-card.featured {
+            background: var(--gradient-1);
+            color: var(--dark);
+            transform: scale(1.05);
+        }
+
+        .traction-card.featured .traction-label {
+            color: var(--dark);
+            opacity: 0.8;
+        }
+
+        .traction-value {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .traction-label {
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        /* Team Section */
+        .team {
+            padding: 8rem 3rem;
+            background: var(--gradient-3);
+        }
+
+        .team-content {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .team-requirements {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+
+        .team-card {
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s;
+        }
+
+        .team-card:hover {
+            border-color: var(--secondary);
+        }
+
+        .team-role {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .team-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(108, 92, 231, 0.15);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+        }
+
+        .team-role h4 {
+            font-size: 1.2rem;
+        }
+
+        .team-card ul {
+            list-style: none;
+            color: var(--text-muted);
+        }
+
+        .team-card li {
+            padding: 0.4rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .team-card li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--secondary);
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 8rem 3rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(0, 212, 170, 0.1) 0%, transparent 60%);
+            transform: translate(-50%, -50%);
+        }
+
+        .cta-content {
+            position: relative;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .cta h2 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .cta p {
+            font-size: 1.3rem;
+            color: var(--text-muted);
+            margin-bottom: 2.5rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        /* Footer */
+        footer {
+            padding: 3rem;
+            border-top: 1px solid var(--card-border);
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-logo {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        .footer-copy {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero h1 {
+                font-size: 3rem;
+            }
+
+            .hero p {
+                margin: 0 auto 2rem;
+            }
+
+            .hero-buttons {
+                justify-content: center;
+            }
+
+            .floating-stats {
+                display: none;
+            }
+
+            .problem-grid,
+            .traction-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .solution-showcase {
+                grid-template-columns: 1fr;
+            }
+
+            .market-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .team-requirements {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+        }
+
+        @media (max-width: 640px) {
+            nav {
+                padding: 1rem 1.5rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero {
+                padding: 6rem 1.5rem 3rem;
+            }
+
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .section-header h2 {
+                font-size: 2rem;
+            }
+
+            .market-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .cta h2 {
+                font-size: 2rem;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    <div class="grid-overlay"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">
+            <div class="logo-icon">α</div>
+            AlphaOS
+        </div>
+        <ul class="nav-links">
+            <li><a href="#problem">Problem</a></li>
+            <li><a href="#solution">Solution</a></li>
+            <li><a href="#market">Market</a></li>
+            <li><a href="#team">Team</a></li>
+            <li><a href="#contact" class="nav-cta">Request Demo</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <div class="hero-badge">🔥 Now accepting design partners</div>
+                <h1>Turn Alternative Data Into <span class="highlight">Alpha</span></h1>
+                <p>The AI-native platform that discovers, validates, and deploys alpha signals from any dataset in hours, not months.</p>
+                <div class="hero-buttons">
+                    <a href="#contact" class="btn btn-primary">Request Early Access →</a>
+                    <a href="#solution" class="btn btn-secondary">See How It Works</a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="floating-stats left">
+                    <div class="floating-stat">
+                        <div class="value">10x</div>
+                        <div class="label">Faster Discovery</div>
+                    </div>
+                    <div class="floating-stat">
+                        <div class="value">5K+</div>
+                        <div class="label">Data Sources</div>
+                    </div>
+                </div>
+                <div class="terminal">
+                    <div class="terminal-header">
+                        <div class="terminal-dot red"></div>
+                        <div class="terminal-dot yellow"></div>
+                        <div class="terminal-dot green"></div>
+                        <span class="terminal-title">alphaos_factor_lab.py</span>
+                    </div>
+                    <div class="terminal-body">
+                        <div class="terminal-line"><span class="terminal-keyword">import</span> alphaos</div>
+                        <div class="terminal-line"></div>
+                        <div class="terminal-line"><span class="terminal-comment"># Discover alpha from consumer spending</span></div>
+                        <div class="terminal-line">factors = alphaos.<span class="terminal-function">discover</span>(</div>
+                        <div class="terminal-line">    hypothesis=<span class="terminal-string">"consumer spending → retail"</span>,</div>
+                        <div class="terminal-line">    universe=<span class="terminal-string">"us_equities"</span></div>
+                        <div class="terminal-line">)</div>
+                        <div class="terminal-line"></div>
+                        <div class="terminal-line"><span class="terminal-success">✓ 47 datasets discovered</span></div>
+                        <div class="terminal-line"><span class="terminal-success">✓ 12 alpha factors validated</span></div>
+                        <div class="terminal-line"><span class="terminal-success">✓ Compliance checks passed</span></div>
+                    </div>
+                </div>
+                <div class="floating-stats right">
+                    <div class="floating-stat">
+                        <div class="value">0.04</div>
+                        <div class="label">Avg IC Score</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="problem" id="problem">
+        <div class="section-header">
+            <div class="section-tag">The Problem</div>
+            <h2>The Alt Data Gold Rush Is Broken</h2>
+            <p>Hedge funds spend $30B+ annually on alternative data, yet most can't extract reliable alpha</p>
+        </div>
+        <div class="problem-grid">
+            <div class="problem-card">
+                <div class="problem-icon">🔍</div>
+                <h3>Discovery Hell</h3>
+                <p>5,000+ alternative data providers. No way to know what works until you spend 6 months testing.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">⏰</div>
+                <h3>Integration Nightmare</h3>
+                <p>Each dataset requires months to clean, normalize, validate. By then, the alpha has decayed.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">👨‍💻</div>
+                <h3>Talent War</h3>
+                <p>Top quant researchers cost $1M+/year. There aren't enough, and they're all at the top 10 funds.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">⚖️</div>
+                <h3>Compliance Chaos</h3>
+                <p>MNPI, MAR, PII, licensing — one wrong dataset can mean SEC investigation and reputation destruction.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">📉</div>
+                <h3>Signal Decay</h3>
+                <p>Alpha half-life keeps shrinking. Yesterday's edge is today's noise. You can't iterate fast enough.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">🎲</div>
+                <h3>False Positives</h3>
+                <p>95% of "signals" are overfitting, data snooping, or survivorship bias. How do you know which 5% are real?</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="solution" id="solution">
+        <div class="solution-content">
+            <div class="section-header">
+                <div class="section-tag">The Solution</div>
+                <h2>AI-Native Alpha Infrastructure</h2>
+                <p>From hypothesis to production signals in hours, not months</p>
+            </div>
+            <div class="solution-showcase">
+                <div class="solution-features">
+                    <div class="solution-feature">
+                        <div class="feature-icon">🧠</div>
+                        <div class="feature-content">
+                            <h4>Natural Language Discovery</h4>
+                            <p>Describe your hypothesis in plain English. Our AI finds relevant datasets across 5,000+ providers.</p>
+                        </div>
+                    </div>
+                    <div class="solution-feature">
+                        <div class="feature-icon">⚡</div>
+                        <div class="feature-content">
+                            <h4>Automated Factor Generation</h4>
+                            <p>AI generates, tests, and validates hundreds of candidate factors with rigorous statistical checks.</p>
+                        </div>
+                    </div>
+                    <div class="solution-feature">
+                        <div class="feature-icon">🛡️</div>
+                        <div class="feature-content">
+                            <h4>Built-in Compliance</h4>
+                            <p>MNPI scanner, MAR watchlist, PII scrubber, licensing verification — all automated.</p>
+                        </div>
+                    </div>
+                    <div class="solution-feature">
+                        <div class="feature-icon">🚀</div>
+                        <div class="feature-content">
+                            <h4>Production Pipeline</h4>
+                            <p>Real-time factor updates, decay monitoring, regime detection. Direct integration to your OMS.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="data-flow">
+                    <div class="data-flow-header">
+                        <h3>The AlphaOS Pipeline</h3>
+                    </div>
+                    <div class="flow-diagram">
+                        <div class="flow-row">
+                            <div class="flow-node">Satellite</div>
+                            <div class="flow-node">Credit Cards</div>
+                            <div class="flow-node">Social</div>
+                            <div class="flow-node">Web Traffic</div>
+                        </div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-row">
+                            <div class="flow-node">Job Posts</div>
+                            <div class="flow-node">Patents</div>
+                            <div class="flow-node">Supply Chain</div>
+                            <div class="flow-node">IoT/Sensors</div>
+                        </div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-row">
+                            <div class="flow-center">AlphaOS AI Engine</div>
+                        </div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-row">
+                            <div class="flow-node flow-output">Validated Factors</div>
+                            <div class="flow-node flow-output">Risk Models</div>
+                            <div class="flow-node flow-output">Trading Signals</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Market Section -->
+    <section class="market" id="market">
+        <div class="market-content">
+            <div class="section-header">
+                <div class="section-tag">Market Opportunity</div>
+                <h2>The Data Advantage Gap</h2>
+                <p>Top funds have 50-person data science teams. Everyone else is left behind.</p>
+            </div>
+            <div class="market-stats">
+                <div class="market-stat">
+                    <div class="number">$150B+</div>
+                    <div class="label">Institutional Asset Management Tech TAM</div>
+                </div>
+                <div class="market-stat">
+                    <div class="number">5,000+</div>
+                    <div class="label">Alternative Data Providers</div>
+                </div>
+                <div class="market-stat">
+                    <div class="number">$30B</div>
+                    <div class="label">Annual Alt Data Spend</div>
+                </div>
+                <div class="market-stat">
+                    <div class="number">10,000+</div>
+                    <div class="label">Hedge Funds Globally</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Traction Section -->
+    <section class="traction">
+        <div class="traction-content">
+            <div class="section-header">
+                <div class="section-tag">Target Metrics</div>
+                <h2>The Path to $300M ARR</h2>
+                <p>Unit economics that make VCs salivate</p>
+            </div>
+            <div class="traction-grid">
+                <div class="traction-card">
+                    <div class="traction-value">$150K</div>
+                    <div class="traction-label">Average Contract Value</div>
+                </div>
+                <div class="traction-card featured">
+                    <div class="traction-value">13:1</div>
+                    <div class="traction-label">LTV:CAC Ratio</div>
+                </div>
+                <div class="traction-card">
+                    <div class="traction-value">140%</div>
+                    <div class="traction-label">Net Revenue Retention</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="team" id="team">
+        <div class="team-content">
+            <div class="section-header">
+                <div class="section-tag">Team</div>
+                <h2>Building the Dream Team</h2>
+                <p>We're looking for exceptional founders to build the future of quantitative finance</p>
+            </div>
+            <div class="team-requirements">
+                <div class="team-card">
+                    <div class="team-role">
+                        <div class="team-icon">👔</div>
+                        <h4>CEO / Business</h4>
+                    </div>
+                    <ul>
+                        <li>Hedge fund or fintech background</li>
+                        <li>Data vendor relationships</li>
+                        <li>Regulatory expertise</li>
+                    </ul>
+                </div>
+                <div class="team-card">
+                    <div class="team-role">
+                        <div class="team-icon">💻</div>
+                        <h4>CTO / Engineering</h4>
+                    </div>
+                    <ul>
+                        <li>Quant infrastructure experience</li>
+                        <li>Real-time systems at scale</li>
+                        <li>ML platform architecture</li>
+                    </ul>
+                </div>
+                <div class="team-card">
+                    <div class="team-role">
+                        <div class="team-icon">🔬</div>
+                        <h4>Chief Science Officer</h4>
+                    </div>
+                    <ul>
+                        <li>PhD in quant finance or ML</li>
+                        <li>Published factor research</li>
+                        <li>Production alpha experience</li>
+                    </ul>
+                </div>
+                <div class="team-card">
+                    <div class="team-role">
+                        <div class="team-icon">📊</div>
+                        <h4>VP Data</h4>
+                    </div>
+                    <ul>
+                        <li>Alt data industry veteran</li>
+                        <li>Vendor network</li>
+                        <li>Data quality obsession</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta" id="contact">
+        <div class="cta-content">
+            <h2>Ready to 10x Your Alpha Discovery?</h2>
+            <p>Join our design partner program and get early access to AlphaOS</p>
+            <div class="cta-buttons">
+                <a href="mailto:founders@alphaos.ai" class="btn btn-primary">Request Early Access →</a>
+                <a href="#" class="btn btn-secondary">Download Pitch Deck</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">AlphaOS</div>
+            <div class="footer-links">
+                <a href="#">About</a>
+                <a href="#">Careers</a>
+                <a href="#">Research</a>
+                <a href="#">Contact</a>
+            </div>
+            <div class="footer-copy">© 2026 AlphaOS. Where Data Becomes Alpha.</div>
+        </div>
+    </footer>
+
+    <script>
+        // Intersection Observer for scroll animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.problem-card, .solution-feature, .market-stat, .traction-card, .team-card').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'all 0.6s ease-out';
+            observer.observe(el);
+        });
+
+        // Smooth scroll for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Counter animation for stats
+        const animateCounter = (element, target) => {
+            let current = 0;
+            const increment = target / 50;
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    current = target;
+                    clearInterval(timer);
+                }
+                element.textContent = Math.floor(current).toLocaleString();
+            }, 30);
+        };
+
+        // Trigger counter animation when in view
+        const statsObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const number = entry.target.querySelector('.number');
+                    if (number && !number.dataset.animated) {
+                        number.dataset.animated = 'true';
+                        const value = parseInt(number.textContent.replace(/[^0-9]/g, ''));
+                        if (!isNaN(value)) {
+                            animateCounter(number, value);
+                        }
+                    }
+                }
+            });
+        }, { threshold: 0.5 });
+
+        document.querySelectorAll('.market-stat').forEach(el => statsObserver.observe(el));
+    </script>
+</body>
+</html>
