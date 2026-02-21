@@ -70,6 +70,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-02-20 | Morning | AgentForge — The Stripe for AI Agents | [Playbook](2026-02-20-morning.md) • [Landing](2026-02-20-morning-landing.html) • [PDF](2026-02-20-morning.pdf) |
 | 2026-02-20 | Afternoon | AlphaOS — The Intelligence Layer for Alternative Data | [Playbook](2026-02-20-afternoon.md) • [Landing](2026-02-20-afternoon-landing.html) • [PDF](2026-02-20-afternoon.pdf) |
 | 2026-02-21 | Evening | Solace — The AI Mental Health Operating System | [Playbook](2026-02-21-evening.md) • [Landing](2026-02-21-evening-landing.html) • [PDF](2026-02-21-evening.pdf) |
+| 2026-02-21 | Morning | FreightMind AI — Autonomous Freight Intelligence | [Playbook](2026-02-21-morning.md) • [Landing](2026-02-21-morning-landing.html) • [PDF](2026-02-21-morning.pdf) |
 <!-- New entries will be added above this line -->
 
 ---
