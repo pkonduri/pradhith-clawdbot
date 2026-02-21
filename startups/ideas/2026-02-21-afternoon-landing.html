@@ -1,0 +1,1300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CrowdOS — Autonomous Live Event Intelligence</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #7c3aed;
+            --primary-light: #a78bfa;
+            --primary-dark: #5b21b6;
+            --accent: #f59e0b;
+            --accent-light: #fbbf24;
+            --bg-dark: #0a0a0f;
+            --bg-card: #12121a;
+            --bg-elevated: #1a1a25;
+            --text-primary: #ffffff;
+            --text-secondary: #a1a1aa;
+            --text-muted: #71717a;
+            --border: #27272a;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(124, 58, 237, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(124, 58, 237, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .gradient-orb {
+            position: fixed;
+            width: 800px;
+            height: 800px;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.15;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .orb-1 {
+            top: -400px;
+            left: -200px;
+            background: var(--primary);
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .orb-2 {
+            bottom: -400px;
+            right: -200px;
+            background: var(--accent);
+            animation: float 25s ease-in-out infinite reverse;
+        }
+
+        .orb-3 {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            width: 600px;
+            height: 600px;
+            opacity: 0.08;
+            animation: pulse 15s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(50px, -50px) rotate(120deg); }
+            66% { transform: translate(-30px, 30px) rotate(240deg); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.08; }
+            50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.12; }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 1.5rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-light), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.02em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .cta-nav {
+            padding: 0.7rem 1.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .cta-nav:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(124, 58, 237, 0.3);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 8rem 2rem 4rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(124, 58, 237, 0.1);
+            border: 1px solid rgba(124, 58, 237, 0.3);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--primary-light);
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .hero-badge .dot {
+            width: 8px;
+            height: 8px;
+            background: var(--success);
+            border-radius: 50%;
+            animation: blink 2s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50%, 100% { opacity: 1; }
+            25%, 75% { opacity: 0.4; }
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 5.5rem);
+            font-weight: 900;
+            line-height: 1.05;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.03em;
+            animation: fadeInUp 0.8s ease-out 0.1s both;
+        }
+
+        .hero h1 .gradient {
+            background: linear-gradient(135deg, var(--primary-light), var(--accent), var(--primary-light));
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradient 5s ease infinite;
+        }
+
+        @keyframes gradient {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .hero-sub {
+            font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin-bottom: 3rem;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+            line-height: 1.7;
+        }
+
+        .hero-ctas {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            animation: fadeInUp 0.8s ease-out 0.3s both;
+        }
+
+        .btn-primary {
+            padding: 1rem 2.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px rgba(124, 58, 237, 0.35);
+        }
+
+        .btn-secondary {
+            padding: 1rem 2.5rem;
+            background: transparent;
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary-light);
+            background: rgba(124, 58, 237, 0.1);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Stats Section */
+        .stats {
+            padding: 4rem 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .stats-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 2rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            transition: all 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: 0 20px 40px rgba(124, 58, 237, 0.15);
+        }
+
+        .stat-number {
+            font-size: 2.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-light), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Problem Section */
+        .problem {
+            padding: 8rem 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 4rem;
+        }
+
+        .section-tag {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--danger);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-tag.success {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: rgba(16, 185, 129, 0.3);
+            color: var(--success);
+        }
+
+        .section-tag.primary {
+            background: rgba(124, 58, 237, 0.1);
+            border-color: rgba(124, 58, 237, 0.3);
+            color: var(--primary-light);
+        }
+
+        .section-header h2 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+
+        .section-header p {
+            font-size: 1.15rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .problem-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .problem-card {
+            padding: 2rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            transition: all 0.3s;
+        }
+
+        .problem-card:hover {
+            border-color: var(--danger);
+            transform: translateY(-5px);
+        }
+
+        .problem-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .problem-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+            font-weight: 700;
+        }
+
+        .problem-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Solution Section */
+        .solution {
+            padding: 8rem 2rem;
+            background: linear-gradient(180deg, transparent, rgba(124, 58, 237, 0.03), transparent);
+            position: relative;
+            z-index: 1;
+        }
+
+        .capabilities-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .capability-card {
+            padding: 2.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .capability-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .capability-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: 0 25px 50px rgba(124, 58, 237, 0.15);
+        }
+
+        .capability-card:hover::before {
+            opacity: 1;
+        }
+
+        .capability-number {
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .capability-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .capability-card p {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+
+        .capability-stats {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .cap-stat {
+            text-align: center;
+        }
+
+        .cap-stat-value {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--success);
+        }
+
+        .cap-stat-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Use Cases */
+        .use-cases {
+            padding: 8rem 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .use-cases-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+        }
+
+        .use-case {
+            padding: 2rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .use-case:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+        }
+
+        .use-case-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .use-case h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .use-case p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* Market Section */
+        .market {
+            padding: 8rem 2rem;
+            background: var(--bg-card);
+            position: relative;
+            z-index: 1;
+        }
+
+        .market-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .market-text h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .market-text p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            line-height: 1.7;
+        }
+
+        .market-stats-list {
+            list-style: none;
+        }
+
+        .market-stats-list li {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .market-stats-list li:last-child {
+            border-bottom: none;
+        }
+
+        .market-stats-list .value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-light);
+            min-width: 100px;
+        }
+
+        .market-visual {
+            position: relative;
+        }
+
+        .market-chart {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2.5rem;
+        }
+
+        .chart-bars {
+            display: flex;
+            align-items: flex-end;
+            gap: 1.5rem;
+            height: 250px;
+            margin-bottom: 1rem;
+        }
+
+        .chart-bar {
+            flex: 1;
+            background: linear-gradient(180deg, var(--primary), var(--primary-dark));
+            border-radius: 8px 8px 0 0;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .chart-bar:hover {
+            filter: brightness(1.2);
+        }
+
+        .chart-bar::after {
+            content: attr(data-value);
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--primary-light);
+        }
+
+        .chart-labels {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .chart-labels span {
+            flex: 1;
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* Pricing Section */
+        .pricing {
+            padding: 8rem 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .pricing-grid {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .pricing-card {
+            padding: 2.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .pricing-card.featured {
+            border-color: var(--primary);
+            transform: scale(1.05);
+        }
+
+        .pricing-card.featured::before {
+            content: 'Most Popular';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+        }
+
+        .pricing-card.featured:hover {
+            transform: scale(1.05) translateY(-5px);
+        }
+
+        .pricing-tier {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--primary-light);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-price {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-price span {
+            font-size: 1rem;
+            font-weight: 400;
+            color: var(--text-muted);
+        }
+
+        .pricing-desc {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-features li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 0;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .pricing-features li::before {
+            content: '✓';
+            color: var(--success);
+            font-weight: 700;
+        }
+
+        .pricing-cta {
+            width: 100%;
+            padding: 1rem;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .pricing-cta:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .pricing-card.featured .pricing-cta {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border: none;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 8rem 2rem;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-box {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 4rem;
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.1), rgba(245, 158, 11, 0.1));
+            border: 1px solid var(--primary);
+            border-radius: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at top right, rgba(124, 58, 237, 0.2), transparent 70%);
+            pointer-events: none;
+        }
+
+        .cta-box h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+
+        .cta-box p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            position: relative;
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 2rem 2rem;
+            border-top: 1px solid var(--border);
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-logo {
+            font-size: 1.25rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-light), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .footer-copy {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .problem-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .capabilities-grid {
+                grid-template-columns: 1fr;
+            }
+            .use-cases-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .market-content {
+                grid-template-columns: 1fr;
+            }
+            .pricing-grid {
+                grid-template-columns: 1fr;
+                max-width: 400px;
+            }
+            .pricing-card.featured {
+                transform: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem 1.5rem;
+            }
+            .nav-links {
+                display: none;
+            }
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .problem-grid {
+                grid-template-columns: 1fr;
+            }
+            .use-cases-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .footer-content {
+                flex-direction: column;
+                gap: 1.5rem;
+                text-align: center;
+            }
+            .cta-box {
+                padding: 2.5rem 1.5rem;
+            }
+            .hero-ctas {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+    <div class="gradient-orb orb-1"></div>
+    <div class="gradient-orb orb-2"></div>
+    <div class="gradient-orb orb-3"></div>
+
+    <nav>
+        <div class="logo">CrowdOS</div>
+        <ul class="nav-links">
+            <li><a href="#problem">Problem</a></li>
+            <li><a href="#solution">Solution</a></li>
+            <li><a href="#market">Market</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+        </ul>
+        <a href="#contact" class="cta-nav">Request Demo</a>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-badge">
+            <span class="dot"></span>
+            Autonomous Live Event Intelligence
+        </div>
+        <h1>The Operating System<br><span class="gradient">for Live Entertainment</span></h1>
+        <p class="hero-sub">CrowdOS deploys AI agents that run stadiums, arenas, and festivals with superhuman intelligence — predicting crowd behavior, optimizing operations, and creating unforgettable experiences.</p>
+        <div class="hero-ctas">
+            <a href="#contact" class="btn-primary">Schedule Demo <span>→</span></a>
+            <a href="#solution" class="btn-secondary">Explore Platform</a>
+        </div>
+    </section>
+
+    <section class="stats">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">$1.5T</div>
+                <div class="stat-label">Global Live Events Market</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">80%</div>
+                <div class="stat-label">Incident Reduction</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">35%</div>
+                <div class="stat-label">Operational Cost Savings</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">25%</div>
+                <div class="stat-label">Revenue Lift Per Event</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="problem" id="problem">
+        <div class="section-header">
+            <span class="section-tag">The Problem</span>
+            <h2>Live Entertainment Runs on Hope</h2>
+            <p>The industry managing millions of people in enclosed spaces still operates with clipboards, walkie-talkies, and reactive firefighting.</p>
+        </div>
+        <div class="problem-grid">
+            <div class="problem-card">
+                <div class="problem-icon">⚠️</div>
+                <h3>Zero Foresight</h3>
+                <p>Security responds AFTER incidents occur. No predictive intelligence, no early warning, no time to prevent disasters.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">👁️</div>
+                <h3>Blind Operations</h3>
+                <p>500 cameras but zero intelligence. No real-time visibility into crowd density, flow patterns, or developing risks.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">💸</div>
+                <h3>Massive Waste</h3>
+                <p>30% labor overstaffing "just in case." Static resource allocation regardless of actual real-time demand.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">🔌</div>
+                <h3>Siloed Systems</h3>
+                <p>Ticketing, security, concessions, and operations all disconnected. No unified command intelligence.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">💀</div>
+                <h3>Life Safety Risk</h3>
+                <p>300+ deaths annually from crowd crushes. Astroworld changed everything. Reactive isn't acceptable anymore.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">😤</div>
+                <h3>Poor Experience</h3>
+                <p>40% of fans frustrated by lines, waits, and chaos. Generic treatment regardless of loyalty or preferences.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="solution" id="solution">
+        <div class="section-header">
+            <span class="section-tag success">The Solution</span>
+            <h2>AI That Sees Everything,<br>Predicts Everything, Controls Everything</h2>
+            <p>CrowdOS deploys autonomous AI agents that transform every venue into a self-optimizing, incident-preventing, revenue-maximizing machine.</p>
+        </div>
+        <div class="capabilities-grid">
+            <div class="capability-card">
+                <div class="capability-number">01</div>
+                <h3>Predictive Crowd Safety</h3>
+                <p>Real-time computer vision across every camera feed with behavioral pattern recognition. Get 30-minute advance warning of dangerous crowd conditions.</p>
+                <div class="capability-stats">
+                    <div class="cap-stat">
+                        <div class="cap-stat-value">80%</div>
+                        <div class="cap-stat-label">Incident Reduction</div>
+                    </div>
+                    <div class="cap-stat">
+                        <div class="cap-stat-value">30min</div>
+                        <div class="cap-stat-label">Early Warning</div>
+                    </div>
+                </div>
+            </div>
+            <div class="capability-card">
+                <div class="capability-number">02</div>
+                <h3>Autonomous Operations</h3>
+                <p>Dynamic staff deployment, AI-optimized vendor placement, predictive queuing, and real-time resource reallocation based on actual demand.</p>
+                <div class="capability-stats">
+                    <div class="cap-stat">
+                        <div class="cap-stat-value">35%</div>
+                        <div class="cap-stat-label">Cost Reduction</div>
+                    </div>
+                    <div class="cap-stat">
+                        <div class="cap-stat-value">2x</div>
+                        <div class="cap-stat-label">Staff Efficiency</div>
+                    </div>
+                </div>
+            </div>
+            <div class="capability-card">
+                <div class="capability-number">03</div>
+                <h3>Revenue Optimization</h3>
+                <p>Dynamic pricing across tickets, F&B, and merchandise. Real-time yield management, fraud detection, and personalized upsells.</p>
+                <div class="capability-stats">
+                    <div class="cap-stat">
+                        <div class="cap-stat-value">25%</div>
+                        <div class="cap-stat-label">Revenue Lift</div>
+                    </div>
+                    <div class="cap-stat">
+                        <div class="cap-stat-value">95%</div>
+                        <div class="cap-stat-label">Fraud Blocked</div>
+                    </div>
+                </div>
+            </div>
+            <div class="capability-card">
+                <div class="capability-number">04</div>
+                <h3>Unified Command Center</h3>
+                <p>Single pane of glass with natural language interface. Automated incident detection, real-time coordination, and complete documentation.</p>
+                <div class="capability-stats">
+                    <div class="cap-stat">
+                        <div class="cap-stat-value"><1s</div>
+                        <div class="cap-stat-label">Alert Time</div>
+                    </div>
+                    <div class="cap-stat">
+                        <div class="cap-stat-value">100%</div>
+                        <div class="cap-stat-label">Visibility</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="use-cases">
+        <div class="section-header">
+            <span class="section-tag primary">Venues</span>
+            <h2>Built for Where Crowds Gather</h2>
+            <p>From 10,000-seat arenas to 100,000+ festivals, CrowdOS scales to any live event environment.</p>
+        </div>
+        <div class="use-cases-grid">
+            <div class="use-case">
+                <div class="use-case-icon">🏟️</div>
+                <h4>Stadiums & Arenas</h4>
+                <p>NFL, NBA, NHL, MLS venues</p>
+            </div>
+            <div class="use-case">
+                <div class="use-case-icon">🎸</div>
+                <h4>Concert Venues</h4>
+                <p>Amphitheaters to mega-arenas</p>
+            </div>
+            <div class="use-case">
+                <div class="use-case-icon">🎪</div>
+                <h4>Festivals</h4>
+                <p>Multi-day, multi-stage events</p>
+            </div>
+            <div class="use-case">
+                <div class="use-case-icon">🎰</div>
+                <h4>Casinos</h4>
+                <p>Gaming floors to entertainment</p>
+            </div>
+            <div class="use-case">
+                <div class="use-case-icon">🎢</div>
+                <h4>Theme Parks</h4>
+                <p>Ride operations to crowd flow</p>
+            </div>
+            <div class="use-case">
+                <div class="use-case-icon">🏛️</div>
+                <h4>Convention Centers</h4>
+                <p>Expos, tradeshows, conferences</p>
+            </div>
+            <div class="use-case">
+                <div class="use-case-icon">✈️</div>
+                <h4>Airports</h4>
+                <p>Terminals, security, gates</p>
+            </div>
+            <div class="use-case">
+                <div class="use-case-icon">🚇</div>
+                <h4>Transit Hubs</h4>
+                <p>Stations, platforms, corridors</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="market" id="market">
+        <div class="market-content">
+            <div class="market-text">
+                <h2>A Category That Must Exist</h2>
+                <p>After Astroworld, regulators and insurers are demanding real-time crowd intelligence. CrowdOS is first to market with a complete solution.</p>
+                <ul class="market-stats-list">
+                    <li>
+                        <span class="value">$1.5T</span>
+                        <span>Global live entertainment by 2027</span>
+                    </li>
+                    <li>
+                        <span class="value">50K+</span>
+                        <span>Target venues globally</span>
+                    </li>
+                    <li>
+                        <span class="value">$50B</span>
+                        <span>Total addressable market</span>
+                    </li>
+                    <li>
+                        <span class="value">0</span>
+                        <span>Unified platform competitors</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="market-visual">
+                <div class="market-chart">
+                    <div class="chart-bars">
+                        <div class="chart-bar" style="height: 15%;" data-value="$12M"></div>
+                        <div class="chart-bar" style="height: 35%;" data-value="$80M"></div>
+                        <div class="chart-bar" style="height: 55%;" data-value="$250M"></div>
+                        <div class="chart-bar" style="height: 75%;" data-value="$500M"></div>
+                        <div class="chart-bar" style="height: 100%;" data-value="$750M"></div>
+                    </div>
+                    <div class="chart-labels">
+                        <span>Y1</span>
+                        <span>Y2</span>
+                        <span>Y3</span>
+                        <span>Y4</span>
+                        <span>Y5</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="pricing" id="pricing">
+        <div class="section-header">
+            <span class="section-tag primary">Pricing</span>
+            <h2>Enterprise-Ready from Day One</h2>
+            <p>Modular pricing that scales with your venue and needs.</p>
+        </div>
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <div class="pricing-tier">Core</div>
+                <div class="pricing-price">$250K<span>/year</span></div>
+                <div class="pricing-desc">Essential crowd intelligence for mid-size venues</div>
+                <ul class="pricing-features">
+                    <li>Real-time density mapping</li>
+                    <li>Basic crowd analytics</li>
+                    <li>Incident alerts</li>
+                    <li>Operations dashboard</li>
+                    <li>Standard support</li>
+                </ul>
+                <button class="pricing-cta">Contact Sales</button>
+            </div>
+            <div class="pricing-card featured">
+                <div class="pricing-tier">Enterprise</div>
+                <div class="pricing-price">$800K<span>/year</span></div>
+                <div class="pricing-desc">Full platform for major stadiums and arenas</div>
+                <ul class="pricing-features">
+                    <li>Predictive crowd safety</li>
+                    <li>Autonomous operations</li>
+                    <li>Revenue optimization</li>
+                    <li>Unified command center</li>
+                    <li>Fan experience platform</li>
+                    <li>24/7 dedicated support</li>
+                </ul>
+                <button class="pricing-cta">Contact Sales</button>
+            </div>
+            <div class="pricing-card">
+                <div class="pricing-tier">Premium</div>
+                <div class="pricing-price">$2M+<span>/year</span></div>
+                <div class="pricing-desc">Full managed operations for flagship venues</div>
+                <ul class="pricing-features">
+                    <li>Everything in Enterprise</li>
+                    <li>On-site AI specialists</li>
+                    <li>Custom integrations</li>
+                    <li>Multi-venue orchestration</li>
+                    <li>White-glove service</li>
+                </ul>
+                <button class="pricing-cta">Contact Sales</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section" id="contact">
+        <div class="cta-box">
+            <h2>Ready to Transform Your Venue?</h2>
+            <p>See CrowdOS in action with a personalized demo for your venue.</p>
+            <div class="cta-buttons">
+                <a href="mailto:demo@crowdos.ai" class="btn-primary">Request Demo <span>→</span></a>
+                <a href="#" class="btn-secondary">Download Overview</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">CrowdOS</div>
+            <ul class="footer-links">
+                <li><a href="#">Platform</a></li>
+                <li><a href="#">Venues</a></li>
+                <li><a href="#">Company</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+            <div class="footer-copy">© 2026 CrowdOS. All rights reserved.</div>
+        </div>
+    </footer>
+</body>
+</html>
