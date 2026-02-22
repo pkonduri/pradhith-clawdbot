@@ -73,6 +73,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-02-21 | Morning | FreightMind AI — Autonomous Freight Intelligence | [Playbook](2026-02-21-morning.md) • [Landing](2026-02-21-morning-landing.html) • [PDF](2026-02-21-morning.pdf) |
 | 2026-02-21 | Afternoon | CrowdOS — Autonomous Live Event Intelligence | [Playbook](2026-02-21-afternoon.md) • [Landing](2026-02-21-afternoon-landing.html) • [PDF](2026-02-21-afternoon.pdf) |
 | 2026-02-22 | Evening | DebtOS — Autonomous Debt Intelligence Platform | [Playbook](2026-02-22-evening.md) • [Landing](2026-02-22-evening-landing.html) • [PDF](2026-02-22-evening.pdf) |
+| 2026-02-22 | Morning | RealmOS — The Physical API for AI Agents | [Playbook](2026-02-22-morning.md) • [Landing](2026-02-22-morning-landing.html) • [PDF](2026-02-22-morning.pdf) |
 <!-- New entries will be added above this line -->
 
 ---
