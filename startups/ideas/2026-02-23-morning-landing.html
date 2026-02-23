@@ -1,0 +1,1356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DataFoundry — Enterprise Synthetic Data Intelligence</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #10b981;
+            --primary-dark: #059669;
+            --primary-light: #34d399;
+            --accent: #8b5cf6;
+            --accent-secondary: #f59e0b;
+            --dark: #030712;
+            --dark-surface: #0f172a;
+            --dark-elevated: #1e293b;
+            --text: #f8fafc;
+            --text-muted: #94a3b8;
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --gradient-1: linear-gradient(135deg, #10b981 0%, #06b6d4 50%, #8b5cf6 100%);
+            --gradient-2: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+            --gradient-3: linear-gradient(180deg, rgba(16, 185, 129, 0.15) 0%, transparent 100%);
+            --glow: 0 0 80px rgba(16, 185, 129, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--dark);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Data Stream Background */
+        .data-stream-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: -2;
+            overflow: hidden;
+        }
+
+        .data-column {
+            position: absolute;
+            top: -100%;
+            width: 2px;
+            height: 200%;
+            background: linear-gradient(180deg, transparent, var(--primary), transparent);
+            opacity: 0.1;
+            animation: dataFall 20s linear infinite;
+        }
+
+        @keyframes dataFall {
+            0% { transform: translateY(-50%); }
+            100% { transform: translateY(0%); }
+        }
+
+        .floating-orbs {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.4;
+            animation: pulse 15s ease-in-out infinite;
+        }
+
+        .orb-1 {
+            width: 700px;
+            height: 700px;
+            background: var(--primary);
+            top: -300px;
+            left: -200px;
+            animation-delay: 0s;
+        }
+
+        .orb-2 {
+            width: 500px;
+            height: 500px;
+            background: var(--accent);
+            bottom: -100px;
+            right: -150px;
+            animation-delay: -5s;
+        }
+
+        .orb-3 {
+            width: 400px;
+            height: 400px;
+            background: #06b6d4;
+            top: 50%;
+            left: 50%;
+            animation-delay: -10s;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.4; }
+            50% { transform: scale(1.1); opacity: 0.5; }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 20px 0;
+            background: rgba(3, 7, 18, 0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(16, 185, 129, 0.1);
+        }
+
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: var(--gradient-2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: white;
+            -webkit-text-fill-color: white;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--gradient-1);
+            color: white;
+            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--primary);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(16, 185, 129, 0.2);
+            border-color: var(--primary);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 120px 0 80px;
+            position: relative;
+        }
+
+        .hero-content {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--primary);
+            margin-bottom: 24px;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .hero-badge::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: blink 2s ease-in-out infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            animation: fadeInUp 0.8s ease 0.1s both;
+        }
+
+        .hero h1 span {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            margin-bottom: 40px;
+            max-width: 540px;
+            animation: fadeInUp 0.8s ease 0.2s both;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 48px;
+            animation: fadeInUp 0.8s ease 0.3s both;
+        }
+
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+            animation: fadeInUp 0.8s ease 0.4s both;
+        }
+
+        .stat {
+            text-align: left;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Hero Visual */
+        .hero-visual {
+            position: relative;
+            animation: fadeIn 1s ease 0.5s both;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .data-transformation {
+            position: relative;
+            padding: 40px;
+        }
+
+        .data-box {
+            background: var(--dark-surface);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .data-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-1);
+        }
+
+        .data-box-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .data-box-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .data-badge {
+            padding: 4px 10px;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .badge-danger {
+            background: rgba(239, 68, 68, 0.2);
+            color: #f87171;
+        }
+
+        .badge-success {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--primary);
+        }
+
+        .data-rows {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+        }
+
+        .data-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+            animation: slideIn 0.5s ease both;
+        }
+
+        .data-row:last-child {
+            border-bottom: none;
+        }
+
+        .data-row.header {
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .pii {
+            color: #f87171;
+            background: rgba(239, 68, 68, 0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .synthetic {
+            color: var(--primary);
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .transform-arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: var(--primary);
+            font-size: 2rem;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(10px); }
+        }
+
+        /* Problem Section */
+        .section {
+            padding: 120px 0;
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 80px;
+        }
+
+        .section-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(16, 185, 129, 0.1);
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-weight: 600;
+        }
+
+        .section-title {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+        }
+
+        /* Problem Cards */
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .problem-card {
+            background: var(--dark-surface);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 20px;
+            padding: 32px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .problem-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #ef4444, #f97316);
+        }
+
+        .problem-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(239, 68, 68, 0.4);
+        }
+
+        .problem-icon {
+            width: 56px;
+            height: 56px;
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        .problem-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #f87171;
+        }
+
+        .problem-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* Solution Section */
+        .solution-section {
+            background: linear-gradient(180deg, var(--dark) 0%, var(--dark-surface) 50%, var(--dark) 100%);
+        }
+
+        .solution-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+
+        .solution-features {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        .feature-item {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            min-width: 48px;
+            background: var(--gradient-1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .feature-content h4 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .feature-content p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* Code Demo */
+        .code-demo {
+            background: var(--dark-surface);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .code-header {
+            background: var(--dark-elevated);
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid rgba(16, 185, 129, 0.1);
+        }
+
+        .code-dots {
+            display: flex;
+            gap: 8px;
+        }
+
+        .code-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .dot-red { background: #ef4444; }
+        .dot-yellow { background: #f59e0b; }
+        .dot-green { background: #22c55e; }
+
+        .code-title {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .code-body {
+            padding: 24px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            line-height: 1.7;
+            overflow-x: auto;
+        }
+
+        .code-comment { color: #6b7280; }
+        .code-keyword { color: #c084fc; }
+        .code-string { color: #34d399; }
+        .code-function { color: #60a5fa; }
+        .code-number { color: #f59e0b; }
+        .code-variable { color: #f8fafc; }
+
+        /* Products Section */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        .product-card {
+            background: var(--dark-surface);
+            border: 1px solid rgba(16, 185, 129, 0.15);
+            border-radius: 20px;
+            padding: 40px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(16, 185, 129, 0.15);
+        }
+
+        .product-card.featured {
+            grid-column: span 2;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+            border-color: var(--primary);
+        }
+
+        .product-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-1);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 24px;
+        }
+
+        .product-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .product-card p {
+            color: var(--text-muted);
+            margin-bottom: 24px;
+        }
+
+        .product-features {
+            list-style: none;
+        }
+
+        .product-features li {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 0;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .product-features li::before {
+            content: '✓';
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        /* Stats Section */
+        .stats-section {
+            background: var(--dark-surface);
+            border-top: 1px solid rgba(16, 185, 129, 0.1);
+            border-bottom: 1px solid rgba(16, 185, 129, 0.1);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 48px;
+            text-align: center;
+        }
+
+        .stat-item {
+            padding: 20px;
+        }
+
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+
+        .stat-description {
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        /* Use Cases */
+        .use-cases-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .use-case-card {
+            background: var(--dark-surface);
+            border: 1px solid rgba(16, 185, 129, 0.15);
+            border-radius: 20px;
+            padding: 32px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .use-case-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+        }
+
+        .use-case-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 24px;
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+
+        .use-case-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .use-case-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(139, 92, 246, 0.15) 100%);
+            border-top: 1px solid rgba(16, 185, 129, 0.2);
+            text-align: center;
+        }
+
+        .cta-content {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .cta-content h2 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+        }
+
+        .cta-content p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-bottom: 40px;
+        }
+
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark-surface);
+            padding: 60px 0 30px;
+            border-top: 1px solid rgba(16, 185, 129, 0.1);
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 32px;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(16, 185, 129, 0.1);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero h1 {
+                font-size: 3rem;
+            }
+
+            .hero-subtitle {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .hero-cta {
+                justify-content: center;
+            }
+
+            .hero-stats {
+                justify-content: center;
+            }
+
+            .hero-visual {
+                display: none;
+            }
+
+            .problem-grid,
+            .use-cases-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .solution-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .product-card.featured {
+                grid-column: span 1;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 640px) {
+            .hero h1 {
+                font-size: 2.25rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Data Stream Background -->
+    <div class="data-stream-bg">
+        <div class="data-column" style="left: 5%; animation-duration: 15s;"></div>
+        <div class="data-column" style="left: 15%; animation-duration: 22s; animation-delay: -5s;"></div>
+        <div class="data-column" style="left: 25%; animation-duration: 18s; animation-delay: -10s;"></div>
+        <div class="data-column" style="left: 35%; animation-duration: 25s; animation-delay: -3s;"></div>
+        <div class="data-column" style="left: 45%; animation-duration: 20s; animation-delay: -8s;"></div>
+        <div class="data-column" style="left: 55%; animation-duration: 17s; animation-delay: -12s;"></div>
+        <div class="data-column" style="left: 65%; animation-duration: 23s; animation-delay: -6s;"></div>
+        <div class="data-column" style="left: 75%; animation-duration: 19s; animation-delay: -15s;"></div>
+        <div class="data-column" style="left: 85%; animation-duration: 21s; animation-delay: -2s;"></div>
+        <div class="data-column" style="left: 95%; animation-duration: 16s; animation-delay: -9s;"></div>
+    </div>
+
+    <!-- Floating Orbs -->
+    <div class="floating-orbs">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="container">
+            <div class="logo">
+                <div class="logo-icon">🧬</div>
+                DataFoundry
+            </div>
+            <div class="nav-links">
+                <a href="#solution">Solution</a>
+                <a href="#products">Products</a>
+                <a href="#use-cases">Use Cases</a>
+                <a href="#" class="btn btn-primary">Get Demo</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <div class="hero-badge">
+                        Enterprise Synthetic Data Platform
+                    </div>
+                    <h1>Privacy-Safe<br><span>Training Data</span><br>at Scale</h1>
+                    <p class="hero-subtitle">
+                        Generate high-fidelity synthetic data that preserves statistical properties while containing zero real customer information. Unlock AI without privacy risk.
+                    </p>
+                    <div class="hero-cta">
+                        <a href="#" class="btn btn-primary">Request Demo →</a>
+                        <a href="#" class="btn btn-secondary">Read Documentation</a>
+                    </div>
+                    <div class="hero-stats">
+                        <div class="stat">
+                            <div class="stat-value">$26B</div>
+                            <div class="stat-label">Market by 2028</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">98%</div>
+                            <div class="stat-label">Statistical Fidelity</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">0%</div>
+                            <div class="stat-label">Re-identification Risk</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <div class="data-transformation">
+                        <div class="data-box">
+                            <div class="data-box-header">
+                                <span class="data-box-title">Source Data (PII)</span>
+                                <span class="data-badge badge-danger">⚠️ Sensitive</span>
+                            </div>
+                            <div class="data-rows">
+                                <div class="data-row header">
+                                    <span>Name</span>
+                                    <span>Email</span>
+                                    <span>SSN</span>
+                                    <span>Amount</span>
+                                </div>
+                                <div class="data-row" style="animation-delay: 0.1s;">
+                                    <span class="pii">John Smith</span>
+                                    <span class="pii">john@...</span>
+                                    <span class="pii">***-**-4521</span>
+                                    <span>$2,450</span>
+                                </div>
+                                <div class="data-row" style="animation-delay: 0.2s;">
+                                    <span class="pii">Sarah Chen</span>
+                                    <span class="pii">sarah@...</span>
+                                    <span class="pii">***-**-8832</span>
+                                    <span>$1,890</span>
+                                </div>
+                                <div class="data-row" style="animation-delay: 0.3s;">
+                                    <span class="pii">Mike Johnson</span>
+                                    <span class="pii">mike@...</span>
+                                    <span class="pii">***-**-2217</span>
+                                    <span>$3,200</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="transform-arrow">↓ 🧬 ↓</div>
+
+                        <div class="data-box">
+                            <div class="data-box-header">
+                                <span class="data-box-title">Synthetic Data</span>
+                                <span class="data-badge badge-success">✓ Privacy Safe</span>
+                            </div>
+                            <div class="data-rows">
+                                <div class="data-row header">
+                                    <span>Name</span>
+                                    <span>Email</span>
+                                    <span>SSN</span>
+                                    <span>Amount</span>
+                                </div>
+                                <div class="data-row" style="animation-delay: 0.4s;">
+                                    <span class="synthetic">Alex Rivera</span>
+                                    <span class="synthetic">alex@synth</span>
+                                    <span class="synthetic">SYN-00-0001</span>
+                                    <span>$2,380</span>
+                                </div>
+                                <div class="data-row" style="animation-delay: 0.5s;">
+                                    <span class="synthetic">Priya Patel</span>
+                                    <span class="synthetic">priya@synth</span>
+                                    <span class="synthetic">SYN-00-0002</span>
+                                    <span>$1,920</span>
+                                </div>
+                                <div class="data-row" style="animation-delay: 0.6s;">
+                                    <span class="synthetic">Jordan Lee</span>
+                                    <span class="synthetic">jordan@synth</span>
+                                    <span class="synthetic">SYN-00-0003</span>
+                                    <span>$3,150</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="section" id="problem">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-label">⚠️ The Problem</div>
+                <h2 class="section-title">The AI Data Paradox</h2>
+                <p class="section-subtitle">
+                    Your data is your greatest AI asset. But privacy regulations, security concerns, and compliance requirements make it nearly impossible to use.
+                </p>
+            </div>
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="problem-icon">🔒</div>
+                    <h3>Data Locked in Silos</h3>
+                    <p>Petabytes of valuable customer data sits unusable due to GDPR, HIPAA, CCPA, and internal security policies. Your AI initiatives starve.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">⚖️</div>
+                    <h3>Privacy vs. Innovation</h3>
+                    <p>€2.1B in GDPR fines were issued in 2024 alone. Companies face an impossible choice: violate regulations or fall behind competitors.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">⏳</div>
+                    <h3>80% Time Wasted</h3>
+                    <p>Data scientists spend 80% of their time waiting for data access, anonymizing datasets, and navigating compliance—not building models.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="section solution-section" id="solution">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-label">✨ The Solution</div>
+                <h2 class="section-title">Synthetic Data That Actually Works</h2>
+                <p class="section-subtitle">
+                    DataFoundry generates high-fidelity synthetic data that's statistically identical to your real data—but contains zero actual personal information.
+                </p>
+            </div>
+            <div class="solution-grid">
+                <div class="solution-features">
+                    <div class="feature-item">
+                        <div class="feature-icon">🧬</div>
+                        <div class="feature-content">
+                            <h4>AI-Powered Generation</h4>
+                            <p>State-of-the-art generative models (GANs, VAEs, Diffusion) learn statistical properties without memorizing individual records.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">🛡️</div>
+                        <div class="feature-content">
+                            <h4>Mathematical Privacy Guarantees</h4>
+                            <p>Differential privacy, k-anonymity, and automated re-identification testing ensure zero privacy risk—with compliance certificates.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">📊</div>
+                        <div class="feature-content">
+                            <h4>98%+ Statistical Fidelity</h4>
+                            <p>Preserve correlations, distributions, and patterns. Train on synthetic, deploy on real—with confidence your models work.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">🔐</div>
+                        <div class="feature-content">
+                            <h4>Zero Data Movement</h4>
+                            <p>Our compute moves to your data, not vice versa. Source data never leaves your VPC. Only synthetic output is transmitted.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="code-demo">
+                    <div class="code-header">
+                        <div class="code-dots">
+                            <div class="code-dot dot-red"></div>
+                            <div class="code-dot dot-yellow"></div>
+                            <div class="code-dot dot-green"></div>
+                        </div>
+                        <span class="code-title">generate_synthetic.py</span>
+                    </div>
+                    <div class="code-body">
+<span class="code-keyword">from</span> <span class="code-variable">datafoundry</span> <span class="code-keyword">import</span> <span class="code-variable">Foundry</span>
+
+<span class="code-comment"># Initialize client</span>
+<span class="code-variable">foundry</span> = <span class="code-function">Foundry</span>(<span class="code-variable">api_key</span>=<span class="code-string">"df_live_..."</span>)
+
+<span class="code-comment"># Connect to source (stays in your VPC)</span>
+<span class="code-variable">source</span> = <span class="code-variable">foundry</span>.<span class="code-function">sources.connect</span>(
+    <span class="code-variable">type</span>=<span class="code-string">"snowflake"</span>,
+    <span class="code-variable">tables</span>=[<span class="code-string">"customers"</span>, <span class="code-string">"transactions"</span>]
+)
+
+<span class="code-comment"># Generate 1M synthetic records</span>
+<span class="code-variable">synthetic</span> = <span class="code-variable">foundry</span>.<span class="code-function">generate</span>(
+    <span class="code-variable">source</span>=<span class="code-variable">source</span>,
+    <span class="code-variable">volume</span>=<span class="code-number">1_000_000</span>,
+    <span class="code-variable">fidelity</span>=<span class="code-string">"high"</span>,
+    <span class="code-variable">privacy</span>={<span class="code-string">"mode"</span>: <span class="code-string">"differential_privacy"</span>}
+)
+
+<span class="code-comment"># Validate quality</span>
+<span class="code-variable">report</span> = <span class="code-variable">foundry</span>.<span class="code-function">validate</span>(<span class="code-variable">synthetic</span>)
+<span class="code-keyword">print</span>(<span class="code-variable">report</span>.<span class="code-variable">fidelity_score</span>)  <span class="code-comment"># 0.98</span>
+<span class="code-keyword">print</span>(<span class="code-variable">report</span>.<span class="code-variable">privacy_score</span>)   <span class="code-comment"># 1.0 (safe!)</span>
+
+<span class="code-comment"># Export for training</span>
+<span class="code-variable">synthetic</span>.<span class="code-function">export</span>(<span class="code-string">"s3://bucket/data/"</span>)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="section stats-section">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">$26B</div>
+                    <div class="stat-description">Synthetic data market by 2028</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">90%</div>
+                    <div class="stat-description">Enterprises cite data access as #1 AI barrier</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">67%</div>
+                    <div class="stat-description">AI projects fail due to insufficient data</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">€2.1B</div>
+                    <div class="stat-description">GDPR fines issued in 2024</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="section" id="products">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-label">🚀 Products</div>
+                <h2 class="section-title">The Complete Synthetic Data Suite</h2>
+                <p class="section-subtitle">
+                    From generation to validation to sharing—everything you need to unlock your data.
+                </p>
+            </div>
+            <div class="products-grid">
+                <div class="product-card featured">
+                    <div class="product-icon">🧬</div>
+                    <h3>DataFoundry Core</h3>
+                    <p>The enterprise platform for generating synthetic versions of your production data for AI training, testing, and development.</p>
+                    <ul class="product-features">
+                        <li>Unlimited synthetic data generation</li>
+                        <li>All data types: tabular, text, time-series, images</li>
+                        <li>Privacy compliance automation</li>
+                        <li>Quality validation dashboard</li>
+                        <li>Enterprise governance & audit</li>
+                    </ul>
+                </div>
+                <div class="product-card">
+                    <div class="product-icon">🔗</div>
+                    <h3>DataFoundry Secure</h3>
+                    <p>Share data with partners, vendors, or researchers without exposing real records.</p>
+                    <ul class="product-features">
+                        <li>Synthetic data clean rooms</li>
+                        <li>Partner access management</li>
+                        <li>Compliance reporting</li>
+                    </ul>
+                </div>
+                <div class="product-card">
+                    <div class="product-icon">⚡</div>
+                    <h3>DataFoundry Accelerate</h3>
+                    <p>Purpose-built synthetic data for ML teams building production models.</p>
+                    <ul class="product-features">
+                        <li>Bias detection & correction</li>
+                        <li>Edge case augmentation</li>
+                        <li>Class balancing automation</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Use Cases Section -->
+    <section class="section" id="use-cases" style="background: var(--dark-surface);">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-label">🎯 Use Cases</div>
+                <h2 class="section-title">Built for Every Industry</h2>
+                <p class="section-subtitle">
+                    From financial services to healthcare, DataFoundry powers AI initiatives across regulated industries.
+                </p>
+            </div>
+            <div class="use-cases-grid">
+                <div class="use-case-card">
+                    <div class="use-case-icon">🏦</div>
+                    <h3>Financial Services</h3>
+                    <p>Train fraud detection models without exposing customer transactions. Generate synthetic portfolios for risk analysis.</p>
+                </div>
+                <div class="use-case-card">
+                    <div class="use-case-icon">🏥</div>
+                    <h3>Healthcare</h3>
+                    <p>Create HIPAA-compliant synthetic patient records for clinical research, drug discovery, and ML model training.</p>
+                </div>
+                <div class="use-case-card">
+                    <div class="use-case-icon">🛒</div>
+                    <h3>Retail & E-commerce</h3>
+                    <p>Build personalization AI with synthetic customer behavior data. Test recommendation systems at scale.</p>
+                </div>
+                <div class="use-case-card">
+                    <div class="use-case-icon">🔬</div>
+                    <h3>Life Sciences</h3>
+                    <p>Accelerate clinical trials with synthetic patient cohorts. Share research data without privacy concerns.</p>
+                </div>
+                <div class="use-case-card">
+                    <div class="use-case-icon">🛡️</div>
+                    <h3>Insurance</h3>
+                    <p>Generate synthetic claims data for underwriting models. Test pricing algorithms on realistic scenarios.</p>
+                </div>
+                <div class="use-case-card">
+                    <div class="use-case-icon">🏛️</div>
+                    <h3>Government</h3>
+                    <p>Create privacy-safe census data for research. Enable inter-agency data sharing without exposure.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="section cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Unlock Your Data. Build Better AI.</h2>
+                <p>Stop letting privacy compliance block your AI initiatives. Get synthetic data that works—without the risk.</p>
+                <div class="cta-buttons">
+                    <a href="#" class="btn btn-primary">Request Demo →</a>
+                    <a href="#" class="btn btn-secondary">Talk to Sales</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="logo">
+                    <div class="logo-icon">🧬</div>
+                    DataFoundry
+                </div>
+                <div class="footer-links">
+                    <a href="#">Documentation</a>
+                    <a href="#">API Reference</a>
+                    <a href="#">Blog</a>
+                    <a href="#">Careers</a>
+                    <a href="#">Contact</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 DataFoundry. The Data Factory for the AI Age.</p>
+                <p style="margin-top: 8px; font-size: 0.8rem;">Strategy by The Godfather 🎩</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
