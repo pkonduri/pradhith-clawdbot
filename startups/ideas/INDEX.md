@@ -75,6 +75,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-02-22 | Evening | DebtOS — Autonomous Debt Intelligence Platform | [Playbook](2026-02-22-evening.md) • [Landing](2026-02-22-evening-landing.html) • [PDF](2026-02-22-evening.pdf) |
 | 2026-02-22 | Morning | RealmOS — The Physical API for AI Agents | [Playbook](2026-02-22-morning.md) • [Landing](2026-02-22-morning-landing.html) • [PDF](2026-02-22-morning.pdf) |
 | 2026-02-22 | Afternoon | RestaurantOS — The AI Operating System for Restaurants | [Playbook](2026-02-22-afternoon.md) • [Landing](2026-02-22-afternoon-landing.html) • [PDF](2026-02-22-afternoon.pdf) |
+| 2026-02-23 | Evening | CloneOS — Enterprise Digital Identity Cloning & Governance | [Playbook](2026-02-23-evening.md) • [Landing](2026-02-23-evening-landing.html) • [PDF](2026-02-23-evening.pdf) |
 <!-- New entries will be added above this line -->
 
 ---
