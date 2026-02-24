@@ -1,0 +1,1354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrialOS — Autonomous Clinical Trials Intelligence</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0ea5e9;
+            --primary-dark: #0284c7;
+            --secondary: #6366f1;
+            --accent: #14b8a6;
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #0f172a;
+            --dark-800: #1e293b;
+            --dark-700: #334155;
+            --dark-600: #475569;
+            --light: #f8fafc;
+            --gradient-primary: linear-gradient(135deg, #0ea5e9 0%, #6366f1 50%, #8b5cf6 100%);
+            --gradient-accent: linear-gradient(135deg, #14b8a6 0%, #0ea5e9 100%);
+            --gradient-dark: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+            --glow-primary: 0 0 60px rgba(14, 165, 233, 0.4);
+            --glow-secondary: 0 0 60px rgba(99, 102, 241, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--dark);
+            color: var(--light);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-grid {
+            position: fixed;
+            inset: 0;
+            background-image: 
+                linear-gradient(rgba(14, 165, 233, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(14, 165, 233, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .bg-gradient {
+            position: fixed;
+            inset: 0;
+            background: 
+                radial-gradient(ellipse 80% 50% at 50% -20%, rgba(14, 165, 233, 0.15), transparent),
+                radial-gradient(ellipse 60% 40% at 80% 60%, rgba(99, 102, 241, 0.1), transparent),
+                radial-gradient(ellipse 50% 30% at 20% 80%, rgba(20, 184, 166, 0.1), transparent);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* DNA Helix Animation */
+        .dna-container {
+            position: absolute;
+            right: 5%;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 200px;
+            height: 500px;
+            opacity: 0.15;
+            pointer-events: none;
+        }
+
+        .dna-strand {
+            position: absolute;
+            width: 4px;
+            height: 100%;
+            animation: dnaRotate 8s linear infinite;
+        }
+
+        .dna-strand:nth-child(1) { left: 30%; }
+        .dna-strand:nth-child(2) { left: 70%; animation-delay: -4s; }
+
+        .dna-node {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: var(--primary);
+            border-radius: 50%;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 0 20px var(--primary);
+        }
+
+        @keyframes dnaRotate {
+            0% { transform: rotateY(0deg); }
+            100% { transform: rotateY(360deg); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1rem 2rem;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: var(--light);
+        }
+
+        .logo-icon {
+            width: 44px;
+            height: 44px;
+            background: var(--gradient-primary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: var(--glow-primary);
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-cta {
+            padding: 0.75rem 1.5rem;
+            background: var(--gradient-primary);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--glow-primary);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 2rem 4rem;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(14, 165, 233, 0.1);
+            border: 1px solid rgba(14, 165, 233, 0.3);
+            border-radius: 100px;
+            font-size: 0.875rem;
+            color: var(--primary);
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .hero-badge span {
+            width: 8px;
+            height: 8px;
+            background: var(--success);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.03em;
+            animation: fadeInUp 0.8s ease 0.1s both;
+        }
+
+        .hero h1 .gradient-text {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.35rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 3rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.7;
+            animation: fadeInUp 0.8s ease 0.2s both;
+        }
+
+        .hero-ctas {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.8s ease 0.3s both;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+            box-shadow: 0 4px 20px rgba(14, 165, 233, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--glow-primary);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            padding: 4rem 2rem;
+            background: rgba(30, 41, 59, 0.5);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+            z-index: 10;
+        }
+
+        .stats-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 3rem;
+            font-weight: 800;
+            background: var(--gradient-accent);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.95rem;
+        }
+
+        /* Problem Section */
+        .problem {
+            padding: 8rem 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .section-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-tag {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 100px;
+            color: var(--danger);
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .section-header h2 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+
+        .section-header p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 1.15rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .problem-card {
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(239, 68, 68, 0.3);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .problem-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .problem-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .problem-card p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .problem-stat {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: rgba(239, 68, 68, 0.15);
+            border-radius: 6px;
+            color: var(--danger);
+            font-weight: 700;
+            font-size: 0.875rem;
+            margin-top: 1rem;
+        }
+
+        /* Solution Section */
+        .solution {
+            padding: 8rem 2rem;
+            background: linear-gradient(180deg, transparent 0%, rgba(14, 165, 233, 0.03) 50%, transparent 100%);
+            position: relative;
+            z-index: 10;
+        }
+
+        .section-tag-success {
+            background: rgba(34, 197, 94, 0.1);
+            border-color: rgba(34, 197, 94, 0.3);
+            color: var(--success);
+        }
+
+        .engines-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .engine-card {
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .engine-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-primary);
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .engine-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .engine-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(14, 165, 233, 0.3);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
+        }
+
+        .engine-icon {
+            width: 56px;
+            height: 56px;
+            background: var(--gradient-primary);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--glow-primary);
+        }
+
+        .engine-card h3 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .engine-card p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .engine-metric {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 0.75rem;
+            background: rgba(34, 197, 94, 0.1);
+            border-radius: 8px;
+            width: fit-content;
+        }
+
+        .engine-metric span {
+            color: var(--success);
+            font-weight: 700;
+            font-size: 0.875rem;
+        }
+
+        /* Platform Architecture */
+        .architecture {
+            padding: 6rem 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .arch-diagram {
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            padding: 3rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.8);
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .arch-diagram::before {
+            content: 'TrialOS Architecture';
+            position: absolute;
+            top: 1rem;
+            left: 1.5rem;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .arch-diagram pre {
+            white-space: pre;
+            line-height: 1.5;
+            color: var(--primary);
+        }
+
+        /* Market Section */
+        .market {
+            padding: 8rem 2rem;
+            background: rgba(30, 41, 59, 0.3);
+            position: relative;
+            z-index: 10;
+        }
+
+        .section-tag-market {
+            background: rgba(99, 102, 241, 0.1);
+            border-color: rgba(99, 102, 241, 0.3);
+            color: var(--secondary);
+        }
+
+        .market-visual {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .market-circle {
+            text-align: center;
+        }
+
+        .circle-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 1.5rem;
+        }
+
+        .circle-bg {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: rgba(99, 102, 241, 0.1);
+            border: 3px solid rgba(99, 102, 241, 0.2);
+        }
+
+        .circle-fill {
+            position: absolute;
+            inset: 10px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--glow-secondary);
+        }
+
+        .circle-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: white;
+        }
+
+        .circle-label-inner {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .market-circle h4 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .market-circle p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+        }
+
+        /* Timeline Section */
+        .timeline {
+            padding: 8rem 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .timeline-container {
+            position: relative;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .timeline-line {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, var(--primary), var(--secondary), var(--accent));
+            transform: translateX(-50%);
+        }
+
+        .timeline-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 3rem;
+        }
+
+        .timeline-item:nth-child(odd) {
+            flex-direction: row;
+        }
+
+        .timeline-item:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .timeline-content {
+            width: 45%;
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 1.5rem;
+        }
+
+        .timeline-dot {
+            width: 20px;
+            height: 20px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: var(--glow-primary);
+        }
+
+        .timeline-year {
+            font-size: 0.875rem;
+            color: var(--primary);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-content h4 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-content p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 8rem 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .cta-card {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--gradient-primary);
+            border-radius: 32px;
+            padding: 4rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+        }
+
+        .cta-card h2 {
+            font-size: clamp(2rem, 5vw, 2.75rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+
+        .cta-card p {
+            font-size: 1.15rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            position: relative;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            position: relative;
+        }
+
+        .btn-white {
+            background: white;
+            color: var(--dark);
+        }
+
+        .btn-white:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+        }
+
+        .btn-outline:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+            z-index: 10;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .footer-brand .logo-icon {
+            width: 36px;
+            height: 36px;
+            font-size: 1.25rem;
+        }
+
+        .footer-text {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.875rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .engines-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .market-visual {
+                grid-template-columns: 1fr;
+                max-width: 300px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .stats-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .problem-grid,
+            .engines-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .timeline-item {
+                flex-direction: column !important;
+            }
+
+            .timeline-content {
+                width: 100%;
+            }
+
+            .timeline-line {
+                display: none;
+            }
+
+            .cta-card {
+                padding: 2.5rem 1.5rem;
+            }
+
+            .footer-container {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        /* Molecule Animation */
+        .molecule {
+            position: fixed;
+            pointer-events: none;
+            opacity: 0.1;
+            z-index: 1;
+        }
+
+        .molecule-1 {
+            top: 20%;
+            left: 10%;
+            width: 150px;
+            height: 150px;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .molecule-2 {
+            bottom: 30%;
+            right: 5%;
+            width: 100px;
+            height: 100px;
+            animation: float 15s infinite ease-in-out reverse;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(20px, -30px) rotate(90deg); }
+            50% { transform: translate(-10px, 20px) rotate(180deg); }
+            75% { transform: translate(30px, 10px) rotate(270deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Elements -->
+    <div class="bg-grid"></div>
+    <div class="bg-gradient"></div>
+
+    <!-- Floating Molecules -->
+    <svg class="molecule molecule-1" viewBox="0 0 100 100">
+        <circle cx="50" cy="20" r="8" fill="#0ea5e9"/>
+        <circle cx="20" cy="70" r="8" fill="#6366f1"/>
+        <circle cx="80" cy="70" r="8" fill="#14b8a6"/>
+        <line x1="50" y1="20" x2="20" y2="70" stroke="#0ea5e9" stroke-width="2"/>
+        <line x1="50" y1="20" x2="80" y2="70" stroke="#6366f1" stroke-width="2"/>
+        <line x1="20" y1="70" x2="80" y2="70" stroke="#14b8a6" stroke-width="2"/>
+    </svg>
+
+    <svg class="molecule molecule-2" viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="10" fill="#0ea5e9"/>
+        <circle cx="20" cy="30" r="6" fill="#6366f1"/>
+        <circle cx="80" cy="30" r="6" fill="#14b8a6"/>
+        <circle cx="30" cy="80" r="6" fill="#8b5cf6"/>
+        <circle cx="70" cy="80" r="6" fill="#22c55e"/>
+        <line x1="50" y1="50" x2="20" y2="30" stroke="#6366f1" stroke-width="2"/>
+        <line x1="50" y1="50" x2="80" y2="30" stroke="#14b8a6" stroke-width="2"/>
+        <line x1="50" y1="50" x2="30" y2="80" stroke="#8b5cf6" stroke-width="2"/>
+        <line x1="50" y1="50" x2="70" y2="80" stroke="#22c55e" stroke-width="2"/>
+    </svg>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <div class="logo-icon">🧬</div>
+                <span class="logo-text">TrialOS</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#problem">Problem</a></li>
+                <li><a href="#solution">Solution</a></li>
+                <li><a href="#market">Market</a></li>
+                <li><a href="#timeline">Roadmap</a></li>
+            </ul>
+            <a href="#contact" class="nav-cta">Request Demo</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span></span>
+                Accelerating Drug Discovery
+            </div>
+            <h1>
+                Make Clinical Trials<br>
+                <span class="gradient-text">10x Faster</span>
+            </h1>
+            <p class="hero-subtitle">
+                TrialOS is the autonomous intelligence layer for clinical trials. 
+                AI-powered patient matching, adaptive protocols, predictive safety, 
+                and automated regulatory submission. Get drugs to patients faster.
+            </p>
+            <div class="hero-ctas">
+                <a href="#contact" class="btn btn-primary">
+                    🚀 Request Early Access
+                </a>
+                <a href="#solution" class="btn btn-secondary">
+                    See How It Works →
+                </a>
+            </div>
+        </div>
+
+        <!-- DNA Helix Animation -->
+        <div class="dna-container">
+            <div class="dna-strand">
+                <div class="dna-node" style="top: 0%"></div>
+                <div class="dna-node" style="top: 20%"></div>
+                <div class="dna-node" style="top: 40%"></div>
+                <div class="dna-node" style="top: 60%"></div>
+                <div class="dna-node" style="top: 80%"></div>
+                <div class="dna-node" style="top: 100%"></div>
+            </div>
+            <div class="dna-strand">
+                <div class="dna-node" style="top: 10%"></div>
+                <div class="dna-node" style="top: 30%"></div>
+                <div class="dna-node" style="top: 50%"></div>
+                <div class="dna-node" style="top: 70%"></div>
+                <div class="dna-node" style="top: 90%"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Bar -->
+    <section class="stats-bar">
+        <div class="stats-container">
+            <div class="stat-item">
+                <div class="stat-value">$2.6B</div>
+                <div class="stat-label">Average Cost Per Drug Approval</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">90%</div>
+                <div class="stat-label">Clinical Trial Failure Rate</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">4-7</div>
+                <div class="stat-label">Years for Phase III Trials</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">50%</div>
+                <div class="stat-label">Trials Miss Enrollment Targets</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="problem" id="problem">
+        <div class="section-container">
+            <div class="section-header">
+                <div class="section-tag">The Problem</div>
+                <h2>Clinical Trials Are Stuck in 1990</h2>
+                <p>While AI transforms every industry, clinical trials remain manual, slow, and wasteful. Patients die waiting.</p>
+            </div>
+
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="problem-icon">👥</div>
+                    <h3>Patient Recruitment Failure</h3>
+                    <p>86% of trials don't meet enrollment timelines. Average sites enroll just 1.1 patients per month. 70% of potential patients live too far from trial sites.</p>
+                    <span class="problem-stat">$1.5M wasted per day of delay</span>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">📋</div>
+                    <h3>Static Protocol Design</h3>
+                    <p>Protocols written once, never adapted. Eligibility criteria exclude 80% of patients unnecessarily. No optimization as data emerges mid-trial.</p>
+                    <span class="problem-stat">40% avoidable protocol failures</span>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">⚠️</div>
+                    <h3>Reactive Safety Monitoring</h3>
+                    <p>Adverse events detected months after they occur. Manual review buries critical signals in noise. Site inspectors overwhelmed with unstructured data.</p>
+                    <span class="problem-stat">Weeks of detection delay</span>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">📑</div>
+                    <h3>Manual Regulatory Submission</h3>
+                    <p>Thousands of documents assembled by hand. Format inconsistencies delay FDA review. Questions asked that should have been pre-answered.</p>
+                    <span class="problem-stat">18-24 month review backlog</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="solution" id="solution">
+        <div class="section-container">
+            <div class="section-header">
+                <div class="section-tag section-tag-success">The Solution</div>
+                <h2>Six AI Engines. One Platform.</h2>
+                <p>TrialOS brings autonomous intelligence to every stage of clinical research.</p>
+            </div>
+
+            <div class="engines-grid">
+                <div class="engine-card">
+                    <div class="engine-icon">🎯</div>
+                    <h3>PatientMatch Engine</h3>
+                    <p>Federated analysis across EHR systems, claims data, and registries. Dynamic eligibility optimization. Predictive enrollment forecasting.</p>
+                    <div class="engine-metric">
+                        <span>95% enrollment targets achieved</span>
+                    </div>
+                </div>
+                <div class="engine-card">
+                    <div class="engine-icon">🧠</div>
+                    <h3>ProtocolMind Engine</h3>
+                    <p>AI protocol generation with scientific justification. Bayesian adaptive design. Real-time dose optimization and endpoint evolution.</p>
+                    <div class="engine-metric">
+                        <span>40% fewer trial failures</span>
+                    </div>
+                </div>
+                <div class="engine-card">
+                    <div class="engine-icon">🛡️</div>
+                    <h3>SafetyNet Engine</h3>
+                    <p>Continuous AE analysis with predictive toxicity modeling. Causal inference distinguishes drug effects from disease progression.</p>
+                    <div class="engine-metric">
+                        <span>3 weeks earlier detection</span>
+                    </div>
+                </div>
+                <div class="engine-card">
+                    <div class="engine-icon">📊</div>
+                    <h3>RegulatoryAI Engine</h3>
+                    <p>Auto-generates CSRs, IBs, and ICFs. Validates against FDA/EMA guidance. Anticipates deficiency questions and pre-answers them.</p>
+                    <div class="engine-metric">
+                        <span>6 months faster submission</span>
+                    </div>
+                </div>
+                <div class="engine-card">
+                    <div class="engine-icon">🏥</div>
+                    <h3>SiteCommand Engine</h3>
+                    <p>Real-time site performance scoring. AI-powered monitoring reduces visits by 60%. Automated query resolution and deviation detection.</p>
+                    <div class="engine-metric">
+                        <span>50% monitoring cost reduction</span>
+                    </div>
+                </div>
+                <div class="engine-card">
+                    <div class="engine-icon">🔬</div>
+                    <h3>DataFusion Engine</h3>
+                    <p>Multi-modal integration: EDC, ePRO, wearables, imaging, genomics. Predictive trial outcomes with updating confidence intervals.</p>
+                    <div class="engine-metric">
+                        <span>10x faster insights</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Architecture Section -->
+    <section class="architecture">
+        <div class="section-container">
+            <div class="arch-diagram">
+                <pre>
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│                              TrialOS Platform Architecture                          │
+├─────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                     │
+│   ┌─────────────────┐   ┌─────────────────┐   ┌─────────────────┐                  │
+│   │  PatientMatch   │   │  ProtocolMind   │   │    SafetyNet    │                  │
+│   │     Engine      │   │     Engine      │   │     Engine      │                  │
+│   │ ─────────────── │   │ ─────────────── │   │ ─────────────── │                  │
+│   │ • EHR Analysis  │   │ • AI Protocol   │   │ • Signal Detect │                  │
+│   │ • Matching      │   │ • Adaptive      │   │ • Predictive    │                  │
+│   │ • Enrollment    │   │ • Cross-Trial   │   │ • Causal ML     │                  │
+│   └─────────────────┘   └─────────────────┘   └─────────────────┘                  │
+│                                                                                     │
+│   ┌─────────────────┐   ┌─────────────────┐   ┌─────────────────┐                  │
+│   │  RegulatoryAI   │   │  SiteCommand    │   │   DataFusion    │                  │
+│   │     Engine      │   │     Engine      │   │     Engine      │                  │
+│   │ ─────────────── │   │ ─────────────── │   │ ─────────────── │                  │
+│   │ • Doc Gen       │   │ • Performance   │   │ • Multi-Modal   │                  │
+│   │ • Compliance    │   │ • Monitoring    │   │ • Real-Time     │                  │
+│   │ • Multi-Region  │   │ • Query Auto    │   │ • Predictive    │                  │
+│   └─────────────────┘   └─────────────────┘   └─────────────────┘                  │
+│                                                                                     │
+├─────────────────────────────────────────────────────────────────────────────────────┤
+│   🔒 HIPAA/GDPR Compliant │ 🏛️ 21 CFR Part 11 │ 🌐 FHIR Native │ 🔐 SOC 2 Type II  │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+                </pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- Market Section -->
+    <section class="market" id="market">
+        <div class="section-container">
+            <div class="section-header">
+                <div class="section-tag section-tag-market">Market Opportunity</div>
+                <h2>$180 Billion Market. Ripe for Disruption.</h2>
+                <p>Clinical trials + pharmaceutical R&D efficiency represents a massive addressable market.</p>
+            </div>
+
+            <div class="market-visual">
+                <div class="market-circle">
+                    <div class="circle-container">
+                        <div class="circle-bg"></div>
+                        <div class="circle-fill">
+                            <span class="circle-value">$180B</span>
+                            <span class="circle-label-inner">TAM</span>
+                        </div>
+                    </div>
+                    <h4>Total Addressable Market</h4>
+                    <p>Clinical trial services, CRO technology, R&D efficiency, regulatory tech</p>
+                </div>
+                <div class="market-circle">
+                    <div class="circle-container">
+                        <div class="circle-bg"></div>
+                        <div class="circle-fill" style="inset: 25px;">
+                            <span class="circle-value">$40B</span>
+                            <span class="circle-label-inner">SAM</span>
+                        </div>
+                    </div>
+                    <h4>Serviceable Market</h4>
+                    <p>Trial technology and services addressable by software platforms</p>
+                </div>
+                <div class="market-circle">
+                    <div class="circle-container">
+                        <div class="circle-bg"></div>
+                        <div class="circle-fill" style="inset: 45px;">
+                            <span class="circle-value">$2B</span>
+                            <span class="circle-label-inner">SOM</span>
+                        </div>
+                    </div>
+                    <h4>Year 5 Target</h4>
+                    <p>Realistic market capture with enterprise penetration</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Timeline Section -->
+    <section class="timeline" id="timeline">
+        <div class="section-container">
+            <div class="section-header">
+                <div class="section-tag section-tag-success">Roadmap</div>
+                <h2>Path to Market Leadership</h2>
+                <p>From biotech wedge to pharmaceutical standard.</p>
+            </div>
+
+            <div class="timeline-container">
+                <div class="timeline-line"></div>
+
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-year">Year 1</div>
+                        <h4>Wedge: Biotech Focus</h4>
+                        <p>Target Phase II trials at biotech companies. Entry via PatientMatch with clearest ROI. 15 trials, $3M ARR.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-year">Year 2</div>
+                        <h4>Expand: Mid-Market</h4>
+                        <p>Upsell to full platform. CRO partnerships for distribution. FDA pilot participation. 80 trials, $15M ARR.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-year">Year 3</div>
+                        <h4>Enterprise: Top 20 Pharma</h4>
+                        <p>Enterprise licensing deals. Private cloud options. System integration. 250 trials, $50M ARR.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-year">Year 5</div>
+                        <h4>Platform: Industry Standard</h4>
+                        <p>CRO white-label. Academic network. Data marketplace. Regulatory integration. 1,500 trials, $300M ARR.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta" id="contact">
+        <div class="cta-card">
+            <h2>Ready to Accelerate Your Trials?</h2>
+            <p>Join the waitlist for early access to TrialOS. Be among the first to transform how you run clinical trials.</p>
+            <div class="cta-buttons">
+                <a href="mailto:trials@example.com" class="btn btn-white">
+                    🚀 Request Early Access
+                </a>
+                <a href="#" class="btn btn-outline">
+                    📄 Download Whitepaper
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-brand">
+                <div class="logo-icon">🧬</div>
+                <span class="logo-text">TrialOS</span>
+            </div>
+            <p class="footer-text">© 2026 TrialOS. Accelerating the future of medicine.</p>
+            <div class="footer-links">
+                <a href="#">Privacy</a>
+                <a href="#">Terms</a>
+                <a href="#">Contact</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Nav background on scroll
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 50) {
+                nav.style.background = 'rgba(15, 23, 42, 0.95)';
+            } else {
+                nav.style.background = 'rgba(15, 23, 42, 0.8)';
+            }
+        });
+
+        // Animate elements on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.problem-card, .engine-card, .timeline-content').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'all 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
