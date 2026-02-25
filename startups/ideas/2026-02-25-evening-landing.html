@@ -1,0 +1,1350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AirportOS — Autonomous Airport Intelligence Platform</title>
+    <meta name="description" content="The AI operating system that transforms airport chaos into seamless flow. AI agents orchestrating every operation in real-time.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0066FF;
+            --primary-dark: #0052CC;
+            --primary-glow: rgba(0, 102, 255, 0.4);
+            --accent: #00D4AA;
+            --accent-glow: rgba(0, 212, 170, 0.4);
+            --warning: #FF6B35;
+            --dark: #0A0E1A;
+            --darker: #060810;
+            --card: #0F1420;
+            --card-border: rgba(255, 255, 255, 0.08);
+            --text: #FFFFFF;
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            --text-muted: rgba(255, 255, 255, 0.5);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--darker);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-grid {
+            position: fixed;
+            inset: 0;
+            background-image: 
+                linear-gradient(rgba(0, 102, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 102, 255, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .radar-sweep {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 200vmax;
+            height: 200vmax;
+            transform: translate(-50%, -50%);
+            background: conic-gradient(
+                from 0deg,
+                transparent 0deg,
+                rgba(0, 102, 255, 0.08) 30deg,
+                transparent 60deg
+            );
+            animation: radar 8s linear infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes radar {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1rem 2rem;
+            background: rgba(6, 8, 16, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 800;
+            font-size: 1.5rem;
+            text-decoration: none;
+            color: var(--text);
+        }
+
+        .logo-icon {
+            width: 42px;
+            height: 42px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.875rem 1.75rem;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            box-shadow: 0 4px 20px var(--primary-glow);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px var(--primary-glow);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text);
+            border: 2px solid var(--card-border);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--primary);
+            background: rgba(0, 102, 255, 0.1);
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 2rem 4rem;
+            z-index: 1;
+        }
+
+        .hero-content {
+            max-width: 1000px;
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(0, 102, 255, 0.15);
+            border: 1px solid rgba(0, 102, 255, 0.3);
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--primary);
+            margin-bottom: 2rem;
+        }
+
+        .hero-badge .pulse {
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: pulse 2s ease infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 5.5rem);
+            font-weight: 900;
+            line-height: 1.05;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.03em;
+        }
+
+        .hero h1 .gradient {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.25rem, 2.5vw, 1.5rem);
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto 3rem;
+            line-height: 1.7;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Live Status Ticker */
+        .status-ticker {
+            margin-top: 4rem;
+            padding: 1.5rem 2rem;
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            animation: statusPulse 2s ease infinite;
+        }
+
+        .status-dot.green { background: #00D4AA; }
+        .status-dot.blue { background: #0066FF; }
+        .status-dot.orange { background: #FF6B35; }
+
+        @keyframes statusPulse {
+            0%, 100% { box-shadow: 0 0 0 0 currentColor; }
+            50% { box-shadow: 0 0 0 6px transparent; }
+        }
+
+        .status-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .status-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        /* Problem Section */
+        .section {
+            position: relative;
+            padding: 6rem 2rem;
+            z-index: 1;
+        }
+
+        .section-dark {
+            background: var(--dark);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-label {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+
+        .section-subtitle {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Problem Cards */
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .problem-card {
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(255, 107, 53, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .problem-icon {
+            width: 56px;
+            height: 56px;
+            background: rgba(255, 107, 53, 0.15);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .problem-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .problem-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .problem-stat {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--card-border);
+        }
+
+        .problem-stat .number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--warning);
+        }
+
+        .problem-stat .label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+        }
+
+        /* Solution Section */
+        .solution-hero {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .platform-visual {
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 3rem;
+            margin-bottom: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .platform-visual::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+        }
+
+        .platform-layers {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .platform-layer {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .agent-box {
+            background: linear-gradient(135deg, rgba(0, 102, 255, 0.1), rgba(0, 212, 170, 0.1));
+            border: 1px solid rgba(0, 102, 255, 0.3);
+            border-radius: 12px;
+            padding: 1.25rem 1.5rem;
+            min-width: 180px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .agent-box:hover {
+            transform: scale(1.05);
+            border-color: var(--primary);
+            box-shadow: 0 0 30px var(--primary-glow);
+        }
+
+        .agent-box .icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .agent-box .name {
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
+        .agent-box .desc {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+        }
+
+        .layer-label {
+            width: 100%;
+            text-align: center;
+            padding: 1rem;
+            background: rgba(0, 102, 255, 0.1);
+            border-radius: 8px;
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 0.9rem;
+        }
+
+        /* Agent Cards */
+        .agents-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+
+        .agent-card {
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .agent-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .agent-card:hover {
+            transform: translateY(-6px);
+            border-color: var(--primary);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+        }
+
+        .agent-card:hover::before {
+            opacity: 1;
+        }
+
+        .agent-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .agent-icon {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+        }
+
+        .agent-name {
+            font-size: 1.5rem;
+            font-weight: 800;
+        }
+
+        .agent-tagline {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .agent-card p {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+
+        .impact-list {
+            list-style: none;
+        }
+
+        .impact-list li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 0;
+            font-size: 0.95rem;
+        }
+
+        .impact-list .check {
+            width: 22px;
+            height: 22px;
+            background: rgba(0, 212, 170, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent);
+            font-size: 0.75rem;
+            flex-shrink: 0;
+        }
+
+        /* Stats Section */
+        .stats-section {
+            background: linear-gradient(180deg, var(--dark) 0%, var(--darker) 100%);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 2rem;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 2.5rem;
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+        }
+
+        .stat-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-top: 0.75rem;
+        }
+
+        /* Disruption Demo */
+        .disruption-demo {
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 3rem;
+            margin-top: 4rem;
+        }
+
+        .disruption-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .disruption-header h3 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .disruption-header p {
+            color: var(--text-muted);
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 1.25rem;
+            text-align: left;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .comparison-table th {
+            font-weight: 600;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .comparison-table td:first-child {
+            font-weight: 500;
+        }
+
+        .comparison-table .old {
+            color: var(--warning);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .comparison-table .new {
+            color: var(--accent);
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+        }
+
+        /* Market Section */
+        .market-visual {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .market-card {
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 2rem;
+        }
+
+        .market-card h4 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .market-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .market-item:last-child {
+            border-bottom: none;
+        }
+
+        .market-item .label {
+            color: var(--text-secondary);
+        }
+
+        .market-item .value {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+        }
+
+        .market-item.highlight .value {
+            color: var(--accent);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            text-align: center;
+            padding: 8rem 2rem;
+            background: radial-gradient(ellipse at center, rgba(0, 102, 255, 0.15) 0%, transparent 70%);
+        }
+
+        .cta-content {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .cta-content h2 {
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .cta-content p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 2.5rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--card-border);
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        .footer-copy {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero {
+                padding: 7rem 1.5rem 3rem;
+            }
+
+            .status-ticker {
+                gap: 1.5rem;
+                padding: 1.25rem;
+            }
+
+            .status-item {
+                flex: 1 1 45%;
+                justify-content: center;
+            }
+
+            .section {
+                padding: 4rem 1.5rem;
+            }
+
+            .platform-visual {
+                padding: 1.5rem;
+            }
+
+            .agent-box {
+                min-width: 140px;
+                padding: 1rem;
+            }
+
+            .comparison-table {
+                font-size: 0.85rem;
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: 0.75rem 0.5rem;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .footer-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-in {
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+    <div class="radar-sweep"></div>
+
+    <nav>
+        <div class="nav-content">
+            <a href="#" class="logo">
+                <div class="logo-icon">✈️</div>
+                AirportOS
+            </a>
+            <ul class="nav-links">
+                <li><a href="#problem">Problem</a></li>
+                <li><a href="#solution">Solution</a></li>
+                <li><a href="#agents">AI Agents</a></li>
+                <li><a href="#market">Market</a></li>
+            </ul>
+            <a href="#contact" class="btn btn-primary">Request Demo</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span class="pulse"></span>
+                AI-Native Airport Operations Platform
+            </div>
+            <h1>
+                Transform Airport<br>
+                <span class="gradient">Chaos Into Flow</span>
+            </h1>
+            <p class="hero-subtitle">
+                The autonomous intelligence layer for airports. AI agents orchestrate every operation in real-time—from gates to ground crews to passenger journeys.
+            </p>
+            <div class="hero-buttons">
+                <a href="#contact" class="btn btn-primary">
+                    Request Demo
+                    <span>→</span>
+                </a>
+                <a href="#solution" class="btn btn-outline">
+                    See How It Works
+                </a>
+            </div>
+
+            <div class="status-ticker">
+                <div class="status-item">
+                    <div class="status-dot green"></div>
+                    <div>
+                        <div class="status-label">Avg. Delay Reduction</div>
+                        <div class="status-value">40%</div>
+                    </div>
+                </div>
+                <div class="status-item">
+                    <div class="status-dot blue"></div>
+                    <div>
+                        <div class="status-label">Faster Turnaround</div>
+                        <div class="status-value">25%</div>
+                    </div>
+                </div>
+                <div class="status-item">
+                    <div class="status-dot green"></div>
+                    <div>
+                        <div class="status-label">Security Wait Cut</div>
+                        <div class="status-value">35%</div>
+                    </div>
+                </div>
+                <div class="status-item">
+                    <div class="status-dot orange"></div>
+                    <div>
+                        <div class="status-label">Disruption Recovery</div>
+                        <div class="status-value">6x faster</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="problem" class="section section-dark">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-label">The Problem</div>
+                <h2 class="section-title">$100B Lost to Airport Chaos Every Year</h2>
+                <p class="section-subtitle">
+                    Airports run the world's most complex logistics—on technology from 1990.
+                </p>
+            </div>
+
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="problem-icon">🔀</div>
+                    <h3>200+ Siloed Systems</h3>
+                    <p>Airlines, ground handlers, security, and retail all run separate systems that don't communicate. Decisions made with incomplete information.</p>
+                    <div class="problem-stat">
+                        <div class="number">$60B</div>
+                        <div class="label">Annual cost of flight delays</div>
+                    </div>
+                </div>
+
+                <div class="problem-card">
+                    <div class="problem-icon">📻</div>
+                    <h3>Manual Coordination</h3>
+                    <p>Gate agents calling operations via radio. Ramp supervisors using whiteboards. A single snowstorm creates cascading chaos for days.</p>
+                    <div class="problem-stat">
+                        <div class="number">4+ hrs</div>
+                        <div class="label">To stabilize after disruption</div>
+                    </div>
+                </div>
+
+                <div class="problem-card">
+                    <div class="problem-icon">⏰</div>
+                    <h3>Reactive Operations</h3>
+                    <p>Problems detected after they cascade. No anticipation of flow bottlenecks. Security queues overflow without warning.</p>
+                    <div class="problem-stat">
+                        <div class="number">50%</div>
+                        <div class="label">Trials miss enrollment targets</div>
+                    </div>
+                </div>
+
+                <div class="problem-card">
+                    <div class="problem-icon">😤</div>
+                    <h3>Broken Experience</h3>
+                    <p>No personalized journey management. Confusing wayfinding. Zero proactive communication during delays. Passengers left in the dark.</p>
+                    <div class="problem-stat">
+                        <div class="number">70%</div>
+                        <div class="label">Rate airports as stressful</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="solution" class="section">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-label">The Solution</div>
+                <h2 class="section-title">AI Agents for Every Operation</h2>
+                <p class="section-subtitle">
+                    A constellation of intelligent agents perceiving, reasoning, and acting across your entire airport—unified by a real-time digital twin.
+                </p>
+            </div>
+
+            <div class="platform-visual">
+                <div class="platform-layers">
+                    <div class="platform-layer">
+                        <div class="agent-box">
+                            <div class="icon">🚶</div>
+                            <div class="name">FlowMind</div>
+                            <div class="desc">Passenger Flow</div>
+                        </div>
+                        <div class="agent-box">
+                            <div class="icon">🛫</div>
+                            <div class="name">GateMind</div>
+                            <div class="desc">Gate Assignment</div>
+                        </div>
+                        <div class="agent-box">
+                            <div class="icon">🛠️</div>
+                            <div class="name">GroundMind</div>
+                            <div class="desc">Ground Ops</div>
+                        </div>
+                        <div class="agent-box">
+                            <div class="icon">👤</div>
+                            <div class="name">PaxMind</div>
+                            <div class="desc">Passenger Journey</div>
+                        </div>
+                    </div>
+                    <div class="layer-label">🧠 Real-Time Digital Twin — Every aircraft, passenger, bag, and worker with live state</div>
+                    <div class="layer-label">📡 Unified Sensor Fusion — Cameras • WiFi • BLE • RFID • Flight Data • Weather</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="agents" class="section section-dark">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-label">AI Agents</div>
+                <h2 class="section-title">Intelligence for Every Domain</h2>
+            </div>
+
+            <div class="agents-grid">
+                <div class="agent-card">
+                    <div class="agent-header">
+                        <div class="agent-icon">🛫</div>
+                        <div>
+                            <div class="agent-name">GateMind</div>
+                            <div class="agent-tagline">Dynamic Gate Intelligence</div>
+                        </div>
+                    </div>
+                    <p>
+                        Optimizes gate assignments in real-time based on arrival predictions, connection flows, turnaround requirements, and terminal capacity.
+                    </p>
+                    <ul class="impact-list">
+                        <li><span class="check">✓</span> 40% reduction in taxi time</li>
+                        <li><span class="check">✓</span> $2.5M saved/year in fuel per hub</li>
+                        <li><span class="check">✓</span> 22% better on-time departures</li>
+                    </ul>
+                </div>
+
+                <div class="agent-card">
+                    <div class="agent-header">
+                        <div class="agent-icon">🚶</div>
+                        <div>
+                            <div class="agent-name">FlowMind</div>
+                            <div class="agent-tagline">Predictive Passenger Flow</div>
+                        </div>
+                    </div>
+                    <p>
+                        Predicts density at every checkpoint, dynamically allocates security lanes, and sends personalized timing recommendations to smooth demand.
+                    </p>
+                    <ul class="impact-list">
+                        <li><span class="check">✓</span> 35% shorter security waits</li>
+                        <li><span class="check">✓</span> $4.2M more retail revenue</li>
+                        <li><span class="check">✓</span> 60% fewer missed flights</li>
+                    </ul>
+                </div>
+
+                <div class="agent-card">
+                    <div class="agent-header">
+                        <div class="agent-icon">🛠️</div>
+                        <div>
+                            <div class="agent-name">GroundMind</div>
+                            <div class="agent-tagline">Autonomous Ground Ops</div>
+                        </div>
+                    </div>
+                    <p>
+                        Orchestrates all turnaround activities—pushback, fueling, catering, cleaning, baggage—with unified timeline and dynamic resource allocation.
+                    </p>
+                    <ul class="impact-list">
+                        <li><span class="check">✓</span> 25% faster turnaround</li>
+                        <li><span class="check">✓</span> 40% fewer ground delays</li>
+                        <li><span class="check">✓</span> $8M saved/year per hub</li>
+                    </ul>
+                </div>
+
+                <div class="agent-card">
+                    <div class="agent-header">
+                        <div class="agent-icon">🌪️</div>
+                        <div>
+                            <div class="agent-name">DisruptionMind</div>
+                            <div class="agent-tagline">Autonomous IROPS</div>
+                        </div>
+                    </div>
+                    <p>
+                        When chaos strikes, this agent takes over—predicting impact, auto-rebooking thousands of passengers, and optimizing recovery across the network.
+                    </p>
+                    <ul class="impact-list">
+                        <li><span class="check">✓</span> 6x faster stabilization</li>
+                        <li><span class="check">✓</span> 97% auto-rebooked passengers</li>
+                        <li><span class="check">✓</span> 92% fewer complaints</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="disruption-demo">
+                <div class="disruption-header">
+                    <h3>⛈️ Thunderstorm Ground Stop Scenario</h3>
+                    <p>See what happens when DisruptionMind takes control</p>
+                </div>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Metric</th>
+                            <th>Without AirportOS</th>
+                            <th>With AirportOS</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Time to stabilize</td>
+                            <td class="old">4+ hours</td>
+                            <td class="new">45 minutes</td>
+                        </tr>
+                        <tr>
+                            <td>Manual rebooking required</td>
+                            <td class="old">8,000 pax</td>
+                            <td class="new">200 pax</td>
+                        </tr>
+                        <tr>
+                            <td>Cascading delays next day</td>
+                            <td class="old">150+ flights</td>
+                            <td class="new">12 flights</td>
+                        </tr>
+                        <tr>
+                            <td>Customer complaints</td>
+                            <td class="old">2,400</td>
+                            <td class="new">180</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <section class="section stats-section">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">$30B</div>
+                    <div class="stat-label">Total Addressable Market</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">12%</div>
+                    <div class="stat-label">Market CAGR</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">$100B</div>
+                    <div class="stat-label">Annual Industry Waste</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">10M</div>
+                    <div class="stat-label">Daily Passengers Impacted</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="market" class="section section-dark">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-label">Market Opportunity</div>
+                <h2 class="section-title">The $180B Airport Tech Market</h2>
+                <p class="section-subtitle">
+                    Legacy vendors are adding "AI features" to 30-year-old products. We're building AI-native from day one.
+                </p>
+            </div>
+
+            <div class="market-visual">
+                <div class="market-card">
+                    <h4>📊 Market Segments</h4>
+                    <div class="market-item">
+                        <span class="label">Airport IT & Software</span>
+                        <span class="value">$12B</span>
+                    </div>
+                    <div class="market-item">
+                        <span class="label">Ground Support Equipment</span>
+                        <span class="value">$8B</span>
+                    </div>
+                    <div class="market-item">
+                        <span class="label">Operations Management</span>
+                        <span class="value">$6B</span>
+                    </div>
+                    <div class="market-item">
+                        <span class="label">Passenger Experience</span>
+                        <span class="value">$4B</span>
+                    </div>
+                    <div class="market-item highlight">
+                        <span class="label">Total TAM</span>
+                        <span class="value">$30B</span>
+                    </div>
+                </div>
+
+                <div class="market-card">
+                    <h4>🚀 Why Now</h4>
+                    <div class="market-item">
+                        <span class="label">AI Inference Cost</span>
+                        <span class="value">↓ 10x since 2023</span>
+                    </div>
+                    <div class="market-item">
+                        <span class="label">Airport Tech Debt</span>
+                        <span class="value">30+ years</span>
+                    </div>
+                    <div class="market-item">
+                        <span class="label">Labor Cost Increase</span>
+                        <span class="value">+35% since 2019</span>
+                    </div>
+                    <div class="market-item">
+                        <span class="label">FAA Modernization</span>
+                        <span class="value">Mandated</span>
+                    </div>
+                </div>
+
+                <div class="market-card">
+                    <h4>💰 Revenue Model</h4>
+                    <div class="market-item">
+                        <span class="label">Tier 1 Hub License</span>
+                        <span class="value">$15-25M/yr</span>
+                    </div>
+                    <div class="market-item">
+                        <span class="label">Tier 2 Hub License</span>
+                        <span class="value">$8-15M/yr</span>
+                    </div>
+                    <div class="market-item">
+                        <span class="label">Performance Share</span>
+                        <span class="value">10-15%</span>
+                    </div>
+                    <div class="market-item">
+                        <span class="label">Gross Margin at Scale</span>
+                        <span class="value">82%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="cta-section">
+        <div class="cta-content">
+            <h2>Ready to Transform Your Airport?</h2>
+            <p>
+                Join the airports that are leaving chaos behind. Request a demo to see AirportOS in action.
+            </p>
+            <div class="cta-buttons">
+                <a href="mailto:founders@airportos.ai" class="btn btn-primary">
+                    Request Demo
+                    <span>→</span>
+                </a>
+                <a href="mailto:investors@airportos.ai" class="btn btn-outline">
+                    Investor Deck
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">
+                ✈️ AirportOS
+            </div>
+            <div class="footer-links">
+                <a href="#problem">Problem</a>
+                <a href="#solution">Solution</a>
+                <a href="#agents">AI Agents</a>
+                <a href="#market">Market</a>
+                <a href="mailto:founders@airportos.ai">Contact</a>
+            </div>
+            <div class="footer-copy">
+                © 2026 AirportOS. The Godfather 🎩
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Intersection Observer for animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-in');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.problem-card, .agent-card, .stat-card, .market-card').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Smooth scroll for nav links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Live counter animations
+        function animateCounter(element, target, suffix = '') {
+            let current = 0;
+            const increment = target / 50;
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    current = target;
+                    clearInterval(timer);
+                }
+                element.textContent = Math.round(current) + suffix;
+            }, 30);
+        }
+    </script>
+</body>
+</html>
