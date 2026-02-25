@@ -82,6 +82,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-02-24 | Morning | TrialOS — Autonomous Clinical Trials Intelligence | [Playbook](2026-02-24-morning.md) • [Landing](2026-02-24-morning-landing.html) • [PDF](2026-02-24-morning.pdf) |
 | 2026-02-24 | Afternoon | EdgeOS — The Intelligence Layer for Edge AI | [Playbook](2026-02-24-afternoon.md) • [Landing](2026-02-24-afternoon-landing.html) • [PDF](2026-02-24-afternoon.pdf) |
 | 2026-02-25 | Evening | AirportOS — Autonomous Airport Intelligence Platform | [Playbook](2026-02-25-evening.md) • [Landing](2026-02-25-evening-landing.html) • [PDF](2026-02-25-evening.pdf) |
+| 2026-02-25 | Morning | ChipOS — Autonomous Semiconductor Intelligence | [Playbook](2026-02-25-morning.md) • [Landing](2026-02-25-morning-landing.html) • [PDF](2026-02-25-morning.pdf) |
 <!-- New entries will be added above this line -->
 
 ---

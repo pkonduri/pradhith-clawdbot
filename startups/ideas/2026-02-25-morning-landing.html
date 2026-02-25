@@ -1,0 +1,1358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChipOS — Autonomous Semiconductor Intelligence</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --accent: #22d3ee;
+            --accent-green: #10b981;
+            --dark: #0f172a;
+            --darker: #020617;
+            --card: #1e293b;
+            --card-hover: #334155;
+            --text: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: #334155;
+            --gradient-1: linear-gradient(135deg, #6366f1 0%, #22d3ee 50%, #10b981 100%);
+            --gradient-2: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+            --glow: 0 0 60px rgba(99, 102, 241, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--darker);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(99, 102, 241, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .floating-chip {
+            position: fixed;
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(34, 211, 238, 0.05));
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 20px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .floating-chip:nth-child(1) {
+            top: 10%;
+            left: 5%;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .floating-chip:nth-child(2) {
+            top: 60%;
+            right: 10%;
+            animation: float 25s ease-in-out infinite reverse;
+            width: 150px;
+            height: 150px;
+        }
+
+        .floating-chip:nth-child(3) {
+            bottom: 20%;
+            left: 15%;
+            animation: float 18s ease-in-out infinite;
+            width: 100px;
+            height: 100px;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.5; }
+            50% { transform: translateY(-30px) rotate(5deg); opacity: 0.8; }
+        }
+
+        /* Circuit Pattern */
+        .circuit-lines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.3;
+        }
+
+        .circuit-line {
+            position: absolute;
+            background: var(--gradient-1);
+            opacity: 0.1;
+        }
+
+        .circuit-line:nth-child(1) {
+            width: 2px;
+            height: 200px;
+            left: 20%;
+            top: 30%;
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        .circuit-line:nth-child(2) {
+            width: 300px;
+            height: 2px;
+            left: 20%;
+            top: calc(30% + 200px);
+            animation: pulse 4s ease-in-out infinite 0.5s;
+        }
+
+        .circuit-line:nth-child(3) {
+            width: 2px;
+            height: 150px;
+            right: 25%;
+            top: 50%;
+            animation: pulse 4s ease-in-out infinite 1s;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.1; }
+            50% { opacity: 0.4; }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1.5rem 2rem;
+            background: rgba(2, 6, 23, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(99, 102, 241, 0.1);
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.75rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            -webkit-text-fill-color: white;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--text);
+        }
+
+        .cta-button {
+            background: var(--gradient-1);
+            color: white;
+            padding: 0.875rem 2rem;
+            border-radius: 10px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            box-shadow: var(--glow);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 80px rgba(99, 102, 241, 0.5);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 2rem 4rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-content {
+            max-width: 1000px;
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            padding: 0.5rem 1.25rem;
+            border-radius: 100px;
+            font-size: 0.9rem;
+            color: var(--accent);
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .hero-badge::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--accent-green);
+            border-radius: 50%;
+            animation: blink 2s ease-in-out infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        h1 {
+            font-size: clamp(3rem, 8vw, 5.5rem);
+            font-weight: 900;
+            line-height: 1.05;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.8s ease-out 0.1s backwards;
+        }
+
+        h1 span {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.35rem;
+            color: var(--text-muted);
+            max-width: 700px;
+            margin: 0 auto 3rem;
+            line-height: 1.7;
+            animation: fadeInUp 0.8s ease-out 0.2s backwards;
+        }
+
+        .hero-ctas {
+            display: flex;
+            gap: 1.25rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.8s ease-out 0.3s backwards;
+        }
+
+        .btn-primary {
+            background: var(--gradient-1);
+            color: white;
+            padding: 1.125rem 2.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-decoration: none;
+            transition: all 0.3s;
+            box-shadow: var(--glow);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 100px rgba(99, 102, 241, 0.6);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text);
+            padding: 1.125rem 2.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-decoration: none;
+            border: 2px solid var(--border);
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .btn-secondary:hover {
+            background: var(--card);
+            border-color: var(--primary);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            padding: 4rem 2rem;
+            background: linear-gradient(180deg, transparent, rgba(99, 102, 241, 0.05));
+            position: relative;
+            z-index: 1;
+        }
+
+        .stats-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            transition: all 0.3s;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: var(--glow);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        /* Problem Section */
+        .section {
+            padding: 8rem 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 5rem;
+        }
+
+        .section-tag {
+            display: inline-block;
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--primary);
+            padding: 0.5rem 1.25rem;
+            border-radius: 100px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(99, 102, 241, 0.2);
+        }
+
+        h2 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+        }
+
+        h2 span {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            line-height: 1.7;
+        }
+
+        /* Problem Cards */
+        .problems-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .problem-card {
+            background: var(--card);
+            border-radius: 20px;
+            padding: 2.5rem;
+            border: 1px solid var(--border);
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .problem-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient-1);
+            transform: scaleX(0);
+            transition: transform 0.4s;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--primary);
+            box-shadow: var(--glow);
+        }
+
+        .problem-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .problem-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .problem-card h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .problem-card p {
+            color: var(--text-muted);
+            line-height: 1.7;
+        }
+
+        .problem-stat {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.95rem;
+        }
+
+        .problem-stat span {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        /* Solution Section */
+        .solution-section {
+            background: var(--gradient-2);
+        }
+
+        .modules-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+        }
+
+        .module-card {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 3rem;
+            border: 1px solid var(--border);
+            transition: all 0.4s;
+            position: relative;
+        }
+
+        .module-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent);
+            box-shadow: 0 0 60px rgba(34, 211, 238, 0.3);
+        }
+
+        .module-number {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            font-size: 4rem;
+            font-weight: 900;
+            opacity: 0.1;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .module-icon {
+            width: 70px;
+            height: 70px;
+            background: var(--gradient-1);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--glow);
+        }
+
+        .module-card h3 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .module-card p {
+            color: var(--text-muted);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .module-features {
+            list-style: none;
+        }
+
+        .module-features li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .module-features li::before {
+            content: '→';
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        .module-value {
+            margin-top: 2rem;
+            padding: 1.25rem;
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: 12px;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .module-value strong {
+            color: var(--accent-green);
+            font-size: 1.1rem;
+        }
+
+        /* Architecture Section */
+        .architecture-section {
+            background: linear-gradient(180deg, var(--darker), #0c1222);
+        }
+
+        .architecture-visual {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: var(--card);
+            border-radius: 24px;
+            padding: 3rem;
+            border: 1px solid var(--border);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .arch-layer {
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-radius: 12px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .arch-layer:hover {
+            transform: scale(1.02);
+        }
+
+        .arch-layer.intelligence {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(34, 211, 238, 0.2));
+            border: 1px solid rgba(99, 102, 241, 0.4);
+        }
+
+        .arch-layer.reasoning {
+            background: rgba(34, 211, 238, 0.1);
+            border: 1px solid rgba(34, 211, 238, 0.3);
+        }
+
+        .arch-layer.data {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .arch-layer.infra {
+            background: rgba(148, 163, 184, 0.1);
+            border: 1px solid rgba(148, 163, 184, 0.3);
+        }
+
+        .arch-layer h4 {
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .arch-modules {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .arch-module {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+        }
+
+        /* Market Section */
+        .market-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .market-chart {
+            background: var(--card);
+            border-radius: 24px;
+            padding: 3rem;
+            border: 1px solid var(--border);
+        }
+
+        .market-bar {
+            margin-bottom: 2rem;
+        }
+
+        .market-bar-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+        }
+
+        .market-bar-label {
+            font-weight: 600;
+        }
+
+        .market-bar-value {
+            color: var(--accent);
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+        }
+
+        .market-bar-track {
+            height: 12px;
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .market-bar-fill {
+            height: 100%;
+            background: var(--gradient-1);
+            border-radius: 6px;
+            transition: width 1s ease-out;
+        }
+
+        .market-content h3 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        .market-points {
+            list-style: none;
+        }
+
+        .market-points li {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1.25rem;
+            font-size: 1.05rem;
+            color: var(--text-muted);
+        }
+
+        .market-points li strong {
+            color: var(--text);
+        }
+
+        .market-icon {
+            width: 32px;
+            height: 32px;
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        /* Traction Section */
+        .traction-section {
+            background: var(--gradient-2);
+        }
+
+        .traction-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 2rem;
+        }
+
+        .traction-item {
+            text-align: center;
+            padding: 2.5rem 1.5rem;
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            transition: all 0.3s;
+        }
+
+        .traction-item:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+        }
+
+        .traction-year {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+        }
+
+        .traction-value {
+            font-size: 2.25rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .traction-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 10rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.15), transparent 70%);
+            pointer-events: none;
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cta-content h2 {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-content p {
+            font-size: 1.3rem;
+            color: var(--text-muted);
+            margin-bottom: 3rem;
+            line-height: 1.7;
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 2rem;
+            background: rgba(15, 23, 42, 0.8);
+            border-top: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .footer-tagline {
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--text);
+        }
+
+        .footer-credit {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .market-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .traction-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .modules-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .traction-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .hero-ctas {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .traction-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background Elements -->
+    <div class="bg-grid"></div>
+    <div class="floating-chip"></div>
+    <div class="floating-chip"></div>
+    <div class="floating-chip"></div>
+    <div class="circuit-lines">
+        <div class="circuit-line"></div>
+        <div class="circuit-line"></div>
+        <div class="circuit-line"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-content">
+            <div class="logo">
+                <div class="logo-icon">⚡</div>
+                ChipOS
+            </div>
+            <ul class="nav-links">
+                <li><a href="#problem">Problem</a></li>
+                <li><a href="#solution">Solution</a></li>
+                <li><a href="#market">Market</a></li>
+                <li><a href="#traction">Traction</a></li>
+            </ul>
+            <a href="mailto:founders@chipos.ai" class="cta-button">Request Demo</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                Launching 2026 • Backed by Leading VCs
+            </div>
+            <h1>The AI Brain for <span>Semiconductor Manufacturing</span></h1>
+            <p class="hero-subtitle">
+                ChipOS is the autonomous intelligence platform that optimizes every aspect of chip manufacturing—from yield prediction to supply chain orchestration. The $600B semiconductor industry runs on 1990s software. We're changing that.
+            </p>
+            <div class="hero-ctas">
+                <a href="mailto:founders@chipos.ai" class="btn-primary">
+                    <span>Get Early Access</span>
+                    <span>→</span>
+                </a>
+                <a href="#solution" class="btn-secondary">
+                    <span>See How It Works</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Bar -->
+    <section class="stats-bar">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-number">$600B</div>
+                <div class="stat-label">Global Semiconductor Market</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">$280B+</div>
+                <div class="stat-label">New Fab Investments</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">100+</div>
+                <div class="stat-label">Fabs Under Construction</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">1%</div>
+                <div class="stat-label">Yield = $100M+ Value</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="section" id="problem">
+        <div class="section-header">
+            <span class="section-tag">The Problem</span>
+            <h2>Chip Manufacturing is <span>Drowning in Complexity</span></h2>
+            <p class="section-subtitle">
+                Modern chips have 100 billion transistors. Manufacturing them requires 2,000+ process steps. Human-scale optimization can't keep up.
+            </p>
+        </div>
+        <div class="problems-grid">
+            <div class="problem-card">
+                <div class="problem-icon">📉</div>
+                <h3>The Yield Nightmare</h3>
+                <p>A single fab runs thousands of simultaneous experiments. Correlating defects to root causes takes weeks. Every day of delay costs millions.</p>
+                <div class="problem-stat">
+                    Impact: <span>$100-500M/year</span> per 1% yield loss
+                </div>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">⚙️</div>
+                <h3>Operations Chaos</h3>
+                <p>Scheduling 1,000+ tools with complex constraints is NP-hard. Humans capture 60% of theoretical efficiency. The rest? Lost revenue.</p>
+                <div class="problem-stat">
+                    Downtime cost: <span>$500K-2M/hour</span>
+                </div>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">🌐</div>
+                <h3>Supply Chain Blindness</h3>
+                <p>10,000+ suppliers. No visibility past tier 1. When Taiwan hiccups, entire industries grind to a halt. Prediction is impossible.</p>
+                <div class="problem-stat">
+                    Lead times: <span>3-6 months</span> for critical materials
+                </div>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">👷</div>
+                <h3>The Talent Exodus</h3>
+                <p>Average age of senior fab engineers: 55. TSMC Arizona delayed due to workforce gaps. Tribal knowledge walks out the door daily.</p>
+                <div class="problem-stat">
+                    Global shortage: <span>50,000+</span> engineers
+                </div>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">⚡</div>
+                <h3>Sustainability Pressure</h3>
+                <p>A single fab consumes 100+ MW and 10M gallons of water daily. ESG mandates are coming. Most fabs can't even measure their footprint.</p>
+                <div class="problem-stat">
+                    Energy: <span>100+ MW</span> per fab
+                </div>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">🏛️</div>
+                <h3>Legacy Tech Debt</h3>
+                <p>Billion-dollar fabs run on software from the 1990s. Integration hell. Data silos. No AI readiness. Competitors are pulling ahead.</p>
+                <div class="problem-stat">
+                    Average software age: <span>20+ years</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="section solution-section" id="solution">
+        <div class="section-header">
+            <span class="section-tag">The Solution</span>
+            <h2>Meet <span>ChipOS</span></h2>
+            <p class="section-subtitle">
+                An autonomous intelligence layer that unifies fab operations, predicts problems before they happen, and optimizes at superhuman scale.
+            </p>
+        </div>
+        <div class="modules-grid">
+            <div class="module-card">
+                <span class="module-number">01</span>
+                <div class="module-icon">🎯</div>
+                <h3>YieldMind</h3>
+                <p>Autonomous yield intelligence that identifies root causes in minutes—not weeks—and prescribes fixes automatically.</p>
+                <ul class="module-features">
+                    <li>Real-time defect correlation across millions of data points</li>
+                    <li>AI-generated recipe adjustments for yield optimization</li>
+                    <li>Predictive modeling before wafers complete processing</li>
+                    <li>99%+ accuracy defect classification</li>
+                </ul>
+                <div class="module-value">
+                    <strong>2-5% yield improvement = $200-500M annual impact per fab</strong>
+                </div>
+            </div>
+            <div class="module-card">
+                <span class="module-number">02</span>
+                <div class="module-icon">🔄</div>
+                <h3>FabFlow</h3>
+                <p>Dynamic production intelligence that schedules, predicts, and optimizes—turning your fab into an autonomous machine.</p>
+                <ul class="module-features">
+                    <li>Real-time scheduling optimization across 1,000+ tools</li>
+                    <li>Predictive maintenance 72+ hours before failures</li>
+                    <li>Digital twin for scenario simulation</li>
+                    <li>Capacity maximization with cycle time balance</li>
+                </ul>
+                <div class="module-value">
+                    <strong>15-20% throughput improvement, 40% downtime reduction</strong>
+                </div>
+            </div>
+            <div class="module-card">
+                <span class="module-number">03</span>
+                <div class="module-icon">🌍</div>
+                <h3>SupplyGraph</h3>
+                <p>Multi-tier supply chain visibility with AI-powered risk intelligence. See problems before they become crises.</p>
+                <ul class="module-features">
+                    <li>Real-time mapping of entire supplier network</li>
+                    <li>Geopolitical and supplier risk scoring</li>
+                    <li>Demand sensing before POs arrive</li>
+                    <li>Intelligent inventory optimization</li>
+                </ul>
+                <div class="module-value">
+                    <strong>25% supply chain cost reduction, 10x faster risk response</strong>
+                </div>
+            </div>
+            <div class="module-card">
+                <span class="module-number">04</span>
+                <div class="module-icon">🧠</div>
+                <h3>TalentOS</h3>
+                <p>Capture tribal knowledge before it walks out the door. Upskill your workforce 3x faster with AI-powered training.</p>
+                <ul class="module-features">
+                    <li>AI skills mapping and knowledge capture</li>
+                    <li>Personalized learning paths for each engineer</li>
+                    <li>Workforce planning 18+ months ahead</li>
+                    <li>Convert expert intuition to automated systems</li>
+                </ul>
+                <div class="module-value">
+                    <strong>50% faster onboarding, 80% reduction in knowledge loss</strong>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Architecture Section -->
+    <section class="section architecture-section">
+        <div class="section-header">
+            <span class="section-tag">Technology</span>
+            <h2>Built for <span>Semiconductor Scale</span></h2>
+            <p class="section-subtitle">
+                AI-native architecture with federated learning to protect your IP while unlocking network effects across the industry.
+            </p>
+        </div>
+        <div class="architecture-visual">
+            <div class="arch-layer intelligence">
+                <h4>ChipOS Intelligence Layer</h4>
+                <div class="arch-modules">
+                    <span class="arch-module">YieldMind</span>
+                    <span class="arch-module">FabFlow</span>
+                    <span class="arch-module">SupplyGraph</span>
+                    <span class="arch-module">TalentOS</span>
+                    <span class="arch-module">SustainMind</span>
+                </div>
+            </div>
+            <div class="arch-layer reasoning">
+                <h4>Reasoning & Orchestration</h4>
+                <div class="arch-modules">
+                    <span class="arch-module">Multi-Agent Coordination</span>
+                    <span class="arch-module">Causal Inference</span>
+                    <span class="arch-module">Reinforcement Learning</span>
+                    <span class="arch-module">Digital Twin Engine</span>
+                </div>
+            </div>
+            <div class="arch-layer data">
+                <h4>Unified Data Platform</h4>
+                <div class="arch-modules">
+                    <span class="arch-module">Semiconductor Data Lake</span>
+                    <span class="arch-module">Real-Time Streaming</span>
+                    <span class="arch-module">Equipment Integration</span>
+                    <span class="arch-module">ERP/MES Connectors</span>
+                </div>
+            </div>
+            <div class="arch-layer infra">
+                <h4>Secure Infrastructure</h4>
+                <div class="arch-modules">
+                    <span class="arch-module">On-Prem / Private Cloud</span>
+                    <span class="arch-module">Zero Trust Security</span>
+                    <span class="arch-module">Federated Learning</span>
+                    <span class="arch-module">Audit & Compliance</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Market Section -->
+    <section class="section" id="market">
+        <div class="section-header">
+            <span class="section-tag">Market Opportunity</span>
+            <h2>The Perfect <span>Timing</span></h2>
+            <p class="section-subtitle">
+                $280B+ in fab investments. 100+ new fabs under construction. The semiconductor industry is transforming—and needs AI to keep up.
+            </p>
+        </div>
+        <div class="market-grid">
+            <div class="market-chart">
+                <div class="market-bar">
+                    <div class="market-bar-header">
+                        <span class="market-bar-label">Fab Operations Software</span>
+                        <span class="market-bar-value">$12B</span>
+                    </div>
+                    <div class="market-bar-track">
+                        <div class="market-bar-fill" style="width: 100%"></div>
+                    </div>
+                </div>
+                <div class="market-bar">
+                    <div class="market-bar-header">
+                        <span class="market-bar-label">Supply Chain Intelligence</span>
+                        <span class="market-bar-value">$8B</span>
+                    </div>
+                    <div class="market-bar-track">
+                        <div class="market-bar-fill" style="width: 67%"></div>
+                    </div>
+                </div>
+                <div class="market-bar">
+                    <div class="market-bar-header">
+                        <span class="market-bar-label">Yield Management Systems</span>
+                        <span class="market-bar-value">$4B</span>
+                    </div>
+                    <div class="market-bar-track">
+                        <div class="market-bar-fill" style="width: 33%"></div>
+                    </div>
+                </div>
+                <div class="market-bar">
+                    <div class="market-bar-header">
+                        <span class="market-bar-label">Workforce Intelligence</span>
+                        <span class="market-bar-value">$2B</span>
+                    </div>
+                    <div class="market-bar-track">
+                        <div class="market-bar-fill" style="width: 17%"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="market-content">
+                <h3>Why Now?</h3>
+                <ul class="market-points">
+                    <li>
+                        <span class="market-icon">🏛️</span>
+                        <span><strong>CHIPS Act Catalyst:</strong> $52B in US subsidies driving unprecedented fab construction and modernization</span>
+                    </li>
+                    <li>
+                        <span class="market-icon">🤖</span>
+                        <span><strong>AI Compute Explosion:</strong> GPU demand creating capacity crisis—every hyperscaler building custom chips</span>
+                    </li>
+                    <li>
+                        <span class="market-icon">🌐</span>
+                        <span><strong>Geopolitical Reshoring:</strong> Companies diversifying from Taiwan concentration to US, Europe, India</span>
+                    </li>
+                    <li>
+                        <span class="market-icon">👨‍🔬</span>
+                        <span><strong>Talent Crisis:</strong> Not enough experienced engineers globally—AI augmentation is the only path forward</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Traction Section -->
+    <section class="section traction-section" id="traction">
+        <div class="section-header">
+            <span class="section-tag">Financial Projections</span>
+            <h2>Path to <span>$850M ARR</span></h2>
+            <p class="section-subtitle">
+                Land and expand with design partners, then scale aggressively as new fabs come online.
+            </p>
+        </div>
+        <div class="traction-grid">
+            <div class="traction-item">
+                <div class="traction-year">Year 1</div>
+                <div class="traction-value">$10M</div>
+                <div class="traction-label">ARR • 3 Customers</div>
+            </div>
+            <div class="traction-item">
+                <div class="traction-year">Year 2</div>
+                <div class="traction-value">$45M</div>
+                <div class="traction-label">ARR • 10 Customers</div>
+            </div>
+            <div class="traction-item">
+                <div class="traction-year">Year 3</div>
+                <div class="traction-value">$150M</div>
+                <div class="traction-label">ARR • 25 Customers</div>
+            </div>
+            <div class="traction-item">
+                <div class="traction-year">Year 4</div>
+                <div class="traction-value">$400M</div>
+                <div class="traction-label">ARR • 50 Customers</div>
+            </div>
+            <div class="traction-item">
+                <div class="traction-year">Year 5</div>
+                <div class="traction-value">$850M</div>
+                <div class="traction-label">ARR • 85 Customers</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="cta-content">
+            <h2>The Future of Chips is <span>Autonomous</span></h2>
+            <p>
+                The $280B fab investment wave has begun. The winners will be those with the intelligence to run them. Join us in building the operating system for the AI age of semiconductors.
+            </p>
+            <div class="hero-ctas">
+                <a href="mailto:founders@chipos.ai" class="btn-primary">
+                    <span>Request Early Access</span>
+                    <span>→</span>
+                </a>
+                <a href="2026-02-25-morning.pdf" class="btn-secondary">
+                    <span>Download Full Strategy</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">ChipOS</div>
+            <p class="footer-tagline">Autonomous Semiconductor Intelligence</p>
+            <div class="footer-links">
+                <a href="mailto:founders@chipos.ai">Contact</a>
+                <a href="2026-02-25-morning.pdf">Full Strategy PDF</a>
+                <a href="#">LinkedIn</a>
+            </div>
+            <p class="footer-credit">
+                Generated by The Godfather 🎩 • February 25, 2026 Morning Drop<br>
+                Building billion-dollar ideas, one day at a time.
+            </p>
+        </div>
+    </footer>
+</body>
+</html>
