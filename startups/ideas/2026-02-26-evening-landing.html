@@ -1,0 +1,1355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VetOS — The AI Operating System for Veterinary Care</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #10B981;
+            --primary-dark: #059669;
+            --primary-light: #34D399;
+            --secondary: #6366F1;
+            --accent: #F59E0B;
+            --dark: #0F172A;
+            --darker: #020617;
+            --light: #F8FAFC;
+            --muted: #94A3B8;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.08);
+            --glow-primary: rgba(16, 185, 129, 0.4);
+            --glow-secondary: rgba(99, 102, 241, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--darker);
+            color: var(--light);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(ellipse 80% 50% at 20% 40%, var(--glow-primary), transparent 60%),
+                radial-gradient(ellipse 60% 40% at 80% 70%, var(--glow-secondary), transparent 50%),
+                radial-gradient(ellipse 50% 30% at 50% 20%, rgba(245, 158, 11, 0.15), transparent 40%);
+            animation: bgPulse 20s ease-in-out infinite;
+        }
+
+        @keyframes bgPulse {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(-5%, 5%) scale(1.05); }
+            50% { transform: translate(5%, -5%) scale(1); }
+            75% { transform: translate(-3%, -3%) scale(1.03); }
+        }
+
+        /* Floating Paw Particles */
+        .paw-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .paw {
+            position: absolute;
+            font-size: 20px;
+            opacity: 0.1;
+            animation: floatPaw 25s linear infinite;
+        }
+
+        @keyframes floatPaw {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.1; }
+            90% { opacity: 0.1; }
+            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 1.5rem 3rem;
+            background: rgba(2, 6, 23, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+
+        nav.scrolled {
+            padding: 1rem 3rem;
+            background: rgba(2, 6, 23, 0.95);
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 800;
+            font-size: 1.75rem;
+            text-decoration: none;
+            color: var(--light);
+        }
+
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 20px var(--glow-primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--muted);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--light);
+        }
+
+        .btn {
+            padding: 0.85rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            box-shadow: 0 4px 25px var(--glow-primary);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 35px var(--glow-primary);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--light);
+            border: 1px solid var(--border);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--primary);
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            z-index: 2;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 8rem 3rem 6rem;
+        }
+
+        .hero-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6rem;
+            align-items: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 100px;
+            font-size: 0.85rem;
+            color: var(--primary-light);
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-badge::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        .hero h1 {
+            font-size: 4.5rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--light) 0%, var(--primary-light) 50%, var(--light) 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer 5s linear infinite;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: 200% center; }
+            100% { background-position: -200% center; }
+        }
+
+        .hero p {
+            font-size: 1.35rem;
+            color: var(--muted);
+            margin-bottom: 2.5rem;
+            max-width: 520px;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 3rem;
+        }
+
+        .stat {
+            text-align: left;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--muted);
+        }
+
+        /* Hero Visual */
+        .hero-visual {
+            position: relative;
+        }
+
+        .hero-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.4);
+            transform: perspective(1000px) rotateY(-5deg) rotateX(5deg);
+            transition: transform 0.5s ease;
+        }
+
+        .hero-card:hover {
+            transform: perspective(1000px) rotateY(0deg) rotateX(0deg);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .card-title {
+            font-size: 0.9rem;
+            color: var(--muted);
+        }
+
+        .health-score {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            padding: 0.5rem 1rem;
+            border-radius: 100px;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .pet-profile {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 16px;
+            margin-bottom: 1.5rem;
+        }
+
+        .pet-avatar {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #FEF3C7, #FBBF24);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+        }
+
+        .pet-info h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .pet-info p {
+            font-size: 0.9rem;
+            color: var(--muted);
+        }
+
+        .ai-insights {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .insight {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(16, 185, 129, 0.05);
+            border: 1px solid rgba(16, 185, 129, 0.1);
+            border-radius: 12px;
+        }
+
+        .insight-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .insight-text {
+            flex: 1;
+        }
+
+        .insight-text strong {
+            display: block;
+            font-size: 0.9rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .insight-text span {
+            font-size: 0.8rem;
+            color: var(--muted);
+        }
+
+        /* Problem Section */
+        .section {
+            position: relative;
+            z-index: 2;
+            padding: 8rem 3rem;
+        }
+
+        .section-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 5rem;
+        }
+
+        .section-label {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 100px;
+            font-size: 0.85rem;
+            color: var(--secondary);
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .section-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-desc {
+            font-size: 1.2rem;
+            color: var(--muted);
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        /* Problem Stats */
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+
+        .problem-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            text-align: center;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .problem-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), #EF4444);
+        }
+
+        .problem-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+            box-shadow: 0 20px 50px rgba(245, 158, 11, 0.15);
+        }
+
+        .problem-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .problem-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .problem-label {
+            font-size: 1rem;
+            color: var(--muted);
+        }
+
+        /* Solution Section */
+        .solution-section {
+            background: linear-gradient(180deg, transparent, rgba(16, 185, 129, 0.03), transparent);
+        }
+
+        .solution-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .solution-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 3rem;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .solution-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), transparent);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .solution-card:hover::before {
+            opacity: 1;
+        }
+
+        .solution-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(16, 185, 129, 0.3);
+            box-shadow: 0 25px 60px rgba(16, 185, 129, 0.15);
+        }
+
+        .solution-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 10px 30px var(--glow-primary);
+        }
+
+        .solution-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .solution-card p {
+            color: var(--muted);
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .solution-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .feature-tag {
+            padding: 0.4rem 0.8rem;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 8px;
+            font-size: 0.8rem;
+            color: var(--primary-light);
+        }
+
+        /* Market Section */
+        .market-visual {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .market-bars {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .market-bar-item {
+            position: relative;
+        }
+
+        .market-bar-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+        }
+
+        .market-bar-label span:first-child {
+            font-weight: 600;
+        }
+
+        .market-bar-label span:last-child {
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .market-bar {
+            height: 24px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .market-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 12px;
+            animation: fillBar 2s ease-out forwards;
+            transform-origin: left;
+        }
+
+        @keyframes fillBar {
+            from { transform: scaleX(0); }
+            to { transform: scaleX(1); }
+        }
+
+        .market-highlights {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .market-highlight {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .market-highlight-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--secondary), #8B5CF6);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .market-highlight h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .market-highlight p {
+            font-size: 0.9rem;
+            color: var(--muted);
+        }
+
+        /* Revenue Model */
+        .revenue-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .revenue-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            text-align: center;
+            transition: all 0.4s ease;
+        }
+
+        .revenue-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--secondary);
+            box-shadow: 0 20px 50px rgba(99, 102, 241, 0.15);
+        }
+
+        .revenue-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--secondary), #8B5CF6);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin: 0 auto 1.5rem;
+        }
+
+        .revenue-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .revenue-price {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .revenue-card p {
+            font-size: 0.9rem;
+            color: var(--muted);
+        }
+
+        /* Traction Section */
+        .traction-section {
+            background: linear-gradient(180deg, transparent, rgba(99, 102, 241, 0.03), transparent);
+        }
+
+        .traction-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 2rem;
+        }
+
+        .traction-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .traction-year {
+            font-size: 0.85rem;
+            color: var(--muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .traction-value {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .traction-label {
+            font-size: 0.85rem;
+            color: var(--muted);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 10rem 3rem;
+        }
+
+        .cta-box {
+            max-width: 900px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(99, 102, 241, 0.15));
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 32px;
+            padding: 5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-box::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, rgba(16, 185, 129, 0.1), transparent 50%);
+            animation: rotateBg 20s linear infinite;
+        }
+
+        @keyframes rotateBg {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-icon {
+            font-size: 4rem;
+            margin-bottom: 2rem;
+        }
+
+        .cta-box h2 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .cta-box p {
+            font-size: 1.2rem;
+            color: var(--muted);
+            margin-bottom: 2.5rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .btn-large {
+            padding: 1.25rem 3rem;
+            font-size: 1.1rem;
+        }
+
+        /* Footer */
+        footer {
+            position: relative;
+            z-index: 2;
+            padding: 4rem 3rem;
+            border-top: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-tagline {
+            color: var(--muted);
+            font-size: 1rem;
+            font-style: italic;
+            margin-bottom: 2rem;
+        }
+
+        .footer-meta {
+            font-size: 0.85rem;
+            color: var(--muted);
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .hero h1 { font-size: 3.5rem; }
+            .section-title { font-size: 2.75rem; }
+        }
+
+        @media (max-width: 1024px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                gap: 4rem;
+            }
+            .hero-visual {
+                order: -1;
+            }
+            .hero-card {
+                transform: none;
+            }
+            .problem-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .market-visual {
+                grid-template-columns: 1fr;
+            }
+            .traction-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem 1.5rem;
+            }
+            .nav-links {
+                display: none;
+            }
+            .hero {
+                padding: 7rem 1.5rem 4rem;
+            }
+            .hero h1 { font-size: 2.5rem; }
+            .hero p { font-size: 1.1rem; }
+            .hero-cta {
+                flex-direction: column;
+            }
+            .hero-stats {
+                gap: 2rem;
+            }
+            .section {
+                padding: 5rem 1.5rem;
+            }
+            .section-title { font-size: 2rem; }
+            .problem-grid, .solution-grid, .revenue-grid {
+                grid-template-columns: 1fr;
+            }
+            .traction-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .cta-box {
+                padding: 3rem 2rem;
+            }
+            .cta-box h2 { font-size: 2rem; }
+            .cta-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Animation -->
+    <div class="bg-animation"></div>
+
+    <!-- Floating Paws -->
+    <div class="paw-particles" id="pawParticles"></div>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-content">
+            <a href="#" class="logo">
+                <div class="logo-icon">🐾</div>
+                VetOS
+            </a>
+            <div class="nav-links">
+                <a href="#problem">Problem</a>
+                <a href="#solution">Solution</a>
+                <a href="#market">Market</a>
+                <a href="#model">Model</a>
+                <a href="#" class="btn btn-primary">Get Early Access</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <div class="hero-badge">Launching 2026 — Join the Waitlist</div>
+                <h1>The AI Operating System for Veterinary Care</h1>
+                <p>VetOS transforms how animal healthcare is delivered — AI diagnostics, predictive health, and practice automation that helps vets save more lives.</p>
+                <div class="hero-cta">
+                    <a href="#" class="btn btn-primary btn-large">Request Demo →</a>
+                    <a href="#solution" class="btn btn-outline btn-large">Learn More</a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <div class="stat-value">$350B+</div>
+                        <div class="stat-label">Pet Health Market</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">20,000+</div>
+                        <div class="stat-label">Vet Shortage (US)</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">1.5B</div>
+                        <div class="stat-label">Pets Worldwide</div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="hero-card">
+                    <div class="card-header">
+                        <span class="card-title">VetOS Patient Dashboard</span>
+                        <span class="health-score">HealthScore™ 94</span>
+                    </div>
+                    <div class="pet-profile">
+                        <div class="pet-avatar">🐕</div>
+                        <div class="pet-info">
+                            <h3>Max • Golden Retriever</h3>
+                            <p>5 years old • 68 lbs • Last visit: 3 days ago</p>
+                        </div>
+                    </div>
+                    <div class="ai-insights">
+                        <div class="insight">
+                            <div class="insight-icon">🔬</div>
+                            <div class="insight-text">
+                                <strong>Bloodwork Analysis Complete</strong>
+                                <span>All markers normal. Liver function improved 12%.</span>
+                            </div>
+                        </div>
+                        <div class="insight">
+                            <div class="insight-icon">⚡</div>
+                            <div class="insight-text">
+                                <strong>Early Detection Alert</strong>
+                                <span>Activity pattern suggests joint monitoring recommended.</span>
+                            </div>
+                        </div>
+                        <div class="insight">
+                            <div class="insight-icon">💊</div>
+                            <div class="insight-text">
+                                <strong>Prescription Reminder</strong>
+                                <span>Heartworm prevention due in 5 days. Auto-refill enabled.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="section" id="problem">
+        <div class="section-inner">
+            <div class="section-header">
+                <div class="section-label">The Crisis</div>
+                <h2 class="section-title">Veterinary Care is Broken</h2>
+                <p class="section-desc">A perfect storm of workforce shortage, outdated technology, and rising demand is leaving pets underserved and vets burned out.</p>
+            </div>
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="problem-icon">👩‍⚕️</div>
+                    <div class="problem-value">20K+</div>
+                    <div class="problem-label">Veterinarian Shortage in US</div>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">😓</div>
+                    <div class="problem-value">50%</div>
+                    <div class="problem-label">Vets Report Burnout</div>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">⏰</div>
+                    <div class="problem-value">60%</div>
+                    <div class="problem-label">Issues Detected Too Late</div>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">💸</div>
+                    <div class="problem-value">$180K</div>
+                    <div class="problem-label">Average Vet School Debt</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="section solution-section" id="solution">
+        <div class="section-inner">
+            <div class="section-header">
+                <div class="section-label">The Solution</div>
+                <h2 class="section-title">Intelligence for Every Paw</h2>
+                <p class="section-desc">A complete AI stack that empowers veterinarians, delights pet parents, and saves animal lives.</p>
+            </div>
+            <div class="solution-grid">
+                <div class="solution-card">
+                    <div class="solution-icon">🔬</div>
+                    <h3>Diagnostic AI Engine</h3>
+                    <p>Upload photos, lab results, or X-rays — get instant specialist-level analysis powered by AI trained on millions of veterinary cases.</p>
+                    <div class="solution-features">
+                        <span class="feature-tag">Visual Diagnostics</span>
+                        <span class="feature-tag">Lab Interpretation</span>
+                        <span class="feature-tag">Radiology AI</span>
+                    </div>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon">🎯</div>
+                    <h3>Predictive Health Intelligence</h3>
+                    <p>Continuous monitoring and AI analysis that predicts health issues 6-12 months before symptoms appear. Prevention over reaction.</p>
+                    <div class="solution-features">
+                        <span class="feature-tag">HealthScore™</span>
+                        <span class="feature-tag">Early Warning</span>
+                        <span class="feature-tag">Breed Insights</span>
+                    </div>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon">⚙️</div>
+                    <h3>Practice Automation</h3>
+                    <p>Smart scheduling, auto-generated notes, inventory intelligence, and revenue optimization — so vets can focus on medicine, not paperwork.</p>
+                    <div class="solution-features">
+                        <span class="feature-tag">Smart Scheduling</span>
+                        <span class="feature-tag">Auto Documentation</span>
+                        <span class="feature-tag">Inventory AI</span>
+                    </div>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon">📱</div>
+                    <h3>Pet Parent Platform</h3>
+                    <p>24/7 AI triage, care reminders, transparent pricing, and telemedicine access — peace of mind for pet owners around the clock.</p>
+                    <div class="solution-features">
+                        <span class="feature-tag">VetChat 24/7</span>
+                        <span class="feature-tag">Care App</span>
+                        <span class="feature-tag">Telemedicine</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Market Section -->
+    <section class="section" id="market">
+        <div class="section-inner">
+            <div class="section-header">
+                <div class="section-label">The Opportunity</div>
+                <h2 class="section-title">$350 Billion Market. Zero Dominant Platform.</h2>
+                <p class="section-desc">Pet humanization, telemedicine adoption, and AI breakthroughs create a once-in-a-generation opportunity.</p>
+            </div>
+            <div class="market-visual">
+                <div class="market-bars">
+                    <div class="market-bar-item">
+                        <div class="market-bar-label">
+                            <span>Total Addressable Market (TAM)</span>
+                            <span>$350B</span>
+                        </div>
+                        <div class="market-bar">
+                            <div class="market-bar-fill" style="width: 100%;"></div>
+                        </div>
+                    </div>
+                    <div class="market-bar-item">
+                        <div class="market-bar-label">
+                            <span>Serviceable Market (SAM)</span>
+                            <span>$85B</span>
+                        </div>
+                        <div class="market-bar">
+                            <div class="market-bar-fill" style="width: 45%;"></div>
+                        </div>
+                    </div>
+                    <div class="market-bar-item">
+                        <div class="market-bar-label">
+                            <span>Target Market (SOM)</span>
+                            <span>$15B</span>
+                        </div>
+                        <div class="market-bar">
+                            <div class="market-bar-fill" style="width: 18%;"></div>
+                        </div>
+                    </div>
+                    <div class="market-bar-item">
+                        <div class="market-bar-label">
+                            <span>Year 5 Revenue Target</span>
+                            <span>$400M ARR</span>
+                        </div>
+                        <div class="market-bar">
+                            <div class="market-bar-fill" style="width: 8%; background: linear-gradient(90deg, #F59E0B, #EF4444);"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="market-highlights">
+                    <div class="market-highlight">
+                        <div class="market-highlight-icon">🐕</div>
+                        <div>
+                            <h4>70% of US Households Own Pets</h4>
+                            <p>Pet humanization trend accelerating post-pandemic</p>
+                        </div>
+                    </div>
+                    <div class="market-highlight">
+                        <div class="market-highlight-icon">📈</div>
+                        <div>
+                            <h4>8% Annual Spending Growth</h4>
+                            <p>Pet healthcare outpacing human healthcare growth</p>
+                        </div>
+                    </div>
+                    <div class="market-highlight">
+                        <div class="market-highlight-icon">🏥</div>
+                        <div>
+                            <h4>32,000+ US Vet Clinics</h4>
+                            <p>Fragmented market ripe for platform consolidation</p>
+                        </div>
+                    </div>
+                    <div class="market-highlight">
+                        <div class="market-highlight-icon">🤖</div>
+                        <div>
+                            <h4>AI Accuracy Inflection Point</h4>
+                            <p>Vision models now match specialist diagnostics</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Revenue Model -->
+    <section class="section" id="model">
+        <div class="section-inner">
+            <div class="section-header">
+                <div class="section-label">Business Model</div>
+                <h2 class="section-title">Multi-Sided Platform Revenue</h2>
+                <p class="section-desc">Diversified revenue streams across clinics, consumers, and ecosystem partners.</p>
+            </div>
+            <div class="revenue-grid">
+                <div class="revenue-card">
+                    <div class="revenue-icon">🏥</div>
+                    <h3>Clinic SaaS</h3>
+                    <div class="revenue-price">$300-800/vet/mo</div>
+                    <p>Full practice management suite with AI diagnostics included</p>
+                </div>
+                <div class="revenue-card">
+                    <div class="revenue-icon">🔬</div>
+                    <h3>Diagnostic AI</h3>
+                    <div class="revenue-price">$3-25/analysis</div>
+                    <p>Pay-per-use diagnostic interpretations for clinics</p>
+                </div>
+                <div class="revenue-card">
+                    <div class="revenue-icon">📱</div>
+                    <h3>Pet Parent Premium</h3>
+                    <div class="revenue-price">$15-30/mo</div>
+                    <p>24/7 AI triage, health tracking, telemedicine access</p>
+                </div>
+                <div class="revenue-card">
+                    <div class="revenue-icon">🛡️</div>
+                    <h3>Insurance Integration</h3>
+                    <div class="revenue-price">2-4% of claims</div>
+                    <p>Automated claims processing and eligibility checks</p>
+                </div>
+                <div class="revenue-card">
+                    <div class="revenue-icon">💊</div>
+                    <h3>Pharmacy Network</h3>
+                    <div class="revenue-price">5-8% referral fee</div>
+                    <p>Electronic prescriptions with home delivery</p>
+                </div>
+                <div class="revenue-card">
+                    <div class="revenue-icon">📊</div>
+                    <h3>Data Intelligence</h3>
+                    <div class="revenue-price">Enterprise licensing</div>
+                    <p>Anonymized insights for pharma & pet food companies</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Traction/Projections -->
+    <section class="section traction-section">
+        <div class="section-inner">
+            <div class="section-header">
+                <div class="section-label">Growth Trajectory</div>
+                <h2 class="section-title">Path to $400M ARR</h2>
+                <p class="section-desc">Aggressive but achievable scaling fueled by network effects and dual-sided platform dynamics.</p>
+            </div>
+            <div class="traction-grid">
+                <div class="traction-card">
+                    <div class="traction-year">Year 1</div>
+                    <div class="traction-value">$3M</div>
+                    <div class="traction-label">200 Clinics</div>
+                </div>
+                <div class="traction-card">
+                    <div class="traction-year">Year 2</div>
+                    <div class="traction-value">$18M</div>
+                    <div class="traction-label">800 Clinics</div>
+                </div>
+                <div class="traction-card">
+                    <div class="traction-year">Year 3</div>
+                    <div class="traction-value">$75M</div>
+                    <div class="traction-label">2,500 Clinics</div>
+                </div>
+                <div class="traction-card">
+                    <div class="traction-year">Year 4</div>
+                    <div class="traction-value">$200M</div>
+                    <div class="traction-label">6,000 Clinics</div>
+                </div>
+                <div class="traction-card">
+                    <div class="traction-year">Year 5</div>
+                    <div class="traction-value">$400M</div>
+                    <div class="traction-label">12,000 Clinics</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="cta-box">
+            <div class="cta-content">
+                <div class="cta-icon">🐾</div>
+                <h2>Because They Can't Tell Us What's Wrong</h2>
+                <p>Join the revolution in veterinary care. VetOS is raising a $5M seed round to transform how we care for the animals we love.</p>
+                <div class="cta-buttons">
+                    <a href="#" class="btn btn-primary btn-large">Request Investor Deck →</a>
+                    <a href="#" class="btn btn-outline btn-large">Schedule Demo</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <div class="logo-icon" style="width: 40px; height: 40px; font-size: 1.25rem;">🐾</div>
+                <span style="font-weight: 700; font-size: 1.25rem;">VetOS</span>
+            </div>
+            <p class="footer-tagline">"Intelligence for the ones who can't speak."</p>
+            <p class="footer-meta">Generated by The Godfather 🎩 • February 26, 2026 • Evening Drop</p>
+        </div>
+    </footer>
+
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Floating paw particles
+        const pawContainer = document.getElementById('pawParticles');
+        const paws = ['🐾', '🐕', '🐈', '🐰', '🐹'];
+        
+        function createPaw() {
+            const paw = document.createElement('div');
+            paw.className = 'paw';
+            paw.textContent = paws[Math.floor(Math.random() * paws.length)];
+            paw.style.left = Math.random() * 100 + 'vw';
+            paw.style.animationDuration = 20 + Math.random() * 15 + 's';
+            paw.style.animationDelay = Math.random() * 10 + 's';
+            paw.style.fontSize = (15 + Math.random() * 20) + 'px';
+            pawContainer.appendChild(paw);
+            
+            setTimeout(() => paw.remove(), 35000);
+        }
+
+        // Create initial paws
+        for (let i = 0; i < 15; i++) {
+            setTimeout(createPaw, i * 500);
+        }
+
+        // Continue creating paws
+        setInterval(createPaw, 3000);
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

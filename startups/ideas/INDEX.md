@@ -84,6 +84,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-02-25 | Evening | AirportOS — Autonomous Airport Intelligence Platform | [Playbook](2026-02-25-evening.md) • [Landing](2026-02-25-evening-landing.html) • [PDF](2026-02-25-evening.pdf) |
 | 2026-02-25 | Morning | ChipOS — Autonomous Semiconductor Intelligence | [Playbook](2026-02-25-morning.md) • [Landing](2026-02-25-morning-landing.html) • [PDF](2026-02-25-morning.pdf) |
 | 2026-02-25 | Afternoon | BatteryOS — Autonomous Battery Intelligence Platform | [Playbook](2026-02-25-afternoon.md) • [Landing](2026-02-25-afternoon-landing.html) • [PDF](2026-02-25-afternoon.pdf) |
+| 2026-02-26 | Evening | VetOS — The AI Operating System for Veterinary Care | [Playbook](2026-02-26-evening.md) • [Landing](2026-02-26-evening-landing.html) • [PDF](2026-02-26-evening.pdf) |
 <!-- New entries will be added above this line -->
 
 ---
