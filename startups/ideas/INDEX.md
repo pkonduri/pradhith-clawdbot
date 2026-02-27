@@ -86,6 +86,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-02-25 | Afternoon | BatteryOS — Autonomous Battery Intelligence Platform | [Playbook](2026-02-25-afternoon.md) • [Landing](2026-02-25-afternoon-landing.html) • [PDF](2026-02-25-afternoon.pdf) |
 | 2026-02-26 | Evening | VetOS — The AI Operating System for Veterinary Care | [Playbook](2026-02-26-evening.md) • [Landing](2026-02-26-evening-landing.html) • [PDF](2026-02-26-evening.pdf) |
 | 2026-02-26 | Afternoon | HomeShield AI — Autonomous Home Network Security Intelligence | [Playbook](2026-02-26-afternoon.md) • [Landing](2026-02-26-afternoon-landing.html) • [PDF](2026-02-26-afternoon.pdf) |
+| 2026-02-27 | Evening | PharmaMind AI — Autonomous Pharmacy Intelligence Platform | [Playbook](2026-02-27-evening.md) • [Landing](2026-02-27-evening-landing.html) • [PDF](2026-02-27-evening.pdf) |
 <!-- New entries will be added above this line -->
 
 ---

@@ -1,0 +1,1359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PharmaMind AI — The Future of Pharmacy</title>
+    <meta name="description" content="AI-powered pharmacy intelligence platform that eliminates medication errors, automates insurance, and empowers pharmacists.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0d9488;
+            --primary-light: #14b8a6;
+            --primary-dark: #0f766e;
+            --secondary: #6366f1;
+            --accent: #f59e0b;
+            --dark: #0f172a;
+            --darker: #020617;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --success: #22c55e;
+            --danger: #ef4444;
+            --gradient-primary: linear-gradient(135deg, #0d9488 0%, #6366f1 100%);
+            --gradient-dark: linear-gradient(180deg, #0f172a 0%, #020617 100%);
+            --gradient-glow: linear-gradient(135deg, rgba(13, 148, 136, 0.3) 0%, rgba(99, 102, 241, 0.3) 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--darker);
+            color: var(--light);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(13, 148, 136, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(13, 148, 136, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .floating-pill {
+            position: fixed;
+            border-radius: 50%;
+            background: var(--gradient-glow);
+            filter: blur(80px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .pill-1 { width: 600px; height: 600px; top: -200px; right: -200px; animation: float 20s ease-in-out infinite; }
+        .pill-2 { width: 500px; height: 500px; bottom: -150px; left: -150px; animation: float 25s ease-in-out infinite reverse; }
+        .pill-3 { width: 400px; height: 400px; top: 50%; left: 50%; transform: translate(-50%, -50%); animation: pulse 15s ease-in-out infinite; }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(30px, -30px) rotate(5deg); }
+            66% { transform: translate(-20px, 20px) rotate(-5deg); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; transform: translate(-50%, -50%) scale(1); }
+            50% { opacity: 0.5; transform: translate(-50%, -50%) scale(1.2); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1.5rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(2, 6, 23, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(13, 148, 136, 0.1);
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            -webkit-text-fill-color: white;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--gray);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-light);
+        }
+
+        .nav-cta {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 0.8rem 1.8rem;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(13, 148, 136, 0.3);
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 30px rgba(13, 148, 136, 0.4);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 3rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6rem;
+            align-items: center;
+        }
+
+        .hero-text {
+            animation: fadeInUp 1s ease;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(13, 148, 136, 0.1);
+            border: 1px solid rgba(13, 148, 136, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--primary-light);
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-badge::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--success);
+            border-radius: 50%;
+            animation: blink 1.5s ease infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 4.5rem;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+        }
+
+        h1 .gradient {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-description {
+            font-size: 1.3rem;
+            color: var(--gray);
+            margin-bottom: 2.5rem;
+            max-width: 540px;
+        }
+
+        .hero-ctas {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 30px rgba(13, 148, 136, 0.4);
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 40px rgba(13, 148, 136, 0.5);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--light);
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--primary-light);
+        }
+
+        .hero-visual {
+            position: relative;
+            animation: fadeIn 1.2s ease 0.3s both;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .dashboard-preview {
+            background: var(--gradient-dark);
+            border-radius: 20px;
+            border: 1px solid rgba(13, 148, 136, 0.2);
+            padding: 1.5rem;
+            box-shadow: 
+                0 50px 100px rgba(0, 0, 0, 0.5),
+                0 0 0 1px rgba(13, 148, 136, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        }
+
+        .dashboard-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .dashboard-dots {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .dashboard-dots span {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .dashboard-dots span:nth-child(1) { background: #ef4444; }
+        .dashboard-dots span:nth-child(2) { background: #f59e0b; }
+        .dashboard-dots span:nth-child(3) { background: #22c55e; }
+
+        .dashboard-title {
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-card {
+            background: rgba(13, 148, 136, 0.05);
+            border: 1px solid rgba(13, 148, 136, 0.1);
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-light);
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .dashboard-workflow {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 12px;
+            padding: 1rem;
+        }
+
+        .workflow-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        .workflow-item:last-child {
+            border-bottom: none;
+        }
+
+        .workflow-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .workflow-text {
+            flex: 1;
+        }
+
+        .workflow-text h4 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+        }
+
+        .workflow-text p {
+            font-size: 0.75rem;
+            color: var(--gray);
+        }
+
+        .workflow-status {
+            width: 24px;
+            height: 24px;
+            background: var(--success);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+        }
+
+        /* Stats Section */
+        .stats-section {
+            padding: 6rem 3rem;
+            background: rgba(13, 148, 136, 0.02);
+            position: relative;
+            z-index: 1;
+        }
+
+        .stats-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 3rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-item .number {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 4rem;
+            font-weight: 700;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-item .label {
+            font-size: 1.1rem;
+            color: var(--gray);
+        }
+
+        /* Problem Section */
+        .problem-section {
+            padding: 8rem 3rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 5rem;
+        }
+
+        .section-label {
+            display: inline-block;
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-label.teal {
+            background: rgba(13, 148, 136, 0.1);
+            color: var(--primary-light);
+        }
+
+        h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-description {
+            font-size: 1.2rem;
+            color: var(--gray);
+        }
+
+        .problems-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .problem-card {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.05) 0%, rgba(239, 68, 68, 0.02) 100%);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(239, 68, 68, 0.4);
+        }
+
+        .problem-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .problem-card h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--danger);
+        }
+
+        .problem-card p {
+            color: var(--gray);
+            line-height: 1.7;
+        }
+
+        .problem-stat {
+            display: inline-block;
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--danger);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+
+        /* Solution Section */
+        .solution-section {
+            padding: 8rem 3rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .modules-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .module-card {
+            background: var(--gradient-dark);
+            border: 1px solid rgba(13, 148, 136, 0.15);
+            border-radius: 24px;
+            padding: 2.5rem;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .module-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-primary);
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .module-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(13, 148, 136, 0.4);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .module-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .module-icon {
+            width: 70px;
+            height: 70px;
+            background: var(--gradient-primary);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 10px 30px rgba(13, 148, 136, 0.3);
+        }
+
+        .module-card h3 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .module-subtitle {
+            font-size: 0.9rem;
+            color: var(--primary-light);
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .module-card p {
+            color: var(--gray);
+            font-size: 0.95rem;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .module-impact {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            border-radius: 12px;
+            padding: 1rem;
+        }
+
+        .module-impact h4 {
+            font-size: 0.75rem;
+            color: var(--success);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.5rem;
+        }
+
+        .module-impact p {
+            color: var(--light);
+            font-weight: 500;
+            margin-bottom: 0;
+            font-size: 0.9rem;
+        }
+
+        /* Market Section */
+        .market-section {
+            padding: 8rem 3rem;
+            background: rgba(13, 148, 136, 0.02);
+            position: relative;
+            z-index: 1;
+        }
+
+        .market-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5rem;
+            align-items: center;
+        }
+
+        .market-visual {
+            position: relative;
+        }
+
+        .market-circle {
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            position: relative;
+            margin: 0 auto;
+        }
+
+        .market-ring {
+            position: absolute;
+            border-radius: 50%;
+            border: 2px solid;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .ring-tam {
+            width: 100%;
+            height: 100%;
+            border-color: rgba(99, 102, 241, 0.3);
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        .ring-sam {
+            width: 70%;
+            height: 70%;
+            top: 15%;
+            left: 15%;
+            border-color: rgba(13, 148, 136, 0.4);
+            background: rgba(13, 148, 136, 0.1);
+        }
+
+        .ring-som {
+            width: 40%;
+            height: 40%;
+            top: 30%;
+            left: 30%;
+            border-color: var(--primary-light);
+            background: rgba(13, 148, 136, 0.2);
+        }
+
+        .ring-label {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--light);
+        }
+
+        .ring-sublabel {
+            font-size: 0.8rem;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .market-details h3 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .market-list {
+            list-style: none;
+        }
+
+        .market-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding: 1.5rem;
+            background: rgba(13, 148, 136, 0.05);
+            border-radius: 15px;
+            border: 1px solid rgba(13, 148, 136, 0.1);
+        }
+
+        .market-list .icon {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-primary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .market-list h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .market-list p {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        /* Traction Section */
+        .traction-section {
+            padding: 8rem 3rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .traction-grid {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .traction-card {
+            background: var(--gradient-dark);
+            border: 1px solid rgba(13, 148, 136, 0.15);
+            border-radius: 20px;
+            padding: 2.5rem;
+            text-align: center;
+        }
+
+        .traction-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .traction-card h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .traction-card p {
+            color: var(--gray);
+            font-size: 1.1rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 8rem 3rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--gradient-primary);
+            border-radius: 30px;
+            padding: 5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+            animation: rotate 30s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-section h2 {
+            color: white;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-section p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.3rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-white {
+            background: white;
+            color: var(--primary-dark);
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-white:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .btn-outline:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: white;
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 3rem;
+            border-top: 1px solid rgba(13, 148, 136, 0.1);
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--gray);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-light);
+        }
+
+        .footer-copy {
+            color: var(--gray);
+            font-size: 0.85rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-description {
+                margin: 0 auto 2.5rem;
+            }
+
+            .hero-ctas {
+                justify-content: center;
+            }
+
+            .hero-visual {
+                order: -1;
+            }
+
+            .modules-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .market-content {
+                grid-template-columns: 1fr;
+            }
+
+            .market-circle {
+                width: 300px;
+                height: 300px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem 1.5rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            h1 {
+                font-size: 2.8rem;
+            }
+
+            h2 {
+                font-size: 2.2rem;
+            }
+
+            .hero {
+                padding: 6rem 1.5rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .problems-grid,
+            .modules-grid,
+            .traction-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cta-container {
+                padding: 3rem 2rem;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                gap: 2rem;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+    <div class="floating-pill pill-1"></div>
+    <div class="floating-pill pill-2"></div>
+    <div class="floating-pill pill-3"></div>
+
+    <nav>
+        <div class="logo">
+            <span class="logo-icon">💊</span>
+            PharmaMind
+        </div>
+        <ul class="nav-links">
+            <li><a href="#problem">Problem</a></li>
+            <li><a href="#solution">Solution</a></li>
+            <li><a href="#market">Market</a></li>
+            <li><a href="#traction">Traction</a></li>
+        </ul>
+        <a href="#contact" class="nav-cta">Get Demo</a>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <div class="hero-badge">Now raising $25M Series A</div>
+                <h1>
+                    The <span class="gradient">AI Operating System</span> for Modern Pharmacies
+                </h1>
+                <p class="hero-description">
+                    Eliminate medication errors. Automate insurance nightmares. Give pharmacists superpowers. PharmaMind AI transforms every pharmacy into an AI-powered precision operation.
+                </p>
+                <div class="hero-ctas">
+                    <a href="#contact" class="btn-primary">Request Demo →</a>
+                    <a href="#solution" class="btn-secondary">See How It Works</a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="dashboard-preview">
+                    <div class="dashboard-header">
+                        <div class="dashboard-dots">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                        <span class="dashboard-title">PharmaMind Dashboard — Real-time Operations</span>
+                    </div>
+                    <div class="dashboard-stats">
+                        <div class="stat-card">
+                            <div class="stat-value">847</div>
+                            <div class="stat-label">Scripts Today</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">99.9%</div>
+                            <div class="stat-label">Accuracy</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">23s</div>
+                            <div class="stat-label">Avg Verify</div>
+                        </div>
+                    </div>
+                    <div class="dashboard-workflow">
+                        <div class="workflow-item">
+                            <div class="workflow-icon">🔍</div>
+                            <div class="workflow-text">
+                                <h4>DispenseGuard™ Active</h4>
+                                <p>AI verification running on all prescriptions</p>
+                            </div>
+                            <div class="workflow-status">✓</div>
+                        </div>
+                        <div class="workflow-item">
+                            <div class="workflow-icon">📋</div>
+                            <div class="workflow-text">
+                                <h4>12 PAs Auto-Submitted</h4>
+                                <p>AuthFlow™ processing insurance authorizations</p>
+                            </div>
+                            <div class="workflow-status">✓</div>
+                        </div>
+                        <div class="workflow-item">
+                            <div class="workflow-icon">⚠️</div>
+                            <div class="workflow-text">
+                                <h4>1 Interaction Alert</h4>
+                                <p>InteractIQ™ flagged drug interaction for review</p>
+                            </div>
+                            <div class="workflow-status" style="background: var(--accent);">!</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="stats-section">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="number">$500B+</div>
+                <div class="label">Global Pharmacy Market</div>
+            </div>
+            <div class="stat-item">
+                <div class="number">1.5M</div>
+                <div class="label">Medication Errors/Year</div>
+            </div>
+            <div class="stat-item">
+                <div class="number">70%</div>
+                <div class="label">Pharmacies Understaffed</div>
+            </div>
+            <div class="stat-item">
+                <div class="number">$40B</div>
+                <div class="label">Cost of Errors Annually</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="problem-section" id="problem">
+        <div class="section-header">
+            <span class="section-label">🚨 The Crisis</span>
+            <h2>Pharmacies Are Breaking</h2>
+            <p class="section-description">
+                The pharmacy industry faces a perfect storm: crushing staff shortages, medication error liability, insurance complexity, and legacy technology from the 1990s.
+            </p>
+        </div>
+        <div class="problems-grid">
+            <div class="problem-card">
+                <div class="problem-icon">👥</div>
+                <h3>Staffing Apocalypse</h3>
+                <p>Pharmacists now verify 400+ prescriptions daily — up from 150 a decade ago. Burnout is driving a mass exodus from the profession while patient volumes keep climbing.</p>
+                <span class="problem-stat">40% annual tech turnover</span>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">💊</div>
+                <h3>Medication Errors</h3>
+                <p>1.5 million Americans harmed by medication errors every year. Pharmacists catch 99% before reaching patients — but that 1% costs billions and lives.</p>
+                <span class="problem-stat">7,000+ deaths annually</span>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">📑</div>
+                <h3>Insurance Nightmare</h3>
+                <p>30% of prescriptions require prior authorization. Each one takes 20+ minutes of manual work. Patients abandon 30% of prescriptions due to insurance friction.</p>
+                <span class="problem-stat">$31B wasted on manual PA</span>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">🖥️</div>
+                <h3>Ancient Technology</h3>
+                <p>Most pharmacy systems were built before the internet existed. Zero AI capabilities. Zero interoperability. Just endless manual data entry on green-screen terminals.</p>
+                <span class="problem-stat">30+ year old systems</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="solution-section" id="solution">
+        <div class="section-header">
+            <span class="section-label teal">💡 The Solution</span>
+            <h2>AI-Powered Pharmacy Operations</h2>
+            <p class="section-description">
+                PharmaMind AI is a comprehensive intelligence layer that integrates with existing systems and adds autonomous AI across every workflow.
+            </p>
+        </div>
+        <div class="modules-grid">
+            <div class="module-card">
+                <div class="module-icon">🔍</div>
+                <h3>DispenseGuard™</h3>
+                <div class="module-subtitle">AI Verification Engine</div>
+                <p>Computer vision confirms right drug, right strength, right quantity. AI does the tedious checking so pharmacists focus on clinical thinking.</p>
+                <div class="module-impact">
+                    <h4>Impact</h4>
+                    <p>60% faster verification, 99.9% error detection</p>
+                </div>
+            </div>
+            <div class="module-card">
+                <div class="module-icon">📋</div>
+                <h3>AuthFlow™</h3>
+                <div class="module-subtitle">Autonomous Prior Authorization</div>
+                <p>Auto-generates PA requests with optimal approval language. ML predicts denials and suggests alternatives before submission.</p>
+                <div class="module-impact">
+                    <h4>Impact</h4>
+                    <p>20 min → 90 sec processing, 35% better approval</p>
+                </div>
+            </div>
+            <div class="module-card">
+                <div class="module-icon">⚡</div>
+                <h3>InteractIQ™</h3>
+                <div class="module-subtitle">Drug Interaction Intelligence</div>
+                <p>Evaluates entire medication regimens, not just pairs. Prioritizes clinically significant alerts and cuts alert fatigue by 80%.</p>
+                <div class="module-impact">
+                    <h4>Impact</h4>
+                    <p>90% fewer serious interactions</p>
+                </div>
+            </div>
+            <div class="module-card">
+                <div class="module-icon">📦</div>
+                <h3>StockMind™</h3>
+                <div class="module-subtitle">Predictive Inventory</div>
+                <p>ML predicts refill patterns, seasonal trends, and shortage warnings. Automatic reordering keeps shelves stocked without waste.</p>
+                <div class="module-impact">
+                    <h4>Impact</h4>
+                    <p>85% fewer stockouts, 70% less waste</p>
+                </div>
+            </div>
+            <div class="module-card">
+                <div class="module-icon">💬</div>
+                <h3>PatientPulse™</h3>
+                <div class="module-subtitle">Adherence & Engagement</div>
+                <p>ML identifies patients at risk of non-adherence. Personalized outreach via preferred channels keeps patients on therapy.</p>
+                <div class="module-impact">
+                    <h4>Impact</h4>
+                    <p>40% better adherence, 25% more refills</p>
+                </div>
+            </div>
+            <div class="module-card">
+                <div class="module-icon">📝</div>
+                <h3>ScriptMind™</h3>
+                <div class="module-subtitle">Intelligent Intake</div>
+                <p>Auto-corrects e-prescribe errors. AI reads handwriting with 99%+ accuracy. Formulary optimization suggests covered alternatives.</p>
+                <div class="module-impact">
+                    <h4>Impact</h4>
+                    <p>70% faster intake, 95% error catch</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="market-section" id="market">
+        <div class="market-content">
+            <div class="market-visual">
+                <div class="market-circle">
+                    <div class="market-ring ring-tam">
+                        <span class="ring-label">$180B</span>
+                        <span class="ring-sublabel">TAM</span>
+                    </div>
+                    <div class="market-ring ring-sam">
+                        <span class="ring-label">$45B</span>
+                        <span class="ring-sublabel">SAM</span>
+                    </div>
+                    <div class="market-ring ring-som">
+                        <span class="ring-label">$4.5B</span>
+                        <span class="ring-sublabel">SOM</span>
+                    </div>
+                </div>
+            </div>
+            <div class="market-details">
+                <h3>Massive Market, Perfect Timing</h3>
+                <ul class="market-list">
+                    <li>
+                        <span class="icon">🌍</span>
+                        <div>
+                            <h4>$500B+ Pharmacy Industry</h4>
+                            <p>Global pharmacy services and technology market running on legacy infrastructure ripe for AI disruption.</p>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="icon">🎯</span>
+                        <div>
+                            <h4>22,000+ Independent Pharmacies</h4>
+                            <p>Underserved by enterprise vendors, faster sales cycles, strong word-of-mouth networks.</p>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="icon">📈</span>
+                        <div>
+                            <h4>AI Inflection Point</h4>
+                            <p>LLMs + computer vision finally capable for clinical work. Regulatory tailwinds opening doors for AI-assisted pharmacy.</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="traction-section" id="traction">
+        <div class="section-header">
+            <span class="section-label teal">📊 Traction</span>
+            <h2>Building Momentum</h2>
+        </div>
+        <div class="traction-grid">
+            <div class="traction-card">
+                <div class="traction-icon">🏪</div>
+                <h3>150+</h3>
+                <p>Pharmacies in pilot</p>
+            </div>
+            <div class="traction-card">
+                <div class="traction-icon">💰</div>
+                <h3>$3M</h3>
+                <p>Current ARR</p>
+            </div>
+            <div class="traction-card">
+                <div class="traction-icon">📈</div>
+                <h3>10:1</h3>
+                <p>LTV:CAC Ratio</p>
+            </div>
+            <div class="traction-card">
+                <div class="traction-icon">⭐</div>
+                <h3>92</h3>
+                <p>Net Promoter Score</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section" id="contact">
+        <div class="cta-container">
+            <div class="cta-content">
+                <h2>Transform Your Pharmacy Operations</h2>
+                <p>Join 150+ pharmacies already using PharmaMind AI to eliminate errors, automate insurance, and give their pharmacists superpowers.</p>
+                <div class="cta-buttons">
+                    <a href="mailto:founders@pharmamind.ai" class="btn-white">Request Demo →</a>
+                    <a href="mailto:investors@pharmamind.ai" class="btn-outline">Investor Deck</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">💊 PharmaMind AI</div>
+            <div class="footer-links">
+                <a href="#">Product</a>
+                <a href="#">Company</a>
+                <a href="#">Careers</a>
+                <a href="mailto:founders@pharmamind.ai">Contact</a>
+            </div>
+            <div class="footer-copy">© 2026 PharmaMind AI. All rights reserved.</div>
+        </div>
+    </footer>
+</body>
+</html>
