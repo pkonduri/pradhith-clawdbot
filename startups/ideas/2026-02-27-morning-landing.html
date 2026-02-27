@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FactChain AI — The Trust Layer for AI Outputs</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #10b981;
+            --primary-dark: #059669;
+            --primary-light: #34d399;
+            --accent: #f59e0b;
+            --dark: #0f172a;
+            --darker: #020617;
+            --gray-900: #1e293b;
+            --gray-800: #334155;
+            --gray-700: #475569;
+            --gray-400: #94a3b8;
+            --gray-300: #cbd5e1;
+            --white: #ffffff;
+            --gradient-primary: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            --gradient-hero: linear-gradient(135deg, #0f172a 0%, #1e3a2f 50%, #0f172a 100%);
+            --gradient-card: linear-gradient(180deg, rgba(16,185,129,0.1) 0%, rgba(16,185,129,0) 100%);
+            --glow: 0 0 60px rgba(16,185,129,0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--darker);
+            color: var(--white);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated background */
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(16,185,129,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(16,185,129,0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .content-wrapper {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(2,6,23,0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(16,185,129,0.1);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 800;
+            font-size: 1.5rem;
+            color: var(--white);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--gray-300);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-cta {
+            padding: 0.75rem 1.75rem;
+            background: var(--gradient-primary);
+            border: none;
+            border-radius: 8px;
+            color: var(--white);
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--glow);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 8rem 5% 4rem;
+            background: var(--gradient-hero);
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(ellipse at center, rgba(16,185,129,0.15) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(16,185,129,0.15);
+            border: 1px solid rgba(16,185,129,0.3);
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--primary-light);
+            margin-bottom: 2rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 5.5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            max-width: 900px;
+            background: linear-gradient(135deg, var(--white) 0%, var(--gray-300) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero h1 span {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--gray-400);
+            max-width: 700px;
+            margin-bottom: 3rem;
+            font-weight: 400;
+        }
+
+        .hero-cta-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            padding: 1rem 2.5rem;
+            background: var(--gradient-primary);
+            border: none;
+            border-radius: 12px;
+            color: var(--white);
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 40px rgba(16,185,129,0.4);
+        }
+
+        .btn-secondary {
+            padding: 1rem 2.5rem;
+            background: transparent;
+            border: 2px solid var(--gray-700);
+            border-radius: 12px;
+            color: var(--white);
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary);
+            background: rgba(16,185,129,0.1);
+        }
+
+        /* Trust Score Demo */
+        .demo-container {
+            margin-top: 4rem;
+            padding: 2rem;
+            background: rgba(15,23,42,0.8);
+            border: 1px solid rgba(16,185,129,0.2);
+            border-radius: 20px;
+            max-width: 600px;
+            width: 100%;
+            backdrop-filter: blur(10px);
+        }
+
+        .demo-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--gray-400);
+            margin-bottom: 1rem;
+        }
+
+        .demo-content {
+            background: var(--gray-900);
+            padding: 1.5rem;
+            border-radius: 12px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: var(--gray-300);
+            margin-bottom: 1rem;
+        }
+
+        .fact-score {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .score-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: conic-gradient(var(--primary) 0deg 338deg, var(--gray-800) 338deg 360deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .score-circle::before {
+            content: '';
+            position: absolute;
+            width: 64px;
+            height: 64px;
+            background: var(--gray-900);
+            border-radius: 50%;
+        }
+
+        .score-value {
+            position: relative;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .score-details {
+            flex: 1;
+        }
+
+        .score-details p {
+            color: var(--gray-400);
+            font-size: 0.85rem;
+        }
+
+        .score-details strong {
+            color: var(--primary-light);
+        }
+
+        /* Stats Section */
+        .stats {
+            padding: 6rem 5%;
+            background: var(--dark);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .stat-value {
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--gray-400);
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        /* Problem Section */
+        .problem {
+            padding: 8rem 5%;
+            background: var(--darker);
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 4rem;
+        }
+
+        .section-tag {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(16,185,129,0.15);
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+        }
+
+        .section-header h2 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            font-size: 1.25rem;
+            color: var(--gray-400);
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .problem-card {
+            padding: 2rem;
+            background: linear-gradient(180deg, rgba(239,68,68,0.1) 0%, transparent 100%);
+            border: 1px solid rgba(239,68,68,0.2);
+            border-radius: 16px;
+            transition: transform 0.3s, border-color 0.3s;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(239,68,68,0.4);
+        }
+
+        .problem-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(239,68,68,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .problem-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            color: #f87171;
+        }
+
+        .problem-card p {
+            color: var(--gray-400);
+            font-size: 0.95rem;
+        }
+
+        /* Solution Section */
+        .solution {
+            padding: 8rem 5%;
+            background: var(--dark);
+        }
+
+        .solution-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .solution-card {
+            padding: 2.5rem;
+            background: var(--gradient-card);
+            border: 1px solid rgba(16,185,129,0.2);
+            border-radius: 20px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .solution-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--glow);
+            border-color: rgba(16,185,129,0.5);
+        }
+
+        .solution-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-primary);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .solution-card h3 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .solution-card p {
+            color: var(--gray-400);
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        /* Code Demo */
+        .code-section {
+            padding: 8rem 5%;
+            background: var(--darker);
+        }
+
+        .code-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--gray-900);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--gray-800);
+        }
+
+        .code-header {
+            padding: 1rem 1.5rem;
+            background: var(--gray-800);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .code-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .code-dot.red { background: #f87171; }
+        .code-dot.yellow { background: #fbbf24; }
+        .code-dot.green { background: #34d399; }
+
+        .code-content {
+            padding: 2rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 1.8;
+            color: var(--gray-300);
+            overflow-x: auto;
+        }
+
+        .code-content .keyword { color: #c084fc; }
+        .code-content .function { color: #60a5fa; }
+        .code-content .string { color: #34d399; }
+        .code-content .comment { color: var(--gray-700); }
+        .code-content .number { color: #f59e0b; }
+
+        /* Market Section */
+        .market {
+            padding: 8rem 5%;
+            background: var(--dark);
+        }
+
+        .market-visual {
+            max-width: 800px;
+            margin: 0 auto;
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .market-bar {
+            background: var(--gray-900);
+            border-radius: 12px;
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .market-bar-fill {
+            height: 40px;
+            background: var(--gradient-primary);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 1rem;
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .market-bar-label {
+            min-width: 120px;
+            font-weight: 600;
+        }
+
+        /* Timeline */
+        .timeline {
+            padding: 8rem 5%;
+            background: var(--darker);
+        }
+
+        .timeline-container {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .timeline-container::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--gradient-primary);
+            transform: translateX(-50%);
+        }
+
+        .timeline-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 3rem;
+        }
+
+        .timeline-item:nth-child(odd) {
+            flex-direction: row-reverse;
+        }
+
+        .timeline-content {
+            width: 45%;
+            padding: 2rem;
+            background: var(--gray-900);
+            border-radius: 16px;
+            border: 1px solid var(--gray-800);
+        }
+
+        .timeline-item:nth-child(odd) .timeline-content {
+            text-align: right;
+        }
+
+        .timeline-dot {
+            width: 20px;
+            height: 20px;
+            background: var(--primary);
+            border-radius: 50%;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 0 20px var(--primary);
+        }
+
+        .timeline-content h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary-light);
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-content p {
+            color: var(--gray-400);
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 8rem 5%;
+            background: var(--gradient-hero);
+            text-align: center;
+            position: relative;
+        }
+
+        .cta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(ellipse at center, rgba(16,185,129,0.2) 0%, transparent 70%);
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .cta h2 {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta p {
+            font-size: 1.25rem;
+            color: var(--gray-400);
+            margin-bottom: 2.5rem;
+        }
+
+        /* Footer */
+        footer {
+            padding: 3rem 5%;
+            background: var(--darker);
+            border-top: 1px solid var(--gray-800);
+            text-align: center;
+        }
+
+        footer p {
+            color: var(--gray-700);
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.15rem;
+            }
+
+            .timeline-container::before {
+                left: 20px;
+            }
+
+            .timeline-item {
+                flex-direction: column !important;
+            }
+
+            .timeline-content {
+                width: 100%;
+                margin-left: 40px;
+                text-align: left !important;
+            }
+
+            .timeline-dot {
+                left: 20px;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-in {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+    
+    <div class="content-wrapper">
+        <nav>
+            <a href="#" class="logo">
+                <div class="logo-icon">✓</div>
+                FactChain
+            </a>
+            <ul class="nav-links">
+                <li><a href="#problem">Problem</a></li>
+                <li><a href="#solution">Solution</a></li>
+                <li><a href="#market">Market</a></li>
+                <li><a href="#roadmap">Roadmap</a></li>
+            </ul>
+            <button class="nav-cta">Get Early Access</button>
+        </nav>
+
+        <section class="hero">
+            <div class="hero-badge">
+                <span>🔒</span> The Trust Layer for AI
+            </div>
+            <h1>Make AI Outputs <span>Verifiable</span></h1>
+            <p class="hero-subtitle">HTTPS secured the internet. FactChain secures AI. Cryptographic verification for every AI-generated claim—in real-time.</p>
+            
+            <div class="hero-cta-group">
+                <a href="#" class="btn-primary">Request Demo →</a>
+                <a href="#solution" class="btn-secondary">How It Works</a>
+            </div>
+
+            <div class="demo-container">
+                <div class="demo-label">Live Verification Demo</div>
+                <div class="demo-content">
+                    "The FDA approved Ozempic for weight loss in June 2021..."
+                </div>
+                <div class="fact-score">
+                    <div class="score-circle">
+                        <span class="score-value">94</span>
+                    </div>
+                    <div class="score-details">
+                        <p><strong>FactScore™: 94/100</strong></p>
+                        <p>Verified against: FDA.gov, PubMed, Reuters</p>
+                        <p>Provenance chain: 3 sources, cryptographically signed</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="stats">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value">73%</div>
+                    <div class="stat-label">Enterprises cite trust as #1 AI barrier</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">$2.1T</div>
+                    <div class="stat-label">AI value unrealized due to trust gaps</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">47%</div>
+                    <div class="stat-label">AI projects abandoned for accuracy</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">&lt;50ms</div>
+                    <div class="stat-label">Real-time verification latency</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="problem" id="problem">
+            <div class="section-header">
+                <span class="section-tag">The Problem</span>
+                <h2>AI Has a Trust Crisis</h2>
+                <p>AI models confidently generate false information. This isn't a bug—it's fundamental. And there's no standardized way to verify what's true.</p>
+            </div>
+
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="problem-icon">⚕️</div>
+                    <h3>Healthcare Liability</h3>
+                    <p>AI-generated medical advice has led to patient harm. Hospitals hesitate to deploy without verification.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">⚖️</div>
+                    <h3>Legal Disasters</h3>
+                    <p>Law firms sanctioned for AI-generated fake case citations. Trust in AI legal tools is near zero.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">📊</div>
+                    <h3>Financial Risk</h3>
+                    <p>AI reports contain fabricated statistics. Compliance nightmares and regulatory exposure.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">🏢</div>
+                    <h3>Enterprise Paralysis</h3>
+                    <p>68% of knowledge workers don't trust AI content without manual verification that defeats the purpose.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="solution" id="solution">
+            <div class="section-header">
+                <span class="section-tag">The Solution</span>
+                <h2>Verification Infrastructure for AI</h2>
+                <p>A simple API that sits between any AI model and its downstream consumers, providing cryptographic trust.</p>
+            </div>
+
+            <div class="solution-grid">
+                <div class="solution-card">
+                    <div class="solution-icon">🔍</div>
+                    <h3>Verification Engine</h3>
+                    <p>Real-time validation against 500+ authoritative knowledge bases. Multi-source triangulation for confidence scoring.</p>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon">🔗</div>
+                    <h3>Provenance Chain</h3>
+                    <p>Cryptographic proof of information origin. Immutable audit trails with source attribution and timestamps.</p>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon">📈</div>
+                    <h3>Trust Scores</h3>
+                    <p>Universal FactScore™ metric (0-100) for every statement. Uncertainty quantification and risk flags.</p>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon">🛡️</div>
+                    <h3>Compliance Ready</h3>
+                    <p>SOC 2, HIPAA, GDPR compliant. Audit-ready reports and regulatory submission packages.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="code-section">
+            <div class="section-header">
+                <span class="section-tag">Integration</span>
+                <h2>Three Lines to Trust</h2>
+                <p>Drop-in verification for any AI pipeline. Ship trusted AI in minutes.</p>
+            </div>
+
+            <div class="code-container">
+                <div class="code-header">
+                    <span class="code-dot red"></span>
+                    <span class="code-dot yellow"></span>
+                    <span class="code-dot green"></span>
+                </div>
+                <pre class="code-content">
+<span class="keyword">from</span> factchain <span class="keyword">import</span> FactChain
+
+<span class="comment"># Initialize client</span>
+fc = FactChain(api_key=<span class="string">"fc_live_..."</span>)
+
+<span class="comment"># Verify any AI output</span>
+result = fc.<span class="function">verify</span>(
+    content=<span class="string">"The FDA approved Drug X in 2024..."</span>,
+    context=<span class="string">"medical_advice"</span>,
+    confidence_threshold=<span class="number">0.85</span>
+)
+
+<span class="comment"># Use verified output</span>
+<span class="keyword">print</span>(result.fact_score)   <span class="comment"># 94.2</span>
+<span class="keyword">print</span>(result.sources)      <span class="comment"># [PubMed, FDA.gov, ...]</span>
+<span class="keyword">print</span>(result.provenance)   <span class="comment"># Cryptographic proof chain</span>
+                </pre>
+            </div>
+        </section>
+
+        <section class="market" id="market">
+            <div class="section-header">
+                <span class="section-tag">Market Opportunity</span>
+                <h2>$47B Trust Gap</h2>
+                <p>Every AI application needs verification. We're building the infrastructure layer.</p>
+            </div>
+
+            <div class="market-visual">
+                <div class="market-bar">
+                    <span class="market-bar-label">TAM (2028)</span>
+                    <div class="market-bar-fill" style="width: 100%;">$47B</div>
+                </div>
+                <div class="market-bar">
+                    <span class="market-bar-label">SAM</span>
+                    <div class="market-bar-fill" style="width: 60%;">$8B</div>
+                </div>
+                <div class="market-bar">
+                    <span class="market-bar-label">SOM (Year 5)</span>
+                    <div class="market-bar-fill" style="width: 30%;">$800M</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="timeline" id="roadmap">
+            <div class="section-header">
+                <span class="section-tag">Roadmap</span>
+                <h2>Path to Market Leader</h2>
+            </div>
+
+            <div class="timeline-container">
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>Phase 1: Developer-First</h3>
+                        <p>Free tier, SDK launch, 10K developers, 50M monthly verifications</p>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>Phase 2: Enterprise Pilots</h3>
+                        <p>Healthcare, legal, finance. 10 customers, $2M ARR</p>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>Phase 3: Platform Expansion</h3>
+                        <p>Industry modules, marketplace, international. 100 customers, $20M ARR</p>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>Phase 4: Category Leader</h3>
+                        <p>FactScore™ industry standard. 1,500 customers, $500M ARR</p>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta">
+            <div class="cta-content">
+                <h2>Make AI Trustworthy</h2>
+                <p>Join the infrastructure layer that will verify every AI output on the planet.</p>
+                <a href="mailto:founders@factchain.ai" class="btn-primary">Get Early Access →</a>
+            </div>
+        </section>
+
+        <footer>
+            <p>© 2026 FactChain AI · <a href="#">Privacy</a> · <a href="#">Terms</a> · Built with conviction by The Godfather 🎩</p>
+        </footer>
+    </div>
+</body>
+</html>
