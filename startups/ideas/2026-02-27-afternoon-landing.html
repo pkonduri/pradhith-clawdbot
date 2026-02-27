@@ -1,0 +1,1381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafetyOS — Autonomous Industrial Safety Intelligence</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --safety-orange: #FF6B35;
+            --safety-red: #DC2626;
+            --safety-yellow: #F59E0B;
+            --safety-green: #10B981;
+            --dark-bg: #0A0A0A;
+            --dark-surface: #141414;
+            --dark-card: #1A1A1A;
+            --dark-border: #2A2A2A;
+            --text-primary: #FFFFFF;
+            --text-secondary: #A0A0A0;
+            --text-muted: #666666;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated Safety Grid Background */
+        .safety-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            background: 
+                linear-gradient(90deg, rgba(255,107,53,0.03) 1px, transparent 1px),
+                linear-gradient(rgba(255,107,53,0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+        }
+
+        /* Pulsing Alert Effect */
+        .pulse-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            background: radial-gradient(ellipse at center, transparent 0%, var(--dark-bg) 70%);
+        }
+
+        /* Scanning Line Animation */
+        .scan-line {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, var(--safety-green), transparent);
+            z-index: 2;
+            animation: scan 4s ease-in-out infinite;
+            opacity: 0.6;
+        }
+
+        @keyframes scan {
+            0%, 100% { transform: translateY(-100%); opacity: 0; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            50% { transform: translateY(100vh); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1.5rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(20px);
+            background: rgba(10,10,10,0.8);
+            border-bottom: 1px solid var(--dark-border);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--safety-orange), var(--safety-red));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            position: relative;
+        }
+
+        .logo-icon::after {
+            content: '';
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--safety-green);
+            border-radius: 50%;
+            top: -2px;
+            right: -2px;
+            animation: statusPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes statusPulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.3); opacity: 0.7; }
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--safety-orange);
+        }
+
+        .cta-nav {
+            background: linear-gradient(135deg, var(--safety-orange), var(--safety-red));
+            color: white !important;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .cta-nav:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255,107,53,0.4);
+            color: white !important;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 8rem 2rem 4rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .safety-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: rgba(16,185,129,0.15);
+            border: 1px solid rgba(16,185,129,0.3);
+            padding: 0.5rem 1.25rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--safety-green);
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            background: var(--safety-green);
+            border-radius: 50%;
+            animation: statusPulse 2s ease-in-out infinite;
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 7vw, 5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.8s ease-out 0.1s backwards;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(135deg, var(--safety-orange), var(--safety-yellow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.25rem, 2.5vw, 1.5rem);
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin-bottom: 3rem;
+            animation: fadeInUp 0.8s ease-out 0.2s backwards;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 4rem;
+            margin-bottom: 3rem;
+            animation: fadeInUp 0.8s ease-out 0.3s backwards;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--safety-red), var(--safety-orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 1rem;
+            animation: fadeInUp 0.8s ease-out 0.4s backwards;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--safety-orange), var(--safety-red));
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px rgba(255,107,53,0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid var(--dark-border);
+            color: var(--text-primary);
+            padding: 1rem 2.5rem;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--safety-orange);
+            color: var(--safety-orange);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Live Monitor Section */
+        .monitor-section {
+            padding: 6rem 4rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .monitor-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .monitor-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .monitor-header h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .live-dashboard {
+            background: var(--dark-surface);
+            border: 1px solid var(--dark-border);
+            border-radius: 24px;
+            padding: 2rem;
+            overflow: hidden;
+        }
+
+        .dashboard-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--dark-border);
+        }
+
+        .facility-name {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .live-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--safety-green);
+            font-weight: 500;
+        }
+
+        .live-dot {
+            width: 12px;
+            height: 12px;
+            background: var(--safety-green);
+            border-radius: 50%;
+            animation: livePulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes livePulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(16,185,129,0.7); }
+            50% { box-shadow: 0 0 0 8px rgba(16,185,129,0); }
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+        }
+
+        .metric-card {
+            background: var(--dark-card);
+            border: 1px solid var(--dark-border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+        }
+
+        .metric-card.safe::before {
+            background: var(--safety-green);
+        }
+
+        .metric-card.warning::before {
+            background: var(--safety-yellow);
+        }
+
+        .metric-card.danger::before {
+            background: var(--safety-red);
+        }
+
+        .metric-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .metric-card.safe .metric-icon {
+            background: rgba(16,185,129,0.15);
+        }
+
+        .metric-card.warning .metric-icon {
+            background: rgba(245,158,11,0.15);
+        }
+
+        .metric-card.danger .metric-icon {
+            background: rgba(220,38,38,0.15);
+        }
+
+        .metric-title {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .metric-card.safe .metric-value {
+            color: var(--safety-green);
+        }
+
+        .metric-card.warning .metric-value {
+            color: var(--safety-yellow);
+        }
+
+        .metric-card.danger .metric-value {
+            color: var(--safety-red);
+        }
+
+        .metric-change {
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Alert Feed */
+        .alert-feed {
+            grid-column: span 2;
+            background: var(--dark-card);
+            border: 1px solid var(--dark-border);
+            border-radius: 16px;
+            padding: 1.5rem;
+        }
+
+        .alert-feed-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .alert-feed h3 {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .alert-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem;
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            margin-bottom: 0.75rem;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .alert-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .alert-icon.warning {
+            background: rgba(245,158,11,0.2);
+        }
+
+        .alert-icon.danger {
+            background: rgba(220,38,38,0.2);
+        }
+
+        .alert-icon.success {
+            background: rgba(16,185,129,0.2);
+        }
+
+        .alert-content {
+            flex: 1;
+        }
+
+        .alert-title {
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+
+        .alert-time {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* Problem Section */
+        .problem-section {
+            padding: 8rem 4rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .problem-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-label {
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-size: 0.8rem;
+            color: var(--safety-red);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .problem-section h2 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 4rem;
+            max-width: 800px;
+        }
+
+        .death-counter {
+            background: linear-gradient(135deg, rgba(220,38,38,0.1), rgba(220,38,38,0.05));
+            border: 1px solid rgba(220,38,38,0.3);
+            border-radius: 24px;
+            padding: 3rem;
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .counter-label {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .counter-value {
+            font-size: 5rem;
+            font-weight: 900;
+            color: var(--safety-red);
+            font-variant-numeric: tabular-nums;
+        }
+
+        .counter-sublabel {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .problem-card {
+            background: var(--dark-surface);
+            border: 1px solid var(--dark-border);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--safety-red);
+        }
+
+        .problem-stat {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--safety-red);
+            margin-bottom: 0.5rem;
+        }
+
+        .problem-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .problem-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* Features Section */
+        .features-section {
+            padding: 8rem 4rem;
+            position: relative;
+            z-index: 10;
+            background: linear-gradient(180deg, transparent, rgba(255,107,53,0.03), transparent);
+        }
+
+        .features-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .features-header {
+            text-align: center;
+            margin-bottom: 5rem;
+        }
+
+        .features-header h2 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: var(--dark-surface);
+            border: 1px solid var(--dark-border);
+            border-radius: 24px;
+            padding: 2.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255,107,53,0.1), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--safety-orange);
+        }
+
+        .feature-icon {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, var(--safety-orange), var(--safety-red));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-list {
+            list-style: none;
+        }
+
+        .feature-list li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 0;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .feature-list li::before {
+            content: '✓';
+            color: var(--safety-green);
+            font-weight: 700;
+        }
+
+        /* ROI Section */
+        .roi-section {
+            padding: 8rem 4rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .roi-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .roi-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .roi-header h2 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .roi-calculator {
+            background: var(--dark-surface);
+            border: 1px solid var(--dark-border);
+            border-radius: 24px;
+            padding: 3rem;
+        }
+
+        .roi-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .roi-input-group {
+            background: var(--dark-card);
+            border-radius: 16px;
+            padding: 1.5rem;
+        }
+
+        .roi-input-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .roi-input-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--safety-orange);
+        }
+
+        .roi-input-sublabel {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .roi-result {
+            text-align: center;
+            padding: 2rem;
+            background: linear-gradient(135deg, rgba(16,185,129,0.15), rgba(16,185,129,0.05));
+            border: 1px solid rgba(16,185,129,0.3);
+            border-radius: 16px;
+        }
+
+        .roi-result-label {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .roi-result-value {
+            font-size: 4rem;
+            font-weight: 900;
+            color: var(--safety-green);
+        }
+
+        .roi-result-sublabel {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+        }
+
+        /* Industries Section */
+        .industries-section {
+            padding: 8rem 4rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .industries-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .industries-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .industries-header h2 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .industries-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1.5rem;
+        }
+
+        .industry-card {
+            background: var(--dark-surface);
+            border: 1px solid var(--dark-border);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .industry-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--safety-orange);
+            background: var(--dark-card);
+        }
+
+        .industry-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .industry-card h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .industry-card p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 8rem 4rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .cta-container {
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .cta-box {
+            background: linear-gradient(135deg, rgba(255,107,53,0.2), rgba(220,38,38,0.1));
+            border: 1px solid rgba(255,107,53,0.3);
+            border-radius: 32px;
+            padding: 4rem;
+        }
+
+        .cta-box h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .cta-box p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem;
+            border-top: 1px solid var(--dark-border);
+            position: relative;
+            z-index: 10;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-logo {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--safety-orange);
+        }
+
+        .footer-tagline {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            nav {
+                padding: 1rem 2rem;
+            }
+
+            .hero-stats {
+                gap: 2rem;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .alert-feed {
+                grid-column: span 2;
+            }
+
+            .problem-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .roi-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .industries-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            .nav-links {
+                gap: 1.5rem;
+            }
+
+            .hero {
+                padding: 10rem 1rem 4rem;
+            }
+
+            .hero-stats {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+
+            .cta-group {
+                flex-direction: column;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .alert-feed {
+                grid-column: span 1;
+            }
+
+            .problem-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .counter-value {
+                font-size: 3rem;
+            }
+
+            .industries-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .footer-content {
+                flex-direction: column;
+                gap: 2rem;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="safety-grid"></div>
+    <div class="pulse-overlay"></div>
+    <div class="scan-line"></div>
+
+    <nav>
+        <div class="logo">
+            <div class="logo-icon">🛡️</div>
+            SafetyOS
+        </div>
+        <div class="nav-links">
+            <a href="#features">Features</a>
+            <a href="#industries">Industries</a>
+            <a href="#roi">ROI</a>
+            <a href="#contact" class="cta-nav">Get Started</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="safety-badge">
+            <span class="status-dot"></span>
+            AI-Powered Industrial Safety
+        </div>
+        <h1>Every Workplace Accident<br>is <span>Preventable</span></h1>
+        <p class="hero-subtitle">
+            SafetyOS is the autonomous safety platform that monitors every corner of your operations 24/7—preventing accidents before they happen.
+        </p>
+        <div class="hero-stats">
+            <div class="stat">
+                <div class="stat-value">2.3M</div>
+                <div class="stat-label">Deaths/Year</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">$500B</div>
+                <div class="stat-label">Economic Impact</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">50%</div>
+                <div class="stat-label">Reduction Proven</div>
+            </div>
+        </div>
+        <div class="cta-group">
+            <a href="#contact" class="btn-primary">
+                Schedule Demo
+                <span>→</span>
+            </a>
+            <a href="#features" class="btn-secondary">
+                See How It Works
+            </a>
+        </div>
+    </section>
+
+    <section class="monitor-section">
+        <div class="monitor-container">
+            <div class="monitor-header">
+                <h2>Real-Time Safety Intelligence</h2>
+                <p style="color: var(--text-secondary);">Live monitoring from a SafetyOS-protected facility</p>
+            </div>
+            <div class="live-dashboard">
+                <div class="dashboard-top">
+                    <div class="facility-name">🏭 Apex Manufacturing — Plant 7</div>
+                    <div class="live-indicator">
+                        <span class="live-dot"></span>
+                        LIVE MONITORING
+                    </div>
+                </div>
+                <div class="dashboard-grid">
+                    <div class="metric-card safe">
+                        <div class="metric-icon">👷</div>
+                        <div class="metric-title">PPE Compliance</div>
+                        <div class="metric-value">98.4%</div>
+                        <div class="metric-change" style="color: var(--safety-green);">↑ 12% this week</div>
+                    </div>
+                    <div class="metric-card safe">
+                        <div class="metric-icon">🔍</div>
+                        <div class="metric-title">Hazards Detected</div>
+                        <div class="metric-value">7</div>
+                        <div class="metric-change" style="color: var(--safety-green);">All resolved</div>
+                    </div>
+                    <div class="metric-card warning">
+                        <div class="metric-icon">⚠️</div>
+                        <div class="metric-title">Risk Score</div>
+                        <div class="metric-value">23</div>
+                        <div class="metric-change" style="color: var(--safety-yellow);">Zone B elevated</div>
+                    </div>
+                    <div class="metric-card safe">
+                        <div class="metric-icon">📊</div>
+                        <div class="metric-title">Days Without Incident</div>
+                        <div class="metric-value">147</div>
+                        <div class="metric-change" style="color: var(--safety-green);">Record: 200</div>
+                    </div>
+                    <div class="alert-feed">
+                        <div class="alert-feed-header">
+                            <h3>📡 Live Alert Feed</h3>
+                            <span style="color: var(--text-muted); font-size: 0.8rem;">Last 30 minutes</span>
+                        </div>
+                        <div class="alert-item">
+                            <div class="alert-icon success">✅</div>
+                            <div class="alert-content">
+                                <div class="alert-title">Zone C forklift proximity alert resolved</div>
+                                <div class="alert-time">2 minutes ago</div>
+                            </div>
+                        </div>
+                        <div class="alert-item">
+                            <div class="alert-icon warning">⚠️</div>
+                            <div class="alert-content">
+                                <div class="alert-title">Worker fatigue pattern detected — Line 4</div>
+                                <div class="alert-time">8 minutes ago</div>
+                            </div>
+                        </div>
+                        <div class="alert-item">
+                            <div class="alert-icon success">✅</div>
+                            <div class="alert-content">
+                                <div class="alert-title">Machine guard check completed — Press #7</div>
+                                <div class="alert-time">15 minutes ago</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="problem-section">
+        <div class="problem-container">
+            <div class="section-label">The Crisis</div>
+            <h2>Traditional Safety Programs Have Failed. Human Vigilance Can't Scale.</h2>
+            
+            <div class="death-counter">
+                <div class="counter-label">Workers who died from occupational accidents this year</div>
+                <div class="counter-value" id="deathCounter">438,247</div>
+                <div class="counter-sublabel">One death every 15 seconds</div>
+            </div>
+
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="problem-stat">$170B</div>
+                    <h3>Workers' Compensation</h3>
+                    <p>Annual cost in the U.S. alone. Every dollar saved goes straight to the bottom line.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-stat">340M</div>
+                    <h3>Occupational Accidents</h3>
+                    <p>Injuries requiring medical treatment globally each year. Most are entirely preventable.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-stat">47%</div>
+                    <h3>Projects Abandoned</h3>
+                    <p>Safety initiatives fail because human monitoring doesn't scale. Technology must.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features-section" id="features">
+        <div class="features-container">
+            <div class="features-header">
+                <div class="section-label">Capabilities</div>
+                <h2>The AI Safety Officer That Never Sleeps</h2>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">👁️</div>
+                    <h3>Real-Time Hazard Detection</h3>
+                    <p>Computer vision and IoT sensors continuously monitor every zone, detecting hazards the moment they appear.</p>
+                    <ul class="feature-list">
+                        <li>PPE compliance monitoring (hard hats, vests, goggles)</li>
+                        <li>Proximity alerts for machinery and vehicles</li>
+                        <li>Spill and obstruction detection</li>
+                        <li>Fire and smoke early warning</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔮</div>
+                    <h3>Predictive Incident Prevention</h3>
+                    <p>AI analyzes patterns to predict accidents 15-60 minutes before they happen, giving you time to intervene.</p>
+                    <ul class="feature-list">
+                        <li>Risk scoring by zone, shift, and activity</li>
+                        <li>Fatigue and heat stress detection</li>
+                        <li>Equipment failure prediction</li>
+                        <li>Weather-adjusted risk modeling</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📋</div>
+                    <h3>Autonomous Compliance</h3>
+                    <p>Every safety observation is logged automatically. OSHA inspections become stress-free with auto-generated reports.</p>
+                    <ul class="feature-list">
+                        <li>Auto-generated OSHA 300 logs</li>
+                        <li>ISO 45001 certification support</li>
+                        <li>Immutable audit trail</li>
+                        <li>Training gap identification</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🌐</div>
+                    <h3>Federated Learning Network</h3>
+                    <p>Learn from near-misses across thousands of facilities without sharing sensitive data. Every deployment makes the network smarter.</p>
+                    <ul class="feature-list">
+                        <li>Cross-industry intelligence sharing</li>
+                        <li>Privacy-preserving model updates</li>
+                        <li>Industry benchmarking</li>
+                        <li>Continuous improvement loop</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="roi-section" id="roi">
+        <div class="roi-container">
+            <div class="roi-header">
+                <div class="section-label">ROI</div>
+                <h2>SafetyOS Pays for Itself in Year 1</h2>
+            </div>
+            <div class="roi-calculator">
+                <div class="roi-grid">
+                    <div class="roi-input-group">
+                        <div class="roi-input-label">Average Workers' Comp Premium</div>
+                        <div class="roi-input-value">$750K</div>
+                        <div class="roi-input-sublabel">per facility/year</div>
+                    </div>
+                    <div class="roi-input-group">
+                        <div class="roi-input-label">Incident Reduction</div>
+                        <div class="roi-input-value">50%</div>
+                        <div class="roi-input-sublabel">proven in pilots</div>
+                    </div>
+                    <div class="roi-input-group">
+                        <div class="roi-input-label">Premium Reduction</div>
+                        <div class="roi-input-value">25%</div>
+                        <div class="roi-input-sublabel">average savings</div>
+                    </div>
+                </div>
+                <div class="roi-result">
+                    <div class="roi-result-label">Your Annual Savings</div>
+                    <div class="roi-result-value">$187,500</div>
+                    <div class="roi-result-sublabel">SafetyOS investment: $150,000 → Net ROI: $37,500+ Year 1</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="industries-section" id="industries">
+        <div class="industries-container">
+            <div class="industries-header">
+                <div class="section-label">Industries</div>
+                <h2>Protecting Every Workplace</h2>
+            </div>
+            <div class="industries-grid">
+                <div class="industry-card">
+                    <div class="industry-icon">🏭</div>
+                    <h4>Manufacturing</h4>
+                    <p>300,000+ U.S. facilities</p>
+                </div>
+                <div class="industry-card">
+                    <div class="industry-icon">🏗️</div>
+                    <h4>Construction</h4>
+                    <p>750,000+ active sites</p>
+                </div>
+                <div class="industry-card">
+                    <div class="industry-icon">📦</div>
+                    <h4>Warehousing</h4>
+                    <p>20,000+ large facilities</p>
+                </div>
+                <div class="industry-card">
+                    <div class="industry-icon">⛽</div>
+                    <h4>Oil & Gas</h4>
+                    <p>10,000+ global sites</p>
+                </div>
+                <div class="industry-card">
+                    <div class="industry-icon">⛏️</div>
+                    <h4>Mining</h4>
+                    <p>2,500+ active mines</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section" id="contact">
+        <div class="cta-container">
+            <div class="cta-box">
+                <h2>Every Worker Deserves to Go Home Safely</h2>
+                <p>See how SafetyOS can eliminate workplace accidents at your facilities.</p>
+                <div class="cta-group" style="justify-content: center;">
+                    <a href="mailto:founder@safetyos.ai" class="btn-primary">
+                        Schedule Demo
+                        <span>→</span>
+                    </a>
+                    <a href="mailto:investor@safetyos.ai" class="btn-secondary">
+                        Investor Deck
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">🛡️ SafetyOS</div>
+            <div class="footer-links">
+                <a href="#">Product</a>
+                <a href="#">Industries</a>
+                <a href="#">Company</a>
+                <a href="#">Contact</a>
+            </div>
+            <div class="footer-tagline">Because Going Home Safely Isn't Optional.</div>
+        </div>
+    </footer>
+
+    <script>
+        // Animate death counter
+        const counter = document.getElementById('deathCounter');
+        let count = 438247;
+        
+        setInterval(() => {
+            count += 1;
+            counter.textContent = count.toLocaleString();
+        }, 15000);
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
