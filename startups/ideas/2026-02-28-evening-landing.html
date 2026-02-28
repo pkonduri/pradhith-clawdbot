@@ -1,0 +1,1455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DataCool AI — Autonomous Datacenter Cooling Intelligence</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00d4ff;
+            --primary-dark: #0099cc;
+            --secondary: #ff6b35;
+            --hot: #ff4444;
+            --cool: #00ccff;
+            --bg-dark: #0a0a0f;
+            --bg-card: #12121a;
+            --bg-gradient: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #0f0f1a 100%);
+            --text: #ffffff;
+            --text-muted: #8892a0;
+            --border: #2a2a3a;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        /* Thermal Animation Background */
+        .thermal-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .thermal-blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            animation: thermalPulse 8s ease-in-out infinite;
+        }
+        
+        .thermal-blob.hot {
+            background: radial-gradient(circle, rgba(255,68,68,0.4) 0%, rgba(255,107,53,0.2) 50%, transparent 70%);
+        }
+        
+        .thermal-blob.cool {
+            background: radial-gradient(circle, rgba(0,212,255,0.3) 0%, rgba(0,153,204,0.15) 50%, transparent 70%);
+        }
+        
+        .blob-1 { width: 600px; height: 600px; top: -200px; right: -100px; animation-delay: 0s; }
+        .blob-2 { width: 500px; height: 500px; bottom: 20%; left: -150px; animation-delay: -2s; }
+        .blob-3 { width: 400px; height: 400px; top: 50%; right: 10%; animation-delay: -4s; }
+        .blob-4 { width: 450px; height: 450px; bottom: -100px; right: 30%; animation-delay: -6s; }
+        
+        @keyframes thermalPulse {
+            0%, 100% { transform: scale(1) translate(0, 0); opacity: 0.6; }
+            33% { transform: scale(1.2) translate(20px, -30px); opacity: 0.8; }
+            66% { transform: scale(0.9) translate(-20px, 20px); opacity: 0.5; }
+        }
+        
+        /* Heat Flow Animation */
+        .heat-flow {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M0 50 Q25 30 50 50 T100 50' stroke='rgba(255,68,68,0.1)' fill='none' stroke-width='0.5'/%3E%3C/svg%3E");
+            animation: heatFlowAnim 20s linear infinite;
+        }
+        
+        @keyframes heatFlowAnim {
+            0% { background-position: 0 0; }
+            100% { background-position: 200px 0; }
+        }
+        
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 800;
+            font-size: 1.5rem;
+        }
+        
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, var(--hot) 0%, var(--cool) 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .logo-icon::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 50%;
+            bottom: 0;
+            background: linear-gradient(to top, var(--cool), transparent);
+            animation: coolDown 3s ease-in-out infinite;
+        }
+        
+        @keyframes coolDown {
+            0%, 100% { height: 30%; }
+            50% { height: 70%; }
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+        
+        .nav-cta {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: var(--bg-dark);
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
+        }
+        
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 120px 5% 80px;
+            position: relative;
+        }
+        
+        .hero-content {
+            max-width: 700px;
+            z-index: 1;
+        }
+        
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 100px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--primary);
+            margin-bottom: 2rem;
+        }
+        
+        .hero-badge .pulse {
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.5); }
+        }
+        
+        h1 {
+            font-size: 4rem;
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+        }
+        
+        h1 span.gradient {
+            background: linear-gradient(135deg, var(--hot) 0%, var(--secondary) 30%, var(--cool) 70%, var(--primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero-description {
+            font-size: 1.35rem;
+            color: var(--text-muted);
+            margin-bottom: 2.5rem;
+            line-height: 1.7;
+        }
+        
+        .hero-stats {
+            display: flex;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+        
+        .stat {
+            text-align: left;
+        }
+        
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--cool));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .stat-value.hot {
+            background: linear-gradient(135deg, var(--hot), var(--secondary));
+            -webkit-background-clip: text;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+        }
+        
+        .hero-ctas {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: var(--bg-dark);
+            box-shadow: 0 4px 20px rgba(0, 212, 255, 0.3);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(0, 212, 255, 0.4);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--primary);
+        }
+        
+        /* Thermal Visualization */
+        .hero-visual {
+            position: absolute;
+            right: 5%;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 500px;
+            height: 500px;
+        }
+        
+        .datacenter-rack {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .rack-unit {
+            position: absolute;
+            width: 120px;
+            height: 60px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            transition: all 0.5s;
+        }
+        
+        .rack-unit::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            animation: blink 1s infinite;
+        }
+        
+        .rack-unit.hot {
+            background: linear-gradient(135deg, rgba(255,68,68,0.3), rgba(255,107,53,0.2));
+            border-color: var(--hot);
+            box-shadow: 0 0 30px rgba(255,68,68,0.3);
+        }
+        
+        .rack-unit.hot::after {
+            background: var(--hot);
+        }
+        
+        .rack-unit.warm {
+            background: linear-gradient(135deg, rgba(255,170,68,0.2), rgba(255,200,100,0.1));
+            border-color: #ffaa44;
+            box-shadow: 0 0 20px rgba(255,170,68,0.2);
+        }
+        
+        .rack-unit.warm::after {
+            background: #ffaa44;
+        }
+        
+        .rack-unit.cool {
+            background: linear-gradient(135deg, rgba(0,212,255,0.2), rgba(0,153,204,0.1));
+            border-color: var(--cool);
+            box-shadow: 0 0 20px rgba(0,212,255,0.2);
+        }
+        
+        .rack-unit.cool::after {
+            background: var(--cool);
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        
+        .rack-unit:nth-child(1) { top: 10%; left: 10%; animation: rackHeat 4s infinite; }
+        .rack-unit:nth-child(2) { top: 10%; left: 45%; animation: rackHeat 4s infinite 0.5s; }
+        .rack-unit:nth-child(3) { top: 10%; left: 80%; animation: rackHeat 4s infinite 1s; }
+        .rack-unit:nth-child(4) { top: 35%; left: 10%; animation: rackHeat 4s infinite 1.5s; }
+        .rack-unit:nth-child(5) { top: 35%; left: 45%; animation: rackHeat 4s infinite 2s; }
+        .rack-unit:nth-child(6) { top: 35%; left: 80%; animation: rackHeat 4s infinite 2.5s; }
+        .rack-unit:nth-child(7) { top: 60%; left: 10%; animation: rackHeat 4s infinite 3s; }
+        .rack-unit:nth-child(8) { top: 60%; left: 45%; animation: rackHeat 4s infinite 3.5s; }
+        .rack-unit:nth-child(9) { top: 60%; left: 80%; animation: rackHeat 4s infinite 0.3s; }
+        
+        .optimization-label {
+            position: absolute;
+            bottom: 5%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid var(--primary);
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .optimization-label .ai-icon {
+            animation: spin 3s linear infinite;
+        }
+        
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Problem Section */
+        .problem {
+            padding: 100px 5%;
+            background: linear-gradient(to bottom, var(--bg-dark), var(--bg-card));
+            position: relative;
+        }
+        
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 4rem;
+        }
+        
+        .section-tag {
+            display: inline-block;
+            background: rgba(255, 68, 68, 0.1);
+            color: var(--hot);
+            padding: 0.5rem 1rem;
+            border-radius: 100px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .section-tag.cool {
+            background: rgba(0, 212, 255, 0.1);
+            color: var(--primary);
+        }
+        
+        h2 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+        }
+        
+        .section-description {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+        }
+        
+        .crisis-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .crisis-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s, border-color 0.3s;
+        }
+        
+        .crisis-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--hot);
+        }
+        
+        .crisis-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--hot), var(--secondary));
+        }
+        
+        .crisis-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .crisis-card h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+        
+        .crisis-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+        
+        .crisis-stat {
+            display: flex;
+            align-items: baseline;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
+        
+        .crisis-stat .number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--hot);
+        }
+        
+        .crisis-stat .label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+        
+        /* Solution Section */
+        .solution {
+            padding: 100px 5%;
+            position: relative;
+        }
+        
+        .solution-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            align-items: center;
+        }
+        
+        .solution-features {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+        
+        .feature {
+            display: flex;
+            gap: 1.5rem;
+            padding: 1.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            transition: all 0.3s;
+        }
+        
+        .feature:hover {
+            border-color: var(--primary);
+            transform: translateX(10px);
+        }
+        
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, rgba(0,212,255,0.2), rgba(0,153,204,0.1));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            flex-shrink: 0;
+        }
+        
+        .feature-content h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .feature-content p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+        
+        /* Architecture Visual */
+        .architecture-visual {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            position: relative;
+        }
+        
+        .arch-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .arch-header h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        .arch-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            color: #00ff88;
+        }
+        
+        .arch-status .dot {
+            width: 8px;
+            height: 8px;
+            background: #00ff88;
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+        
+        .arch-layers {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .arch-layer {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.25rem;
+            transition: all 0.3s;
+        }
+        
+        .arch-layer:hover {
+            border-color: var(--primary);
+            background: rgba(0, 212, 255, 0.05);
+        }
+        
+        .arch-layer-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            margin-bottom: 0.75rem;
+        }
+        
+        .arch-components {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+        
+        .arch-comp {
+            background: var(--bg-dark);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-family: 'JetBrains Mono', monospace;
+            border: 1px solid var(--border);
+        }
+        
+        .arch-comp.active {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+        
+        /* Metrics Section */
+        .metrics {
+            padding: 100px 5%;
+            background: var(--bg-card);
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .metric-card {
+            text-align: center;
+            padding: 2.5rem 1.5rem;
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--cool));
+        }
+        
+        .metric-value {
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+        }
+        
+        .metric-value.gradient {
+            background: linear-gradient(135deg, var(--primary), var(--cool));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .metric-label {
+            font-size: 1rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+        
+        /* Market Section */
+        .market {
+            padding: 100px 5%;
+        }
+        
+        .market-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .market-visual {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-top: 4rem;
+        }
+        
+        .tam-chart {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2.5rem;
+        }
+        
+        .chart-title {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+        
+        .chart-bars {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .chart-bar {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .bar-label {
+            width: 120px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+        
+        .bar-track {
+            flex: 1;
+            height: 30px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 6px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .bar-fill {
+            height: 100%;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 1rem;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: width 1s ease-out;
+        }
+        
+        .bar-fill.hyperscale { width: 85%; background: linear-gradient(90deg, var(--primary), var(--cool)); }
+        .bar-fill.enterprise { width: 60%; background: linear-gradient(90deg, #7c3aed, #a855f7); }
+        .bar-fill.colocation { width: 45%; background: linear-gradient(90deg, var(--secondary), #ffa500); }
+        .bar-fill.edge { width: 25%; background: linear-gradient(90deg, #10b981, #34d399); }
+        
+        .market-drivers {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .driver {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1.25rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+        }
+        
+        .driver-number {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--bg-dark);
+            flex-shrink: 0;
+        }
+        
+        .driver-content h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        
+        .driver-content p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+        
+        /* How It Works */
+        .how-it-works {
+            padding: 100px 5%;
+            background: linear-gradient(to bottom, var(--bg-dark), var(--bg-card));
+        }
+        
+        .steps {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+        }
+        
+        .step {
+            flex: 1;
+            min-width: 280px;
+            max-width: 350px;
+            text-align: center;
+            padding: 2.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            position: relative;
+        }
+        
+        .step::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: -2rem;
+            width: 2rem;
+            height: 2px;
+            background: var(--border);
+        }
+        
+        .step:last-child::before {
+            display: none;
+        }
+        
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--bg-dark);
+            margin: 0 auto 1.5rem;
+        }
+        
+        .step h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .step p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+        
+        .step-time {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.5rem 1rem;
+            background: rgba(0, 212, 255, 0.1);
+            border-radius: 100px;
+            font-size: 0.85rem;
+            color: var(--primary);
+            font-weight: 500;
+        }
+        
+        /* CTA Section */
+        .cta-section {
+            padding: 120px 5%;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(0,212,255,0.2) 0%, transparent 70%);
+            z-index: 0;
+        }
+        
+        .cta-content {
+            position: relative;
+            z-index: 1;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .cta-content h2 {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .cta-content p {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            margin-bottom: 2.5rem;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+        
+        /* Footer */
+        footer {
+            padding: 3rem 5%;
+            border-top: 1px solid var(--border);
+            text-align: center;
+        }
+        
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+        
+        footer p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero-visual {
+                display: none;
+            }
+            
+            .solution-grid,
+            .market-visual {
+                grid-template-columns: 1fr;
+            }
+            
+            .metrics-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            h1 {
+                font-size: 3rem;
+            }
+            
+            h2 {
+                font-size: 2.25rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero-stats {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+            
+            .hero-ctas {
+                flex-direction: column;
+            }
+            
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+            }
+            
+            h1 {
+                font-size: 2.25rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Thermal Background -->
+    <div class="thermal-bg">
+        <div class="heat-flow"></div>
+        <div class="thermal-blob hot blob-1"></div>
+        <div class="thermal-blob cool blob-2"></div>
+        <div class="thermal-blob hot blob-3"></div>
+        <div class="thermal-blob cool blob-4"></div>
+    </div>
+    
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">
+            <div class="logo-icon">🌡️</div>
+            <span>DataCool AI</span>
+        </div>
+        <div class="nav-links">
+            <a href="#problem">Problem</a>
+            <a href="#solution">Solution</a>
+            <a href="#market">Market</a>
+            <a href="#how">How It Works</a>
+        </div>
+        <a href="#contact" class="nav-cta">Get Thermal Assessment</a>
+    </nav>
+    
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span class="pulse"></span>
+                Autonomous Cooling Intelligence
+            </div>
+            <h1>The AI That <span class="gradient">Cools Your Datacenter</span></h1>
+            <p class="hero-description">
+                AI compute is generating unprecedented heat. DataCool AI autonomously optimizes cooling across your entire facility portfolio — cutting costs by 40% while eliminating water waste.
+            </p>
+            <div class="hero-stats">
+                <div class="stat">
+                    <div class="stat-value hot">$86B</div>
+                    <div class="stat-label">Annual Cooling Spend</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">40%</div>
+                    <div class="stat-label">Cost Reduction</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">15s</div>
+                    <div class="stat-label">Optimization Cycle</div>
+                </div>
+            </div>
+            <div class="hero-ctas">
+                <a href="#contact" class="btn btn-primary">
+                    Request Demo
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
+                <a href="#solution" class="btn btn-secondary">See How It Works</a>
+            </div>
+        </div>
+        
+        <!-- Datacenter Thermal Visualization -->
+        <div class="hero-visual">
+            <div class="datacenter-rack">
+                <div class="rack-unit hot">GPU-01</div>
+                <div class="rack-unit cool">GPU-02</div>
+                <div class="rack-unit warm">GPU-03</div>
+                <div class="rack-unit hot">GPU-04</div>
+                <div class="rack-unit cool">GPU-05</div>
+                <div class="rack-unit hot">GPU-06</div>
+                <div class="rack-unit cool">GPU-07</div>
+                <div class="rack-unit warm">GPU-08</div>
+                <div class="rack-unit cool">GPU-09</div>
+                <div class="optimization-label">
+                    <span class="ai-icon">⚡</span>
+                    DataCool AI Optimizing...
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Problem Section -->
+    <section class="problem" id="problem">
+        <div class="section-header">
+            <span class="section-tag">🔥 The Crisis</span>
+            <h2>AI's Thermodynamic Emergency</h2>
+            <p class="section-description">
+                The AI revolution has hit a wall — and it's not compute or data. It's heat. Datacenters are literally running hot, and traditional cooling can't keep up.
+            </p>
+        </div>
+        
+        <div class="crisis-grid">
+            <div class="crisis-card">
+                <div class="crisis-icon">💰</div>
+                <h3>Cooling = 40% of TCO</h3>
+                <p>Datacenters spend more keeping servers cool than powering them. It's the largest operational cost and growing faster than compute.</p>
+                <div class="crisis-stat">
+                    <span class="number">$50B+</span>
+                    <span class="label">Annual global cooling spend</span>
+                </div>
+            </div>
+            
+            <div class="crisis-card">
+                <div class="crisis-icon">💧</div>
+                <h3>Water Crisis</h3>
+                <p>A single hyperscale datacenter uses 5 million gallons of water daily. In a world of water scarcity, this is unsustainable.</p>
+                <div class="crisis-stat">
+                    <span class="number">5M</span>
+                    <span class="label">Gallons per day per facility</span>
+                </div>
+            </div>
+            
+            <div class="crisis-card">
+                <div class="crisis-icon">🔥</div>
+                <h3>GPU Heat Explosion</h3>
+                <p>Nvidia Blackwell chips need 1,200W+ per GPU — 3x the previous generation. Traditional air cooling simply can't handle it.</p>
+                <div class="crisis-stat">
+                    <span class="number">1,200W</span>
+                    <span class="label">Per next-gen GPU</span>
+                </div>
+            </div>
+            
+            <div class="crisis-card">
+                <div class="crisis-icon">⏸️</div>
+                <h3>Stranded Capacity</h3>
+                <p>30% of planned AI datacenter capacity is delayed or cancelled due to cooling constraints. Heat is the bottleneck.</p>
+                <div class="crisis-stat">
+                    <span class="number">30%</span>
+                    <span class="label">Capacity stranded</span>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Solution Section -->
+    <section class="solution" id="solution">
+        <div class="section-header">
+            <span class="section-tag cool">❄️ The Solution</span>
+            <h2>Autonomous Cooling Intelligence</h2>
+            <p class="section-description">
+                DataCool AI is the intelligence layer for datacenter thermal management — continuously optimizing cooling across your entire facility portfolio in real-time.
+            </p>
+        </div>
+        
+        <div class="solution-grid">
+            <div class="solution-features">
+                <div class="feature">
+                    <div class="feature-icon">🧬</div>
+                    <div class="feature-content">
+                        <h3>Thermal Digital Twin</h3>
+                        <p>Physics-informed neural networks model heat transfer and fluid dynamics at 1000x the speed of CFD simulation with 95% accuracy.</p>
+                    </div>
+                </div>
+                
+                <div class="feature">
+                    <div class="feature-icon">🔮</div>
+                    <div class="feature-content">
+                        <h3>Predictive Workload Intelligence</h3>
+                        <p>Integrates with Kubernetes and Slurm to forecast compute demand 24-72 hours ahead. Pre-cool before the heat arrives.</p>
+                    </div>
+                </div>
+                
+                <div class="feature">
+                    <div class="feature-icon">⚡</div>
+                    <div class="feature-content">
+                        <h3>Multi-Objective Optimizer</h3>
+                        <p>Pareto-optimal control balancing energy, water, reliability, and SLAs simultaneously. Reinforcement learning improves continuously.</p>
+                    </div>
+                </div>
+                
+                <div class="feature">
+                    <div class="feature-icon">🤖</div>
+                    <div class="feature-content">
+                        <h3>Autonomous Control</h3>
+                        <p>Direct actuation of chillers, CRAHs, pumps, and liquid cooling systems. Sub-second response to thermal events.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="architecture-visual">
+                <div class="arch-header">
+                    <h4>DataCool Platform</h4>
+                    <div class="arch-status">
+                        <span class="dot"></span>
+                        Optimizing
+                    </div>
+                </div>
+                <div class="arch-layers">
+                    <div class="arch-layer">
+                        <div class="arch-layer-title">Intelligence Layer</div>
+                        <div class="arch-components">
+                            <span class="arch-comp active">ThermalFormer</span>
+                            <span class="arch-comp">CoolRL</span>
+                            <span class="arch-comp">HydroBalance</span>
+                        </div>
+                    </div>
+                    <div class="arch-layer">
+                        <div class="arch-layer-title">Control Layer</div>
+                        <div class="arch-components">
+                            <span class="arch-comp">Liquid Cooling</span>
+                            <span class="arch-comp active">Air-Side</span>
+                            <span class="arch-comp">Water Systems</span>
+                        </div>
+                    </div>
+                    <div class="arch-layer">
+                        <div class="arch-layer-title">Integration Layer</div>
+                        <div class="arch-components">
+                            <span class="arch-comp">BMS</span>
+                            <span class="arch-comp">DCIM</span>
+                            <span class="arch-comp active">K8s/Slurm</span>
+                            <span class="arch-comp">Equipment</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Metrics Section -->
+    <section class="metrics">
+        <div class="section-header">
+            <h2>Proven Results</h2>
+        </div>
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-value gradient">40%</div>
+                <div class="metric-label">Cooling Cost Reduction</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value gradient">60%</div>
+                <div class="metric-label">Water Savings</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value gradient">12mo</div>
+                <div class="metric-label">Payback Period</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value gradient">99.99%</div>
+                <div class="metric-label">Thermal SLA</div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Market Section -->
+    <section class="market" id="market">
+        <div class="section-header">
+            <span class="section-tag cool">📊 Market</span>
+            <h2>$86B Opportunity</h2>
+            <p class="section-description">
+                Datacenter cooling is one of the largest operational expenses globally — and it's growing faster than compute as AI scales.
+            </p>
+        </div>
+        
+        <div class="market-content">
+            <div class="market-visual">
+                <div class="tam-chart">
+                    <div class="chart-title">Total Addressable Market by Segment</div>
+                    <div class="chart-bars">
+                        <div class="chart-bar">
+                            <span class="bar-label">Hyperscale</span>
+                            <div class="bar-track">
+                                <div class="bar-fill hyperscale">$35B</div>
+                            </div>
+                        </div>
+                        <div class="chart-bar">
+                            <span class="bar-label">Enterprise</span>
+                            <div class="bar-track">
+                                <div class="bar-fill enterprise">$25B</div>
+                            </div>
+                        </div>
+                        <div class="chart-bar">
+                            <span class="bar-label">Colocation</span>
+                            <div class="bar-track">
+                                <div class="bar-fill colocation">$18B</div>
+                            </div>
+                        </div>
+                        <div class="chart-bar">
+                            <span class="bar-label">Edge</span>
+                            <div class="bar-track">
+                                <div class="bar-fill edge">$8B</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="market-drivers">
+                    <div class="driver">
+                        <div class="driver-number">1</div>
+                        <div class="driver-content">
+                            <h4>AI Datacenter Explosion</h4>
+                            <p>$300B in new AI datacenter construction 2025-2030</p>
+                        </div>
+                    </div>
+                    <div class="driver">
+                        <div class="driver-number">2</div>
+                        <div class="driver-content">
+                            <h4>Liquid Cooling Adoption</h4>
+                            <p>40% of new AI racks will use liquid cooling by 2027</p>
+                        </div>
+                    </div>
+                    <div class="driver">
+                        <div class="driver-number">3</div>
+                        <div class="driver-content">
+                            <h4>Water Regulations</h4>
+                            <p>EU and US Southwest implementing strict datacenter water limits</p>
+                        </div>
+                    </div>
+                    <div class="driver">
+                        <div class="driver-number">4</div>
+                        <div class="driver-content">
+                            <h4>ESG Mandates</h4>
+                            <p>Hyperscalers committed to carbon-neutral by 2030</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- How It Works -->
+    <section class="how-it-works" id="how">
+        <div class="section-header">
+            <span class="section-tag cool">🚀 Process</span>
+            <h2>How It Works</h2>
+        </div>
+        
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <h3>Connect</h3>
+                <p>Deploy our IoT gateway or connect via API to your existing BMS. No hardware changes required.</p>
+                <span class="step-time">1 Day Setup</span>
+            </div>
+            
+            <div class="step">
+                <div class="step-number">2</div>
+                <h3>Model</h3>
+                <p>Our AI builds a thermal digital twin of your facility, learning equipment behavior and heat patterns.</p>
+                <span class="step-time">1 Week Learning</span>
+            </div>
+            
+            <div class="step">
+                <div class="step-number">3</div>
+                <h3>Optimize</h3>
+                <p>DataCool AI takes over — continuously optimizing cooling every 15 seconds while you focus on compute.</p>
+                <span class="step-time">Continuous Improvement</span>
+            </div>
+        </div>
+    </section>
+    
+    <!-- CTA Section -->
+    <section class="cta-section" id="contact">
+        <div class="cta-content">
+            <h2>Cool Your Datacenter Smarter</h2>
+            <p>Get a free thermal assessment revealing optimization opportunities worth $500K+ annually.</p>
+            <div class="cta-buttons">
+                <a href="mailto:founders@datacool.ai" class="btn btn-primary">
+                    Request Assessment
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
+                <a href="mailto:founders@datacool.ai" class="btn btn-secondary">Talk to Founders</a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="footer-logo">
+            <div class="logo-icon" style="width: 35px; height: 35px; font-size: 1.2rem;">🌡️</div>
+            <span style="font-weight: 700;">DataCool AI</span>
+        </div>
+        <p>The Autonomic Nervous System for Data Centers</p>
+        <p style="margin-top: 1rem; font-size: 0.8rem;">© 2026 DataCool AI. All rights reserved.</p>
+    </footer>
+    
+    <script>
+        // Smooth scroll for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        // Animate rack units thermal states
+        const rackUnits = document.querySelectorAll('.rack-unit');
+        const states = ['hot', 'warm', 'cool'];
+        
+        setInterval(() => {
+            rackUnits.forEach(unit => {
+                const currentState = states.find(s => unit.classList.contains(s));
+                const currentIndex = states.indexOf(currentState);
+                const newIndex = Math.random() > 0.7 ? 
+                    Math.floor(Math.random() * states.length) : 
+                    Math.max(0, currentIndex - 1);
+                
+                states.forEach(s => unit.classList.remove(s));
+                unit.classList.add(states[newIndex]);
+            });
+        }, 3000);
+        
+        // Animate bars on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.querySelectorAll('.bar-fill').forEach(bar => {
+                        bar.style.width = bar.dataset.width || bar.style.width;
+                    });
+                }
+            });
+        }, { threshold: 0.5 });
+        
+        document.querySelectorAll('.tam-chart').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>

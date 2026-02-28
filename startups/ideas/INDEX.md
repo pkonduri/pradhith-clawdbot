@@ -89,6 +89,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-02-27 | Evening | PharmaMind AI — Autonomous Pharmacy Intelligence Platform | [Playbook](2026-02-27-evening.md) • [Landing](2026-02-27-evening-landing.html) • [PDF](2026-02-27-evening.pdf) |
 | 2026-02-27 | Morning | FactChain AI — The Trust Layer for AI Outputs | [Playbook](2026-02-27-morning.md) • [Landing](2026-02-27-morning-landing.html) • [PDF](2026-02-27-morning.pdf) |
 | 2026-02-27 | Afternoon | SafetyOS — Autonomous Industrial Safety Intelligence | [Playbook](2026-02-27-afternoon.md) • [Landing](2026-02-27-afternoon-landing.html) • [PDF](2026-02-27-afternoon.pdf) |
+| 2026-02-28 | Evening | DataCool AI — Autonomous Datacenter Cooling Intelligence | [Playbook](2026-02-28-evening.md) • [Landing](2026-02-28-evening-landing.html) • [PDF](2026-02-28-evening.pdf) |
 <!-- New entries will be added above this line -->
 
 ---
