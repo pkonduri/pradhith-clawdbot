@@ -1,0 +1,1315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LabOS — The AI Operating System for Laboratories</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --lab-teal: #00D4AA;
+            --lab-teal-dark: #00A888;
+            --lab-purple: #7C3AED;
+            --lab-purple-light: #A78BFA;
+            --lab-blue: #3B82F6;
+            --lab-navy: #0A0E27;
+            --lab-navy-light: #131A42;
+            --lab-gray: #94A3B8;
+            --lab-white: #F8FAFC;
+            --gradient-primary: linear-gradient(135deg, #00D4AA 0%, #7C3AED 50%, #3B82F6 100%);
+            --gradient-glow: linear-gradient(135deg, rgba(0, 212, 170, 0.2) 0%, rgba(124, 58, 237, 0.2) 50%, rgba(59, 130, 246, 0.2) 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--lab-navy);
+            color: var(--lab-white);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Animated DNA Helix Background */
+        .dna-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .dna-strand {
+            position: absolute;
+            width: 4px;
+            height: 100%;
+            opacity: 0.1;
+        }
+
+        .dna-strand::before,
+        .dna-strand::after {
+            content: '';
+            position: absolute;
+            width: 4px;
+            height: 20px;
+            background: var(--lab-teal);
+            border-radius: 2px;
+            animation: dnaMove 3s ease-in-out infinite;
+        }
+
+        .dna-strand:nth-child(odd)::before {
+            animation-delay: -1.5s;
+        }
+
+        @keyframes dnaMove {
+            0%, 100% { transform: translateX(-15px); opacity: 0.3; }
+            50% { transform: translateX(15px); opacity: 1; }
+        }
+
+        /* Floating Molecules */
+        .molecule {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            background: var(--lab-teal);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: float 15s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .molecule::before,
+        .molecule::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: var(--lab-purple);
+            border-radius: 50%;
+        }
+
+        .molecule::before {
+            top: -12px;
+            left: 5px;
+        }
+
+        .molecule::after {
+            bottom: -12px;
+            right: 5px;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-100px) rotate(90deg); }
+            50% { transform: translateY(-50px) rotate(180deg); }
+            75% { transform: translateY(-150px) rotate(270deg); }
+        }
+
+        .molecule:nth-child(1) { top: 10%; left: 5%; animation-delay: 0s; }
+        .molecule:nth-child(2) { top: 30%; right: 10%; animation-delay: -3s; }
+        .molecule:nth-child(3) { top: 60%; left: 15%; animation-delay: -6s; }
+        .molecule:nth-child(4) { top: 80%; right: 20%; animation-delay: -9s; }
+        .molecule:nth-child(5) { top: 20%; right: 30%; animation-delay: -12s; }
+
+        /* Lab Equipment Grid Background */
+        .grid-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 212, 170, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 212, 170, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: linear-gradient(180deg, rgba(10, 14, 39, 0.95) 0%, transparent 100%);
+            backdrop-filter: blur(10px);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 800;
+            font-size: 1.8rem;
+            text-decoration: none;
+            color: var(--lab-white);
+        }
+
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--gradient-primary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 0 30px rgba(0, 212, 170, 0.3);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+        }
+
+        .nav-links a {
+            color: var(--lab-gray);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--lab-teal);
+        }
+
+        .btn-demo {
+            padding: 12px 28px;
+            background: var(--gradient-primary);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .btn-demo:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(0, 212, 170, 0.3);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 8rem 5% 4rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-badge {
+            padding: 8px 20px;
+            background: rgba(0, 212, 170, 0.1);
+            border: 1px solid rgba(0, 212, 170, 0.3);
+            border-radius: 50px;
+            font-size: 0.9rem;
+            color: var(--lab-teal);
+            margin-bottom: 2rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(0, 212, 170, 0.2); }
+            50% { box-shadow: 0 0 40px rgba(0, 212, 170, 0.4); }
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 5.5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero .subtitle {
+            font-size: clamp(1.25rem, 3vw, 1.75rem);
+            color: var(--lab-gray);
+            max-width: 800px;
+            margin-bottom: 3rem;
+            font-weight: 400;
+        }
+
+        .hero .subtitle strong {
+            color: var(--lab-white);
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .cta-primary {
+            padding: 18px 48px;
+            background: var(--gradient-primary);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 1.15rem;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .cta-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 60px rgba(0, 212, 170, 0.4);
+        }
+
+        .cta-secondary {
+            padding: 18px 48px;
+            background: transparent;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: var(--lab-white);
+            font-size: 1.15rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .cta-secondary:hover {
+            border-color: var(--lab-teal);
+            background: rgba(0, 212, 170, 0.1);
+        }
+
+        /* Lab Interface Mockup */
+        .hero-visual {
+            margin-top: 4rem;
+            width: 100%;
+            max-width: 1200px;
+            position: relative;
+        }
+
+        .interface-mockup {
+            background: var(--lab-navy-light);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            box-shadow: 
+                0 50px 100px rgba(0, 0, 0, 0.5),
+                0 0 0 1px rgba(255, 255, 255, 0.05),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .interface-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .window-btn {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .window-btn.red { background: #FF5F57; }
+        .window-btn.yellow { background: #FFBD2E; }
+        .window-btn.green { background: #28CA41; }
+
+        .interface-content {
+            display: grid;
+            grid-template-columns: 250px 1fr 280px;
+            gap: 20px;
+            height: 400px;
+        }
+
+        .sidebar {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            color: var(--lab-gray);
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+
+        .sidebar-item.active {
+            background: rgba(0, 212, 170, 0.2);
+            color: var(--lab-teal);
+        }
+
+        .sidebar-item-icon {
+            font-size: 1.2rem;
+        }
+
+        .main-panel {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .panel-header {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .instrument-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            flex-grow: 1;
+        }
+
+        .instrument-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .instrument-card::before {
+            content: '';
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #28CA41;
+            animation: blink 2s ease-in-out infinite;
+        }
+
+        .instrument-card.warning::before {
+            background: #FFBD2E;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .instrument-icon {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+
+        .instrument-name {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--lab-white);
+        }
+
+        .instrument-status {
+            font-size: 0.7rem;
+            color: var(--lab-teal);
+            margin-top: 4px;
+        }
+
+        .ai-panel {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .ai-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .ai-avatar {
+            width: 36px;
+            height: 36px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .ai-title {
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
+        .ai-messages {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            overflow: hidden;
+        }
+
+        .ai-message {
+            background: rgba(0, 212, 170, 0.1);
+            border-radius: 12px;
+            padding: 12px;
+            font-size: 0.85rem;
+            color: var(--lab-gray);
+            border-left: 3px solid var(--lab-teal);
+        }
+
+        .ai-message strong {
+            color: var(--lab-teal);
+        }
+
+        .ai-input {
+            margin-top: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .ai-input input {
+            flex-grow: 1;
+            background: none;
+            border: none;
+            color: var(--lab-white);
+            font-size: 0.85rem;
+            outline: none;
+        }
+
+        .ai-input input::placeholder {
+            color: var(--lab-gray);
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 4rem;
+            padding: 4rem 5%;
+            position: relative;
+            z-index: 1;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 900;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            color: var(--lab-gray);
+            font-size: 1rem;
+            font-weight: 500;
+            margin-top: 8px;
+        }
+
+        /* Problem Section */
+        .problem-section {
+            padding: 8rem 5%;
+            background: linear-gradient(180deg, transparent 0%, rgba(124, 58, 237, 0.05) 50%, transparent 100%);
+            position: relative;
+            z-index: 1;
+        }
+
+        .section-label {
+            text-align: center;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--lab-teal);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 4rem;
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .problem-card {
+            background: var(--lab-navy-light);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .problem-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, #EF4444, #F97316);
+        }
+
+        .problem-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(239, 68, 68, 0.3);
+            box-shadow: 0 30px 60px rgba(239, 68, 68, 0.1);
+        }
+
+        .problem-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .problem-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #EF4444;
+        }
+
+        .problem-text {
+            color: var(--lab-gray);
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        .problem-stat {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 2rem;
+            font-weight: 800;
+            color: #EF4444;
+        }
+
+        .problem-stat span {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--lab-gray);
+            display: block;
+        }
+
+        /* Solution Section */
+        .solution-section {
+            padding: 8rem 5%;
+            position: relative;
+            z-index: 1;
+        }
+
+        .solution-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .solution-card {
+            background: var(--lab-navy-light);
+            border: 1px solid rgba(0, 212, 170, 0.2);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .solution-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-glow);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .solution-card:hover::before {
+            opacity: 1;
+        }
+
+        .solution-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--lab-teal);
+            box-shadow: 0 30px 60px rgba(0, 212, 170, 0.15);
+        }
+
+        .solution-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .solution-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .solution-text {
+            color: var(--lab-gray);
+            font-size: 1rem;
+            line-height: 1.7;
+            position: relative;
+            z-index: 1;
+        }
+
+        .solution-features {
+            margin-top: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .solution-feature {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--lab-teal);
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+        }
+
+        /* Workflow Section */
+        .workflow-section {
+            padding: 8rem 5%;
+            background: linear-gradient(180deg, transparent 0%, rgba(0, 212, 170, 0.03) 50%, transparent 100%);
+            position: relative;
+            z-index: 1;
+        }
+
+        .workflow-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .workflow-step {
+            display: flex;
+            align-items: center;
+            gap: 3rem;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .workflow-step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            left: 40px;
+            bottom: -40px;
+            width: 3px;
+            height: 40px;
+            background: linear-gradient(180deg, var(--lab-teal), transparent);
+        }
+
+        .workflow-number {
+            width: 80px;
+            height: 80px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 800;
+            flex-shrink: 0;
+            box-shadow: 0 10px 40px rgba(0, 212, 170, 0.3);
+        }
+
+        .workflow-content {
+            flex-grow: 1;
+            background: var(--lab-navy-light);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .workflow-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .workflow-desc {
+            color: var(--lab-gray);
+            font-size: 1rem;
+        }
+
+        /* Market Section */
+        .market-section {
+            padding: 8rem 5%;
+            position: relative;
+            z-index: 1;
+        }
+
+        .market-visual {
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .market-number {
+            font-size: clamp(5rem, 15vw, 12rem);
+            font-weight: 900;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+        }
+
+        .market-label {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--lab-white);
+            margin-top: 1rem;
+        }
+
+        .market-desc {
+            font-size: 1.2rem;
+            color: var(--lab-gray);
+            margin-top: 1rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .market-segments {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 4rem;
+        }
+
+        .market-segment {
+            background: var(--lab-navy-light);
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .segment-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--lab-teal);
+        }
+
+        .segment-name {
+            color: var(--lab-gray);
+            font-size: 0.95rem;
+            margin-top: 0.5rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 8rem 5%;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--gradient-primary);
+            border-radius: 30px;
+            padding: 4rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 60%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .cta-title {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-text {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 2.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-button {
+            padding: 20px 60px;
+            background: var(--lab-navy);
+            border: none;
+            border-radius: 14px;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Footer */
+        footer {
+            padding: 3rem 5%;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center;
+            color: var(--lab-gray);
+            position: relative;
+            z-index: 1;
+        }
+
+        footer p {
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .interface-content {
+                grid-template-columns: 1fr;
+                height: auto;
+            }
+
+            .sidebar, .ai-panel {
+                display: none;
+            }
+
+            .nav-links {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .stats-bar {
+                flex-direction: column;
+                gap: 2rem;
+            }
+
+            .workflow-step {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .workflow-step:not(:last-child)::after {
+                display: none;
+            }
+
+            .hero-cta {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .cta-container {
+                padding: 3rem 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Effects -->
+    <div class="dna-background"></div>
+    <div class="grid-pattern"></div>
+    <div class="molecule"></div>
+    <div class="molecule"></div>
+    <div class="molecule"></div>
+    <div class="molecule"></div>
+    <div class="molecule"></div>
+
+    <!-- Header -->
+    <header>
+        <a href="#" class="logo">
+            <div class="logo-icon">🧬</div>
+            LabOS
+        </a>
+        <nav class="nav-links">
+            <a href="#features">Features</a>
+            <a href="#solution">Solution</a>
+            <a href="#market">Market</a>
+            <a href="#contact">Contact</a>
+        </nav>
+        <a href="#demo" class="btn-demo">Request Demo →</a>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-badge">
+            🚀 Now automating 500+ research labs worldwide
+        </div>
+        <h1>The AI Operating System for Laboratories</h1>
+        <p class="subtitle">
+            Turn every lab into an <strong>autonomous research machine</strong>. LabOS unifies equipment, automates workflows, and accelerates discovery—so scientists can focus on science.
+        </p>
+        <div class="hero-cta">
+            <a href="#demo" class="cta-primary">Start Free Pilot 🧪</a>
+            <a href="#features" class="cta-secondary">See How It Works</a>
+        </div>
+
+        <div class="hero-visual">
+            <div class="interface-mockup">
+                <div class="interface-header">
+                    <div class="window-btn red"></div>
+                    <div class="window-btn yellow"></div>
+                    <div class="window-btn green"></div>
+                </div>
+                <div class="interface-content">
+                    <div class="sidebar">
+                        <div class="sidebar-item active">
+                            <span class="sidebar-item-icon">🏠</span>
+                            Dashboard
+                        </div>
+                        <div class="sidebar-item">
+                            <span class="sidebar-item-icon">🔬</span>
+                            Instruments
+                        </div>
+                        <div class="sidebar-item">
+                            <span class="sidebar-item-icon">🧪</span>
+                            Samples
+                        </div>
+                        <div class="sidebar-item">
+                            <span class="sidebar-item-icon">📋</span>
+                            Protocols
+                        </div>
+                        <div class="sidebar-item">
+                            <span class="sidebar-item-icon">📊</span>
+                            Analytics
+                        </div>
+                        <div class="sidebar-item">
+                            <span class="sidebar-item-icon">⚙️</span>
+                            Settings
+                        </div>
+                    </div>
+                    <div class="main-panel">
+                        <div class="panel-header">
+                            <span>🔬</span> Live Instrument Status
+                        </div>
+                        <div class="instrument-grid">
+                            <div class="instrument-card">
+                                <div class="instrument-icon">🧬</div>
+                                <div class="instrument-name">PCR Cycler</div>
+                                <div class="instrument-status">Running • 45 min left</div>
+                            </div>
+                            <div class="instrument-card warning">
+                                <div class="instrument-icon">🔬</div>
+                                <div class="instrument-name">Mass Spec</div>
+                                <div class="instrument-status">Calibrating...</div>
+                            </div>
+                            <div class="instrument-card">
+                                <div class="instrument-icon">❄️</div>
+                                <div class="instrument-name">-80°C Freezer</div>
+                                <div class="instrument-status">-79.8°C • Optimal</div>
+                            </div>
+                            <div class="instrument-card">
+                                <div class="instrument-icon">🧪</div>
+                                <div class="instrument-name">Liquid Handler</div>
+                                <div class="instrument-status">Idle • Ready</div>
+                            </div>
+                            <div class="instrument-card">
+                                <div class="instrument-icon">📸</div>
+                                <div class="instrument-name">Plate Reader</div>
+                                <div class="instrument-status">Scanning Plate 12</div>
+                            </div>
+                            <div class="instrument-card">
+                                <div class="instrument-icon">🧫</div>
+                                <div class="instrument-name">Cell Counter</div>
+                                <div class="instrument-status">Idle • Ready</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ai-panel">
+                        <div class="ai-header">
+                            <div class="ai-avatar">🤖</div>
+                            <div class="ai-title">LabOS Assistant</div>
+                        </div>
+                        <div class="ai-messages">
+                            <div class="ai-message">
+                                <strong>PCR Complete:</strong> 48/48 samples amplified successfully. Results uploaded to project workspace.
+                            </div>
+                            <div class="ai-message">
+                                <strong>Alert:</strong> Mass Spec calibration detected 2% drift. Auto-calibrating now. ETA: 8 minutes.
+                            </div>
+                            <div class="ai-message">
+                                <strong>Optimization:</strong> I found a 23% faster protocol for your ELISA assay. Want me to apply it?
+                            </div>
+                        </div>
+                        <div class="ai-input">
+                            <input type="text" placeholder="Ask LabOS anything...">
+                            <span>🎤</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Bar -->
+    <section class="stats-bar">
+        <div class="stat-item">
+            <div class="stat-number">40%</div>
+            <div class="stat-label">Time Savings Per Researcher</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">200+</div>
+            <div class="stat-label">Instruments Supported</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">99.9%</div>
+            <div class="stat-label">Compliance Audit Success</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">Zero</div>
+            <div class="stat-label">Sample Tracking Errors</div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="problem-section" id="problem">
+        <div class="section-label">The Problem</div>
+        <h2 class="section-title">Labs Are Drowning in Chaos</h2>
+        <div class="problem-grid">
+            <div class="problem-card">
+                <div class="problem-icon">⚠️</div>
+                <h3 class="problem-title">Equipment Chaos</h3>
+                <p class="problem-text">Average lab has 50-200+ instruments from 30+ vendors. No unified interface. Breakdowns halt research for weeks.</p>
+                <div class="problem-stat">$500K<span>Lost annually to equipment downtime</span></div>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">📦</div>
+                <h3 class="problem-title">Sample Nightmares</h3>
+                <p class="problem-text">Sample mix-ups, cold chain failures, manual logging. Millions in destroyed biological samples every year.</p>
+                <div class="problem-stat">$2B+<span>Industry-wide sample losses</span></div>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">⏰</div>
+                <h3 class="problem-title">Wasted Scientist Time</h3>
+                <p class="problem-text">Researchers spend 40% of time on operational overhead—tracking samples, managing equipment, documentation.</p>
+                <div class="problem-stat">40%<span>Productive time lost to admin</span></div>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">📋</div>
+                <h3 class="problem-title">Compliance Burden</h3>
+                <p class="problem-text">FDA, GLP, GMP, ISO requirements create massive paperwork. Audit prep takes weeks and disrupts research.</p>
+                <div class="problem-stat">20-40%<span>Manager time on compliance</span></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="solution-section" id="solution">
+        <div class="section-label">The Solution</div>
+        <h2 class="section-title">LabOS: One Brain for Every Lab</h2>
+        <div class="solution-grid">
+            <div class="solution-card">
+                <div class="solution-icon">🔬</div>
+                <h3 class="solution-title">Unified Equipment Intelligence</h3>
+                <p class="solution-text">Single interface to control instruments from any vendor. Predictive maintenance prevents downtime.</p>
+                <div class="solution-features">
+                    <div class="solution-feature">✓ 200+ instrument integrations</div>
+                    <div class="solution-feature">✓ Predictive failure alerts</div>
+                    <div class="solution-feature">✓ Auto-calibration scheduling</div>
+                </div>
+            </div>
+            <div class="solution-card">
+                <div class="solution-icon">🧪</div>
+                <h3 class="solution-title">Autonomous Sample Management</h3>
+                <p class="solution-text">Real-time tracking from receipt to disposal. AI-driven inventory and smart cold chain monitoring.</p>
+                <div class="solution-features">
+                    <div class="solution-feature">✓ Zero tracking errors</div>
+                    <div class="solution-feature">✓ Smart reordering</div>
+                    <div class="solution-feature">✓ Chain-of-custody automation</div>
+                </div>
+            </div>
+            <div class="solution-card">
+                <div class="solution-icon">🤖</div>
+                <h3 class="solution-title">Intelligent Workflow Engine</h3>
+                <p class="solution-text">Natural language protocols. AI optimizes parameters. Automatic scheduling and conflict resolution.</p>
+                <div class="solution-features">
+                    <div class="solution-feature">✓ "Run PCR on samples 1-48"</div>
+                    <div class="solution-feature">✓ AI protocol optimization</div>
+                    <div class="solution-feature">✓ Knowledge capture</div>
+                </div>
+            </div>
+            <div class="solution-card">
+                <div class="solution-icon">📋</div>
+                <h3 class="solution-title">Zero-Touch Compliance</h3>
+                <p class="solution-text">Continuous audit readiness. Automatic FDA, GLP, GMP documentation. One-click audit reports.</p>
+                <div class="solution-features">
+                    <div class="solution-feature">✓ 21 CFR Part 11 compliant</div>
+                    <div class="solution-feature">✓ Data integrity verification</div>
+                    <div class="solution-feature">✓ Instant audit reports</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Workflow Section -->
+    <section class="workflow-section" id="features">
+        <div class="section-label">How It Works</div>
+        <h2 class="section-title">From Chaos to Autonomous in Days</h2>
+        <div class="workflow-container">
+            <div class="workflow-step">
+                <div class="workflow-number">1</div>
+                <div class="workflow-content">
+                    <h3 class="workflow-title">Connect Your Instruments</h3>
+                    <p class="workflow-desc">LabOS integrates with your existing equipment in minutes. No hardware changes needed—just software.</p>
+                </div>
+            </div>
+            <div class="workflow-step">
+                <div class="workflow-number">2</div>
+                <div class="workflow-content">
+                    <h3 class="workflow-title">AI Learns Your Workflows</h3>
+                    <p class="workflow-desc">LabOS observes your protocols, captures institutional knowledge, and identifies optimization opportunities.</p>
+                </div>
+            </div>
+            <div class="workflow-step">
+                <div class="workflow-number">3</div>
+                <div class="workflow-content">
+                    <h3 class="workflow-title">Automate Everything</h3>
+                    <p class="workflow-desc">Sample tracking, equipment scheduling, compliance docs—all running automatically while you do science.</p>
+                </div>
+            </div>
+            <div class="workflow-step">
+                <div class="workflow-number">4</div>
+                <div class="workflow-content">
+                    <h3 class="workflow-title">Discover 40% More Time</h3>
+                    <p class="workflow-desc">Researchers reclaim hours every day. Research accelerates. Discoveries happen faster.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Market Section -->
+    <section class="market-section" id="market">
+        <div class="section-label">Market Opportunity</div>
+        <h2 class="section-title">A Massive Underserved Market</h2>
+        <div class="market-visual">
+            <div class="market-number">$180B+</div>
+            <div class="market-label">Global Laboratory Industry</div>
+            <p class="market-desc">Research labs, pharma R&D, clinical diagnostics, biotech—all desperately need modernization.</p>
+            <div class="market-segments">
+                <div class="market-segment">
+                    <div class="segment-value">$65B</div>
+                    <div class="segment-name">Academic Research</div>
+                </div>
+                <div class="market-segment">
+                    <div class="segment-value">$45B</div>
+                    <div class="segment-name">Pharma R&D</div>
+                </div>
+                <div class="market-segment">
+                    <div class="segment-value">$35B</div>
+                    <div class="segment-name">Clinical Labs</div>
+                </div>
+                <div class="market-segment">
+                    <div class="segment-value">$20B</div>
+                    <div class="segment-name">Biotech Labs</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section" id="demo">
+        <div class="cta-container">
+            <h2 class="cta-title">Turn Your Lab Into a Discovery Machine</h2>
+            <p class="cta-text">Join 500+ labs already saving 40% of researcher time with LabOS. Free 30-day pilot with ROI guarantee.</p>
+            <a href="mailto:founders@labos.ai" class="cta-button">
+                Start Free Pilot 🧬
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2026 LabOS. The AI Operating System for Laboratories.</p>
+        <p style="margin-top: 10px; font-size: 0.8rem;">Built by scientists, for scientists. Powered by AI.</p>
+    </footer>
+</body>
+</html>
