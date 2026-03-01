@@ -92,6 +92,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-02-28 | Evening | DataCool AI — Autonomous Datacenter Cooling Intelligence | [Playbook](2026-02-28-evening.md) • [Landing](2026-02-28-evening-landing.html) • [PDF](2026-02-28-evening.pdf) |
 | 2026-02-28 | Morning | ProcurementOS — Autonomous Enterprise Procurement Intelligence | [Playbook](2026-02-28-morning.md) • [Landing](2026-02-28-morning-landing.html) • [PDF](2026-02-28-morning.pdf) |
 | 2026-02-28 | Afternoon | LabOS — The AI Operating System for Laboratories | [Playbook](2026-02-28-afternoon.md) • [Landing](2026-02-28-afternoon-landing.html) • [PDF](2026-02-28-afternoon.pdf) |
+| 2026-03-01 | Evening | ArchiMind AI — Autonomous Architecture Intelligence | [Playbook](2026-03-01-evening.md) • [Landing](2026-03-01-evening-landing.html) • [PDF](2026-03-01-evening.pdf) |
 <!-- New entries will be added above this line -->
 
 ---
