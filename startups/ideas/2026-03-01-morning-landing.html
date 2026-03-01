@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WasteZero AI — End Food Waste Forever</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --green-50: #f0fdf4;
+            --green-100: #dcfce7;
+            --green-200: #bbf7d0;
+            --green-300: #86efac;
+            --green-400: #4ade80;
+            --green-500: #22c55e;
+            --green-600: #16a34a;
+            --green-700: #15803d;
+            --green-800: #166534;
+            --green-900: #14532d;
+            --amber-400: #fbbf24;
+            --amber-500: #f59e0b;
+            --slate-50: #f8fafc;
+            --slate-100: #f1f5f9;
+            --slate-200: #e2e8f0;
+            --slate-300: #cbd5e1;
+            --slate-400: #94a3b8;
+            --slate-500: #64748b;
+            --slate-600: #475569;
+            --slate-700: #334155;
+            --slate-800: #1e293b;
+            --slate-900: #0f172a;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--slate-900);
+            color: white;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .hero {
+            min-height: 100vh;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(34, 197, 94, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(251, 191, 36, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(34, 197, 94, 0.05) 0%, transparent 70%);
+            z-index: 0;
+        }
+
+        /* Floating Food Elements */
+        .floating-elements {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .food-icon {
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0.3;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .food-icon:nth-child(1) { top: 10%; left: 5%; animation-delay: 0s; }
+        .food-icon:nth-child(2) { top: 20%; right: 10%; animation-delay: 2s; }
+        .food-icon:nth-child(3) { top: 60%; left: 8%; animation-delay: 4s; }
+        .food-icon:nth-child(4) { top: 70%; right: 5%; animation-delay: 6s; }
+        .food-icon:nth-child(5) { top: 40%; left: 3%; animation-delay: 8s; }
+        .food-icon:nth-child(6) { top: 85%; right: 15%; animation-delay: 10s; }
+        .food-icon:nth-child(7) { top: 15%; left: 20%; animation-delay: 1s; }
+        .food-icon:nth-child(8) { top: 50%; right: 3%; animation-delay: 3s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.3; }
+            25% { transform: translateY(-20px) rotate(5deg); opacity: 0.5; }
+            50% { transform: translateY(0) rotate(0deg); opacity: 0.3; }
+            75% { transform: translateY(20px) rotate(-5deg); opacity: 0.5; }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, var(--green-600), var(--green-700));
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 0 30px rgba(34, 197, 94, 0.3);
+        }
+
+        .badge::before {
+            content: '🌱';
+        }
+
+        h1 {
+            font-size: clamp(3rem, 8vw, 5.5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #fff 0%, var(--green-300) 50%, var(--amber-400) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .tagline {
+            font-size: clamp(1.25rem, 3vw, 1.75rem);
+            color: var(--slate-300);
+            max-width: 700px;
+            margin: 0 auto 2.5rem;
+            font-weight: 400;
+        }
+
+        .stats-row {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+            margin-bottom: 3rem;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--green-400);
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--slate-400);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-size: 1.125rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--green-500), var(--green-600));
+            color: white;
+            box-shadow: 0 4px 20px rgba(34, 197, 94, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(34, 197, 94, 0.5);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Problem Section */
+        .section {
+            padding: 6rem 2rem;
+            position: relative;
+        }
+
+        .section-dark {
+            background: var(--slate-800);
+        }
+
+        .section-gradient {
+            background: linear-gradient(180deg, var(--slate-900) 0%, var(--slate-800) 100%);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-label {
+            display: inline-block;
+            color: var(--green-400);
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            font-size: 1.25rem;
+            color: var(--slate-400);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Problem Cards */
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .problem-card {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(239, 68, 68, 0.05));
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(239, 68, 68, 0.4);
+        }
+
+        .problem-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .problem-stat {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #f87171;
+            margin-bottom: 0.5rem;
+        }
+
+        .problem-text {
+            color: var(--slate-300);
+        }
+
+        /* Solution Section */
+        .solution-visual {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            margin-top: 4rem;
+        }
+
+        @media (max-width: 768px) {
+            .solution-visual {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .solution-stack {
+            background: linear-gradient(135deg, var(--slate-800), var(--slate-900));
+            border: 1px solid var(--slate-700);
+            border-radius: 20px;
+            padding: 2rem;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.9rem;
+        }
+
+        .stack-header {
+            text-align: center;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--green-600), var(--green-700));
+            border-radius: 12px;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .stack-layer {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .stack-layer-title {
+            color: var(--green-400);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .stack-layer-items {
+            color: var(--slate-400);
+            font-size: 0.8rem;
+        }
+
+        .solution-features {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .feature-item {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--green-500), var(--green-600));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .feature-content h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .feature-content p {
+            color: var(--slate-400);
+        }
+
+        /* Modules Section */
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .module-card {
+            background: linear-gradient(135deg, var(--slate-800), var(--slate-900));
+            border: 1px solid var(--slate-700);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .module-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--green-400), var(--amber-400));
+        }
+
+        .module-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--green-600);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .module-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .module-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .module-target {
+            color: var(--green-400);
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .module-features {
+            list-style: none;
+        }
+
+        .module-features li {
+            color: var(--slate-300);
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--slate-700);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .module-features li::before {
+            content: '✓';
+            color: var(--green-400);
+            font-weight: bold;
+        }
+
+        .module-features li:last-child {
+            border-bottom: none;
+        }
+
+        /* Market Section */
+        .market-numbers {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        @media (max-width: 768px) {
+            .market-numbers {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .market-item {
+            text-align: center;
+            padding: 2rem;
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), transparent);
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            border-radius: 16px;
+        }
+
+        .market-value {
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--green-400), var(--amber-400));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .market-label {
+            color: var(--slate-400);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* Timeline Section */
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 3rem auto 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--green-500), var(--amber-500));
+            border-radius: 2px;
+        }
+
+        @media (max-width: 768px) {
+            .timeline::before {
+                left: 20px;
+            }
+        }
+
+        .timeline-item {
+            display: flex;
+            justify-content: flex-end;
+            padding-right: calc(50% + 30px);
+            position: relative;
+            margin-bottom: 3rem;
+        }
+
+        .timeline-item:nth-child(even) {
+            justify-content: flex-start;
+            padding-right: 0;
+            padding-left: calc(50% + 30px);
+        }
+
+        @media (max-width: 768px) {
+            .timeline-item,
+            .timeline-item:nth-child(even) {
+                padding-left: 50px;
+                padding-right: 0;
+                justify-content: flex-start;
+            }
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 20px;
+            background: var(--green-500);
+            border-radius: 50%;
+            border: 4px solid var(--slate-900);
+        }
+
+        @media (max-width: 768px) {
+            .timeline-dot {
+                left: 20px;
+            }
+        }
+
+        .timeline-content {
+            background: var(--slate-800);
+            border: 1px solid var(--slate-700);
+            border-radius: 12px;
+            padding: 1.5rem;
+            max-width: 350px;
+        }
+
+        .timeline-phase {
+            color: var(--green-400);
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .timeline-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin: 0.5rem 0;
+        }
+
+        .timeline-desc {
+            color: var(--slate-400);
+            font-size: 0.9rem;
+        }
+
+        .timeline-metric {
+            display: inline-block;
+            background: rgba(34, 197, 94, 0.2);
+            color: var(--green-400);
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: 0.75rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, var(--green-700), var(--green-900));
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-title {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .cta-subtitle {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--slate-900);
+            padding: 3rem 2rem;
+            text-align: center;
+            border-top: 1px solid var(--slate-800);
+        }
+
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--green-400), var(--amber-400));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .footer-tagline {
+            color: var(--slate-500);
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-credit {
+            color: var(--slate-600);
+            font-size: 0.875rem;
+        }
+
+        /* Animations */
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(34, 197, 94, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(34, 197, 94, 0.5); }
+        }
+
+        .glow {
+            animation: pulse-glow 3s ease-in-out infinite;
+        }
+
+        /* Scroll animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease-out;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="floating-elements">
+            <span class="food-icon">🍎</span>
+            <span class="food-icon">🥬</span>
+            <span class="food-icon">🍞</span>
+            <span class="food-icon">🥕</span>
+            <span class="food-icon">🍇</span>
+            <span class="food-icon">🥛</span>
+            <span class="food-icon">🧀</span>
+            <span class="food-icon">🍅</span>
+        </div>
+        <div class="hero-content">
+            <div class="badge">Autonomous Food Intelligence</div>
+            <h1>WasteZero AI</h1>
+            <p class="tagline">The operating system that turns the $1.2 trillion global food waste crisis into a multi-billion dollar optimization opportunity.</p>
+            
+            <div class="stats-row">
+                <div class="stat">
+                    <div class="stat-value">$1.2T</div>
+                    <div class="stat-label">Wasted Annually</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">40%</div>
+                    <div class="stat-label">Food Thrown Away</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">8-10%</div>
+                    <div class="stat-label">Global Emissions</div>
+                </div>
+            </div>
+
+            <div class="cta-group">
+                <a href="#solution" class="btn btn-primary glow">See How It Works →</a>
+                <a href="#contact" class="btn btn-secondary">Request Demo</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="section section-gradient" id="problem">
+        <div class="container">
+            <div class="section-header fade-in">
+                <span class="section-label">🚨 The Crisis</span>
+                <h2 class="section-title">Food Waste Is a<br>$1.2 Trillion Problem</h2>
+                <p class="section-subtitle">Every stage of the food supply chain operates in silos with primitive forecasting and zero coordination.</p>
+            </div>
+
+            <div class="problem-grid">
+                <div class="problem-card fade-in">
+                    <div class="problem-icon">🏪</div>
+                    <div class="problem-stat">$15.6B</div>
+                    <p class="problem-text">Grocery stores discard in unsold food annually</p>
+                </div>
+                <div class="problem-card fade-in">
+                    <div class="problem-icon">🍽️</div>
+                    <div class="problem-stat">4-10%</div>
+                    <p class="problem-text">Restaurant food lost before reaching customers</p>
+                </div>
+                <div class="problem-card fade-in">
+                    <div class="problem-icon">🌾</div>
+                    <div class="problem-stat">30%</div>
+                    <p class="problem-text">Farm produce never leaves due to cosmetic standards</p>
+                </div>
+                <div class="problem-card fade-in">
+                    <div class="problem-icon">😔</div>
+                    <div class="problem-stat">44M</div>
+                    <p class="problem-text">Americans face food insecurity while we waste</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="section section-dark" id="solution">
+        <div class="container">
+            <div class="section-header fade-in">
+                <span class="section-label">💡 The Solution</span>
+                <h2 class="section-title">Autonomous Intelligence<br>for Zero Waste</h2>
+                <p class="section-subtitle">AI agents at every node of the food system, predicting, optimizing, and routing in real-time.</p>
+            </div>
+
+            <div class="solution-visual">
+                <div class="solution-stack fade-in">
+                    <div class="stack-header">🧠 WASTEZERO AI PLATFORM</div>
+                    <div class="stack-layer">
+                        <div class="stack-layer-title">🎯 Prediction Engine</div>
+                        <div class="stack-layer-items">Hyperlocal demand forecasting • Spoilage prediction • Weather correlation</div>
+                    </div>
+                    <div class="stack-layer">
+                        <div class="stack-layer-title">📦 Inventory Intelligence</div>
+                        <div class="stack-layer-items">Real-time optimization • Auto-reorder • FEFO routing</div>
+                    </div>
+                    <div class="stack-layer">
+                        <div class="stack-layer-title">🔄 Surplus Matching</div>
+                        <div class="stack-layer-items">B2B marketplace • Food bank matching • Dynamic pricing</div>
+                    </div>
+                    <div class="stack-layer">
+                        <div class="stack-layer-title">📊 Impact & Compliance</div>
+                        <div class="stack-layer-items">Carbon credits • ESG reporting • Tax optimization</div>
+                    </div>
+                </div>
+
+                <div class="solution-features fade-in">
+                    <div class="feature-item">
+                        <div class="feature-icon">🎯</div>
+                        <div class="feature-content">
+                            <h3>95%+ Prediction Accuracy</h3>
+                            <p>Hyperlocal demand forecasting using weather, events, social trends, and economic signals.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">⚡</div>
+                        <div class="feature-content">
+                            <h3>Real-Time Optimization</h3>
+                            <p>Inventory adjustments happen automatically to minimize over-ordering and spoilage.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">🔄</div>
+                        <div class="feature-content">
+                            <h3>Perfect Surplus Matching</h3>
+                            <p>Connect surplus food to buyers, food banks, composters — whoever needs it most.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">🌍</div>
+                        <div class="feature-content">
+                            <h3>Carbon Credit Generation</h3>
+                            <p>Turn verified waste diversion into revenue through automated carbon credit programs.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modules Section -->
+    <section class="section section-gradient" id="modules">
+        <div class="container">
+            <div class="section-header fade-in">
+                <span class="section-label">🏗️ Product Suite</span>
+                <h2 class="section-title">Full-Stack Food<br>Waste Intelligence</h2>
+                <p class="section-subtitle">Modular platform covering every stage of the food supply chain.</p>
+            </div>
+
+            <div class="modules-grid">
+                <div class="module-card fade-in">
+                    <div class="module-icon">🏪</div>
+                    <div class="module-title">WasteZero Retail</div>
+                    <div class="module-target">For Grocery & Supermarkets</div>
+                    <ul class="module-features">
+                        <li>Real-time shelf monitoring</li>
+                        <li>Automated markdown engine</li>
+                        <li>Consumer discount app</li>
+                        <li>Food bank auto-matching</li>
+                    </ul>
+                </div>
+
+                <div class="module-card fade-in">
+                    <div class="module-icon">🍽️</div>
+                    <div class="module-title">WasteZero Restaurant</div>
+                    <div class="module-target">For Restaurants & Food Service</div>
+                    <ul class="module-features">
+                        <li>Prep optimization</li>
+                        <li>Menu engineering</li>
+                        <li>Plate waste analytics</li>
+                        <li>Donation coordination</li>
+                    </ul>
+                </div>
+
+                <div class="module-card fade-in">
+                    <div class="module-icon">🚛</div>
+                    <div class="module-title">WasteZero Supply Chain</div>
+                    <div class="module-target">For Distributors & Manufacturers</div>
+                    <ul class="module-features">
+                        <li>Demand sensing</li>
+                        <li>Shelf-life optimization</li>
+                        <li>Secondary market matching</li>
+                        <li>Cold chain optimization</li>
+                    </ul>
+                </div>
+
+                <div class="module-card fade-in">
+                    <div class="module-icon">🌾</div>
+                    <div class="module-title">WasteZero Farm</div>
+                    <div class="module-target">For Agricultural Producers</div>
+                    <ul class="module-features">
+                        <li>Harvest timing optimization</li>
+                        <li>Yield prediction</li>
+                        <li>"Ugly produce" markets</li>
+                        <li>Carbon credit generation</li>
+                    </ul>
+                </div>
+
+                <div class="module-card fade-in">
+                    <div class="module-icon">🏛️</div>
+                    <div class="module-title">WasteZero Municipal</div>
+                    <div class="module-target">For Cities & Waste Management</div>
+                    <ul class="module-features">
+                        <li>Organic diversion tracking</li>
+                        <li>Facility optimization</li>
+                        <li>Compliance monitoring</li>
+                        <li>Public education campaigns</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Market Section -->
+    <section class="section section-dark" id="market">
+        <div class="container">
+            <div class="section-header fade-in">
+                <span class="section-label">📊 The Opportunity</span>
+                <h2 class="section-title">$12B+ Revenue<br>Potential</h2>
+            </div>
+
+            <div class="market-numbers fade-in">
+                <div class="market-item">
+                    <div class="market-value">$1.2T</div>
+                    <div class="market-label">Global Food Waste</div>
+                </div>
+                <div class="market-item">
+                    <div class="market-value">1%</div>
+                    <div class="market-label">Capture Rate</div>
+                </div>
+                <div class="market-item">
+                    <div class="market-value">$12B</div>
+                    <div class="market-label">Revenue Opportunity</div>
+                </div>
+                <div class="market-item">
+                    <div class="market-value">6x</div>
+                    <div class="market-label">LTV/CAC Target</div>
+                </div>
+            </div>
+
+            <!-- Timeline -->
+            <div class="section-header fade-in">
+                <h2 class="section-title" style="font-size: 2rem;">Path to $100M ARR</h2>
+            </div>
+
+            <div class="timeline">
+                <div class="timeline-item fade-in">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-phase">Phase 1 — Year 1</div>
+                        <div class="timeline-title">Beachhead</div>
+                        <p class="timeline-desc">50 regional grocery locations in California. Prove ROI with 30% waste reduction.</p>
+                        <span class="timeline-metric">$500K ARR</span>
+                    </div>
+                </div>
+
+                <div class="timeline-item fade-in">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-phase">Phase 2 — Year 2</div>
+                        <div class="timeline-title">Regional Expansion</div>
+                        <p class="timeline-desc">500 grocery + 200 restaurants. Launch surplus marketplace and carbon credits.</p>
+                        <span class="timeline-metric">$5M ARR</span>
+                    </div>
+                </div>
+
+                <div class="timeline-item fade-in">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-phase">Phase 3 — Year 3</div>
+                        <div class="timeline-title">Enterprise Scale</div>
+                        <p class="timeline-desc">National chains, food service giants, international expansion begins.</p>
+                        <span class="timeline-metric">$30M ARR</span>
+                    </div>
+                </div>
+
+                <div class="timeline-item fade-in">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-phase">Phase 4 — Year 4</div>
+                        <div class="timeline-title">Platform Dominance</div>
+                        <p class="timeline-desc">Market standard for food waste intelligence. API ecosystem, acquisitions.</p>
+                        <span class="timeline-metric">$100M ARR</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="section cta-section" id="contact">
+        <div class="container cta-content">
+            <h2 class="cta-title fade-in">Ready to End Food Waste?</h2>
+            <p class="cta-subtitle fade-in">"Food waste isn't a disposal problem. It's an intelligence problem. We're building the brain the food system never had."</p>
+            <div class="cta-group fade-in">
+                <a href="mailto:hello@wastezero.ai" class="btn btn-primary" style="background: white; color: var(--green-700);">
+                    Get Early Access →
+                </a>
+                <a href="#" class="btn btn-secondary" style="border-color: white;">
+                    Read Full Strategy
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-logo">🌱 WasteZero AI</div>
+        <p class="footer-tagline">Ending food waste through autonomous intelligence</p>
+        <p class="footer-credit">Strategy by The Godfather 🎩 • March 2026</p>
+    </footer>
+
+    <script>
+        // Scroll animations
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
