@@ -94,6 +94,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-02-28 | Afternoon | LabOS — The AI Operating System for Laboratories | [Playbook](2026-02-28-afternoon.md) • [Landing](2026-02-28-afternoon-landing.html) • [PDF](2026-02-28-afternoon.pdf) |
 | 2026-03-01 | Evening | ArchiMind AI — Autonomous Architecture Intelligence | [Playbook](2026-03-01-evening.md) • [Landing](2026-03-01-evening-landing.html) • [PDF](2026-03-01-evening.pdf) |
 | 2026-03-01 | Morning | WasteZero AI — Autonomous Food Waste Intelligence | [Playbook](2026-03-01-morning.md) • [Landing](2026-03-01-morning-landing.html) • [PDF](2026-03-01-morning.pdf) |
+| 2026-03-01 | Afternoon | ParentOS — AI Operating System for Modern Parenting | [Playbook](2026-03-01-afternoon.md) • [Landing](2026-03-01-afternoon-landing.html) • [PDF](2026-03-01-afternoon.pdf) |
 <!-- New entries will be added above this line -->
 
 ---
