@@ -95,6 +95,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-03-01 | Evening | ArchiMind AI — Autonomous Architecture Intelligence | [Playbook](2026-03-01-evening.md) • [Landing](2026-03-01-evening-landing.html) • [PDF](2026-03-01-evening.pdf) |
 | 2026-03-01 | Morning | WasteZero AI — Autonomous Food Waste Intelligence | [Playbook](2026-03-01-morning.md) • [Landing](2026-03-01-morning-landing.html) • [PDF](2026-03-01-morning.pdf) |
 | 2026-03-01 | Afternoon | ParentOS — AI Operating System for Modern Parenting | [Playbook](2026-03-01-afternoon.md) • [Landing](2026-03-01-afternoon-landing.html) • [PDF](2026-03-01-afternoon.pdf) |
+| 2026-03-02 | Evening | AuditOS — Autonomous Financial Audit Intelligence | [Playbook](2026-03-02-evening.md) • [Landing](2026-03-02-evening-landing.html) • [PDF](2026-03-02-evening.pdf) |
 <!-- New entries will be added above this line -->
 
 ---
