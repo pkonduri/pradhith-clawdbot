@@ -97,6 +97,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-03-01 | Afternoon | ParentOS — AI Operating System for Modern Parenting | [Playbook](2026-03-01-afternoon.md) • [Landing](2026-03-01-afternoon-landing.html) • [PDF](2026-03-01-afternoon.pdf) |
 | 2026-03-02 | Evening | AuditOS — Autonomous Financial Audit Intelligence | [Playbook](2026-03-02-evening.md) • [Landing](2026-03-02-evening-landing.html) • [PDF](2026-03-02-evening.pdf) |
 | 2026-03-02 | Morning | AgentGuard — AI Agent Governance & Security Platform | [Playbook](2026-03-02-morning.md) • [Landing](2026-03-02-morning-landing.html) • [PDF](2026-03-02-morning.pdf) |
+| 2026-03-02 | Afternoon | WarehouseOS — The AI Operating System for Autonomous Warehouses | [Playbook](2026-03-02-afternoon.md) • [Landing](2026-03-02-afternoon-landing.html) • [PDF](2026-03-02-afternoon.pdf) |
 <!-- New entries will be added above this line -->
 
 ---

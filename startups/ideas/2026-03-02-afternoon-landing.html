@@ -1,0 +1,1571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WarehouseOS — The AI Operating System for Autonomous Warehouses</title>
+    <meta name="description" content="The unified intelligence layer that transforms any warehouse into an autonomous fulfillment powerhouse.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #FF6B00;
+            --primary-dark: #E55A00;
+            --primary-light: #FF8533;
+            --secondary: #1A1A2E;
+            --accent: #00D4AA;
+            --accent-blue: #4F8EFF;
+            --dark: #0A0A12;
+            --darker: #050508;
+            --light: #FFFFFF;
+            --gray-100: #F5F5F7;
+            --gray-200: #E5E5E9;
+            --gray-300: #C5C5CD;
+            --gray-400: #8E8E9A;
+            --gray-500: #6B6B78;
+            --gray-600: #4A4A56;
+            --gradient-primary: linear-gradient(135deg, #FF6B00 0%, #FF8533 50%, #FFAA66 100%);
+            --gradient-dark: linear-gradient(180deg, #1A1A2E 0%, #0A0A12 100%);
+            --gradient-mesh: radial-gradient(ellipse at 20% 20%, rgba(255, 107, 0, 0.15) 0%, transparent 50%),
+                           radial-gradient(ellipse at 80% 80%, rgba(0, 212, 170, 0.1) 0%, transparent 50%),
+                           radial-gradient(ellipse at 50% 50%, rgba(79, 142, 255, 0.08) 0%, transparent 60%);
+            --shadow-glow: 0 0 60px rgba(255, 107, 0, 0.3);
+            --shadow-card: 0 25px 80px -20px rgba(0, 0, 0, 0.5);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--darker);
+            color: var(--light);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: var(--darker);
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-mesh);
+            animation: meshMove 20s ease-in-out infinite;
+        }
+
+        @keyframes meshMove {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.1); }
+        }
+
+        /* Grid Pattern Overlay */
+        .grid-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-image: 
+                linear-gradient(rgba(255, 107, 0, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 107, 0, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1.5rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10, 10, 18, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 107, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .logo-icon {
+            width: 42px;
+            height: 42px;
+            background: var(--gradient-primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            -webkit-text-fill-color: white;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--gray-300);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-cta {
+            padding: 0.75rem 1.75rem;
+            background: var(--gradient-primary);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            font-size: 0.95rem;
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 8rem 4rem 6rem;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            z-index: 2;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(255, 107, 0, 0.1);
+            border: 1px solid rgba(255, 107, 0, 0.3);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--primary-light);
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .hero-badge::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 7vw, 5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.8s ease 0.1s both;
+        }
+
+        .hero h1 span {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.4rem;
+            color: var(--gray-300);
+            margin-bottom: 2.5rem;
+            max-width: 600px;
+            line-height: 1.8;
+            animation: fadeInUp 0.8s ease 0.2s both;
+        }
+
+        .hero-cta-group {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 4rem;
+            animation: fadeInUp 0.8s ease 0.3s both;
+        }
+
+        .btn-primary {
+            padding: 1rem 2.5rem;
+            background: var(--gradient-primary);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .btn-secondary {
+            padding: 1rem 2.5rem;
+            background: transparent;
+            border: 2px solid rgba(255, 107, 0, 0.4);
+            border-radius: 12px;
+            color: var(--light);
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 107, 0, 0.1);
+            border-color: var(--primary);
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 4rem;
+            animation: fadeInUp 0.8s ease 0.4s both;
+        }
+
+        .stat {
+            text-align: left;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--gray-400);
+            margin-top: 0.25rem;
+        }
+
+        /* Hero Visual */
+        .hero-visual {
+            position: absolute;
+            right: -5%;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 55%;
+            height: 80%;
+            z-index: 1;
+        }
+
+        .warehouse-diagram {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .warehouse-box {
+            position: absolute;
+            background: linear-gradient(135deg, rgba(255, 107, 0, 0.1), rgba(255, 107, 0, 0.05));
+            border: 1px solid rgba(255, 107, 0, 0.2);
+            border-radius: 16px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .warehouse-box.box-1 {
+            top: 10%;
+            left: 20%;
+            width: 180px;
+            animation-delay: 0s;
+        }
+
+        .warehouse-box.box-2 {
+            top: 30%;
+            right: 15%;
+            width: 200px;
+            animation-delay: 1s;
+        }
+
+        .warehouse-box.box-3 {
+            bottom: 25%;
+            left: 30%;
+            width: 190px;
+            animation-delay: 2s;
+        }
+
+        .warehouse-box.box-4 {
+            bottom: 10%;
+            right: 25%;
+            width: 170px;
+            animation-delay: 3s;
+        }
+
+        .warehouse-box h4 {
+            font-size: 0.85rem;
+            color: var(--primary-light);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .warehouse-box p {
+            font-size: 0.75rem;
+            color: var(--gray-400);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* Connection Lines */
+        .connection-lines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .connection-lines svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .connection-lines path {
+            stroke: rgba(255, 107, 0, 0.2);
+            stroke-width: 2;
+            fill: none;
+            stroke-dasharray: 8, 8;
+            animation: dash 20s linear infinite;
+        }
+
+        @keyframes dash {
+            to { stroke-dashoffset: -100; }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Problem Section */
+        .section {
+            padding: 8rem 4rem;
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 5rem;
+        }
+
+        .section-label {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            background: rgba(255, 107, 0, 0.1);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--primary-light);
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .section-title {
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: var(--gray-400);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Problem Cards */
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .problem-card {
+            background: linear-gradient(135deg, rgba(26, 26, 46, 0.8), rgba(26, 26, 46, 0.4));
+            border: 1px solid rgba(255, 107, 0, 0.1);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .problem-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient-primary);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(255, 107, 0, 0.3);
+            box-shadow: var(--shadow-card);
+        }
+
+        .problem-card:hover::before {
+            opacity: 1;
+        }
+
+        .problem-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, rgba(255, 107, 0, 0.2), rgba(255, 107, 0, 0.1));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .problem-card h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--light);
+        }
+
+        .problem-card p {
+            color: var(--gray-400);
+            line-height: 1.7;
+        }
+
+        .problem-stat {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(255, 107, 0, 0.1);
+            border-radius: 8px;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-top: 1rem;
+        }
+
+        /* Solution Section */
+        .solution-section {
+            background: linear-gradient(180deg, transparent, rgba(26, 26, 46, 0.5), transparent);
+        }
+
+        .solution-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            align-items: center;
+        }
+
+        .solution-content h3 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--light);
+        }
+
+        .solution-content p {
+            color: var(--gray-400);
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        .solution-features {
+            list-style: none;
+        }
+
+        .solution-features li {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: rgba(255, 107, 0, 0.05);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 107, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .solution-features li:hover {
+            background: rgba(255, 107, 0, 0.1);
+            border-color: rgba(255, 107, 0, 0.2);
+        }
+
+        .feature-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .feature-text h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+
+        .feature-text p {
+            font-size: 0.9rem;
+            color: var(--gray-400);
+            margin: 0;
+        }
+
+        /* Architecture Diagram */
+        .architecture-visual {
+            background: linear-gradient(135deg, rgba(26, 26, 46, 0.9), rgba(10, 10, 18, 0.9));
+            border: 1px solid rgba(255, 107, 0, 0.2);
+            border-radius: 24px;
+            padding: 3rem;
+            position: relative;
+        }
+
+        .arch-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255, 107, 0, 0.1);
+        }
+
+        .arch-header h4 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary-light);
+        }
+
+        .arch-layers {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .arch-layer {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.75rem;
+        }
+
+        .arch-module {
+            background: rgba(255, 107, 0, 0.1);
+            border: 1px solid rgba(255, 107, 0, 0.2);
+            border-radius: 10px;
+            padding: 1rem;
+            text-align: center;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--gray-300);
+            transition: all 0.3s ease;
+        }
+
+        .arch-module:hover {
+            background: rgba(255, 107, 0, 0.2);
+            transform: scale(1.05);
+        }
+
+        .arch-module.highlight {
+            background: var(--gradient-primary);
+            color: white;
+            font-weight: 600;
+        }
+
+        .arch-integrations {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 107, 0, 0.1);
+        }
+
+        .arch-integration {
+            background: rgba(79, 142, 255, 0.1);
+            border: 1px solid rgba(79, 142, 255, 0.2);
+            border-radius: 8px;
+            padding: 0.75rem;
+            text-align: center;
+            font-size: 0.7rem;
+            color: var(--accent-blue);
+        }
+
+        /* Features Section */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, rgba(26, 26, 46, 0.6), rgba(26, 26, 46, 0.3));
+            border: 1px solid rgba(255, 107, 0, 0.1);
+            border-radius: 20px;
+            padding: 2.5rem;
+            text-align: center;
+            transition: all 0.4s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(255, 107, 0, 0.3);
+            box-shadow: 0 30px 60px -20px rgba(255, 107, 0, 0.2);
+        }
+
+        .feature-card-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, rgba(255, 107, 0, 0.2), rgba(255, 107, 0, 0.05));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin: 0 auto 1.5rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card p {
+            color: var(--gray-400);
+            font-size: 0.95rem;
+        }
+
+        /* Metrics Section */
+        .metrics-section {
+            background: var(--gradient-dark);
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .metric-card {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: linear-gradient(135deg, rgba(255, 107, 0, 0.1), rgba(255, 107, 0, 0.02));
+            border: 1px solid rgba(255, 107, 0, 0.2);
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .metric-card:hover {
+            transform: scale(1.05);
+            border-color: var(--primary);
+        }
+
+        .metric-value {
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-label {
+            font-size: 1rem;
+            color: var(--gray-300);
+            font-weight: 500;
+        }
+
+        /* Market Section */
+        .market-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            align-items: center;
+        }
+
+        .market-visual {
+            position: relative;
+        }
+
+        .market-circle {
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            background: conic-gradient(
+                var(--primary) 0deg 120deg,
+                var(--accent) 120deg 200deg,
+                var(--accent-blue) 200deg 280deg,
+                var(--gray-600) 280deg 360deg
+            );
+            position: relative;
+            margin: 0 auto;
+        }
+
+        .market-circle::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60%;
+            height: 60%;
+            background: var(--darker);
+            border-radius: 50%;
+        }
+
+        .market-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .market-center-value {
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--light);
+        }
+
+        .market-center-label {
+            font-size: 0.9rem;
+            color: var(--gray-400);
+        }
+
+        .market-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-top: 2rem;
+            justify-content: center;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .legend-color {
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
+        }
+
+        .market-text h3 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        .market-text p {
+            color: var(--gray-400);
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .market-highlights {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .market-highlight {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.5rem;
+            background: rgba(255, 107, 0, 0.05);
+            border-left: 3px solid var(--primary);
+            border-radius: 0 12px 12px 0;
+        }
+
+        .market-highlight span {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        /* Pricing Section */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            background: linear-gradient(135deg, rgba(26, 26, 46, 0.8), rgba(26, 26, 46, 0.4));
+            border: 1px solid rgba(255, 107, 0, 0.1);
+            border-radius: 24px;
+            padding: 3rem;
+            text-align: center;
+            transition: all 0.4s ease;
+            position: relative;
+        }
+
+        .pricing-card.featured {
+            background: linear-gradient(135deg, rgba(255, 107, 0, 0.15), rgba(255, 107, 0, 0.05));
+            border-color: var(--primary);
+            transform: scale(1.05);
+        }
+
+        .pricing-card.featured::before {
+            content: 'MOST POPULAR';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 0.5rem 1.5rem;
+            background: var(--gradient-primary);
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .pricing-card.featured:hover {
+            transform: scale(1.05) translateY(-10px);
+        }
+
+        .pricing-tier {
+            font-size: 1rem;
+            color: var(--primary-light);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+        }
+
+        .pricing-price {
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-price span {
+            font-size: 1rem;
+            color: var(--gray-400);
+            font-weight: 400;
+        }
+
+        .pricing-desc {
+            color: var(--gray-400);
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+        }
+
+        .pricing-features {
+            list-style: none;
+            text-align: left;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-features li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            color: var(--gray-300);
+            font-size: 0.95rem;
+        }
+
+        .pricing-features li::before {
+            content: '✓';
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            text-align: center;
+            background: linear-gradient(180deg, transparent, rgba(255, 107, 0, 0.05));
+            padding: 10rem 4rem;
+        }
+
+        .cta-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cta-content h2 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .cta-content h2 span {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .cta-content p {
+            font-size: 1.3rem;
+            color: var(--gray-400);
+            margin-bottom: 3rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem;
+            border-top: 1px solid rgba(255, 107, 0, 0.1);
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .footer-tagline {
+            color: var(--gray-400);
+            margin-bottom: 2rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--gray-400);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        .footer-copy {
+            color: var(--gray-500);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .hero-visual {
+                display: none;
+            }
+
+            .solution-grid,
+            .market-content {
+                grid-template-columns: 1fr;
+            }
+
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .pricing-grid {
+                grid-template-columns: 1fr;
+                max-width: 500px;
+            }
+
+            .pricing-card.featured {
+                transform: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem 2rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero,
+            .section {
+                padding: 6rem 2rem;
+            }
+
+            .hero-stats {
+                flex-direction: column;
+                gap: 2rem;
+            }
+
+            .features-grid,
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .arch-layer {
+                grid-template-columns: 1fr;
+            }
+
+            .arch-integrations {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    <div class="grid-pattern"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">
+            <div class="logo-icon">🏭</div>
+            WarehouseOS
+        </div>
+        <ul class="nav-links">
+            <li><a href="#problem">Problem</a></li>
+            <li><a href="#solution">Solution</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#market">Market</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+        </ul>
+        <a href="#contact" class="nav-cta">Request Demo →</a>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">🚀 Autonomous Warehouse Intelligence</div>
+            <h1>The <span>AI Operating System</span> for Warehouses</h1>
+            <p class="hero-subtitle">Transform any warehouse into an autonomous fulfillment powerhouse. Unified intelligence that orchestrates robots, humans, and systems in perfect harmony.</p>
+            <div class="hero-cta-group">
+                <a href="#contact" class="btn-primary">Get Early Access →</a>
+                <a href="#solution" class="btn-secondary">See How It Works</a>
+            </div>
+            <div class="hero-stats">
+                <div class="stat">
+                    <div class="stat-value">40%</div>
+                    <div class="stat-label">Efficiency Gains</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">$50B</div>
+                    <div class="stat-label">Market Opportunity</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">24/7</div>
+                    <div class="stat-label">Autonomous Ops</div>
+                </div>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <div class="warehouse-diagram">
+                <div class="connection-lines">
+                    <svg viewBox="0 0 100 100" preserveAspectRatio="none">
+                        <path d="M 30 20 Q 50 40 70 35" />
+                        <path d="M 70 35 Q 60 60 40 70" />
+                        <path d="M 40 70 Q 55 55 70 80" />
+                        <path d="M 30 20 Q 35 50 40 70" />
+                    </svg>
+                </div>
+                <div class="warehouse-box box-1">
+                    <h4>🤖 Robot Fleet</h4>
+                    <p>AMRs, AS/RS, Goods-to-Person</p>
+                </div>
+                <div class="warehouse-box box-2">
+                    <h4>📦 Inventory AI</h4>
+                    <p>Real-time tracking & optimization</p>
+                </div>
+                <div class="warehouse-box box-3">
+                    <h4>👷 Labor Command</h4>
+                    <p>Workforce orchestration</p>
+                </div>
+                <div class="warehouse-box box-4">
+                    <h4>🧠 Task Engine</h4>
+                    <p>Autonomous decision making</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="section" id="problem">
+        <div class="section-header">
+            <span class="section-label">The Problem</span>
+            <h2 class="section-title">Warehouses Are Drowning in Complexity</h2>
+            <p class="section-subtitle">The e-commerce explosion created a perfect storm of fragmentation, labor crises, and technological debt.</p>
+        </div>
+        <div class="problem-grid">
+            <div class="problem-card">
+                <div class="problem-icon">🔧</div>
+                <h3>System Fragmentation</h3>
+                <p>Average warehouse runs 15-20 disconnected systems. WMS, TMS, robotics, picking systems — none of them talk to each other. Every integration is duct tape.</p>
+                <div class="problem-stat">68%</div>
+                <p style="margin-top: 0.5rem; font-size: 0.85rem;">cite integration as #1 challenge</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">👷</div>
+                <h3>Labor Crisis</h3>
+                <p>1.1M unfilled warehouse jobs in the US. 150% annual turnover. Pickers walk 10+ miles per shift. Gen Z won't take these jobs at any wage.</p>
+                <div class="problem-stat">150%</div>
+                <p style="margin-top: 0.5rem; font-size: 0.85rem;">annual turnover rate</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">💸</div>
+                <h3>Operational Waste</h3>
+                <p>$50B lost annually to picking errors, inventory discrepancies, and inefficient slotting. Static rules can't adapt to dynamic demand patterns.</p>
+                <div class="problem-stat">$50B</div>
+                <p style="margin-top: 0.5rem; font-size: 0.85rem;">lost to inefficiency annually</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">🏃</div>
+                <h3>The Amazon Gap</h3>
+                <p>Amazon spent $100B+ on automation. SMB brands and 3PLs can't compete. Without AI-native operations, you're bringing a knife to a gunfight.</p>
+                <div class="problem-stat">$100B+</div>
+                <p style="margin-top: 0.5rem; font-size: 0.85rem;">Amazon's automation investment</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="section solution-section" id="solution">
+        <div class="section-header">
+            <span class="section-label">The Solution</span>
+            <h2 class="section-title">One Intelligence Layer to Rule Them All</h2>
+            <p class="section-subtitle">WarehouseOS unifies, orchestrates, and autonomously optimizes every aspect of warehouse operations.</p>
+        </div>
+        <div class="solution-grid">
+            <div class="solution-content">
+                <h3>The Android for Warehouses</h3>
+                <p>A universal intelligence layer that works with any hardware, any WMS, any robotics vendor — and learns continuously across your entire network.</p>
+                <ul class="solution-features">
+                    <li>
+                        <div class="feature-icon">🎯</div>
+                        <div class="feature-text">
+                            <h4>Unified Control Plane</h4>
+                            <p>Single pane of glass for all systems. Hardware-agnostic, vendor-neutral.</p>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="feature-icon">🧠</div>
+                        <div class="feature-text">
+                            <h4>Autonomous Orchestration</h4>
+                            <p>AI dynamically assigns tasks to humans, robots, and automated systems.</p>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="feature-icon">📊</div>
+                        <div class="feature-text">
+                            <h4>Predictive Intelligence</h4>
+                            <p>Know what to pick before orders arrive. Prevent stockouts before they happen.</p>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="feature-icon">🔄</div>
+                        <div class="feature-text">
+                            <h4>Continuous Learning</h4>
+                            <p>Every warehouse makes the network smarter. Cross-facility optimization.</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="architecture-visual">
+                <div class="arch-header">
+                    <h4>🏗️ Platform Architecture</h4>
+                </div>
+                <div class="arch-layers">
+                    <div class="arch-layer">
+                        <div class="arch-module highlight">Facility Commander</div>
+                        <div class="arch-module highlight">Network Optimizer</div>
+                        <div class="arch-module highlight">Analytics Engine</div>
+                    </div>
+                    <div class="arch-layer">
+                        <div class="arch-module">Task Orchestrator</div>
+                        <div class="arch-module">Inventory Intelligence</div>
+                        <div class="arch-module">Labor Command</div>
+                    </div>
+                    <div class="arch-layer">
+                        <div class="arch-module">Robotics Abstraction</div>
+                        <div class="arch-module">Vision Intelligence</div>
+                        <div class="arch-module">Digital Twin Engine</div>
+                    </div>
+                </div>
+                <div class="arch-integrations">
+                    <div class="arch-integration">WMS</div>
+                    <div class="arch-integration">TMS</div>
+                    <div class="arch-integration">Robots</div>
+                    <div class="arch-integration">Vision</div>
+                    <div class="arch-integration">Labor</div>
+                    <div class="arch-integration">ERP</div>
+                    <div class="arch-integration">Orders</div>
+                    <div class="arch-integration">Carriers</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="section" id="features">
+        <div class="section-header">
+            <span class="section-label">Capabilities</span>
+            <h2 class="section-title">Full-Stack Warehouse Intelligence</h2>
+            <p class="section-subtitle">Every module you need to run a truly autonomous fulfillment operation.</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-card-icon">🎯</div>
+                <h3>Task Orchestration</h3>
+                <p>AI dynamically assigns and rebalances tasks in real-time based on conditions, priorities, and resource availability.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-card-icon">📍</div>
+                <h3>Intelligent Slotting</h3>
+                <p>Dynamic product placement based on velocity, affinity, and pick patterns. Continuous re-slotting, not annual audits.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-card-icon">🌊</div>
+                <h3>Adaptive Wave Planning</h3>
+                <p>Real-time wave optimization vs. static batch processing. Dynamic release based on carrier cutoffs and labor.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-card-icon">📦</div>
+                <h3>Inventory Intelligence</h3>
+                <p>Perpetual accuracy without cycle counts. Computer vision verification. Predictive stockout prevention.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-card-icon">👷</div>
+                <h3>Labor Command Center</h3>
+                <p>Real-time workforce optimization. Fatigue detection, ergonomic routing, skill-based assignment, and coaching.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-card-icon">🤖</div>
+                <h3>Robotics Orchestration</h3>
+                <p>Vendor-agnostic fleet management. Multi-robot coordination. Seamless human-robot collaboration zones.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Metrics Section -->
+    <section class="section metrics-section">
+        <div class="section-header">
+            <span class="section-label">Results</span>
+            <h2 class="section-title">Measurable Impact from Day One</h2>
+        </div>
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-value">40%</div>
+                <div class="metric-label">Efficiency Gains</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">99.5%</div>
+                <div class="metric-label">Inventory Accuracy</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">60%</div>
+                <div class="metric-label">Labor Cost Reduction</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">2x</div>
+                <div class="metric-label">Throughput Increase</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Market Section -->
+    <section class="section" id="market">
+        <div class="section-header">
+            <span class="section-label">Market Opportunity</span>
+            <h2 class="section-title">A $50B+ Market Ready for Disruption</h2>
+        </div>
+        <div class="market-content">
+            <div class="market-visual">
+                <div class="market-circle">
+                    <div class="market-center">
+                        <div class="market-center-value">$50B+</div>
+                        <div class="market-center-label">TAM by 2028</div>
+                    </div>
+                </div>
+                <div class="market-legend">
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: var(--primary);"></div>
+                        <span>Warehouse Automation</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: var(--accent);"></div>
+                        <span>WMS Software</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: var(--accent-blue);"></div>
+                        <span>Robotics</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: var(--gray-600);"></div>
+                        <span>Services</span>
+                    </div>
+                </div>
+            </div>
+            <div class="market-text">
+                <h3>Why Now?</h3>
+                <p>The warehouse industry is at an inflection point. Robot hardware costs dropped 60% in three years. Generative AI enables true autonomy. Labor economics force automation. Same-day delivery is the new standard.</p>
+                <div class="market-highlights">
+                    <div class="market-highlight">
+                        <span>$450B</span>
+                        <p>Annual US warehouse operations spend</p>
+                    </div>
+                    <div class="market-highlight">
+                        <span>1.1M</span>
+                        <p>Unfilled warehouse jobs in the US</p>
+                    </div>
+                    <div class="market-highlight">
+                        <span>400%</span>
+                        <p>E-commerce volume growth since 2020</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="section" id="pricing">
+        <div class="section-header">
+            <span class="section-label">Pricing</span>
+            <h2 class="section-title">Built to Scale With You</h2>
+            <p class="section-subtitle">Start small, grow fast. Platform pricing that makes sense.</p>
+        </div>
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <div class="pricing-tier">Starter</div>
+                <div class="pricing-price">$15K<span>/mo</span></div>
+                <p class="pricing-desc">+ $0.03/order</p>
+                <ul class="pricing-features">
+                    <li>Single facility up to 50K sq ft</li>
+                    <li>Core task orchestration</li>
+                    <li>Basic analytics dashboard</li>
+                    <li>Email support</li>
+                    <li>2 system integrations</li>
+                </ul>
+                <a href="#contact" class="btn-secondary" style="width: 100%; justify-content: center;">Get Started</a>
+            </div>
+            <div class="pricing-card featured">
+                <div class="pricing-tier">Growth</div>
+                <div class="pricing-price">$40K<span>/mo</span></div>
+                <p class="pricing-desc">+ $0.02/order</p>
+                <ul class="pricing-features">
+                    <li>1-5 facilities up to 500K sq ft</li>
+                    <li>Full platform access</li>
+                    <li>Network optimization</li>
+                    <li>Priority support</li>
+                    <li>Unlimited integrations</li>
+                    <li>Robotics orchestration</li>
+                </ul>
+                <a href="#contact" class="btn-primary" style="width: 100%; justify-content: center;">Get Started</a>
+            </div>
+            <div class="pricing-card">
+                <div class="pricing-tier">Enterprise</div>
+                <div class="pricing-price">Custom</div>
+                <p class="pricing-desc">Volume-based pricing</p>
+                <ul class="pricing-features">
+                    <li>Unlimited facilities</li>
+                    <li>Full platform + custom ML</li>
+                    <li>Dedicated success team</li>
+                    <li>24/7 support</li>
+                    <li>Custom integrations</li>
+                    <li>White-label options</li>
+                </ul>
+                <a href="#contact" class="btn-secondary" style="width: 100%; justify-content: center;">Contact Sales</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section" id="contact">
+        <div class="cta-content">
+            <h2>Ready to Make Your <span>Warehouse Autonomous?</span></h2>
+            <p>Join the waitlist for early access. Be among the first to transform your operations with WarehouseOS.</p>
+            <div class="cta-buttons">
+                <a href="mailto:founders@warehouseos.ai" class="btn-primary">Request Early Access →</a>
+                <a href="#solution" class="btn-secondary">Watch Demo</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">🏭 WarehouseOS</div>
+            <p class="footer-tagline">The AI Operating System for Autonomous Warehouses</p>
+            <div class="footer-links">
+                <a href="#problem">Problem</a>
+                <a href="#solution">Solution</a>
+                <a href="#features">Features</a>
+                <a href="#market">Market</a>
+                <a href="#pricing">Pricing</a>
+                <a href="mailto:founders@warehouseos.ai">Contact</a>
+            </div>
+            <p class="footer-copy">© 2026 WarehouseOS. All rights reserved. | San Francisco, CA</p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scroll for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Navbar background on scroll
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 100) {
+                nav.style.background = 'rgba(5, 5, 8, 0.95)';
+            } else {
+                nav.style.background = 'rgba(10, 10, 18, 0.8)';
+            }
+        });
+
+        // Animate elements on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.problem-card, .feature-card, .metric-card, .pricing-card').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'all 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
