@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GlassGuard AI — Counter-Surveillance Intelligence for the AI Wearables Era</title>
+    <meta name="description" content="Your privacy shield in a world of always-on AI eyes. Detect, protect, and reclaim your space from smart glasses surveillance.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-tertiary: #1a1a25;
+            --accent-primary: #00ff88;
+            --accent-secondary: #00d4ff;
+            --accent-warning: #ff6b35;
+            --accent-danger: #ff3366;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0b0;
+            --text-muted: #606070;
+            --border-color: #2a2a3a;
+            --gradient-shield: linear-gradient(135deg, #00ff88 0%, #00d4ff 50%, #7c3aed 100%);
+            --gradient-danger: linear-gradient(135deg, #ff3366 0%, #ff6b35 100%);
+            --gradient-dark: linear-gradient(180deg, #0a0a0f 0%, #12121a 100%);
+            --glow-primary: 0 0 60px rgba(0, 255, 136, 0.3);
+            --glow-secondary: 0 0 40px rgba(0, 212, 255, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated background grid */
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 255, 136, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 136, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Floating surveillance elements */
+        .surveillance-float {
+            position: fixed;
+            font-size: 2rem;
+            opacity: 0.1;
+            animation: float 20s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .surveillance-float:nth-child(1) { top: 10%; left: 5%; animation-delay: 0s; }
+        .surveillance-float:nth-child(2) { top: 30%; right: 10%; animation-delay: -5s; }
+        .surveillance-float:nth-child(3) { top: 60%; left: 15%; animation-delay: -10s; }
+        .surveillance-float:nth-child(4) { top: 80%; right: 20%; animation-delay: -15s; }
+        .surveillance-float:nth-child(5) { top: 45%; left: 80%; animation-delay: -7s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.1; }
+            50% { transform: translateY(-30px) rotate(10deg); opacity: 0.2; }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1rem 2rem;
+            background: rgba(10, 10, 15, 0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 800;
+            font-size: 1.5rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-shield);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-primary);
+        }
+
+        .nav-cta {
+            background: var(--gradient-shield);
+            color: var(--bg-primary);
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--glow-primary);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 8rem 2rem 4rem;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            max-width: 1000px;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .alert-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 51, 102, 0.15);
+            border: 1px solid var(--accent-danger);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            color: var(--accent-danger);
+            margin-bottom: 2rem;
+            animation: pulse-border 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-border {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255, 51, 102, 0.4); }
+            50% { box-shadow: 0 0 0 10px rgba(255, 51, 102, 0); }
+        }
+
+        .alert-badge::before {
+            content: '⚠️';
+        }
+
+        h1 {
+            font-size: clamp(3rem, 8vw, 5.5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.03em;
+        }
+
+        .gradient-text {
+            background: var(--gradient-shield);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-tagline {
+            font-size: clamp(1.25rem, 3vw, 1.75rem);
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto 3rem;
+            font-weight: 300;
+        }
+
+        .hero-cta-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--gradient-shield);
+            color: var(--bg-primary);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--glow-primary);
+        }
+
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--accent-primary);
+            background: rgba(0, 255, 136, 0.1);
+        }
+
+        /* Threat Counter */
+        .threat-counter {
+            margin-top: 4rem;
+            padding: 2rem;
+            background: rgba(255, 51, 102, 0.05);
+            border: 1px solid rgba(255, 51, 102, 0.2);
+            border-radius: 16px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .threat-label {
+            font-size: 0.875rem;
+            color: var(--accent-danger);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.5rem;
+        }
+
+        .threat-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--accent-danger);
+        }
+
+        .threat-desc {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Problem Section */
+        .problem-section {
+            padding: 6rem 2rem;
+            position: relative;
+            background: var(--bg-secondary);
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 4rem;
+        }
+
+        .section-label {
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--accent-primary);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        h2 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .section-desc {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .problem-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s;
+        }
+
+        .problem-card:hover {
+            border-color: var(--accent-danger);
+            transform: translateY(-5px);
+        }
+
+        .problem-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .problem-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+            color: var(--accent-danger);
+        }
+
+        .problem-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Solution Section */
+        .solution-section {
+            padding: 6rem 2rem;
+            position: relative;
+        }
+
+        .solution-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 768px) {
+            .solution-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .solution-card {
+            background: linear-gradient(145deg, var(--bg-secondary), var(--bg-tertiary));
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s;
+        }
+
+        .solution-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-shield);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .solution-card:hover::before {
+            opacity: 1;
+        }
+
+        .solution-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--glow-secondary);
+        }
+
+        .solution-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 3rem;
+            font-weight: 800;
+            background: var(--gradient-shield);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            opacity: 0.5;
+            position: absolute;
+            top: 1.5rem;
+            right: 2rem;
+        }
+
+        .solution-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(0, 255, 136, 0.1);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .solution-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .solution-subtitle {
+            color: var(--accent-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .solution-card p {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .solution-features {
+            list-style: none;
+        }
+
+        .solution-features li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 0;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .solution-features li::before {
+            content: '✓';
+            color: var(--accent-primary);
+            font-weight: 700;
+        }
+
+        /* Products Section */
+        .products-section {
+            padding: 6rem 2rem;
+            background: var(--bg-secondary);
+        }
+
+        .products-showcase {
+            display: flex;
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            overflow-x: auto;
+            padding: 2rem 0;
+        }
+
+        .product-card {
+            min-width: 280px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s;
+            flex-shrink: 0;
+        }
+
+        .product-card:hover {
+            border-color: var(--accent-primary);
+            transform: scale(1.02);
+        }
+
+        .product-visual {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 1.5rem;
+            background: linear-gradient(135deg, var(--bg-tertiary), var(--bg-secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            border: 2px solid var(--border-color);
+        }
+
+        .product-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-card .price {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--accent-primary);
+            margin: 1rem 0;
+        }
+
+        .product-card .price span {
+            font-size: 1rem;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .product-card p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Stats Section */
+        .stats-section {
+            padding: 6rem 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: var(--gradient-shield);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 8rem 2rem;
+            text-align: center;
+            position: relative;
+            background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+        }
+
+        .cta-content {
+            max-width: 700px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+        }
+
+        .cta-section h2 {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-section p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 2.5rem;
+        }
+
+        .email-form {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .email-form input {
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            font-size: 1rem;
+            min-width: 300px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .email-form input:focus {
+            border-color: var(--accent-primary);
+        }
+
+        .email-form input::placeholder {
+            color: var(--text-muted);
+        }
+
+        /* Footer */
+        footer {
+            padding: 3rem 2rem;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-tagline {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-primary);
+        }
+
+        .footer-legal {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+
+        /* Animations */
+        @keyframes scan-line {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100vh); }
+        }
+
+        .scan-line {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent-primary), transparent);
+            animation: scan-line 8s linear infinite;
+            pointer-events: none;
+            z-index: 1000;
+            opacity: 0.3;
+        }
+
+        /* Shield Animation */
+        .shield-pulse {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            border: 2px solid rgba(0, 255, 136, 0.1);
+            animation: shield-expand 4s ease-out infinite;
+            pointer-events: none;
+        }
+
+        .shield-pulse:nth-child(2) { animation-delay: -1.33s; }
+        .shield-pulse:nth-child(3) { animation-delay: -2.66s; }
+
+        @keyframes shield-expand {
+            0% {
+                transform: scale(0.5);
+                opacity: 0.5;
+            }
+            100% {
+                transform: scale(1.5);
+                opacity: 0;
+            }
+        }
+
+        .hero-shield-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero {
+                padding: 6rem 1rem 3rem;
+            }
+
+            .threat-counter {
+                margin-top: 2rem;
+                padding: 1.5rem;
+            }
+
+            .threat-number {
+                font-size: 2rem;
+            }
+
+            .solution-card {
+                padding: 1.5rem;
+            }
+
+            .products-showcase {
+                padding: 1rem;
+            }
+
+            .email-form input {
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+    <div class="scan-line"></div>
+    
+    <div class="surveillance-float">👓</div>
+    <div class="surveillance-float">📹</div>
+    <div class="surveillance-float">👁️</div>
+    <div class="surveillance-float">🎥</div>
+    <div class="surveillance-float">📡</div>
+
+    <nav>
+        <div class="nav-content">
+            <div class="logo">
+                <div class="logo-icon">🛡️</div>
+                <span>Glass<span class="gradient-text">Guard</span></span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#problem">The Problem</a></li>
+                <li><a href="#solution">Solution</a></li>
+                <li><a href="#products">Products</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <a href="#contact" class="nav-cta">Get Protected</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-shield-container">
+            <div class="shield-pulse"></div>
+            <div class="shield-pulse"></div>
+            <div class="shield-pulse"></div>
+        </div>
+        
+        <div class="hero-content">
+            <div class="alert-badge">Trending Now: Meta Glasses Privacy Scandal</div>
+            
+            <h1>Your <span class="gradient-text">Privacy Shield</span> in a World of AI Eyes</h1>
+            
+            <p class="hero-tagline">Detect smart glasses. Block surveillance. Reclaim your space. The first counter-surveillance platform built for the AI wearables era.</p>
+            
+            <div class="hero-cta-group">
+                <a href="#contact" class="btn btn-primary">
+                    🛡️ Request Demo
+                </a>
+                <a href="#solution" class="btn btn-secondary">
+                    Learn How It Works →
+                </a>
+            </div>
+
+            <div class="threat-counter">
+                <div class="threat-label">Estimated AI Glasses Active Right Now</div>
+                <div class="threat-number" id="threat-count">47,328,941</div>
+                <div class="threat-desc">...and growing by 50+ per second. Any one of them could be recording you.</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="problem-section" id="problem">
+        <div class="section-header">
+            <div class="section-label">The Crisis</div>
+            <h2>Privacy is Under <span class="gradient-text">Assault</span></h2>
+            <p class="section-desc">AI-powered glasses are everywhere. And they see everything.</p>
+        </div>
+
+        <div class="problem-grid">
+            <div class="problem-card">
+                <div class="problem-icon">👓</div>
+                <h3>47M+ Smart Glasses</h3>
+                <p>Shipped in 2025 alone. Meta, Apple, Snap, Ray-Ban — always-on AI cameras hiding in plain sight.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">🎯</div>
+                <h3>Facial Recognition</h3>
+                <p>AI can identify you, your associates, and access your public data in milliseconds. No consent required.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">📋</div>
+                <h3>Document Capture</h3>
+                <p>Confidential contracts, medical records, legal documents — all vulnerable to a casual glance.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">🎤</div>
+                <h3>Audio Recording</h3>
+                <p>Conversations transcribed and analyzed by AI. Attorney-client privilege? Doctor-patient confidentiality? Gone.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">🏢</div>
+                <h3>Corporate Espionage</h3>
+                <p>Trade secrets, M&A discussions, product roadmaps — exposed to anyone wearing glasses in the room.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">⚖️</div>
+                <h3>Legal Liability</h3>
+                <p>HIPAA, SOX, GDPR, attorney-client privilege — your compliance is only as good as your privacy protection.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="solution-section" id="solution">
+        <div class="section-header">
+            <div class="section-label">The Solution</div>
+            <h2>Complete <span class="gradient-text">Counter-Surveillance</span></h2>
+            <p class="section-desc">Four layers of protection for individuals, businesses, and enterprises.</p>
+        </div>
+
+        <div class="solution-grid">
+            <div class="solution-card">
+                <span class="solution-number">01</span>
+                <div class="solution-icon">📡</div>
+                <h3>GlassGuard Detect</h3>
+                <div class="solution-subtitle">The "Radar" for AI Glasses</div>
+                <p>Proprietary RF/IR detection identifies active smart glasses within 30 feet. Know when you're being watched.</p>
+                <ul class="solution-features">
+                    <li>Sub-second detection alerts</li>
+                    <li>ML trained on 15+ device types</li>
+                    <li>Smartphone app & dedicated hardware</li>
+                    <li>Real-time threat notifications</li>
+                </ul>
+            </div>
+
+            <div class="solution-card">
+                <span class="solution-number">02</span>
+                <div class="solution-icon">🔒</div>
+                <h3>GlassGuard Shield</h3>
+                <div class="solution-subtitle">Active Counter-Measures</div>
+                <p>Neutralize surveillance without disrupting your environment. Invisible protection that works.</p>
+                <ul class="solution-features">
+                    <li>IR-LED badges blind cameras</li>
+                    <li>Ultrasonic audio scrambling</li>
+                    <li>Enterprise ceiling domes</li>
+                    <li>Zero visible disruption</li>
+                </ul>
+            </div>
+
+            <div class="solution-card">
+                <span class="solution-number">03</span>
+                <div class="solution-icon">✅</div>
+                <h3>GlassGuard Zones</h3>
+                <div class="solution-subtitle">Privacy-Certified Spaces</div>
+                <p>Become a certified Glass-Free Zone. Give your clients and employees the privacy they deserve.</p>
+                <ul class="solution-features">
+                    <li>Official certification program</li>
+                    <li>Hardware + policy + signage</li>
+                    <li>Consumer app for discovery</li>
+                    <li>Legal protection framework</li>
+                </ul>
+            </div>
+
+            <div class="solution-card">
+                <span class="solution-number">04</span>
+                <div class="solution-icon">🏛️</div>
+                <h3>GlassGuard Enterprise</h3>
+                <div class="solution-subtitle">Corporate Privacy OS</div>
+                <p>Full-stack privacy protection for organizations that can't afford to be compromised.</p>
+                <ul class="solution-features">
+                    <li>Visitor screening & enforcement</li>
+                    <li>CISO analytics dashboard</li>
+                    <li>Compliance reporting (HIPAA, SOX)</li>
+                    <li>Access control integration</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="products-section" id="products">
+        <div class="section-header">
+            <div class="section-label">Hardware</div>
+            <h2>Protection You Can <span class="gradient-text">Carry</span></h2>
+            <p class="section-desc">From personal devices to enterprise deployments.</p>
+        </div>
+
+        <div class="products-showcase">
+            <div class="product-card">
+                <div class="product-visual">📱</div>
+                <h3>Personal Detector</h3>
+                <div class="price">$149</div>
+                <p>Pocket-sized device that alerts when smart glasses are nearby. 48-hour battery. Pairs with app.</p>
+            </div>
+
+            <div class="product-card">
+                <div class="product-visual">🎖️</div>
+                <h3>IR Shield Badge</h3>
+                <div class="price">$79</div>
+                <p>Wearable badge that blinds camera sensors with invisible IR light. Perfect for executives.</p>
+            </div>
+
+            <div class="product-card">
+                <div class="product-visual">💡</div>
+                <h3>Privacy Dome</h3>
+                <div class="price">$2,999</div>
+                <p>Ceiling-mounted protection for meeting rooms. Covers 400 sq ft with detection + shielding.</p>
+            </div>
+
+            <div class="product-card">
+                <div class="product-visual">🏢</div>
+                <h3>Meeting Room Kit</h3>
+                <div class="price">$8,999</div>
+                <p>Complete boardroom protection: detection, IR shielding, ultrasonic audio mask, and monitoring.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="stats-section">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-number">$77B</div>
+                <div class="stat-label">Privacy Tech Market by 2028</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">200M+</div>
+                <div class="stat-label">Smart Glasses by 2028</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">&lt;100ms</div>
+                <div class="stat-label">Detection Latency</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">15+</div>
+                <div class="stat-label">Device Types Detected</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section" id="contact">
+        <div class="cta-content">
+            <h2>Reclaim Your <span class="gradient-text">Privacy</span></h2>
+            <p>Join the waitlist for early access to GlassGuard. Enterprise inquiries welcome.</p>
+            
+            <form class="email-form" onsubmit="event.preventDefault(); alert('Thanks! We\'ll be in touch soon.');">
+                <input type="email" placeholder="Enter your email" required>
+                <button type="submit" class="btn btn-primary">Get Early Access →</button>
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">
+                <div class="logo-icon" style="width: 32px; height: 32px; font-size: 1rem;">🛡️</div>
+                <span style="font-weight: 700; font-size: 1.25rem;">GlassGuard AI</span>
+            </div>
+            <p class="footer-tagline">Counter-Surveillance Intelligence for the AI Wearables Era</p>
+            <div class="footer-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Documentation</a>
+                <a href="#">Careers</a>
+                <a href="#">Press</a>
+            </div>
+            <p class="footer-legal">© 2026 GlassGuard AI, Inc. All rights reserved. "In a world of infinite eyes, we are the shield."</p>
+        </div>
+    </footer>
+
+    <script>
+        // Animate threat counter
+        const counter = document.getElementById('threat-count');
+        let count = 47328941;
+        
+        setInterval(() => {
+            count += Math.floor(Math.random() * 3) + 1;
+            counter.textContent = count.toLocaleString();
+        }, 1000);
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
