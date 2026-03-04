@@ -1,0 +1,1299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeepMine AI — Autonomous Subsurface Intelligence</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --earth-brown: #4A3728;
+            --deep-amber: #D97706;
+            --gold: #F59E0B;
+            --bright-gold: #FBBF24;
+            --cave-dark: #1C1917;
+            --stone-gray: #44403C;
+            --rock-light: #A8A29E;
+            --surface: #FAFAF9;
+            --mineral-teal: #0D9488;
+            --mineral-cyan: #06B6D4;
+            --danger-red: #DC2626;
+            --glow: rgba(251, 191, 36, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Grotesk', -apple-system, sans-serif;
+            background: var(--cave-dark);
+            color: var(--surface);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Underground Particle Animation */
+        .underground-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+            background: linear-gradient(180deg, 
+                var(--cave-dark) 0%,
+                #292524 30%,
+                #1C1917 60%,
+                #0C0A09 100%
+            );
+        }
+
+        .strata {
+            position: absolute;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, 
+                transparent 0%,
+                rgba(168, 162, 158, 0.1) 20%,
+                rgba(168, 162, 158, 0.2) 50%,
+                rgba(168, 162, 158, 0.1) 80%,
+                transparent 100%
+            );
+            animation: strataPulse 8s ease-in-out infinite;
+        }
+
+        .strata:nth-child(1) { top: 15%; animation-delay: 0s; }
+        .strata:nth-child(2) { top: 30%; animation-delay: 1s; }
+        .strata:nth-child(3) { top: 45%; animation-delay: 2s; }
+        .strata:nth-child(4) { top: 60%; animation-delay: 3s; }
+        .strata:nth-child(5) { top: 75%; animation-delay: 4s; }
+        .strata:nth-child(6) { top: 90%; animation-delay: 5s; }
+
+        @keyframes strataPulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.7; }
+        }
+
+        .mineral-particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--gold);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--gold), 0 0 20px var(--deep-amber);
+            animation: mineralFloat 15s linear infinite;
+        }
+
+        @keyframes mineralFloat {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% {
+                transform: translateY(-20vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 1.5rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: linear-gradient(180deg, rgba(28, 25, 23, 0.95) 0%, transparent 100%);
+            backdrop-filter: blur(10px);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--surface);
+        }
+
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, var(--deep-amber) 0%, var(--gold) 50%, var(--bright-gold) 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logo-icon::before {
+            content: '';
+            position: absolute;
+            inset: 2px;
+            background: var(--cave-dark);
+            border-radius: 8px;
+        }
+
+        .logo-icon span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--rock-light);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--gold);
+        }
+
+        .nav-cta {
+            background: linear-gradient(135deg, var(--deep-amber), var(--gold)) !important;
+            color: var(--cave-dark) !important;
+            padding: 0.75rem 1.75rem;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 4rem 6rem;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(217, 119, 6, 0.15);
+            border: 1px solid rgba(217, 119, 6, 0.3);
+            padding: 0.5rem 1.25rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--gold);
+            margin-bottom: 2rem;
+            animation: badgeGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes badgeGlow {
+            0%, 100% { box-shadow: 0 0 20px rgba(251, 191, 36, 0.1); }
+            50% { box-shadow: 0 0 30px rgba(251, 191, 36, 0.25); }
+        }
+
+        .hero h1 {
+            font-size: 4.5rem;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--surface) 0%, var(--rock-light) 50%, var(--gold) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--rock-light);
+            margin-bottom: 2.5rem;
+            line-height: 1.6;
+        }
+
+        .hero-ctas {
+            display: flex;
+            gap: 1.25rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--deep-amber), var(--gold));
+            color: var(--cave-dark);
+            padding: 1rem 2.5rem;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 30px rgba(251, 191, 36, 0.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 40px rgba(251, 191, 36, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--surface);
+            padding: 1rem 2.5rem;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 4rem;
+            margin-top: 5rem;
+            padding-top: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--gold);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--rock-light);
+            margin-top: 0.5rem;
+        }
+
+        /* Problem Section */
+        .problem-section {
+            position: relative;
+            z-index: 1;
+            padding: 8rem 4rem;
+            background: linear-gradient(180deg, transparent 0%, rgba(68, 64, 60, 0.1) 100%);
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 4rem;
+        }
+
+        .section-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--gold);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1.25rem;
+            color: var(--surface);
+        }
+
+        .section-desc {
+            font-size: 1.15rem;
+            color: var(--rock-light);
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .problem-card {
+            background: linear-gradient(135deg, rgba(68, 64, 60, 0.3) 0%, rgba(28, 25, 23, 0.5) 100%);
+            border: 1px solid rgba(168, 162, 158, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.4s ease;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(217, 119, 6, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .problem-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, rgba(220, 38, 38, 0.2), rgba(220, 38, 38, 0.1));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .problem-card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--surface);
+        }
+
+        .problem-card p {
+            color: var(--rock-light);
+            font-size: 0.95rem;
+        }
+
+        .problem-stat {
+            display: inline-block;
+            background: rgba(220, 38, 38, 0.15);
+            color: #FCA5A5;
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Solution Section */
+        .solution-section {
+            position: relative;
+            z-index: 1;
+            padding: 8rem 4rem;
+        }
+
+        .solution-visual {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .platform-diagram {
+            background: linear-gradient(135deg, rgba(68, 64, 60, 0.2) 0%, rgba(28, 25, 23, 0.4) 100%);
+            border: 1px solid rgba(217, 119, 6, 0.2);
+            border-radius: 20px;
+            padding: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .platform-diagram::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--deep-amber), var(--gold), var(--mineral-cyan), var(--gold), var(--deep-amber));
+        }
+
+        .diagram-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .diagram-header h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--surface);
+        }
+
+        .diagram-layers {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .diagram-layer {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .layer-box {
+            background: rgba(217, 119, 6, 0.1);
+            border: 1px solid rgba(217, 119, 6, 0.3);
+            border-radius: 10px;
+            padding: 1rem 1.5rem;
+            text-align: center;
+            min-width: 150px;
+            transition: all 0.3s ease;
+        }
+
+        .layer-box:hover {
+            background: rgba(217, 119, 6, 0.2);
+            transform: scale(1.05);
+        }
+
+        .layer-box.foundation {
+            flex: 1;
+            max-width: 600px;
+            background: linear-gradient(135deg, rgba(13, 148, 136, 0.15), rgba(6, 182, 212, 0.1));
+            border-color: rgba(13, 148, 136, 0.4);
+        }
+
+        .layer-box h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--gold);
+            margin-bottom: 0.25rem;
+        }
+
+        .layer-box.foundation h4 {
+            color: var(--mineral-cyan);
+        }
+
+        .layer-box p {
+            font-size: 0.8rem;
+            color: var(--rock-light);
+        }
+
+        /* Features Section */
+        .features-section {
+            position: relative;
+            z-index: 1;
+            padding: 8rem 4rem;
+            background: linear-gradient(180deg, rgba(68, 64, 60, 0.05) 0%, transparent 100%);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, rgba(68, 64, 60, 0.2) 0%, rgba(28, 25, 23, 0.3) 100%);
+            border: 1px solid rgba(168, 162, 158, 0.1);
+            border-radius: 16px;
+            padding: 2.5rem;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--gold), var(--deep-amber));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(217, 119, 6, 0.2);
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, rgba(217, 119, 6, 0.2), rgba(251, 191, 36, 0.1));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.35rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--surface);
+        }
+
+        .feature-card p {
+            color: var(--rock-light);
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        .feature-list {
+            list-style: none;
+            margin-top: 1.25rem;
+        }
+
+        .feature-list li {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--rock-light);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-list li::before {
+            content: '⬡';
+            color: var(--gold);
+            font-size: 0.7rem;
+        }
+
+        /* Market Section */
+        .market-section {
+            position: relative;
+            z-index: 1;
+            padding: 8rem 4rem;
+        }
+
+        .market-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .market-stat {
+            background: linear-gradient(135deg, rgba(217, 119, 6, 0.1) 0%, rgba(251, 191, 36, 0.05) 100%);
+            border: 1px solid rgba(217, 119, 6, 0.2);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .market-stat:hover {
+            transform: translateY(-5px);
+            border-color: rgba(217, 119, 6, 0.4);
+        }
+
+        .market-stat .value {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--gold);
+            font-family: 'JetBrains Mono', monospace;
+            line-height: 1;
+        }
+
+        .market-stat .label {
+            font-size: 1rem;
+            color: var(--rock-light);
+            margin-top: 0.75rem;
+        }
+
+        /* Verticals Section */
+        .verticals-section {
+            position: relative;
+            z-index: 1;
+            padding: 6rem 4rem;
+            background: linear-gradient(180deg, transparent 0%, rgba(68, 64, 60, 0.1) 100%);
+        }
+
+        .verticals-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .vertical-card {
+            background: linear-gradient(135deg, rgba(68, 64, 60, 0.25) 0%, rgba(28, 25, 23, 0.4) 100%);
+            border: 1px solid rgba(168, 162, 158, 0.1);
+            border-radius: 12px;
+            padding: 1.75rem;
+            text-align: center;
+            transition: all 0.4s ease;
+        }
+
+        .vertical-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            border-color: rgba(217, 119, 6, 0.3);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .vertical-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .vertical-card h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--surface);
+            margin-bottom: 0.5rem;
+        }
+
+        .vertical-card p {
+            font-size: 0.85rem;
+            color: var(--rock-light);
+        }
+
+        /* Traction Section */
+        .traction-section {
+            position: relative;
+            z-index: 1;
+            padding: 8rem 4rem;
+        }
+
+        .traction-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .traction-card {
+            background: linear-gradient(135deg, rgba(13, 148, 136, 0.1) 0%, rgba(6, 182, 212, 0.05) 100%);
+            border: 1px solid rgba(13, 148, 136, 0.25);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .traction-metric {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: var(--mineral-cyan);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .traction-label {
+            font-size: 1rem;
+            color: var(--rock-light);
+            margin-top: 0.5rem;
+        }
+
+        .traction-detail {
+            font-size: 0.85rem;
+            color: var(--mineral-teal);
+            margin-top: 0.5rem;
+            font-weight: 500;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            position: relative;
+            z-index: 1;
+            padding: 8rem 4rem;
+            text-align: center;
+        }
+
+        .cta-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, rgba(217, 119, 6, 0.15) 0%, rgba(251, 191, 36, 0.08) 100%);
+            border: 1px solid rgba(217, 119, 6, 0.3);
+            border-radius: 24px;
+            padding: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(251, 191, 36, 0.1) 0%, transparent 60%);
+            animation: ctaGlow 8s ease-in-out infinite;
+        }
+
+        @keyframes ctaGlow {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(10%, 10%); }
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-content h2 {
+            font-size: 2.75rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--surface);
+        }
+
+        .cta-content p {
+            font-size: 1.2rem;
+            color: var(--rock-light);
+            margin-bottom: 2rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Footer */
+        footer {
+            position: relative;
+            z-index: 1;
+            padding: 4rem;
+            border-top: 1px solid rgba(168, 162, 158, 0.1);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .footer-brand .logo-icon {
+            width: 40px;
+            height: 40px;
+            font-size: 1.25rem;
+        }
+
+        .footer-brand span {
+            font-weight: 600;
+            font-size: 1.25rem;
+            color: var(--surface);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--rock-light);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--gold);
+        }
+
+        .footer-tagline {
+            color: var(--stone-gray);
+            font-size: 0.85rem;
+            text-align: center;
+            margin-top: 2rem;
+            width: 100%;
+        }
+
+        .footer-tagline .emoji {
+            font-size: 1rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem 1.5rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero {
+                padding: 6rem 1.5rem 4rem;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.15rem;
+            }
+
+            .stats-bar {
+                flex-direction: column;
+                gap: 2rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .problem-section,
+            .solution-section,
+            .features-section,
+            .market-section,
+            .verticals-section,
+            .traction-section,
+            .cta-section {
+                padding: 4rem 1.5rem;
+            }
+
+            .platform-diagram {
+                padding: 1.5rem;
+            }
+
+            .cta-container {
+                padding: 2.5rem 1.5rem;
+            }
+
+            .cta-content h2 {
+                font-size: 2rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Underground Background -->
+    <div class="underground-bg">
+        <div class="strata"></div>
+        <div class="strata"></div>
+        <div class="strata"></div>
+        <div class="strata"></div>
+        <div class="strata"></div>
+        <div class="strata"></div>
+    </div>
+
+    <script>
+        // Create mineral particles
+        const bg = document.querySelector('.underground-bg');
+        for (let i = 0; i < 25; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'mineral-particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 15 + 's';
+            particle.style.animationDuration = (12 + Math.random() * 8) + 's';
+            particle.style.width = (3 + Math.random() * 4) + 'px';
+            particle.style.height = particle.style.width;
+            bg.appendChild(particle);
+        }
+    </script>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">
+            <div class="logo-icon"><span>⛏️</span></div>
+            DeepMine AI
+        </div>
+        <div class="nav-links">
+            <a href="#problem">Problem</a>
+            <a href="#solution">Solution</a>
+            <a href="#market">Market</a>
+            <a href="#traction">Traction</a>
+            <a href="#contact" class="nav-cta">Get Early Access</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span>🏔️</span>
+                <span>The Operating System for the Underground Economy</span>
+            </div>
+            <h1>Autonomous Subsurface Intelligence</h1>
+            <p class="hero-subtitle">
+                AI that sees through solid rock. DeepMine AI is building the cognitive architecture 
+                for mining, tunneling, and underground infrastructure—making the world's most 
+                dangerous operations safe, efficient, and predictable.
+            </p>
+            <div class="hero-ctas">
+                <a href="#contact" class="btn-primary">
+                    <span>Request Demo</span>
+                    <span>→</span>
+                </a>
+                <a href="#solution" class="btn-secondary">
+                    <span>▶</span>
+                    <span>See How It Works</span>
+                </a>
+            </div>
+
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <div class="stat-value">$2.3T</div>
+                    <div class="stat-label">Underground Economy</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">15K+</div>
+                    <div class="stat-label">Annual Mining Fatalities</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value"><5%</div>
+                    <div class="stat-label">AI Adoption Rate</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="problem-section" id="problem">
+        <div class="section-header">
+            <div class="section-label">The Problem</div>
+            <h2 class="section-title">Underground Operations Are Stuck in the Industrial Age</h2>
+            <p class="section-desc">
+                The world's most valuable resources lie beneath the surface—and we're still 
+                extracting them with 20th-century technology.
+            </p>
+        </div>
+
+        <div class="problem-grid">
+            <div class="problem-card">
+                <div class="problem-icon">💀</div>
+                <h3>Deadly Working Conditions</h3>
+                <p>Underground operations remain among the most dangerous jobs on Earth. Legacy systems can't predict or prevent disasters.</p>
+                <span class="problem-stat">15,000+ deaths/year</span>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">🔌</div>
+                <h3>No GPS, No Connectivity</h3>
+                <p>Communication blackouts, fragmented sensor data, and zero real-time visibility into what's happening underground.</p>
+                <span class="problem-stat">60% data loss</span>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">⏰</div>
+                <h3>Massive Cost Overruns</h3>
+                <p>Major tunnel projects routinely exceed budgets by 50-100%. Mines cost $1B+ to develop with uncertain returns.</p>
+                <span class="problem-stat">$500K-$2M/hr downtime</span>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">🔧</div>
+                <h3>Legacy Tech Stack</h3>
+                <p>Equipment runs on 1990s automation. Siloed systems. No interoperability. Critical decisions still made manually.</p>
+                <span class="problem-stat">200+ fragmented vendors</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="solution-section" id="solution">
+        <div class="section-header">
+            <div class="section-label">The Solution</div>
+            <h2 class="section-title">The Cognitive Architecture for Subsurface Operations</h2>
+            <p class="section-desc">
+                DeepMine AI provides a unified intelligence platform that transforms how humans 
+                and machines operate below the surface.
+            </p>
+        </div>
+
+        <div class="solution-visual">
+            <div class="platform-diagram">
+                <div class="diagram-header">
+                    <h3>DeepMine AI Platform</h3>
+                </div>
+                <div class="diagram-layers">
+                    <div class="diagram-layer">
+                        <div class="layer-box">
+                            <h4>🔍 Perception</h4>
+                            <p>Multi-modal sensing</p>
+                        </div>
+                        <div class="layer-box">
+                            <h4>🧠 Prediction</h4>
+                            <p>Ground forecasting</p>
+                        </div>
+                        <div class="layer-box">
+                            <h4>🎮 Control</h4>
+                            <p>Autonomous ops</p>
+                        </div>
+                        <div class="layer-box">
+                            <h4>🛡️ Safety</h4>
+                            <p>Risk guardian</p>
+                        </div>
+                    </div>
+                    <div class="diagram-layer">
+                        <div class="layer-box foundation">
+                            <h4>🌍 Subsurface Foundation Model</h4>
+                            <p>Trained on geology, physics, equipment telemetry & safety data</p>
+                        </div>
+                    </div>
+                    <div class="diagram-layer">
+                        <div class="layer-box">
+                            <h4>⛏️ Mining</h4>
+                            <p>Open pit & underground</p>
+                        </div>
+                        <div class="layer-box">
+                            <h4>🚇 Tunneling</h4>
+                            <p>TBM & drill-blast</p>
+                        </div>
+                        <div class="layer-box">
+                            <h4>🌋 Geothermal</h4>
+                            <p>Heat extraction</p>
+                        </div>
+                        <div class="layer-box">
+                            <h4>💨 Carbon</h4>
+                            <p>Sequestration</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section">
+        <div class="section-header">
+            <div class="section-label">Capabilities</div>
+            <h2 class="section-title">Intelligence for Every Underground Challenge</h2>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">📡</div>
+                <h3>Subsurface Perception</h3>
+                <p>
+                    Real-time 3D mapping in GPS-denied environments. Multi-modal sensor fusion 
+                    (seismic, radar, LiDAR, thermal) creates complete situational awareness underground.
+                </p>
+                <ul class="feature-list">
+                    <li>Equipment state monitoring across all vendors</li>
+                    <li>Human location and vitals tracking</li>
+                    <li>Continuous terrain reconstruction</li>
+                </ul>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>Predictive Intelligence</h3>
+                <p>
+                    Forecast ground conditions before they become problems. Our models predict 
+                    collapses, water intrusion, and gas hazards hours before traditional sensors.
+                </p>
+                <ul class="feature-list">
+                    <li>Equipment failure prediction</li>
+                    <li>Resource estimation refinement</li>
+                    <li>Schedule and cost forecasting</li>
+                </ul>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🤖</div>
+                <h3>Autonomous Operations</h3>
+                <p>
+                    Coordinate entire fleets of drills, loaders, and haul trucks without 
+                    human intervention. Optimize every cut, blast, and movement.
+                </p>
+                <ul class="feature-list">
+                    <li>Drill path optimization</li>
+                    <li>Ventilation and environmental control</li>
+                    <li>Emergency response automation</li>
+                </ul>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🛡️</div>
+                <h3>Safety Guardian</h3>
+                <p>
+                    Continuous risk assessment that never sleeps. Automated hazard detection, 
+                    compliance monitoring, and incident prevention—24/7.
+                </p>
+                <ul class="feature-list">
+                    <li>Real-time hazard detection</li>
+                    <li>Regulatory compliance automation</li>
+                    <li>Incident prediction and prevention</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Market Section -->
+    <section class="market-section" id="market">
+        <div class="section-header">
+            <div class="section-label">Market Opportunity</div>
+            <h2 class="section-title">The Underground Economy is Massive</h2>
+            <p class="section-desc">
+                Critical minerals for EVs. Infrastructure for cities. Energy for the grid. 
+                Carbon storage for the planet. It all happens below the surface.
+            </p>
+        </div>
+
+        <div class="market-stats">
+            <div class="market-stat">
+                <div class="value">$850B</div>
+                <div class="label">Mining Operations</div>
+            </div>
+            <div class="market-stat">
+                <div class="value">$180B</div>
+                <div class="label">Tunneling & Construction</div>
+            </div>
+            <div class="market-stat">
+                <div class="value">$45B</div>
+                <div class="label">Geothermal Energy</div>
+            </div>
+            <div class="market-stat">
+                <div class="value">$15B</div>
+                <div class="label">Carbon Sequestration</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Verticals Section -->
+    <section class="verticals-section">
+        <div class="section-header">
+            <div class="section-label">Applications</div>
+            <h2 class="section-title">Built for Every Underground Domain</h2>
+        </div>
+
+        <div class="verticals-grid">
+            <div class="vertical-card">
+                <div class="vertical-icon">⛏️</div>
+                <h4>Hard Rock Mining</h4>
+                <p>Copper, gold, lithium extraction</p>
+            </div>
+            <div class="vertical-card">
+                <div class="vertical-icon">🚇</div>
+                <h4>Tunnel Boring</h4>
+                <p>Subway, highway, utility tunnels</p>
+            </div>
+            <div class="vertical-card">
+                <div class="vertical-icon">🌋</div>
+                <h4>Geothermal</h4>
+                <p>Clean heat energy extraction</p>
+            </div>
+            <div class="vertical-card">
+                <div class="vertical-icon">💨</div>
+                <h4>Carbon Storage</h4>
+                <p>Gigaton-scale sequestration</p>
+            </div>
+            <div class="vertical-card">
+                <div class="vertical-icon">🏢</div>
+                <h4>Underground Data Centers</h4>
+                <p>Secure, efficient computing</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Traction Section -->
+    <section class="traction-section" id="traction">
+        <div class="section-header">
+            <div class="section-label">Early Results</div>
+            <h2 class="section-title">Proven Impact at Scale</h2>
+            <p class="section-desc">
+                Pilot deployment at a major copper mine demonstrates transformative results.
+            </p>
+        </div>
+
+        <div class="traction-grid">
+            <div class="traction-card">
+                <div class="traction-metric">34%</div>
+                <div class="traction-label">Reduction in Unplanned Downtime</div>
+                <div class="traction-detail">Predictive maintenance at work</div>
+            </div>
+            <div class="traction-card">
+                <div class="traction-metric">23%</div>
+                <div class="traction-label">Improvement in Drill Accuracy</div>
+                <div class="traction-detail">AI-optimized path planning</div>
+            </div>
+            <div class="traction-card">
+                <div class="traction-metric">3</div>
+                <div class="traction-label">Near-Miss Incidents Prevented</div>
+                <div class="traction-detail">Safety guardian in action</div>
+            </div>
+            <div class="traction-card">
+                <div class="traction-metric">8x</div>
+                <div class="traction-label">ROI in First 6 Months</div>
+                <div class="traction-detail">Value from day one</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section" id="contact">
+        <div class="cta-container">
+            <div class="cta-content">
+                <h2>See What Lies Beneath</h2>
+                <p>
+                    Join the leading mining and infrastructure companies already transforming 
+                    their underground operations with DeepMine AI.
+                </p>
+                <div class="cta-buttons">
+                    <a href="mailto:founders@deepmine.ai" class="btn-primary">
+                        <span>Request Demo</span>
+                        <span>→</span>
+                    </a>
+                    <a href="#" class="btn-secondary">
+                        <span>📄</span>
+                        <span>Download Whitepaper</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <div class="logo-icon"><span>⛏️</span></div>
+                <span>DeepMine AI</span>
+            </div>
+            <div class="footer-links">
+                <a href="mailto:founders@deepmine.ai">Contact</a>
+                <a href="#">Careers</a>
+                <a href="#">Privacy</a>
+                <a href="#">Terms</a>
+            </div>
+        </div>
+        <div class="footer-tagline">
+            <p>The Intelligence Layer for Earth's Last Frontier</p>
+            <p style="margin-top: 1rem;">Generated by The Godfather <span class="emoji">🎩</span> — March 4, 2026</p>
+        </div>
+    </footer>
+</body>
+</html>

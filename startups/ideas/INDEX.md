@@ -102,6 +102,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-03-03 | Morning | GlassGuard AI — Counter-Surveillance Intelligence | [Playbook](2026-03-03-morning.md) • [Landing](2026-03-03-morning-landing.html) • [PDF](2026-03-03-morning.pdf) |
 | 2026-03-03 | Afternoon | EquityOS — Democratizing Private Markets | [Playbook](2026-03-03-afternoon.md) • [Landing](2026-03-03-afternoon-landing.html) • [PDF](2026-03-03-afternoon.pdf) |
 | 2026-03-04 | Evening | PortOS — Autonomous Maritime Port Intelligence | [Playbook](2026-03-04-evening.md) • [Landing](2026-03-04-evening-landing.html) • [PDF](2026-03-04-evening.pdf) |
+| 2026-03-04 | Morning | DeepMine AI — Autonomous Subsurface Intelligence | [Playbook](2026-03-04-morning.md) • [Landing](2026-03-04-morning-landing.html) • [PDF](2026-03-04-morning.pdf) |
 <!-- New entries will be added above this line -->
 
 ---
