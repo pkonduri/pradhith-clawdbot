@@ -1,0 +1,1188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JetOS — The Operating System for Private Aviation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --jet-navy: #0a1628;
+            --jet-blue: #1e3a5f;
+            --jet-gold: #c9a227;
+            --jet-gold-light: #e8c547;
+            --jet-silver: #c0c5ce;
+            --jet-white: #f8fafc;
+            --jet-sky: #4a90d9;
+            --jet-accent: #2563eb;
+            --gradient-luxury: linear-gradient(135deg, #c9a227 0%, #f4d03f 50%, #c9a227 100%);
+            --gradient-sky: linear-gradient(180deg, #1e3a5f 0%, #0a1628 100%);
+            --gradient-dark: linear-gradient(135deg, #0a1628 0%, #1e3a5f 50%, #0a1628 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--jet-navy);
+            color: var(--jet-white);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Animated Sky Background */
+        .sky-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: var(--gradient-sky);
+        }
+
+        .stars {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(2px 2px at 20px 30px, white, transparent),
+                radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.8), transparent),
+                radial-gradient(1px 1px at 90px 40px, white, transparent),
+                radial-gradient(2px 2px at 160px 120px, rgba(255,255,255,0.9), transparent),
+                radial-gradient(1px 1px at 230px 80px, white, transparent),
+                radial-gradient(2px 2px at 300px 150px, rgba(255,255,255,0.7), transparent);
+            background-repeat: repeat;
+            background-size: 400px 200px;
+            animation: twinkle 8s ease-in-out infinite;
+            opacity: 0.6;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 0.9; }
+        }
+
+        /* Flying Plane Animation */
+        .plane-trail {
+            position: fixed;
+            top: 15%;
+            left: -100px;
+            width: 50px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(201, 162, 39, 0.6), var(--jet-gold));
+            animation: fly-across 20s linear infinite;
+            opacity: 0.8;
+        }
+
+        .plane-trail::after {
+            content: '✈';
+            position: absolute;
+            right: -20px;
+            top: -10px;
+            font-size: 20px;
+            color: var(--jet-gold);
+        }
+
+        @keyframes fly-across {
+            0% { left: -100px; top: 15%; }
+            100% { left: 110%; top: 25%; }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(10, 22, 40, 0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(201, 162, 39, 0.2);
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: var(--gradient-luxury);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+        }
+
+        .logo span {
+            font-weight: 400;
+            opacity: 0.8;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--jet-silver);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-links a:hover {
+            color: var(--jet-gold);
+        }
+
+        .cta-nav {
+            background: var(--gradient-luxury);
+            color: var(--jet-navy) !important;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        .cta-nav:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(201, 162, 39, 0.3);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 5% 4rem;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 1000px;
+            text-align: center;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(201, 162, 39, 0.15);
+            border: 1px solid rgba(201, 162, 39, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--jet-gold);
+            margin-bottom: 2rem;
+            font-weight: 500;
+        }
+
+        .eyebrow::before {
+            content: '✈';
+            font-size: 1rem;
+        }
+
+        h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(3rem, 8vw, 5rem);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            letter-spacing: -2px;
+        }
+
+        h1 .highlight {
+            background: var(--gradient-luxury);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-sub {
+            font-size: 1.35rem;
+            color: var(--jet-silver);
+            max-width: 700px;
+            margin: 0 auto 3rem;
+            line-height: 1.7;
+        }
+
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 3rem;
+            margin: 4rem 0;
+            padding: 2rem 0;
+            border-top: 1px solid rgba(201, 162, 39, 0.2);
+            border-bottom: 1px solid rgba(201, 162, 39, 0.2);
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--jet-gold);
+            line-height: 1;
+        }
+
+        .stat-label {
+            color: var(--jet-silver);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: var(--gradient-luxury);
+            color: var(--jet-navy);
+            padding: 1rem 2.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(201, 162, 39, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid var(--jet-gold);
+            color: var(--jet-gold);
+            padding: 1rem 2.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(201, 162, 39, 0.1);
+            transform: translateY(-3px);
+        }
+
+        /* Problem Section */
+        .problem {
+            padding: 8rem 5%;
+            background: linear-gradient(180deg, transparent, rgba(30, 58, 95, 0.3));
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 5rem;
+        }
+
+        .section-tag {
+            color: var(--jet-gold);
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            letter-spacing: -1px;
+        }
+
+        .section-desc {
+            color: var(--jet-silver);
+            font-size: 1.15rem;
+        }
+
+        .pain-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .pain-card {
+            background: rgba(30, 58, 95, 0.4);
+            border: 1px solid rgba(201, 162, 39, 0.15);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .pain-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(201, 162, 39, 0.4);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .pain-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, rgba(201, 162, 39, 0.2), rgba(201, 162, 39, 0.1));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .pain-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+        }
+
+        .pain-card p {
+            color: var(--jet-silver);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .pain-value {
+            color: var(--jet-gold);
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-top: 1rem;
+        }
+
+        /* Platform Section */
+        .platform {
+            padding: 8rem 5%;
+            background: var(--jet-navy);
+        }
+
+        .platform-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .platform-card {
+            background: linear-gradient(145deg, rgba(30, 58, 95, 0.5), rgba(10, 22, 40, 0.8));
+            border: 1px solid rgba(201, 162, 39, 0.2);
+            border-radius: 20px;
+            padding: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .platform-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient-luxury);
+        }
+
+        .platform-number {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 4rem;
+            font-weight: 700;
+            color: rgba(201, 162, 39, 0.15);
+        }
+
+        .platform-card h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--jet-gold);
+        }
+
+        .platform-card h4 {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+        }
+
+        .platform-card p {
+            color: var(--jet-silver);
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+
+        .feature-list {
+            list-style: none;
+        }
+
+        .feature-list li {
+            color: var(--jet-silver);
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            font-size: 0.95rem;
+        }
+
+        .feature-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--jet-gold);
+            font-weight: bold;
+        }
+
+        /* Tech Architecture */
+        .tech {
+            padding: 8rem 5%;
+            background: linear-gradient(180deg, rgba(30, 58, 95, 0.2), transparent);
+        }
+
+        .architecture {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: rgba(10, 22, 40, 0.8);
+            border: 1px solid rgba(201, 162, 39, 0.2);
+            border-radius: 20px;
+            padding: 3rem;
+        }
+
+        .arch-layer {
+            padding: 1.5rem 2rem;
+            background: rgba(30, 58, 95, 0.4);
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            border-left: 4px solid var(--jet-gold);
+        }
+
+        .arch-layer h4 {
+            color: var(--jet-gold);
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .arch-layer p {
+            color: var(--jet-silver);
+            font-size: 0.95rem;
+        }
+
+        .tech-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-top: 2rem;
+            justify-content: center;
+        }
+
+        .tech-badge {
+            background: rgba(201, 162, 39, 0.1);
+            border: 1px solid rgba(201, 162, 39, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--jet-gold);
+        }
+
+        /* Market Section */
+        .market {
+            padding: 8rem 5%;
+        }
+
+        .market-visual {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .market-ring {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: rgba(30, 58, 95, 0.3);
+            border-radius: 20px;
+            border: 1px solid rgba(201, 162, 39, 0.15);
+        }
+
+        .ring {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 1.5rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .ring.tam {
+            background: conic-gradient(var(--jet-gold) 100%, transparent 0);
+            padding: 10px;
+        }
+
+        .ring.sam {
+            background: conic-gradient(var(--jet-gold) 24%, rgba(201, 162, 39, 0.2) 24%);
+            padding: 10px;
+        }
+
+        .ring.som {
+            background: conic-gradient(var(--jet-gold) 10%, rgba(201, 162, 39, 0.2) 10%);
+            padding: 10px;
+        }
+
+        .ring-inner {
+            width: 100%;
+            height: 100%;
+            background: var(--jet-navy);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .ring-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--jet-gold);
+        }
+
+        .ring-label {
+            font-size: 0.8rem;
+            color: var(--jet-silver);
+            margin-top: 0.25rem;
+        }
+
+        .market-ring h4 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .market-ring p {
+            color: var(--jet-silver);
+            font-size: 0.9rem;
+        }
+
+        /* Traction Section */
+        .traction {
+            padding: 8rem 5%;
+            background: linear-gradient(180deg, rgba(30, 58, 95, 0.3), transparent);
+        }
+
+        .traction-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .traction-item {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(30, 58, 95, 0.4);
+            border-radius: 16px;
+            border: 1px solid rgba(201, 162, 39, 0.15);
+        }
+
+        .traction-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--jet-gold);
+            margin-bottom: 0.5rem;
+        }
+
+        .traction-label {
+            color: var(--jet-silver);
+            font-size: 0.9rem;
+        }
+
+        /* Why Now Section */
+        .why-now {
+            padding: 8rem 5%;
+        }
+
+        .timeline {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 24px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, var(--jet-gold), rgba(201, 162, 39, 0.2));
+        }
+
+        .timeline-item {
+            padding-left: 70px;
+            padding-bottom: 3rem;
+            position: relative;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 16px;
+            top: 5px;
+            width: 18px;
+            height: 18px;
+            background: var(--jet-gold);
+            border-radius: 50%;
+            border: 4px solid var(--jet-navy);
+        }
+
+        .timeline-item h4 {
+            color: var(--jet-gold);
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-item p {
+            color: var(--jet-silver);
+            line-height: 1.7;
+        }
+
+        /* Team Section */
+        .team {
+            padding: 8rem 5%;
+            background: linear-gradient(180deg, rgba(30, 58, 95, 0.2), transparent);
+        }
+
+        .roles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .role-card {
+            background: rgba(30, 58, 95, 0.4);
+            border: 1px solid rgba(201, 162, 39, 0.15);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .role-card:hover {
+            border-color: rgba(201, 162, 39, 0.4);
+            transform: translateY(-5px);
+        }
+
+        .role-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            background: linear-gradient(135deg, rgba(201, 162, 39, 0.2), rgba(201, 162, 39, 0.1));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+
+        .role-card h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .role-card p {
+            color: var(--jet-silver);
+            font-size: 0.9rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 8rem 5%;
+            text-align: center;
+            background: linear-gradient(180deg, transparent, rgba(30, 58, 95, 0.4));
+        }
+
+        .cta-section h2 {
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-section p {
+            color: var(--jet-silver);
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto 3rem;
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 5% 2rem;
+            background: rgba(10, 22, 40, 0.9);
+            border-top: 1px solid rgba(201, 162, 39, 0.2);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .footer-brand .logo {
+            font-size: 1.5rem;
+        }
+
+        .footer-tagline {
+            color: var(--jet-silver);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--jet-silver);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--jet-gold);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid rgba(201, 162, 39, 0.1);
+            color: var(--jet-silver);
+            font-size: 0.85rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero-stats {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .platform-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .market-visual {
+                grid-template-columns: 1fr;
+            }
+
+            .traction-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        /* Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="sky-bg">
+        <div class="stars"></div>
+    </div>
+    <div class="plane-trail"></div>
+
+    <nav>
+        <div class="logo">Jet<span>OS</span></div>
+        <div class="nav-links">
+            <a href="#platform">Platform</a>
+            <a href="#market">Market</a>
+            <a href="#traction">Traction</a>
+            <a href="#team">Team</a>
+            <a href="#contact" class="cta-nav">Request Demo</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <div class="eyebrow">The Operating System for Private Aviation</div>
+            <h1>Fly <span class="highlight">Smarter</span>.<br>Save <span class="highlight">Millions</span>.</h1>
+            <p class="hero-sub">JetOS is the AI-powered intelligence layer that transforms private aviation operations—from corporate flight departments to charter operators to fractional owners.</p>
+            
+            <div class="hero-stats">
+                <div class="stat">
+                    <div class="stat-value">$3.5B</div>
+                    <div class="stat-label">Wasted on empty leg flights annually</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">40%</div>
+                    <div class="stat-label">Of private flights fly empty</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">4.2 days</div>
+                    <div class="stat-label">Average scheduling delay per mission</div>
+                </div>
+            </div>
+
+            <div class="cta-group">
+                <a href="#contact" class="btn-primary">Request Demo →</a>
+                <a href="#platform" class="btn-secondary">See Platform</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="problem" id="problem">
+        <div class="section-header">
+            <div class="section-tag">The Problem</div>
+            <h2>A $35B Market Running on Spreadsheets</h2>
+            <p class="section-desc">Private aviation operations are stuck in the 1990s. Phone calls, manual scheduling, opaque pricing, and fragmented systems cost the industry billions.</p>
+        </div>
+
+        <div class="pain-grid">
+            <div class="pain-card">
+                <div class="pain-icon">📉</div>
+                <h3>Empty Leg Waste</h3>
+                <p>40% of private jet flights are repositioning flights flying completely empty. No intelligence to match this capacity with demand.</p>
+                <div class="pain-value">$3.5B lost/year</div>
+            </div>
+            <div class="pain-card">
+                <div class="pain-icon">📞</div>
+                <h3>Charter Chaos</h3>
+                <p>Booking a charter requires 47+ emails and calls across 12 operators. Pricing varies 300% for the same route. Zero transparency.</p>
+                <div class="pain-value">15-25% broker fees</div>
+            </div>
+            <div class="pain-card">
+                <div class="pain-icon">⏱️</div>
+                <h3>Flight Dept Inefficiency</h3>
+                <p>Fortune 500 flight departments spend $8-15M annually but aircraft utilization averages only 400 hours—vs. 1,200+ optimal.</p>
+                <div class="pain-value">35% utilization</div>
+            </div>
+            <div class="pain-card">
+                <div class="pain-icon">🔧</div>
+                <h3>Maintenance Delays</h3>
+                <p>Unscheduled maintenance causes 23% of flight cancellations. Parts sourcing averages 4.7 days. AOG situations cost $80K/day.</p>
+                <div class="pain-value">23% cancellation rate</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="platform" id="platform">
+        <div class="section-header">
+            <div class="section-tag">The Platform</div>
+            <h2>The Intelligence Layer for Flight</h2>
+            <p class="section-desc">Four integrated products that transform every aspect of private aviation operations.</p>
+        </div>
+
+        <div class="platform-grid">
+            <div class="platform-card">
+                <div class="platform-number">01</div>
+                <h3>JetOS Dispatch</h3>
+                <h4>AI Flight Operations Autopilot</h4>
+                <p>The complete operating system for flight departments. Natural language commands, autonomous crew scheduling, predictive maintenance, and real-time optimization.</p>
+                <ul class="feature-list">
+                    <li>Natural language trip planning</li>
+                    <li>Autonomous crew scheduling (FAA/EASA compliant)</li>
+                    <li>Predictive maintenance integration</li>
+                    <li>Real-time weather optimization</li>
+                    <li>34% reduction in scheduling time</li>
+                </ul>
+            </div>
+
+            <div class="platform-card">
+                <div class="platform-number">02</div>
+                <h3>JetOS Markets</h3>
+                <h4>The Bloomberg for Private Aviation</h4>
+                <p>Real-time intelligence on pricing, demand, fleet movements, and market opportunities. See the entire market in one dashboard.</p>
+                <ul class="feature-list">
+                    <li>True market rates for any route</li>
+                    <li>Empty leg matching intelligence</li>
+                    <li>Demand forecasting (87% accuracy)</li>
+                    <li>Competitive fleet analytics</li>
+                    <li>43% empty leg recovery rate</li>
+                </ul>
+            </div>
+
+            <div class="platform-card">
+                <div class="platform-number">03</div>
+                <h3>JetOS Charter</h3>
+                <h4>Intelligent Booking Platform</h4>
+                <p>The transparent marketplace that connects clients with operators. AI negotiation, safety ratings, and instant quotes—at 3% vs. 25% broker fees.</p>
+                <ul class="feature-list">
+                    <li>Instant real-time quotes</li>
+                    <li>AI negotiation agent</li>
+                    <li>Safety intelligence ratings</li>
+                    <li>Transparent pricing breakdown</li>
+                    <li>3% transaction fee (vs. 15-25%)</li>
+                </ul>
+            </div>
+
+            <div class="platform-card">
+                <div class="platform-number">04</div>
+                <h3>JetOS Safety</h3>
+                <h4>Autonomous Safety Management</h4>
+                <p>Real-time risk scoring, compliance automation, and insurance intelligence. Built for the AI age of aviation safety.</p>
+                <ul class="feature-list">
+                    <li>Real-time flight risk scoring</li>
+                    <li>IS-BAO/ARGUS/Wyvern automation</li>
+                    <li>Pilot fatigue modeling</li>
+                    <li>Insurance premium optimization</li>
+                    <li>Blockchain audit trail</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="tech" id="tech">
+        <div class="section-header">
+            <div class="section-tag">Technology</div>
+            <h2>Built for Aviation's Unique Demands</h2>
+            <p class="section-desc">AI architecture designed from the ground up for the complexity and safety requirements of private aviation.</p>
+        </div>
+
+        <div class="architecture">
+            <div class="arch-layer">
+                <h4>Intelligence Layer</h4>
+                <p>Demand prediction, dynamic pricing, safety risk, and natural language operations—trained on 500M+ flight records</p>
+            </div>
+            <div class="arch-layer">
+                <h4>Orchestration Layer</h4>
+                <p>Real-time decision engine coordinating scheduling, crew, maintenance, and pricing across the entire ecosystem</p>
+            </div>
+            <div class="arch-layer">
+                <h4>Integration Layer</h4>
+                <p>Connected to scheduling systems, MROs, flight tracking, broker platforms, and insurance carriers</p>
+            </div>
+            <div class="arch-layer">
+                <h4>Data Infrastructure</h4>
+                <p>Real-time ADS-B, historical flight data, maintenance records, and pricing intelligence—SOC 2 and ITAR compliant</p>
+            </div>
+
+            <div class="tech-badges">
+                <span class="tech-badge">500M+ Flight Records</span>
+                <span class="tech-badge">SOC 2 Type II</span>
+                <span class="tech-badge">ITAR Compliant</span>
+                <span class="tech-badge">Real-Time ADS-B</span>
+                <span class="tech-badge">87% Prediction Accuracy</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="market" id="market">
+        <div class="section-header">
+            <div class="section-tag">Market Opportunity</div>
+            <h2>The $35B Private Aviation Market</h2>
+            <p class="section-desc">A massive market with no AI-native solution—until now.</p>
+        </div>
+
+        <div class="market-visual">
+            <div class="market-ring">
+                <div class="ring tam">
+                    <div class="ring-inner">
+                        <span class="ring-value">$35B</span>
+                        <span class="ring-label">TAM</span>
+                    </div>
+                </div>
+                <h4>Total Addressable</h4>
+                <p>Global business aviation, charter, fractional, and corporate flight operations</p>
+            </div>
+            <div class="market-ring">
+                <div class="ring sam">
+                    <div class="ring-inner">
+                        <span class="ring-value">$8.5B</span>
+                        <span class="ring-label">SAM</span>
+                    </div>
+                </div>
+                <h4>Software Addressable</h4>
+                <p>Operations software, booking platforms, safety systems, and market intelligence</p>
+            </div>
+            <div class="market-ring">
+                <div class="ring som">
+                    <div class="ring-inner">
+                        <span class="ring-value">$850M</span>
+                        <span class="ring-label">SOM</span>
+                    </div>
+                </div>
+                <h4>Year 5 Target</h4>
+                <p>10% market capture with proven product-market fit</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="traction" id="traction">
+        <div class="section-header">
+            <div class="section-tag">Validation</div>
+            <h2>Early Traction & Results</h2>
+            <p class="section-desc">Design partners already proving the model with real results.</p>
+        </div>
+
+        <div class="traction-grid">
+            <div class="traction-item">
+                <div class="traction-value">3</div>
+                <div class="traction-label">Fortune 100 LOIs</div>
+            </div>
+            <div class="traction-item">
+                <div class="traction-value">34%</div>
+                <div class="traction-label">Scheduling Time Reduction</div>
+            </div>
+            <div class="traction-item">
+                <div class="traction-value">$1.2M</div>
+                <div class="traction-label">Projected Annual Savings (per dept)</div>
+            </div>
+            <div class="traction-item">
+                <div class="traction-value">47%</div>
+                <div class="traction-label">Empty Leg Match Rate (vs. 12% avg)</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="why-now">
+        <div class="section-header">
+            <div class="section-tag">Why Now</div>
+            <h2>The Perfect Storm for Aviation AI</h2>
+        </div>
+
+        <div class="timeline">
+            <div class="timeline-item">
+                <h4>Post-Pandemic Boom</h4>
+                <p>Private aviation grew 40% since 2020 and stayed elevated. New buyers flooding the market demand modern technology.</p>
+            </div>
+            <div class="timeline-item">
+                <h4>Pilot Shortage Crisis</h4>
+                <p>30,000 pilot gap requires intelligent scheduling optimization. Manual processes can't scale.</p>
+            </div>
+            <div class="timeline-item">
+                <h4>Sustainability Mandates</h4>
+                <p>IMO 2030/2040 regulations require fuel optimization intelligence. SAF adoption needs AI coordination.</p>
+            </div>
+            <div class="timeline-item">
+                <h4>Insurance Hardening</h4>
+                <p>Premiums up 40%—operators need safety intelligence to survive. Risk management is existential.</p>
+            </div>
+            <div class="timeline-item">
+                <h4>AI Technology Maturity</h4>
+                <p>LLMs, real-time ML, and cloud infrastructure finally enable true autonomous operations.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="team" id="team">
+        <div class="section-header">
+            <div class="section-tag">Team</div>
+            <h2>Building the Dream Team</h2>
+            <p class="section-desc">We're assembling aviation industry veterans with world-class AI expertise.</p>
+        </div>
+
+        <div class="roles-grid">
+            <div class="role-card">
+                <div class="role-icon">👔</div>
+                <h4>CEO</h4>
+                <p>Former aviation executive with tech background. NetJets/Vista Global experience ideal.</p>
+            </div>
+            <div class="role-card">
+                <div class="role-icon">💻</div>
+                <h4>CTO</h4>
+                <p>AI/ML leader with marketplace experience. Ex-Uber, Airbnb, or Flexport.</p>
+            </div>
+            <div class="role-card">
+                <div class="role-icon">✈️</div>
+                <h4>Chief Aviation Officer</h4>
+                <p>20+ year operations veteran. Former chief pilot or VP Operations.</p>
+            </div>
+            <div class="role-card">
+                <div class="role-icon">🛡️</div>
+                <h4>Advisors</h4>
+                <p>Former FAA Administrator, NetJets founders, McKinsey aviation leads.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section" id="contact">
+        <div class="section-header">
+            <h2>Ready to Transform Your Flight Operations?</h2>
+            <p>Join the waitlist for early access, or reach out to discuss investment opportunities.</p>
+        </div>
+        <div class="cta-group">
+            <a href="mailto:founders@jetos.ai" class="btn-primary">Request Demo →</a>
+            <a href="mailto:founders@jetos.ai?subject=Investment Inquiry" class="btn-secondary">Investor Deck</a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <div class="logo">Jet<span>OS</span></div>
+                <p class="footer-tagline">The Operating System for Private Aviation</p>
+            </div>
+            <div class="footer-links">
+                <a href="#platform">Platform</a>
+                <a href="#market">Market</a>
+                <a href="mailto:founders@jetos.ai">Contact</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 JetOS. All rights reserved. The sky has no limits. Neither should its intelligence.</p>
+            <p style="margin-top: 0.5rem; opacity: 0.6;">Generated by The Godfather 🎩</p>
+        </div>
+    </footer>
+</body>
+</html>
