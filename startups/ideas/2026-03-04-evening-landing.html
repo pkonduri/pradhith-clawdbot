@@ -1,0 +1,1378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PortOS — Autonomous Maritime Port Intelligence</title>
+    <meta name="description" content="The AI operating system for the world's $14 trillion maritime trade network. Transform ports from bottlenecks to autonomous trade nodes.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --navy: #0a192f;
+            --ocean: #0f4c75;
+            --teal: #3282b8;
+            --cyan: #00d9ff;
+            --mint: #64ffda;
+            --white: #e6f1ff;
+            --gray: #8892b0;
+            --dark-navy: #020c1b;
+            --cargo-orange: #ff6b35;
+            --signal-green: #00ff88;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--dark-navy);
+            color: var(--white);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Ocean Animation Background */
+        .ocean-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background: linear-gradient(135deg, var(--dark-navy) 0%, var(--navy) 50%, var(--ocean) 100%);
+        }
+
+        .ocean-waves {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.15;
+            background: 
+                radial-gradient(ellipse at 20% 80%, var(--teal) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, var(--cyan) 0%, transparent 40%),
+                radial-gradient(ellipse at 50% 50%, var(--ocean) 0%, transparent 60%);
+        }
+
+        /* Grid Lines Animation */
+        .grid-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-image: 
+                linear-gradient(to right, rgba(50, 130, 184, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(50, 130, 184, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridPulse 8s ease-in-out infinite;
+        }
+
+        @keyframes gridPulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        /* Floating Container Animation */
+        .floating-containers {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .container-box {
+            position: absolute;
+            width: 30px;
+            height: 12px;
+            border: 1px solid var(--cyan);
+            opacity: 0.15;
+            animation: floatContainer 20s linear infinite;
+        }
+
+        @keyframes floatContainer {
+            0% { transform: translateX(-100px) translateY(0); }
+            100% { transform: translateX(calc(100vw + 100px)) translateY(-50px); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1.5rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10, 25, 47, 0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(50, 130, 184, 0.2);
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--cyan) 0%, var(--teal) 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 3rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--gray);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--cyan);
+        }
+
+        .nav-cta {
+            background: linear-gradient(135deg, var(--cyan) 0%, var(--teal) 100%);
+            color: var(--dark-navy);
+            padding: 0.75rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(0, 217, 255, 0.3);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 4rem 4rem;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 1400px;
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(0, 217, 255, 0.1);
+            border: 1px solid rgba(0, 217, 255, 0.3);
+            padding: 0.5rem 1.25rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--cyan);
+            margin-bottom: 2rem;
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(0, 217, 255, 0.2); }
+            50% { box-shadow: 0 0 0 20px rgba(0, 217, 255, 0); }
+        }
+
+        .hero h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 5rem;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--white) 0%, var(--cyan) 50%, var(--mint) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--gray);
+            max-width: 800px;
+            margin: 0 auto 3rem;
+            line-height: 1.7;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 4rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: var(--cyan);
+            line-height: 1;
+        }
+
+        .stat-label {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--cyan) 0%, var(--teal) 100%);
+            color: var(--dark-navy);
+            padding: 1.25rem 3rem;
+            border-radius: 60px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 60px rgba(0, 217, 255, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--white);
+            padding: 1.25rem 3rem;
+            border-radius: 60px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            border: 2px solid rgba(100, 255, 218, 0.3);
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--mint);
+            background: rgba(100, 255, 218, 0.1);
+        }
+
+        /* Port Visualization */
+        .port-visual {
+            position: relative;
+            margin-top: 4rem;
+            padding: 2rem;
+        }
+
+        .port-diagram {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .port-element {
+            background: rgba(15, 76, 117, 0.3);
+            border: 1px solid rgba(50, 130, 184, 0.4);
+            border-radius: 16px;
+            padding: 1.5rem;
+            width: 150px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .port-element:hover {
+            transform: translateY(-10px);
+            border-color: var(--cyan);
+            box-shadow: 0 20px 60px rgba(0, 217, 255, 0.2);
+        }
+
+        .port-element-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .port-element-label {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        .connection-lines {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+            opacity: 0.3;
+        }
+
+        /* Problem Section */
+        .problem {
+            padding: 8rem 4rem;
+            background: linear-gradient(180deg, transparent 0%, rgba(15, 76, 117, 0.1) 100%);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-tag {
+            color: var(--cargo-orange);
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            font-size: 1.25rem;
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .problem-card {
+            background: rgba(10, 25, 47, 0.8);
+            border: 1px solid rgba(255, 107, 53, 0.3);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--cargo-orange);
+        }
+
+        .problem-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .problem-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--cargo-orange);
+        }
+
+        .problem-desc {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        .problem-stat {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-top: 1rem;
+        }
+
+        /* Solution Section */
+        .solution {
+            padding: 8rem 4rem;
+            position: relative;
+        }
+
+        .brains-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .brain-card {
+            background: linear-gradient(135deg, rgba(15, 76, 117, 0.4) 0%, rgba(10, 25, 47, 0.8) 100%);
+            border: 1px solid rgba(0, 217, 255, 0.2);
+            border-radius: 24px;
+            padding: 2.5rem;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .brain-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--cyan), var(--mint));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .brain-card:hover::before {
+            opacity: 1;
+        }
+
+        .brain-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--cyan);
+            box-shadow: 0 30px 80px rgba(0, 217, 255, 0.15);
+        }
+
+        .brain-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .brain-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--cyan) 0%, var(--teal) 100%);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+        }
+
+        .brain-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 600;
+        }
+
+        .brain-features {
+            list-style: none;
+        }
+
+        .brain-features li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(100, 255, 218, 0.1);
+            color: var(--gray);
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+
+        .brain-features li::before {
+            content: '▸';
+            color: var(--mint);
+            flex-shrink: 0;
+        }
+
+        .brain-features li:last-child {
+            border-bottom: none;
+        }
+
+        /* Architecture Visual */
+        .architecture {
+            padding: 6rem 4rem;
+            background: rgba(15, 76, 117, 0.1);
+        }
+
+        .arch-diagram {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: rgba(10, 25, 47, 0.9);
+            border: 1px solid rgba(50, 130, 184, 0.3);
+            border-radius: 24px;
+            padding: 3rem;
+        }
+
+        .arch-layer {
+            background: rgba(15, 76, 117, 0.3);
+            border: 1px solid rgba(0, 217, 255, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .arch-layer-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            color: var(--cyan);
+            margin-bottom: 1rem;
+        }
+
+        .arch-components {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .arch-component {
+            background: rgba(10, 25, 47, 0.8);
+            border: 1px solid rgba(100, 255, 218, 0.2);
+            border-radius: 8px;
+            padding: 0.75rem 1.5rem;
+            font-size: 0.85rem;
+            color: var(--white);
+        }
+
+        /* Metrics Section */
+        .metrics {
+            padding: 8rem 4rem;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .metric-card {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(15, 76, 117, 0.2);
+            border: 1px solid rgba(0, 255, 136, 0.2);
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .metric-card:hover {
+            border-color: var(--signal-green);
+            transform: scale(1.05);
+        }
+
+        .metric-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--signal-green);
+            line-height: 1;
+        }
+
+        .metric-label {
+            font-size: 1rem;
+            color: var(--gray);
+            margin-top: 0.75rem;
+        }
+
+        /* Market Section */
+        .market {
+            padding: 8rem 4rem;
+            background: linear-gradient(180deg, transparent 0%, rgba(15, 76, 117, 0.15) 100%);
+        }
+
+        .market-visual {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .market-card {
+            background: rgba(10, 25, 47, 0.9);
+            border: 1px solid rgba(50, 130, 184, 0.3);
+            border-radius: 20px;
+            padding: 2.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .market-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--cyan);
+        }
+
+        .market-size {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--cyan);
+        }
+
+        .market-label {
+            font-size: 1.2rem;
+            color: var(--white);
+            margin: 0.5rem 0;
+        }
+
+        .market-desc {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* Revenue Projection */
+        .revenue {
+            padding: 6rem 4rem;
+        }
+
+        .revenue-chart {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 2rem;
+            height: 350px;
+            padding: 2rem;
+            background: rgba(10, 25, 47, 0.5);
+            border: 1px solid rgba(50, 130, 184, 0.2);
+            border-radius: 24px;
+        }
+
+        .revenue-bar {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .bar {
+            width: 80px;
+            background: linear-gradient(180deg, var(--cyan) 0%, var(--teal) 100%);
+            border-radius: 8px 8px 0 0;
+            transition: all 0.3s ease;
+        }
+
+        .bar:hover {
+            filter: brightness(1.2);
+        }
+
+        .bar-label {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .bar-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            color: var(--white);
+        }
+
+        /* Why Now Section */
+        .why-now {
+            padding: 8rem 4rem;
+        }
+
+        .timeline {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, var(--cyan), var(--mint));
+        }
+
+        .timeline-item {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            padding-left: 3rem;
+            position: relative;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 12px;
+            top: 8px;
+            width: 18px;
+            height: 18px;
+            background: var(--dark-navy);
+            border: 3px solid var(--cyan);
+            border-radius: 50%;
+        }
+
+        .timeline-content {
+            background: rgba(15, 76, 117, 0.2);
+            border: 1px solid rgba(0, 217, 255, 0.2);
+            border-radius: 16px;
+            padding: 1.5rem;
+            flex: 1;
+            transition: all 0.3s ease;
+        }
+
+        .timeline-content:hover {
+            border-color: var(--cyan);
+            transform: translateX(10px);
+        }
+
+        .timeline-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--cyan);
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-desc {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 8rem 4rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(0, 217, 255, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--white) 0%, var(--cyan) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .cta-subtitle {
+            font-size: 1.25rem;
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto 3rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem;
+            text-align: center;
+            border-top: 1px solid rgba(50, 130, 184, 0.2);
+        }
+
+        .footer-logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 1rem;
+        }
+
+        .footer-tagline {
+            color: var(--gray);
+            font-size: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--gray);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--cyan);
+        }
+
+        .footer-copy {
+            color: var(--gray);
+            font-size: 0.85rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .brains-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .metrics-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .market-visual {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero h1 {
+                font-size: 3.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem 2rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .hero {
+                padding: 6rem 2rem 3rem;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero-stats {
+                gap: 2rem;
+            }
+            
+            .stat-value {
+                font-size: 2.5rem;
+            }
+            
+            .section-title {
+                font-size: 2.5rem;
+            }
+            
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .revenue-chart {
+                flex-direction: column;
+                height: auto;
+            }
+            
+            .bar {
+                width: 100%;
+                height: 40px !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="ocean-bg"></div>
+    <div class="ocean-waves"></div>
+    <div class="grid-overlay"></div>
+    
+    <div class="floating-containers">
+        <div class="container-box" style="top: 15%; animation-delay: 0s;"></div>
+        <div class="container-box" style="top: 35%; animation-delay: 5s;"></div>
+        <div class="container-box" style="top: 55%; animation-delay: 10s;"></div>
+        <div class="container-box" style="top: 75%; animation-delay: 15s;"></div>
+    </div>
+
+    <nav>
+        <div class="logo">
+            <div class="logo-icon">⚓</div>
+            PortOS
+        </div>
+        <ul class="nav-links">
+            <li><a href="#problem">Problem</a></li>
+            <li><a href="#solution">Solution</a></li>
+            <li><a href="#market">Market</a></li>
+            <li><a href="#traction">Traction</a></li>
+        </ul>
+        <a href="#contact" class="nav-cta">Request Demo</a>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                🚢 Transforming Global Maritime Trade
+            </div>
+            <h1>The AI Operating System<br>for Global Ports</h1>
+            <p class="hero-subtitle">
+                World ports handle $14 trillion in trade annually on 1990s software. 
+                PortOS brings autonomous intelligence to maritime logistics.
+            </p>
+            
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <div class="stat-value">$14T</div>
+                    <div class="stat-label">Annual Maritime Trade</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">900+</div>
+                    <div class="stat-label">Major Global Ports</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">$1.5T</div>
+                    <div class="stat-label">Lost to Inefficiency</div>
+                </div>
+            </div>
+            
+            <div class="hero-cta">
+                <a href="#contact" class="btn-primary">
+                    Request Demo <span>→</span>
+                </a>
+                <a href="#solution" class="btn-secondary">
+                    See How It Works <span>▼</span>
+                </a>
+            </div>
+            
+            <div class="port-visual">
+                <div class="port-diagram">
+                    <div class="port-element">
+                        <div class="port-element-icon">🚢</div>
+                        <div class="port-element-label">Vessels</div>
+                    </div>
+                    <div class="port-element">
+                        <div class="port-element-icon">🏗️</div>
+                        <div class="port-element-label">Berths</div>
+                    </div>
+                    <div class="port-element">
+                        <div class="port-element-icon">📦</div>
+                        <div class="port-element-label">Yards</div>
+                    </div>
+                    <div class="port-element">
+                        <div class="port-element-icon">🚛</div>
+                        <div class="port-element-label">Gates</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="problem" id="problem">
+        <div class="section-header">
+            <div class="section-tag">The Problem</div>
+            <h2 class="section-title">The $1.5 Trillion Bottleneck</h2>
+            <p class="section-subtitle">
+                Global trade chokes at the dock. Ports are the most expensive parking lots on Earth.
+            </p>
+        </div>
+        
+        <div class="problem-grid">
+            <div class="problem-card">
+                <div class="problem-icon">⚓</div>
+                <h3 class="problem-title">Vessel Waiting</h3>
+                <p class="problem-desc">Ships idle at anchor burning $80K/day waiting for berth slots</p>
+                <div class="problem-stat">4.2 days avg</div>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">📦</div>
+                <h3 class="problem-title">Container Dwell</h3>
+                <p class="problem-desc">Cargo sits in ports 2-3x longer than necessary</p>
+                <div class="problem-stat">5-7 days</div>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">🏗️</div>
+                <h3 class="problem-title">Equipment Idle</h3>
+                <p class="problem-desc">Billion-dollar cranes operate at a fraction of capacity</p>
+                <div class="problem-stat">35% utilized</div>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">📞</div>
+                <h3 class="problem-title">Manual Ops</h3>
+                <p class="problem-desc">Radio calls and spreadsheets run trillion-dollar operations</p>
+                <div class="problem-stat">90% of ports</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="solution" id="solution">
+        <div class="section-header">
+            <div class="section-tag">The Solution</div>
+            <h2 class="section-title">Four AI Brains, One Operating System</h2>
+            <p class="section-subtitle">
+                PortOS orchestrates every moving part—from vessel approach to final delivery
+            </p>
+        </div>
+        
+        <div class="brains-grid">
+            <div class="brain-card">
+                <div class="brain-header">
+                    <div class="brain-icon">🚢</div>
+                    <h3 class="brain-title">Vessel Brain</h3>
+                </div>
+                <ul class="brain-features">
+                    <li>98% ETA accuracy 48 hours out</li>
+                    <li>Dynamic speed optimization saves 15% fuel</li>
+                    <li>Pre-arrival stowage planning cuts crane moves 25%</li>
+                    <li>Zero-conflict anchorage choreography</li>
+                </ul>
+            </div>
+            
+            <div class="brain-card">
+                <div class="brain-header">
+                    <div class="brain-icon">🏗️</div>
+                    <h3 class="brain-title">Berth Brain</h3>
+                </div>
+                <ul class="brain-features">
+                    <li>Real-time berth window allocation</li>
+                    <li>AI-optimized crane path planning</li>
+                    <li>Labor deployment matched to vessel complexity</li>
+                    <li>Predictive equipment maintenance</li>
+                </ul>
+            </div>
+            
+            <div class="brain-card">
+                <div class="brain-header">
+                    <div class="brain-icon">📦</div>
+                    <h3 class="brain-title">Yard Brain</h3>
+                </div>
+                <ul class="brain-features">
+                    <li>ML stack optimization cuts rehandles 40%</li>
+                    <li>Reefer monitoring + intelligent power routing</li>
+                    <li>Automated hazmat IMDG compliance</li>
+                    <li>Pre-stage exports for vessel arrival</li>
+                </ul>
+            </div>
+            
+            <div class="brain-card">
+                <div class="brain-header">
+                    <div class="brain-icon">🚛</div>
+                    <h3 class="brain-title">Gate Brain</h3>
+                </div>
+                <ul class="brain-features">
+                    <li>Zero trucker wait time appointments</li>
+                    <li>Intermodal train building optimization</li>
+                    <li>AI customs pre-clearance + risk scoring</li>
+                    <li>End-to-end cargo visibility</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="architecture">
+        <div class="arch-diagram">
+            <div class="arch-layer">
+                <div class="arch-layer-title">🧠 PORTOS COMMAND CENTER</div>
+                <div class="arch-components">
+                    <div class="arch-component">Real-Time Digital Twin</div>
+                    <div class="arch-component">Decision Engine</div>
+                    <div class="arch-component">Simulation Sandbox</div>
+                </div>
+            </div>
+            <div class="arch-layer">
+                <div class="arch-layer-title">🔌 INTEGRATION LAYER</div>
+                <div class="arch-components">
+                    <div class="arch-component">TOS</div>
+                    <div class="arch-component">AIS</div>
+                    <div class="arch-component">Customs</div>
+                    <div class="arch-component">Trucking</div>
+                    <div class="arch-component">Rail</div>
+                    <div class="arch-component">Shipping Lines</div>
+                </div>
+            </div>
+            <div class="arch-layer">
+                <div class="arch-layer-title">📊 DATA FABRIC</div>
+                <div class="arch-components">
+                    <div class="arch-component">Vessel Tracks</div>
+                    <div class="arch-component">Container IoT</div>
+                    <div class="arch-component">Weather</div>
+                    <div class="arch-component">Tides</div>
+                    <div class="arch-component">Market Signals</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="metrics" id="traction">
+        <div class="section-header">
+            <div class="section-tag">Impact</div>
+            <h2 class="section-title">Measurable Results</h2>
+        </div>
+        
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-value">40%</div>
+                <div class="metric-label">Reduction in Container Dwell Time</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">25%</div>
+                <div class="metric-label">Fewer Crane Moves Per Vessel</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">15%</div>
+                <div class="metric-label">Fuel Savings via Virtual Arrival</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">98%</div>
+                <div class="metric-label">ETA Prediction Accuracy</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="market" id="market">
+        <div class="section-header">
+            <div class="section-tag">Market Opportunity</div>
+            <h2 class="section-title">$180 Billion Market by 2030</h2>
+        </div>
+        
+        <div class="market-visual">
+            <div class="market-card">
+                <div class="market-size">$35B</div>
+                <div class="market-label">Port Operating Software</div>
+                <div class="market-desc">Growing 3x from 2025-2030</div>
+            </div>
+            <div class="market-card">
+                <div class="market-size">$120B</div>
+                <div class="market-label">Maritime Logistics Tech</div>
+                <div class="market-desc">Digital transformation wave</div>
+            </div>
+            <div class="market-card">
+                <div class="market-size">$25B</div>
+                <div class="market-label">Supply Chain Visibility</div>
+                <div class="market-desc">End-to-end cargo tracking</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="revenue">
+        <div class="section-header">
+            <div class="section-tag">Projections</div>
+            <h2 class="section-title">Path to $1B+ Revenue</h2>
+        </div>
+        
+        <div class="revenue-chart">
+            <div class="revenue-bar">
+                <div class="bar-value">$8M</div>
+                <div class="bar" style="height: 30px;"></div>
+                <div class="bar-label">2026</div>
+            </div>
+            <div class="revenue-bar">
+                <div class="bar-value">$45M</div>
+                <div class="bar" style="height: 80px;"></div>
+                <div class="bar-label">2027</div>
+            </div>
+            <div class="revenue-bar">
+                <div class="bar-value">$150M</div>
+                <div class="bar" style="height: 140px;"></div>
+                <div class="bar-label">2028</div>
+            </div>
+            <div class="revenue-bar">
+                <div class="bar-value">$400M</div>
+                <div class="bar" style="height: 220px;"></div>
+                <div class="bar-label">2029</div>
+            </div>
+            <div class="revenue-bar">
+                <div class="bar-value">$1.2B</div>
+                <div class="bar" style="height: 300px;"></div>
+                <div class="bar-label">2030</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="why-now">
+        <div class="section-header">
+            <div class="section-tag">Why Now</div>
+            <h2 class="section-title">The Perfect Storm</h2>
+        </div>
+        
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <h3 class="timeline-title">Post-Pandemic Awakening</h3>
+                    <p class="timeline-desc">C-suites now recognize ports as strategic infrastructure. Budgets unlocked.</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <h3 class="timeline-title">AI Technology Maturity</h3>
+                    <p class="timeline-desc">Foundation models can now handle complex logistics reasoning at scale.</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <h3 class="timeline-title">Labor Dynamics</h3>
+                    <p class="timeline-desc">40% of skilled port workers retiring by 2030. Automation is inevitable.</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <h3 class="timeline-title">Sustainability Mandates</h3>
+                    <p class="timeline-desc">IMO 2030/2040 regulations require optimization-driven decarbonization.</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <h3 class="timeline-title">Megaship Economics</h3>
+                    <p class="timeline-desc">24,000+ TEU vessels require next-gen port orchestration to be viable.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta" id="contact">
+        <div class="cta-content">
+            <h2>Ready to Modernize Your Port?</h2>
+            <p class="cta-subtitle">
+                Join the world's leading ports running on PortOS. 
+                90-day deployment. Measurable ROI.
+            </p>
+            <div class="cta-buttons">
+                <a href="mailto:founders@portos.ai" class="btn-primary">
+                    Request Demo <span>→</span>
+                </a>
+                <a href="#" class="btn-secondary">
+                    Download Playbook <span>📄</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-logo">⚓ PortOS</div>
+        <p class="footer-tagline">The Intelligence Layer for Global Trade</p>
+        <div class="footer-links">
+            <a href="#">About</a>
+            <a href="#">Solutions</a>
+            <a href="#">Partners</a>
+            <a href="#">Careers</a>
+            <a href="mailto:founders@portos.ai">Contact</a>
+        </div>
+        <p class="footer-copy">© 2026 PortOS. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Smooth scroll for nav links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Animate elements on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.problem-card, .brain-card, .metric-card, .market-card, .timeline-item').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'all 0.6s ease';
+            observer.observe(el);
+        });
+
+        // Counter animation for stats
+        function animateCounter(element, target, duration = 2000) {
+            let start = 0;
+            const increment = target / (duration / 16);
+            
+            function update() {
+                start += increment;
+                if (start < target) {
+                    if (target >= 100) {
+                        element.textContent = Math.floor(start).toLocaleString();
+                    } else {
+                        element.textContent = start.toFixed(1);
+                    }
+                    requestAnimationFrame(update);
+                } else {
+                    element.textContent = target >= 100 ? target.toLocaleString() : target;
+                }
+            }
+            update();
+        }
+
+        // Add floating container animation
+        const containers = document.querySelectorAll('.container-box');
+        containers.forEach((container, index) => {
+            container.style.left = `-50px`;
+            container.style.animationDuration = `${18 + index * 3}s`;
+        });
+    </script>
+</body>
+</html>
