@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RehabOS — The AI Operating System for Physical Rehabilitation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00B4D8;
+            --primary-dark: #0096C7;
+            --secondary: #90E0EF;
+            --accent: #FF6B35;
+            --dark: #03045E;
+            --darker: #020337;
+            --light: #CAF0F8;
+            --white: #ffffff;
+            --gray-100: #f8fafc;
+            --gray-200: #e2e8f0;
+            --gray-600: #475569;
+            --success: #10B981;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--darker);
+            color: var(--white);
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .hero {
+            min-height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(0, 180, 216, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(144, 224, 239, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(255, 107, 53, 0.05) 0%, transparent 50%);
+            animation: pulse 8s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        /* Floating Body Outline Animation */
+        .body-animation {
+            position: absolute;
+            right: 5%;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 400px;
+            height: 600px;
+            opacity: 0.15;
+        }
+
+        .body-outline {
+            stroke: var(--primary);
+            stroke-width: 2;
+            fill: none;
+            stroke-dasharray: 1000;
+            animation: drawBody 4s ease-out forwards, glowPulse 3s ease-in-out infinite 4s;
+        }
+
+        .joint {
+            fill: var(--accent);
+            animation: jointPulse 2s ease-in-out infinite;
+        }
+
+        .joint:nth-child(2) { animation-delay: 0.3s; }
+        .joint:nth-child(3) { animation-delay: 0.6s; }
+        .joint:nth-child(4) { animation-delay: 0.9s; }
+        .joint:nth-child(5) { animation-delay: 1.2s; }
+
+        @keyframes drawBody {
+            to { stroke-dashoffset: 0; }
+        }
+
+        @keyframes glowPulse {
+            0%, 100% { filter: drop-shadow(0 0 5px var(--primary)); }
+            50% { filter: drop-shadow(0 0 20px var(--primary)); }
+        }
+
+        @keyframes jointPulse {
+            0%, 100% { r: 8; opacity: 1; }
+            50% { r: 12; opacity: 0.7; }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            max-width: 800px;
+            padding: 2rem;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(0, 180, 216, 0.15);
+            border: 1px solid rgba(0, 180, 216, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--secondary);
+            margin-bottom: 1.5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .badge-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        h1 {
+            font-size: clamp(3rem, 8vw, 5.5rem);
+            font-weight: 900;
+            line-height: 1.05;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--white) 0%, var(--secondary) 50%, var(--primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .tagline {
+            font-size: 1.5rem;
+            font-weight: 300;
+            color: var(--gray-200);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .highlight {
+            color: var(--accent);
+            font-weight: 500;
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: var(--white);
+            border: none;
+            box-shadow: 0 10px 40px rgba(0, 180, 216, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 50px rgba(0, 180, 216, 0.5);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--white);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary);
+            background: rgba(0, 180, 216, 0.1);
+        }
+
+        /* Stats Section */
+        .stats {
+            padding: 6rem 2rem;
+            background: linear-gradient(180deg, var(--darker) 0%, var(--dark) 100%);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(0, 180, 216, 0.3);
+            background: rgba(0, 180, 216, 0.05);
+        }
+
+        .stat-value {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            color: var(--gray-200);
+            font-weight: 400;
+        }
+
+        /* Problem Section */
+        .problem {
+            padding: 8rem 2rem;
+            background: var(--dark);
+            position: relative;
+        }
+
+        .section-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            margin-bottom: 2rem;
+            line-height: 1.1;
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .problem-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .problem-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--accent) 0%, transparent 100%);
+        }
+
+        .problem-card:hover {
+            background: rgba(255, 107, 53, 0.05);
+            border-color: rgba(255, 107, 53, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .problem-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 107, 53, 0.1);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .problem-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.75rem;
+            font-weight: 700;
+        }
+
+        .problem-card p {
+            color: var(--gray-200);
+            line-height: 1.7;
+            font-size: 0.95rem;
+        }
+
+        /* Solution Section */
+        .solution {
+            padding: 8rem 2rem;
+            background: linear-gradient(180deg, var(--dark) 0%, var(--darker) 100%);
+        }
+
+        .solution-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 4rem;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, rgba(0, 180, 216, 0.1) 0%, rgba(144, 224, 239, 0.05) 100%);
+            border: 1px solid rgba(0, 180, 216, 0.2);
+            border-radius: 24px;
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .feature-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(0, 180, 216, 0.1) 0%, transparent 70%);
+            transition: all 0.4s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: var(--primary);
+            box-shadow: 0 20px 60px rgba(0, 180, 216, 0.2);
+        }
+
+        .feature-card:hover::after {
+            top: -30%;
+            right: -30%;
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 10px 30px rgba(0, 180, 216, 0.3);
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature-card p {
+            color: var(--gray-200);
+            line-height: 1.7;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* How It Works */
+        .how-it-works {
+            padding: 8rem 2rem;
+            background: var(--darker);
+        }
+
+        .how-header {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 5rem;
+        }
+
+        .timeline {
+            position: relative;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--primary) 0%, var(--accent) 50%, var(--secondary) 100%);
+            border-radius: 4px;
+        }
+
+        .timeline-item {
+            display: flex;
+            justify-content: flex-end;
+            padding-right: 50%;
+            position: relative;
+            margin-bottom: 3rem;
+        }
+
+        .timeline-item:nth-child(even) {
+            justify-content: flex-start;
+            padding-right: 0;
+            padding-left: 50%;
+        }
+
+        .timeline-content {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 400px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .timeline-content:hover {
+            background: rgba(0, 180, 216, 0.05);
+            border-color: rgba(0, 180, 216, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .timeline-number {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 800;
+            box-shadow: 0 10px 30px rgba(0, 180, 216, 0.3);
+        }
+
+        .timeline-item:nth-child(odd) .timeline-number {
+            right: -80px;
+        }
+
+        .timeline-item:nth-child(even) .timeline-number {
+            left: -80px;
+        }
+
+        .timeline-content h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.75rem;
+            font-weight: 700;
+        }
+
+        .timeline-content p {
+            color: var(--gray-200);
+            line-height: 1.6;
+        }
+
+        /* Market Section */
+        .market {
+            padding: 8rem 2rem;
+            background: linear-gradient(135deg, var(--dark) 0%, #0a1628 100%);
+        }
+
+        .market-header {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 4rem;
+        }
+
+        .market-visual {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .market-circle {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .circle-outer {
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            border: 3px solid var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            animation: rotateCircle 20s linear infinite;
+        }
+
+        @keyframes rotateCircle {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .circle-inner {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: rgba(0, 180, 216, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            animation: rotateCircle 20s linear infinite reverse;
+        }
+
+        .market-value {
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--primary);
+        }
+
+        .market-label {
+            font-size: 1rem;
+            color: var(--gray-200);
+            text-align: center;
+        }
+
+        .market-connector {
+            font-size: 2rem;
+            color: var(--accent);
+        }
+
+        /* Traction Section */
+        .traction {
+            padding: 8rem 2rem;
+            background: var(--darker);
+        }
+
+        .traction-header {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 4rem;
+        }
+
+        .traction-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .traction-card {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(16, 185, 129, 0.02) 100%);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .traction-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--success);
+            box-shadow: 0 15px 40px rgba(16, 185, 129, 0.2);
+        }
+
+        .traction-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .traction-metric {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--success);
+            margin-bottom: 0.5rem;
+        }
+
+        .traction-desc {
+            color: var(--gray-200);
+            line-height: 1.6;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 8rem 2rem;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--dark) 100%);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cta-section h2 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-section p {
+            font-size: 1.3rem;
+            color: var(--light);
+            margin-bottom: 2.5rem;
+            line-height: 1.7;
+        }
+
+        /* Footer */
+        footer {
+            padding: 3rem 2rem;
+            background: var(--darker);
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .footer-brand {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .footer-text {
+            color: var(--gray-600);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .body-animation {
+                display: none;
+            }
+
+            .timeline::before {
+                left: 30px;
+            }
+
+            .timeline-item,
+            .timeline-item:nth-child(even) {
+                padding-left: 80px;
+                padding-right: 0;
+                justify-content: flex-start;
+            }
+
+            .timeline-item .timeline-number,
+            .timeline-item:nth-child(even) .timeline-number {
+                left: 0;
+                right: auto;
+            }
+
+            .market-visual {
+                flex-direction: column;
+            }
+
+            .market-connector {
+                transform: rotate(90deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <svg class="body-animation" viewBox="0 0 200 300">
+            <!-- Simple body outline -->
+            <path class="body-outline" d="M100,30 C115,30 125,45 125,60 C125,75 115,85 100,85 C85,85 75,75 75,60 C75,45 85,30 100,30 M100,85 L100,180 M100,110 L60,150 M100,110 L140,150 M100,180 L70,270 M100,180 L130,270" stroke-dashoffset="1000"/>
+            <!-- Joints -->
+            <circle class="joint" cx="100" cy="60" r="8"/>
+            <circle class="joint" cx="60" cy="150" r="8"/>
+            <circle class="joint" cx="140" cy="150" r="8"/>
+            <circle class="joint" cx="70" cy="270" r="8"/>
+            <circle class="joint" cx="130" cy="270" r="8"/>
+        </svg>
+
+        <div class="hero-content">
+            <div class="badge">
+                <span class="badge-dot"></span>
+                Healthcare AI • March 2026
+            </div>
+            <h1>RehabOS</h1>
+            <p class="tagline">
+                The <span class="highlight">autonomous intelligence layer</span> that transforms physical rehabilitation from episodic clinic visits into continuous, AI-guided recovery.
+            </p>
+            <div class="cta-group">
+                <a href="#solution" class="btn btn-primary">
+                    See How It Works →
+                </a>
+                <a href="#market" class="btn btn-secondary">
+                    View Market Opportunity
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value">$100B+</div>
+                    <div class="stat-label">Lost to Non-Adherence Annually</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">35%</div>
+                    <div class="stat-label">Patients Complete Home Exercises</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">40K+</div>
+                    <div class="stat-label">Physical Therapist Shortage (US)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">165+</div>
+                    <div class="stat-label">Unsupervised Hours Per Week</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="problem">
+        <div class="container">
+            <div class="section-label">The Problem</div>
+            <h2 class="section-title">Physical Rehabilitation is Fundamentally Broken</h2>
+            <p style="font-size: 1.2rem; color: var(--gray-200); max-width: 700px; line-height: 1.7;">
+                The $45B physical therapy industry relies on the same model from 50 years ago: brief clinic visits surrounded by unsupervised recovery time. Patients are set up to fail.
+            </p>
+
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="problem-icon">🩺</div>
+                    <h3>Therapist Shortage Crisis</h3>
+                    <p>40,000+ PT shortage projected, 4+ week wait times for new patients, 60% burnout rates among practitioners.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">📉</div>
+                    <h3>The Adherence Disaster</h3>
+                    <p>Only 35% complete prescribed home exercises. 70% of recovery happens unsupervised. Paper sheets are still the standard.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">🔌</div>
+                    <h3>Fragmented Care</h3>
+                    <p>No continuity between clinic and home. Specialists don't share data. Patients fall through cracks during transitions.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">👁️</div>
+                    <h3>Measurement Blindness</h3>
+                    <p>PTs see patients 30-45 minutes per session. No visibility into the other 165+ hours. Subjective tracking at best.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section id="solution" class="solution">
+        <div class="container">
+            <div class="solution-header">
+                <div class="section-label">The Solution</div>
+                <h2 class="section-title">Meet RehabOS</h2>
+                <p style="font-size: 1.2rem; color: var(--gray-200); line-height: 1.7;">
+                    The autonomous intelligence layer that makes every patient's recovery continuous, personalized, and measurable — from clinic to home and back.
+                </p>
+            </div>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">👁️</div>
+                    <h3>RehabVision</h3>
+                    <p>Computer vision movement analysis using any smartphone. Real-time form correction, compensation detection, and progress tracking — no special hardware required.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🧠</div>
+                    <h3>RehabMind</h3>
+                    <p>Autonomous exercise intelligence that generates personalized progressions, adapts difficulty in real-time, and predicts optimal timing based on recovery patterns.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔗</div>
+                    <h3>RehabLink</h3>
+                    <p>Unified care coordination dashboard connecting the entire care team with automatic reporting, documentation automation, and seamless care transitions.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💬</div>
+                    <h3>RehabCoach</h3>
+                    <p>24/7 AI coach with behavioral psychology-based motivation, pain vs. progress understanding, and intelligent escalation to human therapists when needed.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>RehabPredict</h3>
+                    <p>ML-powered outcome intelligence predicting recovery trajectories, early warning for complications, and evidence-based treatment optimization.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>True Autonomy</h3>
+                    <p>Unlike competitors, RehabOS adapts without constant therapist intervention — learning individual patterns while knowing exactly when human expertise is needed.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works">
+        <div class="container">
+            <div class="how-header">
+                <div class="section-label">How It Works</div>
+                <h2 class="section-title">The Patient Journey, Reimagined</h2>
+            </div>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-number">1</div>
+                        <h3>Instant Onboarding</h3>
+                        <p>Patient downloads app, completes movement assessment. RehabOS creates personalized baseline and recovery plan within minutes.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-number">2</div>
+                        <h3>Guided Daily Recovery</h3>
+                        <p>AI coach delivers personalized exercises with real-time form correction. Difficulty adapts based on actual performance and recovery signals.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-number">3</div>
+                        <h3>Continuous Monitoring</h3>
+                        <p>Movement patterns, adherence, and pain levels tracked automatically. RehabPredict flags issues before they become setbacks.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-number">4</div>
+                        <h3>Care Team Sync</h3>
+                        <p>RehabLink keeps physicians, therapists, and caregivers aligned with automatic progress reports and milestone alerts.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-number">5</div>
+                        <h3>Faster Recovery</h3>
+                        <p>Patients recover 30% faster with higher adherence, fewer complications, and better outcomes — all measured and proven.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Market Section -->
+    <section id="market" class="market">
+        <div class="container">
+            <div class="market-header">
+                <div class="section-label">Market Opportunity</div>
+                <h2 class="section-title">A $110B+ Market Ready for Disruption</h2>
+            </div>
+
+            <div class="market-visual">
+                <div class="market-circle">
+                    <div class="circle-outer">
+                        <div class="circle-inner">
+                            <div class="market-value">$110B+</div>
+                            <div class="market-label">Total Addressable<br>Market</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="market-connector">→</div>
+                <div class="market-circle">
+                    <div class="circle-outer" style="border-color: var(--secondary);">
+                        <div class="circle-inner">
+                            <div class="market-value" style="color: var(--secondary);">$32B</div>
+                            <div class="market-label">Serviceable<br>Market (US)</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="market-connector">→</div>
+                <div class="market-circle">
+                    <div class="circle-outer" style="border-color: var(--accent);">
+                        <div class="circle-inner">
+                            <div class="market-value" style="color: var(--accent);">$750M</div>
+                            <div class="market-label">Year 5<br>Target ARR</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Traction Section -->
+    <section class="traction">
+        <div class="container">
+            <div class="traction-header">
+                <div class="section-label">The Opportunity</div>
+                <h2 class="section-title">Why RehabOS Wins</h2>
+            </div>
+
+            <div class="traction-grid">
+                <div class="traction-card">
+                    <div class="traction-icon">🎯</div>
+                    <div class="traction-metric">40%</div>
+                    <div class="traction-desc">Reduction in no-show rates with continuous engagement and accountability</div>
+                </div>
+                <div class="traction-card">
+                    <div class="traction-icon">⚡</div>
+                    <div class="traction-metric">2x</div>
+                    <div class="traction-desc">Patient throughput per therapist with AI handling routine progressions</div>
+                </div>
+                <div class="traction-card">
+                    <div class="traction-icon">⏱️</div>
+                    <div class="traction-metric">30%</div>
+                    <div class="traction-desc">Faster average recovery times with continuous, adaptive care</div>
+                </div>
+                <div class="traction-card">
+                    <div class="traction-icon">💰</div>
+                    <div class="traction-metric">25%</div>
+                    <div class="traction-desc">Reduction in MSK spend for employers and payers</div>
+                </div>
+                <div class="traction-card">
+                    <div class="traction-icon">📈</div>
+                    <div class="traction-metric">24:1</div>
+                    <div class="traction-desc">Projected LTV:CAC ratio at scale with sticky, outcomes-driven engagement</div>
+                </div>
+                <div class="traction-card">
+                    <div class="traction-icon">🏥</div>
+                    <div class="traction-metric">85%</div>
+                    <div class="traction-desc">Target gross margin with software-first, hardware-free approach</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="cta-content">
+            <h2>Ready to Transform Rehabilitation?</h2>
+            <p>
+                Physical rehabilitation is a $110B+ market trapped in the past. RehabOS brings it into the future with autonomous AI that makes every patient's recovery continuous, personalized, and measurable.
+            </p>
+            <div class="cta-group" style="justify-content: center;">
+                <a href="mailto:pradhith@gmail.com?subject=RehabOS%20Investment%20Inquiry" class="btn btn-primary">
+                    Let's Talk →
+                </a>
+                <a href="2026-03-05-afternoon.md" class="btn btn-secondary">
+                    Read Full Strategy
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-brand">RehabOS</div>
+        <p class="footer-text">Generated by The Godfather 🎩 • Afternoon Drop • March 5, 2026</p>
+    </footer>
+
+    <script>
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.stat-card, .problem-card, .feature-card, .timeline-content, .traction-card').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'all 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
