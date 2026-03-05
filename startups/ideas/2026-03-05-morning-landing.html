@@ -1,0 +1,1214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareCircle AI — The AI Operating System for Family Caregiving</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #7C3AED;
+            --primary-light: #A78BFA;
+            --primary-dark: #5B21B6;
+            --accent: #F472B6;
+            --accent-light: #FBCFE8;
+            --warm: #FCD34D;
+            --warm-dark: #F59E0B;
+            --success: #10B981;
+            --text-primary: #1F2937;
+            --text-secondary: #6B7280;
+            --text-light: #9CA3AF;
+            --bg-cream: #FFFBF5;
+            --bg-lavender: #F5F3FF;
+            --bg-pink: #FDF2F8;
+            --card-shadow: 0 25px 80px -12px rgba(124, 58, 237, 0.25);
+            --glow: 0 0 60px rgba(124, 58, 237, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-cream);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0.4;
+        }
+
+        .floating-heart {
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0.1;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-30px) rotate(10deg); }
+            50% { transform: translateY(-15px) rotate(-5deg); }
+            75% { transform: translateY(-40px) rotate(5deg); }
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            position: relative;
+            background: linear-gradient(135deg, var(--bg-cream) 0%, var(--bg-lavender) 50%, var(--bg-pink) 100%);
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 100px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 20px rgba(124, 58, 237, 0.15);
+            animation: pulse-badge 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-badge {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .hero-title {
+            font-size: clamp(3rem, 8vw, 5.5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.25rem, 3vw, 1.75rem);
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto 3rem;
+            font-weight: 400;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 4rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1.25rem 2.5rem;
+            font-size: 1.125rem;
+            font-weight: 600;
+            border-radius: 100px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            box-shadow: 0 10px 40px rgba(124, 58, 237, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 50px rgba(124, 58, 237, 0.5);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--primary);
+            border: 2px solid var(--primary-light);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-lavender);
+            transform: translateY(-3px);
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 20px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+        }
+
+        /* Problem Section */
+        .section {
+            padding: 6rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-label {
+            display: inline-block;
+            font-size: 0.875rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Problem Cards */
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .problem-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 24px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--accent-light);
+            box-shadow: 0 20px 60px rgba(244, 114, 182, 0.15);
+        }
+
+        .problem-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--accent-light) 0%, var(--bg-pink) 100%);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .problem-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .problem-text {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        .problem-stat {
+            display: inline-block;
+            background: var(--bg-pink);
+            color: var(--accent);
+            font-weight: 700;
+            padding: 0.25rem 0.75rem;
+            border-radius: 100px;
+            font-size: 0.875rem;
+            margin-top: 1rem;
+        }
+
+        /* Solution Section */
+        .solution-section {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 6rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .solution-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 600px;
+            height: 600px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+        }
+
+        .solution-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .solution-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .solution-title {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .solution-subtitle {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Agent Cards */
+        .agents-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .agent-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .agent-card:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-5px);
+        }
+
+        .agent-emoji {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .agent-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .agent-desc {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        /* How It Works */
+        .how-it-works {
+            background: var(--bg-lavender);
+            padding: 6rem 2rem;
+        }
+
+        .timeline {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--primary), var(--accent));
+            border-radius: 4px;
+        }
+
+        .timeline-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .timeline-item:nth-child(odd) {
+            flex-direction: row-reverse;
+        }
+
+        .timeline-content {
+            width: 45%;
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+        }
+
+        .timeline-number {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.25rem;
+            box-shadow: 0 5px 20px rgba(124, 58, 237, 0.4);
+        }
+
+        .timeline-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+
+        .timeline-text {
+            color: var(--text-secondary);
+        }
+
+        /* Market Section */
+        .market-section {
+            padding: 6rem 2rem;
+            background: white;
+        }
+
+        .market-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            max-width: 900px;
+            margin: 3rem auto 0;
+        }
+
+        .market-card {
+            text-align: center;
+            padding: 2rem;
+            border-radius: 20px;
+            background: var(--bg-lavender);
+        }
+
+        .market-value {
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .market-label {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+        }
+
+        /* Testimonial */
+        .testimonial-section {
+            background: linear-gradient(135deg, var(--bg-pink) 0%, var(--bg-cream) 100%);
+            padding: 6rem 2rem;
+        }
+
+        .testimonial-card {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 3rem;
+            border-radius: 30px;
+            box-shadow: var(--card-shadow);
+            text-align: center;
+            position: relative;
+        }
+
+        .testimonial-quote {
+            font-size: 1.5rem;
+            font-style: italic;
+            color: var(--text-primary);
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+
+        .testimonial-avatar {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto 1rem;
+        }
+
+        .testimonial-name {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .testimonial-role {
+            color: var(--text-secondary);
+        }
+
+        /* Pricing Section */
+        .pricing-section {
+            padding: 6rem 2rem;
+            background: var(--bg-cream);
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 3rem auto 0;
+        }
+
+        .pricing-card {
+            background: white;
+            border-radius: 24px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            position: relative;
+            border: 2px solid transparent;
+        }
+
+        .pricing-card.featured {
+            border-color: var(--primary);
+            transform: scale(1.05);
+        }
+
+        .pricing-card.featured::before {
+            content: 'MOST POPULAR';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.5rem 1rem;
+            border-radius: 100px;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .pricing-card.featured:hover {
+            transform: scale(1.05) translateY(-10px);
+        }
+
+        .pricing-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-price {
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--primary);
+        }
+
+        .pricing-price span {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin: 2rem 0;
+        }
+
+        .pricing-features li {
+            padding: 0.75rem 0;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .pricing-features li::before {
+            content: '✓';
+            color: var(--success);
+            font-weight: 700;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 6rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '💜';
+            position: absolute;
+            font-size: 400px;
+            opacity: 0.05;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 2;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .cta-title {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .cta-text {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+        }
+
+        .cta-btn {
+            background: white;
+            color: var(--primary);
+            padding: 1.5rem 3rem;
+            font-size: 1.25rem;
+            font-weight: 700;
+            border-radius: 100px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--text-primary);
+            color: white;
+            padding: 4rem 2rem 2rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 3rem;
+        }
+
+        .footer-brand {
+            font-size: 1.5rem;
+            font-weight: 800;
+        }
+
+        .footer-tagline {
+            color: var(--text-light);
+            margin-top: 1rem;
+            font-size: 0.95rem;
+        }
+
+        .footer-title {
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 3rem auto 0;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            color: var(--text-light);
+            font-size: 0.875rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .timeline::before {
+                left: 20px;
+            }
+
+            .timeline-item,
+            .timeline-item:nth-child(odd) {
+                flex-direction: column;
+                align-items: flex-start;
+                padding-left: 60px;
+            }
+
+            .timeline-content {
+                width: 100%;
+            }
+
+            .timeline-number {
+                left: 20px;
+                transform: translateX(-50%);
+            }
+
+            .market-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .pricing-card.featured {
+                transform: scale(1);
+            }
+
+            .pricing-card.featured:hover {
+                transform: translateY(-10px);
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-in {
+            animation: fadeInUp 0.8s ease forwards;
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Hearts Background -->
+    <div class="bg-pattern">
+        <div class="floating-heart" style="top: 10%; left: 5%;">💜</div>
+        <div class="floating-heart" style="top: 20%; right: 10%; animation-delay: -5s;">💗</div>
+        <div class="floating-heart" style="top: 60%; left: 15%; animation-delay: -10s;">💜</div>
+        <div class="floating-heart" style="top: 80%; right: 20%; animation-delay: -15s;">💗</div>
+        <div class="floating-heart" style="top: 40%; left: 80%; animation-delay: -7s;">💜</div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span>💜</span>
+                <span>Caring for Those Who Care</span>
+            </div>
+            
+            <h1 class="hero-title">CareCircle AI</h1>
+            
+            <p class="hero-subtitle">
+                The AI operating system for family caregiving. Coordinate care, manage medications, 
+                unite your family — and finally reclaim your life.
+            </p>
+            
+            <div class="hero-cta">
+                <a href="#" class="btn btn-primary">
+                    <span>Start Free Trial</span>
+                    <span>→</span>
+                </a>
+                <a href="#" class="btn btn-secondary">
+                    <span>Watch Demo</span>
+                    <span>▶</span>
+                </a>
+            </div>
+            
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <div class="stat-number">53M</div>
+                    <div class="stat-label">Family caregivers in America</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">24h</div>
+                    <div class="stat-label">Average weekly care time</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">$470B</div>
+                    <div class="stat-label">Annual unpaid labor value</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">40%</div>
+                    <div class="stat-label">Experience depression</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="section">
+        <div class="section-header">
+            <span class="section-label">The Challenge</span>
+            <h2 class="section-title">Caregiving Is a Full-Time Job Nobody Prepared You For</h2>
+            <p class="section-subtitle">
+                You became a caregiver overnight. Now you're juggling medications, appointments, 
+                insurance battles, and family drama — with zero training and zero support.
+            </p>
+        </div>
+        
+        <div class="problem-grid">
+            <div class="problem-card">
+                <div class="problem-icon">💊</div>
+                <h3 class="problem-title">Medication Chaos</h3>
+                <p class="problem-text">
+                    Managing 5-15 medications across multiple pharmacies, with dangerous 
+                    interactions nobody warned you about.
+                </p>
+                <span class="problem-stat">7+ providers to coordinate</span>
+            </div>
+            
+            <div class="problem-card">
+                <div class="problem-icon">📅</div>
+                <h3 class="problem-title">Appointment Overload</h3>
+                <p class="problem-text">
+                    Endless specialist visits, conflicting schedules, and nobody sharing 
+                    information between offices.
+                </p>
+                <span class="problem-stat">12+ appointments/month</span>
+            </div>
+            
+            <div class="problem-card">
+                <div class="problem-icon">👨‍👩‍👧‍👦</div>
+                <h3 class="problem-title">Family Friction</h3>
+                <p class="problem-text">
+                    Siblings out of the loop, unfair burden distribution, and nobody agreeing 
+                    on the right decisions.
+                </p>
+                <span class="problem-stat">60% report family conflict</span>
+            </div>
+            
+            <div class="problem-card">
+                <div class="problem-icon">📋</div>
+                <h3 class="problem-title">Bureaucratic Hell</h3>
+                <p class="problem-text">
+                    Medicare, Medicaid, insurance appeals, VA benefits — each with its own 
+                    maze of paperwork and deadlines.
+                </p>
+                <span class="problem-stat">40+ hours on paperwork/year</span>
+            </div>
+            
+            <div class="problem-card">
+                <div class="problem-icon">😰</div>
+                <h3 class="problem-title">Emotional Exhaustion</h3>
+                <p class="problem-text">
+                    The guilt, the grief, the impossible decisions — all while trying to 
+                    maintain your own life and career.
+                </p>
+                <span class="problem-stat">72% report high stress</span>
+            </div>
+            
+            <div class="problem-card">
+                <div class="problem-icon">💸</div>
+                <h3 class="problem-title">Hidden Costs</h3>
+                <p class="problem-text">
+                    Lost wages, missed promotions, out-of-pocket expenses, and benefits 
+                    you didn't know existed.
+                </p>
+                <span class="problem-stat">$522K lifetime earnings loss</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="solution-section">
+        <div class="solution-content">
+            <div class="solution-header">
+                <span class="section-label" style="color: var(--warm);">The Solution</span>
+                <h2 class="solution-title">Your AI Care Coordinator, Working 24/7</h2>
+                <p class="solution-subtitle">
+                    CareCircle AI handles the overwhelming details so you can focus on 
+                    what matters most — being present with your loved one.
+                </p>
+            </div>
+            
+            <div class="agents-grid">
+                <div class="agent-card">
+                    <div class="agent-emoji">💊</div>
+                    <h3 class="agent-name">MedAssist Agent</h3>
+                    <p class="agent-desc">
+                        Manages all medications, catches dangerous interactions, automates 
+                        refills, and optimizes insurance coverage.
+                    </p>
+                </div>
+                
+                <div class="agent-card">
+                    <div class="agent-emoji">📅</div>
+                    <h3 class="agent-name">AppointmentPilot</h3>
+                    <p class="agent-desc">
+                        Schedules and coordinates all appointments, preps you with questions, 
+                        and summarizes each visit.
+                    </p>
+                </div>
+                
+                <div class="agent-card">
+                    <div class="agent-emoji">💰</div>
+                    <h3 class="agent-name">BenefitsNavigator</h3>
+                    <p class="agent-desc">
+                        Finds every benefit your loved one qualifies for — Medicare, VA, 
+                        state programs — and handles the applications.
+                    </p>
+                </div>
+                
+                <div class="agent-card">
+                    <div class="agent-emoji">👨‍👩‍👧</div>
+                    <h3 class="agent-name">FamilySync Agent</h3>
+                    <p class="agent-desc">
+                        Keeps everyone informed with automatic updates, delegates tasks 
+                        fairly, and reduces family friction.
+                    </p>
+                </div>
+                
+                <div class="agent-card">
+                    <div class="agent-emoji">🚨</div>
+                    <h3 class="agent-name">CrisisResponse</h3>
+                    <p class="agent-desc">
+                        24/7 emergency guidance, hospital prep, discharge planning, and 
+                        care transition coordination.
+                    </p>
+                </div>
+                
+                <div class="agent-card">
+                    <div class="agent-emoji">🎙️</div>
+                    <h3 class="agent-name">Voice-First Interface</h3>
+                    <p class="agent-desc">
+                        Hands-free operation when you're busy caring. Just ask — CareCircle 
+                        handles the rest.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works">
+        <div class="section" style="padding: 0;">
+            <div class="section-header">
+                <span class="section-label">How It Works</span>
+                <h2 class="section-title">From Overwhelmed to In Control</h2>
+                <p class="section-subtitle">
+                    Set up in 15 minutes. See results in your first week.
+                </p>
+            </div>
+            
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3 class="timeline-title">Tell Us Your Story</h3>
+                        <p class="timeline-text">
+                            A simple guided interview captures your care situation — who you're 
+                            caring for, their conditions, your family, and your biggest challenges.
+                        </p>
+                    </div>
+                    <div class="timeline-number">1</div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3 class="timeline-title">We Build Your CareGraph</h3>
+                        <p class="timeline-text">
+                            CareCircle connects to health records, maps your family network, 
+                            and creates a living intelligence layer for your care journey.
+                        </p>
+                    </div>
+                    <div class="timeline-number">2</div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3 class="timeline-title">Agents Activate</h3>
+                        <p class="timeline-text">
+                            Our AI agents start working immediately — reconciling medications, 
+                            finding benefits, and setting up family communication.
+                        </p>
+                    </div>
+                    <div class="timeline-number">3</div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3 class="timeline-title">You Reclaim Your Life</h3>
+                        <p class="timeline-text">
+                            Spend less time on paperwork and more time on what matters. 
+                            CareCircle handles the details; you stay present.
+                        </p>
+                    </div>
+                    <div class="timeline-number">4</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Market Section -->
+    <section class="market-section">
+        <div class="section" style="padding: 0;">
+            <div class="section-header">
+                <span class="section-label">The Opportunity</span>
+                <h2 class="section-title">A $500B+ Market Desperately Underserved</h2>
+            </div>
+            
+            <div class="market-grid">
+                <div class="market-card">
+                    <div class="market-value">$50B+</div>
+                    <div class="market-label">Family Caregiver TAM</div>
+                </div>
+                <div class="market-card">
+                    <div class="market-value">10K</div>
+                    <div class="market-label">Americans turn 65 daily</div>
+                </div>
+                <div class="market-card">
+                    <div class="market-value">3x</div>
+                    <div class="market-label">85+ population by 2050</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonial -->
+    <section class="testimonial-section">
+        <div class="testimonial-card">
+            <div class="testimonial-avatar">👩</div>
+            <blockquote class="testimonial-quote">
+                "Before CareCircle, I was drowning. Juggling my mom's 12 medications, 
+                fighting with insurance, updating my sisters who live across the country. 
+                Now I spend 10 hours a week on care coordination instead of 25. 
+                I have my life back."
+            </blockquote>
+            <div class="testimonial-name">Maria Rodriguez</div>
+            <div class="testimonial-role">Primary caregiver for mother with dementia</div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="pricing-section">
+        <div class="section" style="padding: 0;">
+            <div class="section-header">
+                <span class="section-label">Simple Pricing</span>
+                <h2 class="section-title">Less Than the Cost of Two Coffees a Day</h2>
+                <p class="section-subtitle">
+                    Professional care managers charge $150-200/hour. CareCircle gives you 
+                    one for a fraction of the cost.
+                </p>
+            </div>
+            
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <h3 class="pricing-name">Essential</h3>
+                    <div class="pricing-price">$49<span>/month</span></div>
+                    <ul class="pricing-features">
+                        <li>AI Care Assistant</li>
+                        <li>Medication Management</li>
+                        <li>Appointment Scheduling</li>
+                        <li>Family Sharing (3 members)</li>
+                        <li>Email Support</li>
+                    </ul>
+                    <a href="#" class="btn btn-secondary" style="width: 100%; justify-content: center;">Get Started</a>
+                </div>
+                
+                <div class="pricing-card featured">
+                    <h3 class="pricing-name">Complete</h3>
+                    <div class="pricing-price">$99<span>/month</span></div>
+                    <ul class="pricing-features">
+                        <li>All Essential Features</li>
+                        <li>All 5 AI Agents</li>
+                        <li>Unlimited Family Members</li>
+                        <li>Health Record Integration</li>
+                        <li>Benefits Navigator</li>
+                        <li>24/7 Chat Support</li>
+                    </ul>
+                    <a href="#" class="btn btn-primary" style="width: 100%; justify-content: center;">Start Free Trial</a>
+                </div>
+                
+                <div class="pricing-card">
+                    <h3 class="pricing-name">Concierge</h3>
+                    <div class="pricing-price">$199<span>/month</span></div>
+                    <ul class="pricing-features">
+                        <li>All Complete Features</li>
+                        <li>Dedicated Care Coordinator</li>
+                        <li>Legal/Financial Guidance</li>
+                        <li>Priority Phone Support</li>
+                        <li>Family Video Consultations</li>
+                    </ul>
+                    <a href="#" class="btn btn-secondary" style="width: 100%; justify-content: center;">Contact Sales</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="cta-content">
+            <h2 class="cta-title">You've Been Caring for Everyone Else. Let Someone Care for You.</h2>
+            <p class="cta-text">
+                Join 10,000+ families who've reclaimed their lives with CareCircle AI. 
+                Start your free 14-day trial today.
+            </p>
+            <a href="#" class="cta-btn">
+                <span>Start Your Free Trial</span>
+                <span>💜</span>
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div>
+                <div class="footer-brand">💜 CareCircle AI</div>
+                <p class="footer-tagline">
+                    The AI operating system for family caregiving.<br>
+                    Because caring for family shouldn't mean losing yourself.
+                </p>
+            </div>
+            
+            <div>
+                <h4 class="footer-title">Product</h4>
+                <ul class="footer-links">
+                    <li><a href="#">Features</a></li>
+                    <li><a href="#">Pricing</a></li>
+                    <li><a href="#">For Employers</a></li>
+                    <li><a href="#">For Health Plans</a></li>
+                </ul>
+            </div>
+            
+            <div>
+                <h4 class="footer-title">Resources</h4>
+                <ul class="footer-links">
+                    <li><a href="#">Caregiver Guides</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Support</a></li>
+                    <li><a href="#">Community</a></li>
+                </ul>
+            </div>
+            
+            <div>
+                <h4 class="footer-title">Company</h4>
+                <ul class="footer-links">
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Press</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>© 2026 CareCircle AI. All rights reserved. | Privacy Policy | Terms of Service | HIPAA Compliant</p>
+            <p style="margin-top: 1rem; opacity: 0.6;">
+                Made with 💜 by The Godfather 🎩 | March 5, 2026 Morning Drop
+            </p>
+        </div>
+    </footer>
+</body>
+</html>
