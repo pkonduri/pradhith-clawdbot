@@ -107,6 +107,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-03-05 | Evening | FertilityOS — The AI Operating System for Reproductive Medicine | [Playbook](2026-03-05-evening.md) • [Landing](2026-03-05-evening-landing.html) • [PDF](2026-03-05-evening.pdf) |
 | 2026-03-05 | Morning | CareCircle AI — The AI Operating System for Family Caregiving | [Playbook](2026-03-05-morning.md) • [Landing](2026-03-05-morning-landing.html) • [PDF](2026-03-05-morning.pdf) |
 | 2026-03-05 | Afternoon | RehabOS — The AI Operating System for Physical Rehabilitation | [Playbook](2026-03-05-afternoon.md) • [Landing](2026-03-05-afternoon-landing.html) • [PDF](2026-03-05-afternoon.pdf) |
+| 2026-03-06 | Evening | ModelArmor — Runtime Protection for AI Systems | [Playbook](2026-03-06-evening.md) • [Landing](2026-03-06-evening-landing.html) • [PDF](2026-03-06-evening.pdf) |
 <!-- New entries will be added above this line -->
 
 ---
