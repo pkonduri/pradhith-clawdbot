@@ -111,6 +111,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-03-06 | Morning | InjectionGuard AI — The Firewall for AI Agents | [Playbook](2026-03-06-morning.md) • [Landing](2026-03-06-morning-landing.html) • [PDF](2026-03-06-morning.pdf) |
 | 2026-03-06 | Afternoon | TradesOS — The AI Operating System for Trade Businesses | [Playbook](2026-03-06-afternoon.md) • [Landing](2026-03-06-afternoon-landing.html) • [PDF](2026-03-06-afternoon.pdf) |
 | 2026-03-07 | Evening | BreachOS — Autonomous Cyber Incident Response Intelligence | [Playbook](2026-03-07-evening.md) • [Landing](2026-03-07-evening-landing.html) • [PDF](2026-03-07-evening.pdf) |
+| 2026-03-07 | Morning | RetailMind AI — The Autonomous Intelligence Layer for Physical Retail | [Playbook](2026-03-07-morning.md) • [Landing](2026-03-07-morning-landing.html) • [PDF](2026-03-07-morning.pdf) |
 <!-- New entries will be added above this line -->
 
 ---
