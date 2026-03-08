@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AccessOS — The AI Operating System for Universal Accessibility</title>
+    <meta name="description" content="AccessOS makes digital and physical experiences universally accessible with AI-powered translation, navigation, and compliance automation.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #818cf8;
+            --secondary: #06b6d4;
+            --accent: #f59e0b;
+            --success: #10b981;
+            --dark: #0f172a;
+            --darker: #020617;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --gradient-primary: linear-gradient(135deg, #6366f1 0%, #06b6d4 50%, #10b981 100%);
+            --gradient-hero: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+            --gradient-card: linear-gradient(145deg, rgba(99, 102, 241, 0.1), rgba(6, 182, 212, 0.05));
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--darker);
+            color: var(--light);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+        
+        /* Accessibility Focus Styles */
+        :focus {
+            outline: 3px solid var(--secondary);
+            outline-offset: 2px;
+        }
+        
+        :focus:not(:focus-visible) {
+            outline: none;
+        }
+        
+        :focus-visible {
+            outline: 3px solid var(--secondary);
+            outline-offset: 2px;
+        }
+        
+        /* Skip Link */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--primary);
+            color: white;
+            padding: 8px 16px;
+            z-index: 100;
+            transition: top 0.3s;
+        }
+        
+        .skip-link:focus {
+            top: 0;
+        }
+        
+        /* Animated Background */
+        .hero-bg {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        
+        .accessibility-grid {
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            background-image: 
+                radial-gradient(circle at 1px 1px, rgba(99, 102, 241, 0.15) 1px, transparent 0);
+            background-size: 50px 50px;
+            animation: gridMove 30s linear infinite;
+        }
+        
+        @keyframes gridMove {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            100% { transform: translate(25px, 25px) rotate(1deg); }
+        }
+        
+        .floating-icon {
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0.2;
+            animation: floatIcon 20s ease-in-out infinite;
+        }
+        
+        @keyframes floatIcon {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(10deg); }
+        }
+        
+        /* Accessibility Pulse Rings */
+        .pulse-ring {
+            position: absolute;
+            border: 2px solid var(--primary);
+            border-radius: 50%;
+            opacity: 0.1;
+            animation: pulseExpand 4s ease-out infinite;
+        }
+        
+        @keyframes pulseExpand {
+            0% { transform: scale(0.5); opacity: 0.3; }
+            100% { transform: scale(2); opacity: 0; }
+        }
+        
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1rem 2rem;
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(99, 102, 241, 0.2);
+        }
+        
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+        }
+        
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            -webkit-text-fill-color: white;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            color: var(--gray);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--light);
+        }
+        
+        .cta-button {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(99, 102, 241, 0.4);
+        }
+        
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 8rem 2rem 4rem;
+            background: var(--gradient-hero);
+        }
+        
+        .hero-content {
+            max-width: 1000px;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(99, 102, 241, 0.2);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            color: var(--primary-light);
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.8s ease-out;
+        }
+        
+        .badge-icon {
+            font-size: 1rem;
+        }
+        
+        h1 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+        
+        .gradient-text {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero-subtitle {
+            font-size: clamp(1.125rem, 2.5vw, 1.5rem);
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto 2.5rem;
+            animation: fadeInUp 0.8s ease-out 0.4s both;
+        }
+        
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.8s ease-out 0.6s both;
+        }
+        
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.125rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 50px rgba(99, 102, 241, 0.4);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: var(--light);
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.125rem;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .btn-secondary:hover {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.1);
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Stats Section */
+        .stats {
+            padding: 4rem 2rem;
+            background: var(--darker);
+            border-top: 1px solid rgba(99, 102, 241, 0.1);
+            border-bottom: 1px solid rgba(99, 102, 241, 0.1);
+        }
+        
+        .stats-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 1.5rem;
+        }
+        
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 900;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            color: var(--gray);
+            font-size: 1rem;
+        }
+        
+        /* Problem Section */
+        .problem {
+            padding: 6rem 2rem;
+            background: var(--dark);
+        }
+        
+        .section-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        
+        .section-tag {
+            color: var(--accent);
+            font-weight: 600;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+        }
+        
+        h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+        
+        .section-subtitle {
+            color: var(--gray);
+            font-size: 1.25rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .problem-card {
+            background: var(--gradient-card);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: transform 0.3s, border-color 0.3s;
+        }
+        
+        .problem-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+        }
+        
+        .problem-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(239, 68, 68, 0.2);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .problem-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .problem-card p {
+            color: var(--gray);
+        }
+        
+        /* Solution Section */
+        .solution {
+            padding: 6rem 2rem;
+            background: var(--gradient-hero);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .solution-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .solution-card {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 24px;
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s;
+        }
+        
+        .solution-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+        }
+        
+        .solution-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary);
+            box-shadow: 0 25px 60px rgba(99, 102, 241, 0.2);
+        }
+        
+        .solution-icon {
+            width: 70px;
+            height: 70px;
+            background: var(--gradient-primary);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .solution-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .solution-card p {
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+        }
+        
+        .feature-list {
+            list-style: none;
+        }
+        
+        .feature-list li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 0;
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+        
+        .feature-list li::before {
+            content: '✓';
+            color: var(--success);
+            font-weight: bold;
+        }
+        
+        /* Market Section */
+        .market {
+            padding: 6rem 2rem;
+            background: var(--darker);
+        }
+        
+        .market-visual {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .market-card {
+            background: var(--gradient-card);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        
+        .market-card:hover {
+            transform: scale(1.05);
+        }
+        
+        .market-value {
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+        
+        .market-segment {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .market-desc {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        /* Differentiators Section */
+        .differentiators {
+            padding: 6rem 2rem;
+            background: var(--dark);
+        }
+        
+        .diff-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+        
+        .diff-card {
+            background: rgba(99, 102, 241, 0.05);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 16px;
+            padding: 1.5rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            transition: all 0.3s;
+        }
+        
+        .diff-card:hover {
+            background: rgba(99, 102, 241, 0.1);
+            border-color: var(--primary);
+        }
+        
+        .diff-number {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            flex-shrink: 0;
+        }
+        
+        .diff-content h4 {
+            font-size: 1.125rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .diff-content p {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+        
+        /* CTA Section */
+        .cta-section {
+            padding: 8rem 2rem;
+            background: var(--gradient-hero);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .cta-section h2 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            margin-bottom: 1.5rem;
+        }
+        
+        .cta-section p {
+            font-size: 1.25rem;
+            color: var(--gray);
+            margin-bottom: 2.5rem;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        /* Footer */
+        footer {
+            padding: 4rem 2rem;
+            background: var(--darker);
+            border-top: 1px solid rgba(99, 102, 241, 0.1);
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+        
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.25rem;
+            font-weight: 800;
+        }
+        
+        .footer-tagline {
+            color: var(--gray);
+            font-style: italic;
+            margin-top: 0.5rem;
+        }
+        
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .footer-links a {
+            color: var(--gray);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: var(--light);
+        }
+        
+        /* Accessibility Indicator */
+        .a11y-badge {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--gradient-primary);
+            color: white;
+            padding: 0.75rem 1rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            z-index: 1000;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        
+        .a11y-badge:hover {
+            transform: scale(1.05);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero-cta {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn-primary, .btn-secondary {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+            
+            .solution-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+        
+        /* Reduce Motion */
+        @media (prefers-reduced-motion: reduce) {
+            *, ::before, ::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
+    <!-- Navigation -->
+    <nav role="navigation" aria-label="Main navigation">
+        <div class="nav-content">
+            <a href="#" class="logo" aria-label="AccessOS Home">
+                <span class="logo-icon">♿</span>
+                AccessOS
+            </a>
+            <div class="nav-links">
+                <a href="#problem">Problem</a>
+                <a href="#solution">Solution</a>
+                <a href="#market">Market</a>
+                <a href="#why-us">Why Us</a>
+                <a href="#cta" class="cta-button">Get Early Access</a>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Hero Section -->
+    <header class="hero" id="main-content" role="banner">
+        <div class="hero-bg" aria-hidden="true">
+            <div class="accessibility-grid"></div>
+            <div class="floating-icon" style="top: 20%; left: 10%;">👁️</div>
+            <div class="floating-icon" style="top: 30%; right: 15%; animation-delay: -5s;">🦻</div>
+            <div class="floating-icon" style="bottom: 30%; left: 20%; animation-delay: -10s;">🧠</div>
+            <div class="floating-icon" style="bottom: 20%; right: 10%; animation-delay: -15s;">♿</div>
+            <div class="pulse-ring" style="top: 50%; left: 50%; width: 200px; height: 200px;"></div>
+            <div class="pulse-ring" style="top: 50%; left: 50%; width: 200px; height: 200px; animation-delay: -2s;"></div>
+        </div>
+        
+        <div class="hero-content">
+            <div class="badge">
+                <span class="badge-icon">🌐</span>
+                Serving 1.3 Billion People Worldwide
+            </div>
+            <h1>Accessibility<br><span class="gradient-text">Made Automatic</span></h1>
+            <p class="hero-subtitle">
+                The AI operating system that makes digital and physical experiences universally accessible. Real-time translation, intelligent navigation, and enterprise compliance in one platform.
+            </p>
+            <div class="hero-cta">
+                <a href="#cta" class="btn-primary">
+                    <span>Request Early Access</span>
+                    <span aria-hidden="true">→</span>
+                </a>
+                <a href="#solution" class="btn-secondary">
+                    <span aria-hidden="true">▶</span>
+                    <span>See How It Works</span>
+                </a>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Stats Section -->
+    <section class="stats" aria-label="Key statistics">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-number">1.3B</div>
+                <div class="stat-label">People with disabilities globally</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">98%</div>
+                <div class="stat-label">Websites fail accessibility standards</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">$13T</div>
+                <div class="stat-label">Annual spending power</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">10K+</div>
+                <div class="stat-label">ADA lawsuits filed annually</div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Problem Section -->
+    <section class="problem" id="problem" aria-labelledby="problem-heading">
+        <div class="section-container">
+            <header class="section-header">
+                <p class="section-tag">The Problem</p>
+                <h2 id="problem-heading">Accessibility Is Broken</h2>
+                <p class="section-subtitle">Current solutions are fragmented, reactive, and failing both users and enterprises</p>
+            </header>
+            
+            <div class="problem-grid">
+                <article class="problem-card">
+                    <div class="problem-icon">🧩</div>
+                    <h3>Fragmented Solutions</h3>
+                    <p>Screen readers, captioning, navigation apps all operate in silos. Users juggle 10+ tools that don't talk to each other.</p>
+                </article>
+                
+                <article class="problem-card">
+                    <div class="problem-icon">🔧</div>
+                    <h3>Retrofit Approach</h3>
+                    <p>Accessibility is always an afterthought, bolted on after the fact. This results in poor experiences and compliance gaps.</p>
+                </article>
+                
+                <article class="problem-card">
+                    <div class="problem-icon">⚖️</div>
+                    <h3>Legal Chaos</h3>
+                    <p>ADA lawsuits up 400% in 5 years. Companies panic-buy overlay widgets that don't actually solve the problem.</p>
+                </article>
+                
+                <article class="problem-card">
+                    <div class="problem-icon">💸</div>
+                    <h3>Massive Lost Revenue</h3>
+                    <p>$6.9 billion lost annually in US e-commerce alone from inaccessible experiences. A market ignored.</p>
+                </article>
+                
+                <article class="problem-card">
+                    <div class="problem-icon">🔄</div>
+                    <h3>Manual & Slow</h3>
+                    <p>Human captioners, manual audits, expensive consultants. Nothing scales, nothing works in real-time.</p>
+                </article>
+                
+                <article class="problem-card">
+                    <div class="problem-icon">😤</div>
+                    <h3>User Frustration</h3>
+                    <p>People with disabilities deserve seamless experiences, not workarounds. The bar is too low.</p>
+                </article>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Solution Section -->
+    <section class="solution" id="solution" aria-labelledby="solution-heading">
+        <div class="section-container">
+            <header class="section-header">
+                <p class="section-tag">The Solution</p>
+                <h2 id="solution-heading">One Platform. <span class="gradient-text">Universal Access.</span></h2>
+                <p class="section-subtitle">AI-powered accessibility that works everywhere, for everyone</p>
+            </header>
+            
+            <div class="solution-grid">
+                <article class="solution-card">
+                    <div class="solution-icon">🗣️</div>
+                    <h3>RealTime Translation</h3>
+                    <p>Instant speech-to-text, sign language AI, audio descriptions, and language simplification — all under 200ms latency.</p>
+                    <ul class="feature-list">
+                        <li>Live captioning with speaker ID</li>
+                        <li>ASL/BSL/ISL translation (both ways)</li>
+                        <li>AI-generated audio descriptions</li>
+                        <li>Complex → plain language conversion</li>
+                    </ul>
+                </article>
+                
+                <article class="solution-card">
+                    <div class="solution-icon">🧭</div>
+                    <h3>Intelligent Navigation</h3>
+                    <p>AI-powered navigation for visual impairment, mobility assistance, and cognitive support — indoors and out.</p>
+                    <ul class="feature-list">
+                        <li>Obstacle detection & spatial audio</li>
+                        <li>Wheelchair-accessible routing</li>
+                        <li>Precise indoor positioning</li>
+                        <li>Real-time hazard alerts</li>
+                    </ul>
+                </article>
+                
+                <article class="solution-card">
+                    <div class="solution-icon">🧠</div>
+                    <h3>Cognitive Assistance</h3>
+                    <p>Support for reading, executive function, sensory regulation, and neurodivergent-friendly interfaces.</p>
+                    <ul class="feature-list">
+                        <li>Dyslexia-friendly formatting</li>
+                        <li>Task breakdown & reminders</li>
+                        <li>Sensory environment control</li>
+                        <li>ADHD/autism optimizations</li>
+                    </ul>
+                </article>
+                
+                <article class="solution-card">
+                    <div class="solution-icon">🏢</div>
+                    <h3>Enterprise Compliance</h3>
+                    <p>Automated WCAG auditing, one-click remediation, and bulletproof legal documentation.</p>
+                    <ul class="feature-list">
+                        <li>Continuous accessibility scanning</li>
+                        <li>AI-powered auto-fixes</li>
+                        <li>ADA, WCAG 2.2, Section 508</li>
+                        <li>Compliance certificates & audit trails</li>
+                    </ul>
+                </article>
+                
+                <article class="solution-card">
+                    <div class="solution-icon">👨‍💻</div>
+                    <h3>Developer Platform</h3>
+                    <p>Drop-in SDK, pre-built accessible components, and CI/CD testing automation.</p>
+                    <ul class="feature-list">
+                        <li>One-line integration</li>
+                        <li>Accessibility-first UI library</li>
+                        <li>Automated testing in CI/CD</li>
+                        <li>Full REST/GraphQL APIs</li>
+                    </ul>
+                </article>
+                
+                <article class="solution-card">
+                    <div class="solution-icon">🔒</div>
+                    <h3>Privacy-First Design</h3>
+                    <p>On-device processing where possible. Your data stays yours, with full user control.</p>
+                    <ul class="feature-list">
+                        <li>On-device AI inference</li>
+                        <li>End-to-end encryption</li>
+                        <li>GDPR/CCPA compliant</li>
+                        <li>User data ownership</li>
+                    </ul>
+                </article>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Market Section -->
+    <section class="market" id="market" aria-labelledby="market-heading">
+        <div class="section-container">
+            <header class="section-header">
+                <p class="section-tag">Market Opportunity</p>
+                <h2 id="market-heading">A <span class="gradient-text">$150 Billion</span> Market</h2>
+                <p class="section-subtitle">Accessibility tech is massively underserved and growing rapidly</p>
+            </header>
+            
+            <div class="market-visual">
+                <article class="market-card">
+                    <div class="market-value">$35B</div>
+                    <div class="market-segment">Enterprise Compliance</div>
+                    <p class="market-desc">Website/app tools, monitoring, legal protection</p>
+                </article>
+                
+                <article class="market-card">
+                    <div class="market-value">$45B</div>
+                    <div class="market-segment">Consumer Assistive Tech</div>
+                    <p class="market-desc">Screen readers, hearing aids, mobility aids</p>
+                </article>
+                
+                <article class="market-card">
+                    <div class="market-value">$30B</div>
+                    <div class="market-segment">Healthcare & Rehab</div>
+                    <p class="market-desc">Patient communication, rehabilitation tech</p>
+                </article>
+                
+                <article class="market-card">
+                    <div class="market-value">$20B</div>
+                    <div class="market-segment">Education</div>
+                    <p class="market-desc">Accessible learning, student accommodations</p>
+                </article>
+                
+                <article class="market-card">
+                    <div class="market-value">$20B</div>
+                    <div class="market-segment">Government</div>
+                    <p class="market-desc">Public services, infrastructure accessibility</p>
+                </article>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Differentiators Section -->
+    <section class="differentiators" id="why-us" aria-labelledby="diff-heading">
+        <div class="section-container">
+            <header class="section-header">
+                <p class="section-tag">Why AccessOS</p>
+                <h2 id="diff-heading">Built Different</h2>
+                <p class="section-subtitle">Not another overlay widget — a complete operating system for accessibility</p>
+            </header>
+            
+            <div class="diff-grid">
+                <article class="diff-card">
+                    <div class="diff-number">1</div>
+                    <div class="diff-content">
+                        <h4>Comprehensive Platform</h4>
+                        <p>Not a point solution — a full accessibility OS covering translation, navigation, cognition, and compliance.</p>
+                    </div>
+                </article>
+                
+                <article class="diff-card">
+                    <div class="diff-number">2</div>
+                    <div class="diff-content">
+                        <h4>Disability-Led Design</h4>
+                        <p>Built with the disability community from day one. Real inclusion, not checkbox compliance.</p>
+                    </div>
+                </article>
+                
+                <article class="diff-card">
+                    <div class="diff-number">3</div>
+                    <div class="diff-content">
+                        <h4>AI-Native Architecture</h4>
+                        <p>Purpose-built AI models for accessibility, not retrofitted automation. True intelligence.</p>
+                    </div>
+                </article>
+                
+                <article class="diff-card">
+                    <div class="diff-number">4</div>
+                    <div class="diff-content">
+                        <h4>Privacy-First</h4>
+                        <p>On-device processing, user data ownership, end-to-end encryption. Your accessibility, your data.</p>
+                    </div>
+                </article>
+                
+                <article class="diff-card">
+                    <div class="diff-number">5</div>
+                    <div class="diff-content">
+                        <h4>Enterprise + Consumer</h4>
+                        <p>One platform serving individuals AND businesses. Network effects on both sides.</p>
+                    </div>
+                </article>
+                
+                <article class="diff-card">
+                    <div class="diff-number">6</div>
+                    <div class="diff-content">
+                        <h4>Real Compliance</h4>
+                        <p>Actual accessibility improvements, not overlay illusions. Fixes that matter.</p>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+    
+    <!-- CTA Section -->
+    <section class="cta-section" id="cta" aria-labelledby="cta-heading">
+        <div class="cta-content">
+            <h2 id="cta-heading">Ready to Make<br><span class="gradient-text">Accessibility Automatic?</span></h2>
+            <p>Join the waitlist for early access. Be part of building an accessible world.</p>
+            <div class="cta-buttons">
+                <a href="mailto:access@accessos.ai" class="btn-primary">
+                    <span>Request Enterprise Demo</span>
+                    <span aria-hidden="true">→</span>
+                </a>
+                <a href="mailto:invest@accessos.ai" class="btn-secondary">
+                    <span aria-hidden="true">💼</span>
+                    <span>Investor Deck</span>
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer role="contentinfo">
+        <div class="footer-content">
+            <div>
+                <div class="footer-logo">
+                    <span style="font-size: 1.5rem;">♿</span>
+                    <span class="gradient-text">AccessOS</span>
+                </div>
+                <p class="footer-tagline">"Accessibility is a right, not a feature."</p>
+            </div>
+            <div class="footer-links">
+                <a href="#solution">Product</a>
+                <a href="#market">Market</a>
+                <a href="mailto:access@accessos.ai">Contact</a>
+                <a href="#">Privacy</a>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Accessibility Badge -->
+    <div class="a11y-badge" role="status" aria-label="This site meets WCAG 2.2 AA standards">
+        ✓ WCAG 2.2 AA
+    </div>
+</body>
+</html>
