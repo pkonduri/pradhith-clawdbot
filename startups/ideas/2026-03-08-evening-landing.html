@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MicrobiomeOS — The AI Operating System for Gut Health Intelligence</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #10B981;
+            --primary-dark: #059669;
+            --primary-light: #34D399;
+            --accent: #8B5CF6;
+            --accent-light: #A78BFA;
+            --dark: #0F172A;
+            --darker: #020617;
+            --gray: #64748B;
+            --light: #F1F5F9;
+            --white: #FFFFFF;
+            --gradient-1: linear-gradient(135deg, #10B981 0%, #8B5CF6 50%, #EC4899 100%);
+            --gradient-2: linear-gradient(180deg, #0F172A 0%, #1E293B 100%);
+            --gradient-glow: radial-gradient(ellipse at center, rgba(16, 185, 129, 0.15) 0%, transparent 70%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--darker);
+            color: var(--white);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(16, 185, 129, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(139, 92, 246, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(236, 72, 153, 0.05) 0%, transparent 50%);
+            animation: bgPulse 20s ease-in-out infinite;
+        }
+
+        @keyframes bgPulse {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(-5%, 5%) scale(1.1); }
+            66% { transform: translate(5%, -5%) scale(0.95); }
+        }
+
+        /* Floating Microbe Particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: float 15s infinite ease-in-out;
+        }
+
+        .particle:nth-child(1) { width: 8px; height: 8px; background: var(--primary); top: 10%; left: 10%; animation-delay: 0s; }
+        .particle:nth-child(2) { width: 12px; height: 12px; background: var(--accent); top: 20%; left: 80%; animation-delay: 2s; }
+        .particle:nth-child(3) { width: 6px; height: 6px; background: var(--primary-light); top: 60%; left: 15%; animation-delay: 4s; }
+        .particle:nth-child(4) { width: 10px; height: 10px; background: #EC4899; top: 70%; left: 70%; animation-delay: 6s; }
+        .particle:nth-child(5) { width: 8px; height: 8px; background: var(--accent-light); top: 40%; left: 50%; animation-delay: 8s; }
+        .particle:nth-child(6) { width: 14px; height: 14px; background: var(--primary); top: 85%; left: 30%; animation-delay: 10s; }
+        .particle:nth-child(7) { width: 6px; height: 6px; background: var(--accent); top: 30%; left: 90%; animation-delay: 12s; }
+        .particle:nth-child(8) { width: 10px; height: 10px; background: var(--primary-light); top: 50%; left: 5%; animation-delay: 14s; }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(30px, -30px) rotate(90deg); }
+            50% { transform: translate(-20px, 20px) rotate(180deg); }
+            75% { transform: translate(20px, 30px) rotate(270deg); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1.5rem 2rem;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--white);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--gray);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--white);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.875rem 1.75rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--gradient-1);
+            color: var(--white);
+            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--white);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 2rem 4rem;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 1000px;
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 100px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--primary-light);
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .hero-badge span {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .hero h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(3rem, 8vw, 5.5rem);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.8s ease 0.1s both;
+        }
+
+        .hero h1 .gradient {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: clamp(1.125rem, 2vw, 1.5rem);
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto 2.5rem;
+            animation: fadeInUp 0.8s ease 0.2s both;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.8s ease 0.3s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-visual {
+            margin-top: 4rem;
+            position: relative;
+            animation: fadeInUp 0.8s ease 0.4s both;
+        }
+
+        .hero-image {
+            width: 100%;
+            max-width: 900px;
+            border-radius: 24px;
+            background: var(--gradient-2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            box-shadow: 0 50px 100px rgba(0, 0, 0, 0.5);
+        }
+
+        /* DNA Helix Animation */
+        .dna-visual {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 300px;
+            position: relative;
+        }
+
+        .dna-strand {
+            position: relative;
+            width: 200px;
+            height: 300px;
+        }
+
+        .dna-dot {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            animation: dnaRotate 4s infinite linear;
+        }
+
+        @keyframes dnaRotate {
+            0% { transform: rotateY(0deg) translateX(80px); }
+            100% { transform: rotateY(360deg) translateX(80px); }
+        }
+
+        /* Stats Section */
+        .stats {
+            padding: 4rem 2rem;
+            background: rgba(15, 23, 42, 0.5);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .stats-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 3rem;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        /* Problem Section */
+        .problem {
+            padding: 8rem 2rem;
+        }
+
+        .section-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-tag {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 100px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--accent-light);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            font-size: 1.25rem;
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .problem-card {
+            background: var(--gradient-2);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(239, 68, 68, 0.3);
+            box-shadow: 0 20px 60px rgba(239, 68, 68, 0.1);
+        }
+
+        .problem-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .problem-card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .problem-card p {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        /* Solution Section */
+        .solution {
+            padding: 8rem 2rem;
+            background: var(--gradient-2);
+        }
+
+        .solution-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .solution-content h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        .solution-content p {
+            color: var(--gray);
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+
+        .solution-features {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .solution-feature {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .feature-check {
+            width: 28px;
+            height: 28px;
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            color: var(--primary);
+        }
+
+        .feature-text h4 {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .feature-text p {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        .solution-visual {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 24px;
+            padding: 3rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .microbiome-display {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 1rem;
+        }
+
+        .microbe {
+            aspect-ratio: 1;
+            border-radius: 50%;
+            animation: microbeFloat 3s infinite ease-in-out;
+        }
+
+        .microbe:nth-child(1) { background: var(--primary); animation-delay: 0s; }
+        .microbe:nth-child(2) { background: var(--accent); animation-delay: 0.3s; }
+        .microbe:nth-child(3) { background: #EC4899; animation-delay: 0.6s; }
+        .microbe:nth-child(4) { background: var(--primary-light); animation-delay: 0.9s; }
+        .microbe:nth-child(5) { background: var(--accent-light); animation-delay: 1.2s; }
+        .microbe:nth-child(6) { background: #F59E0B; animation-delay: 1.5s; }
+        .microbe:nth-child(7) { background: var(--primary-dark); animation-delay: 1.8s; }
+        .microbe:nth-child(8) { background: #6366F1; animation-delay: 2.1s; }
+        .microbe:nth-child(9) { background: var(--primary); animation-delay: 2.4s; }
+        .microbe:nth-child(10) { background: #F43F5E; animation-delay: 0.15s; }
+        .microbe:nth-child(11) { background: var(--accent); animation-delay: 0.45s; }
+        .microbe:nth-child(12) { background: var(--primary-light); animation-delay: 0.75s; }
+
+        @keyframes microbeFloat {
+            0%, 100% { transform: scale(1) translateY(0); opacity: 0.8; }
+            50% { transform: scale(1.1) translateY(-5px); opacity: 1; }
+        }
+
+        /* Features Section */
+        .features {
+            padding: 8rem 2rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: var(--gradient-2);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-1);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(16, 185, 129, 0.3);
+            box-shadow: 0 20px 60px rgba(16, 185, 129, 0.1);
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-1);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card p {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        /* How It Works */
+        .how-it-works {
+            padding: 8rem 2rem;
+            background: var(--gradient-2);
+        }
+
+        .steps {
+            display: flex;
+            gap: 2rem;
+            position: relative;
+        }
+
+        .steps::before {
+            content: '';
+            position: absolute;
+            top: 50px;
+            left: 60px;
+            right: 60px;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--accent), #EC4899);
+            z-index: 0;
+        }
+
+        .step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0 auto 1.5rem;
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+        }
+
+        .step h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .step p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* Market Section */
+        .market {
+            padding: 8rem 2rem;
+        }
+
+        .market-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .market-chart {
+            background: var(--gradient-2);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            padding: 3rem;
+        }
+
+        .chart-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            color: var(--gray);
+        }
+
+        .chart-bars {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .chart-bar {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .bar-label {
+            width: 120px;
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .bar-track {
+            flex: 1;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            height: 100%;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 1rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            animation: barGrow 1.5s ease-out;
+        }
+
+        @keyframes barGrow {
+            from { width: 0; }
+        }
+
+        .bar-fill.green { background: var(--gradient-1); }
+        .bar-fill.purple { background: linear-gradient(90deg, var(--accent), #EC4899); }
+        .bar-fill.blue { background: linear-gradient(90deg, #3B82F6, #8B5CF6); }
+        .bar-fill.orange { background: linear-gradient(90deg, #F59E0B, #EF4444); }
+
+        .market-content h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        .market-content p {
+            color: var(--gray);
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .market-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .market-stat {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 1.5rem;
+        }
+
+        .market-stat-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .market-stat-label {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 8rem 2rem;
+            background: var(--gradient-2);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .cta h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta p {
+            font-size: 1.25rem;
+            color: var(--gray);
+            margin-bottom: 2.5rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--gray);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--white);
+        }
+
+        .footer-copy {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .stats-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .problem-grid,
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .solution-grid,
+            .market-grid {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .steps {
+                flex-direction: column;
+            }
+
+            .steps::before {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .stats-container,
+            .problem-grid,
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .market-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .footer-container {
+                flex-direction: column;
+                gap: 1.5rem;
+                text-align: center;
+            }
+
+            .footer-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    <div class="particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+
+    <nav>
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <div class="logo-icon">🧬</div>
+                MicrobiomeOS
+            </a>
+            <div class="nav-links">
+                <a href="#problem">Problem</a>
+                <a href="#solution">Solution</a>
+                <a href="#features">Features</a>
+                <a href="#market">Market</a>
+                <a href="#cta" class="btn btn-primary">Get Early Access</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span>🧬</span> The Future of Gut Health Intelligence
+            </div>
+            <h1>
+                Your Gut Has<br>
+                <span class="gradient">100 Trillion Stories</span><br>
+                We Help You Read Them
+            </h1>
+            <p>
+                MicrobiomeOS is the AI operating system that transforms your gut health from a black box into actionable intelligence. Test. Understand. Optimize. Repeat.
+            </p>
+            <div class="hero-buttons">
+                <a href="#cta" class="btn btn-primary">
+                    Start Your Journey →
+                </a>
+                <a href="#solution" class="btn btn-secondary">
+                    How It Works
+                </a>
+            </div>
+            <div class="hero-visual">
+                <div class="hero-image">
+                    <div class="dna-visual">
+                        <svg viewBox="0 0 400 250" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Animated DNA/Microbiome Visualization -->
+                            <defs>
+                                <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#10B981;stop-opacity:1" />
+                                    <stop offset="50%" style="stop-color:#8B5CF6;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#EC4899;stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
+                            <!-- Central DNA Helix -->
+                            <path d="M50 125 Q100 50 150 125 T250 125 T350 125" stroke="url(#grad1)" stroke-width="3" fill="none" opacity="0.5">
+                                <animate attributeName="d" 
+                                    values="M50 125 Q100 50 150 125 T250 125 T350 125;
+                                            M50 125 Q100 200 150 125 T250 125 T350 125;
+                                            M50 125 Q100 50 150 125 T250 125 T350 125"
+                                    dur="4s" repeatCount="indefinite"/>
+                            </path>
+                            <path d="M50 125 Q100 200 150 125 T250 125 T350 125" stroke="url(#grad1)" stroke-width="3" fill="none" opacity="0.5">
+                                <animate attributeName="d" 
+                                    values="M50 125 Q100 200 150 125 T250 125 T350 125;
+                                            M50 125 Q100 50 150 125 T250 125 T350 125;
+                                            M50 125 Q100 200 150 125 T250 125 T350 125"
+                                    dur="4s" repeatCount="indefinite"/>
+                            </path>
+                            <!-- Floating Microbe Circles -->
+                            <circle cx="80" cy="100" r="8" fill="#10B981" opacity="0.8">
+                                <animate attributeName="cy" values="100;80;100" dur="3s" repeatCount="indefinite"/>
+                            </circle>
+                            <circle cx="150" cy="150" r="12" fill="#8B5CF6" opacity="0.8">
+                                <animate attributeName="cy" values="150;170;150" dur="2.5s" repeatCount="indefinite"/>
+                            </circle>
+                            <circle cx="220" cy="90" r="10" fill="#EC4899" opacity="0.8">
+                                <animate attributeName="cy" values="90;110;90" dur="3.5s" repeatCount="indefinite"/>
+                            </circle>
+                            <circle cx="290" cy="140" r="9" fill="#34D399" opacity="0.8">
+                                <animate attributeName="cy" values="140;120;140" dur="2.8s" repeatCount="indefinite"/>
+                            </circle>
+                            <circle cx="320" cy="100" r="7" fill="#A78BFA" opacity="0.8">
+                                <animate attributeName="cy" values="100;120;100" dur="3.2s" repeatCount="indefinite"/>
+                            </circle>
+                            <!-- Data Points -->
+                            <circle cx="100" cy="125" r="4" fill="#fff" opacity="0.6">
+                                <animate attributeName="opacity" values="0.6;1;0.6" dur="2s" repeatCount="indefinite"/>
+                            </circle>
+                            <circle cx="200" cy="125" r="4" fill="#fff" opacity="0.6">
+                                <animate attributeName="opacity" values="0.6;1;0.6" dur="2s" repeatCount="indefinite" begin="0.5s"/>
+                            </circle>
+                            <circle cx="300" cy="125" r="4" fill="#fff" opacity="0.6">
+                                <animate attributeName="opacity" values="0.6;1;0.6" dur="2s" repeatCount="indefinite" begin="1s"/>
+                            </circle>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="stats">
+        <div class="stats-container">
+            <div class="stat">
+                <div class="stat-value">100T</div>
+                <div class="stat-label">Microorganisms in your gut</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">70%</div>
+                <div class="stat-label">Of immune system in the gut</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">95%</div>
+                <div class="stat-label">Of serotonin produced there</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">$100B+</div>
+                <div class="stat-label">Addressable market</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="problem" id="problem">
+        <div class="section-container">
+            <div class="section-header">
+                <div class="section-tag">The Problem</div>
+                <h2 class="section-title">Gut Health is a Black Box</h2>
+                <p class="section-subtitle">
+                    Your gut influences everything—yet we treat it like a mystery we can't solve.
+                </p>
+            </div>
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="problem-icon">🤷</div>
+                    <h3>Fragmented Testing</h3>
+                    <p>Dozens of gut test providers, inconsistent methods, and results that don't talk to each other. No longitudinal view of your microbiome health.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">📊</div>
+                    <h3>Data Without Insight</h3>
+                    <p>You get a PDF with species lists and percentages. Great. Now what? No actionable recommendations. No connection to how you actually feel.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">💊</div>
+                    <h3>Generic Interventions</h3>
+                    <p>Everyone recommends the same probiotics and fiber. But your microbiome is unique—generic advice produces generic results.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">❓</div>
+                    <h3>No Outcome Tracking</h3>
+                    <p>Spent $200 on supplements? Did they work? Nobody knows. There's no system connecting interventions to measurable outcomes.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">🧠</div>
+                    <h3>Gut-Brain Disconnect</h3>
+                    <p>Science proves the gut-brain axis is real—affecting mood, cognition, and mental health. But no platform connects these dots for you.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">🔮</div>
+                    <h3>No Predictive Power</h3>
+                    <p>Current testing tells you where you are, not where you're heading. No early warnings. No trend analysis. No prevention.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="solution" id="solution">
+        <div class="section-container">
+            <div class="solution-grid">
+                <div class="solution-content">
+                    <div class="section-tag">The Solution</div>
+                    <h2>The Operating System Your Gut Deserves</h2>
+                    <p>
+                        MicrobiomeOS combines advanced testing, AI-powered insights, personalized interventions, and outcome tracking into one intelligent platform.
+                    </p>
+                    <div class="solution-features">
+                        <div class="solution-feature">
+                            <div class="feature-check">✓</div>
+                            <div class="feature-text">
+                                <h4>Full Metagenomic Sequencing</h4>
+                                <p>Not 16S shortcuts—complete picture of what's living in your gut</p>
+                            </div>
+                        </div>
+                        <div class="solution-feature">
+                            <div class="feature-check">✓</div>
+                            <div class="feature-text">
+                                <h4>MicrobiomeGPT™ Intelligence</h4>
+                                <p>Ask questions in plain English, get personalized answers backed by your data</p>
+                            </div>
+                        </div>
+                        <div class="solution-feature">
+                            <div class="feature-check">✓</div>
+                            <div class="feature-text">
+                                <h4>Precision Intervention Protocols</h4>
+                                <p>Strain-specific probiotics, targeted prebiotics, dietary changes that work</p>
+                            </div>
+                        </div>
+                        <div class="solution-feature">
+                            <div class="feature-check">✓</div>
+                            <div class="feature-text">
+                                <h4>Longitudinal Outcome Tracking</h4>
+                                <p>See what's working, what's not, and optimize over time</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="solution-visual">
+                    <div class="microbiome-display">
+                        <div class="microbe"></div>
+                        <div class="microbe"></div>
+                        <div class="microbe"></div>
+                        <div class="microbe"></div>
+                        <div class="microbe"></div>
+                        <div class="microbe"></div>
+                        <div class="microbe"></div>
+                        <div class="microbe"></div>
+                        <div class="microbe"></div>
+                        <div class="microbe"></div>
+                        <div class="microbe"></div>
+                        <div class="microbe"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features" id="features">
+        <div class="section-container">
+            <div class="section-header">
+                <div class="section-tag">Platform Features</div>
+                <h2 class="section-title">Everything You Need to Optimize</h2>
+                <p class="section-subtitle">
+                    A complete ecosystem for understanding and improving your gut health.
+                </p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🧪</div>
+                    <h3>At-Home Testing Kit</h3>
+                    <p>Simple collection, lab-grade results. Shotgun metagenomic sequencing plus metabolomic overlay for the complete picture.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🤖</div>
+                    <h3>MicrobiomeGPT™</h3>
+                    <p>"Why am I bloated after pasta?" Get personalized answers based on YOUR microbiome, not generic internet advice.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💡</div>
+                    <h3>Smart Recommendations</h3>
+                    <p>Precision probiotic strains, prebiotic fibers, and dietary protocols tailored to your unique ecosystem.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📈</div>
+                    <h3>Progress Tracking</h3>
+                    <p>Quarterly testing shows what's changing. A/B test lifestyle changes and see real impact on your microbiome.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⌚</div>
+                    <h3>Health Integration</h3>
+                    <p>Connect Apple Health, Oura, Whoop, CGMs. See how sleep, stress, and glucose correlate with gut health.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>Privacy First</h3>
+                    <p>HIPAA compliant. You control your data. Granular sharing settings. Your microbiome stays yours.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="how-it-works">
+        <div class="section-container">
+            <div class="section-header">
+                <div class="section-tag">How It Works</div>
+                <h2 class="section-title">Four Steps to Gut Intelligence</h2>
+            </div>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Collect</h3>
+                    <p>Simple at-home sample collection. Takes 2 minutes. Ship it back free.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Sequence</h3>
+                    <p>Full metagenomic sequencing in our CLIA-certified lab. Results in 2 weeks.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Understand</h3>
+                    <p>MicrobiomeGPT transforms raw data into actionable insights you can actually use.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>Optimize</h3>
+                    <p>Follow personalized protocols. Track progress. Improve over time.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="market" id="market">
+        <div class="section-container">
+            <div class="market-grid">
+                <div class="market-chart">
+                    <div class="chart-title">TAM by Segment (2026)</div>
+                    <div class="chart-bars">
+                        <div class="chart-bar">
+                            <div class="bar-label">Enterprise Wellness</div>
+                            <div class="bar-track">
+                                <div class="bar-fill green" style="width: 100%;">$70B</div>
+                            </div>
+                        </div>
+                        <div class="chart-bar">
+                            <div class="bar-label">Pharma Data</div>
+                            <div class="bar-track">
+                                <div class="bar-fill purple" style="width: 29%;">$20B</div>
+                            </div>
+                        </div>
+                        <div class="chart-bar">
+                            <div class="bar-label">Personalized Nutrition</div>
+                            <div class="bar-track">
+                                <div class="bar-fill blue" style="width: 23%;">$16B</div>
+                            </div>
+                        </div>
+                        <div class="chart-bar">
+                            <div class="bar-label">Consumer Testing</div>
+                            <div class="bar-track">
+                                <div class="bar-fill orange" style="width: 11%;">$8B</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="market-content">
+                    <div class="section-tag">Market Opportunity</div>
+                    <h2>A $100B+ Opportunity</h2>
+                    <p>
+                        The microbiome market sits at the intersection of digital health, personalized nutrition, longevity, and enterprise wellness—all explosive growth categories.
+                    </p>
+                    <p>
+                        With GLP-1 medications revealing that weight loss ≠ metabolic health, millions are searching for the missing piece. The gut microbiome is that piece.
+                    </p>
+                    <div class="market-stats">
+                        <div class="market-stat">
+                            <div class="market-stat-value">5x</div>
+                            <div class="market-stat-label">Microbiome testing growth by 2030</div>
+                        </div>
+                        <div class="market-stat">
+                            <div class="market-stat-value">$350M</div>
+                            <div class="market-stat-label">Year 5 revenue target</div>
+                        </div>
+                        <div class="market-stat">
+                            <div class="market-stat-value">75%+</div>
+                            <div class="market-stat-label">Gross margins at scale</div>
+                        </div>
+                        <div class="market-stat">
+                            <div class="market-stat-value">7.4x</div>
+                            <div class="market-stat-label">LTV to CAC ratio</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta" id="cta">
+        <div class="cta-content">
+            <h2>Ready to Decode Your Gut?</h2>
+            <p>
+                Join the waitlist for early access to MicrobiomeOS. Be among the first to transform your gut health from mystery to mastery.
+            </p>
+            <div class="cta-buttons">
+                <a href="mailto:founders@microbiomeos.com" class="btn btn-primary">
+                    Get Early Access →
+                </a>
+                <a href="mailto:founders@microbiomeos.com?subject=Investor%20Inquiry" class="btn btn-secondary">
+                    Investor Inquiries
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-container">
+            <a href="#" class="logo">
+                <div class="logo-icon">🧬</div>
+                MicrobiomeOS
+            </a>
+            <div class="footer-links">
+                <a href="#problem">Problem</a>
+                <a href="#solution">Solution</a>
+                <a href="#features">Features</a>
+                <a href="#market">Market</a>
+                <a href="mailto:founders@microbiomeos.com">Contact</a>
+            </div>
+            <div class="footer-copy">
+                © 2026 MicrobiomeOS. The future of gut health.
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
