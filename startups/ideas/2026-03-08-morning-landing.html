@@ -1,0 +1,1374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MoveOS — The AI Operating System for Relocation Intelligence</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366F1;
+            --primary-dark: #4F46E5;
+            --primary-light: #818CF8;
+            --accent: #F59E0B;
+            --accent-light: #FBBF24;
+            --teal: #14B8A6;
+            --rose: #F43F5E;
+            --dark: #0F172A;
+            --darker: #020617;
+            --gray: #64748B;
+            --light: #F1F5F9;
+            --white: #FFFFFF;
+            --gradient-1: linear-gradient(135deg, #6366F1 0%, #14B8A6 50%, #F59E0B 100%);
+            --gradient-2: linear-gradient(135deg, #F43F5E 0%, #6366F1 100%);
+            --gradient-hero: linear-gradient(180deg, rgba(15, 23, 42, 0.95) 0%, rgba(2, 6, 23, 1) 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--darker);
+            color: var(--white);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated Map Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle at 30% 20%, rgba(99, 102, 241, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 70% 60%, rgba(20, 184, 166, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 50% 80%, rgba(245, 158, 11, 0.06) 0%, transparent 40%);
+            animation: mapPulse 25s ease-in-out infinite;
+        }
+
+        @keyframes mapPulse {
+            0%, 100% { transform: translate(0, 0) scale(1); opacity: 1; }
+            33% { transform: translate(-3%, 3%) scale(1.05); opacity: 0.8; }
+            66% { transform: translate(3%, -3%) scale(0.98); opacity: 0.9; }
+        }
+
+        /* Floating Location Pins */
+        .location-pins {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .pin {
+            position: absolute;
+            font-size: 1.5rem;
+            opacity: 0.15;
+            animation: pinFloat 20s infinite ease-in-out;
+        }
+
+        .pin:nth-child(1) { top: 15%; left: 10%; animation-delay: 0s; }
+        .pin:nth-child(2) { top: 25%; left: 85%; animation-delay: 3s; }
+        .pin:nth-child(3) { top: 55%; left: 8%; animation-delay: 6s; }
+        .pin:nth-child(4) { top: 75%; left: 75%; animation-delay: 9s; }
+        .pin:nth-child(5) { top: 40%; left: 45%; animation-delay: 12s; }
+        .pin:nth-child(6) { top: 85%; left: 25%; animation-delay: 15s; }
+        .pin:nth-child(7) { top: 10%; left: 65%; animation-delay: 18s; }
+        .pin:nth-child(8) { top: 65%; left: 90%; animation-delay: 21s; }
+
+        @keyframes pinFloat {
+            0%, 100% { transform: translateY(0) scale(1); opacity: 0.15; }
+            25% { transform: translateY(-20px) scale(1.1); opacity: 0.25; }
+            50% { transform: translateY(10px) scale(0.95); opacity: 0.1; }
+            75% { transform: translateY(-10px) scale(1.05); opacity: 0.2; }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1.5rem 2rem;
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--white);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 44px;
+            height: 44px;
+            background: var(--gradient-1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--gray);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--white);
+        }
+
+        .nav-cta {
+            background: var(--gradient-1);
+            color: var(--white) !important;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(99, 102, 241, 0.3);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 2rem 4rem;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 1000px;
+            text-align: center;
+            z-index: 1;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            color: var(--primary-light);
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .hero-badge::before {
+            content: '📍';
+        }
+
+        .hero h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(3rem, 8vw, 5.5rem);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.8s ease-out 0.1s both;
+        }
+
+        .hero h1 .gradient-text {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.35rem;
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto 3rem;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.8s ease-out 0.3s both;
+        }
+
+        .btn-primary {
+            background: var(--gradient-1);
+            color: var(--white);
+            padding: 1rem 2.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 60px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--white);
+            padding: 1rem 2.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 4rem;
+            margin-top: 5rem;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.8s ease-out 0.4s both;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-top: 0.25rem;
+        }
+
+        /* Pain Section */
+        .pain-section {
+            padding: 8rem 2rem;
+            background: linear-gradient(180deg, var(--darker) 0%, var(--dark) 100%);
+        }
+
+        .pain-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-header h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2rem, 5vw, 3rem);
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            color: var(--gray);
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .pain-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .pain-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .pain-card:hover {
+            background: rgba(244, 63, 94, 0.05);
+            border-color: rgba(244, 63, 94, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .pain-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .pain-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+            color: var(--rose);
+        }
+
+        .pain-card p {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        /* Solution Section */
+        .solution-section {
+            padding: 8rem 2rem;
+            position: relative;
+        }
+
+        .solution-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .solution-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .solution-card {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(20, 184, 166, 0.05) 100%);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 24px;
+            padding: 2.5rem;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .solution-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient-1);
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .solution-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 30px 80px rgba(99, 102, 241, 0.15);
+        }
+
+        .solution-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .solution-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-1);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .solution-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .solution-card p {
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+
+        .solution-features {
+            list-style: none;
+        }
+
+        .solution-features li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .solution-features li::before {
+            content: '✓';
+            color: var(--teal);
+            font-weight: 700;
+        }
+
+        /* Journey Section */
+        .journey-section {
+            padding: 8rem 2rem;
+            background: linear-gradient(180deg, var(--darker) 0%, var(--dark) 50%, var(--darker) 100%);
+        }
+
+        .journey-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .journey-timeline {
+            position: relative;
+        }
+
+        .journey-timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, var(--primary), var(--teal), var(--accent));
+            transform: translateX(-50%);
+        }
+
+        .journey-step {
+            display: flex;
+            align-items: center;
+            margin-bottom: 4rem;
+            position: relative;
+        }
+
+        .journey-step:nth-child(odd) {
+            flex-direction: row;
+        }
+
+        .journey-step:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .journey-content {
+            width: 45%;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .journey-step:nth-child(odd) .journey-content {
+            text-align: right;
+            margin-right: 5%;
+        }
+
+        .journey-step:nth-child(even) .journey-content {
+            text-align: left;
+            margin-left: 5%;
+        }
+
+        .journey-icon {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 60px;
+            background: var(--dark);
+            border: 3px solid var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            z-index: 1;
+        }
+
+        .journey-content h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.75rem;
+            color: var(--primary-light);
+        }
+
+        .journey-content p {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        /* Demo Section */
+        .demo-section {
+            padding: 8rem 2rem;
+            position: relative;
+        }
+
+        .demo-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .demo-box {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(20, 184, 166, 0.1) 100%);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 24px;
+            padding: 3rem;
+            text-align: center;
+        }
+
+        .demo-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .demo-subtitle {
+            color: var(--gray);
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        .demo-chat {
+            background: var(--darker);
+            border-radius: 16px;
+            padding: 2rem;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            text-align: left;
+        }
+
+        .chat-message {
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        .chat-user {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 1rem;
+        }
+
+        .chat-user .bubble {
+            background: var(--primary);
+            color: white;
+            padding: 1rem 1.25rem;
+            border-radius: 18px 18px 4px 18px;
+            max-width: 80%;
+        }
+
+        .chat-ai {
+            display: flex;
+            justify-content: flex-start;
+        }
+
+        .chat-ai .bubble {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1rem 1.25rem;
+            border-radius: 18px 18px 18px 4px;
+            max-width: 85%;
+        }
+
+        .chat-ai .bubble strong {
+            color: var(--teal);
+        }
+
+        /* Market Section */
+        .market-section {
+            padding: 8rem 2rem;
+            background: var(--dark);
+        }
+
+        .market-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .market-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .market-card {
+            text-align: center;
+            padding: 2.5rem;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .market-card:hover {
+            background: rgba(99, 102, 241, 0.05);
+            border-color: rgba(99, 102, 241, 0.2);
+        }
+
+        .market-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .market-label {
+            color: var(--white);
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+
+        .market-desc {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Pricing Section */
+        .pricing-section {
+            padding: 8rem 2rem;
+        }
+
+        .pricing-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .pricing-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            padding: 2.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .pricing-card.featured {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(20, 184, 166, 0.1) 100%);
+            border-color: var(--primary);
+            transform: scale(1.05);
+        }
+
+        .pricing-card.featured::before {
+            content: 'MOST POPULAR';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--gradient-1);
+            padding: 0.35rem 1rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .pricing-card.featured:hover {
+            transform: scale(1.05) translateY(-5px);
+        }
+
+        .pricing-name {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-desc {
+            color: var(--gray);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .pricing-price {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        .pricing-price span {
+            font-size: 1rem;
+            color: var(--gray);
+            font-weight: 400;
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-features li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 0;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.95rem;
+        }
+
+        .pricing-features li::before {
+            content: '✓';
+            color: var(--teal);
+            font-weight: 700;
+        }
+
+        .pricing-btn {
+            display: block;
+            width: 100%;
+            text-align: center;
+            padding: 1rem;
+            border-radius: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .pricing-btn.primary {
+            background: var(--gradient-1);
+            color: white;
+        }
+
+        .pricing-btn.secondary {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .pricing-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 8rem 2rem;
+            background: linear-gradient(135deg, var(--dark) 0%, var(--darker) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.2) 0%, transparent 70%);
+            transform: translate(-50%, -50%);
+            animation: ctaPulse 8s ease-in-out infinite;
+        }
+
+        @keyframes ctaPulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.3; }
+        }
+
+        .cta-container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-container h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-container p {
+            color: var(--gray);
+            font-size: 1.2rem;
+            margin-bottom: 3rem;
+        }
+
+        .cta-form {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .cta-form input {
+            flex: 1;
+            min-width: 250px;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            font-size: 1rem;
+        }
+
+        .cta-form input::placeholder {
+            color: var(--gray);
+        }
+
+        .cta-form input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 2rem 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--white);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--gray);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--white);
+        }
+
+        .footer-copy {
+            width: 100%;
+            text-align: center;
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .stats-bar {
+                gap: 2rem;
+            }
+
+            .journey-timeline::before {
+                left: 20px;
+            }
+
+            .journey-step {
+                flex-direction: column !important;
+            }
+
+            .journey-content {
+                width: 100%;
+                text-align: left !important;
+                margin: 0 0 0 50px !important;
+            }
+
+            .journey-icon {
+                left: 20px;
+                transform: none;
+            }
+
+            .pricing-card.featured {
+                transform: none;
+            }
+
+            .pricing-card.featured:hover {
+                transform: translateY(-5px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Animation -->
+    <div class="bg-animation"></div>
+
+    <!-- Floating Location Pins -->
+    <div class="location-pins">
+        <div class="pin">📍</div>
+        <div class="pin">🏠</div>
+        <div class="pin">📍</div>
+        <div class="pin">🗺️</div>
+        <div class="pin">📍</div>
+        <div class="pin">🏡</div>
+        <div class="pin">📍</div>
+        <div class="pin">🌆</div>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <div class="logo-icon">🗺️</div>
+                MoveOS
+            </a>
+            <div class="nav-links">
+                <a href="#solution">Features</a>
+                <a href="#journey">How It Works</a>
+                <a href="#pricing">Pricing</a>
+                <a href="#demo">Demo</a>
+                <a href="#cta" class="nav-cta">Get Early Access</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">AI-Powered Relocation Intelligence</div>
+            <h1>Moving Shouldn't<br>Be a <span class="gradient-text">Nightmare</span></h1>
+            <p>MoveOS is the AI operating system that orchestrates your entire relocation—from finding the perfect neighborhood to settling into your new life. No more chaos. Just clarity.</p>
+            <div class="hero-cta">
+                <a href="#cta" class="btn-primary">
+                    <span>Find Your Place</span>
+                    <span>→</span>
+                </a>
+                <a href="#demo" class="btn-secondary">
+                    <span>See It Work</span>
+                </a>
+            </div>
+            <div class="stats-bar">
+                <div class="stat">
+                    <div class="stat-value">11x</div>
+                    <div class="stat-label">Average Lifetime Moves</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">$85B+</div>
+                    <div class="stat-label">Relocation Market</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">200+</div>
+                    <div class="stat-label">Personalization Factors</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pain Section -->
+    <section class="pain-section">
+        <div class="pain-container">
+            <div class="section-header">
+                <h2>Moving is Broken</h2>
+                <p>Every relocation is 3-6 months of fragmented chaos across dozens of disconnected tools.</p>
+            </div>
+            <div class="pain-grid">
+                <div class="pain-card">
+                    <div class="pain-icon">🎯</div>
+                    <h3>Decision Paralysis</h3>
+                    <p>"Best neighborhoods" lists don't know you. Generic rankings ignore your lifestyle, career goals, and what actually matters.</p>
+                </div>
+                <div class="pain-card">
+                    <div class="pain-icon">📊</div>
+                    <h3>Data Scattered Everywhere</h3>
+                    <p>Crime stats on one site, schools on another, commute times somewhere else. You're drowning in tabs with no unified view.</p>
+                </div>
+                <div class="pain-card">
+                    <div class="pain-icon">💸</div>
+                    <h3>Hidden Costs Everywhere</h3>
+                    <p>State taxes, insurance rates, HOA fees, utility costs—nobody shows you the real cost of living until it's too late.</p>
+                </div>
+                <div class="pain-card">
+                    <div class="pain-icon">📦</div>
+                    <h3>Logistics Nightmare</h3>
+                    <p>Coordinating movers, utilities, address changes, and timelines across vendors who don't talk to each other.</p>
+                </div>
+                <div class="pain-card">
+                    <div class="pain-icon">🏠</div>
+                    <h3>Starting From Zero</h3>
+                    <p>Finding doctors, dentists, gyms, and building a social life in a new city is exhausting and lonely.</p>
+                </div>
+                <div class="pain-card">
+                    <div class="pain-icon">⏰</div>
+                    <h3>Time Sink</h3>
+                    <p>40+ hours of research and coordination for each move. Time you don't have while juggling work and life.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="solution-section" id="solution">
+        <div class="solution-container">
+            <div class="section-header">
+                <h2>One Platform. <span class="gradient-text">Complete Intelligence.</span></h2>
+                <p>MoveOS integrates everything into a unified AI-powered experience built around you.</p>
+            </div>
+            <div class="solution-grid">
+                <div class="solution-card">
+                    <div class="solution-icon">🧠</div>
+                    <h3>Destination Intelligence</h3>
+                    <p>AI that understands your lifestyle, career, and values—then finds places that actually fit.</p>
+                    <ul class="solution-features">
+                        <li>200+ personalization factors</li>
+                        <li>Career trajectory matching</li>
+                        <li>True cost-of-living modeling</li>
+                        <li>Climate & environment scoring</li>
+                    </ul>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon">🏘️</div>
+                    <h3>Neighborhood Deep Dive</h3>
+                    <p>Street-level intelligence that goes way beyond star ratings and generic descriptions.</p>
+                    <ul class="solution-features">
+                        <li>Real-time safety patterns</li>
+                        <li>School trajectory analysis</li>
+                        <li>Commute modeling for your schedule</li>
+                        <li>Community vibe matching</li>
+                    </ul>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon">🏡</div>
+                    <h3>Housing Intelligence</h3>
+                    <p>Every property analyzed, priced, and scored. No more guessing if you're overpaying.</p>
+                    <ul class="solution-features">
+                        <li>Cross-platform aggregation</li>
+                        <li>Price prediction modeling</li>
+                        <li>Hidden cost calculator</li>
+                        <li>Negotiation intelligence</li>
+                    </ul>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon">🎯</div>
+                    <h3>Transition Orchestrator</h3>
+                    <p>One click to coordinate movers, utilities, address changes, and every detail of your move.</p>
+                    <ul class="solution-features">
+                        <li>Moving company matching</li>
+                        <li>Utility setup automation</li>
+                        <li>Address change cascade</li>
+                        <li>Timeline optimization</li>
+                    </ul>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon">🌟</div>
+                    <h3>Settlement Accelerator</h3>
+                    <p>Land in your new city with everything ready. Doctors, gyms, groups—all matched to you.</p>
+                    <ul class="solution-features">
+                        <li>Local professional matching</li>
+                        <li>Social connection engine</li>
+                        <li>First 30-day playbook</li>
+                        <li>Kids' activities optimization</li>
+                    </ul>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon">💬</div>
+                    <h3>MoveGPT™</h3>
+                    <p>Your AI relocation concierge. Ask anything, anytime. Context-aware across months of planning.</p>
+                    <ul class="solution-features">
+                        <li>Natural language interface</li>
+                        <li>Personalized recommendations</li>
+                        <li>Proactive guidance</li>
+                        <li>24/7 availability</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Journey Section -->
+    <section class="journey-section" id="journey">
+        <div class="journey-container">
+            <div class="section-header">
+                <h2>Your Relocation Journey</h2>
+                <p>From "should I move?" to "I love it here" — we're with you every step.</p>
+            </div>
+            <div class="journey-timeline">
+                <div class="journey-step">
+                    <div class="journey-content">
+                        <h3>🔍 Explore</h3>
+                        <p>Tell us about your life—career, hobbies, family, values. Our AI matches you with places that actually fit.</p>
+                    </div>
+                    <div class="journey-icon">1</div>
+                </div>
+                <div class="journey-step">
+                    <div class="journey-content">
+                        <h3>📊 Compare</h3>
+                        <p>Deep-dive into neighborhoods with real data. Understand true costs, commutes, and community vibes.</p>
+                    </div>
+                    <div class="journey-icon">2</div>
+                </div>
+                <div class="journey-step">
+                    <div class="journey-content">
+                        <h3>🏠 Decide</h3>
+                        <p>Find your home with AI-powered pricing analysis, hidden cost alerts, and negotiation intelligence.</p>
+                    </div>
+                    <div class="journey-icon">3</div>
+                </div>
+                <div class="journey-step">
+                    <div class="journey-content">
+                        <h3>📦 Move</h3>
+                        <p>One-click coordination of movers, utilities, and address changes. Optimized timing saves thousands.</p>
+                    </div>
+                    <div class="journey-icon">4</div>
+                </div>
+                <div class="journey-step">
+                    <div class="journey-content">
+                        <h3>🌟 Settle</h3>
+                        <p>Land with everything ready—doctors, gyms, social connections. Your personalized first-30-days playbook.</p>
+                    </div>
+                    <div class="journey-icon">5</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo Section -->
+    <section class="demo-section" id="demo">
+        <div class="demo-container">
+            <div class="demo-box">
+                <div class="demo-title">Meet MoveGPT™</div>
+                <div class="demo-subtitle">Your AI relocation concierge that actually knows you</div>
+                <div class="demo-chat">
+                    <div class="chat-message">
+                        <div class="chat-user">
+                            <div class="bubble">Can I afford to live in Austin on $95K with a family of four?</div>
+                        </div>
+                    </div>
+                    <div class="chat-message">
+                        <div class="chat-ai">
+                            <div class="bubble">
+                                Based on your profile, here's the reality check for Austin:<br><br>
+                                <strong>Take-home after Texas taxes:</strong> $6,850/mo<br>
+                                <strong>Housing (family-friendly areas):</strong> $2,200-2,800/mo<br>
+                                <strong>Childcare + activities:</strong> $1,400/mo<br>
+                                <strong>True cost of living:</strong> $5,800/mo<br><br>
+                                <strong>Verdict:</strong> Tight but doable. You'd have ~$1,000/mo cushion.<br><br>
+                                I found 3 neighborhoods that hit your budget while keeping good schools and under 25-min commute. Want me to deep-dive on those?
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Market Section -->
+    <section class="market-section">
+        <div class="market-container">
+            <div class="section-header">
+                <h2>The Opportunity</h2>
+                <p>A universal pain point with zero innovation.</p>
+            </div>
+            <div class="market-grid">
+                <div class="market-card">
+                    <div class="market-value">$85B+</div>
+                    <div class="market-label">Total Addressable Market</div>
+                    <div class="market-desc">Relocation, real estate, moving, HR mobility</div>
+                </div>
+                <div class="market-card">
+                    <div class="market-value">40M</div>
+                    <div class="market-label">Americans Move Annually</div>
+                    <div class="market-desc">11 times average per lifetime</div>
+                </div>
+                <div class="market-card">
+                    <div class="market-value">$97K</div>
+                    <div class="market-label">Avg Corporate Relo Cost</div>
+                    <div class="market-desc">30% failure rate</div>
+                </div>
+                <div class="market-card">
+                    <div class="market-value">35%</div>
+                    <div class="market-label">Remote-Work Capable</div>
+                    <div class="market-desc">Geographic flexibility at all-time high</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="pricing-section" id="pricing">
+        <div class="pricing-container">
+            <div class="section-header">
+                <h2>Simple Pricing</h2>
+                <p>Start free. Upgrade when you're ready to move.</p>
+            </div>
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <div class="pricing-name">Explorer</div>
+                    <div class="pricing-desc">Dream about where to live</div>
+                    <div class="pricing-price">Free</div>
+                    <ul class="pricing-features">
+                        <li>City & neighborhood exploration</li>
+                        <li>Basic cost-of-living comparison</li>
+                        <li>Top 10 destination matches</li>
+                        <li>Limited MoveGPT™ queries</li>
+                    </ul>
+                    <a href="#cta" class="pricing-btn secondary">Get Started</a>
+                </div>
+                <div class="pricing-card featured">
+                    <div class="pricing-name">Premium</div>
+                    <div class="pricing-desc">Full relocation intelligence</div>
+                    <div class="pricing-price">$29<span>/month</span></div>
+                    <ul class="pricing-features">
+                        <li>Unlimited destination intelligence</li>
+                        <li>Street-level neighborhood analysis</li>
+                        <li>Housing price predictions</li>
+                        <li>Unlimited MoveGPT™</li>
+                        <li>Transition timeline optimizer</li>
+                        <li>Settlement playbook</li>
+                    </ul>
+                    <a href="#cta" class="pricing-btn primary">Start Premium</a>
+                </div>
+                <div class="pricing-card">
+                    <div class="pricing-name">Concierge</div>
+                    <div class="pricing-desc">White-glove assistance</div>
+                    <div class="pricing-price">$199<span> one-time</span></div>
+                    <ul class="pricing-features">
+                        <li>Everything in Premium</li>
+                        <li>Human relocation specialist</li>
+                        <li>Moving coordination handled</li>
+                        <li>Utility setup managed</li>
+                        <li>Local professional matching</li>
+                        <li>Priority support</li>
+                    </ul>
+                    <a href="#cta" class="pricing-btn secondary">Get Concierge</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section" id="cta">
+        <div class="cta-container">
+            <h2>Ready to Find<br><span class="gradient-text">Where You Belong?</span></h2>
+            <p>Join the waitlist for early access. Be the first to experience intelligent relocation.</p>
+            <div class="cta-form">
+                <input type="email" placeholder="Enter your email">
+                <button class="btn-primary">Get Early Access →</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-logo">
+                <div class="logo-icon" style="width: 32px; height: 32px; font-size: 1rem;">🗺️</div>
+                MoveOS
+            </div>
+            <div class="footer-links">
+                <a href="#">Features</a>
+                <a href="#">Pricing</a>
+                <a href="#">Enterprise</a>
+                <a href="#">Blog</a>
+                <a href="#">Careers</a>
+            </div>
+            <div class="footer-copy">
+                © 2026 MoveOS. All rights reserved. — Finding where you belong shouldn't be a nightmare.
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

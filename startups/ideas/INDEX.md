@@ -114,6 +114,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-03-07 | Morning | RetailMind AI — The Autonomous Intelligence Layer for Physical Retail | [Playbook](2026-03-07-morning.md) • [Landing](2026-03-07-morning-landing.html) • [PDF](2026-03-07-morning.pdf) |
 | 2026-03-07 | Afternoon | PetOS — The AI Operating System for Pet Care | [Playbook](2026-03-07-afternoon.md) • [Landing](2026-03-07-afternoon-landing.html) • [PDF](2026-03-07-afternoon.pdf) |
 | 2026-03-08 | Evening | MicrobiomeOS — The AI Operating System for Gut Health Intelligence | [Playbook](2026-03-08-evening.md) • [Landing](2026-03-08-evening-landing.html) • [PDF](2026-03-08-evening.pdf) |
+| 2026-03-08 | Morning | MoveOS — The AI Operating System for Relocation Intelligence | [Playbook](2026-03-08-morning.md) • [Landing](2026-03-08-morning-landing.html) • [PDF](2026-03-08-morning.pdf) |
 <!-- New entries will be added above this line -->
 
 ---
