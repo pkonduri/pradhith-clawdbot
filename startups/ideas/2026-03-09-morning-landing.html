@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DealRoom AI — Autonomous M&A Due Diligence Intelligence</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0A1628;
+            --secondary: #1E3A5F;
+            --accent: #00D4AA;
+            --accent-glow: rgba(0, 212, 170, 0.4);
+            --gold: #FFD700;
+            --white: #FFFFFF;
+            --gray-100: #F8FAFC;
+            --gray-200: #E2E8F0;
+            --gray-300: #CBD5E1;
+            --gray-400: #94A3B8;
+            --gray-600: #475569;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--primary);
+            color: var(--white);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(0, 212, 170, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(30, 58, 95, 0.3) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(255, 215, 0, 0.03) 0%, transparent 70%),
+                var(--primary);
+        }
+
+        .grid-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-image: 
+                linear-gradient(rgba(0, 212, 170, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 212, 170, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1.5rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10, 22, 40, 0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0, 212, 170, 0.1);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--gold) 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--gray-300);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        .cta-nav {
+            background: linear-gradient(135deg, var(--accent) 0%, #00B894 100%);
+            color: var(--primary);
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px var(--accent-glow);
+        }
+
+        .cta-nav:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px var(--accent-glow);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 4rem 4rem;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            text-align: center;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(0, 212, 170, 0.1);
+            border: 1px solid rgba(0, 212, 170, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--accent);
+            margin-bottom: 2rem;
+        }
+
+        .badge::before {
+            content: '⚡';
+        }
+
+        h1 {
+            font-size: 4.5rem;
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--white) 0%, var(--accent) 50%, var(--gold) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--gray-300);
+            margin-bottom: 2rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 4rem;
+            margin: 3rem 0;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--accent);
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--gray-400);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .cta-primary {
+            background: linear-gradient(135deg, var(--accent) 0%, #00B894 100%);
+            color: var(--primary);
+            padding: 1rem 2.5rem;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            text-decoration: none;
+            transition: all 0.3s;
+            box-shadow: 0 4px 20px var(--accent-glow);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .cta-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px var(--accent-glow);
+        }
+
+        .cta-secondary {
+            background: transparent;
+            color: var(--white);
+            padding: 1rem 2.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-decoration: none;
+            border: 2px solid var(--gray-600);
+            transition: all 0.3s;
+        }
+
+        .cta-secondary:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* Problem Section */
+        .section {
+            padding: 6rem 4rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-label {
+            color: var(--accent);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        h2 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: var(--gray-400);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Problem Cards */
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .problem-card {
+            background: linear-gradient(135deg, rgba(30, 58, 95, 0.4) 0%, rgba(10, 22, 40, 0.6) 100%);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(239, 68, 68, 0.5);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .problem-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .problem-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.75rem;
+            color: var(--white);
+        }
+
+        .problem-card p {
+            color: var(--gray-400);
+            font-size: 0.95rem;
+        }
+
+        /* Solution Section */
+        .solution-visual {
+            background: linear-gradient(135deg, rgba(30, 58, 95, 0.3) 0%, rgba(10, 22, 40, 0.5) 100%);
+            border: 1px solid rgba(0, 212, 170, 0.2);
+            border-radius: 30px;
+            padding: 3rem;
+            margin-top: 3rem;
+        }
+
+        .workflow {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .workflow-step {
+            flex: 1;
+            min-width: 200px;
+            text-align: center;
+            position: relative;
+        }
+
+        .workflow-step::after {
+            content: '→';
+            position: absolute;
+            right: -1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--accent);
+            font-size: 1.5rem;
+        }
+
+        .workflow-step:last-child::after {
+            display: none;
+        }
+
+        .step-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--accent) 0%, #00B894 100%);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto 1rem;
+            box-shadow: 0 10px 30px var(--accent-glow);
+        }
+
+        .step-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .step-desc {
+            color: var(--gray-400);
+            font-size: 0.9rem;
+        }
+
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, rgba(30, 58, 95, 0.3) 0%, rgba(10, 22, 40, 0.5) 100%);
+            border: 1px solid rgba(0, 212, 170, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .feature-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(0, 212, 170, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.2rem;
+        }
+
+        .feature-card p {
+            color: var(--gray-400);
+            font-size: 0.95rem;
+        }
+
+        .feature-list {
+            list-style: none;
+            margin-top: 1rem;
+        }
+
+        .feature-list li {
+            padding: 0.5rem 0;
+            color: var(--gray-300);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .feature-list li::before {
+            content: '✓';
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        /* Pricing Section */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .pricing-card {
+            background: linear-gradient(135deg, rgba(30, 58, 95, 0.3) 0%, rgba(10, 22, 40, 0.5) 100%);
+            border: 1px solid rgba(0, 212, 170, 0.1);
+            border-radius: 25px;
+            padding: 2.5rem;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .pricing-card.featured {
+            border-color: var(--accent);
+            transform: scale(1.05);
+            box-shadow: 0 20px 50px rgba(0, 212, 170, 0.2);
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .pricing-card.featured:hover {
+            transform: scale(1.05) translateY(-5px);
+        }
+
+        .popular-badge {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--accent) 0%, var(--gold) 100%);
+            color: var(--primary);
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .pricing-header {
+            text-align: center;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 1.5rem;
+        }
+
+        .pricing-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-price {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--accent);
+        }
+
+        .pricing-price span {
+            font-size: 1rem;
+            color: var(--gray-400);
+            font-weight: 400;
+        }
+
+        .pricing-desc {
+            color: var(--gray-400);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-features li {
+            padding: 0.75rem 0;
+            color: var(--gray-300);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .pricing-features li::before {
+            content: '✓';
+            color: var(--accent);
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .pricing-cta {
+            display: block;
+            width: 100%;
+            text-align: center;
+            padding: 1rem;
+            border-radius: 10px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .pricing-card.featured .pricing-cta {
+            background: linear-gradient(135deg, var(--accent) 0%, #00B894 100%);
+            color: var(--primary);
+        }
+
+        .pricing-card:not(.featured) .pricing-cta {
+            border: 2px solid var(--gray-600);
+            color: var(--white);
+        }
+
+        .pricing-card:not(.featured) .pricing-cta:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* Market Section */
+        .market-visual {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .market-chart {
+            background: linear-gradient(135deg, rgba(30, 58, 95, 0.3) 0%, rgba(10, 22, 40, 0.5) 100%);
+            border: 1px solid rgba(0, 212, 170, 0.1);
+            border-radius: 25px;
+            padding: 2.5rem;
+        }
+
+        .market-chart h3 {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .bar-chart {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .bar-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .bar-label {
+            width: 140px;
+            font-size: 0.9rem;
+            color: var(--gray-300);
+        }
+
+        .bar-track {
+            flex: 1;
+            height: 30px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--gold));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 1rem;
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: var(--primary);
+        }
+
+        /* Testimonials */
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .testimonial-card {
+            background: linear-gradient(135deg, rgba(30, 58, 95, 0.3) 0%, rgba(10, 22, 40, 0.5) 100%);
+            border: 1px solid rgba(255, 215, 0, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+        }
+
+        .testimonial-quote {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: var(--gray-200);
+            margin-bottom: 1.5rem;
+            font-style: italic;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .author-info h4 {
+            font-size: 1rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .author-info p {
+            font-size: 0.85rem;
+            color: var(--gray-400);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, rgba(0, 212, 170, 0.1) 0%, rgba(255, 215, 0, 0.05) 100%);
+            border-top: 1px solid rgba(0, 212, 170, 0.2);
+            border-bottom: 1px solid rgba(0, 212, 170, 0.2);
+            padding: 6rem 4rem;
+            text-align: center;
+        }
+
+        .cta-section h2 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .cta-section p {
+            font-size: 1.2rem;
+            color: var(--gray-300);
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 1.5rem 0;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--gray-400);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+
+        .footer-copy {
+            color: var(--gray-600);
+            font-size: 0.85rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem 1.5rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero {
+                padding: 6rem 1.5rem 3rem;
+            }
+
+            .section {
+                padding: 4rem 1.5rem;
+            }
+
+            .hero-stats {
+                gap: 2rem;
+            }
+
+            .stat-value {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 2rem;
+            }
+
+            .market-visual {
+                grid-template-columns: 1fr;
+            }
+
+            .workflow-step::after {
+                display: none;
+            }
+
+            .pricing-card.featured {
+                transform: none;
+            }
+        }
+
+        /* Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .pulsing {
+            animation: pulse 2s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    <div class="grid-overlay"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">
+            <div class="logo-icon">📋</div>
+            DealRoom AI
+        </div>
+        <ul class="nav-links">
+            <li><a href="#problem">Problem</a></li>
+            <li><a href="#solution">Solution</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+            <li><a href="#market">Market</a></li>
+        </ul>
+        <a href="#cta" class="cta-nav">Request Demo</a>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <span class="badge">Transforming M&A Due Diligence</span>
+            <h1>Weeks of Due Diligence in Hours</h1>
+            <p class="hero-subtitle">The AI operating system that transforms M&A due diligence — 10x faster, 50% cheaper, catching what humans miss.</p>
+            
+            <div class="hero-stats">
+                <div class="stat">
+                    <span class="stat-value">10x</span>
+                    <span class="stat-label">Faster</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value">50%</span>
+                    <span class="stat-label">Cost Savings</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value">99%</span>
+                    <span class="stat-label">Accuracy</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value">$5T+</span>
+                    <span class="stat-label">Market Served</span>
+                </div>
+            </div>
+
+            <div class="cta-group">
+                <a href="#cta" class="cta-primary">Start Your First Deal →</a>
+                <a href="#solution" class="cta-secondary">See How It Works</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="section" id="problem">
+        <div class="section-header">
+            <span class="section-label">The Problem</span>
+            <h2>M&A Due Diligence is Broken</h2>
+            <p class="section-subtitle">A process stuck in the past while deal velocity accelerates</p>
+        </div>
+
+        <div class="problem-grid">
+            <div class="problem-card">
+                <div class="problem-icon">⏰</div>
+                <h3>4-8 Week Bottleneck</h3>
+                <p>Average deal requires weeks of document review, delaying closings and costing millions in opportunity cost.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">💸</div>
+                <h3>$2-5M Per Deal</h3>
+                <p>Large deals spend millions on DD alone — legal, financial, operational reviews add up fast.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">⚠️</div>
+                <h3>40% Deal Failure</h3>
+                <p>Human reviewers miss critical issues. Nearly half of deals fail to deliver expected value post-close.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">🧩</div>
+                <h3>Fragmented Silos</h3>
+                <p>Legal, financial, HR, IP, and operational DD happen separately. No unified view of deal risk.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="section" id="solution">
+        <div class="section-header">
+            <span class="section-label">The Solution</span>
+            <h2>Intelligence Layer for Every Deal</h2>
+            <p class="section-subtitle">Full-stack autonomous due diligence that transforms weeks into hours</p>
+        </div>
+
+        <div class="solution-visual">
+            <div class="workflow">
+                <div class="workflow-step">
+                    <div class="step-icon floating">📁</div>
+                    <div class="step-title">Ingest</div>
+                    <div class="step-desc">Connect data rooms, upload documents, any format</div>
+                </div>
+                <div class="workflow-step">
+                    <div class="step-icon floating" style="animation-delay: 0.5s;">🔍</div>
+                    <div class="step-title">Analyze</div>
+                    <div class="step-desc">AI extracts entities, risks, obligations</div>
+                </div>
+                <div class="workflow-step">
+                    <div class="step-icon floating" style="animation-delay: 1s;">🎯</div>
+                    <div class="step-title">Score</div>
+                    <div class="step-desc">Proprietary deal risk scoring</div>
+                </div>
+                <div class="workflow-step">
+                    <div class="step-icon floating" style="animation-delay: 1.5s;">📊</div>
+                    <div class="step-title">Report</div>
+                    <div class="step-desc">Comprehensive DD report + negotiation points</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-header">
+                    <div class="feature-icon">📜</div>
+                    <h3>Deep Contract Analytics</h3>
+                </div>
+                <p>Extract every obligation, right, and restriction from thousands of contracts.</p>
+                <ul class="feature-list">
+                    <li>Change of control provisions</li>
+                    <li>MAC clause analysis</li>
+                    <li>Indemnification mapping</li>
+                    <li>Non-standard term flagging</li>
+                </ul>
+            </div>
+            <div class="feature-card">
+                <div class="feature-header">
+                    <div class="feature-icon">💰</div>
+                    <h3>Financial Forensics</h3>
+                </div>
+                <p>Automated quality of earnings and working capital analysis.</p>
+                <ul class="feature-list">
+                    <li>Revenue recognition patterns</li>
+                    <li>EBITDA adjustment validation</li>
+                    <li>Related party detection</li>
+                    <li>Working capital normalization</li>
+                </ul>
+            </div>
+            <div class="feature-card">
+                <div class="feature-header">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Risk Scoring Engine</h3>
+                </div>
+                <p>Proprietary deal risk score benchmarked against thousands of transactions.</p>
+                <ul class="feature-list">
+                    <li>0-100 deal risk score</li>
+                    <li>Category breakdowns</li>
+                    <li>Comparable benchmarks</li>
+                    <li>Integration risk prediction</li>
+                </ul>
+            </div>
+            <div class="feature-card">
+                <div class="feature-header">
+                    <div class="feature-icon">🕸️</div>
+                    <h3>Knowledge Graph</h3>
+                </div>
+                <p>Map all entities, relationships, and hidden liabilities across the deal.</p>
+                <ul class="feature-list">
+                    <li>Corporate structure mapping</li>
+                    <li>Beneficial ownership chains</li>
+                    <li>Cross-reference analysis</li>
+                    <li>Hidden liability detection</li>
+                </ul>
+            </div>
+            <div class="feature-card">
+                <div class="feature-header">
+                    <div class="feature-icon">🛡️</div>
+                    <h3>Cyber & ESG DD</h3>
+                </div>
+                <p>Modern due diligence categories that traditional DD misses.</p>
+                <ul class="feature-list">
+                    <li>Security posture assessment</li>
+                    <li>ESG risk scoring</li>
+                    <li>Regulatory compliance mapping</li>
+                    <li>IP portfolio valuation</li>
+                </ul>
+            </div>
+            <div class="feature-card">
+                <div class="feature-header">
+                    <div class="feature-icon">⚖️</div>
+                    <h3>AI Deal Negotiator</h3>
+                </div>
+                <p>Generate negotiation leverage and purchase agreement markup.</p>
+                <ul class="feature-list">
+                    <li>Negotiation points generation</li>
+                    <li>Rep & warranty drafting</li>
+                    <li>Price adjustment suggestions</li>
+                    <li>Closing condition checklists</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="section" id="pricing">
+        <div class="section-header">
+            <span class="section-label">Pricing</span>
+            <h2>Flexible Plans for Every Deal</h2>
+            <p class="section-subtitle">Pay per deal or unlimited annual access</p>
+        </div>
+
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <div class="pricing-header">
+                    <div class="pricing-name">Express</div>
+                    <div class="pricing-price">$25K <span>/ deal</span></div>
+                    <p class="pricing-desc">For straightforward transactions</p>
+                </div>
+                <ul class="pricing-features">
+                    <li>Up to 5,000 documents</li>
+                    <li>Standard DD report</li>
+                    <li>48-hour turnaround</li>
+                    <li>Basic risk scoring</li>
+                    <li>Email support</li>
+                </ul>
+                <a href="#cta" class="pricing-cta">Get Started</a>
+            </div>
+
+            <div class="pricing-card featured">
+                <div class="popular-badge">Most Popular</div>
+                <div class="pricing-header">
+                    <div class="pricing-name">Professional</div>
+                    <div class="pricing-price">$75K <span>/ deal</span></div>
+                    <p class="pricing-desc">Full-stack due diligence</p>
+                </div>
+                <ul class="pricing-features">
+                    <li>Unlimited documents</li>
+                    <li>Comprehensive DD across all categories</li>
+                    <li>Real-time collaboration workspace</li>
+                    <li>Custom deal scoring models</li>
+                    <li>Data room integration</li>
+                    <li>Dedicated deal support</li>
+                </ul>
+                <a href="#cta" class="pricing-cta">Get Started</a>
+            </div>
+
+            <div class="pricing-card">
+                <div class="pricing-header">
+                    <div class="pricing-name">Enterprise</div>
+                    <div class="pricing-price">$500K+ <span>/ year</span></div>
+                    <p class="pricing-desc">For high-volume deal teams</p>
+                </div>
+                <ul class="pricing-features">
+                    <li>Unlimited deals</li>
+                    <li>Dedicated AI models</li>
+                    <li>White-label capabilities</li>
+                    <li>API access</li>
+                    <li>Custom development</li>
+                    <li>24/7 priority support</li>
+                </ul>
+                <a href="#cta" class="pricing-cta">Contact Sales</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Market Section -->
+    <section class="section" id="market">
+        <div class="section-header">
+            <span class="section-label">Market Opportunity</span>
+            <h2>A $70B Market Ready for AI</h2>
+            <p class="section-subtitle">Massive TAM with clear transformation opportunity</p>
+        </div>
+
+        <div class="market-visual">
+            <div class="market-chart">
+                <h3>📊 Market Breakdown</h3>
+                <div class="bar-chart">
+                    <div class="bar-item">
+                        <span class="bar-label">M&A Advisory DD</span>
+                        <div class="bar-track">
+                            <div class="bar-fill" style="width: 50%;">$35B</div>
+                        </div>
+                    </div>
+                    <div class="bar-item">
+                        <span class="bar-label">Legal DD Services</span>
+                        <div class="bar-track">
+                            <div class="bar-fill" style="width: 21%;">$15B</div>
+                        </div>
+                    </div>
+                    <div class="bar-item">
+                        <span class="bar-label">PE Due Diligence</span>
+                        <div class="bar-track">
+                            <div class="bar-fill" style="width: 17%;">$12B</div>
+                        </div>
+                    </div>
+                    <div class="bar-item">
+                        <span class="bar-label">Corporate Dev</span>
+                        <div class="bar-track">
+                            <div class="bar-fill" style="width: 11%;">$8B</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="market-chart">
+                <h3>🎯 Why Now?</h3>
+                <ul class="feature-list">
+                    <li>AI maturity — LLMs can finally understand legal & financial docs</li>
+                    <li>PE dry powder at all-time highs ($2.5T+)</li>
+                    <li>Competitive deal processes demand faster DD</li>
+                    <li>Cross-border regulatory complexity exploding</li>
+                    <li>Post-pandemic buyers demand deeper operational DD</li>
+                    <li>Labor shortage for experienced DD professionals</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="section">
+        <div class="section-header">
+            <span class="section-label">Early Feedback</span>
+            <h2>What Deal Professionals Say</h2>
+        </div>
+
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <p class="testimonial-quote">"We ran our last deal through DealRoom in parallel with our traditional DD process. DealRoom caught three material issues we missed — including a change of control provision that would have cost us $12M."</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">👔</div>
+                    <div class="author-info">
+                        <h4>Managing Director</h4>
+                        <p>Mid-Market PE Firm</p>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <p class="testimonial-quote">"In competitive auctions, speed wins. DealRoom lets us complete comprehensive DD in days instead of weeks. We've won three deals this year we would have lost to slower diligence."</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">💼</div>
+                    <div class="author-info">
+                        <h4>Head of Corporate Development</h4>
+                        <p>Fortune 500 Company</p>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <p class="testimonial-quote">"The knowledge graph visualization changed how we think about deal risk. Seeing the web of entities, obligations, and relationships made it obvious where the hidden landmines were."</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">⚖️</div>
+                    <div class="author-info">
+                        <h4>M&A Partner</h4>
+                        <p>AM Law 50 Firm</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section" id="cta">
+        <h2>Ready to Transform Your DD?</h2>
+        <p>Join the deal teams already using AI to close faster and smarter. Get your first deal analysis free.</p>
+        <div class="cta-group">
+            <a href="mailto:hello@dealroom.ai" class="cta-primary">Request Demo →</a>
+            <a href="#solution" class="cta-secondary">Learn More</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-logo">
+            <div class="logo-icon">📋</div>
+            DealRoom AI
+        </div>
+        <div class="footer-links">
+            <a href="#problem">Problem</a>
+            <a href="#solution">Solution</a>
+            <a href="#pricing">Pricing</a>
+            <a href="#market">Market</a>
+            <a href="mailto:hello@dealroom.ai">Contact</a>
+        </div>
+        <p class="footer-copy">© 2026 DealRoom AI. Transforming M&A due diligence.</p>
+        <p class="footer-copy" style="margin-top: 0.5rem; color: var(--gray-600);">Generated by The Godfather 🎩</p>
+    </footer>
+
+    <script>
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Animate stats on scroll
+        const observerOptions = {
+            threshold: 0.5
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.stat, .problem-card, .feature-card, .pricing-card').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'all 0.6s ease-out';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
