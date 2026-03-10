@@ -1,0 +1,1304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VoiceGuard AI - Real-Time Voice Authentication & Deepfake Detection</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00ff88;
+            --primary-dark: #00cc6a;
+            --accent: #ff3366;
+            --danger: #ff4444;
+            --bg-dark: #0a0a0f;
+            --bg-card: #12121a;
+            --bg-elevated: #1a1a25;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0b0;
+            --text-muted: #606070;
+            --border: #2a2a3a;
+            --gradient-1: linear-gradient(135deg, #00ff88 0%, #00ccff 100%);
+            --gradient-2: linear-gradient(135deg, #ff3366 0%, #ff6b35 100%);
+            --gradient-shield: linear-gradient(180deg, #00ff88 0%, #00aa55 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.4;
+        }
+
+        .wave-container {
+            position: absolute;
+            width: 200%;
+            height: 100%;
+            left: -50%;
+        }
+
+        .wave {
+            position: absolute;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient-1);
+            opacity: 0.1;
+            border-radius: 50%;
+            animation: wave 8s ease-in-out infinite;
+        }
+
+        .wave:nth-child(1) { top: 20%; animation-delay: 0s; }
+        .wave:nth-child(2) { top: 35%; animation-delay: 0.5s; }
+        .wave:nth-child(3) { top: 50%; animation-delay: 1s; }
+        .wave:nth-child(4) { top: 65%; animation-delay: 1.5s; }
+        .wave:nth-child(5) { top: 80%; animation-delay: 2s; }
+
+        @keyframes wave {
+            0%, 100% { transform: scaleX(0.8) translateX(-10%); opacity: 0.05; }
+            50% { transform: scaleX(1.2) translateX(10%); opacity: 0.15; }
+        }
+
+        /* Grid overlay */
+        .grid-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0,255,136,0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,255,136,0.02) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -1;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 1.5rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 800;
+            font-size: 1.5rem;
+        }
+
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: var(--gradient-1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logo-icon::before {
+            content: '🛡️';
+            font-size: 1.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-cta {
+            background: var(--gradient-1);
+            color: var(--bg-dark);
+            padding: 0.75rem 1.75rem;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(0, 255, 136, 0.3);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 4rem 4rem;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            text-align: center;
+            position: relative;
+        }
+
+        .threat-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 51, 102, 0.15);
+            border: 1px solid rgba(255, 51, 102, 0.3);
+            color: var(--accent);
+            padding: 0.5rem 1.25rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            animation: pulse-badge 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-badge {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255, 51, 102, 0.4); }
+            50% { box-shadow: 0 0 0 10px rgba(255, 51, 102, 0); }
+        }
+
+        .hero h1 {
+            font-size: 4.5rem;
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.03em;
+        }
+
+        .hero h1 span {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+            line-height: 1.6;
+        }
+
+        .hero-cta-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: var(--gradient-1);
+            color: var(--bg-dark);
+            padding: 1.1rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 60px rgba(0, 255, 136, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-primary);
+            padding: 1.1rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 2px solid var(--border);
+            transition: all 0.3s;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* Voice Visualization */
+        .voice-visual {
+            position: absolute;
+            width: 100%;
+            height: 200px;
+            bottom: -50px;
+            left: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            opacity: 0.6;
+        }
+
+        .voice-bar {
+            width: 4px;
+            background: var(--gradient-1);
+            border-radius: 4px;
+            animation: voice-pulse 1.2s ease-in-out infinite;
+        }
+
+        .voice-bar:nth-child(1) { height: 20px; animation-delay: 0s; }
+        .voice-bar:nth-child(2) { height: 40px; animation-delay: 0.1s; }
+        .voice-bar:nth-child(3) { height: 60px; animation-delay: 0.2s; }
+        .voice-bar:nth-child(4) { height: 80px; animation-delay: 0.3s; }
+        .voice-bar:nth-child(5) { height: 100px; animation-delay: 0.4s; }
+        .voice-bar:nth-child(6) { height: 80px; animation-delay: 0.5s; }
+        .voice-bar:nth-child(7) { height: 60px; animation-delay: 0.6s; }
+        .voice-bar:nth-child(8) { height: 40px; animation-delay: 0.7s; }
+        .voice-bar:nth-child(9) { height: 20px; animation-delay: 0.8s; }
+
+        @keyframes voice-pulse {
+            0%, 100% { transform: scaleY(0.5); opacity: 0.5; }
+            50% { transform: scaleY(1); opacity: 1; }
+        }
+
+        /* Stats Section */
+        .stats-section {
+            padding: 6rem 4rem;
+            background: var(--bg-card);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-number.danger {
+            background: var(--gradient-2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Problem Section */
+        .problem-section {
+            padding: 8rem 4rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid rgba(0, 255, 136, 0.2);
+            color: var(--primary);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .section-title {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+
+        .section-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .problem-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .problem-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient-2);
+        }
+
+        .problem-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+            box-shadow: 0 20px 60px rgba(255, 51, 102, 0.15);
+        }
+
+        .problem-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .problem-card h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--accent);
+        }
+
+        .problem-card p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        /* Solution Section */
+        .solution-section {
+            padding: 8rem 4rem;
+            background: var(--bg-card);
+        }
+
+        .solution-content {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .solution-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .solution-visual {
+            position: relative;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 3rem;
+            overflow: hidden;
+        }
+
+        .detection-demo {
+            position: relative;
+        }
+
+        .waveform {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 3px;
+            height: 100px;
+            margin-bottom: 2rem;
+        }
+
+        .waveform-bar {
+            width: 6px;
+            background: var(--primary);
+            border-radius: 3px;
+            animation: waveform-animate 1.5s ease-in-out infinite;
+        }
+
+        .waveform-bar:nth-child(odd) { animation-delay: 0.1s; }
+        .waveform-bar:nth-child(even) { animation-delay: 0.2s; }
+
+        @keyframes waveform-animate {
+            0%, 100% { height: 20px; }
+            50% { height: 80px; }
+        }
+
+        .detection-result {
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid var(--primary);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .detection-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--primary);
+            color: var(--bg-dark);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .detection-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .detection-stat {
+            text-align: center;
+        }
+
+        .detection-stat-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .detection-stat-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .solution-text h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+        }
+
+        .solution-text h2 span {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .solution-text p {
+            font-size: 1.15rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            line-height: 1.8;
+        }
+
+        .feature-list {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .feature-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            font-size: 1.05rem;
+        }
+
+        .feature-check {
+            width: 24px;
+            height: 24px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--bg-dark);
+            font-weight: bold;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        /* Products Section */
+        .products-section {
+            padding: 8rem 4rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+        }
+
+        .product-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-1);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+        }
+
+        .product-card:hover::before {
+            opacity: 0.05;
+        }
+
+        .product-card > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .product-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .product-card h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .product-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .product-features {
+            list-style: none;
+            font-size: 0.85rem;
+        }
+
+        .product-features li {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .product-features li::before {
+            content: '→';
+            color: var(--primary);
+        }
+
+        /* Market Section */
+        .market-section {
+            padding: 8rem 4rem;
+            background: var(--bg-card);
+        }
+
+        .market-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .market-visual {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .market-card {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2.5rem;
+        }
+
+        .market-card h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .market-value {
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .market-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* Technology Section */
+        .tech-section {
+            padding: 8rem 4rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .tech-pipeline {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 3rem;
+            margin-top: 3rem;
+        }
+
+        .pipeline-stages {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            position: relative;
+        }
+
+        .pipeline-stages::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 5%;
+            right: 5%;
+            height: 2px;
+            background: var(--border);
+            z-index: 0;
+        }
+
+        .pipeline-stage {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            transition: all 0.3s;
+        }
+
+        .pipeline-stage:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+        }
+
+        .stage-number {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--bg-dark);
+            font-weight: 800;
+            margin: 0 auto 1rem;
+        }
+
+        .pipeline-stage h4 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .pipeline-stage p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .stage-time {
+            display: inline-block;
+            background: rgba(0, 255, 136, 0.1);
+            color: var(--primary);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: 0.75rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Metrics */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .metric-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--primary);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .metric-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 8rem 4rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(0, 255, 136, 0.1) 0%, transparent 70%);
+            z-index: 0;
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cta-title {
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .cta-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem;
+            border-top: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            font-weight: 800;
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-tagline {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            font-style: italic;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        .footer-copyright {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .products-grid { grid-template-columns: repeat(2, 1fr); }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .pipeline-stages { grid-template-columns: repeat(2, 1fr); }
+            .pipeline-stages::before { display: none; }
+        }
+
+        @media (max-width: 900px) {
+            nav { padding: 1rem 2rem; }
+            .nav-links { display: none; }
+            .hero { padding: 6rem 2rem 3rem; }
+            .hero h1 { font-size: 3rem; }
+            .hero-subtitle { font-size: 1.2rem; }
+            .problem-grid { grid-template-columns: 1fr; }
+            .solution-grid { grid-template-columns: 1fr; }
+            .market-visual { grid-template-columns: 1fr; }
+            .products-grid { grid-template-columns: 1fr; }
+            .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+            .pipeline-stages { grid-template-columns: 1fr; }
+            .cta-title { font-size: 2.5rem; }
+        }
+
+        @media (max-width: 600px) {
+            .hero h1 { font-size: 2.5rem; }
+            .section-title { font-size: 2rem; }
+            .stats-grid { grid-template-columns: 1fr; }
+            .stat-number { font-size: 2.5rem; }
+            .market-value { font-size: 2.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-pattern">
+        <div class="wave-container">
+            <div class="wave"></div>
+            <div class="wave"></div>
+            <div class="wave"></div>
+            <div class="wave"></div>
+            <div class="wave"></div>
+        </div>
+    </div>
+    <div class="grid-overlay"></div>
+
+    <nav>
+        <div class="logo">
+            <div class="logo-icon"></div>
+            VoiceGuard AI
+        </div>
+        <ul class="nav-links">
+            <li><a href="#problem">The Threat</a></li>
+            <li><a href="#solution">Solution</a></li>
+            <li><a href="#products">Products</a></li>
+            <li><a href="#technology">Technology</a></li>
+            <li><a href="#market">Market</a></li>
+        </ul>
+        <a href="#contact" class="nav-cta">Request Demo</a>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <div class="threat-badge">
+                <span>⚠️</span>
+                <span>$4.7B Lost to Voice Cloning Scams in 2025</span>
+            </div>
+            <h1>Trust Nothing.<br><span>Verify Everything.</span></h1>
+            <p class="hero-subtitle">Real-time AI voice detection that protects your calls, customers, and family from synthetic voice attacks with 99.7% accuracy.</p>
+            <div class="hero-cta-group">
+                <a href="#contact" class="btn-primary">
+                    <span>🛡️</span>
+                    <span>Protect Your Organization</span>
+                </a>
+                <a href="#demo" class="btn-secondary">
+                    <span>▶️</span>
+                    <span>Watch Demo</span>
+                </a>
+            </div>
+            <div class="voice-visual">
+                <div class="voice-bar"></div>
+                <div class="voice-bar"></div>
+                <div class="voice-bar"></div>
+                <div class="voice-bar"></div>
+                <div class="voice-bar"></div>
+                <div class="voice-bar"></div>
+                <div class="voice-bar"></div>
+                <div class="voice-bar"></div>
+                <div class="voice-bar"></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="stats-section">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number danger">340%</div>
+                <div class="stat-label">YoY Growth in Voice Scams</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number danger">3 sec</div>
+                <div class="stat-label">Audio to Clone Your Voice</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">99.7%</div>
+                <div class="stat-label">Detection Accuracy</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">&lt;50ms</div>
+                <div class="stat-label">Real-Time Latency</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="problem-section" id="problem">
+        <div class="section-header">
+            <div class="section-tag">⚠️ The Crisis</div>
+            <h2 class="section-title">Voice Trust is Broken</h2>
+            <p class="section-subtitle">AI can clone any voice in seconds. Your security is already compromised.</p>
+        </div>
+        <div class="problem-grid">
+            <div class="problem-card">
+                <div class="problem-icon">🏦</div>
+                <h3>Financial Fraud</h3>
+                <p>CEO fraud calls transferring millions. Vendor impersonation. Bank authentication bypass. The average enterprise loses $243,000 per voice fraud incident.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">👨‍👩‍👧</div>
+                <h3>Family Devastation</h3>
+                <p>"Grandparent scams" using children's cloned voices. Fake kidnapping calls demanding ransom. Elderly targeted at unprecedented scale. Average loss: $9,000.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">🎭</div>
+                <h3>Identity Weaponization</h3>
+                <p>Deepfake recordings destroying reputations. Fabricated confessions. Market manipulation. Your voice can be used against you—forever.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="solution-section" id="solution">
+        <div class="solution-content">
+            <div class="solution-grid">
+                <div class="solution-visual">
+                    <div class="detection-demo">
+                        <div class="waveform">
+                            <div class="waveform-bar" style="height: 30px;"></div>
+                            <div class="waveform-bar" style="height: 50px;"></div>
+                            <div class="waveform-bar" style="height: 70px;"></div>
+                            <div class="waveform-bar" style="height: 90px;"></div>
+                            <div class="waveform-bar" style="height: 60px;"></div>
+                            <div class="waveform-bar" style="height: 80px;"></div>
+                            <div class="waveform-bar" style="height: 40px;"></div>
+                            <div class="waveform-bar" style="height: 65px;"></div>
+                            <div class="waveform-bar" style="height: 45px;"></div>
+                            <div class="waveform-bar" style="height: 75px;"></div>
+                            <div class="waveform-bar" style="height: 55px;"></div>
+                            <div class="waveform-bar" style="height: 85px;"></div>
+                        </div>
+                        <div class="detection-result">
+                            <div class="detection-badge">✓ AUTHENTIC HUMAN VOICE</div>
+                            <p style="color: var(--text-secondary); font-size: 0.9rem;">Caller verified in real-time</p>
+                            <div class="detection-stats">
+                                <div class="detection-stat">
+                                    <div class="detection-stat-value">99.8%</div>
+                                    <div class="detection-stat-label">Confidence</div>
+                                </div>
+                                <div class="detection-stat">
+                                    <div class="detection-stat-value">42ms</div>
+                                    <div class="detection-stat-label">Latency</div>
+                                </div>
+                                <div class="detection-stat">
+                                    <div class="detection-stat-value">147</div>
+                                    <div class="detection-stat-label">Signals</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="solution-text">
+                    <div class="section-tag">🛡️ The Solution</div>
+                    <h2>Real-Time <span>Voice Authentication</span></h2>
+                    <p>VoiceGuard AI analyzes 147 acoustic dimensions in real-time to detect AI-generated voice with 99.7% accuracy. Protection happens during the call, not after the damage is done.</p>
+                    <ul class="feature-list">
+                        <li>
+                            <span class="feature-check">✓</span>
+                            <span><strong>Spectral Anomaly Detection</strong> — Identifies neural vocoder artifacts invisible to human perception</span>
+                        </li>
+                        <li>
+                            <span class="feature-check">✓</span>
+                            <span><strong>Prosodic Analysis</strong> — Flags AI's statistical regularity vs. natural human variance</span>
+                        </li>
+                        <li>
+                            <span class="feature-check">✓</span>
+                            <span><strong>Environment Forensics</strong> — Validates acoustic coherence of room and mic characteristics</span>
+                        </li>
+                        <li>
+                            <span class="feature-check">✓</span>
+                            <span><strong>Adversarial Resilience</strong> — Continuous updates against latest evasion techniques</span>
+                        </li>
+                    </ul>
+                    <a href="#contact" class="btn-primary">Get Protected Today</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="products-section" id="products">
+        <div class="section-header">
+            <div class="section-tag">📦 Products</div>
+            <h2 class="section-title">Protection for Every Use Case</h2>
+            <p class="section-subtitle">From enterprise call centers to family protection</p>
+        </div>
+        <div class="products-grid">
+            <div class="product-card">
+                <div class="product-icon">🏢</div>
+                <h3>VoiceGuard Enterprise</h3>
+                <p>Real-time protection for corporate phone systems with full integration support.</p>
+                <ul class="product-features">
+                    <li>Cisco, Zoom, Teams integration</li>
+                    <li>API for custom systems</li>
+                    <li>Threat intelligence dashboard</li>
+                    <li>SOC 2 Type II compliant</li>
+                </ul>
+            </div>
+            <div class="product-card">
+                <div class="product-icon">🏦</div>
+                <h3>VoiceGuard Financial</h3>
+                <p>Bank-grade protection for call centers and phone authentication.</p>
+                <ul class="product-features">
+                    <li>Phone auth hardening</li>
+                    <li>KYC voice verification</li>
+                    <li>Fraud investigation tools</li>
+                    <li>Regulatory compliance</li>
+                </ul>
+            </div>
+            <div class="product-card">
+                <div class="product-icon">👨‍👩‍👧‍👦</div>
+                <h3>VoiceGuard Family</h3>
+                <p>Consumer protection for families, especially designed for elderly safety.</p>
+                <ul class="product-features">
+                    <li>Simple mobile app</li>
+                    <li>"Safe word" verification</li>
+                    <li>Emergency contact alerts</li>
+                    <li>Elderly-focused UX</li>
+                </ul>
+            </div>
+            <div class="product-card">
+                <div class="product-icon">📺</div>
+                <h3>VoiceGuard Media</h3>
+                <p>Authenticity verification for news, podcasts, and legal evidence.</p>
+                <ul class="product-features">
+                    <li>Broadcast verification</li>
+                    <li>Podcast certification</li>
+                    <li>Legal forensic reports</li>
+                    <li>Social media auth</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="tech-section" id="technology">
+        <div class="section-header">
+            <div class="section-tag">⚙️ Technology</div>
+            <h2 class="section-title">How VoiceGuard Works</h2>
+            <p class="section-subtitle">Multi-modal analysis in under 50 milliseconds</p>
+        </div>
+        <div class="tech-pipeline">
+            <div class="pipeline-stages">
+                <div class="pipeline-stage">
+                    <div class="stage-number">1</div>
+                    <h4>Audio Ingestion</h4>
+                    <p>Noise normalization, sample rate standardization</p>
+                    <span class="stage-time">5ms</span>
+                </div>
+                <div class="pipeline-stage">
+                    <div class="stage-number">2</div>
+                    <h4>Feature Extraction</h4>
+                    <p>MFCC, spectral, prosodic, environment analysis</p>
+                    <span class="stage-time">15ms</span>
+                </div>
+                <div class="pipeline-stage">
+                    <div class="stage-number">3</div>
+                    <h4>ML Ensemble</h4>
+                    <p>Transformer + LSTM + CNN fusion with calibration</p>
+                    <span class="stage-time">25ms</span>
+                </div>
+                <div class="pipeline-stage">
+                    <div class="stage-number">4</div>
+                    <h4>Decision & Action</h4>
+                    <p>Alerting, logging, response triggering</p>
+                    <span class="stage-time">5ms</span>
+                </div>
+            </div>
+        </div>
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-value">99.7%</div>
+                <div class="metric-label">Accuracy</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">0.15%</div>
+                <div class="metric-label">False Positive Rate</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">42ms</div>
+                <div class="metric-label">P50 Latency</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">147</div>
+                <div class="metric-label">Acoustic Signals</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="market-section" id="market">
+        <div class="market-content">
+            <div class="section-header">
+                <div class="section-tag">📈 Market</div>
+                <h2 class="section-title">$47 Billion Opportunity</h2>
+                <p class="section-subtitle">Voice security is the next enterprise security imperative</p>
+            </div>
+            <div class="market-visual">
+                <div class="market-card">
+                    <h3>Enterprise Communications Security</h3>
+                    <div class="market-value">$18B</div>
+                    <p>500,000+ enterprises need phone system protection. Growing 28% CAGR.</p>
+                </div>
+                <div class="market-card">
+                    <h3>Financial Services Fraud Prevention</h3>
+                    <div class="market-value">$15B</div>
+                    <p>25,000+ banks globally. Voice fraud is the fastest-growing category.</p>
+                </div>
+                <div class="market-card">
+                    <h3>Consumer Protection</h3>
+                    <div class="market-value">$8B</div>
+                    <p>150M+ US households. Regulatory mandates driving adoption.</p>
+                </div>
+                <div class="market-card">
+                    <h3>Media & Content Verification</h3>
+                    <div class="market-value">$6B</div>
+                    <p>News, social platforms, legal. Emerging regulatory requirements.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section" id="contact">
+        <div class="cta-content">
+            <h2 class="cta-title">Don't Wait for the Attack</h2>
+            <p class="cta-subtitle">Voice cloning attacks are happening right now. Every day without protection is a day of exposure. Get VoiceGuard deployed in weeks, not months.</p>
+            <div class="hero-cta-group">
+                <a href="mailto:founders@voiceguard.ai" class="btn-primary">
+                    <span>📧</span>
+                    <span>Contact Sales</span>
+                </a>
+                <a href="#" class="btn-secondary">
+                    <span>📄</span>
+                    <span>Download Whitepaper</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-logo">
+            <div class="logo-icon"></div>
+            VoiceGuard AI
+        </div>
+        <p class="footer-tagline">"In a world where any voice can be faked, we're building the infrastructure of audio truth."</p>
+        <div class="footer-links">
+            <a href="#">Product</a>
+            <a href="#">Technology</a>
+            <a href="#">Company</a>
+            <a href="#">Careers</a>
+            <a href="#">Contact</a>
+        </div>
+        <p class="footer-copyright">© 2026 VoiceGuard AI. All rights reserved. | San Francisco, CA</p>
+    </footer>
+</body>
+</html>

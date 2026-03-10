@@ -119,6 +119,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-03-09 | Evening | DocuMind AI — The AI Operating System for Document Intelligence | [Playbook](2026-03-09-evening.md) • [Landing](2026-03-09-evening-landing.html) • [PDF](2026-03-09-evening.pdf) |
 | 2026-03-09 | Morning | DealRoom AI — Autonomous M&A Due Diligence Intelligence | [Playbook](2026-03-09-morning.md) • [Landing](2026-03-09-morning-landing.html) • [PDF](2026-03-09-morning.pdf) |
 | 2026-03-09 | Afternoon | MeetingOS — The AI That Attends Meetings For You | [Playbook](2026-03-09-afternoon.md) • [Landing](2026-03-09-afternoon-landing.html) • [PDF](2026-03-09-afternoon.pdf) |
+| 2026-03-10 | Evening | VoiceGuard AI — Real-Time Voice Authentication & Deepfake Detection | [Playbook](2026-03-10-evening.md) • [Landing](2026-03-10-evening-landing.html) • [PDF](2026-03-10-evening.pdf) |
 <!-- New entries will be added above this line -->
 
 ---
