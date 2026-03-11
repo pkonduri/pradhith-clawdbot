@@ -123,6 +123,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-03-10 | Morning | LobbyOS — Autonomous Political Intelligence & Influence Platform | [Playbook](2026-03-10-morning.md) • [Landing](2026-03-10-morning-landing.html) • [PDF](2026-03-10-morning.pdf) |
 | 2026-03-10 | Afternoon | AddictionOS — The AI Operating System for Addiction Recovery | [Playbook](2026-03-10-afternoon.md) • [Landing](2026-03-10-afternoon-landing.html) • [PDF](2026-03-10-afternoon.pdf) |
 | 2026-03-11 | Evening | WorldMind AI — Autonomous Geopolitical Intelligence Platform | [Playbook](2026-03-11-evening.md) • [Landing](2026-03-11-evening-landing.html) • [PDF](2026-03-11-evening.pdf) |
+| 2026-03-11 | Morning | AvatarOS — The Operating System for Telepresence Robotics | [Playbook](2026-03-11-morning.md) • [Landing](2026-03-11-morning-landing.html) • [PDF](2026-03-11-morning.pdf) |
 <!-- New entries will be added above this line -->
 
 ---
