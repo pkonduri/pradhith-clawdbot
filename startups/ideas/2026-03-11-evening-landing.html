@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WorldMind AI — Autonomous Geopolitical Intelligence Platform</title>
+    <meta name="description" content="Know tomorrow's world events before they impact your business. AI-powered geopolitical intelligence for enterprises, governments, and investors.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0ea5e9;
+            --primary-dark: #0284c7;
+            --secondary: #f59e0b;
+            --accent: #10b981;
+            --danger: #ef4444;
+            --dark: #0f172a;
+            --darker: #020617;
+            --card: #1e293b;
+            --card-hover: #334155;
+            --text: #f1f5f9;
+            --text-muted: #94a3b8;
+            --border: #334155;
+            --glow: rgba(14, 165, 233, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--darker);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Globe Background Animation */
+        .globe-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .globe {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 150vmax;
+            height: 150vmax;
+            background: radial-gradient(ellipse at center, 
+                rgba(14, 165, 233, 0.03) 0%, 
+                rgba(14, 165, 233, 0.01) 40%, 
+                transparent 70%);
+            border-radius: 50%;
+            animation: pulse 8s ease-in-out infinite;
+        }
+
+        .grid-lines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(14, 165, 233, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(14, 165, 233, 0.03) 1px, transparent 1px);
+            background-size: 100px 100px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.8; }
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(100px, 100px); }
+        }
+
+        /* Data Points Animation */
+        .data-points {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .data-point {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 50%;
+            opacity: 0;
+            animation: dataPoint 4s ease-in-out infinite;
+        }
+
+        @keyframes dataPoint {
+            0% { opacity: 0; transform: scale(0); }
+            20% { opacity: 1; transform: scale(1); }
+            80% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1.5rem 2rem;
+            background: rgba(2, 6, 23, 0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 800;
+            font-size: 1.5rem;
+            color: var(--text);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 0 30px var(--glow);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.875rem 1.75rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            box-shadow: 0 4px 20px var(--glow);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px var(--glow);
+        }
+
+        .btn-secondary {
+            background: var(--card);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--card-hover);
+            border-color: var(--primary);
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 8rem 2rem 4rem;
+            z-index: 1;
+        }
+
+        .hero-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .hero-text h1 {
+            font-size: 4rem;
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--text) 0%, var(--primary) 50%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-text .subtitle {
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .stat {
+            text-align: center;
+            padding: 1.5rem;
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            display: block;
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Live Intelligence Terminal */
+        .terminal {
+            background: var(--dark);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .terminal-header {
+            background: var(--card);
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .terminal-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .terminal-dot.red { background: #ef4444; }
+        .terminal-dot.yellow { background: #f59e0b; }
+        .terminal-dot.green { background: #10b981; }
+
+        .terminal-title {
+            margin-left: 1rem;
+            color: var(--text-muted);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
+        }
+
+        .terminal-body {
+            padding: 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
+            height: 400px;
+            overflow: hidden;
+        }
+
+        .terminal-line {
+            margin-bottom: 0.75rem;
+            opacity: 0;
+            animation: fadeInLine 0.5s ease forwards;
+        }
+
+        .terminal-line.alert {
+            color: var(--secondary);
+        }
+
+        .terminal-line.success {
+            color: var(--accent);
+        }
+
+        .terminal-line.danger {
+            color: var(--danger);
+        }
+
+        .terminal-line.info {
+            color: var(--primary);
+        }
+
+        @keyframes fadeInLine {
+            to { opacity: 1; }
+        }
+
+        .terminal-line:nth-child(1) { animation-delay: 0.5s; }
+        .terminal-line:nth-child(2) { animation-delay: 1s; }
+        .terminal-line:nth-child(3) { animation-delay: 1.5s; }
+        .terminal-line:nth-child(4) { animation-delay: 2s; }
+        .terminal-line:nth-child(5) { animation-delay: 2.5s; }
+        .terminal-line:nth-child(6) { animation-delay: 3s; }
+        .terminal-line:nth-child(7) { animation-delay: 3.5s; }
+        .terminal-line:nth-child(8) { animation-delay: 4s; }
+        .terminal-line:nth-child(9) { animation-delay: 4.5s; }
+        .terminal-line:nth-child(10) { animation-delay: 5s; }
+
+        /* Sections */
+        section {
+            position: relative;
+            z-index: 1;
+            padding: 6rem 2rem;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 4rem;
+        }
+
+        .section-header h2 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            color: var(--text-muted);
+            font-size: 1.25rem;
+        }
+
+        /* Problem Section */
+        .problem-section {
+            background: linear-gradient(180deg, var(--darker) 0%, var(--dark) 100%);
+        }
+
+        .problems-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .problem-card {
+            background: var(--card);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--danger);
+            box-shadow: 0 20px 40px rgba(239, 68, 68, 0.1);
+        }
+
+        .problem-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .problem-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .problem-card p {
+            color: var(--text-muted);
+        }
+
+        /* Solution Section */
+        .solution-section {
+            background: var(--dark);
+        }
+
+        .solution-features {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, var(--card) 0%, rgba(30, 41, 59, 0.5) 100%);
+            border-radius: 24px;
+            padding: 2.5rem;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px rgba(14, 165, 233, 0.15);
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 10px 30px var(--glow);
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card p {
+            color: var(--text-muted);
+            line-height: 1.8;
+        }
+
+        /* How It Works */
+        .how-section {
+            background: linear-gradient(180deg, var(--dark) 0%, var(--darker) 100%);
+        }
+
+        .flow-diagram {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .flow-step {
+            display: flex;
+            align-items: center;
+            gap: 3rem;
+            background: var(--card);
+            padding: 2rem 3rem;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            position: relative;
+        }
+
+        .flow-step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            bottom: -2rem;
+            left: 50%;
+            width: 2px;
+            height: 2rem;
+            background: linear-gradient(180deg, var(--primary), transparent);
+        }
+
+        .flow-number {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 800;
+            flex-shrink: 0;
+        }
+
+        .flow-content h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .flow-content p {
+            color: var(--text-muted);
+        }
+
+        /* Tiers Section */
+        .tiers-section {
+            background: var(--darker);
+        }
+
+        .tiers-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .tier-card {
+            background: var(--card);
+            border-radius: 24px;
+            padding: 3rem;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .tier-card.featured {
+            border-color: var(--primary);
+            transform: scale(1.05);
+            box-shadow: 0 25px 50px var(--glow);
+        }
+
+        .tier-card.featured::before {
+            content: 'MOST POPULAR';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .tier-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .tier-price {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .tier-price span {
+            font-size: 1rem;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .tier-desc {
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .tier-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .tier-features li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            color: var(--text-muted);
+        }
+
+        .tier-features li::before {
+            content: '✓';
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        /* Market Section */
+        .market-section {
+            background: var(--dark);
+        }
+
+        .market-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .market-chart {
+            background: var(--card);
+            border-radius: 24px;
+            padding: 3rem;
+            border: 1px solid var(--border);
+        }
+
+        .chart-bars {
+            display: flex;
+            align-items: flex-end;
+            gap: 1.5rem;
+            height: 250px;
+            padding-top: 2rem;
+        }
+
+        .chart-bar {
+            flex: 1;
+            background: linear-gradient(180deg, var(--primary), var(--primary-dark));
+            border-radius: 8px 8px 0 0;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .chart-bar:hover {
+            filter: brightness(1.2);
+        }
+
+        .chart-bar span {
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .chart-bar small {
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            white-space: nowrap;
+        }
+
+        .market-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .market-stat {
+            background: var(--card);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .market-stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .market-stat-label {
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, var(--dark) 0%, var(--card) 100%);
+            text-align: center;
+            padding: 8rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, var(--glow) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cta-content h2 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--text), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .cta-content p {
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            margin-bottom: 3rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+        }
+
+        .cta-email {
+            margin-top: 3rem;
+            color: var(--text-muted);
+        }
+
+        .cta-email a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--darker);
+            border-top: 1px solid var(--border);
+            padding: 3rem 2rem;
+            text-align: center;
+            color: var(--text-muted);
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-text h1 {
+                font-size: 3rem;
+            }
+
+            .solution-features,
+            .tiers-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tier-card.featured {
+                transform: none;
+            }
+
+            .market-content {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                display: none;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .hero-text h1 {
+                font-size: 2.25rem;
+            }
+
+            .hero-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .section-header h2 {
+                font-size: 2rem;
+            }
+
+            .cta-content h2 {
+                font-size: 2rem;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+            }
+        }
+
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeIn 0.8s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .delay-1 { animation-delay: 0.2s; }
+        .delay-2 { animation-delay: 0.4s; }
+        .delay-3 { animation-delay: 0.6s; }
+    </style>
+</head>
+<body>
+    <!-- Background Effects -->
+    <div class="globe-container">
+        <div class="globe"></div>
+        <div class="grid-lines"></div>
+    </div>
+
+    <div class="data-points" id="dataPoints"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-content">
+            <a href="#" class="logo">
+                <div class="logo-icon">🌐</div>
+                WorldMind AI
+            </a>
+            <div class="nav-links">
+                <a href="#problem">Problem</a>
+                <a href="#solution">Solution</a>
+                <a href="#how">How It Works</a>
+                <a href="#pricing">Pricing</a>
+                <a class="btn btn-primary" href="#cta">Request Access</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1 class="fade-in">Know Tomorrow's World Events Before They Impact You</h1>
+                <p class="subtitle fade-in delay-1">WorldMind AI transforms geopolitical chaos into actionable intelligence. Real-time predictions tailored to your supply chain, investments, and operations.</p>
+                <div class="fade-in delay-2">
+                    <a href="#cta" class="btn btn-primary">Request Early Access</a>
+                    <a href="#how" class="btn btn-secondary" style="margin-left: 1rem;">See How It Works</a>
+                </div>
+                <div class="hero-stats fade-in delay-3">
+                    <div class="stat">
+                        <span class="stat-value">73%</span>
+                        <span class="stat-label">Prediction Accuracy (30-day)</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value">24h</span>
+                        <span class="stat-label">Average Lead Time</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value">127</span>
+                        <span class="stat-label">Languages Monitored</span>
+                    </div>
+                </div>
+            </div>
+            <div class="terminal fade-in delay-2">
+                <div class="terminal-header">
+                    <span class="terminal-dot red"></span>
+                    <span class="terminal-dot yellow"></span>
+                    <span class="terminal-dot green"></span>
+                    <span class="terminal-title">worldmind-intelligence-feed</span>
+                </div>
+                <div class="terminal-body">
+                    <div class="terminal-line info">$ worldmind --monitor --personalized</div>
+                    <div class="terminal-line">⏳ Connecting to 847 data sources...</div>
+                    <div class="terminal-line success">✓ Real-time satellite feed active</div>
+                    <div class="terminal-line success">✓ Social sentiment analysis online</div>
+                    <div class="terminal-line success">✓ Maritime tracking synchronized</div>
+                    <div class="terminal-line alert">⚠️ AMBER ALERT: Taiwan Strait Escalation</div>
+                    <div class="terminal-line">├── Military movements detected (sat imagery)</div>
+                    <div class="terminal-line danger">├── YOUR EXPOSURE: $47M in TW suppliers</div>
+                    <div class="terminal-line info">├── PROBABILITY of disruption: 34% (↑12%)</div>
+                    <div class="terminal-line success">└── RECOMMENDED: Activate contingency plan</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="problem-section" id="problem">
+        <div class="section-header">
+            <h2>The World Is More Volatile Than Ever</h2>
+            <p>Traditional intelligence can't keep pace with accelerating global instability</p>
+        </div>
+        <div class="problems-grid">
+            <div class="problem-card">
+                <div class="problem-icon">⚔️</div>
+                <h3>56 Active Conflicts</h3>
+                <p>The highest number of armed conflicts since World War II, creating unprecedented supply chain and security risks.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">💸</div>
+                <h3>$4.3T Annual Losses</h3>
+                <p>Geopolitical disruptions cost the global economy trillions each year. Most organizations are caught off guard.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">🐢</div>
+                <h3>Days-Slow Analysis</h3>
+                <p>Traditional analysts take days or weeks to synthesize reports. By then, the damage is already done.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">💰</div>
+                <h3>$500K-$5M/Year Costs</h3>
+                <p>Quality geopolitical intelligence is prohibitively expensive, accessible only to the largest enterprises.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">📋</div>
+                <h3>Generic Reports</h3>
+                <p>Most intelligence is one-size-fits-all. It doesn't map to YOUR specific supply chain or investment exposure.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">🔮</div>
+                <h3>Reactive, Not Predictive</h3>
+                <p>Existing solutions tell you what happened. They can't predict what's about to happen.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="solution-section" id="solution">
+        <div class="section-header">
+            <h2>Your Autonomous Intelligence Center</h2>
+            <p>WorldMind processes billions of signals to predict global events before they impact you</p>
+        </div>
+        <div class="solution-features">
+            <div class="feature-card">
+                <div class="feature-icon">🛰️</div>
+                <h3>Universal Data Fusion</h3>
+                <p>We ingest satellite imagery, social signals, shipping data, financial flows, news in 127 languages, and more — all unified into actionable intelligence.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🧠</div>
+                <h3>Predictive Intelligence</h3>
+                <p>Our AI achieves 73% accuracy on 30-day conflict predictions (vs. 51% human baseline). Know what's coming before it arrives.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <h3>Personalized to You</h3>
+                <p>Every alert is mapped to YOUR supply chain, investments, and operations. Know exactly how global events impact YOUR business.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-section" id="how">
+        <div class="section-header">
+            <h2>How WorldMind Works</h2>
+            <p>From raw global data to personalized action in milliseconds</p>
+        </div>
+        <div class="flow-diagram">
+            <div class="flow-step">
+                <div class="flow-number">1</div>
+                <div class="flow-content">
+                    <h3>Ingest Global Data</h3>
+                    <p>847+ data sources including commercial satellites, maritime AIS, social media firehoses, news in 127 languages, dark web monitoring, and financial market feeds.</p>
+                </div>
+            </div>
+            <div class="flow-step">
+                <div class="flow-number">2</div>
+                <div class="flow-content">
+                    <h3>Build Causal Knowledge Graph</h3>
+                    <p>195 countries, 50,000+ entities, 1 million+ relationships. Our AI understands not just who and what, but why and what happens next.</p>
+                </div>
+            </div>
+            <div class="flow-step">
+                <div class="flow-number">3</div>
+                <div class="flow-content">
+                    <h3>Generate Predictions</h3>
+                    <p>Multi-horizon forecasting (24 hours to 90 days) with calibrated confidence intervals. Scenario simulation stress-tests your exposure.</p>
+                </div>
+            </div>
+            <div class="flow-step">
+                <div class="flow-number">4</div>
+                <div class="flow-content">
+                    <h3>Personalize & Act</h3>
+                    <p>Alerts mapped to your specific supply chain, investments, and operations. Automated triggers for hedging, supplier switching, and crisis response.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="tiers-section" id="pricing">
+        <div class="section-header">
+            <h2>Simple, Transparent Pricing</h2>
+            <p>Start with Analyst, scale to Sovereign</p>
+        </div>
+        <div class="tiers-grid">
+            <div class="tier-card">
+                <div class="tier-name">Analyst</div>
+                <div class="tier-price">$2,500<span>/month</span></div>
+                <p class="tier-desc">For teams getting started with geopolitical intelligence</p>
+                <ul class="tier-features">
+                    <li>Daily personalized briefings</li>
+                    <li>50 custom scenario tracks</li>
+                    <li>Email & Slack alerts</li>
+                    <li>API access (10K calls/mo)</li>
+                    <li>Standard support</li>
+                </ul>
+                <a href="#cta" class="btn btn-secondary" style="width: 100%; justify-content: center;">Get Started</a>
+            </div>
+            <div class="tier-card featured">
+                <div class="tier-name">Enterprise</div>
+                <div class="tier-price">$15,000<span>/month</span></div>
+                <p class="tier-desc">Full platform with supply chain integration</p>
+                <ul class="tier-features">
+                    <li>Unlimited scenario tracking</li>
+                    <li>Supply chain integration</li>
+                    <li>Custom knowledge graph entities</li>
+                    <li>Dedicated analyst support</li>
+                    <li>Unlimited API access</li>
+                    <li>Custom integrations</li>
+                </ul>
+                <a href="#cta" class="btn btn-primary" style="width: 100%; justify-content: center;">Request Demo</a>
+            </div>
+            <div class="tier-card">
+                <div class="tier-name">Sovereign</div>
+                <div class="tier-price">Custom</div>
+                <p class="tier-desc">Government-grade deployment options</p>
+                <ul class="tier-features">
+                    <li>Air-gapped deployment</li>
+                    <li>Custom data source integration</li>
+                    <li>Government-grade security</li>
+                    <li>On-premise or private cloud</li>
+                    <li>24/7 dedicated team</li>
+                    <li>White-label options</li>
+                </ul>
+                <a href="#cta" class="btn btn-secondary" style="width: 100%; justify-content: center;">Contact Sales</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Market Section -->
+    <section class="market-section" id="market">
+        <div class="section-header">
+            <h2>A $28B Opportunity</h2>
+            <p>The geopolitical intelligence market is exploding</p>
+        </div>
+        <div class="market-content">
+            <div class="market-chart">
+                <h3 style="margin-bottom: 2rem; color: var(--text-muted);">Market Growth (2024-2030)</h3>
+                <div class="chart-bars">
+                    <div class="chart-bar" style="height: 25%;">
+                        <span>$7B</span>
+                        <small>2024</small>
+                    </div>
+                    <div class="chart-bar" style="height: 40%;">
+                        <span>$11B</span>
+                        <small>2026</small>
+                    </div>
+                    <div class="chart-bar" style="height: 60%;">
+                        <span>$17B</span>
+                        <small>2028</small>
+                    </div>
+                    <div class="chart-bar" style="height: 100%;">
+                        <span>$28B</span>
+                        <small>2030</small>
+                    </div>
+                </div>
+            </div>
+            <div class="market-stats">
+                <div class="market-stat">
+                    <div class="market-stat-value">27%</div>
+                    <div class="market-stat-label">Annual Market Growth</div>
+                </div>
+                <div class="market-stat">
+                    <div class="market-stat-value">78%</div>
+                    <div class="market-stat-label">Execs Cite Geopolitical Risk #1</div>
+                </div>
+                <div class="market-stat">
+                    <div class="market-stat-value">$184M</div>
+                    <div class="market-stat-label">Avg Supply Chain Shock Cost</div>
+                </div>
+                <div class="market-stat">
+                    <div class="market-stat-value">10x</div>
+                    <div class="market-stat-label">Cheaper Than Incumbents</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section" id="cta">
+        <div class="cta-content">
+            <h2>Stay Ahead of Global Chaos</h2>
+            <p>Join the waitlist for early access to WorldMind AI</p>
+            <div class="cta-buttons">
+                <a href="mailto:founders@worldmind.ai?subject=WorldMind%20Early%20Access" class="btn btn-primary">
+                    Request Early Access →
+                </a>
+                <a href="mailto:founders@worldmind.ai?subject=WorldMind%20Investment" class="btn btn-secondary">
+                    Investment Inquiries
+                </a>
+            </div>
+            <p class="cta-email">Or reach us directly at <a href="mailto:founders@worldmind.ai">founders@worldmind.ai</a></p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2026 WorldMind AI. All rights reserved.</p>
+        <p style="margin-top: 0.5rem; font-size: 0.875rem;">Know tomorrow's world events before they impact your business.</p>
+    </footer>
+
+    <!-- Data Points Animation Script -->
+    <script>
+        const dataPointsContainer = document.getElementById('dataPoints');
+        
+        function createDataPoint() {
+            const point = document.createElement('div');
+            point.className = 'data-point';
+            point.style.left = Math.random() * 100 + '%';
+            point.style.top = Math.random() * 100 + '%';
+            point.style.animationDelay = Math.random() * 2 + 's';
+            dataPointsContainer.appendChild(point);
+            
+            setTimeout(() => {
+                point.remove();
+            }, 4000);
+        }
+        
+        setInterval(createDataPoint, 500);
+        
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
