@@ -125,6 +125,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-03-11 | Evening | WorldMind AI — Autonomous Geopolitical Intelligence Platform | [Playbook](2026-03-11-evening.md) • [Landing](2026-03-11-evening-landing.html) • [PDF](2026-03-11-evening.pdf) |
 | 2026-03-11 | Morning | AvatarOS — The Operating System for Telepresence Robotics | [Playbook](2026-03-11-morning.md) • [Landing](2026-03-11-morning-landing.html) • [PDF](2026-03-11-morning.pdf) |
 | 2026-03-11 | Afternoon | InheritanceOS — Autonomous Wealth Transfer Intelligence | [Playbook](2026-03-11-afternoon.md) • [Landing](2026-03-11-afternoon-landing.html) • [PDF](2026-03-11-afternoon.pdf) |
+| 2026-03-12 | Evening | ClaimOS — Autonomous Insurance Claims Intelligence | [Playbook](2026-03-12-evening.md) • [Landing](2026-03-12-evening-landing.html) • [PDF](2026-03-12-evening.pdf) |
 <!-- New entries will be added above this line -->
 
 ---

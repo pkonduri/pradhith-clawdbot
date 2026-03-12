@@ -1,0 +1,1276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClaimOS — The AI That Fights For Your Claim</title>
+    <meta name="description" content="Autonomous AI that documents damage, understands your policy, and fights for fair insurance settlements. Stop getting lowballed.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #DC2626;
+            --primary-dark: #B91C1C;
+            --primary-light: #FEE2E2;
+            --secondary: #1E40AF;
+            --secondary-light: #DBEAFE;
+            --accent: #059669;
+            --accent-light: #D1FAE5;
+            --dark: #0F172A;
+            --gray-900: #111827;
+            --gray-800: #1F2937;
+            --gray-700: #374151;
+            --gray-600: #4B5563;
+            --gray-500: #6B7280;
+            --gray-400: #9CA3AF;
+            --gray-300: #D1D5DB;
+            --gray-200: #E5E7EB;
+            --gray-100: #F3F4F6;
+            --gray-50: #F9FAFB;
+            --white: #FFFFFF;
+            --gold: #F59E0B;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--dark);
+            color: var(--white);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #0F172A 100%);
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(220, 38, 38, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(30, 64, 175, 0.15) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        
+        /* Animated grid background */
+        .grid-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 20s linear infinite;
+        }
+        
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 1000px;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(220, 38, 38, 0.2);
+            border: 1px solid rgba(220, 38, 38, 0.4);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #FCA5A5;
+            margin-bottom: 2rem;
+            animation: fadeInDown 0.8s ease;
+        }
+        
+        .badge::before {
+            content: '⚔️';
+            font-size: 1rem;
+        }
+        
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 900;
+            line-height: 1.05;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+        
+        .hero h1 .gradient {
+            background: linear-gradient(135deg, var(--primary) 0%, #F97316 50%, var(--gold) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .hero-subtitle {
+            font-size: clamp(1.25rem, 3vw, 1.75rem);
+            color: var(--gray-300);
+            max-width: 700px;
+            margin: 0 auto 2.5rem;
+            font-weight: 400;
+            animation: fadeInUp 1s ease 0.4s both;
+        }
+        
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            max-width: 800px;
+            margin: 0 auto 3rem;
+            animation: fadeInUp 1s ease 0.5s both;
+        }
+        
+        .stat {
+            text-align: center;
+            padding: 1.5rem;
+            background: rgba(255,255,255,0.03);
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--gray-400);
+            margin-top: 0.5rem;
+        }
+        
+        .cta-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            animation: fadeInUp 1s ease 0.6s both;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 18px 36px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, #DC2626 100%);
+            color: white;
+            box-shadow: 0 10px 40px rgba(220, 38, 38, 0.4);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 50px rgba(220, 38, 38, 0.5);
+        }
+        
+        .btn-secondary {
+            background: rgba(255,255,255,0.05);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.3);
+        }
+        
+        /* Problem Section */
+        .problem {
+            padding: 120px 2rem;
+            background: var(--gray-900);
+            position: relative;
+        }
+        
+        .problem::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 200px;
+            background: linear-gradient(to bottom, var(--dark), transparent);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .section-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(220, 38, 38, 0.1);
+            border: 1px solid rgba(220, 38, 38, 0.2);
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1.5rem;
+        }
+        
+        .section-title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+        
+        .section-subtitle {
+            font-size: 1.25rem;
+            color: var(--gray-400);
+            max-width: 600px;
+        }
+        
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+        
+        .problem-card {
+            background: linear-gradient(145deg, rgba(220, 38, 38, 0.05) 0%, rgba(220, 38, 38, 0.02) 100%);
+            border: 1px solid rgba(220, 38, 38, 0.15);
+            padding: 2rem;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .problem-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(220, 38, 38, 0.3);
+            box-shadow: 0 20px 60px rgba(220, 38, 38, 0.1);
+        }
+        
+        .problem-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(220, 38, 38, 0.1);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .problem-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            color: var(--white);
+        }
+        
+        .problem-card p {
+            color: var(--gray-400);
+            font-size: 0.95rem;
+        }
+        
+        .problem-stat {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Solution Section */
+        .solution {
+            padding: 120px 2rem;
+            background: linear-gradient(to bottom, var(--gray-900), var(--dark));
+        }
+        
+        .solution-header {
+            text-align: center;
+            margin-bottom: 5rem;
+        }
+        
+        .solution-badge {
+            background: rgba(5, 150, 105, 0.1);
+            border-color: rgba(5, 150, 105, 0.2);
+            color: var(--accent);
+        }
+        
+        .solution-flow {
+            display: grid;
+            gap: 4rem;
+        }
+        
+        .flow-step {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+        
+        .flow-step:nth-child(even) {
+            direction: rtl;
+        }
+        
+        .flow-step:nth-child(even) > * {
+            direction: ltr;
+        }
+        
+        .flow-visual {
+            position: relative;
+            aspect-ratio: 4/3;
+            background: linear-gradient(145deg, rgba(5, 150, 105, 0.1) 0%, rgba(5, 150, 105, 0.03) 100%);
+            border: 1px solid rgba(5, 150, 105, 0.2);
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .flow-visual::before {
+            content: '';
+            position: absolute;
+            inset: 20px;
+            background: 
+                linear-gradient(90deg, rgba(5, 150, 105, 0.1) 1px, transparent 1px),
+                linear-gradient(rgba(5, 150, 105, 0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+            border-radius: 16px;
+        }
+        
+        .flow-icon {
+            font-size: 6rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .flow-content h3 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            background: var(--accent);
+            color: white;
+            border-radius: 50%;
+            font-weight: 700;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .flow-content p {
+            color: var(--gray-400);
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .features-list {
+            list-style: none;
+        }
+        
+        .features-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 0.5rem 0;
+            color: var(--gray-300);
+        }
+        
+        .features-list li::before {
+            content: '✓';
+            color: var(--accent);
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+        
+        /* Market Section */
+        .market {
+            padding: 120px 2rem;
+            background: var(--dark);
+        }
+        
+        .market-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        
+        .market-badge {
+            background: rgba(30, 64, 175, 0.1);
+            border-color: rgba(30, 64, 175, 0.2);
+            color: var(--secondary);
+        }
+        
+        .market-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .market-card {
+            background: linear-gradient(145deg, rgba(30, 64, 175, 0.08) 0%, rgba(30, 64, 175, 0.02) 100%);
+            border: 1px solid rgba(30, 64, 175, 0.15);
+            padding: 2rem;
+            border-radius: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .market-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(30, 64, 175, 0.3);
+        }
+        
+        .market-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--secondary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .market-label {
+            font-size: 0.875rem;
+            color: var(--gray-400);
+        }
+        
+        /* Comparison Section */
+        .comparison {
+            padding: 120px 2rem;
+            background: var(--gray-900);
+        }
+        
+        .comparison-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        
+        .comparison-table {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 24px;
+            overflow: hidden;
+        }
+        
+        .comparison-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .comparison-row:last-child {
+            border-bottom: none;
+        }
+        
+        .comparison-cell {
+            padding: 1.5rem 2rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .comparison-header-row {
+            background: rgba(255,255,255,0.03);
+        }
+        
+        .comparison-header-row .comparison-cell {
+            font-weight: 700;
+            color: var(--gray-300);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .comparison-feature {
+            color: var(--white);
+            font-weight: 500;
+        }
+        
+        .comparison-check {
+            color: var(--accent);
+            font-size: 1.25rem;
+        }
+        
+        .comparison-x {
+            color: var(--gray-600);
+            font-size: 1.25rem;
+        }
+        
+        .comparison-highlight {
+            background: rgba(5, 150, 105, 0.08);
+        }
+        
+        /* Pricing Section */
+        .pricing {
+            padding: 120px 2rem;
+            background: linear-gradient(to bottom, var(--gray-900), var(--dark));
+        }
+        
+        .pricing-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .pricing-card {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 24px;
+            padding: 2.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .pricing-card.featured {
+            background: linear-gradient(145deg, rgba(220, 38, 38, 0.08) 0%, rgba(220, 38, 38, 0.02) 100%);
+            border-color: var(--primary);
+            transform: scale(1.02);
+        }
+        
+        .pricing-card:hover {
+            border-color: rgba(255,255,255,0.2);
+        }
+        
+        .pricing-badge {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .pricing-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .pricing-desc {
+            color: var(--gray-400);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .pricing-amount {
+            margin-bottom: 2rem;
+        }
+        
+        .pricing-price {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 3rem;
+            font-weight: 700;
+        }
+        
+        .pricing-period {
+            color: var(--gray-500);
+            font-size: 1rem;
+        }
+        
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+        
+        .pricing-features li {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            color: var(--gray-300);
+        }
+        
+        .pricing-features li:last-child {
+            border-bottom: none;
+        }
+        
+        .pricing-features li::before {
+            content: '✓';
+            color: var(--accent);
+            font-weight: 700;
+        }
+        
+        /* Timeline Section */
+        .timeline {
+            padding: 120px 2rem;
+            background: var(--dark);
+        }
+        
+        .timeline-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        
+        .timeline-wrapper {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .timeline-line {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--primary), var(--secondary), var(--accent));
+            transform: translateX(-50%);
+        }
+        
+        .timeline-item {
+            display: flex;
+            gap: 4rem;
+            margin-bottom: 3rem;
+        }
+        
+        .timeline-item:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+        
+        .timeline-content {
+            flex: 1;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 2rem;
+            border-radius: 20px;
+        }
+        
+        .timeline-dot {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 20px;
+            background: var(--primary);
+            border-radius: 50%;
+            border: 4px solid var(--dark);
+        }
+        
+        .timeline-date {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--primary);
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .timeline-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+        
+        .timeline-desc {
+            color: var(--gray-400);
+            font-size: 0.95rem;
+        }
+        
+        /* CTA Section */
+        .cta {
+            padding: 120px 2rem;
+            background: linear-gradient(135deg, var(--gray-900) 0%, var(--dark) 100%);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(ellipse at 30% 50%, rgba(220, 38, 38, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 50%, rgba(30, 64, 175, 0.1) 0%, transparent 50%);
+        }
+        
+        .cta-content {
+            position: relative;
+            z-index: 2;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .cta h2 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+        }
+        
+        .cta p {
+            font-size: 1.25rem;
+            color: var(--gray-400);
+            margin-bottom: 2.5rem;
+        }
+        
+        .cta-quote {
+            margin-top: 4rem;
+            padding-top: 4rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .cta-quote blockquote {
+            font-size: 1.5rem;
+            font-style: italic;
+            color: var(--gray-300);
+        }
+        
+        /* Footer */
+        footer {
+            padding: 3rem 2rem;
+            background: var(--gray-900);
+            border-top: 1px solid rgba(255,255,255,0.05);
+            text-align: center;
+        }
+        
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+        
+        .footer-tagline {
+            color: var(--gray-500);
+            margin-bottom: 1.5rem;
+        }
+        
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .footer-links a {
+            color: var(--gray-400);
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: color 0.2s ease;
+        }
+        
+        .footer-links a:hover {
+            color: var(--white);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-stats {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .flow-step {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .flow-step:nth-child(even) {
+                direction: ltr;
+            }
+            
+            .comparison-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .timeline-line {
+                display: none;
+            }
+            
+            .timeline-item {
+                flex-direction: column !important;
+                gap: 0;
+            }
+            
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .pricing-card.featured {
+                transform: none;
+            }
+        }
+        
+        /* Floating elements */
+        .float-badge {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--primary);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            box-shadow: 0 10px 40px rgba(220, 38, 38, 0.4);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .float-badge:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 50px rgba(220, 38, 38, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="grid-bg"></div>
+        <div class="hero-content">
+            <div class="badge">Fight Back Against Insurance Companies</div>
+            <h1><span class="gradient">ClaimOS</span><br>The AI That Fights<br>For Your Claim</h1>
+            <p class="hero-subtitle">Insurance companies use sophisticated AI to minimize your payout. Now you have your own. Document damage, decode your policy, and negotiate settlements—automatically.</p>
+            
+            <div class="hero-stats">
+                <div class="stat">
+                    <div class="stat-value">$30B</div>
+                    <div class="stat-label">Lost to underpayments annually</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">40%</div>
+                    <div class="stat-label">Claims initially underpaid</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">45</div>
+                    <div class="stat-label">Days average claim resolution</div>
+                </div>
+            </div>
+            
+            <div class="cta-group">
+                <a href="#waitlist" class="btn btn-primary">Start Fighting Back →</a>
+                <a href="#how-it-works" class="btn btn-secondary">See How It Works</a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Problem Section -->
+    <section class="problem">
+        <div class="container">
+            <span class="section-badge">⚠️ The Problem</span>
+            <h2 class="section-title">The System Is Rigged<br>Against You</h2>
+            <p class="section-subtitle">Insurance companies deploy billion-dollar algorithms to minimize payouts. You fight back with phone calls and paper forms.</p>
+            
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="problem-icon">📉</div>
+                    <div class="problem-stat">$1.4T</div>
+                    <h3>Annual Claims Volume</h3>
+                    <p>Processed by carriers with AI-powered systems designed to reduce payouts</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">⏳</div>
+                    <div class="problem-stat">30-45</div>
+                    <h3>Days to Resolution</h3>
+                    <p>The average homeowner claim drags on while you're stuck waiting</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">💸</div>
+                    <div class="problem-stat">10-15%</div>
+                    <h3>Public Adjuster Fees</h3>
+                    <p>The only help available takes a massive cut of your settlement</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">❌</div>
+                    <div class="problem-stat">40%</div>
+                    <h3>Claims Underpaid</h3>
+                    <p>Initial offers are designed to be rejected—but most people don't know</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Solution Section -->
+    <section class="solution" id="how-it-works">
+        <div class="container">
+            <div class="solution-header">
+                <span class="section-badge solution-badge">✨ The Solution</span>
+                <h2 class="section-title">Your AI-Powered<br>Claims Advocate</h2>
+                <p class="section-subtitle">ClaimOS fights for you with the same sophistication insurers use against you.</p>
+            </div>
+            
+            <div class="solution-flow">
+                <div class="flow-step">
+                    <div class="flow-visual">
+                        <div class="flow-icon">📸</div>
+                    </div>
+                    <div class="flow-content">
+                        <div class="step-number">1</div>
+                        <h3>Document Everything</h3>
+                        <p>Point your phone at damage—our AI generates comprehensive, legally defensible documentation in seconds.</p>
+                        <ul class="features-list">
+                            <li>Computer vision trained on 50M+ damage images</li>
+                            <li>Automatic repair cost estimates</li>
+                            <li>Timestamped evidence chain</li>
+                            <li>Identifies damage types insurers miss</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="flow-step">
+                    <div class="flow-visual">
+                        <div class="flow-icon">📋</div>
+                    </div>
+                    <div class="flow-content">
+                        <div class="step-number">2</div>
+                        <h3>Decode Your Policy</h3>
+                        <p>Upload your policy and our AI extracts every coverage provision—including the ones insurers conveniently forget.</p>
+                        <ul class="features-list">
+                            <li>Parses complex insurance language</li>
+                            <li>Maps damage to applicable coverages</li>
+                            <li>Identifies favorable provisions</li>
+                            <li>Compares to industry standards</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="flow-step">
+                    <div class="flow-visual">
+                        <div class="flow-icon">⚔️</div>
+                    </div>
+                    <div class="flow-content">
+                        <div class="step-number">3</div>
+                        <h3>Negotiate & Win</h3>
+                        <p>Our AI analyzes every offer, generates counter-arguments, and knows when to escalate.</p>
+                        <ul class="features-list">
+                            <li>Real-time settlement range analysis</li>
+                            <li>Persuasive response generation</li>
+                            <li>Bad faith pattern detection</li>
+                            <li>Automatic appeal letters</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Market Section -->
+    <section class="market">
+        <div class="container">
+            <div class="market-header">
+                <span class="section-badge market-badge">📊 Market Opportunity</span>
+                <h2 class="section-title">A $150B+ Opportunity</h2>
+                <p class="section-subtitle">Insurance claims are a massive, broken market waiting for disruption.</p>
+            </div>
+            
+            <div class="market-grid">
+                <div class="market-card">
+                    <div class="market-value">$95B</div>
+                    <div class="market-label">Property Claims (Residential)</div>
+                </div>
+                <div class="market-card">
+                    <div class="market-value">$280B</div>
+                    <div class="market-label">Auto Insurance Claims</div>
+                </div>
+                <div class="market-card">
+                    <div class="market-value">$45B</div>
+                    <div class="market-label">Commercial Property</div>
+                </div>
+                <div class="market-card">
+                    <div class="market-value">$50B+</div>
+                    <div class="market-label">Health Claims Denied</div>
+                </div>
+                <div class="market-card">
+                    <div class="market-value">$15B</div>
+                    <div class="market-label">Life Insurance Disputes</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Comparison Section -->
+    <section class="comparison">
+        <div class="container">
+            <div class="comparison-header">
+                <span class="section-badge">🏆 Why ClaimOS</span>
+                <h2 class="section-title">ClaimOS vs. Alternatives</h2>
+            </div>
+            
+            <div class="comparison-table">
+                <div class="comparison-row comparison-header-row">
+                    <div class="comparison-cell">Feature</div>
+                    <div class="comparison-cell">ClaimOS</div>
+                    <div class="comparison-cell">Public Adjuster</div>
+                </div>
+                <div class="comparison-row">
+                    <div class="comparison-cell comparison-feature">Fee Structure</div>
+                    <div class="comparison-cell comparison-highlight"><strong>5-8%</strong> success fee</div>
+                    <div class="comparison-cell">10-15% of settlement</div>
+                </div>
+                <div class="comparison-row">
+                    <div class="comparison-cell comparison-feature">Instant Documentation</div>
+                    <div class="comparison-cell comparison-highlight comparison-check">✓</div>
+                    <div class="comparison-cell comparison-x">✗</div>
+                </div>
+                <div class="comparison-row">
+                    <div class="comparison-cell comparison-feature">24/7 Availability</div>
+                    <div class="comparison-cell comparison-highlight comparison-check">✓</div>
+                    <div class="comparison-cell comparison-x">✗</div>
+                </div>
+                <div class="comparison-row">
+                    <div class="comparison-cell comparison-feature">Policy Analysis</div>
+                    <div class="comparison-cell comparison-highlight comparison-check">✓ AI-powered</div>
+                    <div class="comparison-cell">Manual review</div>
+                </div>
+                <div class="comparison-row">
+                    <div class="comparison-cell comparison-feature">Negotiation Support</div>
+                    <div class="comparison-cell comparison-highlight comparison-check">✓</div>
+                    <div class="comparison-cell comparison-check">✓</div>
+                </div>
+                <div class="comparison-row">
+                    <div class="comparison-cell comparison-feature">Speed to File</div>
+                    <div class="comparison-cell comparison-highlight"><strong>Minutes</strong></div>
+                    <div class="comparison-cell">Days</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Pricing Section -->
+    <section class="pricing">
+        <div class="container">
+            <div class="pricing-header">
+                <span class="section-badge">💰 Pricing</span>
+                <h2 class="section-title">Fair Pricing.<br>Real Results.</h2>
+            </div>
+            
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <div class="pricing-name">Free</div>
+                    <div class="pricing-desc">Get started documenting claims</div>
+                    <div class="pricing-amount">
+                        <span class="pricing-price">$0</span>
+                        <span class="pricing-period">forever</span>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>Damage documentation</li>
+                        <li>Basic policy upload</li>
+                        <li>Claim prep templates</li>
+                        <li>Community support</li>
+                    </ul>
+                    <a href="#waitlist" class="btn btn-secondary" style="width:100%;justify-content:center;">Get Started</a>
+                </div>
+                
+                <div class="pricing-card featured">
+                    <span class="pricing-badge">Most Popular</span>
+                    <div class="pricing-name">Premium</div>
+                    <div class="pricing-desc">Full AI-powered claim support</div>
+                    <div class="pricing-amount">
+                        <span class="pricing-price">$19.99</span>
+                        <span class="pricing-period">/month</span>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>Everything in Free</li>
+                        <li>Full negotiation support</li>
+                        <li>Unlimited claims</li>
+                        <li>Appeal automation</li>
+                        <li>Priority support</li>
+                    </ul>
+                    <a href="#waitlist" class="btn btn-primary" style="width:100%;justify-content:center;">Start Free Trial →</a>
+                </div>
+                
+                <div class="pricing-card">
+                    <div class="pricing-name">Success Fee</div>
+                    <div class="pricing-desc">Pay only when you win more</div>
+                    <div class="pricing-amount">
+                        <span class="pricing-price">5-8%</span>
+                        <span class="pricing-period">of recovered amount</span>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>Everything in Premium</li>
+                        <li>Dedicated claim specialist</li>
+                        <li>Legal escalation support</li>
+                        <li>No win, no fee</li>
+                    </ul>
+                    <a href="#waitlist" class="btn btn-secondary" style="width:100%;justify-content:center;">Learn More</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Timeline Section -->
+    <section class="timeline">
+        <div class="container">
+            <div class="timeline-header">
+                <span class="section-badge">🚀 Roadmap</span>
+                <h2 class="section-title">The Path to $1B</h2>
+            </div>
+            
+            <div class="timeline-wrapper">
+                <div class="timeline-line"></div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-date">2026 Q2</div>
+                        <div class="timeline-title">MVP Launch</div>
+                        <div class="timeline-desc">Property damage documentation app. Beta with first major weather event.</div>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-date">2026 Q4</div>
+                        <div class="timeline-title">National Scale</div>
+                        <div class="timeline-desc">100K users. Auto claims module. $10M ARR target.</div>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-date">2027 Q2</div>
+                        <div class="timeline-title">Health Claims</div>
+                        <div class="timeline-desc">Expand into denied health insurance appeals. Enterprise launch.</div>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-date">2028</div>
+                        <div class="timeline-title">$500M+ ARR</div>
+                        <div class="timeline-desc">15M users. International expansion. IPO preparation.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- CTA Section -->
+    <section class="cta" id="waitlist">
+        <div class="cta-content">
+            <h2>Stop Getting<br>Lowballed</h2>
+            <p>Join the waitlist and be first to fight back with AI on your side.</p>
+            <div class="cta-group">
+                <a href="mailto:founder@claimos.ai" class="btn btn-primary">Join Waitlist →</a>
+                <a href="mailto:founder@claimos.ai?subject=Investor%20Interest" class="btn btn-secondary">Investor Inquiries</a>
+            </div>
+            
+            <div class="cta-quote">
+                <blockquote>"They have algorithms. Now you do too."</blockquote>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="footer-logo">ClaimOS</div>
+        <p class="footer-tagline">The AI That Fights For Your Claim</p>
+        <div class="footer-links">
+            <a href="#">About</a>
+            <a href="#">How It Works</a>
+            <a href="#">Pricing</a>
+            <a href="mailto:founder@claimos.ai">Contact</a>
+            <a href="#">Privacy</a>
+            <a href="#">Terms</a>
+        </div>
+    </footer>
+    
+    <a href="#waitlist" class="float-badge">
+        <span>⚔️</span>
+        <span>Join the Fight</span>
+    </a>
+    
+    <script>
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        // Intersection Observer for animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        document.querySelectorAll('.problem-card, .flow-step, .market-card, .pricing-card, .timeline-content').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'all 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
