@@ -1,0 +1,1439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudioOS — The AI Operating System for Film & TV Production</title>
+    <meta name="description" content="Transform film and TV production with unified AI intelligence. From script to screen in half the time.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #8B5CF6;
+            --primary-dark: #7C3AED;
+            --secondary: #F59E0B;
+            --accent: #EC4899;
+            --dark: #0F0F1A;
+            --darker: #080810;
+            --light: #F8FAFC;
+            --gray: #94A3B8;
+            --gradient-1: linear-gradient(135deg, #8B5CF6 0%, #EC4899 50%, #F59E0B 100%);
+            --gradient-2: linear-gradient(180deg, #1E1B4B 0%, #0F0F1A 100%);
+            --gradient-3: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(236, 72, 153, 0.2) 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--darker);
+            color: var(--light);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(ellipse at center, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+                        radial-gradient(ellipse at 80% 20%, rgba(236, 72, 153, 0.1) 0%, transparent 40%),
+                        radial-gradient(ellipse at 20% 80%, rgba(245, 158, 11, 0.1) 0%, transparent 40%);
+            animation: bgRotate 30s linear infinite;
+        }
+
+        @keyframes bgRotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Film Strip Animation */
+        .film-strip {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.03;
+            background-image: repeating-linear-gradient(
+                90deg,
+                transparent,
+                transparent 40px,
+                #8B5CF6 40px,
+                #8B5CF6 42px
+            );
+            animation: filmMove 20s linear infinite;
+        }
+
+        @keyframes filmMove {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(42px); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(8, 8, 16, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            -webkit-text-fill-color: white;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--gray);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--light);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-1);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .cta-button {
+            background: var(--gradient-1);
+            color: white;
+            padding: 0.85rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(139, 92, 246, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .cta-button:hover::before {
+            left: 100%;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 30px rgba(139, 92, 246, 0.5);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 5% 4rem;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(139, 92, 246, 0.15);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            padding: 0.6rem 1.2rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--primary);
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .hero-badge::before {
+            content: '🎬';
+            font-size: 1rem;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(3rem, 8vw, 5.5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.8s ease 0.1s backwards;
+        }
+
+        .hero h1 span {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.1rem, 2vw, 1.4rem);
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto 2.5rem;
+            animation: fadeInUp 0.8s ease 0.2s backwards;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.8s ease 0.3s backwards;
+        }
+
+        .btn-primary {
+            background: var(--gradient-1);
+            color: white;
+            padding: 1.1rem 2.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.05rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 25px rgba(139, 92, 246, 0.4);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 35px rgba(139, 92, 246, 0.5);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--light);
+            padding: 1.1rem 2.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.05rem;
+            border: 2px solid rgba(139, 92, 246, 0.5);
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(139, 92, 246, 0.1);
+            border-color: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 4rem;
+            margin-top: 4rem;
+            padding-top: 4rem;
+            border-top: 1px solid rgba(139, 92, 246, 0.2);
+            animation: fadeInUp 0.8s ease 0.4s backwards;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.8rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--gray);
+            margin-top: 0.3rem;
+        }
+
+        /* Workflow Section */
+        .workflow {
+            padding: 8rem 5%;
+            background: var(--gradient-2);
+            position: relative;
+        }
+
+        .workflow::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 5rem;
+        }
+
+        .section-tag {
+            display: inline-block;
+            background: rgba(139, 92, 246, 0.15);
+            color: var(--primary);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .section-header h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2.2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            color: var(--gray);
+            font-size: 1.15rem;
+        }
+
+        .workflow-timeline {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            max-width: 1200px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .workflow-timeline::before {
+            content: '';
+            position: absolute;
+            top: 60px;
+            left: 10%;
+            right: 10%;
+            height: 3px;
+            background: var(--gradient-1);
+            border-radius: 2px;
+            z-index: 0;
+        }
+
+        .workflow-step {
+            flex: 1;
+            min-width: 200px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .step-icon {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 1.5rem;
+            background: var(--dark);
+            border: 3px solid;
+            border-image: var(--gradient-1) 1;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .workflow-step:hover .step-icon {
+            transform: scale(1.1);
+            box-shadow: 0 0 40px rgba(139, 92, 246, 0.4);
+        }
+
+        .step-number {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            width: 35px;
+            height: 35px;
+            background: var(--gradient-1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .workflow-step h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .workflow-step p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* Features Grid */
+        .features {
+            padding: 8rem 5%;
+            position: relative;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(15, 15, 26, 0.9) 100%);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            border-radius: 24px;
+            padding: 2.5rem;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-1);
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary);
+            box-shadow: 0 20px 50px rgba(139, 92, 246, 0.2);
+        }
+
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background: var(--gradient-3);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-card h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card p {
+            color: var(--gray);
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        .feature-list {
+            margin-top: 1.5rem;
+            list-style: none;
+        }
+
+        .feature-list li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+            font-size: 0.95rem;
+            color: var(--gray);
+        }
+
+        .feature-list li::before {
+            content: '✓';
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        /* Impact Section */
+        .impact {
+            padding: 8rem 5%;
+            background: var(--gradient-2);
+            position: relative;
+        }
+
+        .impact-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .impact-card {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: rgba(139, 92, 246, 0.05);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .impact-card:hover {
+            transform: translateY(-5px);
+            background: rgba(139, 92, 246, 0.1);
+        }
+
+        .impact-number {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 4rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        .impact-label {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .impact-desc {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* How It Works */
+        .how-it-works {
+            padding: 8rem 5%;
+            position: relative;
+        }
+
+        .architecture-visual {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: rgba(15, 15, 26, 0.8);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 24px;
+            padding: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .architecture-visual::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(139, 92, 246, 0.1), transparent 60%);
+            pointer-events: none;
+        }
+
+        .arch-layer {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .arch-box {
+            background: rgba(139, 92, 246, 0.15);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 12px;
+            padding: 1.2rem 1.5rem;
+            text-align: center;
+            min-width: 150px;
+            transition: all 0.3s ease;
+        }
+
+        .arch-box:hover {
+            background: rgba(139, 92, 246, 0.25);
+            transform: scale(1.05);
+        }
+
+        .arch-box.core {
+            background: var(--gradient-1);
+            border: none;
+            padding: 2rem 3rem;
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+
+        .arch-connector {
+            display: flex;
+            justify-content: center;
+            margin: 1rem 0;
+            color: var(--primary);
+            font-size: 1.5rem;
+        }
+
+        /* Pricing */
+        .pricing {
+            padding: 8rem 5%;
+            background: var(--gradient-2);
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            background: rgba(15, 15, 26, 0.9);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            border-radius: 24px;
+            padding: 3rem;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .pricing-card.featured {
+            border-color: var(--primary);
+            transform: scale(1.05);
+            box-shadow: 0 0 50px rgba(139, 92, 246, 0.3);
+        }
+
+        .pricing-card.featured::before {
+            content: 'MOST POPULAR';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--gradient-1);
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+        }
+
+        .pricing-card.featured:hover {
+            transform: scale(1.05) translateY(-5px);
+        }
+
+        .pricing-tier {
+            font-size: 0.9rem;
+            color: var(--primary);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-name {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .pricing-price {
+            margin-bottom: 1.5rem;
+        }
+
+        .price-amount {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .price-period {
+            color: var(--gray);
+            font-size: 1rem;
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-features li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            color: var(--gray);
+        }
+
+        .pricing-features li::before {
+            content: '✓';
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .pricing-cta {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .pricing-cta.primary {
+            background: var(--gradient-1);
+            color: white;
+        }
+
+        .pricing-cta.secondary {
+            background: transparent;
+            border: 2px solid rgba(139, 92, 246, 0.5);
+            color: var(--light);
+        }
+
+        .pricing-cta:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Testimonials */
+        .testimonials {
+            padding: 8rem 5%;
+        }
+
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .testimonial-card {
+            background: rgba(139, 92, 246, 0.05);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            border-radius: 20px;
+            padding: 2.5rem;
+            position: relative;
+        }
+
+        .testimonial-card::before {
+            content: '"';
+            position: absolute;
+            top: 20px;
+            left: 25px;
+            font-size: 5rem;
+            color: rgba(139, 92, 246, 0.2);
+            font-family: Georgia, serif;
+            line-height: 1;
+        }
+
+        .testimonial-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .author-avatar {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .author-info h4 {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .author-info p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* CTA Section */
+        .final-cta {
+            padding: 10rem 5%;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .final-cta::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.3) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .final-cta-content {
+            max-width: 700px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .final-cta h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+        }
+
+        .final-cta p {
+            font-size: 1.25rem;
+            color: var(--gray);
+            margin-bottom: 2.5rem;
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 5% 2rem;
+            border-top: 1px solid rgba(139, 92, 246, 0.2);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .footer-logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .footer-links a {
+            color: var(--gray);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--light);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(139, 92, 246, 0.1);
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .impact-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .workflow-timeline::before {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem 5%;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero {
+                padding: 7rem 5% 4rem;
+            }
+
+            .stats-bar {
+                gap: 2rem;
+            }
+
+            .impact-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pricing-card.featured {
+                transform: none;
+            }
+
+            .pricing-card.featured:hover {
+                transform: translateY(-5px);
+            }
+        }
+
+        /* Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .float {
+            animation: float 6s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    <div class="film-strip"></div>
+
+    <nav>
+        <div class="logo">
+            <div class="logo-icon">🎬</div>
+            StudioOS
+        </div>
+        <ul class="nav-links">
+            <li><a href="#features">Features</a></li>
+            <li><a href="#workflow">Workflow</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+            <li><a href="#about">About</a></li>
+        </ul>
+        <a href="#contact" class="cta-button">Get Early Access</a>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">Now Accepting Studio Pilots</div>
+            <h1>From Script to Screen<br><span>in Half the Time</span></h1>
+            <p class="hero-subtitle">The unified AI operating system that orchestrates every phase of film and TV production — transforming how stories get made.</p>
+            <div class="hero-cta">
+                <a href="#contact" class="btn-primary">Request Demo →</a>
+                <a href="#features" class="btn-secondary">▶ Watch Overview</a>
+            </div>
+            <div class="stats-bar">
+                <div class="stat">
+                    <div class="stat-value">40%</div>
+                    <div class="stat-label">Faster Production</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">30%</div>
+                    <div class="stat-label">Cost Reduction</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">$500B</div>
+                    <div class="stat-label">Industry TAM</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">100+</div>
+                    <div class="stat-label">AI Models</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="workflow" id="workflow">
+        <div class="section-header">
+            <div class="section-tag">Complete Workflow</div>
+            <h2>One Platform. Every Phase.</h2>
+            <p>StudioOS connects development through distribution, creating a unified intelligence layer for your entire production.</p>
+        </div>
+        <div class="workflow-timeline">
+            <div class="workflow-step">
+                <div class="step-icon">
+                    📝
+                    <div class="step-number">1</div>
+                </div>
+                <h3>ScriptMind</h3>
+                <p>AI-powered development & story intelligence</p>
+            </div>
+            <div class="workflow-step">
+                <div class="step-icon">
+                    🎯
+                    <div class="step-number">2</div>
+                </div>
+                <h3>PrePro AI</h3>
+                <p>Automated breakdown, casting & scheduling</p>
+            </div>
+            <div class="workflow-step">
+                <div class="step-icon">
+                    🎥
+                    <div class="step-number">3</div>
+                </div>
+                <h3>SetMind</h3>
+                <p>Real-time production intelligence</p>
+            </div>
+            <div class="workflow-step">
+                <div class="step-icon">
+                    ✂️
+                    <div class="step-number">4</div>
+                </div>
+                <h3>PostGenius</h3>
+                <p>AI editing, VFX & post-production</p>
+            </div>
+            <div class="workflow-step">
+                <div class="step-icon">
+                    🌍
+                    <div class="step-number">5</div>
+                </div>
+                <h3>LocalizeOS</h3>
+                <p>Global distribution & localization</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="features" id="features">
+        <div class="section-header">
+            <div class="section-tag">Platform Capabilities</div>
+            <h2>AI That Understands Production</h2>
+            <p>Purpose-built models trained on thousands of hours of film content, designed for professional workflows.</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">📝</div>
+                <h3>ScriptMind Intelligence</h3>
+                <p>Transform your development process with AI that truly understands storytelling.</p>
+                <ul class="feature-list">
+                    <li>Plot hole and pacing analysis</li>
+                    <li>Audience reception prediction</li>
+                    <li>Automatic budget estimation</li>
+                    <li>Comparable title benchmarking</li>
+                    <li>Real-time collaboration</li>
+                </ul>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <h3>Pre-Production Automation</h3>
+                <p>What took weeks now takes hours with intelligent automation.</p>
+                <ul class="feature-list">
+                    <li>Auto script breakdown</li>
+                    <li>AI casting recommendations</li>
+                    <li>Virtual location scouting</li>
+                    <li>Storyboard generation</li>
+                    <li>Schedule optimization</li>
+                </ul>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎥</div>
+                <h3>Production Intelligence</h3>
+                <p>Real-time insights that catch issues before they become problems.</p>
+                <ul class="feature-list">
+                    <li>Instant dailies analysis</li>
+                    <li>Continuity error detection</li>
+                    <li>Performance tracking</li>
+                    <li>Resource optimization</li>
+                    <li>Union compliance automation</li>
+                </ul>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">✂️</div>
+                <h3>Post-Production Engine</h3>
+                <p>Accelerate post with AI that knows film grammar.</p>
+                <ul class="feature-list">
+                    <li>Auto rough cut assembly</li>
+                    <li>AI color grading</li>
+                    <li>Sound design generation</li>
+                    <li>VFX pipeline automation</li>
+                    <li>Temporary score creation</li>
+                </ul>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🌍</div>
+                <h3>Global Distribution</h3>
+                <p>Reach worldwide audiences with intelligent localization.</p>
+                <ul class="feature-list">
+                    <li>50+ language auto-dubbing</li>
+                    <li>Context-aware subtitles</li>
+                    <li>Cultural adaptation</li>
+                    <li>Platform compliance</li>
+                    <li>Asset management</li>
+                </ul>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>Studio Analytics</h3>
+                <p>Data-driven decisions across your entire slate.</p>
+                <ul class="feature-list">
+                    <li>Performance prediction</li>
+                    <li>Marketing optimization</li>
+                    <li>Talent analytics</li>
+                    <li>Cost benchmarking</li>
+                    <li>Rights management</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="impact">
+        <div class="section-header">
+            <div class="section-tag">Real Results</div>
+            <h2>The StudioOS Impact</h2>
+            <p>Production companies using StudioOS see transformational improvements.</p>
+        </div>
+        <div class="impact-grid">
+            <div class="impact-card">
+                <div class="impact-number">40%</div>
+                <div class="impact-label">Faster Timelines</div>
+                <div class="impact-desc">From development to delivery</div>
+            </div>
+            <div class="impact-card">
+                <div class="impact-number">30%</div>
+                <div class="impact-label">Cost Reduction</div>
+                <div class="impact-desc">Across production budget</div>
+            </div>
+            <div class="impact-card">
+                <div class="impact-number">80%</div>
+                <div class="impact-label">Less Manual Work</div>
+                <div class="impact-desc">On repetitive tasks</div>
+            </div>
+            <div class="impact-card">
+                <div class="impact-number">2X</div>
+                <div class="impact-label">More Output</div>
+                <div class="impact-desc">With same team size</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="how-it-works" id="about">
+        <div class="section-header">
+            <div class="section-tag">Architecture</div>
+            <h2>Built for Enterprise Production</h2>
+            <p>A unified data model connecting every phase, powered by production-specific AI.</p>
+        </div>
+        <div class="architecture-visual">
+            <div class="arch-layer">
+                <div class="arch-box">ScriptMind</div>
+                <div class="arch-box">PrePro AI</div>
+                <div class="arch-box">SetMind</div>
+                <div class="arch-box">PostGenius</div>
+                <div class="arch-box">LocalizeOS</div>
+            </div>
+            <div class="arch-connector">↕</div>
+            <div class="arch-layer">
+                <div class="arch-box core">Unified Production Data Graph</div>
+            </div>
+            <div class="arch-connector">↕</div>
+            <div class="arch-layer">
+                <div class="arch-box">Vision AI</div>
+                <div class="arch-box">Language AI</div>
+                <div class="arch-box">Audio AI</div>
+                <div class="arch-box">Generative AI</div>
+            </div>
+            <div class="arch-connector">↕</div>
+            <div class="arch-layer">
+                <div class="arch-box">Avid</div>
+                <div class="arch-box">DaVinci</div>
+                <div class="arch-box">Final Draft</div>
+                <div class="arch-box">Frame.io</div>
+                <div class="arch-box">Shotgrid</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="pricing" id="pricing">
+        <div class="section-header">
+            <div class="section-tag">Simple Pricing</div>
+            <h2>Plans for Every Production</h2>
+            <p>From indie filmmakers to major studios.</p>
+        </div>
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <div class="pricing-tier">Indie</div>
+                <div class="pricing-name">Indie Tier</div>
+                <div class="pricing-price">
+                    <span class="price-amount">$2,500</span>
+                    <span class="price-period">/month</span>
+                </div>
+                <ul class="pricing-features">
+                    <li>Single project up to $5M budget</li>
+                    <li>Core ScriptMind features</li>
+                    <li>Basic PrePro automation</li>
+                    <li>PostGenius essentials</li>
+                    <li>Community support</li>
+                </ul>
+                <button class="pricing-cta secondary">Start Free Trial</button>
+            </div>
+            <div class="pricing-card featured">
+                <div class="pricing-tier">Professional</div>
+                <div class="pricing-name">Studio Tier</div>
+                <div class="pricing-price">
+                    <span class="price-amount">$15,000</span>
+                    <span class="price-period">/month</span>
+                </div>
+                <ul class="pricing-features">
+                    <li>Unlimited projects</li>
+                    <li>Full platform access</li>
+                    <li>API integrations</li>
+                    <li>Multi-user collaboration</li>
+                    <li>Priority support</li>
+                </ul>
+                <button class="pricing-cta primary">Request Demo</button>
+            </div>
+            <div class="pricing-card">
+                <div class="pricing-tier">Enterprise</div>
+                <div class="pricing-name">Enterprise</div>
+                <div class="pricing-price">
+                    <span class="price-amount">Custom</span>
+                    <span class="price-period"></span>
+                </div>
+                <ul class="pricing-features">
+                    <li>Unlimited everything</li>
+                    <li>Custom model training</li>
+                    <li>On-premise deployment</li>
+                    <li>Dedicated success team</li>
+                    <li>Custom SLA & integrations</li>
+                </ul>
+                <button class="pricing-cta secondary">Contact Sales</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonials">
+        <div class="section-header">
+            <div class="section-tag">Early Adopters</div>
+            <h2>What Studios Are Saying</h2>
+        </div>
+        <div class="testimonial-grid">
+            <div class="testimonial-card">
+                <p class="testimonial-text">StudioOS cut our pre-production time in half. The script breakdown automation alone saved us weeks of work on our last feature.</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">🎬</div>
+                    <div class="author-info">
+                        <h4>Sarah Chen</h4>
+                        <p>Head of Production, Indie Studio</p>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <p class="testimonial-text">The AI understands film grammar in a way I've never seen before. It doesn't just suggest cuts — it understands storytelling rhythm.</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">✂️</div>
+                    <div class="author-info">
+                        <h4>Marcus Rodriguez</h4>
+                        <p>Emmy-Winning Editor</p>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <p class="testimonial-text">We're producing 50% more content with the same team. StudioOS didn't replace anyone — it made everyone more powerful.</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">🏢</div>
+                    <div class="author-info">
+                        <h4>Jennifer Walsh</h4>
+                        <p>COO, Production Company</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="final-cta" id="contact">
+        <div class="final-cta-content">
+            <h2>Ready to Transform Your Production?</h2>
+            <p>Join the studios already using StudioOS to make better content, faster.</p>
+            <div class="hero-cta">
+                <a href="mailto:pilots@studioos.ai" class="btn-primary">Request Studio Pilot →</a>
+                <a href="#" class="btn-secondary">Download Playbook</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">🎬 StudioOS</div>
+            <ul class="footer-links">
+                <li><a href="#">Product</a></li>
+                <li><a href="#">Pricing</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Blog</a></li>
+                <li><a href="#">Careers</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 StudioOS, Inc. All rights reserved. | The intelligence layer for the stories that move us.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth reveal on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.feature-card, .impact-card, .pricing-card, .testimonial-card, .workflow-step').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+
+        // Navbar background on scroll
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 100) {
+                nav.style.background = 'rgba(8, 8, 16, 0.95)';
+            } else {
+                nav.style.background = 'rgba(8, 8, 16, 0.8)';
+            }
+        });
+    </script>
+</body>
+</html>

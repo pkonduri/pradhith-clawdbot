@@ -128,6 +128,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-03-12 | Evening | ClaimOS — Autonomous Insurance Claims Intelligence | [Playbook](2026-03-12-evening.md) • [Landing](2026-03-12-evening-landing.html) • [PDF](2026-03-12-evening.pdf) |
 | 2026-03-12 | Morning | ProofID — Zero-Storage Identity Verification | [Playbook](2026-03-12-morning.md) • [Landing](2026-03-12-morning-landing.html) • [PDF](2026-03-12-morning.pdf) |
 | 2026-03-12 | Afternoon | ShopMind AI — Autonomous Commerce Agent Platform | [Playbook](2026-03-12-afternoon.md) • [Landing](2026-03-12-afternoon-landing.html) • [PDF](2026-03-12-afternoon.pdf) |
+| 2026-03-13 | Evening | StudioOS — The AI Operating System for Film & TV Production | [Playbook](2026-03-13-evening.md) • [Landing](2026-03-13-evening-landing.html) • [PDF](2026-03-13-evening.pdf) |
 <!-- New entries will be added above this line -->
 
 ---
