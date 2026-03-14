@@ -133,6 +133,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-03-13 | Afternoon | ArbitrateOS — The AI Operating System for Dispute Resolution | [Playbook](2026-03-13-afternoon.md) • [Landing](2026-03-13-afternoon-landing.html) • [PDF](2026-03-13-afternoon.pdf) |
 | 2026-03-14 | Evening | SoundMind AI — The Autonomous Operating System for Music Industry Intelligence | [Playbook](2026-03-14-evening.md) • [Landing](2026-03-14-evening-landing.html) • [PDF](2026-03-14-evening.pdf) |
 | 2026-03-14 | Morning | GrantOS — Autonomous Grant Writing & Research Funding Intelligence | [Playbook](2026-03-14-morning.md) • [Landing](2026-03-14-morning-landing.html) • [PDF](2026-03-14-morning.pdf) |
+| 2026-03-14 | Afternoon | StyleOS — The AI Operating System for Personal Style Intelligence | [Playbook](2026-03-14-afternoon.md) • [Landing](2026-03-14-afternoon-landing.html) • [PDF](2026-03-14-afternoon.pdf) |
 <!-- New entries will be added above this line -->
 
 ---
