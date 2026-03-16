@@ -136,6 +136,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-03-14 | Afternoon | StyleOS — The AI Operating System for Personal Style Intelligence | [Playbook](2026-03-14-afternoon.md) • [Landing](2026-03-14-afternoon-landing.html) • [PDF](2026-03-14-afternoon.pdf) |
 | 2026-03-15 | Morning | RepairOS — The AI Operating System for Technical Repair Intelligence | [Playbook](2026-03-15-morning.md) • [Landing](2026-03-15-morning-landing.html) • [PDF](2026-03-15-morning.pdf) |
 | 2026-03-15 | Afternoon | ImmigrationOS — The AI Operating System for Global Immigration Intelligence | [Playbook](2026-03-15-afternoon.md) • [Landing](2026-03-15-afternoon-landing.html) • [PDF](2026-03-15-afternoon.pdf) |
+| 2026-03-16 | Evening | NightShift AI — The Operating System for Shift Worker Health & Performance | [Playbook](2026-03-16-evening.md) • [Landing](2026-03-16-evening-landing.html) • [PDF](2026-03-16-evening.pdf) |
 <!-- New entries will be added above this line -->
 
 ---

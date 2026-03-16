@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NightShift AI — The Operating System for Shift Worker Health</title>
+    <meta name="description" content="AI-powered health and performance optimization for the 1.3 billion people working against their circadian biology.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --night-deep: #0a0e1a;
+            --night-mid: #111827;
+            --night-light: #1f2937;
+            --accent-purple: #8b5cf6;
+            --accent-blue: #3b82f6;
+            --accent-cyan: #06b6d4;
+            --accent-orange: #f97316;
+            --text-primary: #f9fafb;
+            --text-secondary: #9ca3af;
+            --text-muted: #6b7280;
+            --gradient-hero: linear-gradient(135deg, #0a0e1a 0%, #1e1b4b 50%, #0a0e1a 100%);
+            --gradient-card: linear-gradient(180deg, rgba(139,92,246,0.1) 0%, rgba(59,130,246,0.05) 100%);
+            --gradient-accent: linear-gradient(90deg, #8b5cf6 0%, #3b82f6 50%, #06b6d4 100%);
+            --glow-purple: 0 0 60px rgba(139,92,246,0.3);
+            --glow-blue: 0 0 60px rgba(59,130,246,0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--night-deep);
+            color: var(--text-primary);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Space Grotesk', sans-serif;
+            line-height: 1.2;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .stars {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(2px 2px at 20px 30px, rgba(255,255,255,0.3), transparent),
+                radial-gradient(2px 2px at 40px 70px, rgba(139,92,246,0.4), transparent),
+                radial-gradient(1px 1px at 90px 40px, rgba(255,255,255,0.2), transparent),
+                radial-gradient(2px 2px at 160px 120px, rgba(59,130,246,0.3), transparent),
+                radial-gradient(1px 1px at 230px 80px, rgba(255,255,255,0.3), transparent),
+                radial-gradient(2px 2px at 300px 200px, rgba(6,182,212,0.3), transparent);
+            background-size: 350px 350px;
+            animation: twinkle 8s ease-in-out infinite alternate;
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .gradient-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .orb-1 {
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(139,92,246,0.3) 0%, transparent 70%);
+            top: -200px;
+            right: -200px;
+            animation-delay: 0s;
+        }
+
+        .orb-2 {
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(59,130,246,0.2) 0%, transparent 70%);
+            bottom: -150px;
+            left: -150px;
+            animation-delay: -10s;
+        }
+
+        .orb-3 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(6,182,212,0.15) 0%, transparent 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation-delay: -5s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(30px, -30px) scale(1.05); }
+            50% { transform: translate(-20px, 20px) scale(0.95); }
+            75% { transform: translate(20px, 30px) scale(1.02); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10,14,26,0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(139,92,246,0.1);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--gradient-accent);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-accent);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .nav-cta {
+            background: var(--gradient-accent);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(139,92,246,0.3);
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(139,92,246,0.5);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 2rem 4rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(139,92,246,0.15);
+            border: 1px solid rgba(139,92,246,0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            color: var(--accent-purple);
+            margin-bottom: 2rem;
+            animation: pulse-glow 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(139,92,246,0.2); }
+            50% { box-shadow: 0 0 40px rgba(139,92,246,0.4); }
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .hero h1 .gradient-text {
+            background: var(--gradient-accent);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.125rem, 2vw, 1.5rem);
+            color: var(--text-secondary);
+            margin-bottom: 2.5rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-ctas {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 4rem;
+        }
+
+        .btn-primary {
+            background: var(--gradient-accent);
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.125rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 25px rgba(139,92,246,0.4);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 40px rgba(139,92,246,0.5);
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.05);
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.125rem;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.2);
+        }
+
+        /* Circadian Clock Animation */
+        .clock-visual {
+            width: 300px;
+            height: 300px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .clock-ring {
+            position: absolute;
+            border-radius: 50%;
+            border: 2px solid;
+            animation: rotate 20s linear infinite;
+        }
+
+        .clock-ring.outer {
+            width: 100%;
+            height: 100%;
+            border-color: rgba(139,92,246,0.3);
+        }
+
+        .clock-ring.middle {
+            width: 75%;
+            height: 75%;
+            top: 12.5%;
+            left: 12.5%;
+            border-color: rgba(59,130,246,0.3);
+            animation-direction: reverse;
+            animation-duration: 15s;
+        }
+
+        .clock-ring.inner {
+            width: 50%;
+            height: 50%;
+            top: 25%;
+            left: 25%;
+            border-color: rgba(6,182,212,0.3);
+            animation-duration: 10s;
+        }
+
+        .clock-center {
+            position: absolute;
+            width: 30%;
+            height: 30%;
+            top: 35%;
+            left: 35%;
+            background: var(--gradient-accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            box-shadow: var(--glow-purple);
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Stats Section */
+        .stats {
+            padding: 4rem 2rem;
+            background: rgba(139,92,246,0.05);
+            border-top: 1px solid rgba(139,92,246,0.1);
+            border-bottom: 1px solid rgba(139,92,246,0.1);
+        }
+
+        .stats-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            text-align: center;
+        }
+
+        .stat-item {
+            padding: 1.5rem;
+        }
+
+        .stat-number {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            background: var(--gradient-accent);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* Crisis Section */
+        .crisis {
+            padding: 8rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(249,115,22,0.15);
+            border: 1px solid rgba(249,115,22,0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            color: var(--accent-orange);
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.25rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .crisis-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .crisis-card {
+            background: var(--gradient-card);
+            border: 1px solid rgba(249,115,22,0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .crisis-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(249,115,22,0.4);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .crisis-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(249,115,22,0.15);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .crisis-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: var(--accent-orange);
+        }
+
+        .crisis-card p {
+            color: var(--text-secondary);
+        }
+
+        /* Solution Section */
+        .solution {
+            padding: 8rem 2rem;
+            background: linear-gradient(180deg, transparent 0%, rgba(139,92,246,0.05) 50%, transparent 100%);
+        }
+
+        .solution-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .module-card {
+            background: rgba(17,24,39,0.8);
+            border: 1px solid rgba(139,92,246,0.2);
+            border-radius: 24px;
+            padding: 2.5rem;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .module-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-accent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .module-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(139,92,246,0.4);
+            box-shadow: var(--glow-purple);
+        }
+
+        .module-card:hover::before {
+            opacity: 1;
+        }
+
+        .module-icon {
+            width: 70px;
+            height: 70px;
+            background: var(--gradient-accent);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 10px 30px rgba(139,92,246,0.3);
+        }
+
+        .module-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .module-card p {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .module-features {
+            list-style: none;
+        }
+
+        .module-features li {
+            padding: 0.5rem 0;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.9rem;
+        }
+
+        .module-features li::before {
+            content: '✦';
+            color: var(--accent-cyan);
+        }
+
+        /* Market Section */
+        .market {
+            padding: 8rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .market-visual {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+
+        .market-tier {
+            background: var(--gradient-card);
+            border: 1px solid rgba(139,92,246,0.2);
+            border-radius: 20px;
+            padding: 2.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .market-tier:hover {
+            transform: scale(1.02);
+            border-color: rgba(139,92,246,0.4);
+        }
+
+        .market-tier.highlight {
+            border-color: var(--accent-purple);
+            background: linear-gradient(180deg, rgba(139,92,246,0.2) 0%, rgba(59,130,246,0.1) 100%);
+            box-shadow: var(--glow-purple);
+        }
+
+        .market-label {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.5rem;
+        }
+
+        .market-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            background: var(--gradient-accent);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .market-desc {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Traction Section */
+        .traction {
+            padding: 8rem 2rem;
+            background: rgba(6,182,212,0.03);
+        }
+
+        .traction-content {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 3rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: var(--gradient-accent);
+            border-radius: 3px;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 3rem;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -3rem;
+            top: 0.25rem;
+            width: 20px;
+            height: 20px;
+            background: var(--accent-purple);
+            border-radius: 50%;
+            border: 4px solid var(--night-deep);
+            box-shadow: 0 0 20px rgba(139,92,246,0.5);
+        }
+
+        .timeline-phase {
+            color: var(--accent-cyan);
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-title {
+            font-size: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .timeline-desc {
+            color: var(--text-secondary);
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 8rem 2rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .cta-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            margin-bottom: 1.5rem;
+        }
+
+        .cta p {
+            color: var(--text-secondary);
+            font-size: 1.25rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .cta-highlight {
+            background: var(--gradient-accent);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Footer */
+        footer {
+            padding: 3rem 2rem;
+            text-align: center;
+            border-top: 1px solid rgba(139,92,246,0.1);
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-purple);
+        }
+
+        .footer-copy {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero {
+                padding-top: 6rem;
+            }
+
+            .market-visual {
+                grid-template-columns: 1fr;
+            }
+
+            .clock-visual {
+                width: 200px;
+                height: 200px;
+            }
+
+            .modules-grid {
+                grid-template-columns: 1fr;
+            }
+
+            nav {
+                padding: 1rem;
+            }
+
+            .logo span {
+                display: none;
+            }
+        }
+
+        /* Scroll animations */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s ease;
+        }
+
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="bg-animation">
+        <div class="stars"></div>
+        <div class="gradient-orb orb-1"></div>
+        <div class="gradient-orb orb-2"></div>
+        <div class="gradient-orb orb-3"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">
+            <div class="logo-icon">🌙</div>
+            <span>NightShift AI</span>
+        </div>
+        <a href="#join" class="nav-cta">Join Waitlist</a>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span>⏰</span> Built for the 24/7 Workforce
+            </div>
+            <h1>
+                Your Body Doesn't Know<br>
+                <span class="gradient-text">What Shift You're On</span>
+            </h1>
+            <p class="hero-subtitle">
+                AI-powered health and performance optimization for the 1.3 billion people working against their circadian biology. Because nobody should trade their health for a paycheck.
+            </p>
+            <div class="hero-ctas">
+                <a href="#join" class="btn-primary">
+                    <span>Get Early Access</span>
+                    <span>→</span>
+                </a>
+                <a href="#how" class="btn-secondary">
+                    <span>See How It Works</span>
+                </a>
+            </div>
+
+            <!-- Circadian Clock Visual -->
+            <div class="clock-visual">
+                <div class="clock-ring outer"></div>
+                <div class="clock-ring middle"></div>
+                <div class="clock-ring inner"></div>
+                <div class="clock-center">🌙</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-number">1.3B</div>
+                <div class="stat-label">Shift Workers Globally</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">40%</div>
+                <div class="stat-label">Higher Heart Disease Risk</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">6-8</div>
+                <div class="stat-label">Years Shorter Lifespan</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">$136B</div>
+                <div class="stat-label">Annual Productivity Loss (US)</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Crisis Section -->
+    <section class="crisis fade-up">
+        <div class="section-header">
+            <div class="section-badge">
+                <span>⚠️</span> The Hidden Crisis
+            </div>
+            <h2 class="section-title">Fighting Millions of Years of Evolution</h2>
+            <p class="section-subtitle">
+                Shift workers power modern civilization — and the healthcare system is failing them.
+            </p>
+        </div>
+
+        <div class="crisis-grid">
+            <div class="crisis-card">
+                <div class="crisis-icon">💔</div>
+                <h3>Cardiovascular Crisis</h3>
+                <p>40% higher risk of heart disease. Night shifts disrupt every metabolic process.</p>
+            </div>
+            <div class="crisis-card">
+                <div class="crisis-icon">🧠</div>
+                <h3>Mental Health Epidemic</h3>
+                <p>33% higher depression rates. Isolation, disrupted sleep, and circadian chaos take their toll.</p>
+            </div>
+            <div class="crisis-card">
+                <div class="crisis-icon">⚡</div>
+                <h3>Fatigue Kills</h3>
+                <p>100,000+ preventable deaths from shift-work-related errors in healthcare alone.</p>
+            </div>
+            <div class="crisis-card">
+                <div class="crisis-icon">🏥</div>
+                <h3>No Support System</h3>
+                <p>Healthcare providers aren't trained in circadian medicine. Advice designed for 9-5 doesn't work.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section id="how" class="solution fade-up">
+        <div class="solution-content">
+            <div class="section-header">
+                <div class="section-badge" style="background: rgba(139,92,246,0.15); border-color: rgba(139,92,246,0.3); color: var(--accent-purple);">
+                    <span>✨</span> The Solution
+                </div>
+                <h2 class="section-title">Six AI Modules. One Optimized Life.</h2>
+                <p class="section-subtitle">
+                    NightShift AI understands your schedule, your biology, and your goals — then orchestrates everything to help you thrive.
+                </p>
+            </div>
+
+            <div class="modules-grid">
+                <div class="module-card">
+                    <div class="module-icon">🧭</div>
+                    <h3>CircadianMind</h3>
+                    <p>Adaptive schedule intelligence that maps your chronotype and optimizes your day.</p>
+                    <ul class="module-features">
+                        <li>Schedule integration & analysis</li>
+                        <li>Peak performance prediction</li>
+                        <li>Fatigue window alerts</li>
+                    </ul>
+                </div>
+
+                <div class="module-card">
+                    <div class="module-icon">😴</div>
+                    <h3>SleepForge</h3>
+                    <p>Intelligent sleep architecture designed for any schedule.</p>
+                    <ul class="module-features">
+                        <li>AI nap timing & duration</li>
+                        <li>Light exposure prescriptions</li>
+                        <li>Smart home integration</li>
+                    </ul>
+                </div>
+
+                <div class="module-card">
+                    <div class="module-icon">🥗</div>
+                    <h3>NutriSync</h3>
+                    <p>Circadian nutrition that keeps your metabolism on track.</p>
+                    <ul class="module-features">
+                        <li>Shift-optimized meal timing</li>
+                        <li>Glucose optimization</li>
+                        <li>Meal delivery integration</li>
+                    </ul>
+                </div>
+
+                <div class="module-card">
+                    <div class="module-icon">⚡</div>
+                    <h3>PerformancePulse</h3>
+                    <p>Real-time alertness monitoring for safety-critical work.</p>
+                    <ul class="module-features">
+                        <li>Fatigue risk scoring</li>
+                        <li>"Not Safe to Drive" alerts</li>
+                        <li>Decision support systems</li>
+                    </ul>
+                </div>
+
+                <div class="module-card">
+                    <div class="module-icon">🏥</div>
+                    <h3>HealthGuard</h3>
+                    <p>Proactive medical intelligence for shift-work health risks.</p>
+                    <ul class="module-features">
+                        <li>Early warning systems</li>
+                        <li>Predictive risk scoring</li>
+                        <li>Care coordination</li>
+                    </ul>
+                </div>
+
+                <div class="module-card">
+                    <div class="module-icon">🧘</div>
+                    <h3>MindShift</h3>
+                    <p>Mental health support designed for shift workers.</p>
+                    <ul class="module-features">
+                        <li>Shift-aware therapy</li>
+                        <li>Community matching</li>
+                        <li>Burnout detection</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Market Section -->
+    <section class="market fade-up">
+        <div class="section-header">
+            <div class="section-badge" style="background: rgba(6,182,212,0.15); border-color: rgba(6,182,212,0.3); color: var(--accent-cyan);">
+                <span>📊</span> Market Opportunity
+            </div>
+            <h2 class="section-title">A $487 Billion Problem</h2>
+            <p class="section-subtitle">
+                Nobody has built for shift workers. We're changing that.
+            </p>
+        </div>
+
+        <div class="market-visual">
+            <div class="market-tier">
+                <div class="market-label">Total Addressable Market</div>
+                <div class="market-value">$487B</div>
+                <div class="market-desc">Global shift worker health costs</div>
+            </div>
+            <div class="market-tier highlight">
+                <div class="market-label">Serviceable Market</div>
+                <div class="market-value">$89B</div>
+                <div class="market-desc">US, EU, UK, ANZ markets</div>
+            </div>
+            <div class="market-tier">
+                <div class="market-label">Year 5 Target</div>
+                <div class="market-value">$4.2B</div>
+                <div class="market-desc">15M paid users</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Traction Section -->
+    <section class="traction fade-up">
+        <div class="traction-content">
+            <div class="section-header">
+                <div class="section-badge" style="background: rgba(139,92,246,0.15); border-color: rgba(139,92,246,0.3); color: var(--accent-purple);">
+                    <span>🚀</span> The Roadmap
+                </div>
+                <h2 class="section-title">From Nurses to the World</h2>
+            </div>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-phase">Phase 1 — Now</div>
+                    <h3 class="timeline-title">ICU & ER Nurses</h3>
+                    <p class="timeline-desc">The highest-impact, highest-visibility beachhead. Strong peer networks, clear ROI for hospitals, and a sympathetic narrative that drives adoption.</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-phase">Phase 2 — Year 2</div>
+                    <h3 class="timeline-title">Transportation</h3>
+                    <p class="timeline-desc">Truck drivers and pilots. ELD integration for trucking, FAA compliance for aviation. Partner with major carriers and logistics companies.</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-phase">Phase 3 — Year 3</div>
+                    <h3 class="timeline-title">Industrial & Hospitality</h3>
+                    <p class="timeline-desc">Manufacturing plants, data centers, hotels, casinos, security. Millions of workers across hundreds of industries.</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-phase">Phase 4 — Year 4+</div>
+                    <h3 class="timeline-title">Global Expansion</h3>
+                    <p class="timeline-desc">NHS partnership in UK, EU labor markets, Australia mining and healthcare, Asia-Pacific manufacturing hubs.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="join" class="cta fade-up">
+        <div class="cta-content">
+            <h2>Join the <span class="cta-highlight">Night Shift Revolution</span></h2>
+            <p>We're seeking early partners: health systems ready to run pilots, investors who understand the opportunity, and shift workers ready to take back their health.</p>
+            <a href="mailto:founders@nightshift.ai" class="btn-primary">
+                <span>Get In Touch</span>
+                <span>→</span>
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-links">
+            <a href="#">About</a>
+            <a href="#">Research</a>
+            <a href="#">For Employers</a>
+            <a href="#">For Workers</a>
+            <a href="#">Contact</a>
+        </div>
+        <p class="footer-copy">
+            © 2026 NightShift AI. Because your body doesn't know what shift you're on. 🌙
+        </p>
+    </footer>
+
+    <!-- Scroll Animation Script -->
+    <script>
+        const fadeElements = document.querySelectorAll('.fade-up');
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        fadeElements.forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
