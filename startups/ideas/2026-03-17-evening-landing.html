@@ -1,0 +1,1405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeepSim — Simulate Before You Commit</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --deep-navy: #0a0f1c;
+            --midnight: #0d1426;
+            --dark-blue: #141e33;
+            --electric-cyan: #00d4ff;
+            --neon-purple: #7c3aed;
+            --bright-violet: #8b5cf6;
+            --glow-pink: #ec4899;
+            --success-green: #10b981;
+            --warning-amber: #f59e0b;
+            --soft-white: #f1f5f9;
+            --muted-gray: #94a3b8;
+            --card-bg: rgba(20, 30, 51, 0.8);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--deep-navy);
+            color: var(--soft-white);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(124, 58, 237, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(0, 212, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(236, 72, 153, 0.05) 0%, transparent 70%);
+        }
+
+        /* Grid Pattern Overlay */
+        .grid-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-image: 
+                linear-gradient(rgba(0, 212, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        /* Floating Nodes Animation */
+        .simulation-nodes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .sim-node {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: var(--electric-cyan);
+            border-radius: 50%;
+            opacity: 0.4;
+            box-shadow: 0 0 20px var(--electric-cyan);
+        }
+
+        .sim-node:nth-child(odd) {
+            background: var(--neon-purple);
+            box-shadow: 0 0 20px var(--neon-purple);
+        }
+
+        .sim-node:nth-child(1) { top: 10%; left: 15%; animation: simFloat 8s ease-in-out infinite; }
+        .sim-node:nth-child(2) { top: 25%; left: 75%; animation: simFloat 12s ease-in-out infinite 1s; }
+        .sim-node:nth-child(3) { top: 45%; left: 25%; animation: simFloat 10s ease-in-out infinite 2s; }
+        .sim-node:nth-child(4) { top: 60%; left: 85%; animation: simFloat 9s ease-in-out infinite 0.5s; }
+        .sim-node:nth-child(5) { top: 80%; left: 45%; animation: simFloat 11s ease-in-out infinite 1.5s; }
+        .sim-node:nth-child(6) { top: 15%; left: 55%; animation: simFloat 13s ease-in-out infinite 3s; }
+        .sim-node:nth-child(7) { top: 70%; left: 10%; animation: simFloat 7s ease-in-out infinite 2.5s; }
+        .sim-node:nth-child(8) { top: 35%; left: 90%; animation: simFloat 14s ease-in-out infinite 4s; }
+
+        @keyframes simFloat {
+            0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.4; }
+            25% { transform: translate(30px, -20px) scale(1.3); opacity: 0.7; }
+            50% { transform: translate(-20px, 30px) scale(0.8); opacity: 0.5; }
+            75% { transform: translate(40px, 20px) scale(1.2); opacity: 0.6; }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(10, 15, 28, 0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 800;
+            font-size: 1.5rem;
+        }
+
+        .logo-icon {
+            width: 42px;
+            height: 42px;
+            background: linear-gradient(135deg, var(--electric-cyan), var(--neon-purple));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.4);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--muted-gray);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .nav-links a:hover {
+            color: var(--electric-cyan);
+        }
+
+        .nav-cta {
+            background: linear-gradient(135deg, var(--electric-cyan), var(--neon-purple));
+            color: white;
+            padding: 0.75rem 1.75rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 4px 20px rgba(0, 212, 255, 0.3);
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0, 212, 255, 0.5);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 5% 4rem;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            padding: 0.5rem 1.25rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--electric-cyan);
+            margin-bottom: 2rem;
+            animation: badgePulse 2s ease-in-out infinite;
+        }
+
+        @keyframes badgePulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(0, 212, 255, 0.4); }
+            50% { box-shadow: 0 0 20px 5px rgba(0, 212, 255, 0.2); }
+        }
+
+        .hero h1 {
+            font-size: 4.5rem;
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #fff 0%, var(--electric-cyan) 50%, var(--neon-purple) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero h1 span {
+            display: block;
+            font-size: 2rem;
+            font-weight: 400;
+            background: linear-gradient(90deg, var(--muted-gray), var(--soft-white));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-top: 0.5rem;
+        }
+
+        .hero-description {
+            font-size: 1.35rem;
+            color: var(--muted-gray);
+            margin-bottom: 3rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-ctas {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 4rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--electric-cyan), var(--neon-purple));
+            color: white;
+            padding: 1.1rem 2.5rem;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            box-shadow: 0 4px 30px rgba(0, 212, 255, 0.4);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 40px rgba(0, 212, 255, 0.6);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--soft-white);
+            padding: 1.1rem 2.5rem;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--electric-cyan);
+            background: rgba(0, 212, 255, 0.1);
+        }
+
+        /* Simulation Visual */
+        .simulation-visual {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .simulation-visual::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--electric-cyan), var(--neon-purple), var(--glow-pink));
+        }
+
+        .sim-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sim-title {
+            font-size: 0.9rem;
+            color: var(--muted-gray);
+        }
+
+        .sim-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--success-green);
+        }
+
+        .sim-status::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--success-green);
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        .sim-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .sim-input, .sim-output {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 1.25rem;
+        }
+
+        .sim-label {
+            font-size: 0.75rem;
+            color: var(--electric-cyan);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.75rem;
+        }
+
+        .sim-decision {
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .sim-params {
+            font-size: 0.85rem;
+            color: var(--muted-gray);
+        }
+
+        .sim-results {
+            display: grid;
+            gap: 0.75rem;
+        }
+
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+        }
+
+        .result-label {
+            color: var(--muted-gray);
+        }
+
+        .result-value {
+            font-weight: 600;
+            font-family: 'SF Mono', 'Fira Code', monospace;
+        }
+
+        .result-value.positive { color: var(--success-green); }
+        .result-value.caution { color: var(--warning-amber); }
+
+        .confidence-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            margin-top: 1rem;
+            overflow: hidden;
+        }
+
+        .confidence-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--electric-cyan), var(--neon-purple));
+            width: 73%;
+            border-radius: 3px;
+            animation: confidenceGrow 2s ease-out;
+        }
+
+        @keyframes confidenceGrow {
+            from { width: 0; }
+            to { width: 73%; }
+        }
+
+        /* Stats Section */
+        .stats {
+            padding: 6rem 5%;
+            background: linear-gradient(180deg, transparent, rgba(0, 212, 255, 0.02));
+        }
+
+        .stats-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 2rem;
+            background: var(--card-bg);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(0, 212, 255, 0.3);
+            box-shadow: 0 10px 40px rgba(0, 212, 255, 0.1);
+        }
+
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--electric-cyan), var(--neon-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            color: var(--muted-gray);
+            font-size: 0.95rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Problem Section */
+        .problem {
+            padding: 8rem 5%;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 4rem;
+        }
+
+        .section-label {
+            display: inline-block;
+            color: var(--glow-pink);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 1rem;
+        }
+
+        .section-header h2 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            color: var(--muted-gray);
+            font-size: 1.15rem;
+        }
+
+        .problem-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .problem-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 2.5rem;
+            border: 1px solid rgba(236, 72, 153, 0.2);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .problem-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--glow-pink), transparent);
+        }
+
+        .problem-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(236, 72, 153, 0.4);
+        }
+
+        .problem-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .problem-card h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .problem-card p {
+            color: var(--muted-gray);
+            font-size: 1rem;
+        }
+
+        .problem-stat {
+            display: inline-block;
+            background: rgba(236, 72, 153, 0.1);
+            color: var(--glow-pink);
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+
+        /* Solution Section */
+        .solution {
+            padding: 8rem 5%;
+            background: linear-gradient(180deg, rgba(124, 58, 237, 0.03), transparent);
+        }
+
+        .solution-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .solution-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 2.5rem;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .solution-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--electric-cyan);
+            box-shadow: 0 20px 60px rgba(0, 212, 255, 0.15);
+        }
+
+        .solution-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(124, 58, 237, 0.2));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto 1.5rem;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+        }
+
+        .solution-card h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .solution-card p {
+            color: var(--muted-gray);
+            font-size: 0.95rem;
+        }
+
+        /* How It Works */
+        .how-it-works {
+            padding: 8rem 5%;
+        }
+
+        .process-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .process-step {
+            display: grid;
+            grid-template-columns: 80px 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .process-step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            left: 39px;
+            top: 80px;
+            width: 2px;
+            height: calc(100% - 40px);
+            background: linear-gradient(180deg, var(--electric-cyan), transparent);
+        }
+
+        .step-number {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--electric-cyan), var(--neon-purple));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            font-weight: 800;
+            flex-shrink: 0;
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.4);
+        }
+
+        .step-content h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .step-content p {
+            color: var(--muted-gray);
+            font-size: 1.05rem;
+        }
+
+        .step-example {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 1.25rem;
+            margin-top: 1rem;
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            font-size: 0.85rem;
+            color: var(--electric-cyan);
+            border-left: 3px solid var(--neon-purple);
+        }
+
+        /* Use Cases */
+        .use-cases {
+            padding: 8rem 5%;
+            background: linear-gradient(180deg, transparent, rgba(0, 212, 255, 0.02));
+        }
+
+        .use-cases-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .use-case-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 2.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s;
+        }
+
+        .use-case-card:hover {
+            border-color: rgba(0, 212, 255, 0.3);
+            transform: translateY(-3px);
+        }
+
+        .use-case-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .use-case-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(124, 58, 237, 0.2));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .use-case-card h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .use-case-card p {
+            color: var(--muted-gray);
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+        }
+
+        .use-case-result {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .use-case-result strong {
+            color: var(--success-green);
+        }
+
+        /* Pricing */
+        .pricing {
+            padding: 8rem 5%;
+        }
+
+        .pricing-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .pricing-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 3rem 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .pricing-card.featured {
+            border-color: var(--electric-cyan);
+            transform: scale(1.05);
+            box-shadow: 0 20px 60px rgba(0, 212, 255, 0.2);
+        }
+
+        .pricing-card.featured::before {
+            content: 'MOST POPULAR';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--electric-cyan), var(--neon-purple));
+            padding: 0.35rem 1.25rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .pricing-card.featured:hover {
+            transform: scale(1.05) translateY(-5px);
+        }
+
+        .pricing-tier {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--electric-cyan);
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-price {
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-price span {
+            font-size: 1rem;
+            font-weight: 400;
+            color: var(--muted-gray);
+        }
+
+        .pricing-description {
+            color: var(--muted-gray);
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-features li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+            font-size: 0.95rem;
+            color: var(--muted-gray);
+        }
+
+        .pricing-features li::before {
+            content: '✓';
+            color: var(--success-green);
+            font-weight: 700;
+        }
+
+        .pricing-cta {
+            display: block;
+            text-align: center;
+            padding: 1rem;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .pricing-card:not(.featured) .pricing-cta {
+            background: transparent;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: var(--soft-white);
+        }
+
+        .pricing-card:not(.featured) .pricing-cta:hover {
+            border-color: var(--electric-cyan);
+            background: rgba(0, 212, 255, 0.1);
+        }
+
+        .pricing-card.featured .pricing-cta {
+            background: linear-gradient(135deg, var(--electric-cyan), var(--neon-purple));
+            color: white;
+            box-shadow: 0 4px 20px rgba(0, 212, 255, 0.3);
+        }
+
+        .pricing-card.featured .pricing-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0, 212, 255, 0.5);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 8rem 5%;
+            text-align: center;
+            position: relative;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(ellipse at center, rgba(0, 212, 255, 0.1) 0%, transparent 70%);
+            z-index: -1;
+        }
+
+        .cta-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cta-content h2 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #fff, var(--electric-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .cta-content p {
+            font-size: 1.25rem;
+            color: var(--muted-gray);
+            margin-bottom: 2.5rem;
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 5% 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 4rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-brand p {
+            color: var(--muted-gray);
+            margin-top: 1rem;
+            font-size: 0.95rem;
+        }
+
+        .footer-links h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--soft-white);
+        }
+
+        .footer-links ul {
+            list-style: none;
+        }
+
+        .footer-links a {
+            color: var(--muted-gray);
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: block;
+            padding: 0.3rem 0;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--electric-cyan);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            color: var(--muted-gray);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero h1 { font-size: 3.5rem; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .solution-grid { grid-template-columns: repeat(2, 1fr); }
+            .pricing-grid { grid-template-columns: 1fr; max-width: 450px; }
+            .pricing-card.featured { transform: none; }
+            .pricing-card.featured:hover { transform: translateY(-5px); }
+            .footer-content { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .hero h1 { font-size: 2.5rem; }
+            .hero h1 span { font-size: 1.25rem; }
+            .hero-description { font-size: 1.1rem; }
+            .sim-content { grid-template-columns: 1fr; }
+            .stats-grid { grid-template-columns: 1fr; }
+            .problem-grid { grid-template-columns: 1fr; }
+            .solution-grid { grid-template-columns: 1fr; }
+            .use-cases-grid { grid-template-columns: 1fr; }
+            .process-step { grid-template-columns: 1fr; text-align: center; }
+            .step-number { margin: 0 auto 1rem; }
+            .process-step:not(:last-child)::after { display: none; }
+            .section-header h2 { font-size: 2.25rem; }
+            .cta-content h2 { font-size: 2.5rem; }
+            .footer-content { grid-template-columns: 1fr; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Effects -->
+    <div class="bg-animation"></div>
+    <div class="grid-pattern"></div>
+    <div class="simulation-nodes">
+        <div class="sim-node"></div>
+        <div class="sim-node"></div>
+        <div class="sim-node"></div>
+        <div class="sim-node"></div>
+        <div class="sim-node"></div>
+        <div class="sim-node"></div>
+        <div class="sim-node"></div>
+        <div class="sim-node"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">
+            <div class="logo-icon">◈</div>
+            DeepSim
+        </div>
+        <ul class="nav-links">
+            <li><a href="#problem">Problem</a></li>
+            <li><a href="#solution">Solution</a></li>
+            <li><a href="#how-it-works">How It Works</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+        </ul>
+        <a href="#contact" class="nav-cta">Request Demo</a>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                ◈ Enterprise Decision Intelligence
+            </div>
+            <h1>
+                Simulate Before You Commit
+                <span>AI-Powered Strategic Decision Simulation</span>
+            </h1>
+            <p class="hero-description">
+                Every $1M+ decision deserves stress-testing. DeepSim runs 10,000+ scenarios in minutes—turning strategic uncertainty into quantified confidence.
+            </p>
+            <div class="hero-ctas">
+                <a href="#contact" class="btn-primary">
+                    Start Simulating →
+                </a>
+                <a href="#how-it-works" class="btn-secondary">
+                    ▶ See How It Works
+                </a>
+            </div>
+
+            <!-- Simulation Visual -->
+            <div class="simulation-visual">
+                <div class="sim-header">
+                    <span class="sim-title">SIMULATION #4,847 • M&A Analysis</span>
+                    <span class="sim-status">Running 10,000 scenarios</span>
+                </div>
+                <div class="sim-content">
+                    <div class="sim-input">
+                        <div class="sim-label">Decision Input</div>
+                        <div class="sim-decision">"Acquire TechCo for $500M"</div>
+                        <div class="sim-params">
+                            Synergy target: $80M/yr<br>
+                            Integration timeline: 18 months<br>
+                            Retention risk: Key talent
+                        </div>
+                    </div>
+                    <div class="sim-output">
+                        <div class="sim-label">Simulation Results</div>
+                        <div class="sim-results">
+                            <div class="result-row">
+                                <span class="result-label">Expected NPV</span>
+                                <span class="result-value positive">$127M</span>
+                            </div>
+                            <div class="result-row">
+                                <span class="result-label">Success Probability</span>
+                                <span class="result-value positive">73%</span>
+                            </div>
+                            <div class="result-row">
+                                <span class="result-label">Break-even</span>
+                                <span class="result-value">Month 28</span>
+                            </div>
+                            <div class="result-row">
+                                <span class="result-label">Key Risk</span>
+                                <span class="result-value caution">Talent flight</span>
+                            </div>
+                        </div>
+                        <div class="confidence-bar">
+                            <div class="confidence-fill"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">70%</div>
+                <div class="stat-label">M&A deals fail to create value</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">$200M</div>
+                <div class="stat-label">Average cost of failed market entry</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">73%</div>
+                <div class="stat-label">CEOs admit decisions are "gut-driven"</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">6-12mo</div>
+                <div class="stat-label">Traditional consulting engagement</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="problem" id="problem">
+        <div class="section-header">
+            <span class="section-label">The Problem</span>
+            <h2>Strategic Decisions in the Dark</h2>
+            <p>Billion-dollar decisions are made with million-dollar analysis—or worse, spreadsheets and intuition.</p>
+        </div>
+        <div class="problem-grid">
+            <div class="problem-card">
+                <div class="problem-icon">📊</div>
+                <h3>Static Excel Models</h3>
+                <p>Most strategic analysis happens in spreadsheets that can't capture market dynamics, competitive responses, or uncertainty.</p>
+                <span class="problem-stat">3-5 scenarios vs. 10,000+ needed</span>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">⏳</div>
+                <h3>Consultant Time Lag</h3>
+                <p>McKinsey charges $1-5M for strategic analysis that takes 6-12 months—often outdated by delivery.</p>
+                <span class="problem-stat">$50B+ spent annually on consulting</span>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">🎯</div>
+                <h3>Blind Spot Failures</h3>
+                <p>"We didn't think about X" is the most common post-mortem on failed strategic initiatives.</p>
+                <span class="problem-stat">65% of strategic pivots fail</span>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">🎲</div>
+                <h3>Intuition Over Analysis</h3>
+                <p>When proper simulation isn't feasible, decisions default to executive intuition and experience.</p>
+                <span class="problem-stat">$4.5T in supply chain disruption costs</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="solution" id="solution">
+        <div class="section-header">
+            <span class="section-label">The Solution</span>
+            <h2>AI-Powered Decision Simulation</h2>
+            <p>DeepSim transforms strategic uncertainty into quantified confidence with multi-agent market simulation.</p>
+        </div>
+        <div class="solution-grid">
+            <div class="solution-card">
+                <div class="solution-icon">🧠</div>
+                <h3>Multi-Agent Dynamics</h3>
+                <p>AI models competitors, customers, regulators, and markets—simulating realistic responses to your decisions.</p>
+            </div>
+            <div class="solution-card">
+                <div class="solution-icon">📈</div>
+                <h3>10,000+ Scenarios</h3>
+                <p>Monte Carlo simulations run thousands of permutations, revealing outcomes that 3-scenario planning misses.</p>
+            </div>
+            <div class="solution-card">
+                <div class="solution-icon">⚡</div>
+                <h3>Minutes, Not Months</h3>
+                <p>Get comprehensive strategic analysis in hours instead of waiting for a 6-month consulting engagement.</p>
+            </div>
+            <div class="solution-card">
+                <div class="solution-icon">🎯</div>
+                <h3>Confidence Quantified</h3>
+                <p>Every projection includes confidence intervals. Know the range of outcomes, not just the base case.</p>
+            </div>
+            <div class="solution-card">
+                <div class="solution-icon">🔄</div>
+                <h3>Continuous Monitoring</h3>
+                <p>Assumptions tracked against reality. Get alerts when your simulation needs updating.</p>
+            </div>
+            <div class="solution-card">
+                <div class="solution-icon">👥</div>
+                <h3>Decision Rooms</h3>
+                <p>Stakeholders explore scenarios together. "What if we tried X?" in real-time with full audit trails.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works" id="how-it-works">
+        <div class="section-header">
+            <span class="section-label">How It Works</span>
+            <h2>From Decision to Confidence</h2>
+            <p>DeepSim automatically builds world models and runs comprehensive simulations.</p>
+        </div>
+        <div class="process-container">
+            <div class="process-step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h3>Define Your Decision</h3>
+                    <p>Input the strategic decision you're considering—whether it's an acquisition, market entry, pricing change, or major investment.</p>
+                    <div class="step-example">"Should we enter the German market with €50M investment in Q3?"</div>
+                </div>
+            </div>
+            <div class="process-step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h3>World Model Generation</h3>
+                    <p>DeepSim automatically constructs models of your company, the market, competitors, customer segments, and macro factors.</p>
+                    <div class="step-example">→ Ingests financials, market data, competitive intelligence, economic indicators</div>
+                </div>
+            </div>
+            <div class="process-step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h3>Run Multi-Agent Simulation</h3>
+                    <p>10,000+ scenarios simulate competitive responses, customer behavior, regulatory reactions, and market dynamics.</p>
+                    <div class="step-example">→ Competitor AI predicts 82% chance of price war response</div>
+                </div>
+            </div>
+            <div class="process-step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <h3>Actionable Intelligence</h3>
+                    <p>Receive synthesized insights with confidence intervals, risk identification, and strategic recommendations.</p>
+                    <div class="step-example">→ "Partnership model reduces risk 40%. Delay to Q1 2027 improves outcomes 15%."</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Use Cases -->
+    <section class="use-cases">
+        <div class="section-header">
+            <span class="section-label">Use Cases</span>
+            <h2>Decisions We Simulate</h2>
+            <p>From M&A to market entry, DeepSim stress-tests your most important strategic choices.</p>
+        </div>
+        <div class="use-cases-grid">
+            <div class="use-case-card">
+                <div class="use-case-header">
+                    <div class="use-case-icon">🤝</div>
+                    <h3>M&A Due Diligence</h3>
+                </div>
+                <p>Simulate acquisition outcomes including synergy realization, integration risks, and competitive dynamics post-deal.</p>
+                <div class="use-case-result">
+                    <strong>Result:</strong> "Identified talent flight risk that traditional DD missed. Saved $45M in renegotiated terms."
+                </div>
+            </div>
+            <div class="use-case-card">
+                <div class="use-case-header">
+                    <div class="use-case-icon">🌍</div>
+                    <h3>Market Entry</h3>
+                </div>
+                <p>Compare entry modes (direct, JV, acquisition), timing scenarios, and investment levels with realistic market response.</p>
+                <div class="use-case-result">
+                    <strong>Result:</strong> "Simulation showed 18-month delay improved success probability from 45% to 72%."
+                </div>
+            </div>
+            <div class="use-case-card">
+                <div class="use-case-header">
+                    <div class="use-case-icon">💰</div>
+                    <h3>Pricing Strategy</h3>
+                </div>
+                <p>Model price elasticity, competitive response, and segment-level impact before making pricing changes.</p>
+                <div class="use-case-result">
+                    <strong>Result:</strong> "12% price increase was optimal. Simulated competitor response showed only 3% would match."
+                </div>
+            </div>
+            <div class="use-case-card">
+                <div class="use-case-header">
+                    <div class="use-case-icon">🔗</div>
+                    <h3>Supply Chain Decisions</h3>
+                </div>
+                <p>Stress-test supplier concentration, geographic risks, and network design against disruption scenarios.</p>
+                <div class="use-case-result">
+                    <strong>Result:</strong> "Dual-sourcing Taiwan exposure reduced 5-year risk-adjusted cost by $180M."
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section class="pricing" id="pricing">
+        <div class="section-header">
+            <span class="section-label">Pricing</span>
+            <h2>Choose Your Plan</h2>
+            <p>Simulation packages for every stage of your strategic journey.</p>
+        </div>
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <div class="pricing-tier">Essentials</div>
+                <div class="pricing-price">$150K<span>/year</span></div>
+                <p class="pricing-description">For growing companies making their first major strategic decisions.</p>
+                <ul class="pricing-features">
+                    <li>50 simulations per year</li>
+                    <li>Core simulation engine</li>
+                    <li>Standard integrations</li>
+                    <li>Email support</li>
+                    <li>Basic decision rooms</li>
+                </ul>
+                <a href="#contact" class="pricing-cta">Get Started</a>
+            </div>
+            <div class="pricing-card featured">
+                <div class="pricing-tier">Professional</div>
+                <div class="pricing-price">$500K<span>/year</span></div>
+                <p class="pricing-description">For enterprises requiring comprehensive strategic simulation.</p>
+                <ul class="pricing-features">
+                    <li>200 simulations per year</li>
+                    <li>Multi-agent dynamics</li>
+                    <li>Competitive intelligence</li>
+                    <li>Premium integrations</li>
+                    <li>Dedicated success manager</li>
+                    <li>Executive dashboards</li>
+                </ul>
+                <a href="#contact" class="pricing-cta">Request Demo</a>
+            </div>
+            <div class="pricing-card">
+                <div class="pricing-tier">Enterprise</div>
+                <div class="pricing-price">$1.5M+<span>/year</span></div>
+                <p class="pricing-description">For Fortune 500 companies with continuous strategic needs.</p>
+                <ul class="pricing-features">
+                    <li>Unlimited simulations</li>
+                    <li>Custom world models</li>
+                    <li>Full API access</li>
+                    <li>On-premise deployment</li>
+                    <li>Strategic advisory</li>
+                    <li>Executive briefings</li>
+                </ul>
+                <a href="#contact" class="pricing-cta">Contact Sales</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section" id="contact">
+        <div class="cta-content">
+            <h2>Stop Guessing. Start Simulating.</h2>
+            <p>Join the enterprises that simulate every major decision before committing. See DeepSim in action with your real strategic question.</p>
+            <div class="hero-ctas">
+                <a href="mailto:founders@deepsim.ai" class="btn-primary">
+                    Request Demo →
+                </a>
+                <a href="#" class="btn-secondary">
+                    Download Whitepaper
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <div class="logo">
+                    <div class="logo-icon">◈</div>
+                    DeepSim
+                </div>
+                <p>The AI platform for enterprise decision simulation. Simulate before you commit.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Product</h4>
+                <ul>
+                    <li><a href="#">Strategy</a></li>
+                    <li><a href="#">M&A</a></li>
+                    <li><a href="#">Pricing</a></li>
+                    <li><a href="#">Supply Chain</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Press</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Resources</h4>
+                <ul>
+                    <li><a href="#">Documentation</a></li>
+                    <li><a href="#">Case Studies</a></li>
+                    <li><a href="#">Whitepaper</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 DeepSim, Inc. All rights reserved. | Crafted by The Godfather 🎩</p>
+        </div>
+    </footer>
+</body>
+</html>
