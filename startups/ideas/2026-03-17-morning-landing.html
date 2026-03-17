@@ -1,0 +1,1430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ModelMarket — The NYSE for AI Model Weights</title>
+    <meta name="description" content="The world's first regulated exchange for trading, licensing, and monetizing AI model intellectual property.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #818cf8;
+            --secondary: #0ea5e9;
+            --accent: #f59e0b;
+            --success: #10b981;
+            --dark: #0f172a;
+            --dark-800: #1e293b;
+            --dark-700: #334155;
+            --dark-600: #475569;
+            --light: #f8fafc;
+            --light-200: #e2e8f0;
+            --gradient-primary: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
+            --gradient-secondary: linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%);
+            --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            --gradient-dark: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+            --shadow-glow: 0 0 60px rgba(99, 102, 241, 0.3);
+            --shadow-card: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--dark);
+            color: var(--light);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(ellipse at 20% 30%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 70%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(14, 165, 233, 0.08) 0%, transparent 60%);
+            animation: bgPulse 15s ease-in-out infinite;
+        }
+
+        @keyframes bgPulse {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(-2%, -2%) scale(1.05); }
+            66% { transform: translate(2%, 2%) scale(0.95); }
+        }
+
+        /* Grid Pattern Overlay */
+        .grid-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(99, 102, 241, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            z-index: -1;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1rem 2rem;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(99, 102, 241, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: var(--gradient-primary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 0 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .logo-text {
+            font-weight: 800;
+            font-size: 1.5rem;
+            color: var(--light);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--light-200);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-light);
+        }
+
+        .btn {
+            padding: 0.75rem 1.75rem;
+            border-radius: 10px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(99, 102, 241, 0.5);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--light);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary);
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-gold {
+            background: var(--gradient-gold);
+            color: var(--dark);
+        }
+
+        .btn-gold:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(245, 158, 11, 0.4);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 2rem 4rem;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1.25rem;
+            background: rgba(99, 102, 241, 0.15);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--primary-light);
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .hero-badge::before {
+            content: '📊';
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 5.5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.8s ease 0.1s both;
+        }
+
+        .hero h1 .gradient {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero h1 .gold {
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+            color: var(--light-200);
+            max-width: 800px;
+            margin: 0 auto 3rem;
+            animation: fadeInUp 0.8s ease 0.2s both;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 4rem;
+            animation: fadeInUp 0.8s ease 0.3s both;
+        }
+
+        /* Live Ticker */
+        .ticker-container {
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+            animation: fadeInUp 0.8s ease 0.4s both;
+        }
+
+        .ticker-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(99, 102, 241, 0.1);
+        }
+
+        .ticker-title {
+            font-weight: 700;
+            color: var(--light-200);
+        }
+
+        .ticker-live {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--success);
+        }
+
+        .ticker-live::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--success);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        .ticker-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .ticker-item {
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: 12px;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .ticker-name {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            color: var(--light);
+        }
+
+        .ticker-price {
+            text-align: right;
+        }
+
+        .ticker-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            color: var(--light);
+        }
+
+        .ticker-change {
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .ticker-change.up {
+            color: var(--success);
+        }
+
+        .ticker-change.down {
+            color: #ef4444;
+        }
+
+        /* Stats Section */
+        .stats {
+            padding: 6rem 2rem;
+            background: linear-gradient(180deg, transparent 0%, rgba(99, 102, 241, 0.05) 50%, transparent 100%);
+        }
+
+        .stats-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 2.5rem;
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(99, 102, 241, 0.1);
+            border-radius: 20px;
+            transition: all 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(99, 102, 241, 0.3);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .stat-value {
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--light-200);
+            font-weight: 500;
+            font-size: 1.1rem;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 8rem 2rem;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 5rem;
+        }
+
+        .section-label {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(99, 102, 241, 0.15);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--primary-light);
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .section-header h2 {
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-header p {
+            font-size: 1.25rem;
+            color: var(--light-200);
+        }
+
+        .features-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: var(--gradient-dark);
+            border: 1px solid rgba(99, 102, 241, 0.15);
+            border-radius: 24px;
+            padding: 2.5rem;
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-primary);
+            opacity: 0;
+            transition: opacity 0.4s;
+            z-index: 0;
+        }
+
+        .feature-card:hover::before {
+            opacity: 0.05;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(99, 102, 241, 0.4);
+            box-shadow: var(--shadow-card);
+        }
+
+        .feature-card > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background: var(--gradient-primary);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card p {
+            color: var(--light-200);
+            line-height: 1.8;
+        }
+
+        /* How It Works */
+        .how-it-works {
+            padding: 8rem 2rem;
+            background: rgba(99, 102, 241, 0.03);
+        }
+
+        .process-timeline {
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .process-timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--gradient-primary);
+            transform: translateX(-50%);
+        }
+
+        .process-step {
+            display: flex;
+            align-items: center;
+            gap: 4rem;
+            margin-bottom: 4rem;
+            position: relative;
+        }
+
+        .process-step:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .process-number {
+            width: 80px;
+            height: 80px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 800;
+            flex-shrink: 0;
+            box-shadow: 0 0 40px rgba(99, 102, 241, 0.4);
+            z-index: 2;
+        }
+
+        .process-content {
+            flex: 1;
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+        }
+
+        .process-content h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .process-content p {
+            color: var(--light-200);
+        }
+
+        /* Market Comparison */
+        .comparison {
+            padding: 8rem 2rem;
+        }
+
+        .comparison-table {
+            max-width: 1000px;
+            margin: 0 auto;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 1.5rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(99, 102, 241, 0.1);
+        }
+
+        th {
+            background: rgba(99, 102, 241, 0.15);
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        td {
+            color: var(--light-200);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        .check {
+            color: var(--success);
+            font-size: 1.25rem;
+        }
+
+        .cross {
+            color: #ef4444;
+            font-size: 1.25rem;
+        }
+
+        /* Testimonials / Use Cases */
+        .use-cases {
+            padding: 8rem 2rem;
+            background: rgba(99, 102, 241, 0.03);
+        }
+
+        .use-cases-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .use-case-card {
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid rgba(99, 102, 241, 0.15);
+            border-radius: 20px;
+            padding: 2.5rem;
+            position: relative;
+        }
+
+        .use-case-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .use-case-card h3 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .use-case-card p {
+            color: var(--light-200);
+            line-height: 1.8;
+        }
+
+        .use-case-highlight {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 12px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: var(--primary-light);
+        }
+
+        /* Pricing / Investment */
+        .investment {
+            padding: 8rem 2rem;
+        }
+
+        .investment-grid {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .investment-card {
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 24px;
+            padding: 3rem;
+            text-align: center;
+            transition: all 0.4s;
+        }
+
+        .investment-card.featured {
+            background: var(--gradient-primary);
+            border: none;
+            transform: scale(1.05);
+        }
+
+        .investment-card:hover {
+            transform: translateY(-8px);
+        }
+
+        .investment-card.featured:hover {
+            transform: scale(1.08);
+        }
+
+        .investment-tier {
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1rem;
+            color: var(--primary-light);
+        }
+
+        .investment-card.featured .investment-tier {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .investment-amount {
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+        }
+
+        .investment-subtitle {
+            color: var(--light-200);
+            margin-bottom: 2rem;
+        }
+
+        .investment-card.featured .investment-subtitle {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .investment-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .investment-features li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--light-200);
+        }
+
+        .investment-card.featured .investment-features li {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 8rem 2rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .cta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(ellipse at center, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
+            z-index: 0;
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cta h2 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta p {
+            font-size: 1.25rem;
+            color: var(--light-200);
+            margin-bottom: 3rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 2rem 2rem;
+            background: rgba(15, 23, 42, 0.9);
+            border-top: 1px solid rgba(99, 102, 241, 0.1);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-brand {
+            max-width: 300px;
+        }
+
+        .footer-brand .logo {
+            margin-bottom: 1rem;
+        }
+
+        .footer-brand p {
+            color: var(--light-200);
+            font-size: 0.95rem;
+        }
+
+        .footer-links h4 {
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--light);
+        }
+
+        .footer-links a {
+            display: block;
+            color: var(--light-200);
+            text-decoration: none;
+            padding: 0.5rem 0;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-light);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(99, 102, 241, 0.1);
+            color: var(--dark-600);
+            font-size: 0.9rem;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero {
+                padding: 6rem 1rem 3rem;
+            }
+
+            .process-timeline::before {
+                left: 40px;
+            }
+
+            .process-step {
+                flex-direction: column !important;
+                gap: 1rem;
+            }
+
+            .process-number {
+                width: 60px;
+                height: 60px;
+                font-size: 1.5rem;
+            }
+
+            .stat-value {
+                font-size: 2.5rem;
+            }
+
+            .investment-card.featured {
+                transform: none;
+            }
+        }
+
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--dark);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--dark-700);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary);
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    <div class="grid-pattern"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <div class="logo-icon">📊</div>
+                <span class="logo-text">ModelMarket</span>
+            </a>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#how-it-works">How It Works</a>
+                <a href="#use-cases">Use Cases</a>
+                <a href="#invest">Invest</a>
+                <a href="#contact" class="btn btn-primary">Get Early Access</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">Launching Q2 2026 — Join the Waitlist</div>
+            <h1>
+                The <span class="gradient">NYSE</span> for<br>
+                <span class="gold">AI Model Weights</span>
+            </h1>
+            <p class="hero-subtitle">
+                The world's first regulated exchange for trading, licensing, and monetizing AI model intellectual property. Finally, a liquid market for the most valuable digital assets ever created.
+            </p>
+            <div class="hero-buttons">
+                <a href="#contact" class="btn btn-primary">
+                    <span>🚀</span> Request Seller Access
+                </a>
+                <a href="#contact" class="btn btn-secondary">
+                    <span>💼</span> Institutional Buyers
+                </a>
+                <a href="#invest" class="btn btn-gold">
+                    <span>📈</span> Invest Now
+                </a>
+            </div>
+
+            <!-- Live Ticker -->
+            <div class="ticker-container">
+                <div class="ticker-header">
+                    <span class="ticker-title">📊 Model Index — Live Preview</span>
+                    <span class="ticker-live">SIMULATED</span>
+                </div>
+                <div class="ticker-grid">
+                    <div class="ticker-item">
+                        <span class="ticker-name">GPT-5-MICRO</span>
+                        <div class="ticker-price">
+                            <div class="ticker-value">$2.4M</div>
+                            <div class="ticker-change up">+12.4%</div>
+                        </div>
+                    </div>
+                    <div class="ticker-item">
+                        <span class="ticker-name">CLAUDE-FIN</span>
+                        <div class="ticker-price">
+                            <div class="ticker-value">$8.7M</div>
+                            <div class="ticker-change up">+5.2%</div>
+                        </div>
+                    </div>
+                    <div class="ticker-item">
+                        <span class="ticker-name">VISION-PRO</span>
+                        <div class="ticker-price">
+                            <div class="ticker-value">$1.2M</div>
+                            <div class="ticker-change down">-2.1%</div>
+                        </div>
+                    </div>
+                    <div class="ticker-item">
+                        <span class="ticker-name">CODEX-7B</span>
+                        <div class="ticker-price">
+                            <div class="ticker-value">$5.1M</div>
+                            <div class="ticker-change up">+8.9%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats -->
+    <section class="stats">
+        <div class="stats-grid fade-in">
+            <div class="stat-card">
+                <div class="stat-value">$500B+</div>
+                <div class="stat-label">AI Model Market by 2028</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">0</div>
+                <div class="stat-label">Regulated Exchanges Today</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">90%</div>
+                <div class="stat-label">Models Never Monetized</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">$10B</div>
+                <div class="stat-label">Revenue Opportunity</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features" id="features">
+        <div class="section-header fade-in">
+            <span class="section-label">Platform Features</span>
+            <h2>Complete Financial Infrastructure for AI IP</h2>
+            <p>Everything you need to trade, license, and invest in AI models — with institutional-grade security and compliance</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card fade-in">
+                <div class="feature-icon">✅</div>
+                <h3>Verified Performance</h3>
+                <p>Third-party audited benchmarks using zero-knowledge proofs. Verify model capabilities without exposing weights. Trust, but verify — mathematically.</p>
+            </div>
+            <div class="feature-card fade-in">
+                <div class="feature-icon">🔐</div>
+                <h3>Secure Custody</h3>
+                <p>Military-grade encryption with multi-party computation transfers. Model weights never exposed during transactions. Sleep soundly knowing your IP is safe.</p>
+            </div>
+            <div class="feature-card fade-in">
+                <div class="feature-icon">⚡</div>
+                <h3>Instant Settlement</h3>
+                <p>Blockchain-based atomic swaps ensure immediate, irrevocable transfers. No more waiting weeks for wire transfers and legal review.</p>
+            </div>
+            <div class="feature-card fade-in">
+                <div class="feature-icon">📈</div>
+                <h3>Price Discovery</h3>
+                <p>Real-time market pricing based on actual supply and demand. Finally know what your model is really worth — or what you should pay.</p>
+            </div>
+            <div class="feature-card fade-in">
+                <div class="feature-icon">🪙</div>
+                <h3>Fractional Ownership</h3>
+                <p>Can't afford a $50M model? Buy fractional shares. Want to diversify? Build a portfolio across model types. Democratizing AI ownership.</p>
+            </div>
+            <div class="feature-card fade-in">
+                <div class="feature-icon">📜</div>
+                <h3>Smart Licensing</h3>
+                <p>Flexible licensing templates — perpetual, usage-based, royalty streams. Smart contracts enforce terms automatically. No lawyers required.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works" id="how-it-works">
+        <div class="section-header fade-in">
+            <span class="section-label">The Process</span>
+            <h2>How ModelMarket Works</h2>
+            <p>From listing to settlement in hours, not months</p>
+        </div>
+
+        <div class="process-timeline">
+            <div class="process-step fade-in">
+                <div class="process-number">1</div>
+                <div class="process-content">
+                    <h3>List Your Model</h3>
+                    <p>Upload metadata, benchmarks, and licensing preferences. Our system generates a standardized Model Card automatically.</p>
+                </div>
+            </div>
+            <div class="process-step fade-in">
+                <div class="process-number">2</div>
+                <div class="process-content">
+                    <h3>Get Verified</h3>
+                    <p>Independent auditors validate your performance claims using zero-knowledge proofs. Buyers trust what they see.</p>
+                </div>
+            </div>
+            <div class="process-step fade-in">
+                <div class="process-number">3</div>
+                <div class="process-content">
+                    <h3>Set Your Terms</h3>
+                    <p>Choose auction or fixed price. Define licensing terms. Set geographic restrictions. You're in control.</p>
+                </div>
+            </div>
+            <div class="process-step fade-in">
+                <div class="process-number">4</div>
+                <div class="process-content">
+                    <h3>Match & Settle</h3>
+                    <p>Our order book matches buyers and sellers. Smart contracts handle escrow. Settlement is instant and atomic.</p>
+                </div>
+            </div>
+            <div class="process-step fade-in">
+                <div class="process-number">5</div>
+                <div class="process-content">
+                    <h3>Collect & Trade</h3>
+                    <p>Receive payment immediately. Buyers can resell on secondary markets. Royalty streams flow automatically.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Comparison -->
+    <section class="comparison">
+        <div class="section-header fade-in">
+            <span class="section-label">Why ModelMarket</span>
+            <h2>The Old Way vs. The New Way</h2>
+        </div>
+
+        <div class="comparison-table fade-in">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>Private Deals</th>
+                        <th>Hugging Face</th>
+                        <th>ModelMarket</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Verified Performance</td>
+                        <td><span class="cross">✗</span></td>
+                        <td><span class="cross">✗</span></td>
+                        <td><span class="check">✓</span></td>
+                    </tr>
+                    <tr>
+                        <td>Price Discovery</td>
+                        <td><span class="cross">✗</span></td>
+                        <td><span class="cross">✗</span></td>
+                        <td><span class="check">✓</span></td>
+                    </tr>
+                    <tr>
+                        <td>Instant Settlement</td>
+                        <td><span class="cross">✗</span></td>
+                        <td>N/A</td>
+                        <td><span class="check">✓</span></td>
+                    </tr>
+                    <tr>
+                        <td>Secondary Market</td>
+                        <td><span class="cross">✗</span></td>
+                        <td><span class="cross">✗</span></td>
+                        <td><span class="check">✓</span></td>
+                    </tr>
+                    <tr>
+                        <td>Fractional Ownership</td>
+                        <td><span class="cross">✗</span></td>
+                        <td><span class="cross">✗</span></td>
+                        <td><span class="check">✓</span></td>
+                    </tr>
+                    <tr>
+                        <td>Regulatory Compliance</td>
+                        <td>Manual</td>
+                        <td><span class="cross">✗</span></td>
+                        <td><span class="check">✓</span></td>
+                    </tr>
+                    <tr>
+                        <td>Time to Close</td>
+                        <td>2-6 months</td>
+                        <td>N/A</td>
+                        <td>Hours</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Use Cases -->
+    <section class="use-cases" id="use-cases">
+        <div class="section-header fade-in">
+            <span class="section-label">Who It's For</span>
+            <h2>Every Player in the AI Economy</h2>
+        </div>
+
+        <div class="use-cases-grid">
+            <div class="use-case-card fade-in">
+                <div class="use-case-icon">🔬</div>
+                <h3>AI Research Labs</h3>
+                <p>Monetize breakthrough models without building products. Focus on research while your IP generates revenue through licensing and royalty streams.</p>
+                <div class="use-case-highlight">
+                    "We sold 3 models for $12M total — more than our annual grant funding."
+                </div>
+            </div>
+            <div class="use-case-card fade-in">
+                <div class="use-case-icon">🏢</div>
+                <h3>Enterprises</h3>
+                <p>Acquire best-in-class models instantly. Skip the 18-month build-or-buy debate. Get exactly the capabilities you need, verified and ready to deploy.</p>
+                <div class="use-case-highlight">
+                    "Acquired a domain-specific LLM in 48 hours. Would have taken 2 years to build."
+                </div>
+            </div>
+            <div class="use-case-card fade-in">
+                <div class="use-case-icon">💼</div>
+                <h3>Hedge Funds</h3>
+                <p>Finally, a way to gain exposure to specific AI models as assets. Build diversified portfolios, hedge positions, access exclusive market data.</p>
+                <div class="use-case-highlight">
+                    "Our AI Model Index fund outperformed tech equities by 340% this year."
+                </div>
+            </div>
+            <div class="use-case-card fade-in">
+                <div class="use-case-icon">👨‍💻</div>
+                <h3>Independent Researchers</h3>
+                <p>That side project you trained on weekends? It might be worth millions. List it, let the market decide, and earn ongoing royalties.</p>
+                <div class="use-case-highlight">
+                    "My hobby project sold for $800K. Now I research full-time."
+                </div>
+            </div>
+            <div class="use-case-card fade-in">
+                <div class="use-case-icon">🚀</div>
+                <h3>AI Startups</h3>
+                <p>Need a foundation model but can't afford to train one? License or buy fractional ownership. Focus your capital on differentiation, not infrastructure.</p>
+                <div class="use-case-highlight">
+                    "Licensed a vision model for 10% of what training would cost."
+                </div>
+            </div>
+            <div class="use-case-card fade-in">
+                <div class="use-case-icon">🏛️</div>
+                <h3>Governments</h3>
+                <p>Sovereign AI capabilities without building from scratch. Acquire proven models with verified provenance, compliant with national security requirements.</p>
+                <div class="use-case-highlight">
+                    "Deployed national-scale AI infrastructure in months, not years."
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Investment -->
+    <section class="investment" id="invest">
+        <div class="section-header fade-in">
+            <span class="section-label">Investment Opportunity</span>
+            <h2>Own a Piece of AI's Financial Infrastructure</h2>
+            <p>We're raising our Seed round to build the foundation</p>
+        </div>
+
+        <div class="investment-grid">
+            <div class="investment-card fade-in">
+                <div class="investment-tier">Seed Round</div>
+                <div class="investment-amount">$5M</div>
+                <div class="investment-subtitle">Building the Foundation</div>
+                <ul class="investment-features">
+                    <li>Core platform development</li>
+                    <li>First 50 model listings</li>
+                    <li>SEC regulatory engagement</li>
+                    <li>Founding team (15 people)</li>
+                    <li>12-month runway</li>
+                </ul>
+                <a href="#contact" class="btn btn-primary">Express Interest</a>
+            </div>
+            <div class="investment-card featured fade-in">
+                <div class="investment-tier">Target Valuation</div>
+                <div class="investment-amount">$40B</div>
+                <div class="investment-subtitle">By 2030</div>
+                <ul class="investment-features">
+                    <li>$100B transaction volume</li>
+                    <li>$2B annual revenue</li>
+                    <li>45% net margins</li>
+                    <li>Global regulatory approval</li>
+                    <li>IPO ready</li>
+                </ul>
+                <a href="#contact" class="btn btn-gold">Join the Journey</a>
+            </div>
+            <div class="investment-card fade-in">
+                <div class="investment-tier">Comparable Exit</div>
+                <div class="investment-amount">NYSE</div>
+                <div class="investment-subtitle">$70B Market Cap</div>
+                <ul class="investment-features">
+                    <li>Similar exchange model</li>
+                    <li>Smaller addressable market</li>
+                    <li>Legacy technology</li>
+                    <li>Slower growth</li>
+                    <li>But still $70B</li>
+                </ul>
+                <a href="#contact" class="btn btn-secondary">Learn More</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta" id="contact">
+        <div class="cta-content fade-in">
+            <h2>The Future of AI Value Starts Here</h2>
+            <p>AI models are the most valuable digital assets ever created. It's time they had a market that matches their importance.</p>
+            <div class="cta-buttons">
+                <a href="mailto:founders@modelmarket.ai" class="btn btn-primary btn-lg">
+                    <span>📧</span> Contact Founders
+                </a>
+                <a href="mailto:invest@modelmarket.ai" class="btn btn-gold btn-lg">
+                    <span>💰</span> Investor Relations
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <a href="#" class="logo">
+                    <div class="logo-icon">📊</div>
+                    <span class="logo-text">ModelMarket</span>
+                </a>
+                <p>The world's first regulated exchange for AI model intellectual property. Where AI value finds its price.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Platform</h4>
+                <a href="#features">Features</a>
+                <a href="#how-it-works">How It Works</a>
+                <a href="#use-cases">Use Cases</a>
+                <a href="#">Documentation</a>
+            </div>
+            <div class="footer-links">
+                <h4>Company</h4>
+                <a href="#">About</a>
+                <a href="#">Careers</a>
+                <a href="#">Press</a>
+                <a href="#invest">Investors</a>
+            </div>
+            <div class="footer-links">
+                <h4>Legal</h4>
+                <a href="#">Terms of Service</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Regulatory</a>
+                <a href="#">Compliance</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 ModelMarket. All rights reserved. | Concept by The Godfather 🎩</p>
+        </div>
+    </footer>
+
+    <script>
+        // Intersection Observer for fade-in animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        });
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Smooth scroll for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Simulated ticker updates
+        function updateTicker() {
+            const tickers = document.querySelectorAll('.ticker-item');
+            tickers.forEach(ticker => {
+                const changeEl = ticker.querySelector('.ticker-change');
+                const valueEl = ticker.querySelector('.ticker-value');
+                
+                // Parse current value
+                const currentValue = parseFloat(valueEl.textContent.replace(/[$M]/g, ''));
+                
+                // Random change between -0.5% and +0.5%
+                const changePercent = (Math.random() - 0.45) * 1;
+                const newValue = currentValue * (1 + changePercent / 100);
+                
+                valueEl.textContent = `$${newValue.toFixed(1)}M`;
+                
+                // Update change display
+                const displayChange = changePercent.toFixed(1);
+                changeEl.textContent = changePercent >= 0 ? `+${displayChange}%` : `${displayChange}%`;
+                changeEl.className = `ticker-change ${changePercent >= 0 ? 'up' : 'down'}`;
+            });
+        }
+
+        // Update ticker every 3 seconds
+        setInterval(updateTicker, 3000);
+    </script>
+</body>
+</html>
