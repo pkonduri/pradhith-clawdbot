@@ -1,0 +1,1639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Augment AI — The Cognitive Enhancement Operating System for Humans</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --accent: #22d3ee;
+            --accent-green: #34d399;
+            --bg-dark: #0a0a0f;
+            --bg-card: #111118;
+            --bg-card-hover: #18181f;
+            --text-primary: #ffffff;
+            --text-secondary: #a1a1aa;
+            --text-muted: #71717a;
+            --border: #27272a;
+            --glow-primary: rgba(99, 102, 241, 0.4);
+            --glow-accent: rgba(34, 211, 238, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Neural Network Animation Background */
+        .neural-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.4;
+        }
+
+        .neural-bg canvas {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Gradient Orbs */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(100px);
+            z-index: -1;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .orb-1 {
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, var(--glow-primary) 0%, transparent 70%);
+            top: -200px;
+            right: -200px;
+        }
+
+        .orb-2 {
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, var(--glow-accent) 0%, transparent 70%);
+            bottom: -150px;
+            left: -150px;
+            animation-delay: -10s;
+        }
+
+        .orb-3 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(168, 85, 247, 0.3) 0%, transparent 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation-delay: -5s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(30px, -30px) scale(1.05); }
+            50% { transform: translate(-20px, 20px) scale(0.95); }
+            75% { transform: translate(20px, 30px) scale(1.02); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 1.5rem 2rem;
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 800;
+            font-size: 1.5rem;
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+
+        .logo-icon {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .nav-cta {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 4px 20px var(--glow-primary);
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px var(--glow-primary);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 2rem 4rem;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            text-align: center;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            color: var(--accent);
+            margin-bottom: 2rem;
+            animation: pulse-badge 3s infinite;
+        }
+
+        @keyframes pulse-badge {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4); }
+            50% { box-shadow: 0 0 0 10px rgba(99, 102, 241, 0); }
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 7vw, 5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #fff 0%, #a1a1aa 50%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            box-shadow: 0 4px 30px var(--glow-primary);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 40px var(--glow-primary);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-primary);
+            border: 2px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        /* Brain Visualization */
+        .brain-visual {
+            margin-top: 4rem;
+            position: relative;
+        }
+
+        .brain-container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .brain-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, var(--glow-primary) 0%, transparent 70%);
+            animation: brain-pulse 4s infinite ease-in-out;
+        }
+
+        @keyframes brain-pulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.8; }
+        }
+
+        .brain-svg {
+            width: 100%;
+            height: auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Synapse Animation */
+        .synapse {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: var(--accent);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--accent), 0 0 20px var(--accent);
+            animation: synapse-fire 2s infinite;
+        }
+
+        @keyframes synapse-fire {
+            0%, 100% { opacity: 0; transform: scale(0.5); }
+            50% { opacity: 1; transform: scale(1.5); }
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2rem 3rem;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            max-width: 1000px;
+            margin: -3rem auto 0;
+            position: relative;
+            z-index: 10;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: 0.25rem;
+        }
+
+        /* Section Styles */
+        section {
+            padding: 6rem 2rem;
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 4rem;
+        }
+
+        .section-label {
+            color: var(--accent);
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+        }
+
+        /* Problem Section */
+        .problem-section {
+            background: linear-gradient(180deg, transparent 0%, rgba(99, 102, 241, 0.03) 50%, transparent 100%);
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .problem-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .problem-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #ef4444, #f97316);
+        }
+
+        .problem-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(239, 68, 68, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .problem-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .problem-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .problem-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .problem-stat {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+            font-family: 'JetBrains Mono', monospace;
+            color: #ef4444;
+            font-weight: 500;
+        }
+
+        /* Features Section */
+        .features-section {
+            background: linear-gradient(180deg, transparent 0%, rgba(34, 211, 238, 0.03) 50%, transparent 100%);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            transform: scaleX(0);
+            transition: transform 0.4s;
+        }
+
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--primary);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-list {
+            list-style: none;
+        }
+
+        .feature-list li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-list li::before {
+            content: '✓';
+            color: var(--accent-green);
+            font-weight: bold;
+        }
+
+        /* How It Works */
+        .how-section {
+            background: var(--bg-card);
+        }
+
+        .timeline {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--primary), var(--accent));
+            border-radius: 4px;
+        }
+
+        .timeline-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .timeline-item:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .timeline-content {
+            width: 45%;
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s;
+        }
+
+        .timeline-content:hover {
+            border-color: var(--primary);
+            transform: scale(1.02);
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 24px;
+            height: 24px;
+            background: var(--primary);
+            border-radius: 50%;
+            border: 4px solid var(--bg-card);
+            z-index: 1;
+        }
+
+        .timeline-number {
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-content h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-content p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Comparison Section */
+        .comparison-section {
+            background: linear-gradient(180deg, rgba(34, 211, 238, 0.03) 0%, transparent 100%);
+        }
+
+        .comparison-table {
+            max-width: 1000px;
+            margin: 0 auto;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .comparison-header {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .comparison-header > div {
+            padding: 1.5rem;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .comparison-header > div:first-child {
+            text-align: left;
+        }
+
+        .comparison-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            border-bottom: 1px solid var(--border);
+            transition: all 0.3s;
+        }
+
+        .comparison-row:hover {
+            background: var(--bg-card);
+        }
+
+        .comparison-row > div {
+            padding: 1.25rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .comparison-row > div:first-child {
+            justify-content: flex-start;
+            color: var(--text-secondary);
+        }
+
+        .check {
+            color: var(--accent-green);
+            font-size: 1.5rem;
+        }
+
+        .cross {
+            color: #ef4444;
+            font-size: 1.5rem;
+        }
+
+        /* Use Cases */
+        .use-cases-section {
+            padding: 6rem 2rem;
+        }
+
+        .use-cases-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .use-case-card {
+            background: linear-gradient(135deg, var(--bg-card) 0%, rgba(99, 102, 241, 0.05) 100%);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s;
+        }
+
+        .use-case-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+        }
+
+        .use-case-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .use-case-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .use-case-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Testimonials */
+        .testimonials-section {
+            background: var(--bg-card);
+            padding: 6rem 2rem;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .testimonial-card {
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .testimonial-card::before {
+            content: '"';
+            position: absolute;
+            top: 1rem;
+            left: 1.5rem;
+            font-size: 4rem;
+            color: var(--primary);
+            opacity: 0.3;
+            font-family: Georgia, serif;
+        }
+
+        .testimonial-text {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .testimonial-avatar {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .testimonial-info h4 {
+            font-size: 1rem;
+        }
+
+        .testimonial-info p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Pricing */
+        .pricing-section {
+            padding: 6rem 2rem;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            text-align: center;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .pricing-card.featured {
+            border-color: var(--primary);
+            transform: scale(1.05);
+            box-shadow: 0 20px 50px rgba(99, 102, 241, 0.2);
+        }
+
+        .pricing-card.featured::before {
+            content: 'MOST POPULAR';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .pricing-card.featured:hover {
+            transform: scale(1.05) translateY(-5px);
+        }
+
+        .pricing-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-desc {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .pricing-price {
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-price span {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        .pricing-features {
+            list-style: none;
+            text-align: left;
+            margin: 2rem 0;
+        }
+
+        .pricing-features li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-secondary);
+        }
+
+        .pricing-features li::before {
+            content: '✓';
+            color: var(--accent-green);
+            font-weight: bold;
+        }
+
+        .pricing-btn {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .pricing-card:not(.featured) .pricing-btn {
+            background: transparent;
+            border: 2px solid var(--border);
+            color: var(--text-primary);
+        }
+
+        .pricing-card:not(.featured) .pricing-btn:hover {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .pricing-card.featured .pricing-btn {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            box-shadow: 0 4px 20px var(--glow-primary);
+        }
+
+        .pricing-card.featured .pricing-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px var(--glow-primary);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 8rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(ellipse at center, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .cta-section h2 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 900;
+            margin-bottom: 1rem;
+        }
+
+        .cta-section p {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--bg-card);
+            border-top: 1px solid var(--border);
+            padding: 4rem 2rem 2rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr repeat(3, 1fr);
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-brand {
+            max-width: 300px;
+        }
+
+        .footer-brand p {
+            color: var(--text-secondary);
+            margin-top: 1rem;
+            font-size: 0.95rem;
+        }
+
+        .footer-links h4 {
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-links a {
+            display: block;
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 0.4rem 0;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .stats-bar {
+                grid-template-columns: repeat(2, 1fr);
+                margin-top: 2rem;
+            }
+
+            .timeline::before {
+                left: 20px;
+            }
+
+            .timeline-item,
+            .timeline-item:nth-child(even) {
+                flex-direction: column;
+                align-items: flex-start;
+                padding-left: 50px;
+            }
+
+            .timeline-content {
+                width: 100%;
+            }
+
+            .timeline-dot {
+                left: 20px;
+            }
+
+            .comparison-header,
+            .comparison-row {
+                grid-template-columns: 1.5fr 1fr 1fr;
+                font-size: 0.85rem;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .footer-brand {
+                max-width: 100%;
+            }
+        }
+
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeIn 0.8s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+        .delay-5 { animation-delay: 0.5s; }
+    </style>
+</head>
+<body>
+    <!-- Background Elements -->
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-content">
+            <a href="#" class="logo">
+                <div class="logo-icon">🧠</div>
+                Augment AI
+            </a>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#how-it-works">How It Works</a>
+                <a href="#pricing">Pricing</a>
+                <a href="#" class="nav-cta">Join Beta</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="badge fade-in">
+                <span>🚀</span> Now in Private Beta — Join 10,000+ Waitlist
+            </div>
+            <h1 class="fade-in delay-1">
+                Become <span>Superhuman</span><br>in the Age of AI
+            </h1>
+            <p class="hero-subtitle fade-in delay-2">
+                The cognitive enhancement operating system that amplifies your memory, 
+                accelerates your learning, and makes you irreplaceable in an AI-dominated world.
+            </p>
+            <div class="hero-cta fade-in delay-3">
+                <a href="#" class="btn btn-primary">
+                    <span>🧠</span> Start Free Trial
+                </a>
+                <a href="#" class="btn btn-secondary">
+                    <span>▶</span> Watch Demo
+                </a>
+            </div>
+
+            <!-- Brain Visualization -->
+            <div class="brain-visual fade-in delay-4">
+                <div class="brain-container">
+                    <div class="brain-glow"></div>
+                    <svg class="brain-svg" viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Stylized Brain Network -->
+                        <g stroke="url(#gradient1)" stroke-width="1.5" fill="none" opacity="0.6">
+                            <circle cx="200" cy="150" r="80"/>
+                            <circle cx="200" cy="150" r="60"/>
+                            <circle cx="200" cy="150" r="40"/>
+                            <ellipse cx="160" cy="130" rx="40" ry="50"/>
+                            <ellipse cx="240" cy="130" rx="40" ry="50"/>
+                            <ellipse cx="200" cy="180" rx="50" ry="30"/>
+                        </g>
+                        <!-- Neural Connections -->
+                        <g stroke="url(#gradient2)" stroke-width="2" opacity="0.8">
+                            <line x1="120" y1="120" x2="160" y2="140" class="neural-line"/>
+                            <line x1="160" y1="140" x2="200" y2="120" class="neural-line"/>
+                            <line x1="200" y1="120" x2="240" y2="140" class="neural-line"/>
+                            <line x1="240" y1="140" x2="280" y2="120" class="neural-line"/>
+                            <line x1="140" y1="180" x2="180" y2="160" class="neural-line"/>
+                            <line x1="180" y1="160" x2="220" y2="160" class="neural-line"/>
+                            <line x1="220" y1="160" x2="260" y2="180" class="neural-line"/>
+                        </g>
+                        <!-- Nodes -->
+                        <g fill="url(#gradient2)">
+                            <circle cx="120" cy="120" r="6"/>
+                            <circle cx="160" cy="140" r="8"/>
+                            <circle cx="200" cy="120" r="10"/>
+                            <circle cx="240" cy="140" r="8"/>
+                            <circle cx="280" cy="120" r="6"/>
+                            <circle cx="140" cy="180" r="6"/>
+                            <circle cx="180" cy="160" r="7"/>
+                            <circle cx="220" cy="160" r="7"/>
+                            <circle cx="260" cy="180" r="6"/>
+                            <circle cx="200" cy="150" r="12"/>
+                        </g>
+                        <defs>
+                            <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#6366f1"/>
+                                <stop offset="100%" stop-color="#22d3ee"/>
+                            </linearGradient>
+                            <linearGradient id="gradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#22d3ee"/>
+                                <stop offset="100%" stop-color="#34d399"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    <!-- Animated Synapses -->
+                    <div class="synapse" style="top: 30%; left: 35%; animation-delay: 0s;"></div>
+                    <div class="synapse" style="top: 40%; left: 55%; animation-delay: 0.5s;"></div>
+                    <div class="synapse" style="top: 50%; left: 45%; animation-delay: 1s;"></div>
+                    <div class="synapse" style="top: 35%; left: 65%; animation-delay: 1.5s;"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Bar -->
+    <div class="stats-bar fade-in delay-5">
+        <div class="stat">
+            <div class="stat-value">10x</div>
+            <div class="stat-label">Memory Recall Speed</div>
+        </div>
+        <div class="stat">
+            <div class="stat-value">3x</div>
+            <div class="stat-label">Faster Learning</div>
+        </div>
+        <div class="stat">
+            <div class="stat-value">47%</div>
+            <div class="stat-label">Better Focus</div>
+        </div>
+        <div class="stat">
+            <div class="stat-value">34%</div>
+            <div class="stat-label">Decision Quality</div>
+        </div>
+    </div>
+
+    <!-- Problem Section -->
+    <section class="problem-section">
+        <div class="section-header">
+            <div class="section-label">The Crisis</div>
+            <h2 class="section-title">You're Fighting a Losing Battle</h2>
+            <p class="section-subtitle">
+                Knowledge workers are drowning in information while AI threatens their relevance. 
+                The old tools can't save you.
+            </p>
+        </div>
+
+        <div class="problem-grid">
+            <div class="problem-card">
+                <div class="problem-icon">🧠</div>
+                <h3>Cognitive Overload</h3>
+                <p>You process 174 newspapers worth of information daily — 5x more than in 1986. Your brain wasn't designed for this.</p>
+                <div class="problem-stat">70% forgotten within 24 hours</div>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">⚡</div>
+                <h3>Context Switching Tax</h3>
+                <p>You switch contexts every 3 minutes, losing 23 minutes of productivity each time. That's 6+ hours of lost work daily.</p>
+                <div class="problem-stat">$31.5B lost annually</div>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">🤖</div>
+                <h3>AI Anxiety</h3>
+                <p>70% of knowledge workers fear AI will make them obsolete. Yet most AI tools are designed to replace you, not enhance you.</p>
+                <div class="problem-stat">85% of AI tools replace, not augment</div>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">📚</div>
+                <h3>Learning Speed Gap</h3>
+                <p>AI capabilities double every 6 months. Human learning speed is fixed. The skills gap is widening exponentially.</p>
+                <div class="problem-stat">10% training effectiveness rate</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section" id="features">
+        <div class="section-header">
+            <div class="section-label">The Solution</div>
+            <h2 class="section-title">Your Cognitive Enhancement Suite</h2>
+            <p class="section-subtitle">
+                Five integrated systems that amplify every aspect of your cognitive performance.
+            </p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">💾</div>
+                <h3>Memory Augmentation Engine</h3>
+                <p>Perfect recall for everything you've ever read, discussed, or learned. Never forget anything again.</p>
+                <ul class="feature-list">
+                    <li>Automatic context capture across all apps</li>
+                    <li>Semantic knowledge graph of your mind</li>
+                    <li>Instant natural language retrieval</li>
+                    <li>Proactive memory surfacing</li>
+                </ul>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>Cognitive Load Optimizer</h3>
+                <p>AI that manages your mental energy like a world-class executive assistant.</p>
+                <ul class="feature-list">
+                    <li>Biometric-aware scheduling</li>
+                    <li>Peak performance window detection</li>
+                    <li>Intelligent distraction blocking</li>
+                    <li>Burnout early warning system</li>
+                </ul>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🚀</div>
+                <h3>Accelerated Learning System</h3>
+                <p>Learn anything 10x faster through AI-personalized, context-aware micro-learning.</p>
+                <ul class="feature-list">
+                    <li>Personalized learning paths</li>
+                    <li>Workflow-integrated micro-sessions</li>
+                    <li>AI-optimized spaced repetition</li>
+                    <li>70% retention vs. 10% traditional</li>
+                </ul>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <h3>Decision Intelligence Layer</h3>
+                <p>Your personal board of advisors for every important decision you make.</p>
+                <ul class="feature-list">
+                    <li>Real-time cognitive bias detection</li>
+                    <li>Devil's advocate mode</li>
+                    <li>Outcome tracking and learning</li>
+                    <li>Stakeholder simulation</li>
+                </ul>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🏆</div>
+                <h3>Expertise Amplifier</h3>
+                <p>Become a domain expert in any field in weeks, not years.</p>
+                <ul class="feature-list">
+                    <li>500+ domain expertise modules</li>
+                    <li>Expert AI personas on demand</li>
+                    <li>Cross-domain connection discovery</li>
+                    <li>Credibility building roadmaps</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-section" id="how-it-works">
+        <div class="section-header">
+            <div class="section-label">Experience</div>
+            <h2 class="section-title">How It Works</h2>
+            <p class="section-subtitle">
+                Seamlessly integrated into your workflow. Invisible until you need it.
+            </p>
+        </div>
+
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="timeline-number">01</div>
+                    <h3>Connect Your World</h3>
+                    <p>Install our browser extension, desktop app, and connect your tools. Augment begins learning from everything you do — silently, securely.</p>
+                </div>
+                <div class="timeline-dot"></div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="timeline-number">02</div>
+                    <h3>Build Your Second Brain</h3>
+                    <p>Over days, Augment constructs your personal knowledge graph — connecting every meeting, document, conversation, and insight into a semantic web.</p>
+                </div>
+                <div class="timeline-dot"></div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="timeline-number">03</div>
+                    <h3>Experience Cognitive Symbiosis</h3>
+                    <p>The Augment Sidebar appears when you need it — surfacing relevant memories, suggesting learning moments, catching cognitive biases in real-time.</p>
+                </div>
+                <div class="timeline-dot"></div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="timeline-number">04</div>
+                    <h3>Evolve Continuously</h3>
+                    <p>Weekly reviews show your cognitive performance metrics. Personalized recommendations optimize your growth. You get better every single day.</p>
+                </div>
+                <div class="timeline-dot"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Comparison -->
+    <section class="comparison-section">
+        <div class="section-header">
+            <div class="section-label">Comparison</div>
+            <h2 class="section-title">Why Augment Wins</h2>
+            <p class="section-subtitle">
+                Most tools automate. We amplify.
+            </p>
+        </div>
+
+        <div class="comparison-table">
+            <div class="comparison-header">
+                <div>Feature</div>
+                <div>Traditional Tools</div>
+                <div>Augment AI</div>
+            </div>
+            <div class="comparison-row">
+                <div>Full cognitive context capture</div>
+                <div><span class="cross">✗</span></div>
+                <div><span class="check">✓</span></div>
+            </div>
+            <div class="comparison-row">
+                <div>Personalized learning optimization</div>
+                <div><span class="cross">✗</span></div>
+                <div><span class="check">✓</span></div>
+            </div>
+            <div class="comparison-row">
+                <div>Real-time bias detection</div>
+                <div><span class="cross">✗</span></div>
+                <div><span class="check">✓</span></div>
+            </div>
+            <div class="comparison-row">
+                <div>Biometric-aware scheduling</div>
+                <div><span class="cross">✗</span></div>
+                <div><span class="check">✓</span></div>
+            </div>
+            <div class="comparison-row">
+                <div>Proactive memory surfacing</div>
+                <div><span class="cross">✗</span></div>
+                <div><span class="check">✓</span></div>
+            </div>
+            <div class="comparison-row">
+                <div>Designed to make YOU irreplaceable</div>
+                <div><span class="cross">✗</span></div>
+                <div><span class="check">✓</span></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Use Cases -->
+    <section class="use-cases-section">
+        <div class="section-header">
+            <div class="section-label">Use Cases</div>
+            <h2 class="section-title">Built for High Performers</h2>
+            <p class="section-subtitle">
+                Join thousands of professionals who refuse to be replaced.
+            </p>
+        </div>
+
+        <div class="use-cases-grid">
+            <div class="use-case-card">
+                <div class="use-case-icon">💻</div>
+                <h3>Software Engineers</h3>
+                <p>Instantly recall codebase context, accelerate learning new frameworks, and make better architecture decisions.</p>
+            </div>
+            <div class="use-case-card">
+                <div class="use-case-icon">📊</div>
+                <h3>Product Managers</h3>
+                <p>Remember every user insight, learn technical concepts faster, and make data-driven decisions without the cognitive load.</p>
+            </div>
+            <div class="use-case-card">
+                <div class="use-case-icon">💼</div>
+                <h3>Executives</h3>
+                <p>Perfect recall of strategic context, bias-free decision making, and rapid expertise in any domain you're overseeing.</p>
+            </div>
+            <div class="use-case-card">
+                <div class="use-case-icon">📈</div>
+                <h3>Consultants</h3>
+                <p>Become an instant expert in client industries, remember every engagement detail, and deliver insights faster than humanly possible.</p>
+            </div>
+            <div class="use-case-card">
+                <div class="use-case-icon">⚖️</div>
+                <h3>Legal Professionals</h3>
+                <p>Total recall of case law and precedent, accelerated expertise in new practice areas, and flawless attention to detail.</p>
+            </div>
+            <div class="use-case-card">
+                <div class="use-case-icon">🔬</div>
+                <h3>Researchers</h3>
+                <p>Never lose a citation, discover cross-domain connections, and accelerate literature reviews by 10x.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials-section">
+        <div class="section-header">
+            <div class="section-label">Beta Users</div>
+            <h2 class="section-title">What Early Adopters Say</h2>
+        </div>
+
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <p class="testimonial-text">"I used to spend 30 minutes searching for context before every meeting. Now Augment surfaces everything I need automatically. It's like having a photographic memory."</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">SK</div>
+                    <div class="testimonial-info">
+                        <h4>Sarah Kim</h4>
+                        <p>VP Product, Series C Startup</p>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <p class="testimonial-text">"The decision intelligence layer caught a confirmation bias I didn't know I had. That single catch saved my company from a $2M mistake."</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">MR</div>
+                    <div class="testimonial-info">
+                        <h4>Marcus Rodriguez</h4>
+                        <p>CEO, FinTech Company</p>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <p class="testimonial-text">"I went from knowing nothing about machine learning to leading AI initiatives in 3 weeks. The accelerated learning system is unreal."</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">JC</div>
+                    <div class="testimonial-info">
+                        <h4>Jennifer Chen</h4>
+                        <p>Strategy Consultant, McKinsey</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section class="pricing-section" id="pricing">
+        <div class="section-header">
+            <div class="section-label">Pricing</div>
+            <h2 class="section-title">Invest in Your Cognitive Edge</h2>
+            <p class="section-subtitle">
+                Start free. Upgrade when you're addicted.
+            </p>
+        </div>
+
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <div class="pricing-name">Personal</div>
+                <div class="pricing-desc">For individual power users</div>
+                <div class="pricing-price">$29<span>/month</span></div>
+                <ul class="pricing-features">
+                    <li>Memory Augmentation Engine</li>
+                    <li>Accelerated Learning System</li>
+                    <li>50GB knowledge storage</li>
+                    <li>Browser & desktop apps</li>
+                    <li>Basic integrations</li>
+                </ul>
+                <button class="pricing-btn">Start Free Trial</button>
+            </div>
+            <div class="pricing-card featured">
+                <div class="pricing-name">Pro</div>
+                <div class="pricing-desc">For serious professionals</div>
+                <div class="pricing-price">$79<span>/month</span></div>
+                <ul class="pricing-features">
+                    <li>Everything in Personal</li>
+                    <li>Cognitive Load Optimizer</li>
+                    <li>Decision Intelligence Layer</li>
+                    <li>Expertise Amplifier</li>
+                    <li>Unlimited storage</li>
+                    <li>Wearable integration</li>
+                    <li>Priority support</li>
+                </ul>
+                <button class="pricing-btn">Start Free Trial</button>
+            </div>
+            <div class="pricing-card">
+                <div class="pricing-name">Enterprise</div>
+                <div class="pricing-desc">For teams and organizations</div>
+                <div class="pricing-price">Custom</div>
+                <ul class="pricing-features">
+                    <li>Everything in Pro</li>
+                    <li>Organizational knowledge graph</li>
+                    <li>Team analytics dashboard</li>
+                    <li>SSO & advanced security</li>
+                    <li>On-premise deployment</li>
+                    <li>Dedicated success manager</li>
+                    <li>Custom integrations</li>
+                </ul>
+                <button class="pricing-btn">Contact Sales</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="cta-content">
+            <h2>Ready to Become <span style="background: linear-gradient(135deg, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Superhuman</span>?</h2>
+            <p>Join 10,000+ professionals already on the waitlist. The future belongs to the augmented.</p>
+            <div class="cta-buttons">
+                <a href="#" class="btn btn-primary">
+                    <span>🧠</span> Join the Waitlist
+                </a>
+                <a href="#" class="btn btn-secondary">
+                    <span>📧</span> Contact Sales
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="#" class="logo">
+                        <div class="logo-icon">🧠</div>
+                        Augment AI
+                    </a>
+                    <p>The cognitive enhancement operating system that makes humans irreplaceable in the age of AI.</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Product</h4>
+                    <a href="#">Features</a>
+                    <a href="#">Pricing</a>
+                    <a href="#">Integrations</a>
+                    <a href="#">Roadmap</a>
+                </div>
+                <div class="footer-links">
+                    <h4>Company</h4>
+                    <a href="#">About</a>
+                    <a href="#">Careers</a>
+                    <a href="#">Blog</a>
+                    <a href="#">Press</a>
+                </div>
+                <div class="footer-links">
+                    <h4>Resources</h4>
+                    <a href="#">Documentation</a>
+                    <a href="#">Research</a>
+                    <a href="#">Privacy</a>
+                    <a href="#">Terms</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 Augment AI. All rights reserved. Built for humans who refuse to be replaced.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Simple scroll reveal animation
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.problem-card, .feature-card, .timeline-item, .use-case-card, .testimonial-card, .pricing-card').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'all 0.6s ease';
+            observer.observe(el);
+        });
+
+        // Neural line animation
+        document.querySelectorAll('.neural-line').forEach((line, i) => {
+            line.style.animation = `pulse ${1.5 + Math.random()}s infinite ease-in-out ${i * 0.2}s`;
+        });
+    </script>
+</body>
+</html>
