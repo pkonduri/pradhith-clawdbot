@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TokenMind AI — The Operating System for Real-World Asset Tokenization</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #10b981;
+            --accent: #f59e0b;
+            --dark: #0f172a;
+            --darker: #020617;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --gradient-1: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
+            --gradient-2: linear-gradient(135deg, #10b981 0%, #06b6d4 100%);
+            --gradient-3: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--darker);
+            color: var(--light);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(16, 185, 129, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 40% 60%, rgba(139, 92, 246, 0.1) 0%, transparent 40%);
+            animation: bgPulse 20s ease-in-out infinite;
+        }
+
+        @keyframes bgPulse {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(2%, -2%) rotate(1deg); }
+            66% { transform: translate(-1%, 1%) rotate(-1deg); }
+        }
+
+        /* Grid Pattern */
+        .grid-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(99, 102, 241, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -1;
+        }
+
+        /* Floating Tokens */
+        .floating-tokens {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .token {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            border: 2px solid rgba(99, 102, 241, 0.3);
+            border-radius: 12px;
+            background: rgba(99, 102, 241, 0.05);
+            animation: floatToken 20s ease-in-out infinite;
+        }
+
+        .token::before {
+            content: '◈';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 24px;
+            color: rgba(99, 102, 241, 0.4);
+        }
+
+        .token:nth-child(1) { top: 10%; left: 5%; animation-delay: 0s; }
+        .token:nth-child(2) { top: 20%; right: 10%; animation-delay: -4s; }
+        .token:nth-child(3) { top: 60%; left: 8%; animation-delay: -8s; }
+        .token:nth-child(4) { top: 70%; right: 15%; animation-delay: -12s; }
+        .token:nth-child(5) { top: 40%; left: 3%; animation-delay: -16s; }
+
+        @keyframes floatToken {
+            0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.3; }
+            50% { transform: translateY(-30px) rotate(180deg); opacity: 0.6; }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1.5rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(2, 6, 23, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            -webkit-text-fill-color: white;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--gray);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--light);
+        }
+
+        .btn-primary {
+            background: var(--gradient-1);
+            color: white;
+            padding: 0.75rem 1.75rem;
+            border-radius: 10px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 0.95rem;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(99, 102, 241, 0.4);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 4rem 4rem;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--secondary);
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .hero-badge::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--secondary);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .hero h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 4.5rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.8s ease 0.1s backwards;
+        }
+
+        .hero h1 .highlight {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.35rem;
+            color: var(--gray);
+            line-height: 1.8;
+            margin-bottom: 2.5rem;
+            animation: fadeInUp 0.8s ease 0.2s backwards;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            animation: fadeInUp 0.8s ease 0.3s backwards;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--light);
+            padding: 0.75rem 1.75rem;
+            border-radius: 10px;
+            font-weight: 600;
+            text-decoration: none;
+            border: 2px solid var(--glass-border);
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: var(--glass);
+            border-color: var(--primary);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Hero Visual */
+        .hero-visual {
+            position: relative;
+            animation: fadeInUp 0.8s ease 0.4s backwards;
+        }
+
+        .token-flow-visual {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .token-flow-visual::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-1);
+        }
+
+        .flow-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .flow-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .flow-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .flow-subtitle {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .asset-cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .asset-card {
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 12px;
+            padding: 1rem;
+            animation: cardFloat 4s ease-in-out infinite;
+        }
+
+        .asset-card:nth-child(2) { animation-delay: -1s; }
+        .asset-card:nth-child(3) { animation-delay: -2s; }
+        .asset-card:nth-child(4) { animation-delay: -3s; }
+
+        @keyframes cardFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .asset-label {
+            font-size: 0.75rem;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .asset-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--light);
+            margin-top: 0.25rem;
+        }
+
+        .asset-token {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--secondary);
+        }
+
+        /* Stats Section */
+        .stats {
+            padding: 4rem;
+            background: var(--glass);
+            border-top: 1px solid var(--glass-border);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .stats-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            color: var(--gray);
+            font-size: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Problem Section */
+        .problem {
+            padding: 8rem 4rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-tag {
+            display: inline-block;
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .problem-card {
+            background: var(--glass);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(239, 68, 68, 0.4);
+        }
+
+        .problem-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .problem-card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .problem-card p {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        /* Solution Section */
+        .solution {
+            padding: 8rem 4rem;
+            background: linear-gradient(180deg, transparent 0%, rgba(99, 102, 241, 0.05) 50%, transparent 100%);
+        }
+
+        .solution-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-tag.solution-tag {
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--primary);
+        }
+
+        .solution-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .solution-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .solution-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-1);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .solution-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+        }
+
+        .solution-card:hover::before {
+            opacity: 1;
+        }
+
+        .solution-number {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            opacity: 0.3;
+            position: absolute;
+            top: 1rem;
+            right: 1.5rem;
+        }
+
+        .solution-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .solution-card h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.35rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .solution-card p {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        /* How It Works */
+        .how-it-works {
+            padding: 8rem 4rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-tag.works-tag {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--secondary);
+        }
+
+        .workflow {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-top: 4rem;
+            position: relative;
+        }
+
+        .workflow::before {
+            content: '';
+            position: absolute;
+            top: 60px;
+            left: 15%;
+            right: 15%;
+            height: 2px;
+            background: var(--gradient-2);
+            z-index: 0;
+        }
+
+        .workflow-step {
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            flex: 1;
+        }
+
+        .step-icon {
+            width: 120px;
+            height: 120px;
+            background: var(--glass);
+            border: 2px solid var(--secondary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin: 0 auto 1.5rem;
+            position: relative;
+        }
+
+        .step-icon::after {
+            content: '';
+            position: absolute;
+            inset: -8px;
+            border: 2px dashed rgba(16, 185, 129, 0.3);
+            border-radius: 50%;
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .workflow-step h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .workflow-step p {
+            color: var(--gray);
+            font-size: 0.9rem;
+            max-width: 200px;
+            margin: 0 auto;
+        }
+
+        /* Markets Section */
+        .markets {
+            padding: 8rem 4rem;
+            background: var(--glass);
+        }
+
+        .markets-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-tag.markets-tag {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--accent);
+        }
+
+        .markets-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .market-card {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .market-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+        }
+
+        .market-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .market-card h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.35rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .market-size {
+            color: var(--accent);
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+
+        .market-card p {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        /* Comparison */
+        .comparison {
+            padding: 8rem 4rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .comparison-table {
+            margin-top: 3rem;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .comparison-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .comparison-row:last-child {
+            border-bottom: none;
+        }
+
+        .comparison-header {
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .comparison-cell {
+            padding: 1.25rem 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .comparison-cell:not(:last-child) {
+            border-right: 1px solid var(--glass-border);
+        }
+
+        .comparison-header .comparison-cell {
+            font-weight: 600;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .check {
+            color: var(--secondary);
+        }
+
+        .cross {
+            color: #ef4444;
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 8rem 4rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at center, rgba(99, 102, 241, 0.2) 0%, transparent 70%);
+        }
+
+        .cta-content {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cta h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta h2 .highlight {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .cta p {
+            font-size: 1.25rem;
+            color: var(--gray);
+            margin-bottom: 2.5rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .btn-large {
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem;
+            border-top: 1px solid var(--glass-border);
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .footer-text {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            margin-top: 1.5rem;
+        }
+
+        .footer-links a {
+            color: var(--gray);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--light);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero h1 {
+                font-size: 3rem;
+            }
+
+            .hero-buttons {
+                justify-content: center;
+            }
+
+            .stats-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .problem-grid,
+            .solution-grid,
+            .markets-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .workflow {
+                flex-direction: column;
+                gap: 3rem;
+            }
+
+            .workflow::before {
+                display: none;
+            }
+
+            nav {
+                padding: 1rem 2rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero {
+                padding: 6rem 2rem 4rem;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .cta h2 {
+                font-size: 2.5rem;
+            }
+
+            .comparison-row {
+                grid-template-columns: 1fr;
+            }
+
+            .comparison-cell:not(:last-child) {
+                border-right: none;
+                border-bottom: 1px solid var(--glass-border);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Effects -->
+    <div class="bg-animation"></div>
+    <div class="grid-pattern"></div>
+    <div class="floating-tokens">
+        <div class="token"></div>
+        <div class="token"></div>
+        <div class="token"></div>
+        <div class="token"></div>
+        <div class="token"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">
+            <div class="logo-icon">◈</div>
+            TokenMind
+        </div>
+        <div class="nav-links">
+            <a href="#solution">Solution</a>
+            <a href="#how-it-works">How It Works</a>
+            <a href="#markets">Markets</a>
+            <a href="#" class="btn-primary">Request Demo</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <div class="hero-badge">Launching Q3 2026</div>
+                <h1>Tokenize <span class="highlight">Any Asset</span> in 30 Days</h1>
+                <p>The AI-powered operating system that transforms real-world assets into compliant digital securities. 10x faster. 10x cheaper. 200+ jurisdictions.</p>
+                <div class="hero-buttons">
+                    <a href="#" class="btn-primary">Request Early Access</a>
+                    <a href="#" class="btn-secondary">Watch Demo</a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="token-flow-visual">
+                    <div class="flow-header">
+                        <div class="flow-icon">◈</div>
+                        <div>
+                            <div class="flow-title">Live Tokenization</div>
+                            <div class="flow-subtitle">Manhattan Office Building</div>
+                        </div>
+                    </div>
+                    <div class="asset-cards">
+                        <div class="asset-card">
+                            <div class="asset-label">Asset Value</div>
+                            <div class="asset-value">$45.2M</div>
+                            <div class="asset-token">◈ 45,200 tokens</div>
+                        </div>
+                        <div class="asset-card">
+                            <div class="asset-label">Compliance</div>
+                            <div class="asset-value">12 Jurisdictions</div>
+                            <div class="asset-token">✓ SEC, MiCA, MAS</div>
+                        </div>
+                        <div class="asset-card">
+                            <div class="asset-label">Time to Market</div>
+                            <div class="asset-value">28 Days</div>
+                            <div class="asset-token">↓ 91% faster</div>
+                        </div>
+                        <div class="asset-card">
+                            <div class="asset-label">Total Cost</div>
+                            <div class="asset-value">$32,500</div>
+                            <div class="asset-token">↓ 87% savings</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="stats-container">
+            <div class="stat">
+                <div class="stat-value">$500T+</div>
+                <div class="stat-label">Global RWA Value</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">10x</div>
+                <div class="stat-label">Cost Reduction</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">200+</div>
+                <div class="stat-label">Jurisdictions</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">30</div>
+                <div class="stat-label">Days to Market</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="problem">
+        <div class="section-tag">THE PROBLEM</div>
+        <h2 class="section-title">Tokenization is Broken</h2>
+        <p style="color: var(--gray); font-size: 1.1rem; max-width: 700px;">
+            $500 trillion in assets are locked in illiquid, inaccessible markets. 
+            Current tokenization is too expensive, too slow, and too complex.
+        </p>
+        <div class="problem-grid">
+            <div class="problem-card">
+                <div class="problem-icon">⚖️</div>
+                <h3>Regulatory Nightmare</h3>
+                <p>Each jurisdiction has different rules. A single tokenized asset might need to comply with 50+ regulatory frameworks.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">💸</div>
+                <h3>Prohibitive Costs</h3>
+                <p>$250K-$1M per tokenization. Legal fees, compliance costs, and technical integration make it accessible only to large institutions.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">⏰</div>
+                <h3>Endless Timelines</h3>
+                <p>6-18 months from concept to launch. By the time you're live, market conditions have changed entirely.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">🔗</div>
+                <h3>Fragmented Stack</h3>
+                <p>Custody, issuance, trading, and compliance systems don't talk to each other. Assets get stuck in silos.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">📉</div>
+                <h3>Liquidity Void</h3>
+                <p>Secondary markets are illiquid and fragmented. Investors can't exit positions when they need to.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">📋</div>
+                <h3>Compliance Burden</h3>
+                <p>Ongoing reporting, KYC/AML, investor eligibility, and tax compliance require armies of professionals.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="solution" id="solution">
+        <div class="solution-container">
+            <div class="section-tag solution-tag">THE SOLUTION</div>
+            <h2 class="section-title">AI-Powered Tokenization</h2>
+            <p style="color: var(--gray); font-size: 1.1rem; max-width: 700px;">
+                TokenMind AI automates every step of the tokenization lifecycle with advanced artificial intelligence.
+            </p>
+            <div class="solution-grid">
+                <div class="solution-card">
+                    <div class="solution-number">01</div>
+                    <div class="solution-icon">🤖</div>
+                    <h3>AssetGPT</h3>
+                    <p>Upload asset documents. AI extracts data, recommends structure, and provides real-time valuations.</p>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-number">02</div>
+                    <div class="solution-icon">⚖️</div>
+                    <h3>ComplianceEngine</h3>
+                    <p>Maps 200+ jurisdictions' regulations. Generates compliant structures. Monitors for changes.</p>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-number">03</div>
+                    <div class="solution-icon">📝</div>
+                    <h3>LegalForge</h3>
+                    <p>AI generates jurisdiction-specific legal documents and audited smart contracts in minutes.</p>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-number">04</div>
+                    <div class="solution-icon">🪙</div>
+                    <h3>TokenFlow</h3>
+                    <p>One-click token creation across chains with built-in KYC/AML and compliant distribution.</p>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-number">05</div>
+                    <div class="solution-icon">💧</div>
+                    <h3>LiquidityOS</h3>
+                    <p>AI-powered market making, cross-platform aggregation, and intelligent price discovery.</p>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-number">06</div>
+                    <div class="solution-icon">📊</div>
+                    <h3>ReportMind</h3>
+                    <p>Automated investor reporting, tax documentation, and regulatory filings worldwide.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works" id="how-it-works">
+        <div class="section-tag works-tag">HOW IT WORKS</div>
+        <h2 class="section-title">From Asset to Token in 4 Steps</h2>
+        <div class="workflow">
+            <div class="workflow-step">
+                <div class="step-icon">📄</div>
+                <h3>Upload</h3>
+                <p>Drop your asset documents. AI handles the rest.</p>
+            </div>
+            <div class="workflow-step">
+                <div class="step-icon">⚡</div>
+                <h3>Analyze</h3>
+                <p>AI values, structures, and ensures compliance.</p>
+            </div>
+            <div class="workflow-step">
+                <div class="step-icon">🪙</div>
+                <h3>Tokenize</h3>
+                <p>One-click issuance with smart contracts.</p>
+            </div>
+            <div class="workflow-step">
+                <div class="step-icon">🚀</div>
+                <h3>Trade</h3>
+                <p>Distribute to investors with instant liquidity.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Markets Section -->
+    <section class="markets" id="markets">
+        <div class="markets-container">
+            <div class="section-tag markets-tag">TARGET MARKETS</div>
+            <h2 class="section-title">Every Asset. Every Market.</h2>
+            <div class="markets-grid">
+                <div class="market-card">
+                    <div class="market-icon">🏢</div>
+                    <h3>Real Estate</h3>
+                    <div class="market-size">$326 Trillion</div>
+                    <p>Commercial, residential, development projects, REITs—all tokenizable with compliant fractional ownership.</p>
+                </div>
+                <div class="market-card">
+                    <div class="market-icon">💳</div>
+                    <h3>Private Credit</h3>
+                    <div class="market-size">$1.5 Trillion</div>
+                    <p>Loans, bonds, and credit instruments with T+0 settlement and secondary trading.</p>
+                </div>
+                <div class="market-card">
+                    <div class="market-icon">🎨</div>
+                    <h3>Art & Collectibles</h3>
+                    <div class="market-size">$435 Billion</div>
+                    <p>Fractional fine art, rare collectibles, and memorabilia with provenance tracking.</p>
+                </div>
+                <div class="market-card">
+                    <div class="market-icon">⚡</div>
+                    <h3>Infrastructure</h3>
+                    <div class="market-size">$130 Trillion Gap</div>
+                    <p>Wind farms, solar projects, bridges, ports—tokenized for global investment.</p>
+                </div>
+                <div class="market-card">
+                    <div class="market-icon">💡</div>
+                    <h3>Intellectual Property</h3>
+                    <div class="market-size">$74 Trillion</div>
+                    <p>Royalty streams, patents, music catalogs, and creative works.</p>
+                </div>
+                <div class="market-card">
+                    <div class="market-icon">⛏️</div>
+                    <h3>Commodities</h3>
+                    <div class="market-size">$120 Trillion</div>
+                    <p>Gold reserves, carbon credits, agricultural products, and natural resources.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Comparison Section -->
+    <section class="comparison">
+        <div class="section-tag solution-tag">WHY TOKENMIND</div>
+        <h2 class="section-title">The Competitive Edge</h2>
+        <div class="comparison-table">
+            <div class="comparison-row comparison-header">
+                <div class="comparison-cell">Feature</div>
+                <div class="comparison-cell">TokenMind AI</div>
+                <div class="comparison-cell">Traditional</div>
+            </div>
+            <div class="comparison-row">
+                <div class="comparison-cell">Time to Market</div>
+                <div class="comparison-cell check">30 days</div>
+                <div class="comparison-cell cross">6-18 months</div>
+            </div>
+            <div class="comparison-row">
+                <div class="comparison-cell">Cost per Asset</div>
+                <div class="comparison-cell check">$25K-$50K</div>
+                <div class="comparison-cell cross">$250K-$1M</div>
+            </div>
+            <div class="comparison-row">
+                <div class="comparison-cell">Jurisdictions</div>
+                <div class="comparison-cell check">200+</div>
+                <div class="comparison-cell cross">5-10</div>
+            </div>
+            <div class="comparison-row">
+                <div class="comparison-cell">AI Automation</div>
+                <div class="comparison-cell check">✓ End-to-End</div>
+                <div class="comparison-cell cross">✗ Manual</div>
+            </div>
+            <div class="comparison-row">
+                <div class="comparison-cell">Real-Time Compliance</div>
+                <div class="comparison-cell check">✓ Continuous</div>
+                <div class="comparison-cell cross">✗ Point-in-Time</div>
+            </div>
+            <div class="comparison-row">
+                <div class="comparison-cell">Secondary Liquidity</div>
+                <div class="comparison-cell check">✓ AI Market Making</div>
+                <div class="comparison-cell cross">✗ Fragmented</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="cta-content">
+            <h2>Ready to <span class="highlight">Tokenize?</span></h2>
+            <p>Join the waiting list for early access. Be among the first to transform your assets into digital securities.</p>
+            <div class="cta-buttons">
+                <a href="#" class="btn-primary btn-large">Request Early Access</a>
+                <a href="#" class="btn-secondary btn-large">Schedule a Demo</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-logo">◈ TokenMind AI</div>
+        <p class="footer-text">The Operating System for Real-World Asset Tokenization</p>
+        <div class="footer-links">
+            <a href="#">About</a>
+            <a href="#">Documentation</a>
+            <a href="#">Blog</a>
+            <a href="#">Contact</a>
+            <a href="#">Privacy</a>
+        </div>
+        <p class="footer-text" style="margin-top: 2rem; opacity: 0.5;">© 2026 TokenMind AI. All rights reserved.</p>
+    </footer>
+</body>
+</html>
