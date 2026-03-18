@@ -142,6 +142,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-03-17 | Morning | ModelMarket — The NYSE for AI Model Weights | [Playbook](2026-03-17-morning.md) • [Landing](2026-03-17-morning-landing.html) • [PDF](2026-03-17-morning.pdf) |
 | 2026-03-17 | Afternoon | HabitatOS — The AI Operating System for Space Habitat Management | [Playbook](2026-03-17-afternoon.md) • [Landing](2026-03-17-afternoon-landing.html) • [PDF](2026-03-17-afternoon.pdf) |
 | 2026-03-18 | Evening | TokenMind AI — The Operating System for Real-World Asset Tokenization | [Playbook](2026-03-18-evening.md) • [Landing](2026-03-18-evening-landing.html) • [PDF](2026-03-18-evening.pdf) |
+| 2026-03-18 | Morning | FundFlow AI — The Operating System for Startup Fundraising Intelligence | [Playbook](2026-03-18-morning.md) • [Landing](2026-03-18-morning-landing.html) • [PDF](2026-03-18-morning.pdf) |
 <!-- New entries will be added above this line -->
 
 ---
