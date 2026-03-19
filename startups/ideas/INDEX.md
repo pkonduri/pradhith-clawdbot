@@ -145,6 +145,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-03-18 | Morning | FundFlow AI — The Operating System for Startup Fundraising Intelligence | [Playbook](2026-03-18-morning.md) • [Landing](2026-03-18-morning-landing.html) • [PDF](2026-03-18-morning.pdf) |
 | 2026-03-18 | Afternoon | Augment AI — The Cognitive Enhancement Operating System for Humans | [Playbook](2026-03-18-afternoon.md) • [Landing](2026-03-18-afternoon-landing.html) • [PDF](2026-03-18-afternoon.pdf) |
 | 2026-03-19 | Evening | AgentExchange — The NASDAQ for AI Agent Services | [Playbook](2026-03-19-evening.md) • [Landing](2026-03-19-evening-landing.html) • [PDF](2026-03-19-evening.pdf) |
+| 2026-03-19 | Morning | AgentNet — The Secure Communication Protocol for AI Agent Swarms | [Playbook](2026-03-19-morning.md) • [Landing](2026-03-19-morning-landing.html) • [PDF](2026-03-19-morning.pdf) |
 <!-- New entries will be added above this line -->
 
 ---
