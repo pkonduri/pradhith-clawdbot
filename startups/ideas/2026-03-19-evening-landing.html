@@ -1,0 +1,1184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgentExchange — The NASDAQ for AI Agent Services</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00D4AA;
+            --primary-dark: #00B894;
+            --secondary: #6C5CE7;
+            --accent: #FD79A8;
+            --dark: #0A0E27;
+            --darker: #060914;
+            --card: #111633;
+            --card-border: #1E2452;
+            --text: #FFFFFF;
+            --text-secondary: #A0AEC0;
+            --gradient-1: linear-gradient(135deg, #00D4AA 0%, #00B894 50%, #6C5CE7 100%);
+            --gradient-2: linear-gradient(135deg, #6C5CE7 0%, #A29BFE 100%);
+            --gradient-3: linear-gradient(135deg, #FD79A8 0%, #FDCB6E 100%);
+            --glow: 0 0 60px rgba(0, 212, 170, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--darker);
+            color: var(--text);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(0, 212, 170, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(108, 92, 231, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(253, 121, 168, 0.05) 0%, transparent 50%);
+            animation: bgRotate 30s linear infinite;
+        }
+
+        @keyframes bgRotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Grid Pattern Overlay */
+        .grid-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-image: 
+                linear-gradient(rgba(0, 212, 170, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 212, 170, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(6, 9, 20, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0, 212, 170, 0.1);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -1px;
+        }
+
+        .logo-icon {
+            display: inline-block;
+            margin-right: 0.5rem;
+            font-size: 1.8rem;
+        }
+
+        .nav-cta {
+            padding: 0.75rem 2rem;
+            background: var(--gradient-1);
+            border: none;
+            border-radius: 50px;
+            color: var(--dark);
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--glow);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 5% 4rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 1000px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1.5rem;
+            background: rgba(0, 212, 170, 0.1);
+            border: 1px solid rgba(0, 212, 170, 0.3);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--primary);
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .badge-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 5.5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            letter-spacing: -3px;
+            animation: fadeInUp 0.8s ease 0.1s both;
+        }
+
+        .hero h1 span {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.4rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto 3rem;
+            animation: fadeInUp 0.8s ease 0.2s both;
+            font-weight: 300;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.8s ease 0.3s both;
+        }
+
+        .btn-primary {
+            padding: 1.25rem 3rem;
+            background: var(--gradient-1);
+            border: none;
+            border-radius: 60px;
+            color: var(--dark);
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: var(--glow);
+        }
+
+        .btn-secondary {
+            padding: 1.25rem 3rem;
+            background: transparent;
+            border: 2px solid var(--card-border);
+            border-radius: 60px;
+            color: var(--text);
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Live Ticker Section */
+        .ticker-section {
+            padding: 4rem 5%;
+            background: var(--dark);
+            border-top: 1px solid var(--card-border);
+            border-bottom: 1px solid var(--card-border);
+            overflow: hidden;
+        }
+
+        .ticker-container {
+            display: flex;
+            animation: tickerScroll 30s linear infinite;
+        }
+
+        @keyframes tickerScroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .ticker-item {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            padding: 0 3rem;
+            white-space: nowrap;
+        }
+
+        .ticker-symbol {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--text);
+        }
+
+        .ticker-price {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+            color: var(--text-secondary);
+        }
+
+        .ticker-change {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            font-size: 0.9rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+        }
+
+        .ticker-change.up {
+            color: #00D4AA;
+            background: rgba(0, 212, 170, 0.15);
+        }
+
+        .ticker-change.down {
+            color: #FD79A8;
+            background: rgba(253, 121, 168, 0.15);
+        }
+
+        /* Stats Section */
+        .stats {
+            padding: 6rem 5%;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .stat-card {
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: 0 20px 40px rgba(0, 212, 170, 0.1);
+        }
+
+        .stat-value {
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Problem Section */
+        .problem {
+            padding: 8rem 5%;
+            background: var(--dark);
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 5rem;
+        }
+
+        .section-tag {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            background: rgba(253, 121, 168, 0.1);
+            border: 1px solid rgba(253, 121, 168, 0.3);
+            border-radius: 50px;
+            color: var(--accent);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title {
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            letter-spacing: -2px;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .problem-card {
+            background: linear-gradient(135deg, rgba(253, 121, 168, 0.05), rgba(253, 203, 110, 0.05));
+            border: 1px solid rgba(253, 121, 168, 0.2);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+        }
+
+        .problem-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-3);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .problem-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .problem-card p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        /* Solution Section */
+        .solution {
+            padding: 8rem 5%;
+        }
+
+        .solution .section-tag {
+            background: rgba(0, 212, 170, 0.1);
+            border-color: rgba(0, 212, 170, 0.3);
+            color: var(--primary);
+        }
+
+        .solution-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .solution-card {
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 3rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .solution-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-1);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .solution-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .solution-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .solution-number {
+            font-size: 4rem;
+            font-weight: 900;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            opacity: 0.3;
+            position: absolute;
+            top: 1rem;
+            right: 2rem;
+        }
+
+        .solution-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .solution-card p {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .solution-features {
+            list-style: none;
+        }
+
+        .solution-features li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 0;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .solution-features li::before {
+            content: '✓';
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        /* Market Terminal Section */
+        .terminal {
+            padding: 8rem 5%;
+            background: var(--dark);
+        }
+
+        .terminal-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: var(--darker);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+        }
+
+        .terminal-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 1.5rem;
+            background: var(--card);
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .terminal-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .terminal-dot:nth-child(1) { background: #FF5F56; }
+        .terminal-dot:nth-child(2) { background: #FFBD2E; }
+        .terminal-dot:nth-child(3) { background: #27C93F; }
+
+        .terminal-title {
+            margin-left: auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .terminal-body {
+            padding: 2rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+        }
+
+        .terminal-line {
+            margin-bottom: 0.75rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .terminal-prompt {
+            color: var(--primary);
+        }
+
+        .terminal-command {
+            color: var(--text);
+        }
+
+        .terminal-output {
+            color: var(--text-secondary);
+            padding-left: 1.5rem;
+        }
+
+        .terminal-table {
+            width: 100%;
+            margin: 1rem 0;
+            border-collapse: collapse;
+        }
+
+        .terminal-table th,
+        .terminal-table td {
+            text-align: left;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .terminal-table th {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .terminal-table .positive { color: #00D4AA; }
+        .terminal-table .negative { color: #FD79A8; }
+
+        /* Use Cases Section */
+        .use-cases {
+            padding: 8rem 5%;
+        }
+
+        .use-case-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .use-case-card {
+            background: linear-gradient(135deg, var(--card), var(--darker));
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .use-case-card:hover {
+            transform: scale(1.02);
+            border-color: var(--secondary);
+        }
+
+        .use-case-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .use-case-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .use-case-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Roadmap Section */
+        .roadmap {
+            padding: 8rem 5%;
+            background: var(--dark);
+        }
+
+        .timeline {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 100%;
+            background: var(--gradient-1);
+        }
+
+        .timeline-item {
+            display: flex;
+            margin-bottom: 4rem;
+            position: relative;
+        }
+
+        .timeline-item:nth-child(odd) {
+            flex-direction: row-reverse;
+        }
+
+        .timeline-content {
+            width: 45%;
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .timeline-content:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+        }
+
+        .timeline-marker {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 24px;
+            height: 24px;
+            background: var(--gradient-1);
+            border-radius: 50%;
+            border: 4px solid var(--darker);
+        }
+
+        .timeline-date {
+            font-size: 0.85rem;
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-content h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .timeline-content p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 10rem 5%;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(0, 212, 170, 0.15), transparent 70%);
+            pointer-events: none;
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cta h2 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            letter-spacing: -2px;
+        }
+
+        .cta h2 span {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .cta p {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+        }
+
+        /* Footer */
+        footer {
+            padding: 3rem 5%;
+            text-align: center;
+            border-top: 1px solid var(--card-border);
+        }
+
+        footer p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                letter-spacing: -1px;
+            }
+
+            .timeline::before {
+                left: 20px;
+            }
+
+            .timeline-item {
+                flex-direction: column !important;
+                padding-left: 50px;
+            }
+
+            .timeline-content {
+                width: 100%;
+            }
+
+            .timeline-marker {
+                left: 20px;
+            }
+
+            .terminal-body {
+                font-size: 0.75rem;
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    <div class="grid-pattern"></div>
+
+    <nav>
+        <div class="logo">
+            <span class="logo-icon">📊</span>AgentExchange
+        </div>
+        <button class="nav-cta">Get Early Access</button>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span class="badge-dot"></span>
+                Powered by Stripe MPP • Live Q2 2026
+            </div>
+            <h1>The <span>NASDAQ</span> for<br>AI Agent Services</h1>
+            <p class="hero-subtitle">
+                The first real-time exchange where AI agents trade compute, API calls, data, and services at market prices. Built for the $1T agentic economy.
+            </p>
+            <div class="hero-cta">
+                <a href="#" class="btn-primary">
+                    <span>⚡</span> Start Trading
+                </a>
+                <a href="#" class="btn-secondary">View API Docs</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="ticker-section">
+        <div class="ticker-container">
+            <div class="ticker-item">
+                <span class="ticker-symbol">GPT4-TKN</span>
+                <span class="ticker-price">$0.0024</span>
+                <span class="ticker-change up">+12.4%</span>
+            </div>
+            <div class="ticker-item">
+                <span class="ticker-symbol">CLAUDE-TKN</span>
+                <span class="ticker-price">$0.0019</span>
+                <span class="ticker-change up">+8.7%</span>
+            </div>
+            <div class="ticker-item">
+                <span class="ticker-symbol">H100-HR</span>
+                <span class="ticker-price">$2.34</span>
+                <span class="ticker-change down">-3.2%</span>
+            </div>
+            <div class="ticker-item">
+                <span class="ticker-symbol">SEARCH-API</span>
+                <span class="ticker-price">$0.0045</span>
+                <span class="ticker-change up">+5.1%</span>
+            </div>
+            <div class="ticker-item">
+                <span class="ticker-symbol">VISION-CALL</span>
+                <span class="ticker-price">$0.012</span>
+                <span class="ticker-change up">+2.3%</span>
+            </div>
+            <div class="ticker-item">
+                <span class="ticker-symbol">GPT4-TKN</span>
+                <span class="ticker-price">$0.0024</span>
+                <span class="ticker-change up">+12.4%</span>
+            </div>
+            <div class="ticker-item">
+                <span class="ticker-symbol">CLAUDE-TKN</span>
+                <span class="ticker-price">$0.0019</span>
+                <span class="ticker-change up">+8.7%</span>
+            </div>
+            <div class="ticker-item">
+                <span class="ticker-symbol">H100-HR</span>
+                <span class="ticker-price">$2.34</span>
+                <span class="ticker-change down">-3.2%</span>
+            </div>
+            <div class="ticker-item">
+                <span class="ticker-symbol">SEARCH-API</span>
+                <span class="ticker-price">$0.0045</span>
+                <span class="ticker-change up">+5.1%</span>
+            </div>
+            <div class="ticker-item">
+                <span class="ticker-symbol">VISION-CALL</span>
+                <span class="ticker-price">$0.012</span>
+                <span class="ticker-change up">+2.3%</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="stats">
+        <div class="stat-card">
+            <div class="stat-value">$1T+</div>
+            <div class="stat-label">Market by 2030</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">&lt;1ms</div>
+            <div class="stat-label">Matching Latency</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">50M+</div>
+            <div class="stat-label">Agents by 2027</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">0.25%</div>
+            <div class="stat-label">Trading Fee</div>
+        </div>
+    </section>
+
+    <section class="problem">
+        <div class="section-header">
+            <span class="section-tag">The Problem</span>
+            <h2 class="section-title">The Agent Economy Has No Market</h2>
+            <p class="section-subtitle">Stripe's MPP solves payments. But where's the price discovery?</p>
+        </div>
+        <div class="problem-grid">
+            <div class="problem-card">
+                <div class="problem-icon">💸</div>
+                <h3>Price Opacity</h3>
+                <p>Agents have zero visibility into market rates. They accept whatever providers charge with no benchmark or negotiation power.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">📉</div>
+                <h3>Static Pricing Waste</h3>
+                <p>Off-peak capacity goes unused. Surge demand can't be monetized. Billions in value lost to pricing inefficiency every year.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">🔍</div>
+                <h3>Discovery Friction</h3>
+                <p>Finding the optimal provider for a specific task requires manual exploration. No unified marketplace exists.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">📊</div>
+                <h3>No Market Intelligence</h3>
+                <p>Enterprises can't benchmark agent spending. No visibility into what "market rate" even means.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="solution">
+        <div class="section-header">
+            <span class="section-tag">The Solution</span>
+            <h2 class="section-title">AgentExchange: Where Agents Meet Markets</h2>
+            <p class="section-subtitle">Real-time price discovery for the autonomous economy</p>
+        </div>
+        <div class="solution-grid">
+            <div class="solution-card">
+                <span class="solution-number">01</span>
+                <h3>Spot Market</h3>
+                <p>Real-time trading for inference tokens, GPU-hours, API calls, and specialized services.</p>
+                <ul class="solution-features">
+                    <li>Sub-millisecond order matching</li>
+                    <li>Market/limit/stop orders</li>
+                    <li>Cross-provider arbitrage</li>
+                </ul>
+            </div>
+            <div class="solution-card">
+                <span class="solution-number">02</span>
+                <h3>Futures & Options</h3>
+                <p>Lock in future capacity. Hedge against price volatility. Enterprise-grade risk management.</p>
+                <ul class="solution-features">
+                    <li>Weekly/monthly contracts</li>
+                    <li>Physical or cash settlement</li>
+                    <li>Volatility products (AgentVIX)</li>
+                </ul>
+            </div>
+            <div class="solution-card">
+                <span class="solution-number">03</span>
+                <h3>Smart Order Routing</h3>
+                <p>Intelligent execution that finds best prices across all providers automatically.</p>
+                <ul class="solution-features">
+                    <li>TWAP/VWAP strategies</li>
+                    <li>Latency-aware routing</li>
+                    <li>Multi-provider fills</li>
+                </ul>
+            </div>
+            <div class="solution-card">
+                <span class="solution-number">04</span>
+                <h3>Enterprise Gateway</h3>
+                <p>Complete control and visibility for organizations managing agent fleets.</p>
+                <ul class="solution-features">
+                    <li>Budget controls & policies</li>
+                    <li>Full audit trails</li>
+                    <li>Spend analytics & benchmarks</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="terminal">
+        <div class="section-header">
+            <span class="section-tag">Live Demo</span>
+            <h2 class="section-title">The AgentExchange Terminal</h2>
+        </div>
+        <div class="terminal-container">
+            <div class="terminal-header">
+                <span class="terminal-dot"></span>
+                <span class="terminal-dot"></span>
+                <span class="terminal-dot"></span>
+                <span class="terminal-title">agentexchange-cli v1.0</span>
+            </div>
+            <div class="terminal-body">
+                <div class="terminal-line">
+                    <span class="terminal-prompt">$</span>
+                    <span class="terminal-command">agentx market --asset inference.gpt4</span>
+                </div>
+                <table class="terminal-table">
+                    <tr>
+                        <th>Asset</th>
+                        <th>Bid</th>
+                        <th>Ask</th>
+                        <th>Last</th>
+                        <th>24h Change</th>
+                        <th>Volume</th>
+                    </tr>
+                    <tr>
+                        <td>GPT4-TKN</td>
+                        <td>$0.00238</td>
+                        <td>$0.00242</td>
+                        <td>$0.00240</td>
+                        <td class="positive">+12.4%</td>
+                        <td>48.2M</td>
+                    </tr>
+                    <tr>
+                        <td>CLAUDE-TKN</td>
+                        <td>$0.00187</td>
+                        <td>$0.00191</td>
+                        <td>$0.00189</td>
+                        <td class="positive">+8.7%</td>
+                        <td>31.5M</td>
+                    </tr>
+                    <tr>
+                        <td>GEMINI-TKN</td>
+                        <td>$0.00145</td>
+                        <td>$0.00148</td>
+                        <td>$0.00146</td>
+                        <td class="negative">-2.1%</td>
+                        <td>22.8M</td>
+                    </tr>
+                </table>
+                <div class="terminal-line">
+                    <span class="terminal-prompt">$</span>
+                    <span class="terminal-command">agentx order buy GPT4-TKN 10000 --limit 0.0024 --strategy twap</span>
+                </div>
+                <div class="terminal-output">
+                    ✓ Order placed: #AX-2026031900042<br>
+                    ✓ Strategy: TWAP over 60s<br>
+                    ✓ Fills: 6,200 @ $0.00238 (OpenAI), 3,800 @ $0.00241 (Anthropic)<br>
+                    ✓ Avg price: $0.00239 | Saved: $0.10 vs static pricing
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="use-cases">
+        <div class="section-header">
+            <span class="section-tag">Use Cases</span>
+            <h2 class="section-title">Built for Every Player</h2>
+        </div>
+        <div class="use-case-grid">
+            <div class="use-case-card">
+                <div class="use-case-icon">🤖</div>
+                <h3>AI Agents</h3>
+                <p>Get the best prices on compute and services. Execute tasks at market rates, not list prices.</p>
+            </div>
+            <div class="use-case-card">
+                <div class="use-case-icon">🏢</div>
+                <h3>Enterprises</h3>
+                <p>Control and optimize agent spending. Benchmark costs against market. Lock in future capacity.</p>
+            </div>
+            <div class="use-case-card">
+                <div class="use-case-icon">☁️</div>
+                <h3>Cloud Providers</h3>
+                <p>Monetize spare capacity. Dynamic pricing that maximizes revenue. Reach millions of agent buyers.</p>
+            </div>
+            <div class="use-case-card">
+                <div class="use-case-icon">🛠️</div>
+                <h3>Service Providers</h3>
+                <p>List your API and reach the agent economy. Market-driven pricing. Instant MPP settlement.</p>
+            </div>
+            <div class="use-case-card">
+                <div class="use-case-icon">📈</div>
+                <h3>Traders</h3>
+                <p>Arbitrage across providers. Market make for rebates. Trade AI compute like commodities.</p>
+            </div>
+            <div class="use-case-card">
+                <div class="use-case-icon">🔬</div>
+                <h3>Researchers</h3>
+                <p>Access market data for analysis. Study agent economics. Build trading strategies.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="roadmap">
+        <div class="section-header">
+            <span class="section-tag">Roadmap</span>
+            <h2 class="section-title">Building the Exchange</h2>
+        </div>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <span class="timeline-date">Q2 2026</span>
+                    <h3>Spot Market Launch</h3>
+                    <p>Core exchange with inference tokens, initial provider partnerships, zero-fee launch period.</p>
+                </div>
+                <div class="timeline-marker"></div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <span class="timeline-date">Q3 2026</span>
+                    <h3>Asset Expansion</h3>
+                    <p>GPU compute, API calls, data feeds. Enterprise gateway. $10M daily volume target.</p>
+                </div>
+                <div class="timeline-marker"></div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <span class="timeline-date">Q4 2026</span>
+                    <h3>Derivatives Launch</h3>
+                    <p>Monthly futures on top assets. Options market. AgentVIX volatility index.</p>
+                </div>
+                <div class="timeline-marker"></div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <span class="timeline-date">2027</span>
+                    <h3>Ecosystem Dominance</h3>
+                    <p>$100M daily volume. Industry-standard pricing feeds. Global expansion.</p>
+                </div>
+                <div class="timeline-marker"></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta">
+        <div class="cta-content">
+            <h2>The Agent Economy <span>Needs an Exchange</span></h2>
+            <p>Stripe built the payment rails. We're building the market that runs on them.</p>
+            <div class="hero-cta">
+                <a href="#" class="btn-primary">
+                    <span>🚀</span> Join the Waitlist
+                </a>
+                <a href="#" class="btn-secondary">Talk to Founders</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>
+            <strong>AgentExchange</strong> — A Pradhith Startup Lab Concept<br>
+            Generated by <a href="#">The Godfather 🎩</a> | March 19, 2026
+        </p>
+    </footer>
+</body>
+</html>
