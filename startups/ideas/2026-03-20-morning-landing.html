@@ -1,0 +1,1364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgentInsure — Insurance for the Autonomous Age</title>
+    <meta name="description" content="The AI-native insurance platform for autonomous agent liability. Real-time risk assessment, dynamic pricing, instant claims.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #818cf8;
+            --secondary: #10b981;
+            --accent: #f59e0b;
+            --dark: #0f172a;
+            --darker: #020617;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --gradient-primary: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
+            --gradient-secondary: linear-gradient(135deg, #10b981 0%, #14b8a6 100%);
+            --gradient-accent: linear-gradient(135deg, #f59e0b 0%, #f97316 100%);
+            --gradient-dark: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--darker);
+            color: var(--light);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(16, 185, 129, 0.08) 0%, transparent 40%);
+            animation: bgFloat 20s ease-in-out infinite;
+        }
+
+        @keyframes bgFloat {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(2%, 2%) rotate(1deg); }
+            50% { transform: translate(-1%, 3%) rotate(-1deg); }
+            75% { transform: translate(-2%, -1%) rotate(0.5deg); }
+        }
+
+        /* Grid Pattern */
+        .grid-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-image: 
+                linear-gradient(rgba(99, 102, 241, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1rem 2rem;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 800;
+            text-decoration: none;
+            color: var(--light);
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-primary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--gray);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--light);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: none;
+            cursor: pointer;
+            font-size: 0.95rem;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--glass);
+            color: var(--light);
+            border: 1px solid var(--glass-border);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 2rem 4rem;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 100px;
+            font-size: 0.875rem;
+            color: var(--primary-light);
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .hero-badge::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--secondary);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 5.5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.8s ease 0.1s both;
+        }
+
+        .hero h1 .gradient-text {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto 2.5rem;
+            animation: fadeInUp 0.8s ease 0.2s both;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.8s ease 0.3s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Shield Animation */
+        .hero-visual {
+            margin-top: 4rem;
+            position: relative;
+            animation: fadeInUp 0.8s ease 0.4s both;
+        }
+
+        .shield-container {
+            width: 300px;
+            height: 350px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .shield {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .shield-bg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 250px;
+            height: 300px;
+            background: var(--gradient-primary);
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            opacity: 0.2;
+            animation: shieldPulse 3s ease-in-out infinite;
+        }
+
+        .shield-inner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 180px;
+            height: 220px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.3), rgba(139, 92, 246, 0.3));
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            border: 2px solid var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .shield-icon {
+            font-size: 4rem;
+        }
+
+        @keyframes shieldPulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.2; }
+            50% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.3; }
+        }
+
+        /* Floating Elements */
+        .floating-element {
+            position: absolute;
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 1rem 1.25rem;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            animation: float 6s ease-in-out infinite;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .floating-element.left {
+            left: -60px;
+            top: 50px;
+            animation-delay: 0s;
+        }
+
+        .floating-element.right {
+            right: -80px;
+            top: 120px;
+            animation-delay: 2s;
+        }
+
+        .floating-element.bottom {
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation-delay: 4s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .floating-element.bottom {
+            animation: floatBottom 6s ease-in-out infinite;
+        }
+
+        @keyframes floatBottom {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-10px); }
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--secondary);
+            box-shadow: 0 0 10px var(--secondary);
+        }
+
+        .status-dot.warning {
+            background: var(--accent);
+            box-shadow: 0 0 10px var(--accent);
+        }
+
+        /* Stats Section */
+        .stats {
+            padding: 6rem 2rem;
+            background: var(--glass);
+            border-top: 1px solid var(--glass-border);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .stats-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+            text-align: center;
+        }
+
+        .stat-item h3 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-item p {
+            color: var(--gray);
+            font-size: 1rem;
+        }
+
+        /* Problem Section */
+        .problem {
+            padding: 8rem 2rem;
+        }
+
+        .section-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-label {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border-radius: 100px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .section-label.solution {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--secondary);
+        }
+
+        .section-label.features {
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--primary-light);
+        }
+
+        .section-header h2 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            color: var(--gray);
+            font-size: 1.125rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .problem-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(239, 68, 68, 0.3);
+            box-shadow: 0 20px 40px rgba(239, 68, 68, 0.1);
+        }
+
+        .problem-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .problem-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .problem-card p {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        /* Solution Section */
+        .solution {
+            padding: 8rem 2rem;
+            background: var(--gradient-dark);
+        }
+
+        .solution-showcase {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            margin-top: 4rem;
+        }
+
+        .solution-visual {
+            position: relative;
+        }
+
+        .code-block {
+            background: #1e293b;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--glass-border);
+        }
+
+        .code-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 1.25rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .code-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .code-dot.red { background: #ef4444; }
+        .code-dot.yellow { background: #f59e0b; }
+        .code-dot.green { background: #10b981; }
+
+        .code-content {
+            padding: 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            line-height: 1.8;
+            overflow-x: auto;
+        }
+
+        .code-content .keyword { color: #c084fc; }
+        .code-content .function { color: #60a5fa; }
+        .code-content .string { color: #34d399; }
+        .code-content .comment { color: #64748b; }
+        .code-content .variable { color: #f472b6; }
+
+        .solution-content h3 {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+        }
+
+        .solution-content p {
+            color: var(--gray);
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        .feature-list {
+            list-style: none;
+        }
+
+        .feature-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .feature-check {
+            width: 24px;
+            height: 24px;
+            background: rgba(16, 185, 129, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--secondary);
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .feature-list li span {
+            color: var(--gray);
+        }
+
+        .feature-list li strong {
+            color: var(--light);
+        }
+
+        /* Coverage Products */
+        .products {
+            padding: 8rem 2rem;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+
+        .product-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--primary);
+            box-shadow: 0 30px 60px rgba(99, 102, 241, 0.15);
+        }
+
+        .product-card:hover::before {
+            opacity: 1;
+        }
+
+        .product-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+        }
+
+        .product-card h3 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .product-card p {
+            color: var(--gray);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .product-coverage {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--secondary);
+            border-radius: 100px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        /* How It Works */
+        .how-it-works {
+            padding: 8rem 2rem;
+            background: var(--glass);
+            border-top: 1px solid var(--glass-border);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            margin-top: 4rem;
+            position: relative;
+        }
+
+        .steps::before {
+            content: '';
+            position: absolute;
+            top: 60px;
+            left: 10%;
+            right: 10%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            z-index: 0;
+        }
+
+        .step {
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .step-number {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 1.5rem;
+            background: var(--dark);
+            border: 2px solid var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            box-shadow: 0 0 30px rgba(99, 102, 241, 0.2);
+        }
+
+        .step h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .step p {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        /* Market Opportunity */
+        .market {
+            padding: 8rem 2rem;
+        }
+
+        .market-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            margin-top: 4rem;
+        }
+
+        .market-stats {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 2.5rem;
+        }
+
+        .market-stat-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.25rem 0;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .market-stat-row:last-child {
+            border-bottom: none;
+        }
+
+        .market-stat-label {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        .market-stat-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .market-text h3 {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+        }
+
+        .market-text p {
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+            font-size: 1.05rem;
+        }
+
+        .market-highlights {
+            list-style: none;
+        }
+
+        .market-highlights li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            color: var(--gray);
+        }
+
+        .market-highlights li::before {
+            content: '→';
+            color: var(--primary-light);
+            font-weight: bold;
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 8rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at center, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
+            z-index: 0;
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .cta h2 {
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta p {
+            color: var(--gray);
+            font-size: 1.25rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cta .btn-primary {
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 2rem;
+            background: var(--darker);
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .footer-brand span {
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--gray);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--light);
+        }
+
+        .footer-tagline {
+            color: var(--gray);
+            font-size: 0.875rem;
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .solution-showcase {
+                grid-template-columns: 1fr;
+            }
+
+            .market-content {
+                grid-template-columns: 1fr;
+            }
+
+            .steps {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .steps::before {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .section-header h2 {
+                font-size: 2rem;
+            }
+
+            .floating-element.left,
+            .floating-element.right {
+                display: none;
+            }
+
+            .steps {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    <div class="grid-pattern"></div>
+
+    <nav>
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <div class="logo-icon">🛡️</div>
+                AgentInsure
+            </a>
+            <div class="nav-links">
+                <a href="#problem">Problem</a>
+                <a href="#solution">Solution</a>
+                <a href="#products">Coverage</a>
+                <a href="#market">Market</a>
+                <a href="#" class="btn btn-primary">Get Started</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span>Launching Q2 2026</span>
+            </div>
+            <h1>
+                Insurance for the<br>
+                <span class="gradient-text">Autonomous Age</span>
+            </h1>
+            <p>
+                AI agents are making decisions, executing transactions, and taking physical actions. 
+                When things go wrong, AgentInsure has you covered with real-time monitoring, 
+                dynamic pricing, and instant claims.
+            </p>
+            <div class="hero-cta">
+                <a href="#" class="btn btn-primary">
+                    Request Early Access
+                    <span>→</span>
+                </a>
+                <a href="#solution" class="btn btn-secondary">
+                    See How It Works
+                </a>
+            </div>
+
+            <div class="hero-visual">
+                <div class="shield-container">
+                    <div class="shield">
+                        <div class="shield-bg"></div>
+                        <div class="shield-inner">
+                            <span class="shield-icon">🛡️</span>
+                        </div>
+                    </div>
+                    <div class="floating-element left">
+                        <span class="status-dot"></span>
+                        <span>Agent Protected</span>
+                    </div>
+                    <div class="floating-element right">
+                        <span class="status-dot warning"></span>
+                        <span>Risk Score: 23</span>
+                    </div>
+                    <div class="floating-element bottom">
+                        <span>⚡</span>
+                        <span>Claims settled in &lt;24h</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="stats">
+        <div class="stats-container">
+            <div class="stat-item">
+                <h3>$2.4T</h3>
+                <p>AI Agent Market by 2030</p>
+            </div>
+            <div class="stat-item">
+                <h3>0</h3>
+                <p>Insurance Solutions Today</p>
+            </div>
+            <div class="stat-item">
+                <h3>87%</h3>
+                <p>Enterprises Need Coverage</p>
+            </div>
+            <div class="stat-item">
+                <h3>&lt;24h</h3>
+                <p>Claim Settlement Time</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="problem" id="problem">
+        <div class="section-container">
+            <div class="section-header">
+                <span class="section-label">The Problem</span>
+                <h2>The Liability Gap is Massive</h2>
+                <p>AI agents are making million-dollar decisions with zero coverage. Traditional insurance wasn't built for this.</p>
+            </div>
+
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="problem-icon">⚠️</div>
+                    <h3>No Coverage Exists</h3>
+                    <p>Traditional E&O, cyber, and liability policies explicitly exclude autonomous AI decisions. When your agent makes an error, you're on your own.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">📊</div>
+                    <h3>Unquantifiable Risk</h3>
+                    <p>Without real-time monitoring, no one knows how risky an agent actually is. Insurers can't price what they can't see.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">🏛️</div>
+                    <h3>Regulatory Pressure</h3>
+                    <p>EU AI Act, US state laws, and board mandates are requiring AI liability coverage—but there's nowhere to get it.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">⏰</div>
+                    <h3>Slow Claims Process</h3>
+                    <p>Traditional insurance takes 30-90 days to settle. AI-caused incidents need real-time response and fast resolution.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">🔗</div>
+                    <h3>Multi-Agent Complexity</h3>
+                    <p>When multiple agents interact, cascade failures happen. Who's liable when Agent A's action triggers Agent B's error?</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">🤖</div>
+                    <h3>Physical World Actions</h3>
+                    <p>Robots, drones, and autonomous vehicles are controlled by AI. Physical damage needs physical coverage—built for AI.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="solution" id="solution">
+        <div class="section-container">
+            <div class="section-header">
+                <span class="section-label solution">The Solution</span>
+                <h2>Insurance That Understands AI</h2>
+                <p>Embed coverage directly into your agent runtime. Monitor, price, and settle—automatically.</p>
+            </div>
+
+            <div class="solution-showcase">
+                <div class="solution-visual">
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-dot red"></span>
+                            <span class="code-dot yellow"></span>
+                            <span class="code-dot green"></span>
+                        </div>
+                        <div class="code-content">
+<span class="keyword">from</span> agentinsure <span class="keyword">import</span> Monitor, Policy
+
+<span class="comment"># Initialize coverage</span>
+monitor = Monitor(
+    <span class="variable">policy_id</span>=<span class="string">"pol_abc123"</span>,
+    <span class="variable">agent_name</span>=<span class="string">"procurement-agent"</span>,
+    <span class="variable">coverage_tier</span>=<span class="string">"enterprise"</span>
+)
+
+<span class="comment"># Wrap your agent - that's it</span>
+<span class="function">@monitor.track</span>
+<span class="keyword">async def</span> <span class="function">execute_purchase</span>(order):
+    result = <span class="keyword">await</span> agent.process(order)
+    <span class="keyword">return</span> result
+
+<span class="comment"># ✅ All actions automatically covered</span>
+<span class="comment"># ✅ Real-time risk scoring</span>
+<span class="comment"># ✅ Instant claims if errors occur</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="solution-content">
+                    <h3>Three Lines of Code. Full Coverage.</h3>
+                    <p>Our SDK embeds directly into your agent runtime. Every action is monitored, every risk is priced, and every incident is automatically captured for claims.</p>
+                    <ul class="feature-list">
+                        <li>
+                            <span class="feature-check">✓</span>
+                            <span><strong>Behavioral Monitoring:</strong> Track every decision, action, and interaction in real-time</span>
+                        </li>
+                        <li>
+                            <span class="feature-check">✓</span>
+                            <span><strong>Dynamic Pricing:</strong> Premiums adjust based on actual agent behavior, not static estimates</span>
+                        </li>
+                        <li>
+                            <span class="feature-check">✓</span>
+                            <span><strong>Instant Evidence:</strong> When claims happen, all context is already captured</span>
+                        </li>
+                        <li>
+                            <span class="feature-check">✓</span>
+                            <span><strong>Risk Alerts:</strong> Get notified before small issues become large claims</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="products" id="products">
+        <div class="section-container">
+            <div class="section-header">
+                <span class="section-label features">Coverage Products</span>
+                <h2>Protection for Every Agent Type</h2>
+                <p>From customer service bots to autonomous drones—we've got you covered.</p>
+            </div>
+
+            <div class="products-grid">
+                <div class="product-card">
+                    <div class="product-icon">📝</div>
+                    <h3>Agent E&O</h3>
+                    <p>Coverage for errors, omissions, and unintended consequences of AI agent decisions and communications.</p>
+                    <span class="product-coverage">Up to $50M</span>
+                </div>
+                <div class="product-card">
+                    <div class="product-icon">🤖</div>
+                    <h3>Physical Action Liability</h3>
+                    <p>Protection for AI controlling robots, drones, vehicles, and physical infrastructure.</p>
+                    <span class="product-coverage">Up to $100M</span>
+                </div>
+                <div class="product-card">
+                    <div class="product-icon">💰</div>
+                    <h3>Transaction Protection</h3>
+                    <p>Coverage for financial transactions, contracts, and agreements executed by AI agents.</p>
+                    <span class="product-coverage">Up to $250M</span>
+                </div>
+                <div class="product-card">
+                    <div class="product-icon">🔄</div>
+                    <h3>Multi-Agent Coordination</h3>
+                    <p>Specialized coverage for complex multi-agent systems, swarms, and coordination failures.</p>
+                    <span class="product-coverage">Custom Limits</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="how-it-works">
+        <div class="section-container">
+            <div class="section-header">
+                <span class="section-label features">How It Works</span>
+                <h2>From Integration to Settlement</h2>
+                <p>Get covered in minutes. Stay protected forever.</p>
+            </div>
+
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">🔌</div>
+                    <h3>1. Integrate SDK</h3>
+                    <p>Add our lightweight SDK to your agent runtime in under 5 minutes.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">📊</div>
+                    <h3>2. Get Risk Score</h3>
+                    <p>Our AI analyzes your agent's behavior and assigns a real-time risk profile.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">🛡️</div>
+                    <h3>3. Instant Coverage</h3>
+                    <p>Receive a policy customized to your agent's risk profile and operational scope.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">⚡</div>
+                    <h3>4. Auto Claims</h3>
+                    <p>If something goes wrong, evidence is captured instantly and claims settle in hours.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="market" id="market">
+        <div class="section-container">
+            <div class="section-header">
+                <span class="section-label features">Market Opportunity</span>
+                <h2>A Trillion-Dollar Market Emerging</h2>
+                <p>AI agents are the next computing platform. Insurance is the trust layer that enables adoption.</p>
+            </div>
+
+            <div class="market-content">
+                <div class="market-stats">
+                    <div class="market-stat-row">
+                        <span class="market-stat-label">AI Agent Market (2030)</span>
+                        <span class="market-stat-value">$2.4T</span>
+                    </div>
+                    <div class="market-stat-row">
+                        <span class="market-stat-label">Insurance TAM (2030)</span>
+                        <span class="market-stat-value">$400B</span>
+                    </div>
+                    <div class="market-stat-row">
+                        <span class="market-stat-label">Agents Deployed (2028)</span>
+                        <span class="market-stat-value">500M+</span>
+                    </div>
+                    <div class="market-stat-row">
+                        <span class="market-stat-label">Enterprise Demand</span>
+                        <span class="market-stat-value">87%</span>
+                    </div>
+                    <div class="market-stat-row">
+                        <span class="market-stat-label">Current Solutions</span>
+                        <span class="market-stat-value">0</span>
+                    </div>
+                </div>
+                <div class="market-text">
+                    <h3>Why Now?</h3>
+                    <p>The confluence of regulatory pressure, enterprise adoption, and incident volume is creating unprecedented demand for AI-native insurance.</p>
+                    <ul class="market-highlights">
+                        <li>EU AI Act requires liability coverage for high-risk AI systems</li>
+                        <li>US states introducing AI accountability legislation</li>
+                        <li>Board directors demanding coverage before approving AI projects</li>
+                        <li>First major AI-caused losses creating insurance awareness</li>
+                        <li>Traditional insurers unable to properly assess AI risk</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta">
+        <div class="cta-content">
+            <h2>Ready to Protect Your Agents?</h2>
+            <p>Join our early access program and be the first to get coverage for your autonomous AI systems.</p>
+            <div class="cta-buttons">
+                <a href="#" class="btn btn-primary">
+                    Apply for Early Access
+                    <span>→</span>
+                </a>
+                <a href="#" class="btn btn-secondary">
+                    Talk to Our Team
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <div class="logo-icon">🛡️</div>
+                <span>AgentInsure</span>
+            </div>
+            <div class="footer-links">
+                <a href="#">About</a>
+                <a href="#">Coverage</a>
+                <a href="#">Developers</a>
+                <a href="#">Blog</a>
+                <a href="#">Contact</a>
+            </div>
+        </div>
+        <p class="footer-tagline">
+            "In a world of autonomous agents, trust is the ultimate currency. AgentInsure is the mint."<br>
+            <span style="font-size: 0.75rem; margin-top: 1rem; display: block;">A Billion Dollar Startup Idea by The Godfather 🎩 — March 20, 2026</span>
+        </p>
+    </footer>
+
+    <script>
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.problem-card, .product-card, .step, .stat-item').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
