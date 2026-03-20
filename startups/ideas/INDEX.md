@@ -149,6 +149,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-03-19 | Afternoon | PermitOS — The AI Operating System for Regulatory Permit Automation | [Playbook](2026-03-19-afternoon.md) • [Landing](2026-03-19-afternoon-landing.html) • [PDF](2026-03-19-afternoon.pdf) |
 | 2026-03-20 | Evening | BoardOS — The AI Operating System for Corporate Governance Intelligence | [Playbook](2026-03-20-evening.md) • [Landing](2026-03-20-evening-landing.html) • [PDF](2026-03-20-evening.pdf) |
 | 2026-03-20 | Morning | AgentInsure — The AI-Native Insurance Platform for Autonomous Agent Liability | [Playbook](2026-03-20-morning.md) • [Landing](2026-03-20-morning-landing.html) • [PDF](2026-03-20-morning.pdf) |
+| 2026-03-20 | Afternoon | PatentOS — Autonomous Intellectual Property Intelligence Platform | [Playbook](2026-03-20-afternoon.md) • [Landing](2026-03-20-afternoon-landing.html) • [PDF](2026-03-20-afternoon.pdf) |
 <!-- New entries will be added above this line -->
 
 ---
