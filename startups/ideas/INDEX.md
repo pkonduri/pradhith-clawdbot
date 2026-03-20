@@ -147,6 +147,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-03-19 | Evening | AgentExchange — The NASDAQ for AI Agent Services | [Playbook](2026-03-19-evening.md) • [Landing](2026-03-19-evening-landing.html) • [PDF](2026-03-19-evening.pdf) |
 | 2026-03-19 | Morning | AgentNet — The Secure Communication Protocol for AI Agent Swarms | [Playbook](2026-03-19-morning.md) • [Landing](2026-03-19-morning-landing.html) • [PDF](2026-03-19-morning.pdf) |
 | 2026-03-19 | Afternoon | PermitOS — The AI Operating System for Regulatory Permit Automation | [Playbook](2026-03-19-afternoon.md) • [Landing](2026-03-19-afternoon-landing.html) • [PDF](2026-03-19-afternoon.pdf) |
+| 2026-03-20 | Evening | BoardOS — The AI Operating System for Corporate Governance Intelligence | [Playbook](2026-03-20-evening.md) • [Landing](2026-03-20-evening-landing.html) • [PDF](2026-03-20-evening.pdf) |
 <!-- New entries will be added above this line -->
 
 ---

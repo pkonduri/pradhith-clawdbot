@@ -1,0 +1,1646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BoardOS — The AI Operating System for Corporate Governance</title>
+    <meta name="description" content="Making Every Board Decision Defensible, Data-Driven, and Documented. Transform corporate governance from compliance burden to strategic advantage.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-tertiary: #1a1a25;
+            --bg-card: #15151f;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0b0;
+            --text-muted: #6b6b7b;
+            --accent-primary: #6366f1;
+            --accent-secondary: #8b5cf6;
+            --accent-tertiary: #a855f7;
+            --accent-gold: #f59e0b;
+            --accent-emerald: #10b981;
+            --accent-rose: #f43f5e;
+            --gradient-primary: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
+            --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+            --gradient-mesh: radial-gradient(ellipse at 20% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                            radial-gradient(ellipse at 80% 80%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+                            radial-gradient(ellipse at 50% 50%, rgba(168, 85, 247, 0.05) 0%, transparent 70%);
+            --border-subtle: rgba(255, 255, 255, 0.06);
+            --border-accent: rgba(99, 102, 241, 0.3);
+            --shadow-glow: 0 0 60px rgba(99, 102, 241, 0.2);
+            --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-mesh {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-mesh);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .grid-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(99, 102, 241, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1.25rem 2rem;
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 800;
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+
+        .logo-icon {
+            width: 42px;
+            height: 42px;
+            background: var(--gradient-primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            box-shadow: var(--shadow-glow);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .nav-cta {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.75rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: none;
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--border-subtle);
+        }
+
+        .btn-ghost:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 30px rgba(99, 102, 241, 0.5);
+        }
+
+        .btn-large {
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 8rem 2rem 4rem;
+            position: relative;
+        }
+
+        .hero-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .hero-content {
+            max-width: 680px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid var(--border-accent);
+            border-radius: 100px;
+            font-size: 0.85rem;
+            color: var(--accent-primary);
+            margin-bottom: 2rem;
+            animation: pulse-border 3s infinite;
+        }
+
+        @keyframes pulse-border {
+            0%, 100% { border-color: rgba(99, 102, 241, 0.3); }
+            50% { border-color: rgba(99, 102, 241, 0.6); }
+        }
+
+        .hero-badge-icon {
+            font-size: 1rem;
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 6vw, 4.5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.03em;
+        }
+
+        .hero h1 span {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.35rem;
+            color: var(--text-secondary);
+            margin-bottom: 2.5rem;
+            line-height: 1.6;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        .stat {
+            text-align: left;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+        }
+
+        /* Hero Visual */
+        .hero-visual {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .dashboard-preview {
+            width: 100%;
+            max-width: 600px;
+            background: var(--bg-card);
+            border-radius: 16px;
+            border: 1px solid var(--border-subtle);
+            box-shadow: var(--shadow-card), var(--shadow-glow);
+            overflow: hidden;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .dashboard-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 1.5rem;
+            background: var(--bg-tertiary);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .dashboard-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .dashboard-dot.red { background: #f43f5e; }
+        .dashboard-dot.yellow { background: #f59e0b; }
+        .dashboard-dot.green { background: #10b981; }
+
+        .dashboard-content {
+            padding: 1.5rem;
+        }
+
+        .dashboard-title {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .risk-cards {
+            display: grid;
+            gap: 0.75rem;
+        }
+
+        .risk-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+            background: var(--bg-tertiary);
+            border-radius: 10px;
+            border-left: 3px solid;
+        }
+
+        .risk-card.critical { border-left-color: var(--accent-rose); }
+        .risk-card.warning { border-left-color: var(--accent-gold); }
+        .risk-card.healthy { border-left-color: var(--accent-emerald); }
+
+        .risk-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .risk-name {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .risk-detail {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .risk-score {
+            font-size: 0.85rem;
+            font-weight: 700;
+            padding: 0.35rem 0.75rem;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .risk-card.critical .risk-score { color: var(--accent-rose); }
+        .risk-card.warning .risk-score { color: var(--accent-gold); }
+        .risk-card.healthy .risk-score { color: var(--accent-emerald); }
+
+        /* Floating Elements */
+        .floating-card {
+            position: absolute;
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            box-shadow: var(--shadow-card);
+            animation: float-slow 8s ease-in-out infinite;
+        }
+
+        @keyframes float-slow {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(1deg); }
+        }
+
+        .floating-card.top-left {
+            top: 5%;
+            left: -5%;
+            animation-delay: -2s;
+        }
+
+        .floating-card.bottom-right {
+            bottom: 10%;
+            right: -8%;
+            animation-delay: -4s;
+        }
+
+        .floating-card-label {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.35rem;
+        }
+
+        .floating-card-value {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .floating-card-value.green { color: var(--accent-emerald); }
+        .floating-card-value.gold { color: var(--accent-gold); }
+
+        /* Crisis Section */
+        .crisis {
+            padding: 6rem 2rem;
+            background: var(--bg-secondary);
+            position: relative;
+        }
+
+        .crisis::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent-rose), transparent);
+        }
+
+        .section-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-label {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(244, 63, 94, 0.1);
+            border: 1px solid rgba(244, 63, 94, 0.3);
+            border-radius: 100px;
+            font-size: 0.8rem;
+            color: var(--accent-rose);
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+
+        .section-subtitle {
+            font-size: 1.15rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .crisis-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .crisis-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid var(--border-subtle);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .crisis-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--gradient-primary);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .crisis-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--border-accent);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .crisis-card:hover::before {
+            opacity: 1;
+        }
+
+        .crisis-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .crisis-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .crisis-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .crisis-stat {
+            margin-top: 1.25rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-subtle);
+            font-size: 0.85rem;
+            color: var(--accent-rose);
+            font-weight: 600;
+        }
+
+        /* Failures Timeline */
+        .failures {
+            padding: 6rem 2rem;
+        }
+
+        .failures-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1rem;
+            margin-top: 3rem;
+        }
+
+        .failure-card {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid var(--border-subtle);
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .failure-card:hover {
+            transform: scale(1.02);
+            border-color: var(--accent-rose);
+        }
+
+        .failure-company {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .failure-amount {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--accent-rose);
+            margin-bottom: 0.25rem;
+        }
+
+        .failure-impact {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* Solution Section */
+        .solution {
+            padding: 6rem 2rem;
+            background: var(--bg-secondary);
+        }
+
+        .solution .section-label {
+            background: rgba(99, 102, 241, 0.1);
+            border-color: rgba(99, 102, 241, 0.3);
+            color: var(--accent-primary);
+        }
+
+        .pillars-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1.25rem;
+            margin-top: 3rem;
+        }
+
+        .pillar-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 1.75rem;
+            border: 1px solid var(--border-subtle);
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .pillar-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            height: 3px;
+            background: var(--gradient-primary);
+            border-radius: 3px 3px 0 0;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .pillar-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .pillar-card:hover::after {
+            opacity: 1;
+        }
+
+        .pillar-number {
+            width: 36px;
+            height: 36px;
+            background: var(--gradient-primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .pillar-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .pillar-subtitle {
+            font-size: 0.8rem;
+            color: var(--accent-primary);
+            margin-bottom: 0.75rem;
+        }
+
+        .pillar-desc {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* Why Now Section */
+        .why-now {
+            padding: 6rem 2rem;
+        }
+
+        .why-now .section-label {
+            background: rgba(245, 158, 11, 0.1);
+            border-color: rgba(245, 158, 11, 0.3);
+            color: var(--accent-gold);
+        }
+
+        .timeline {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+            position: relative;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 28px;
+            left: 10%;
+            right: 10%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary), var(--accent-tertiary), var(--accent-gold));
+        }
+
+        .timeline-item {
+            text-align: center;
+            position: relative;
+        }
+
+        .timeline-dot {
+            width: 56px;
+            height: 56px;
+            background: var(--bg-card);
+            border: 3px solid var(--accent-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .timeline-title {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-desc {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* Market Section */
+        .market {
+            padding: 6rem 2rem;
+            background: var(--bg-secondary);
+        }
+
+        .market .section-label {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: rgba(16, 185, 129, 0.3);
+            color: var(--accent-emerald);
+        }
+
+        .market-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            margin-top: 3rem;
+            align-items: center;
+        }
+
+        .market-visual {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 3rem;
+            border: 1px solid var(--border-subtle);
+            text-align: center;
+        }
+
+        .market-number {
+            font-size: 5rem;
+            font-weight: 900;
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+        }
+
+        .market-label {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+        }
+
+        .market-breakdown {
+            margin-top: 2rem;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+
+        .breakdown-item {
+            padding: 1rem;
+            background: var(--bg-tertiary);
+            border-radius: 10px;
+        }
+
+        .breakdown-value {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--accent-emerald);
+        }
+
+        .breakdown-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+        }
+
+        .market-points {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .market-point {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .market-point-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .market-point-content h4 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.35rem;
+        }
+
+        .market-point-content p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* Pricing Section */
+        .pricing {
+            padding: 6rem 2rem;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .pricing-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid var(--border-subtle);
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .pricing-card.featured {
+            border-color: var(--accent-primary);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .pricing-card.featured::before {
+            content: 'Most Popular';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 0.35rem 1rem;
+            background: var(--gradient-primary);
+            border-radius: 100px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .pricing-tier {
+            font-size: 0.8rem;
+            color: var(--accent-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .pricing-price {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.25rem;
+        }
+
+        .pricing-period {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .pricing-features li {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            padding: 0.5rem 0;
+        }
+
+        .pricing-features li::before {
+            content: '✓';
+            color: var(--accent-emerald);
+            font-weight: 700;
+        }
+
+        .pricing-card .btn {
+            width: 100%;
+            justify-content: center;
+        }
+
+        /* Vision Section */
+        .vision {
+            padding: 6rem 2rem;
+            background: var(--bg-secondary);
+        }
+
+        .vision .section-label {
+            background: rgba(139, 92, 246, 0.1);
+            border-color: rgba(139, 92, 246, 0.3);
+            color: var(--accent-secondary);
+        }
+
+        .vision-timeline {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .vision-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid var(--border-subtle);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .vision-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--gradient-primary);
+        }
+
+        .vision-year {
+            font-size: 2rem;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.75rem;
+        }
+
+        .vision-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .vision-desc {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 8rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cta h2 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.03em;
+        }
+
+        .cta p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 2.5rem;
+            line-height: 1.6;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 2rem;
+            border-top: 1px solid var(--border-subtle);
+            text-align: center;
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-brand .logo-icon {
+            width: 36px;
+            height: 36px;
+            font-size: 1rem;
+        }
+
+        .footer-brand span {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .footer-tagline {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .footer-copyright {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .pillars-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .failures-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .pricing-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 992px) {
+            .hero-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .hero-content {
+                max-width: 100%;
+            }
+            .hero-cta {
+                justify-content: center;
+            }
+            .hero-stats {
+                justify-content: center;
+            }
+            .hero-visual {
+                margin-top: 2rem;
+            }
+            .dashboard-preview {
+                max-width: 500px;
+            }
+            .floating-card {
+                display: none;
+            }
+            .crisis-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .timeline {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .timeline::before {
+                display: none;
+            }
+            .market-content {
+                grid-template-columns: 1fr;
+            }
+            .vision-timeline {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links, .nav-cta {
+                display: none;
+            }
+            .pillars-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .failures-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+            .hero-stats {
+                flex-direction: column;
+                gap: 1.5rem;
+                align-items: center;
+            }
+            .stat {
+                text-align: center;
+            }
+            .crisis-grid {
+                grid-template-columns: 1fr;
+            }
+            .timeline {
+                grid-template-columns: 1fr;
+            }
+            .vision-timeline {
+                grid-template-columns: 1fr;
+            }
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .pillars-grid {
+                grid-template-columns: 1fr;
+            }
+            .failures-grid {
+                grid-template-columns: 1fr;
+            }
+            .market-breakdown {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-mesh"></div>
+    <div class="grid-overlay"></div>
+
+    <nav>
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <div class="logo-icon">⚖️</div>
+                <span>BoardOS</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#problem">Problem</a></li>
+                <li><a href="#solution">Solution</a></li>
+                <li><a href="#why-now">Why Now</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+            </ul>
+            <div class="nav-cta">
+                <a href="#demo" class="btn btn-ghost">Request Demo</a>
+                <a href="#contact" class="btn btn-primary">Get Started</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <span class="hero-badge-icon">🛡️</span>
+                    <span>The Future of Corporate Governance</span>
+                </div>
+                <h1>Make Every <span>Board Decision</span> Defensible</h1>
+                <p class="hero-subtitle">AI-powered intelligence that transforms corporate governance from compliance burden to strategic advantage. Real-time insights. Predictive risk. Automatic documentation.</p>
+                <div class="hero-cta">
+                    <a href="#demo" class="btn btn-primary btn-large">Schedule Demo</a>
+                    <a href="#learn" class="btn btn-ghost btn-large">Learn More →</a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <div class="stat-value">$30B+</div>
+                        <div class="stat-label">Governance Market</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">500K+</div>
+                        <div class="stat-label">Company Boards</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">60%</div>
+                        <div class="stat-label">Prep Time Saved</div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="floating-card top-left">
+                    <div class="floating-card-label">Compliance Score</div>
+                    <div class="floating-card-value green">98.5%</div>
+                </div>
+                <div class="dashboard-preview">
+                    <div class="dashboard-header">
+                        <div class="dashboard-dot red"></div>
+                        <div class="dashboard-dot yellow"></div>
+                        <div class="dashboard-dot green"></div>
+                    </div>
+                    <div class="dashboard-content">
+                        <div class="dashboard-title">Risk Intelligence Dashboard</div>
+                        <div class="risk-cards">
+                            <div class="risk-card critical">
+                                <div class="risk-info">
+                                    <span class="risk-name">Supply Chain Exposure</span>
+                                    <span class="risk-detail">China concentration detected</span>
+                                </div>
+                                <span class="risk-score">CRITICAL</span>
+                            </div>
+                            <div class="risk-card warning">
+                                <div class="risk-info">
+                                    <span class="risk-name">SEC Filing Deadline</span>
+                                    <span class="risk-detail">10-Q due in 12 days</span>
+                                </div>
+                                <span class="risk-score">WARNING</span>
+                            </div>
+                            <div class="risk-card healthy">
+                                <div class="risk-info">
+                                    <span class="risk-name">Board Independence</span>
+                                    <span class="risk-detail">7 of 9 directors independent</span>
+                                </div>
+                                <span class="risk-score">HEALTHY</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="floating-card bottom-right">
+                    <div class="floating-card-label">Risks Surfaced</div>
+                    <div class="floating-card-value gold">+47 Days Early</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="crisis" id="problem">
+        <div class="section-container">
+            <div class="section-header">
+                <span class="section-label">The Crisis</span>
+                <h2 class="section-title">Corporate Governance is Fundamentally Broken</h2>
+                <p class="section-subtitle">Every major corporate catastrophe traces back to governance failure. The old ways can't handle 2026.</p>
+            </div>
+            <div class="crisis-grid">
+                <div class="crisis-card">
+                    <div class="crisis-icon">📚</div>
+                    <h3>Information Asymmetry</h3>
+                    <p>Board members receive 300+ page decks 48 hours before meetings. 73% can't fully digest materials in time.</p>
+                    <div class="crisis-stat">Management controls what boards see</div>
+                </div>
+                <div class="crisis-card">
+                    <div class="crisis-icon">⚠️</div>
+                    <h3>Unlimited Liability</h3>
+                    <p>Directors face personal liability for decisions. D&O insurance premiums up 400% since 2020.</p>
+                    <div class="crisis-stat">Most boards can't prove they were informed</div>
+                </div>
+                <div class="crisis-card">
+                    <div class="crisis-icon">📋</div>
+                    <h3>Compliance Explosion</h3>
+                    <p>SEC climate disclosures, cybersecurity rules, ESG mandates, AI regulations—requirements multiply daily.</p>
+                    <div class="crisis-stat">10,000+ regulatory requirements for F500</div>
+                </div>
+                <div class="crisis-card">
+                    <div class="crisis-icon">🔥</div>
+                    <h3>Reactive Not Proactive</h3>
+                    <p>Boards learn about problems after they become crises. Risk committees meet quarterly; risks evolve daily.</p>
+                    <div class="crisis-stat">Zero early warning systems</div>
+                </div>
+                <div class="crisis-card">
+                    <div class="crisis-icon">⏰</div>
+                    <h3>Time Poverty</h3>
+                    <p>Average director serves on 2.3 boards with 25-40 hours prep per meeting. No leverage, no automation.</p>
+                    <div class="crisis-stat">250+ hours annually on governance</div>
+                </div>
+                <div class="crisis-card">
+                    <div class="crisis-icon">📉</div>
+                    <h3>Outdated Tools</h3>
+                    <p>Board portals built in 2005 still dominate. Document sharing instead of intelligence. No AI capabilities.</p>
+                    <div class="crisis-stat">Digitizing paper is not transformation</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="failures">
+        <div class="section-container">
+            <div class="section-header">
+                <h2 class="section-title">The Cost of Governance Failure</h2>
+                <p class="section-subtitle">Every catastrophe had warning signs. Every board missed them.</p>
+            </div>
+            <div class="failures-grid">
+                <div class="failure-card">
+                    <div class="failure-company">Theranos</div>
+                    <div class="failure-amount">$9B</div>
+                    <div class="failure-impact">Investor losses, criminal charges</div>
+                </div>
+                <div class="failure-card">
+                    <div class="failure-company">WeWork</div>
+                    <div class="failure-amount">$40B</div>
+                    <div class="failure-impact">Valuation destruction</div>
+                </div>
+                <div class="failure-card">
+                    <div class="failure-company">FTX</div>
+                    <div class="failure-amount">$32B</div>
+                    <div class="failure-impact">Customer losses, prison</div>
+                </div>
+                <div class="failure-card">
+                    <div class="failure-company">SVB</div>
+                    <div class="failure-amount">$200B+</div>
+                    <div class="failure-impact">Banking contagion</div>
+                </div>
+                <div class="failure-card">
+                    <div class="failure-company">Boeing</div>
+                    <div class="failure-amount">346</div>
+                    <div class="failure-impact">Lives lost, $20B+ costs</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="solution" id="solution">
+        <div class="section-container">
+            <div class="section-header">
+                <span class="section-label">The Solution</span>
+                <h2 class="section-title">The Intelligence Layer for Corporate Governance</h2>
+                <p class="section-subtitle">Five integrated modules that transform how boards think, decide, and govern.</p>
+            </div>
+            <div class="pillars-grid">
+                <div class="pillar-card">
+                    <div class="pillar-number">1</div>
+                    <div class="pillar-title">BoardBrain</div>
+                    <div class="pillar-subtitle">Real-Time Intelligence</div>
+                    <p class="pillar-desc">AI-synthesized briefings tailored to each director. Natural language queries. Contradiction detection.</p>
+                </div>
+                <div class="pillar-card">
+                    <div class="pillar-number">2</div>
+                    <div class="pillar-title">RiskRadar</div>
+                    <div class="pillar-subtitle">Predictive Risk AI</div>
+                    <p class="pillar-desc">50,000+ risk signals monitored continuously. 90-day forward projections. Cascade modeling.</p>
+                </div>
+                <div class="pillar-card">
+                    <div class="pillar-number">3</div>
+                    <div class="pillar-title">ComplianceCore</div>
+                    <div class="pillar-subtitle">Regulatory Automation</div>
+                    <p class="pillar-desc">Maps all applicable regulations. Auto-generates filings and disclosures. Monitors regulatory changes.</p>
+                </div>
+                <div class="pillar-card">
+                    <div class="pillar-number">4</div>
+                    <div class="pillar-title">DecisionDoc</div>
+                    <div class="pillar-subtitle">Fiduciary Protection</div>
+                    <p class="pillar-desc">Documents every decision with full context. Creates defensible records. Litigation-ready governance.</p>
+                </div>
+                <div class="pillar-card">
+                    <div class="pillar-number">5</div>
+                    <div class="pillar-title">BoardBench</div>
+                    <div class="pillar-subtitle">Composition Intelligence</div>
+                    <p class="pillar-desc">Skill gap analysis. Director search AI. Compensation benchmarking. Onboarding automation.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="why-now" id="why-now">
+        <div class="section-container">
+            <div class="section-header">
+                <span class="section-label">Why Now</span>
+                <h2 class="section-title">The Perfect Storm for Governance Transformation</h2>
+                <p class="section-subtitle">Four converging forces make this the moment for BoardOS.</p>
+            </div>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-dot">📜</div>
+                    <h3 class="timeline-title">Regulatory Tsunami</h3>
+                    <p class="timeline-desc">SEC climate rules, cybersecurity requirements, EU AI Act, human capital disclosures—boards are drowning.</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot">🛡️</div>
+                    <h3 class="timeline-title">D&O Crisis</h3>
+                    <p class="timeline-desc">Insurance premiums up 400%. Carriers exiting. Directors need defensible documentation or won't serve.</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot">🤖</div>
+                    <h3 class="timeline-title">AI Governance Imperative</h3>
+                    <p class="timeline-desc">Every board faces AI questions they can't answer. BoardOS provides AI that governs AI.</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot">👥</div>
+                    <h3 class="timeline-title">Director Demographics</h3>
+                    <p class="timeline-desc">40% of S&P 500 directors over 65. New generation expects modern tools. Board service less attractive.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="market">
+        <div class="section-container">
+            <div class="section-header">
+                <span class="section-label">Market Opportunity</span>
+                <h2 class="section-title">A Massive Market Waiting for Intelligence</h2>
+                <p class="section-subtitle">The corporate governance market exceeds $30B with no intelligent solution.</p>
+            </div>
+            <div class="market-content">
+                <div class="market-visual">
+                    <div class="market-number">$30B+</div>
+                    <div class="market-label">Total Addressable Market</div>
+                    <div class="market-breakdown">
+                        <div class="breakdown-item">
+                            <div class="breakdown-value">$15B</div>
+                            <div class="breakdown-label">Board Software</div>
+                        </div>
+                        <div class="breakdown-item">
+                            <div class="breakdown-value">$10B</div>
+                            <div class="breakdown-label">Compliance</div>
+                        </div>
+                        <div class="breakdown-item">
+                            <div class="breakdown-value">$5B+</div>
+                            <div class="breakdown-label">Advisory</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="market-points">
+                    <div class="market-point">
+                        <div class="market-point-icon">🏢</div>
+                        <div class="market-point-content">
+                            <h4>500,000+ Company Boards</h4>
+                            <p>Public and private companies, nonprofits, and family offices all require governance. Each represents $50K-$500K+ annual spend.</p>
+                        </div>
+                    </div>
+                    <div class="market-point">
+                        <div class="market-point-icon">📈</div>
+                        <div class="market-point-content">
+                            <h4>No Intelligent Incumbent</h4>
+                            <p>Diligent, BoardEffect, and others offer document portals—not intelligence. Legacy architecture can't support AI. First-mover advantage available.</p>
+                        </div>
+                    </div>
+                    <div class="market-point">
+                        <div class="market-point-icon">🔒</div>
+                        <div class="market-point-content">
+                            <h4>Extremely Sticky Category</h4>
+                            <p>Governance is existential. Boards don't switch lightly. 95%+ retention rates with deep data moats once established.</p>
+                        </div>
+                    </div>
+                    <div class="market-point">
+                        <div class="market-point-icon">💰</div>
+                        <div class="market-point-content">
+                            <h4>Counter-Cyclical Demand</h4>
+                            <p>Economic downturns increase governance scrutiny. Risk and compliance become priorities. Defensive spend is protected.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="pricing" id="pricing">
+        <div class="section-container">
+            <div class="section-header">
+                <h2 class="section-title">Simple, Transparent Pricing</h2>
+                <p class="section-subtitle">Start with what you need. Scale as you grow.</p>
+            </div>
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <div class="pricing-tier">Growth</div>
+                    <div class="pricing-name">Startup/Private</div>
+                    <div class="pricing-price">$2,500</div>
+                    <div class="pricing-period">/month • Billed annually</div>
+                    <ul class="pricing-features">
+                        <li>BoardBrain Intelligence</li>
+                        <li>ComplianceCore Lite</li>
+                        <li>DecisionDoc</li>
+                        <li>Up to 10 directors</li>
+                        <li>Email support</li>
+                    </ul>
+                    <a href="#" class="btn btn-ghost">Get Started</a>
+                </div>
+                <div class="pricing-card featured">
+                    <div class="pricing-tier">Enterprise</div>
+                    <div class="pricing-name">Mid-Market</div>
+                    <div class="pricing-price">$10,000</div>
+                    <div class="pricing-period">/month • Billed annually</div>
+                    <ul class="pricing-features">
+                        <li>Full platform access</li>
+                        <li>Unlimited directors</li>
+                        <li>API integrations</li>
+                        <li>RiskRadar predictive AI</li>
+                        <li>Priority support</li>
+                    </ul>
+                    <a href="#" class="btn btn-primary">Contact Sales</a>
+                </div>
+                <div class="pricing-card">
+                    <div class="pricing-tier">Premium</div>
+                    <div class="pricing-name">Public Company</div>
+                    <div class="pricing-price">$25,000</div>
+                    <div class="pricing-period">/month • Billed annually</div>
+                    <ul class="pricing-features">
+                        <li>Everything in Enterprise</li>
+                        <li>Dedicated success team</li>
+                        <li>Custom integrations</li>
+                        <li>Multi-entity support</li>
+                        <li>24/7 support SLA</li>
+                    </ul>
+                    <a href="#" class="btn btn-ghost">Contact Sales</a>
+                </div>
+                <div class="pricing-card">
+                    <div class="pricing-tier">Strategic</div>
+                    <div class="pricing-name">Fortune 500</div>
+                    <div class="pricing-price">Custom</div>
+                    <div class="pricing-period">Enterprise agreement</div>
+                    <ul class="pricing-features">
+                        <li>White-glove implementation</li>
+                        <li>On-premise deployment</li>
+                        <li>Global regulatory coverage</li>
+                        <li>M&A support</li>
+                        <li>Executive sponsorship</li>
+                    </ul>
+                    <a href="#" class="btn btn-ghost">Talk to Us</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="vision">
+        <div class="section-container">
+            <div class="section-header">
+                <span class="section-label">The Vision</span>
+                <h2 class="section-title">Building the Standard of Care</h2>
+                <p class="section-subtitle">From intelligent board portal to the global governance network.</p>
+            </div>
+            <div class="vision-timeline">
+                <div class="vision-card">
+                    <div class="vision-year">Year 1</div>
+                    <h3 class="vision-title">The Intelligent Board Portal</h3>
+                    <p class="vision-desc">Replace static document sharing with dynamic intelligence that helps boards prepare, decide, and document.</p>
+                </div>
+                <div class="vision-card">
+                    <div class="vision-year">Year 3</div>
+                    <h3 class="vision-title">The Governance Operating System</h3>
+                    <p class="vision-desc">Become the system of record for all corporate governance—compliance, risk, composition, decisions.</p>
+                </div>
+                <div class="vision-card">
+                    <div class="vision-year">Year 5</div>
+                    <h3 class="vision-title">The Standard of Care</h3>
+                    <p class="vision-desc">Make BoardOS adoption the expected standard for responsible governance across all major companies.</p>
+                </div>
+                <div class="vision-card">
+                    <div class="vision-year">Year 10</div>
+                    <h3 class="vision-title">Governance Intelligence Network</h3>
+                    <p class="vision-desc">Connect every board with real-time intelligence about risks, opportunities, and best practices globally.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta" id="contact">
+        <div class="cta-content">
+            <h2>Every Board Decision <br>Affects Thousands</h2>
+            <p>Employees, shareholders, and communities deserve better than 300-page PDFs and gut instinct. Give your board superpowers.</p>
+            <div class="cta-buttons">
+                <a href="#demo" class="btn btn-primary btn-large">Schedule Demo</a>
+                <a href="#contact" class="btn btn-ghost btn-large">Contact Sales</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-brand">
+            <div class="logo-icon">⚖️</div>
+            <span>BoardOS</span>
+        </div>
+        <p class="footer-tagline">The AI Operating System for Corporate Governance</p>
+        <div class="footer-links">
+            <a href="#">Product</a>
+            <a href="#">Pricing</a>
+            <a href="#">About</a>
+            <a href="#">Careers</a>
+            <a href="#">Privacy</a>
+            <a href="#">Terms</a>
+        </div>
+        <p class="footer-copyright">© 2026 BoardOS, Inc. All rights reserved. | Evening Drop — March 20, 2026</p>
+    </footer>
+</body>
+</html>
