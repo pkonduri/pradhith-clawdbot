@@ -154,6 +154,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-03-21 | Morning | EternOS — The AI Operating System for Long-Horizon Institutional Intelligence | [Playbook](2026-03-21-morning.md) • [Landing](2026-03-21-morning-landing.html) • [PDF](2026-03-21-morning.pdf) |
 | 2026-03-21 | Afternoon | BioForge — The AI Operating System for Synthetic Biology Design & Biomanufacturing | [Playbook](2026-03-21-afternoon.md) • [Landing](2026-03-21-afternoon-landing.html) • [PDF](2026-03-21-afternoon.pdf) |
 | 2026-03-22 | Evening | HandsOS — The Physical Execution Layer for AI Agents | [Playbook](2026-03-22-evening.md) • [Landing](2026-03-22-evening-landing.html) • [PDF](2026-03-22-evening.pdf) |
+| 2026-03-22 | Morning | HumanLayer — The Trust Infrastructure for AI Training Data Authenticity | [Playbook](2026-03-22-morning.md) • [Landing](2026-03-22-morning-landing.html) • [PDF](2026-03-22-morning.pdf) |
 <!-- New entries will be added above this line -->
 
 ---

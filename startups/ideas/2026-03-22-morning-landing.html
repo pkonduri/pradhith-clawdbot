@@ -1,0 +1,1455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HumanLayer — The Trust Infrastructure for AI Training Data</title>
+    <meta name="description" content="Protecting Foundation Models from Synthetic Data Collapse. Verify, certify, and guarantee the human origin of AI training data.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --human-gold: #FFB800;
+            --human-gold-light: #FFCF4D;
+            --human-amber: #F59E0B;
+            --trust-blue: #3B82F6;
+            --trust-indigo: #6366F1;
+            --verified-green: #10B981;
+            --verified-emerald: #34D399;
+            --alert-red: #EF4444;
+            --dark-void: #0A0A0F;
+            --dark-surface: #111118;
+            --dark-elevated: #1A1A24;
+            --dark-border: #2A2A3A;
+            --text-primary: #FFFFFF;
+            --text-secondary: #A0A0B0;
+            --text-muted: #6B6B7B;
+            --gradient-gold: linear-gradient(135deg, #FFB800 0%, #F59E0B 50%, #D97706 100%);
+            --gradient-trust: linear-gradient(135deg, #3B82F6 0%, #6366F1 50%, #8B5CF6 100%);
+            --gradient-verified: linear-gradient(135deg, #10B981 0%, #34D399 100%);
+            --gradient-hero: linear-gradient(180deg, #0A0A0F 0%, #111118 50%, #0F0F18 100%);
+            --glow-gold: 0 0 80px rgba(255, 184, 0, 0.3);
+            --glow-blue: 0 0 60px rgba(59, 130, 246, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--dark-void);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.4;
+        }
+
+        .bg-pattern::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(255, 184, 0, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(59, 130, 246, 0.06) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.04) 0%, transparent 60%);
+            animation: pulseGlow 15s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulseGlow {
+            0% { opacity: 0.3; transform: scale(1); }
+            100% { opacity: 0.6; transform: scale(1.1); }
+        }
+
+        /* DNA Helix Animation */
+        .dna-container {
+            position: absolute;
+            top: 0;
+            right: 5%;
+            height: 100%;
+            width: 200px;
+            overflow: hidden;
+            opacity: 0.15;
+        }
+
+        .dna-strand {
+            position: absolute;
+            width: 100%;
+            height: 200%;
+            animation: dnaScroll 20s linear infinite;
+        }
+
+        @keyframes dnaScroll {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-50%); }
+        }
+
+        .dna-node {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--human-gold);
+        }
+
+        .dna-node.verified {
+            background: var(--verified-green);
+        }
+
+        .dna-link {
+            position: absolute;
+            width: 60px;
+            height: 2px;
+            background: linear-gradient(90deg, var(--human-gold), var(--verified-green));
+            opacity: 0.5;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1rem 2rem;
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 184, 0, 0.1);
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 800;
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+
+        .logo-icon {
+            width: 42px;
+            height: 42px;
+            background: var(--gradient-gold);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            box-shadow: var(--glow-gold);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--human-gold);
+        }
+
+        .nav-cta {
+            background: var(--gradient-gold);
+            color: var(--dark-void) !important;
+            padding: 0.75rem 1.75rem;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--glow-gold);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 2rem 4rem;
+            position: relative;
+            background: var(--gradient-hero);
+        }
+
+        .hero-content {
+            max-width: 1000px;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 184, 0, 0.1);
+            border: 1px solid rgba(255, 184, 0, 0.3);
+            padding: 0.5rem 1.25rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--human-gold);
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .badge-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--human-gold);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        h1 {
+            font-size: clamp(3rem, 8vw, 5.5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.8s ease-out 0.1s both;
+        }
+
+        .gradient-text {
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+            color: var(--text-secondary);
+            max-width: 750px;
+            margin: 0 auto 3rem;
+            font-weight: 400;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        .hero-quote {
+            font-size: 1.25rem;
+            font-style: italic;
+            color: var(--text-muted);
+            margin-bottom: 3rem;
+            animation: fadeInUp 0.8s ease-out 0.25s both;
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.8s ease-out 0.3s both;
+        }
+
+        .cta-primary {
+            background: var(--gradient-gold);
+            color: var(--dark-void);
+            padding: 1.25rem 3rem;
+            border-radius: 12px;
+            font-size: 1.125rem;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .cta-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--glow-gold);
+        }
+
+        .cta-secondary {
+            background: transparent;
+            color: var(--text-primary);
+            padding: 1.25rem 3rem;
+            border-radius: 12px;
+            font-size: 1.125rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            border: 2px solid var(--dark-border);
+            transition: all 0.3s;
+        }
+
+        .cta-secondary:hover {
+            border-color: var(--human-gold);
+            color: var(--human-gold);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Stats Section */
+        .stats-bar {
+            background: var(--dark-surface);
+            border-top: 1px solid var(--dark-border);
+            border-bottom: 1px solid var(--dark-border);
+            padding: 3rem 2rem;
+        }
+
+        .stats-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 3rem;
+            font-weight: 800;
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Problem Section */
+        .problem {
+            padding: 8rem 2rem;
+            background: var(--dark-void);
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 5rem;
+        }
+
+        .section-tag {
+            display: inline-block;
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--alert-red);
+            padding: 0.5rem 1.25rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-tag.success {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--verified-green);
+        }
+
+        .section-tag.primary {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--trust-blue);
+        }
+
+        .section-tag.gold {
+            background: rgba(255, 184, 0, 0.1);
+            color: var(--human-gold);
+        }
+
+        h2 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .section-desc {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        /* Collapse Visualization */
+        .collapse-viz {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: var(--dark-elevated);
+            border-radius: 24px;
+            padding: 3rem;
+            border: 1px solid var(--dark-border);
+        }
+
+        .collapse-title {
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            color: var(--alert-red);
+        }
+
+        .generation-bars {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .gen-row {
+            display: grid;
+            grid-template-columns: 120px 1fr 80px;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .gen-label {
+            font-weight: 600;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .gen-bar-container {
+            height: 40px;
+            background: var(--dark-surface);
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .gen-bar {
+            height: 100%;
+            border-radius: 8px;
+            transition: width 1.5s ease-out;
+            display: flex;
+            align-items: center;
+            padding-left: 1rem;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        .gen-bar.human {
+            background: var(--gradient-verified);
+            width: 100%;
+        }
+
+        .gen-bar.g2 {
+            background: linear-gradient(90deg, #10B981, #34D399);
+            width: 95%;
+        }
+
+        .gen-bar.g3 {
+            background: linear-gradient(90deg, #84CC16, #A3E635);
+            width: 78%;
+        }
+
+        .gen-bar.g4 {
+            background: linear-gradient(90deg, #F59E0B, #FBBF24);
+            width: 54%;
+        }
+
+        .gen-bar.g5 {
+            background: linear-gradient(90deg, #EF4444, #F87171);
+            width: 32%;
+        }
+
+        .gen-bar.g6 {
+            background: linear-gradient(90deg, #7F1D1D, #991B1B);
+            width: 15%;
+        }
+
+        .gen-percent {
+            font-weight: 700;
+            color: var(--text-secondary);
+        }
+
+        .collapse-warning {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 12px;
+            text-align: center;
+            color: var(--alert-red);
+            font-weight: 500;
+        }
+
+        /* Solution Section */
+        .solution {
+            padding: 8rem 2rem;
+            background: var(--dark-surface);
+        }
+
+        .solution-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .solution-card {
+            background: var(--dark-elevated);
+            border: 1px solid var(--dark-border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .solution-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-gold);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .solution-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(255, 184, 0, 0.3);
+        }
+
+        .solution-card:hover::before {
+            opacity: 1;
+        }
+
+        .solution-icon {
+            width: 64px;
+            height: 64px;
+            background: rgba(255, 184, 0, 0.1);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .solution-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .solution-card p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        /* Code Demo Section */
+        .code-demo {
+            padding: 8rem 2rem;
+            background: var(--dark-void);
+        }
+
+        .code-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--dark-surface);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--dark-border);
+        }
+
+        .code-header {
+            background: var(--dark-elevated);
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            border-bottom: 1px solid var(--dark-border);
+        }
+
+        .code-dots {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .code-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .code-dot.red { background: #FF5F56; }
+        .code-dot.yellow { background: #FFBD2E; }
+        .code-dot.green { background: #27C93F; }
+
+        .code-title {
+            flex: 1;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        .code-body {
+            padding: 2rem;
+            overflow-x: auto;
+        }
+
+        pre {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 1.7;
+        }
+
+        .code-comment { color: #6A737D; }
+        .code-keyword { color: #F97583; }
+        .code-string { color: #9ECBFF; }
+        .code-function { color: #B392F0; }
+        .code-variable { color: #FFAB70; }
+        .code-number { color: #79B8FF; }
+        .code-property { color: #79B8FF; }
+
+        /* Trust Metrics */
+        .trust-metrics {
+            padding: 8rem 2rem;
+            background: var(--dark-surface);
+        }
+
+        .metrics-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 3rem;
+        }
+
+        .metric-card {
+            background: var(--dark-elevated);
+            border-radius: 20px;
+            padding: 2.5rem;
+            border: 1px solid var(--dark-border);
+        }
+
+        .metric-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .metric-rows {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .metric-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .metric-label {
+            color: var(--text-secondary);
+        }
+
+        .metric-value {
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--verified-green);
+        }
+
+        /* Pricing Section */
+        .pricing {
+            padding: 8rem 2rem;
+            background: var(--dark-void);
+        }
+
+        .pricing-grid {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .pricing-card {
+            background: var(--dark-elevated);
+            border: 1px solid var(--dark-border);
+            border-radius: 24px;
+            padding: 3rem 2rem;
+            text-align: center;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .pricing-card.featured {
+            border-color: var(--human-gold);
+            transform: scale(1.05);
+            box-shadow: var(--glow-gold);
+        }
+
+        .pricing-card.featured::before {
+            content: 'Most Popular';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--gradient-gold);
+            color: var(--dark-void);
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .pricing-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-desc {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-price {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-card.featured .pricing-price {
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .pricing-period {
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+
+        .pricing-features {
+            list-style: none;
+            text-align: left;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-features li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--dark-border);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .pricing-features li::before {
+            content: '✓';
+            color: var(--verified-green);
+            font-weight: 700;
+        }
+
+        .pricing-cta {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: block;
+        }
+
+        .pricing-card:not(.featured) .pricing-cta {
+            background: transparent;
+            border: 2px solid var(--dark-border);
+            color: var(--text-primary);
+        }
+
+        .pricing-card:not(.featured) .pricing-cta:hover {
+            border-color: var(--human-gold);
+            color: var(--human-gold);
+        }
+
+        .pricing-card.featured .pricing-cta {
+            background: var(--gradient-gold);
+            border: none;
+            color: var(--dark-void);
+        }
+
+        .pricing-card.featured .pricing-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--glow-gold);
+        }
+
+        /* CTA Section */
+        .final-cta {
+            padding: 8rem 2rem;
+            background: var(--dark-surface);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .final-cta::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(255, 184, 0, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .final-cta-content {
+            position: relative;
+            z-index: 10;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .final-cta h2 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            margin-bottom: 1.5rem;
+        }
+
+        .final-cta p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 2rem 2rem;
+            background: var(--dark-void);
+            border-top: 1px solid var(--dark-border);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-top {
+            display: grid;
+            grid-template-columns: 2fr repeat(3, 1fr);
+            gap: 4rem;
+            margin-bottom: 4rem;
+        }
+
+        .footer-brand {
+            max-width: 300px;
+        }
+
+        .footer-brand .logo {
+            margin-bottom: 1rem;
+        }
+
+        .footer-brand p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .footer-links h4 {
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-links ul {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--human-gold);
+        }
+
+        .footer-bottom {
+            padding-top: 2rem;
+            border-top: 1px solid var(--dark-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .footer-social a {
+            color: var(--text-muted);
+            font-size: 1.25rem;
+            transition: color 0.3s;
+        }
+
+        .footer-social a:hover {
+            color: var(--human-gold);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .solution-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pricing-card.featured {
+                transform: none;
+            }
+
+            .footer-top {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero {
+                padding: 6rem 1rem 3rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 1.5rem;
+            }
+
+            .stat-value {
+                font-size: 2rem;
+            }
+
+            .gen-row {
+                grid-template-columns: 80px 1fr 60px;
+                gap: 0.75rem;
+            }
+
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+
+        /* Animations on scroll */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+
+        .animate-on-scroll.animated {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-pattern"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-content">
+            <a href="#" class="logo">
+                <div class="logo-icon">👤</div>
+                HumanLayer
+            </a>
+            <div class="nav-links">
+                <a href="#problem">Problem</a>
+                <a href="#solution">Solution</a>
+                <a href="#api">API</a>
+                <a href="#pricing">Pricing</a>
+                <a href="#contact" class="nav-cta">Get Early Access</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="dna-container">
+            <div class="dna-strand">
+                <!-- DNA visualization would be generated with JS in production -->
+            </div>
+        </div>
+        <div class="hero-content">
+            <div class="badge">
+                <span class="badge-dot"></span>
+                Protecting the Future of AI
+            </div>
+            <h1>The <span class="gradient-text">Trust Layer</span> for AI Training Data</h1>
+            <p class="hero-subtitle">Verify, certify, and guarantee the human origin of data used to train foundation models. Stop model collapse before it starts.</p>
+            <p class="hero-quote">"You wouldn't build a skyscraper on quicksand. Why build foundation models on AI-generated data?"</p>
+            <div class="cta-group">
+                <a href="#contact" class="cta-primary">
+                    Request Demo
+                    <span>→</span>
+                </a>
+                <a href="#api" class="cta-secondary">
+                    <span>📖</span>
+                    View Documentation
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Bar -->
+    <section class="stats-bar">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-value">92%</div>
+                <div class="stat-label">of new internet content contains AI elements</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">$400B</div>
+                <div class="stat-label">in foundation models at risk</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">99.2%</div>
+                <div class="stat-label">detection accuracy</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">50K+</div>
+                <div class="stat-label">verifications per second</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="problem" id="problem">
+        <div class="section-header">
+            <span class="section-tag">Critical Warning</span>
+            <h2>The Silent Crisis: <span class="gradient-text">Model Collapse</span></h2>
+            <p class="section-desc">As AI-generated content floods the internet, training new models on synthetic data leads to exponential quality degradation. Each generation becomes worse.</p>
+        </div>
+
+        <div class="collapse-viz animate-on-scroll">
+            <div class="collapse-title">⚠️ The Collapse Cascade</div>
+            <div class="generation-bars">
+                <div class="gen-row">
+                    <span class="gen-label">Human Created</span>
+                    <div class="gen-bar-container">
+                        <div class="gen-bar human">Diverse, creative, nuanced</div>
+                    </div>
+                    <span class="gen-percent">100%</span>
+                </div>
+                <div class="gen-row">
+                    <span class="gen-label">Generation 2</span>
+                    <div class="gen-bar-container">
+                        <div class="gen-bar g2">High quality retention</div>
+                    </div>
+                    <span class="gen-percent">95%</span>
+                </div>
+                <div class="gen-row">
+                    <span class="gen-label">Generation 3</span>
+                    <div class="gen-bar-container">
+                        <div class="gen-bar g3">Noticeable degradation</div>
+                    </div>
+                    <span class="gen-percent">78%</span>
+                </div>
+                <div class="gen-row">
+                    <span class="gen-label">Generation 4</span>
+                    <div class="gen-bar-container">
+                        <div class="gen-bar g4">Significant loss</div>
+                    </div>
+                    <span class="gen-percent">54%</span>
+                </div>
+                <div class="gen-row">
+                    <span class="gen-label">Generation 5</span>
+                    <div class="gen-bar-container">
+                        <div class="gen-bar g5">Severe collapse</div>
+                    </div>
+                    <span class="gen-percent">32%</span>
+                </div>
+                <div class="gen-row">
+                    <span class="gen-label">Generation 6+</span>
+                    <div class="gen-bar-container">
+                        <div class="gen-bar g6">💀</div>
+                    </div>
+                    <span class="gen-percent">15%</span>
+                </div>
+            </div>
+            <div class="collapse-warning">
+                By generation 7-8, models produce what researchers call "AI gray goo" — technically coherent but creatively bankrupt output.
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="solution" id="solution">
+        <div class="section-header">
+            <span class="section-tag success">The Solution</span>
+            <h2>Introducing <span class="gradient-text">HumanLayer</span></h2>
+            <p class="section-desc">The authenticity infrastructure that verifies, certifies, and guarantees the human origin of AI training data.</p>
+        </div>
+
+        <div class="solution-grid">
+            <div class="solution-card animate-on-scroll">
+                <div class="solution-icon">🔍</div>
+                <h3>Verification API</h3>
+                <p>Real-time detection of synthetic content using multi-signal analysis — behavioral patterns, temporal forensics, and cryptographic attestation.</p>
+            </div>
+            <div class="solution-card animate-on-scroll">
+                <div class="solution-icon">📜</div>
+                <h3>Provenance Chain</h3>
+                <p>Immutable, privacy-preserving audit trail from content creation to model training. Zero-knowledge proofs protect creator identity.</p>
+            </div>
+            <div class="solution-card animate-on-scroll">
+                <div class="solution-icon">🏪</div>
+                <h3>Clean Data Marketplace</h3>
+                <p>Certified human-generated datasets ready for foundation model training. Fair compensation for creators whose work trains AI.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Code Demo Section -->
+    <section class="code-demo" id="api">
+        <div class="section-header">
+            <span class="section-tag primary">Developer Experience</span>
+            <h2>Simple API, <span class="gradient-text">Powerful Results</span></h2>
+            <p class="section-desc">Integrate authenticity verification into your training pipeline in minutes.</p>
+        </div>
+
+        <div class="code-container animate-on-scroll">
+            <div class="code-header">
+                <div class="code-dots">
+                    <span class="code-dot red"></span>
+                    <span class="code-dot yellow"></span>
+                    <span class="code-dot green"></span>
+                </div>
+                <span class="code-title">verification.py</span>
+            </div>
+            <div class="code-body">
+<pre><span class="code-keyword">from</span> humanlayer <span class="code-keyword">import</span> Authenticator
+
+client = Authenticator(api_key=<span class="code-string">"hl_live_..."</span>)
+
+<span class="code-comment"># Verify content authenticity</span>
+result = <span class="code-keyword">await</span> client.<span class="code-function">verify</span>(
+    content=document_text,
+    content_type=<span class="code-string">"text"</span>,
+    verification_depth=<span class="code-string">"forensic"</span>,
+    return_confidence=<span class="code-number">True</span>
+)
+
+<span class="code-comment"># Result</span>
+{
+    <span class="code-property">"authentic"</span>: <span class="code-number">True</span>,
+    <span class="code-property">"human_probability"</span>: <span class="code-number">0.97</span>,
+    <span class="code-property">"synthetic_markers"</span>: [],
+    <span class="code-property">"certification_id"</span>: <span class="code-string">"HL-2026-03-22-ABC123"</span>,
+    <span class="code-property">"audit_trail"</span>: <span class="code-string">"https://verify.humanlayer.ai/ABC123"</span>
+}</pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trust Metrics -->
+    <section class="trust-metrics">
+        <div class="section-header">
+            <span class="section-tag gold">Performance</span>
+            <h2>Built for <span class="gradient-text">Scale & Accuracy</span></h2>
+        </div>
+
+        <div class="metrics-grid">
+            <div class="metric-card animate-on-scroll">
+                <h3>🎯 Detection Accuracy</h3>
+                <div class="metric-rows">
+                    <div class="metric-row">
+                        <span class="metric-label">General Text (HumanSense-7B)</span>
+                        <span class="metric-value">99.2%</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Programming Code</span>
+                        <span class="metric-value">98.7%</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Visual Content</span>
+                        <span class="metric-value">97.8%</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Audio & Voice</span>
+                        <span class="metric-value">98.1%</span>
+                    </div>
+                </div>
+            </div>
+            <div class="metric-card animate-on-scroll">
+                <h3>⚡ Platform Performance</h3>
+                <div class="metric-rows">
+                    <div class="metric-row">
+                        <span class="metric-label">Verifications / Second</span>
+                        <span class="metric-value">50,000+</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Average Latency</span>
+                        <span class="metric-value">&lt;50ms</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Uptime SLA</span>
+                        <span class="metric-value">99.99%</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Model Families Tracked</span>
+                        <span class="metric-value">147+</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="pricing" id="pricing">
+        <div class="section-header">
+            <span class="section-tag gold">Pricing</span>
+            <h2>Plans for <span class="gradient-text">Every Scale</span></h2>
+            <p class="section-desc">From startups to foundation model labs</p>
+        </div>
+
+        <div class="pricing-grid">
+            <div class="pricing-card animate-on-scroll">
+                <div class="pricing-name">Starter</div>
+                <div class="pricing-desc">For growing AI teams</div>
+                <div class="pricing-price">$5K</div>
+                <div class="pricing-period">per month</div>
+                <ul class="pricing-features">
+                    <li>10M verifications/month</li>
+                    <li>Standard API access</li>
+                    <li>Basic certification reports</li>
+                    <li>Community support</li>
+                    <li>5 team members</li>
+                </ul>
+                <a href="#contact" class="pricing-cta">Get Started</a>
+            </div>
+
+            <div class="pricing-card featured animate-on-scroll">
+                <div class="pricing-name">Professional</div>
+                <div class="pricing-desc">For serious AI development</div>
+                <div class="pricing-price">$25K</div>
+                <div class="pricing-period">per month</div>
+                <ul class="pricing-features">
+                    <li>100M verifications/month</li>
+                    <li>Priority API access</li>
+                    <li>Full certification suite</li>
+                    <li>Dedicated support</li>
+                    <li>Unlimited team members</li>
+                    <li>Provenance chain access</li>
+                </ul>
+                <a href="#contact" class="pricing-cta">Get Started</a>
+            </div>
+
+            <div class="pricing-card animate-on-scroll">
+                <div class="pricing-name">Enterprise</div>
+                <div class="pricing-desc">For foundation model labs</div>
+                <div class="pricing-price">Custom</div>
+                <div class="pricing-period">contact sales</div>
+                <ul class="pricing-features">
+                    <li>Unlimited verifications</li>
+                    <li>Dedicated infrastructure</li>
+                    <li>Custom integrations</li>
+                    <li>24/7 white-glove support</li>
+                    <li>On-premise deployment</li>
+                    <li>Custom SLAs</li>
+                </ul>
+                <a href="#contact" class="pricing-cta">Contact Sales</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="final-cta" id="contact">
+        <div class="final-cta-content">
+            <span class="section-tag success">Join the Waitlist</span>
+            <h2>Protect Your Foundation Models from <span class="gradient-text">Model Collapse</span></h2>
+            <p>Join the AI labs and enterprises building on authentic human intelligence. Early access launching Q2 2026.</p>
+            <div class="cta-group">
+                <a href="mailto:founders@humanlayer.ai" class="cta-primary">
+                    <span>✉️</span>
+                    founders@humanlayer.ai
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <a href="#" class="logo">
+                        <div class="logo-icon">👤</div>
+                        HumanLayer
+                    </a>
+                    <p>The trust infrastructure for AI training data. Because the future of AI depends on the authenticity of its past.</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Product</h4>
+                    <ul>
+                        <li><a href="#">Verification API</a></li>
+                        <li><a href="#">Provenance Chain</a></li>
+                        <li><a href="#">Marketplace</a></li>
+                        <li><a href="#">Enterprise</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Developers</h4>
+                    <ul>
+                        <li><a href="#">Documentation</a></li>
+                        <li><a href="#">API Reference</a></li>
+                        <li><a href="#">SDK Downloads</a></li>
+                        <li><a href="#">Status</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="#">About</a></li>
+                        <li><a href="#">Research</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Careers</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>© 2026 HumanLayer. All rights reserved.</span>
+                <div class="footer-social">
+                    <a href="#">𝕏</a>
+                    <a href="#">in</a>
+                    <a href="#">⌘</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Animate elements on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animated');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.animate-on-scroll').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Smooth scroll for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
