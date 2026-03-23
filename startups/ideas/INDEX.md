@@ -157,6 +157,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-03-22 | Morning | HumanLayer — The Trust Infrastructure for AI Training Data Authenticity | [Playbook](2026-03-22-morning.md) • [Landing](2026-03-22-morning-landing.html) • [PDF](2026-03-22-morning.pdf) |
 | 2026-03-23 | Evening | ComputeX — The Global Commodity Exchange for AI Compute | [Playbook](2026-03-23-evening.md) • [Landing](2026-03-23-evening-landing.html) • [PDF](2026-03-23-evening.pdf) |
 | 2026-03-23 | Morning | AlignOS — Enterprise AI Alignment & Values Governance | [Playbook](2026-03-23-morning.md) • [Landing](2026-03-23-morning-landing.html) • [PDF](2026-03-23-morning.pdf) |
+| 2026-03-23 | Afternoon | CoFounder AI — The AI Operating System for Solo Founders | [Playbook](2026-03-23-afternoon.md) • [Landing](2026-03-23-afternoon-landing.html) • [PDF](2026-03-23-afternoon.pdf) |
 <!-- New entries will be added above this line -->
 
 ---
