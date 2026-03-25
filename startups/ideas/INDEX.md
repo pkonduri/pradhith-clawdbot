@@ -162,6 +162,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-03-24 | Morning | SupplyGuard AI — Autonomous Software Supply Chain Security Intelligence | [Playbook](2026-03-24-morning.md) • [Landing](2026-03-24-morning-landing.html) • [PDF](2026-03-24-morning.pdf) |
 | 2026-03-25 | Evening | MindShield AI — The Cognitive Firewall for Personal AI Interactions | [Playbook](2026-03-25-evening.md) • [Landing](2026-03-25-evening-landing.html) • [PDF](2026-03-25-evening.pdf) |
 | 2026-03-25 | Morning | ChargeGrid AI — The AI Operating System for EV Charging Network Intelligence | [Playbook](2026-03-25-morning.md) • [Landing](2026-03-25-morning-landing.html) • [PDF](2026-03-25-morning.pdf) |
+| 2026-03-25 | Afternoon | ContextFabric — The Universal Context Layer for Multi-Agent AI Systems | [Playbook](2026-03-25-afternoon.md) • [Landing](2026-03-25-afternoon-landing.html) • [PDF](2026-03-25-afternoon.pdf) |
 <!-- New entries will be added above this line -->
 
 ---
