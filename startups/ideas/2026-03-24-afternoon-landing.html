@@ -1,0 +1,1369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SignalOS — The AI Operating System for Decision Intelligence</title>
+    <meta name="description" content="Cut through the noise. Surface what matters. Make better decisions. SignalOS is the intelligence layer for leaders drowning in AI-generated information.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-card: #1a1a25;
+            --bg-hover: #222230;
+            --signal-blue: #3b82f6;
+            --signal-cyan: #06b6d4;
+            --signal-purple: #8b5cf6;
+            --signal-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 50%, #06b6d4 100%);
+            --noise-red: #ef4444;
+            --success-green: #22c55e;
+            --warning-amber: #f59e0b;
+            --text-primary: #ffffff;
+            --text-secondary: #a1a1aa;
+            --text-muted: #71717a;
+            --border: rgba(255, 255, 255, 0.08);
+            --glow-blue: rgba(59, 130, 246, 0.4);
+            --glow-purple: rgba(139, 92, 246, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated noise background */
+        .noise-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Signal pulse background */
+        .signal-pulse {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 150vmax;
+            height: 150vmax;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .pulse-ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            border: 1px solid rgba(59, 130, 246, 0.1);
+            animation: pulseOut 8s ease-out infinite;
+        }
+
+        .pulse-ring:nth-child(1) { width: 30%; height: 30%; animation-delay: 0s; }
+        .pulse-ring:nth-child(2) { width: 50%; height: 50%; animation-delay: 2s; }
+        .pulse-ring:nth-child(3) { width: 70%; height: 70%; animation-delay: 4s; }
+        .pulse-ring:nth-child(4) { width: 90%; height: 90%; animation-delay: 6s; }
+
+        @keyframes pulseOut {
+            0% { opacity: 0.5; transform: translate(-50%, -50%) scale(0.5); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(1.5); }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 20px 0;
+            z-index: 100;
+            background: linear-gradient(to bottom, var(--bg-primary) 0%, transparent 100%);
+            backdrop-filter: blur(12px);
+        }
+
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .logo-icon {
+            width: 42px;
+            height: 42px;
+            background: var(--signal-gradient);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            box-shadow: 0 0 30px var(--glow-blue);
+        }
+
+        .nav-cta {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-link:hover {
+            color: var(--text-primary);
+        }
+
+        .btn {
+            padding: 12px 28px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--signal-gradient);
+            color: white;
+            box-shadow: 0 4px 20px var(--glow-blue);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px var(--glow-blue);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-hover);
+            border-color: var(--signal-blue);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 120px 0 80px;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 800px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+        }
+
+        .badge-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--success-green);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 5rem);
+            font-weight: 800;
+            line-height: 1.05;
+            margin-bottom: 24px;
+            letter-spacing: -0.03em;
+        }
+
+        .gradient-text {
+            background: var(--signal-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.35rem;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            max-width: 600px;
+            line-height: 1.7;
+        }
+
+        .hero-ctas {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .hero-visual {
+            position: absolute;
+            right: -100px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 500px;
+            height: 500px;
+            opacity: 0.6;
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            padding: 60px 0;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            background: var(--bg-secondary);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 800;
+            background: var(--signal-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-top: 8px;
+        }
+
+        /* Problem Section */
+        .problem {
+            padding: 120px 0;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 80px;
+        }
+
+        .section-tag {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--signal-blue);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 20px;
+        }
+
+        .section-desc {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        /* Noise Visualization */
+        .noise-demo {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 60px;
+            overflow: hidden;
+        }
+
+        .noise-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .noise-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--noise-red);
+        }
+
+        .noise-counter {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--noise-red);
+        }
+
+        .noise-streams {
+            display: grid;
+            gap: 12px;
+        }
+
+        .noise-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 20px;
+            background: var(--bg-primary);
+            border-radius: 12px;
+            opacity: 0.7;
+            animation: fadeNoise 3s ease-in-out infinite;
+        }
+
+        .noise-item:nth-child(1) { animation-delay: 0s; }
+        .noise-item:nth-child(2) { animation-delay: 0.3s; }
+        .noise-item:nth-child(3) { animation-delay: 0.6s; }
+        .noise-item:nth-child(4) { animation-delay: 0.9s; }
+        .noise-item:nth-child(5) { animation-delay: 1.2s; }
+        .noise-item:nth-child(6) { animation-delay: 1.5s; }
+
+        @keyframes fadeNoise {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 0.8; }
+        }
+
+        .noise-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            background: var(--bg-hover);
+        }
+
+        .noise-text {
+            flex: 1;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .noise-tag {
+            font-size: 0.75rem;
+            padding: 4px 10px;
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--noise-red);
+            border-radius: 100px;
+        }
+
+        /* Problem Cards */
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .problem-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px;
+            transition: all 0.3s ease;
+        }
+
+        .problem-card:hover {
+            border-color: var(--noise-red);
+            transform: translateY(-4px);
+        }
+
+        .problem-icon {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .problem-card h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--noise-red);
+        }
+
+        .problem-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Solution Section */
+        .solution {
+            padding: 120px 0;
+            background: var(--bg-secondary);
+        }
+
+        .solution-visual {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 80px;
+        }
+
+        .signal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .signal-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--success-green);
+        }
+
+        .signal-counter {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--success-green);
+        }
+
+        .daily-brief {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+            border: 1px solid var(--signal-blue);
+            border-radius: 16px;
+            padding: 30px;
+        }
+
+        .brief-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .brief-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--signal-gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .brief-meta {
+            flex: 1;
+        }
+
+        .brief-meta h4 {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .brief-meta span {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .brief-items {
+            display: grid;
+            gap: 16px;
+        }
+
+        .brief-item {
+            display: flex;
+            gap: 16px;
+            padding: 16px;
+            background: var(--bg-primary);
+            border-radius: 12px;
+            align-items: flex-start;
+        }
+
+        .brief-priority {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+        }
+
+        .priority-1 { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+        .priority-2 { background: rgba(245, 158, 11, 0.2); color: #f59e0b; }
+        .priority-3 { background: rgba(59, 130, 246, 0.2); color: #3b82f6; }
+
+        .brief-content h5 {
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .brief-content p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .brief-action {
+            margin-top: 8px;
+            font-size: 0.85rem;
+            color: var(--signal-cyan);
+            font-weight: 500;
+        }
+
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 40px;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            border-color: var(--signal-blue);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .feature-icon {
+            width: 64px;
+            height: 64px;
+            background: var(--signal-gradient);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 24px;
+            box-shadow: 0 10px 30px var(--glow-blue);
+        }
+
+        .feature-card h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        /* How It Works */
+        .how-it-works {
+            padding: 120px 0;
+        }
+
+        .workflow {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            margin-top: 60px;
+        }
+
+        .workflow-step {
+            text-align: center;
+            position: relative;
+        }
+
+        .workflow-step::after {
+            content: '→';
+            position: absolute;
+            right: -24px;
+            top: 40px;
+            font-size: 1.5rem;
+            color: var(--text-muted);
+        }
+
+        .workflow-step:last-child::after {
+            display: none;
+        }
+
+        .workflow-num {
+            width: 80px;
+            height: 80px;
+            background: var(--bg-card);
+            border: 2px solid var(--signal-blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 800;
+            margin: 0 auto 24px;
+            color: var(--signal-blue);
+        }
+
+        .workflow-step h4 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .workflow-step p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        /* Pricing */
+        .pricing {
+            padding: 120px 0;
+            background: var(--bg-secondary);
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-top: 60px;
+        }
+
+        .price-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 40px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .price-card:hover {
+            transform: translateY(-8px);
+        }
+
+        .price-card.featured {
+            border: 2px solid var(--signal-blue);
+            background: linear-gradient(180deg, rgba(59, 130, 246, 0.1) 0%, var(--bg-card) 100%);
+        }
+
+        .price-badge {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--signal-gradient);
+            padding: 6px 20px;
+            border-radius: 100px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .price-header {
+            margin-bottom: 30px;
+        }
+
+        .price-tier {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .price-amount {
+            font-size: 3rem;
+            font-weight: 800;
+        }
+
+        .price-period {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .price-features {
+            list-style: none;
+            margin-bottom: 30px;
+        }
+
+        .price-features li {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 16px;
+            color: var(--text-secondary);
+        }
+
+        .check-icon {
+            color: var(--success-green);
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .price-card .btn {
+            width: 100%;
+            text-align: center;
+        }
+
+        /* Testimonial */
+        .testimonial {
+            padding: 120px 0;
+            text-align: center;
+        }
+
+        .testimonial-quote {
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            font-weight: 500;
+            line-height: 1.4;
+            max-width: 900px;
+            margin: 0 auto 40px;
+            font-style: italic;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        .author-avatar {
+            width: 60px;
+            height: 60px;
+            background: var(--signal-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .author-info h4 {
+            font-weight: 600;
+        }
+
+        .author-info span {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 120px 0;
+            background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-glow {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, var(--glow-purple) 0%, transparent 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0.3;
+        }
+
+        .cta-content {
+            position: relative;
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .cta h2 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            margin-bottom: 20px;
+            line-height: 1.1;
+        }
+
+        .cta p {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+        }
+
+        .cta-form {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cta-input {
+            padding: 16px 24px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            min-width: 300px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .cta-input:focus {
+            border-color: var(--signal-blue);
+        }
+
+        /* Footer */
+        footer {
+            padding: 60px 0;
+            border-top: 1px solid var(--border);
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 32px;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .footer-copy {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .stats-grid,
+            .problem-grid,
+            .features-grid,
+            .pricing-grid,
+            .workflow {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .workflow-step::after {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .stats-grid,
+            .problem-grid,
+            .features-grid,
+            .pricing-grid,
+            .workflow {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-link {
+                display: none;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                gap: 24px;
+                text-align: center;
+            }
+
+            .cta-form {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .cta-input {
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="noise-bg"></div>
+    <div class="signal-pulse">
+        <div class="pulse-ring"></div>
+        <div class="pulse-ring"></div>
+        <div class="pulse-ring"></div>
+        <div class="pulse-ring"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="container">
+            <div class="logo">
+                <div class="logo-icon">📡</div>
+                <span>Signal<span class="gradient-text">OS</span></span>
+            </div>
+            <div class="nav-cta">
+                <a href="#features" class="nav-link">Features</a>
+                <a href="#pricing" class="nav-link">Pricing</a>
+                <a class="btn btn-primary" href="#waitlist">Request Access</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <span class="badge-dot"></span>
+                    Now accepting executive applications
+                </div>
+                <h1>
+                    Cut Through the <span class="gradient-text">Noise</span>
+                </h1>
+                <p>
+                    You're drowning in AI-generated reports, alerts, and analysis. 
+                    SignalOS surfaces only what matters—giving you back your clarity, 
+                    your confidence, and your time.
+                </p>
+                <div class="hero-ctas">
+                    <a href="#waitlist" class="btn btn-primary">Join the Waitlist</a>
+                    <a href="#demo" class="btn btn-secondary">See It In Action</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Bar -->
+    <section class="stats-bar">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">2,400+</div>
+                    <div class="stat-label">Average daily inputs for executives</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">4.2h</div>
+                    <div class="stat-label">Spent on information triage daily</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">67%</div>
+                    <div class="stat-label">Report near-miss critical signals</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">7</div>
+                    <div class="stat-label">Things that actually matter today</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="problem" id="problem">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag">The Problem</div>
+                <h2 class="section-title">AI Created More Noise, Not Less</h2>
+                <p class="section-desc">
+                    We solved information scarcity. We created information paralysis.
+                    In 2026, the executives who win aren't the most informed—they're the ones who know what to ignore.
+                </p>
+            </div>
+
+            <!-- Noise Visualization -->
+            <div class="noise-demo">
+                <div class="noise-header">
+                    <span class="noise-title">🔴 Your Typical Day</span>
+                    <span class="noise-counter">2,847 inputs</span>
+                </div>
+                <div class="noise-streams">
+                    <div class="noise-item">
+                        <div class="noise-icon">📧</div>
+                        <span class="noise-text">347 emails — 12 new threads, mostly CCs you don't need</span>
+                        <span class="noise-tag">noise</span>
+                    </div>
+                    <div class="noise-item">
+                        <div class="noise-icon">💬</div>
+                        <span class="noise-text">892 Slack messages — important update buried in #random</span>
+                        <span class="noise-tag">noise</span>
+                    </div>
+                    <div class="noise-item">
+                        <div class="noise-icon">📊</div>
+                        <span class="noise-text">47 dashboard alerts — 2 actually matter</span>
+                        <span class="noise-tag">noise</span>
+                    </div>
+                    <div class="noise-item">
+                        <div class="noise-icon">📰</div>
+                        <span class="noise-text">1,200+ news articles — same story, 50 sources</span>
+                        <span class="noise-tag">noise</span>
+                    </div>
+                    <div class="noise-item">
+                        <div class="noise-icon">📅</div>
+                        <span class="noise-text">12 meeting invites — 3 worth your time</span>
+                        <span class="noise-tag">noise</span>
+                    </div>
+                    <div class="noise-item">
+                        <div class="noise-icon">🤖</div>
+                        <span class="noise-text">AI-generated reports from 8 different tools</span>
+                        <span class="noise-tag">noise</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="problem-icon">📊</div>
+                    <h3>Dashboard Overload</h3>
+                    <p>47 BI dashboards, zero actionable insights. You check them all, act on none.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">🔔</div>
+                    <h3>Alert Fatigue</h3>
+                    <p>Critical warnings buried in 500+ daily notifications. You've learned to ignore them all.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">📑</div>
+                    <h3>Report Paralysis</h3>
+                    <p>200-page AI analyses that nobody reads. Information without synthesis is useless.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">🏃</div>
+                    <h3>Decision Latency</h3>
+                    <p>72-hour average from signal to action. Your competitors move faster.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">🙈</div>
+                    <h3>Competitive Blindness</h3>
+                    <p>Market shifts missed while processing noise. The signal was there—you just didn't see it.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">😫</div>
+                    <h3>Decision Fatigue</h3>
+                    <p>89% of executives cite burnout from information overload. Your brain has limits.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="solution" id="features">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag">The Solution</div>
+                <h2 class="section-title">Your Daily Brief: <span class="gradient-text">7 Things</span> That Matter</h2>
+                <p class="section-desc">
+                    SignalOS eliminates 99% of the noise and delivers only what deserves your attention.
+                    Not more information—ruthless curation.
+                </p>
+            </div>
+
+            <!-- Signal Visualization -->
+            <div class="solution-visual" id="demo">
+                <div class="signal-header">
+                    <span class="signal-title">✅ Your SignalOS Daily Brief</span>
+                    <span class="signal-counter">7 signals</span>
+                </div>
+                <div class="daily-brief">
+                    <div class="brief-header">
+                        <div class="brief-icon">📡</div>
+                        <div class="brief-meta">
+                            <h4>Tuesday, March 24</h4>
+                            <span>5-minute read • 7 signals • 2,840 filtered out</span>
+                        </div>
+                    </div>
+                    <div class="brief-items">
+                        <div class="brief-item">
+                            <div class="brief-priority priority-1">1</div>
+                            <div class="brief-content">
+                                <h5>Series C: New Signal</h5>
+                                <p>Competitor raised $200M at 2x your target valuation. Secondary data suggests your terms may need adjustment.</p>
+                                <div class="brief-action">→ Action: Request secondary market comparables before term sheet</div>
+                            </div>
+                        </div>
+                        <div class="brief-item">
+                            <div class="brief-priority priority-1">2</div>
+                            <div class="brief-content">
+                                <h5>Customer Alert: Enterprise Risk</h5>
+                                <p>Your largest customer ($2.4M ARR) quietly announced restructuring. CFO mentions "vendor consolidation."</p>
+                                <div class="brief-action">→ Action: Schedule exec relationship call this week</div>
+                            </div>
+                        </div>
+                        <div class="brief-item">
+                            <div class="brief-priority priority-2">3</div>
+                            <div class="brief-content">
+                                <h5>VP Engineering Candidate</h5>
+                                <p>Positive HN discussion about your finalist. But no backchannel refs from previous company yet.</p>
+                                <div class="brief-action">→ Action: Initiate informal reference check before offer</div>
+                            </div>
+                        </div>
+                        <div class="brief-item">
+                            <div class="brief-priority priority-3">4</div>
+                            <div class="brief-content">
+                                <h5>Q2 Expansion: Regulatory Shift</h5>
+                                <p>New compliance requirement in target market. Two other entrants paused expansion plans.</p>
+                                <div class="brief-action">→ Action: Consider delay until regulatory clarity (30 days)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Features Grid -->
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Decision Mapping</h3>
+                    <p>Every executive has 3-7 active decisions at any time. SignalOS maps incoming signals to your specific decisions, surfacing what's relevant and flagging blind spots.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔇</div>
+                    <h3>Noise Elimination</h3>
+                    <p>Redundancy detection, relevance scoring, temporal filtering, and source authority weighting. We eliminate 95%+ of inputs that don't deserve your attention.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Interrupt Protocol</h3>
+                    <p>A learned gatekeeper that only breaks through with true emergencies. Your phone only buzzes when it actually matters.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔮</div>
+                    <h3>Contrarian Detection</h3>
+                    <p>The most dangerous signals are the ones you want to ignore. We surface information that contradicts your thesis—before it's too late.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag">How It Works</div>
+                <h2 class="section-title">From Chaos to Clarity in <span class="gradient-text">4 Steps</span></h2>
+            </div>
+            <div class="workflow">
+                <div class="workflow-step">
+                    <div class="workflow-num">1</div>
+                    <h4>Connect Everything</h4>
+                    <p>Email, Slack, calendars, news, CRM, BI tools—SignalOS ingests all your information streams.</p>
+                </div>
+                <div class="workflow-step">
+                    <div class="workflow-num">2</div>
+                    <h4>Learn Your Patterns</h4>
+                    <p>We study what you act on, what you ignore, and what decisions you're facing right now.</p>
+                </div>
+                <div class="workflow-step">
+                    <div class="workflow-num">3</div>
+                    <h4>Eliminate Noise</h4>
+                    <p>Redundant, stale, irrelevant, and low-authority signals are filtered automatically.</p>
+                </div>
+                <div class="workflow-step">
+                    <div class="workflow-num">4</div>
+                    <h4>Deliver Clarity</h4>
+                    <p>Daily brief, interrupt shield, and decision packets—exactly what you need, when you need it.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section class="pricing" id="pricing">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag">Pricing</div>
+                <h2 class="section-title">Invest in Your <span class="gradient-text">Clarity</span></h2>
+                <p class="section-desc">
+                    What's your time worth? What's a missed signal worth? SignalOS pays for itself in the first week.
+                </p>
+            </div>
+            <div class="pricing-grid">
+                <div class="price-card">
+                    <div class="price-header">
+                        <div class="price-tier">Executive</div>
+                        <div class="price-amount">$2,500</div>
+                        <div class="price-period">per month</div>
+                    </div>
+                    <ul class="price-features">
+                        <li><span class="check-icon">✓</span> Unlimited source connections</li>
+                        <li><span class="check-icon">✓</span> Daily Brief (5-7 min synthesis)</li>
+                        <li><span class="check-icon">✓</span> Interrupt Shield</li>
+                        <li><span class="check-icon">✓</span> Decision Context packets</li>
+                        <li><span class="check-icon">✓</span> Attention Analytics</li>
+                        <li><span class="check-icon">✓</span> Personal model training</li>
+                    </ul>
+                    <a href="#waitlist" class="btn btn-secondary">Join Waitlist</a>
+                </div>
+                <div class="price-card featured">
+                    <div class="price-badge">Most Popular</div>
+                    <div class="price-header">
+                        <div class="price-tier">Team</div>
+                        <div class="price-amount">$15,000</div>
+                        <div class="price-period">per month</div>
+                    </div>
+                    <ul class="price-features">
+                        <li><span class="check-icon">✓</span> Everything in Executive</li>
+                        <li><span class="check-icon">✓</span> Up to 10 team members</li>
+                        <li><span class="check-icon">✓</span> Team Signal Alignment</li>
+                        <li><span class="check-icon">✓</span> Decision Handoff routing</li>
+                        <li><span class="check-icon">✓</span> Meeting Intelligence</li>
+                        <li><span class="check-icon">✓</span> Organizational Blind Spots</li>
+                        <li><span class="check-icon">✓</span> Competitive Signal Network</li>
+                    </ul>
+                    <a href="#waitlist" class="btn btn-primary">Join Waitlist</a>
+                </div>
+                <div class="price-card">
+                    <div class="price-header">
+                        <div class="price-tier">Enterprise</div>
+                        <div class="price-amount">Custom</div>
+                        <div class="price-period">contact us</div>
+                    </div>
+                    <ul class="price-features">
+                        <li><span class="check-icon">✓</span> Everything in Team</li>
+                        <li><span class="check-icon">✓</span> Unlimited users</li>
+                        <li><span class="check-icon">✓</span> Deep system integrations</li>
+                        <li><span class="check-icon">✓</span> Custom signal models</li>
+                        <li><span class="check-icon">✓</span> Governance & Audit logs</li>
+                        <li><span class="check-icon">✓</span> Strategic Foresight</li>
+                        <li><span class="check-icon">✓</span> Dedicated success team</li>
+                    </ul>
+                    <a href="#waitlist" class="btn btn-secondary">Contact Sales</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonial -->
+    <section class="testimonial">
+        <div class="container">
+            <p class="testimonial-quote">
+                "SignalOS gave me back 3 hours a day. More importantly, it gave me back my confidence that I'm not missing something critical. For the first time in years, I can think instead of react."
+            </p>
+            <div class="testimonial-author">
+                <div class="author-avatar">👤</div>
+                <div class="author-info">
+                    <h4>Future SignalOS User</h4>
+                    <span>CEO, Series C Startup</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta" id="waitlist">
+        <div class="cta-glow"></div>
+        <div class="container">
+            <div class="cta-content">
+                <h2>
+                    Ready for <span class="gradient-text">Clarity</span>?
+                </h2>
+                <p>
+                    Join the waitlist for early access. We're selecting 50 executives for our alpha program.
+                </p>
+                <form class="cta-form" action="#" method="POST">
+                    <input type="email" class="cta-input" placeholder="your@email.com" required>
+                    <button type="submit" class="btn btn-primary">Request Access</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="logo">
+                    <div class="logo-icon">📡</div>
+                    <span>Signal<span class="gradient-text">OS</span></span>
+                </div>
+                <div class="footer-links">
+                    <a href="#">About</a>
+                    <a href="#">Privacy</a>
+                    <a href="#">Terms</a>
+                    <a href="mailto:founders@signalos.ai">Contact</a>
+                </div>
+                <div class="footer-copy">
+                    © 2026 SignalOS. Less noise. Better decisions.
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Animate noise counter
+        const noiseCounter = document.querySelector('.noise-counter');
+        if (noiseCounter) {
+            let count = 2847;
+            setInterval(() => {
+                count += Math.floor(Math.random() * 5) + 1;
+                noiseCounter.textContent = count.toLocaleString() + ' inputs';
+            }, 2000);
+        }
+    </script>
+</body>
+</html>

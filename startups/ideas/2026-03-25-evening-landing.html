@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindShield AI — The Cognitive Firewall for AI Interactions</title>
+    <meta name="description" content="Protect your mind from AI manipulation. Real-time detection of dark patterns, deepfakes, and persuasive AI tactics.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --shield-blue: #3b82f6;
+            --shield-purple: #8b5cf6;
+            --shield-cyan: #06b6d4;
+            --alert-red: #ef4444;
+            --safe-green: #22c55e;
+            --dark-bg: #0a0a0f;
+            --darker-bg: #050508;
+            --card-bg: rgba(15, 15, 25, 0.8);
+            --text-primary: #ffffff;
+            --text-secondary: #94a3b8;
+            --border-color: rgba(59, 130, 246, 0.2);
+            --glow-blue: rgba(59, 130, 246, 0.4);
+            --glow-purple: rgba(139, 92, 246, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Animated background grid */
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(59, 130, 246, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(59, 130, 246, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Shield particles */
+        .shield-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--shield-blue);
+            border-radius: 50%;
+            opacity: 0.5;
+            animation: float-particle 20s infinite linear;
+        }
+
+        @keyframes float-particle {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.5; }
+            90% { opacity: 0.5; }
+            100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; }
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-content {
+            text-align: center;
+            max-width: 900px;
+        }
+
+        /* Animated Shield Logo */
+        .shield-logo {
+            width: 180px;
+            height: 180px;
+            margin: 0 auto 3rem;
+            position: relative;
+        }
+
+        .shield-icon {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .shield-base {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120px;
+            height: 140px;
+            background: linear-gradient(135deg, var(--shield-blue), var(--shield-purple));
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            animation: shield-pulse 3s ease-in-out infinite;
+        }
+
+        .shield-inner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90px;
+            height: 105px;
+            background: var(--dark-bg);
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .brain-icon {
+            font-size: 3rem;
+            animation: brain-glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes shield-pulse {
+            0%, 100% { 
+                box-shadow: 0 0 30px var(--glow-blue), 0 0 60px var(--glow-purple);
+                transform: translate(-50%, -50%) scale(1);
+            }
+            50% { 
+                box-shadow: 0 0 50px var(--glow-blue), 0 0 100px var(--glow-purple);
+                transform: translate(-50%, -50%) scale(1.02);
+            }
+        }
+
+        @keyframes brain-glow {
+            0% { filter: drop-shadow(0 0 5px var(--shield-cyan)); }
+            100% { filter: drop-shadow(0 0 20px var(--shield-cyan)); }
+        }
+
+        /* Rotating protection ring */
+        .protection-ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 200px;
+            height: 200px;
+            transform: translate(-50%, -50%);
+            border: 2px dashed rgba(59, 130, 246, 0.3);
+            border-radius: 50%;
+            animation: ring-rotate 30s linear infinite;
+        }
+
+        .protection-ring::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: 50%;
+            width: 10px;
+            height: 10px;
+            background: var(--shield-cyan);
+            border-radius: 50%;
+            box-shadow: 0 0 20px var(--shield-cyan);
+        }
+
+        @keyframes ring-rotate {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .tagline {
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--shield-cyan);
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--shield-blue) 50%, var(--shield-purple) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 1.4rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Threat ticker */
+        .threat-ticker {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 50px;
+            padding: 0.75rem 2rem;
+            margin-bottom: 2.5rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+        }
+
+        .threat-indicator {
+            width: 8px;
+            height: 8px;
+            background: var(--alert-red);
+            border-radius: 50%;
+            animation: threat-blink 1s ease-in-out infinite;
+        }
+
+        @keyframes threat-blink {
+            0%, 100% { opacity: 1; box-shadow: 0 0 10px var(--alert-red); }
+            50% { opacity: 0.5; box-shadow: 0 0 5px var(--alert-red); }
+        }
+
+        .threat-text {
+            color: var(--alert-red);
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 3rem;
+        }
+
+        .btn {
+            padding: 1rem 2.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--shield-blue), var(--shield-purple));
+            color: white;
+            box-shadow: 0 4px 30px var(--glow-blue);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 40px var(--glow-blue);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-primary);
+            border: 2px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--shield-blue);
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        /* Stats row */
+        .stats-row {
+            display: flex;
+            justify-content: center;
+            gap: 4rem;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--shield-cyan);
+            display: flex;
+            align-items: baseline;
+            justify-content: center;
+            gap: 0.25rem;
+        }
+
+        .stat-value span {
+            font-size: 1.2rem;
+            color: var(--safe-green);
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Protection Demo Section */
+        .protection-demo {
+            padding: 6rem 2rem;
+            position: relative;
+            z-index: 2;
+            background: linear-gradient(180deg, transparent, var(--darker-bg));
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(--text-secondary);
+            margin-bottom: 4rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Live threat monitor */
+        .threat-monitor {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            overflow: hidden;
+            backdrop-filter: blur(20px);
+        }
+
+        .monitor-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.5rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .monitor-title {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 600;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            background: var(--safe-green);
+            border-radius: 50%;
+            animation: status-pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes status-pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4); }
+            50% { box-shadow: 0 0 0 8px rgba(34, 197, 94, 0); }
+        }
+
+        .monitor-content {
+            padding: 1.5rem;
+        }
+
+        .threat-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            border-left: 4px solid var(--alert-red);
+            animation: threat-slide-in 0.5s ease-out;
+        }
+
+        .threat-item.blocked {
+            border-left-color: var(--safe-green);
+            opacity: 0.7;
+        }
+
+        @keyframes threat-slide-in {
+            from { transform: translateX(-20px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .threat-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .threat-details h4 {
+            font-size: 0.95rem;
+            margin-bottom: 0.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .threat-tag {
+            font-size: 0.65rem;
+            padding: 0.2rem 0.5rem;
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--alert-red);
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        .threat-tag.blocked {
+            background: rgba(34, 197, 94, 0.2);
+            color: var(--safe-green);
+        }
+
+        .threat-details p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .threat-meta {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+        }
+
+        /* Protection Types */
+        .protection-types {
+            padding: 6rem 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .protection-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .protection-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2rem;
+            backdrop-filter: blur(20px);
+            transition: all 0.3s ease;
+        }
+
+        .protection-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--shield-blue);
+            box-shadow: 0 20px 40px rgba(59, 130, 246, 0.1);
+        }
+
+        .protection-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .protection-icon.manipulation { background: rgba(239, 68, 68, 0.1); }
+        .protection-icon.deepfake { background: rgba(139, 92, 246, 0.1); }
+        .protection-icon.privacy { background: rgba(6, 182, 212, 0.1); }
+        .protection-icon.financial { background: rgba(34, 197, 94, 0.1); }
+
+        .protection-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .protection-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* How it works */
+        .how-it-works {
+            padding: 6rem 2rem;
+            background: var(--darker-bg);
+            position: relative;
+            z-index: 2;
+        }
+
+        .steps {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .step {
+            text-align: center;
+            position: relative;
+        }
+
+        .step-number {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--shield-blue), var(--shield-purple));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin: 0 auto 1.5rem;
+        }
+
+        .step h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .step p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Pricing */
+        .pricing {
+            padding: 6rem 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .pricing-grid {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .pricing-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 2.5rem;
+            backdrop-filter: blur(20px);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .pricing-card.featured {
+            border-color: var(--shield-blue);
+            transform: scale(1.02);
+        }
+
+        .pricing-card.featured::before {
+            content: 'MOST POPULAR';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--shield-blue), var(--shield-purple));
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            letter-spacing: 1px;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--shield-blue);
+        }
+
+        .pricing-card.featured:hover {
+            transform: scale(1.02) translateY(-5px);
+        }
+
+        .pricing-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-desc {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .pricing-price {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 0.25rem;
+        }
+
+        .pricing-price span {
+            font-size: 1rem;
+            font-weight: 400;
+            color: var(--text-secondary);
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin: 2rem 0;
+        }
+
+        .pricing-features li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 0;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .pricing-features li::before {
+            content: '✓';
+            color: var(--safe-green);
+            font-weight: 700;
+        }
+
+        /* Trust badges */
+        .trust-section {
+            padding: 4rem 2rem;
+            background: var(--darker-bg);
+            position: relative;
+            z-index: 2;
+        }
+
+        .trust-grid {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .trust-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 1.5rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+        }
+
+        .trust-badge-icon {
+            font-size: 1.5rem;
+        }
+
+        .trust-badge-text {
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 8rem 2rem;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+            background: linear-gradient(180deg, var(--dark-bg), var(--darker-bg));
+        }
+
+        .cta-shield {
+            font-size: 4rem;
+            margin-bottom: 2rem;
+            animation: shield-float 3s ease-in-out infinite;
+        }
+
+        @keyframes shield-float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .cta-section h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .cta-section p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            max-width: 500px;
+            margin: 0 auto 2rem;
+        }
+
+        /* Footer */
+        footer {
+            padding: 3rem 2rem;
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+            position: relative;
+            z-index: 2;
+        }
+
+        .footer-logo {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--shield-blue);
+        }
+
+        .footer-copy {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .stats-row {
+                gap: 2rem;
+            }
+            
+            .stat-value {
+                font-size: 2rem;
+            }
+
+            .protection-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pricing-card.featured {
+                transform: none;
+            }
+
+            .pricing-card.featured:hover {
+                transform: translateY(-5px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+    
+    <div class="shield-particles">
+        <div class="particle" style="left: 10%; animation-delay: 0s;"></div>
+        <div class="particle" style="left: 20%; animation-delay: 4s;"></div>
+        <div class="particle" style="left: 30%; animation-delay: 2s;"></div>
+        <div class="particle" style="left: 40%; animation-delay: 6s;"></div>
+        <div class="particle" style="left: 50%; animation-delay: 1s;"></div>
+        <div class="particle" style="left: 60%; animation-delay: 5s;"></div>
+        <div class="particle" style="left: 70%; animation-delay: 3s;"></div>
+        <div class="particle" style="left: 80%; animation-delay: 7s;"></div>
+        <div class="particle" style="left: 90%; animation-delay: 2s;"></div>
+    </div>
+
+    <section class="hero">
+        <div class="hero-content">
+            <div class="shield-logo">
+                <div class="protection-ring"></div>
+                <div class="shield-icon">
+                    <div class="shield-base"></div>
+                    <div class="shield-inner">
+                        <span class="brain-icon">🧠</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tagline">Cognitive Protection Platform</div>
+            
+            <h1>Your AI Guardian Against AI Manipulation</h1>
+            
+            <p class="subtitle">
+                MindShield monitors all your AI interactions in real-time, detecting manipulation, 
+                dark patterns, and deceptive tactics—protecting your mind in the age of persuasive AI.
+            </p>
+            
+            <div class="threat-ticker">
+                <div class="threat-indicator"></div>
+                <span class="threat-text">47 AI manipulation attempts blocked today</span>
+            </div>
+            
+            <div class="cta-group">
+                <a href="#pricing" class="btn btn-primary">
+                    🛡️ Start Protection Free
+                </a>
+                <a href="#demo" class="btn btn-secondary">
+                    Watch Demo
+                </a>
+            </div>
+            
+            <div class="stats-row">
+                <div class="stat">
+                    <div class="stat-value">500K<span>+</span></div>
+                    <div class="stat-label">Minds Protected</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">12M</div>
+                    <div class="stat-label">Threats Blocked</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">99.7<span>%</span></div>
+                    <div class="stat-label">Detection Rate</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="protection-demo" id="demo">
+        <h2 class="section-title">Live Threat Monitor</h2>
+        <p class="section-subtitle">
+            See MindShield detecting and blocking manipulation attempts in real-time
+        </p>
+        
+        <div class="threat-monitor">
+            <div class="monitor-header">
+                <div class="monitor-title">
+                    <div class="status-dot"></div>
+                    <span>MindShield Active Protection</span>
+                </div>
+                <span style="color: var(--text-secondary); font-size: 0.85rem;">Last 5 minutes</span>
+            </div>
+            <div class="monitor-content">
+                <div class="threat-item blocked">
+                    <span class="threat-icon">🎭</span>
+                    <div class="threat-details">
+                        <h4>
+                            Urgency Manipulation Detected
+                            <span class="threat-tag blocked">BLOCKED</span>
+                        </h4>
+                        <p>"Only 2 items left! 47 people viewing this right now. Offer expires in 3:42..."</p>
+                        <div class="threat-meta">Source: shopping-assistant.ai • Tactic: Artificial Scarcity + Social Proof</div>
+                    </div>
+                </div>
+                
+                <div class="threat-item blocked">
+                    <span class="threat-icon">🔊</span>
+                    <div class="threat-details">
+                        <h4>
+                            Deepfake Voice Call Intercepted
+                            <span class="threat-tag blocked">BLOCKED</span>
+                        </h4>
+                        <p>Incoming call claiming to be "Mom" - voice pattern mismatch detected (87% synthetic)</p>
+                        <div class="threat-meta">Source: Unknown caller • Tactic: Voice Impersonation Scam</div>
+                    </div>
+                </div>
+                
+                <div class="threat-item blocked">
+                    <span class="threat-icon">💳</span>
+                    <div class="threat-details">
+                        <h4>
+                            Financial Pressure Pattern
+                            <span class="threat-tag blocked">BLOCKED</span>
+                        </h4>
+                        <p>AI customer service attempting to upsell premium plan using guilt-based messaging</p>
+                        <div class="threat-meta">Source: subscription-support.ai • Tactic: Reciprocity + Commitment Escalation</div>
+                    </div>
+                </div>
+                
+                <div class="threat-item">
+                    <span class="threat-icon">⚠️</span>
+                    <div class="threat-details">
+                        <h4>
+                            Data Extraction Attempt
+                            <span class="threat-tag">MONITORING</span>
+                        </h4>
+                        <p>Chatbot asking progressively personal questions outside stated purpose</p>
+                        <div class="threat-meta">Source: health-quiz.ai • Tactic: Information Overload + Trust Building</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="protection-types">
+        <h2 class="section-title">Complete Cognitive Protection</h2>
+        <p class="section-subtitle">
+            Four layers of defense against AI manipulation
+        </p>
+        
+        <div class="protection-grid">
+            <div class="protection-card">
+                <div class="protection-icon manipulation">🎭</div>
+                <h3>Manipulation Detection</h3>
+                <p>Real-time analysis of 500+ psychological manipulation tactics. Detects urgency pressure, emotional exploitation, and cognitive bias attacks.</p>
+            </div>
+            
+            <div class="protection-card">
+                <div class="protection-icon deepfake">🔊</div>
+                <h3>Deepfake Defense</h3>
+                <p>Voice and video authentication in real-time. Verify callers are who they claim to be. Catches synthetic media before you're fooled.</p>
+            </div>
+            
+            <div class="protection-card">
+                <div class="protection-icon privacy">🔒</div>
+                <h3>Privacy Guardian</h3>
+                <p>Monitors AI systems attempting to extract sensitive information. Blocks data harvesting disguised as helpful conversations.</p>
+            </div>
+            
+            <div class="protection-card">
+                <div class="protection-icon financial">💰</div>
+                <h3>Financial Protection</h3>
+                <p>Intercepts AI-driven purchase pressure and subscription traps. Enforces cooling-off periods for major decisions.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="how-it-works">
+        <h2 class="section-title">How MindShield Works</h2>
+        <p class="section-subtitle">
+            Three steps to cognitive protection
+        </p>
+        
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <h3>Install & Connect</h3>
+                <p>Add our browser extension and mobile app. MindShield integrates with all your AI touchpoints.</p>
+            </div>
+            
+            <div class="step">
+                <div class="step-number">2</div>
+                <h3>Shield Activates</h3>
+                <p>Every AI interaction is analyzed in real-time for manipulation patterns, deepfakes, and dark patterns.</p>
+            </div>
+            
+            <div class="step">
+                <div class="step-number">3</div>
+                <h3>Stay Protected</h3>
+                <p>Threats are blocked automatically. You get alerts and daily reports on what was stopped.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="pricing" id="pricing">
+        <h2 class="section-title">Choose Your Shield</h2>
+        <p class="section-subtitle">
+            Protection for individuals, families, and organizations
+        </p>
+        
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <div class="pricing-name">Personal</div>
+                <div class="pricing-desc">Essential protection for one person</div>
+                <div class="pricing-price">$19.99<span>/month</span></div>
+                <ul class="pricing-features">
+                    <li>Browser extension protection</li>
+                    <li>Mobile app shield</li>
+                    <li>Real-time manipulation alerts</li>
+                    <li>Basic deepfake detection</li>
+                    <li>Daily safety reports</li>
+                </ul>
+                <a href="#" class="btn btn-secondary" style="width: 100%; justify-content: center;">Start Free Trial</a>
+            </div>
+            
+            <div class="pricing-card featured">
+                <div class="pricing-name">Family</div>
+                <div class="pricing-desc">Protect everyone you love</div>
+                <div class="pricing-price">$39.99<span>/month</span></div>
+                <ul class="pricing-features">
+                    <li>Everything in Personal</li>
+                    <li>Up to 5 family members</li>
+                    <li>Elder fraud protection</li>
+                    <li>Child safety controls</li>
+                    <li>Family dashboard</li>
+                    <li>Priority support</li>
+                </ul>
+                <a href="#" class="btn btn-primary" style="width: 100%; justify-content: center;">Start Free Trial</a>
+            </div>
+            
+            <div class="pricing-card">
+                <div class="pricing-name">Enterprise</div>
+                <div class="pricing-desc">Organization-wide protection</div>
+                <div class="pricing-price">Custom</div>
+                <ul class="pricing-features">
+                    <li>Unlimited employees</li>
+                    <li>AI social engineering defense</li>
+                    <li>Compliance reporting</li>
+                    <li>SIEM integration</li>
+                    <li>Custom policy engine</li>
+                    <li>Dedicated success manager</li>
+                </ul>
+                <a href="#" class="btn btn-secondary" style="width: 100%; justify-content: center;">Contact Sales</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="trust-section">
+        <div class="trust-grid">
+            <div class="trust-badge">
+                <span class="trust-badge-icon">🔒</span>
+                <span class="trust-badge-text">Zero-Knowledge Privacy</span>
+            </div>
+            <div class="trust-badge">
+                <span class="trust-badge-icon">✓</span>
+                <span class="trust-badge-text">SOC 2 Type II</span>
+            </div>
+            <div class="trust-badge">
+                <span class="trust-badge-icon">🏥</span>
+                <span class="trust-badge-text">HIPAA Compliant</span>
+            </div>
+            <div class="trust-badge">
+                <span class="trust-badge-icon">🇪🇺</span>
+                <span class="trust-badge-text">GDPR Ready</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <div class="cta-shield">🛡️</div>
+        <h2>Protect Your Mind Today</h2>
+        <p>
+            Join 500,000+ people who browse, call, and interact with AI 
+            knowing their cognitive space is protected.
+        </p>
+        <div class="cta-group">
+            <a href="#pricing" class="btn btn-primary">
+                🛡️ Start Free 14-Day Trial
+            </a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-logo">
+            🛡️ MindShield AI
+        </div>
+        <div class="footer-links">
+            <a href="#">About</a>
+            <a href="#">Blog</a>
+            <a href="#">Documentation</a>
+            <a href="#">Privacy</a>
+            <a href="#">Terms</a>
+            <a href="#">Contact</a>
+        </div>
+        <p class="footer-copy">
+            © 2026 MindShield AI. Protecting human minds in the AI era.<br>
+            <em>Concept by The Godfather 🎩</em>
+        </p>
+    </footer>
+
+    <script>
+        // Add more particles dynamically
+        const particlesContainer = document.querySelector('.shield-particles');
+        for (let i = 0; i < 15; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 20 + 's';
+            particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+            particlesContainer.appendChild(particle);
+        }
+
+        // Animate threat count
+        const threatTicker = document.querySelector('.threat-text');
+        let threatCount = 47;
+        setInterval(() => {
+            if (Math.random() > 0.7) {
+                threatCount += Math.floor(Math.random() * 3) + 1;
+                threatTicker.textContent = `${threatCount} AI manipulation attempts blocked today`;
+            }
+        }, 3000);
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
