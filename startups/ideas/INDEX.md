@@ -164,6 +164,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-03-25 | Morning | ChargeGrid AI — The AI Operating System for EV Charging Network Intelligence | [Playbook](2026-03-25-morning.md) • [Landing](2026-03-25-morning-landing.html) • [PDF](2026-03-25-morning.pdf) |
 | 2026-03-25 | Afternoon | ContextFabric — The Universal Context Layer for Multi-Agent AI Systems | [Playbook](2026-03-25-afternoon.md) • [Landing](2026-03-25-afternoon-landing.html) • [PDF](2026-03-25-afternoon.pdf) |
 | 2026-03-26 | Evening | WildfireOS — Autonomous Wildfire Prevention & Response Intelligence | [Playbook](2026-03-26-evening.md) • [Landing](2026-03-26-evening-landing.html) • [PDF](2026-03-26-evening.pdf) |
+| 2026-03-26 | Morning | ShadowAI Sentinel — Enterprise AI Shadow IT Detection & Governance | [Playbook](2026-03-26-morning.md) • [Landing](2026-03-26-morning-landing.html) • [PDF](2026-03-26-morning.pdf) |
 <!-- New entries will be added above this line -->
 
 ---

@@ -1,0 +1,1620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShadowAI Sentinel — Enterprise AI Shadow IT Detection & Governance</title>
+    <meta name="description" content="The security platform that discovers, monitors, and governs unauthorized AI tool usage across your enterprise. Stop data leakage before it happens.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #dc2626;
+            --primary-dark: #b91c1c;
+            --primary-light: #fee2e2;
+            --secondary: #1e293b;
+            --accent: #f97316;
+            --accent-light: #ffedd5;
+            --dark: #0f172a;
+            --darker: #020617;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --success: #22c55e;
+            --warning: #eab308;
+            --danger: #ef4444;
+            --gradient: linear-gradient(135deg, #dc2626 0%, #f97316 50%, #dc2626 100%);
+            --gradient-dark: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            --glow: 0 0 60px rgba(220, 38, 38, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--darker);
+            color: var(--light);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(220, 38, 38, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(249, 115, 22, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(30, 41, 59, 0.5) 0%, transparent 70%);
+            animation: bgPulse 15s ease-in-out infinite;
+        }
+
+        @keyframes bgPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        /* Grid Lines */
+        .grid-lines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-image: 
+                linear-gradient(rgba(220, 38, 38, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(220, 38, 38, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 1rem 2rem;
+            background: rgba(2, 6, 23, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(220, 38, 38, 0.2);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 800;
+            font-size: 1.5rem;
+            color: var(--light);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: var(--gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: var(--glow);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--gray);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-cta {
+            background: var(--gradient);
+            color: white;
+            padding: 0.75rem 1.75rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3);
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(220, 38, 38, 0.4);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 2rem 4rem;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 1000px;
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(220, 38, 38, 0.15);
+            border: 1px solid rgba(220, 38, 38, 0.3);
+            padding: 0.5rem 1.25rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            color: var(--primary);
+            margin-bottom: 2rem;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.4); }
+            50% { box-shadow: 0 0 20px 5px rgba(220, 38, 38, 0.2); }
+        }
+
+        .hero-badge::before {
+            content: '🚨';
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 5.5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #ffffff 0%, #dc2626 50%, #f97316 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+            color: var(--gray);
+            max-width: 800px;
+            margin: 0 auto 3rem;
+            line-height: 1.5;
+        }
+
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            margin: 3rem 0;
+            padding: 2rem;
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 20px;
+            border: 1px solid rgba(220, 38, 38, 0.2);
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--gray);
+            margin-top: 0.5rem;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: var(--gradient);
+            color: white;
+            padding: 1.25rem 2.5rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            box-shadow: 0 8px 30px rgba(220, 38, 38, 0.4);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(220, 38, 38, 0.5);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--light);
+            padding: 1.25rem 2.5rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary);
+            background: rgba(220, 38, 38, 0.1);
+        }
+
+        /* Alert Banner */
+        .alert-banner {
+            background: linear-gradient(90deg, rgba(220, 38, 38, 0.2) 0%, rgba(249, 115, 22, 0.2) 100%);
+            border-top: 1px solid rgba(220, 38, 38, 0.3);
+            border-bottom: 1px solid rgba(220, 38, 38, 0.3);
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+
+        .alert-banner h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .alert-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 2rem auto 0;
+        }
+
+        .alert-card {
+            background: rgba(2, 6, 23, 0.8);
+            border: 1px solid rgba(220, 38, 38, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: left;
+        }
+
+        .alert-card-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .alert-card-stat {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .alert-card-text {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Problem Section */
+        .problem {
+            padding: 8rem 2rem;
+            background: var(--gradient-dark);
+        }
+
+        .section-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-label {
+            display: inline-block;
+            background: rgba(220, 38, 38, 0.15);
+            color: var(--primary);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+        }
+
+        .section-header h2 {
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            font-size: 1.25rem;
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .problem-visual {
+            background: rgba(2, 6, 23, 0.6);
+            border: 1px solid rgba(220, 38, 38, 0.2);
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 4rem;
+        }
+
+        .terminal {
+            background: #0d1117;
+            border-radius: 12px;
+            overflow: hidden;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+        }
+
+        .terminal-header {
+            background: #161b22;
+            padding: 0.75rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .terminal-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .terminal-dot.red { background: #ff5f56; }
+        .terminal-dot.yellow { background: #ffbd2e; }
+        .terminal-dot.green { background: #27ca40; }
+
+        .terminal-content {
+            padding: 1.5rem;
+            line-height: 1.8;
+        }
+
+        .terminal-line {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 0.75rem;
+        }
+
+        .terminal-prompt {
+            color: var(--primary);
+            margin-right: 0.75rem;
+            flex-shrink: 0;
+        }
+
+        .terminal-text {
+            color: #c9d1d9;
+        }
+
+        .terminal-warning {
+            color: var(--warning);
+        }
+
+        .terminal-danger {
+            color: var(--danger);
+        }
+
+        .terminal-success {
+            color: var(--success);
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .problem-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(100, 116, 139, 0.2);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s;
+        }
+
+        .problem-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+        }
+
+        .problem-card-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(220, 38, 38, 0.15);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .problem-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+            color: var(--light);
+        }
+
+        .problem-card p {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        /* Solution Section */
+        .solution {
+            padding: 8rem 2rem;
+            background: var(--darker);
+        }
+
+        .solution-visual {
+            background: linear-gradient(135deg, rgba(220, 38, 38, 0.1) 0%, rgba(15, 23, 42, 0.9) 50%, rgba(249, 115, 22, 0.1) 100%);
+            border: 1px solid rgba(220, 38, 38, 0.2);
+            border-radius: 24px;
+            padding: 4rem;
+            margin-bottom: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .solution-diagram {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            text-align: center;
+        }
+
+        .solution-step {
+            padding: 2rem;
+            background: rgba(2, 6, 23, 0.6);
+            border-radius: 16px;
+            border: 1px solid rgba(220, 38, 38, 0.2);
+            position: relative;
+        }
+
+        .solution-step::after {
+            content: '→';
+            position: absolute;
+            right: -1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2rem;
+            color: var(--primary);
+        }
+
+        .solution-step:last-child::after {
+            display: none;
+        }
+
+        .step-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--gradient);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin: 0 auto 1.5rem;
+            box-shadow: var(--glow);
+        }
+
+        .step-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .step-desc {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(100, 116, 139, 0.2);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient);
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .feature-card:hover {
+            border-color: rgba(220, 38, 38, 0.3);
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(220, 38, 38, 0.15);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--light);
+        }
+
+        .feature-card p {
+            color: var(--gray);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .feature-list {
+            list-style: none;
+            margin-top: 1.5rem;
+        }
+
+        .feature-list li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .feature-list li::before {
+            content: '✓';
+            color: var(--success);
+            font-weight: 700;
+        }
+
+        /* Dashboard Preview */
+        .dashboard-preview {
+            padding: 8rem 2rem;
+            background: var(--gradient-dark);
+        }
+
+        .dashboard-mockup {
+            background: #0d1117;
+            border-radius: 20px;
+            border: 1px solid rgba(220, 38, 38, 0.3);
+            overflow: hidden;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5);
+        }
+
+        .dashboard-header {
+            background: #161b22;
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(100, 116, 139, 0.2);
+        }
+
+        .dashboard-tabs {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .dashboard-tab {
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            color: var(--gray);
+            cursor: pointer;
+        }
+
+        .dashboard-tab.active {
+            background: rgba(220, 38, 38, 0.2);
+            color: var(--primary);
+        }
+
+        .dashboard-content {
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+        }
+
+        .dash-metric {
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid rgba(100, 116, 139, 0.2);
+        }
+
+        .dash-metric-label {
+            font-size: 0.8rem;
+            color: var(--gray);
+            margin-bottom: 0.5rem;
+        }
+
+        .dash-metric-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--light);
+        }
+
+        .dash-metric-change {
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+        }
+
+        .dash-metric-change.up { color: var(--danger); }
+        .dash-metric-change.down { color: var(--success); }
+
+        .dashboard-table {
+            grid-column: span 4;
+            background: rgba(30, 41, 59, 0.3);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .table-header {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+            padding: 1rem 1.5rem;
+            background: rgba(15, 23, 42, 0.5);
+            font-size: 0.8rem;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .table-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+            padding: 1rem 1.5rem;
+            border-top: 1px solid rgba(100, 116, 139, 0.1);
+            align-items: center;
+            font-size: 0.9rem;
+        }
+
+        .table-row:hover {
+            background: rgba(220, 38, 38, 0.05);
+        }
+
+        .risk-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .risk-critical { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+        .risk-high { background: rgba(249, 115, 22, 0.2); color: #f97316; }
+        .risk-medium { background: rgba(234, 179, 8, 0.2); color: #eab308; }
+
+        /* Market Section */
+        .market {
+            padding: 8rem 2rem;
+            background: var(--darker);
+        }
+
+        .market-chart {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(100, 116, 139, 0.2);
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 4rem;
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .chart-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .chart-legend {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+
+        .legend-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+        }
+
+        .chart-bars {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            height: 250px;
+            padding: 0 1rem;
+        }
+
+        .chart-bar-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .chart-bar {
+            width: 60px;
+            background: var(--gradient);
+            border-radius: 4px 4px 0 0;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .chart-bar:hover {
+            opacity: 0.9;
+        }
+
+        .chart-bar-value {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--light);
+        }
+
+        .chart-bar-label {
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+
+        .market-segments {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .segment-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(100, 116, 139, 0.2);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .segment-card:hover {
+            border-color: var(--primary);
+        }
+
+        .segment-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .segment-name {
+            font-size: 1rem;
+            color: var(--light);
+            margin-bottom: 0.25rem;
+        }
+
+        .segment-growth {
+            font-size: 0.85rem;
+            color: var(--success);
+        }
+
+        /* Compliance Section */
+        .compliance {
+            padding: 8rem 2rem;
+            background: var(--gradient-dark);
+        }
+
+        .compliance-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .compliance-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(100, 116, 139, 0.2);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .compliance-card:hover {
+            border-color: var(--success);
+            transform: translateY(-5px);
+        }
+
+        .compliance-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .compliance-name {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .compliance-status {
+            font-size: 0.85rem;
+            color: var(--success);
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 8rem 2rem;
+            background: linear-gradient(135deg, rgba(220, 38, 38, 0.2) 0%, var(--darker) 50%, rgba(249, 115, 22, 0.2) 100%);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(220, 38, 38, 0.2) 0%, transparent 70%);
+            transform: translateX(-50%) translateY(-50%);
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cta h2 {
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #ffffff 0%, #dc2626 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .cta p {
+            font-size: 1.25rem;
+            color: var(--gray);
+            margin-bottom: 2.5rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--darker);
+            border-top: 1px solid rgba(100, 116, 139, 0.2);
+            padding: 4rem 2rem 2rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr repeat(3, 1fr);
+            gap: 4rem;
+        }
+
+        .footer-brand p {
+            color: var(--gray);
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .footer-column h4 {
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1.5rem;
+            color: var(--light);
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-column a {
+            color: var(--gray);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .footer-column a:hover {
+            color: var(--primary);
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 3rem auto 0;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(100, 116, 139, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--gray);
+            font-size: 0.85rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .solution-diagram {
+                grid-template-columns: 1fr;
+            }
+
+            .solution-step::after {
+                content: '↓';
+                right: 50%;
+                transform: translateX(50%);
+                top: auto;
+                bottom: -1.5rem;
+            }
+
+            .dashboard-content {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .dashboard-table {
+                grid-column: span 2;
+            }
+
+            .table-header, .table-row {
+                grid-template-columns: 2fr 1fr 1fr;
+            }
+
+            .table-header > *:nth-child(4),
+            .table-header > *:nth-child(5),
+            .table-row > *:nth-child(4),
+            .table-row > *:nth-child(5) {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero-stats {
+                grid-template-columns: 1fr 1fr;
+                gap: 1rem;
+            }
+
+            .stat-value {
+                font-size: 1.75rem;
+            }
+
+            .hero-cta {
+                flex-direction: column;
+            }
+
+            .btn-primary, .btn-secondary {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .features-grid, .problem-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .dashboard-content {
+                grid-template-columns: 1fr;
+            }
+
+            .dashboard-table {
+                grid-column: span 1;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    <div class="grid-lines"></div>
+
+    <nav>
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <div class="logo-icon">🛡️</div>
+                ShadowAI Sentinel
+            </a>
+            <ul class="nav-links">
+                <li><a href="#problem">Problem</a></li>
+                <li><a href="#solution">Solution</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#market">Market</a></li>
+                <li><a href="#compliance">Compliance</a></li>
+            </ul>
+            <a href="#cta" class="nav-cta">Request Demo</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">AI Shadow IT Crisis Alert — 78% of Employees Using Unapproved AI</div>
+            <h1>ShadowAI Sentinel</h1>
+            <p class="hero-subtitle">The enterprise security platform that discovers, monitors, and governs unauthorized AI tool usage. Stop data leakage before your next compliance audit finds it.</p>
+            
+            <div class="hero-stats">
+                <div class="stat">
+                    <div class="stat-value">247</div>
+                    <div class="stat-label">AI Tools Per Enterprise (Avg)</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">12</div>
+                    <div class="stat-label">Approved by IT</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">47GB</div>
+                    <div class="stat-label">Data to Unapproved AI/Week</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">340%</div>
+                    <div class="stat-label">YoY Increase in AI Leaks</div>
+                </div>
+            </div>
+
+            <div class="hero-cta">
+                <a href="#cta" class="btn-primary">🛡️ Protect Your Enterprise</a>
+                <a href="#solution" class="btn-secondary">📊 See How It Works</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="alert-banner">
+        <h2>🚨 Your Data Is Leaking Right Now</h2>
+        <p style="color: var(--gray); margin-bottom: 2rem;">Every day, employees paste sensitive data into AI tools your IT team doesn't even know exist.</p>
+        <div class="alert-grid">
+            <div class="alert-card">
+                <div class="alert-card-icon">👥</div>
+                <div class="alert-card-stat">3.2M</div>
+                <div class="alert-card-text">Customer records sent to AI tools daily (enterprise avg)</div>
+            </div>
+            <div class="alert-card">
+                <div class="alert-card-icon">💻</div>
+                <div class="alert-card-stat">47%</div>
+                <div class="alert-card-text">Developers pasting proprietary code into AI assistants</div>
+            </div>
+            <div class="alert-card">
+                <div class="alert-card-icon">⚖️</div>
+                <div class="alert-card-stat">$20M+</div>
+                <div class="alert-card-text">Average GDPR/CCPA fine per data breach incident</div>
+            </div>
+            <div class="alert-card">
+                <div class="alert-card-icon">🏥</div>
+                <div class="alert-card-stat">34%</div>
+                <div class="alert-card-text">Healthcare workers using unapproved AI with PHI</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="problem" id="problem">
+        <div class="section-container">
+            <div class="section-header">
+                <span class="section-label">The Problem</span>
+                <h2>AI Shadow IT Is Your Biggest Blind Spot</h2>
+                <p>Traditional security tools weren't built for the AI era. Your data is flowing to external AI services every minute.</p>
+            </div>
+
+            <div class="problem-visual">
+                <div class="terminal">
+                    <div class="terminal-header">
+                        <div class="terminal-dot red"></div>
+                        <div class="terminal-dot yellow"></div>
+                        <div class="terminal-dot green"></div>
+                        <span style="margin-left: 1rem; color: var(--gray); font-size: 0.8rem;">ai-traffic-monitor.log</span>
+                    </div>
+                    <div class="terminal-content">
+                        <div class="terminal-line">
+                            <span class="terminal-prompt">▸</span>
+                            <span class="terminal-text">[09:23:41] <span class="terminal-danger">CRITICAL</span> marketing@company.com → ChatGPT: Customer list with emails (2,847 records)</span>
+                        </div>
+                        <div class="terminal-line">
+                            <span class="terminal-prompt">▸</span>
+                            <span class="terminal-text">[09:24:12] <span class="terminal-danger">CRITICAL</span> dev-lead@company.com → Claude: Proprietary payment API source code</span>
+                        </div>
+                        <div class="terminal-line">
+                            <span class="terminal-prompt">▸</span>
+                            <span class="terminal-text">[09:25:03] <span class="terminal-warning">HIGH</span> finance@company.com → Perplexity: Q1 earnings before public disclosure</span>
+                        </div>
+                        <div class="terminal-line">
+                            <span class="terminal-prompt">▸</span>
+                            <span class="terminal-text">[09:25:47] <span class="terminal-danger">CRITICAL</span> legal@company.com → ChatGPT: Attorney-client privileged memo</span>
+                        </div>
+                        <div class="terminal-line">
+                            <span class="terminal-prompt">▸</span>
+                            <span class="terminal-text">[09:26:31] <span class="terminal-warning">HIGH</span> hr@company.com → Claude: Employee SSNs for benefits analysis</span>
+                        </div>
+                        <div class="terminal-line">
+                            <span class="terminal-prompt">▸</span>
+                            <span class="terminal-text"><span class="terminal-danger">⚠️ 12,847 sensitive data instances detected this week</span></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="problem-card-icon">🔓</div>
+                    <h3>Invisible Data Flow</h3>
+                    <p>Employees copy/paste sensitive data into AI tools without thinking twice. It's faster than filing a ticket for IT-approved alternatives.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-card-icon">🎯</div>
+                    <h3>Training Data Risk</h3>
+                    <p>Unlike traditional SaaS, AI services may train on your data. That proprietary code could end up in competitor suggestions.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-card-icon">⚖️</div>
+                    <h3>Regulatory Exposure</h3>
+                    <p>GDPR, HIPAA, SOX, EU AI Act—regulators are asking about AI governance. "We didn't know" isn't a defense.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-card-icon">💰</div>
+                    <h3>Insurance Pressure</h3>
+                    <p>Cyber insurers now require AI governance attestation. No visibility = higher premiums or denied coverage.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="solution" id="solution">
+        <div class="section-container">
+            <div class="section-header">
+                <span class="section-label">The Solution</span>
+                <h2>Complete AI Visibility & Control</h2>
+                <p>ShadowAI Sentinel discovers every AI tool, classifies every risk, and enforces policies in real-time—without killing productivity.</p>
+            </div>
+
+            <div class="solution-visual">
+                <div class="solution-diagram">
+                    <div class="solution-step">
+                        <div class="step-icon">🔍</div>
+                        <div class="step-title">Discover</div>
+                        <div class="step-desc">Find every AI tool across browser, endpoint, network, and API—even ones you've never heard of</div>
+                    </div>
+                    <div class="solution-step">
+                        <div class="step-icon">⚡</div>
+                        <div class="step-title">Classify</div>
+                        <div class="step-desc">ML-powered risk classification identifies PII, PHI, source code, and financial data in real-time</div>
+                    </div>
+                    <div class="solution-step">
+                        <div class="step-icon">🛡️</div>
+                        <div class="step-title">Protect</div>
+                        <div class="step-desc">Enforce policies automatically—block, redact, or redirect to compliant enterprise alternatives</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="features-grid" id="features">
+                <div class="feature-card">
+                    <div class="feature-icon">🔎</div>
+                    <h3>Universal AI Discovery</h3>
+                    <p>See every AI tool employees use—browser, desktop, mobile, API. Our catalog tracks 300+ AI services with real-time updates.</p>
+                    <ul class="feature-list">
+                        <li>Browser extension capture</li>
+                        <li>Endpoint agent monitoring</li>
+                        <li>Network traffic analysis</li>
+                        <li>OAuth/SSO detection</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Real-Time Risk Classification</h3>
+                    <p>ML models analyze every interaction to classify data sensitivity and compliance risk before it leaves your network.</p>
+                    <ul class="feature-list">
+                        <li>PII/PHI detection</li>
+                        <li>Source code recognition</li>
+                        <li>Financial data flagging</li>
+                        <li>Context-aware scoring</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚙️</div>
+                    <h3>Intelligent Policy Engine</h3>
+                    <p>200+ configurable rules with sub-100ms enforcement. Block, warn, redact, or redirect—your policies, your control.</p>
+                    <ul class="feature-list">
+                        <li>Granular rule builder</li>
+                        <li>Smart redaction</li>
+                        <li>User education prompts</li>
+                        <li>Exception workflows</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔄</div>
+                    <h3>Compliant Alternatives</h3>
+                    <p>Don't just block—redirect to approved enterprise AI. Preserve productivity while eliminating risk.</p>
+                    <ul class="feature-list">
+                        <li>Automatic redirection</li>
+                        <li>Zero-retention options</li>
+                        <li>On-premise AI routing</li>
+                        <li>Seamless UX</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Compliance Automation</h3>
+                    <p>Pre-built frameworks for EU AI Act, GDPR, HIPAA, and SOX. Generate audit reports in one click.</p>
+                    <ul class="feature-list">
+                        <li>Real-time compliance scoring</li>
+                        <li>Automated evidence collection</li>
+                        <li>Board-ready reports</li>
+                        <li>Insurance attestation</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🚨</div>
+                    <h3>Incident Response</h3>
+                    <p>When sensitive data does leak, know immediately. Auto-triage, forensics, and remediation workflows built in.</p>
+                    <ul class="feature-list">
+                        <li>Real-time alerts</li>
+                        <li>Forensic investigation</li>
+                        <li>Remediation playbooks</li>
+                        <li>Retention tracking</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="dashboard-preview">
+        <div class="section-container">
+            <div class="section-header">
+                <span class="section-label">Dashboard</span>
+                <h2>Complete Visibility at a Glance</h2>
+                <p>Know exactly what AI tools are in use, what data is flowing, and where your risks are—in real-time.</p>
+            </div>
+
+            <div class="dashboard-mockup">
+                <div class="dashboard-header">
+                    <div class="dashboard-tabs">
+                        <div class="dashboard-tab active">Overview</div>
+                        <div class="dashboard-tab">Discovery</div>
+                        <div class="dashboard-tab">Incidents</div>
+                        <div class="dashboard-tab">Compliance</div>
+                    </div>
+                    <span style="color: var(--gray); font-size: 0.85rem;">Last updated: 2 min ago</span>
+                </div>
+                <div class="dashboard-content">
+                    <div class="dash-metric">
+                        <div class="dash-metric-label">AI Services Detected</div>
+                        <div class="dash-metric-value">247</div>
+                        <div class="dash-metric-change up">↑ 23 this week</div>
+                    </div>
+                    <div class="dash-metric">
+                        <div class="dash-metric-label">Unapproved Usage</div>
+                        <div class="dash-metric-value">81%</div>
+                        <div class="dash-metric-change down">↓ 12% vs last month</div>
+                    </div>
+                    <div class="dash-metric">
+                        <div class="dash-metric-label">Data Volume (Weekly)</div>
+                        <div class="dash-metric-value">47.3 GB</div>
+                        <div class="dash-metric-change up">↑ 8.2 GB</div>
+                    </div>
+                    <div class="dash-metric">
+                        <div class="dash-metric-label">Sensitive Incidents</div>
+                        <div class="dash-metric-value">12,847</div>
+                        <div class="dash-metric-change down">↓ 2,341 blocked</div>
+                    </div>
+                    <div class="dashboard-table">
+                        <div class="table-header">
+                            <span>AI Service</span>
+                            <span>Users</span>
+                            <span>Risk Level</span>
+                            <span>Data Volume</span>
+                            <span>Status</span>
+                        </div>
+                        <div class="table-row">
+                            <span>ChatGPT (Personal)</span>
+                            <span>4,231</span>
+                            <span><span class="risk-badge risk-critical">Critical</span></span>
+                            <span>23.4 GB</span>
+                            <span style="color: var(--warning);">Monitoring</span>
+                        </div>
+                        <div class="table-row">
+                            <span>Claude.ai</span>
+                            <span>2,847</span>
+                            <span><span class="risk-badge risk-high">High</span></span>
+                            <span>12.1 GB</span>
+                            <span style="color: var(--warning);">Monitoring</span>
+                        </div>
+                        <div class="table-row">
+                            <span>GitHub Copilot (Personal)</span>
+                            <span>1,234</span>
+                            <span><span class="risk-badge risk-critical">Critical</span></span>
+                            <span>8.7 GB</span>
+                            <span style="color: var(--danger);">Blocked</span>
+                        </div>
+                        <div class="table-row">
+                            <span>Perplexity</span>
+                            <span>1,923</span>
+                            <span><span class="risk-badge risk-medium">Medium</span></span>
+                            <span>2.1 GB</span>
+                            <span style="color: var(--warning);">Monitoring</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="market" id="market">
+        <div class="section-container">
+            <div class="section-header">
+                <span class="section-label">Market Opportunity</span>
+                <h2>$93B Market by 2030</h2>
+                <p>AI governance is the fastest-growing segment in enterprise security, with 60% CAGR.</p>
+            </div>
+
+            <div class="market-chart">
+                <div class="chart-header">
+                    <div class="chart-title">AI Security & Governance TAM</div>
+                    <div class="chart-legend">
+                        <div class="legend-item">
+                            <div class="legend-dot" style="background: var(--gradient);"></div>
+                            <span>Market Size ($B)</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="chart-bars">
+                    <div class="chart-bar-group">
+                        <div class="chart-bar" style="height: 60px;">
+                            <span class="chart-bar-value">$14B</span>
+                        </div>
+                        <span class="chart-bar-label">2026</span>
+                    </div>
+                    <div class="chart-bar-group">
+                        <div class="chart-bar" style="height: 100px;">
+                            <span class="chart-bar-value">$28B</span>
+                        </div>
+                        <span class="chart-bar-label">2027</span>
+                    </div>
+                    <div class="chart-bar-group">
+                        <div class="chart-bar" style="height: 150px;">
+                            <span class="chart-bar-value">$42B</span>
+                        </div>
+                        <span class="chart-bar-label">2028</span>
+                    </div>
+                    <div class="chart-bar-group">
+                        <div class="chart-bar" style="height: 200px;">
+                            <span class="chart-bar-value">$65B</span>
+                        </div>
+                        <span class="chart-bar-label">2029</span>
+                    </div>
+                    <div class="chart-bar-group">
+                        <div class="chart-bar" style="height: 250px;">
+                            <span class="chart-bar-value">$93B</span>
+                        </div>
+                        <span class="chart-bar-label">2030</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="market-segments">
+                <div class="segment-card">
+                    <div class="segment-value">$50B</div>
+                    <div class="segment-name">AI Security & Governance</div>
+                    <div class="segment-growth">55% CAGR</div>
+                </div>
+                <div class="segment-card">
+                    <div class="segment-value">$18B</div>
+                    <div class="segment-name">AI-Specific DLP</div>
+                    <div class="segment-growth">50% CAGR</div>
+                </div>
+                <div class="segment-card">
+                    <div class="segment-value">$15B</div>
+                    <div class="segment-name">AI Compliance Automation</div>
+                    <div class="segment-growth">65% CAGR</div>
+                </div>
+                <div class="segment-card">
+                    <div class="segment-value">$10B</div>
+                    <div class="segment-name">Enterprise AI Observability</div>
+                    <div class="segment-growth">75% CAGR</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="compliance" id="compliance">
+        <div class="section-container">
+            <div class="section-header">
+                <span class="section-label">Compliance Ready</span>
+                <h2>Built for Regulation</h2>
+                <p>Pre-built compliance frameworks with automated evidence collection and reporting.</p>
+            </div>
+
+            <div class="compliance-grid">
+                <div class="compliance-card">
+                    <div class="compliance-icon">🇪🇺</div>
+                    <div class="compliance-name">EU AI Act</div>
+                    <div class="compliance-status">✓ Full Coverage</div>
+                </div>
+                <div class="compliance-card">
+                    <div class="compliance-icon">🔒</div>
+                    <div class="compliance-name">GDPR</div>
+                    <div class="compliance-status">✓ Full Coverage</div>
+                </div>
+                <div class="compliance-card">
+                    <div class="compliance-icon">🏥</div>
+                    <div class="compliance-name">HIPAA</div>
+                    <div class="compliance-status">✓ Full Coverage</div>
+                </div>
+                <div class="compliance-card">
+                    <div class="compliance-icon">💳</div>
+                    <div class="compliance-name">PCI DSS</div>
+                    <div class="compliance-status">✓ Full Coverage</div>
+                </div>
+                <div class="compliance-card">
+                    <div class="compliance-icon">📊</div>
+                    <div class="compliance-name">SOX</div>
+                    <div class="compliance-status">✓ Full Coverage</div>
+                </div>
+                <div class="compliance-card">
+                    <div class="compliance-icon">🇺🇸</div>
+                    <div class="compliance-name">CCPA/CPRA</div>
+                    <div class="compliance-status">✓ Full Coverage</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta" id="cta">
+        <div class="cta-content">
+            <h2>Stop AI Shadow IT Before Your Next Audit</h2>
+            <p>Every day you wait, more sensitive data flows to AI services you don't control. Get complete visibility in minutes.</p>
+            <div class="hero-cta">
+                <a href="mailto:hello@shadowai.security" class="btn-primary">🛡️ Request Demo</a>
+                <a href="#" class="btn-secondary">📄 Download Whitepaper</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <a href="#" class="logo">
+                    <div class="logo-icon">🛡️</div>
+                    ShadowAI Sentinel
+                </a>
+                <p>Enterprise AI Shadow IT Detection & Governance. Protect your data, prove compliance, enable AI acceleration.</p>
+            </div>
+            <div class="footer-column">
+                <h4>Product</h4>
+                <ul>
+                    <li><a href="#">Discovery Engine</a></li>
+                    <li><a href="#">Risk Classification</a></li>
+                    <li><a href="#">Policy Enforcement</a></li>
+                    <li><a href="#">Compliance</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Solutions</h4>
+                <ul>
+                    <li><a href="#">Financial Services</a></li>
+                    <li><a href="#">Healthcare</a></li>
+                    <li><a href="#">Legal</a></li>
+                    <li><a href="#">Enterprise</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>© 2026 ShadowAI Sentinel. All rights reserved.</span>
+            <span>Generated by The Godfather 🎩 | Morning Drop: March 26, 2026</span>
+        </div>
+    </footer>
+</body>
+</html>
