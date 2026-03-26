@@ -1,0 +1,1328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WildfireOS — Autonomous Wildfire Prevention & Response Intelligence</title>
+    <meta name="description" content="The AI operating system that predicts, prevents, and coordinates wildfire response. Protecting communities, utilities, and insurers from the growing wildfire crisis.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --fire-orange: #FF6B35;
+            --fire-red: #D62828;
+            --ember-gold: #F77F00;
+            --smoke-dark: #1A1A2E;
+            --smoke-medium: #16213E;
+            --smoke-light: #0F3460;
+            --ash-gray: #94A3B8;
+            --clean-white: #F8FAFC;
+            --forest-green: #059669;
+            --alert-yellow: #FBBF24;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--smoke-dark);
+            color: var(--clean-white);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Fire Animation Background */
+        .fire-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .fire-background::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 60%;
+            background: linear-gradient(
+                to top,
+                rgba(214, 40, 40, 0.15) 0%,
+                rgba(247, 127, 0, 0.08) 30%,
+                rgba(255, 107, 53, 0.03) 60%,
+                transparent 100%
+            );
+            animation: fireGlow 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes fireGlow {
+            0% { opacity: 0.6; transform: translateY(0); }
+            100% { opacity: 1; transform: translateY(-20px); }
+        }
+
+        /* Ember Particles */
+        .ember {
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            background: var(--ember-gold);
+            border-radius: 50%;
+            animation: ember-rise linear infinite;
+            opacity: 0;
+            box-shadow: 0 0 6px var(--fire-orange);
+        }
+
+        @keyframes ember-rise {
+            0% {
+                opacity: 0;
+                transform: translateY(100vh) scale(0);
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 0.5;
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-100px) scale(1);
+            }
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            position: relative;
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, rgba(214, 40, 40, 0.2), rgba(247, 127, 0, 0.2));
+            border: 1px solid rgba(255, 107, 53, 0.4);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--ember-gold);
+            margin-bottom: 2rem;
+            animation: pulse-badge 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-badge {
+            0%, 100% { box-shadow: 0 0 20px rgba(247, 127, 0, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(247, 127, 0, 0.5); }
+        }
+
+        .hero-badge svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 7rem);
+            font-weight: 900;
+            line-height: 1.05;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--clean-white) 0%, var(--ember-gold) 50%, var(--fire-orange) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: fire-text 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes fire-text {
+            0% { filter: drop-shadow(0 0 30px rgba(255, 107, 53, 0.3)); }
+            100% { filter: drop-shadow(0 0 60px rgba(247, 127, 0, 0.5)); }
+        }
+
+        .hero-tagline {
+            font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+            color: var(--ash-gray);
+            max-width: 800px;
+            margin-bottom: 3rem;
+            font-weight: 400;
+        }
+
+        .hero-tagline strong {
+            color: var(--ember-gold);
+            font-weight: 600;
+        }
+
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 3rem;
+            margin-bottom: 3rem;
+            max-width: 900px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--fire-orange);
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--ash-gray);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--fire-red), var(--fire-orange));
+            color: white;
+            box-shadow: 0 10px 40px rgba(214, 40, 40, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 50px rgba(214, 40, 40, 0.6);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--clean-white);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: var(--ember-gold);
+        }
+
+        /* Scroll Indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--ash-gray);
+            font-size: 0.85rem;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(10px); }
+        }
+
+        /* Section Styling */
+        section {
+            padding: 8rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 5rem;
+        }
+
+        .section-eyebrow {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--fire-orange);
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .section-subtitle {
+            font-size: 1.15rem;
+            color: var(--ash-gray);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Crisis Section */
+        .crisis {
+            background: linear-gradient(180deg, transparent, rgba(214, 40, 40, 0.1), transparent);
+        }
+
+        .crisis-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .crisis-card {
+            background: linear-gradient(135deg, rgba(214, 40, 40, 0.15), rgba(247, 127, 0, 0.05));
+            border: 1px solid rgba(214, 40, 40, 0.3);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .crisis-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--fire-orange);
+            box-shadow: 0 20px 60px rgba(214, 40, 40, 0.3);
+        }
+
+        .crisis-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--fire-red), var(--fire-orange));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+        }
+
+        .crisis-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .crisis-card p {
+            color: var(--ash-gray);
+            font-size: 1rem;
+        }
+
+        .crisis-stat {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--fire-orange);
+            display: block;
+            margin-top: 1rem;
+        }
+
+        /* Platform Section */
+        .platform-layers {
+            display: flex;
+            flex-direction: column;
+            gap: 4rem;
+        }
+
+        .layer {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 4rem;
+            align-items: center;
+            padding: 3rem;
+            background: rgba(15, 52, 96, 0.3);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 107, 53, 0.2);
+        }
+
+        .layer:nth-child(even) {
+            direction: rtl;
+        }
+
+        .layer:nth-child(even) > * {
+            direction: ltr;
+        }
+
+        .layer-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--fire-red), var(--fire-orange));
+            border-radius: 12px;
+            font-weight: 800;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .layer h3 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .layer p {
+            color: var(--ash-gray);
+            font-size: 1.05rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .layer-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .layer-feature {
+            background: rgba(255, 107, 53, 0.15);
+            border: 1px solid rgba(255, 107, 53, 0.3);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: var(--ember-gold);
+        }
+
+        .layer-visual {
+            background: linear-gradient(135deg, rgba(214, 40, 40, 0.2), rgba(247, 127, 0, 0.1));
+            border-radius: 20px;
+            height: 350px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(255, 107, 53, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .layer-visual::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(
+                from 0deg,
+                transparent,
+                rgba(255, 107, 53, 0.1),
+                transparent,
+                rgba(214, 40, 40, 0.1),
+                transparent
+            );
+            animation: radar-sweep 8s linear infinite;
+        }
+
+        @keyframes radar-sweep {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .layer-visual-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+
+        .layer-visual-icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+        }
+
+        .layer-visual-text {
+            font-size: 1.2rem;
+            color: var(--ember-gold);
+            font-weight: 600;
+        }
+
+        /* Market Section */
+        .market-bars {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .market-bar {
+            display: grid;
+            grid-template-columns: 200px 1fr 100px;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .market-label {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .market-progress {
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .market-progress-fill {
+            height: 100%;
+            border-radius: 20px;
+            background: linear-gradient(90deg, var(--fire-red), var(--fire-orange), var(--ember-gold));
+            animation: fill-in 2s ease-out forwards;
+            transform-origin: left;
+        }
+
+        @keyframes fill-in {
+            from { transform: scaleX(0); }
+            to { transform: scaleX(1); }
+        }
+
+        .market-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--ember-gold);
+            text-align: right;
+        }
+
+        .tam-total {
+            text-align: center;
+            margin-top: 4rem;
+            padding: 3rem;
+            background: linear-gradient(135deg, rgba(214, 40, 40, 0.2), rgba(247, 127, 0, 0.1));
+            border-radius: 24px;
+            border: 1px solid rgba(255, 107, 53, 0.3);
+        }
+
+        .tam-total-value {
+            font-size: 5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--ember-gold), var(--fire-orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .tam-total-label {
+            font-size: 1.2rem;
+            color: var(--ash-gray);
+            margin-top: 0.5rem;
+        }
+
+        /* Competitive Section */
+        .moats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .moat-card {
+            background: linear-gradient(135deg, rgba(15, 52, 96, 0.5), rgba(22, 33, 62, 0.5));
+            border: 1px solid rgba(255, 107, 53, 0.2);
+            border-radius: 24px;
+            padding: 3rem;
+            transition: all 0.3s ease;
+        }
+
+        .moat-card:hover {
+            border-color: var(--fire-orange);
+            transform: translateY(-5px);
+        }
+
+        .moat-number {
+            font-size: 4rem;
+            font-weight: 900;
+            color: rgba(255, 107, 53, 0.3);
+            line-height: 1;
+            margin-bottom: 1rem;
+        }
+
+        .moat-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--ember-gold);
+        }
+
+        .moat-card p {
+            color: var(--ash-gray);
+            font-size: 1rem;
+        }
+
+        /* Business Model */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .pricing-card {
+            background: rgba(15, 52, 96, 0.4);
+            border: 1px solid rgba(255, 107, 53, 0.2);
+            border-radius: 24px;
+            padding: 2.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .pricing-card:hover {
+            border-color: var(--ember-gold);
+            transform: scale(1.02);
+        }
+
+        .pricing-card.featured {
+            background: linear-gradient(135deg, rgba(214, 40, 40, 0.2), rgba(247, 127, 0, 0.1));
+            border-color: var(--fire-orange);
+            transform: scale(1.05);
+        }
+
+        .pricing-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--fire-red), var(--fire-orange));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .pricing-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-target {
+            font-size: 0.9rem;
+            color: var(--ash-gray);
+            margin-bottom: 1.5rem;
+        }
+
+        .pricing-price {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--ember-gold);
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-period {
+            font-size: 0.85rem;
+            color: var(--ash-gray);
+        }
+
+        /* Traction/Projections */
+        .projections {
+            background: linear-gradient(180deg, transparent, rgba(5, 150, 105, 0.1), transparent);
+        }
+
+        .projection-timeline {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            padding: 4rem 0;
+        }
+
+        .projection-timeline::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--fire-red), var(--ember-gold), var(--forest-green));
+            border-radius: 2px;
+        }
+
+        .projection-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .projection-dot {
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(135deg, var(--fire-orange), var(--ember-gold));
+            border-radius: 50%;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 0 20px rgba(247, 127, 0, 0.5);
+        }
+
+        .projection-year {
+            font-size: 0.9rem;
+            color: var(--ash-gray);
+            margin-bottom: 0.5rem;
+        }
+
+        .projection-arr {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--ember-gold);
+        }
+
+        .projection-customers {
+            font-size: 0.9rem;
+            color: var(--ash-gray);
+            margin-top: 0.25rem;
+        }
+
+        /* Team Section */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 2rem;
+        }
+
+        .team-card {
+            background: rgba(15, 52, 96, 0.4);
+            border: 1px solid rgba(255, 107, 53, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .team-card:hover {
+            border-color: var(--ember-gold);
+            transform: translateY(-5px);
+        }
+
+        .team-avatar {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--fire-red), var(--fire-orange));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto 1.5rem;
+        }
+
+        .team-role {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .team-profile {
+            font-size: 0.9rem;
+            color: var(--ash-gray);
+        }
+
+        /* CTA Section */
+        .final-cta {
+            text-align: center;
+            padding: 8rem 2rem;
+            background: linear-gradient(180deg, transparent, rgba(214, 40, 40, 0.15));
+            position: relative;
+        }
+
+        .final-cta h2 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .final-cta p {
+            font-size: 1.2rem;
+            color: var(--ash-gray);
+            max-width: 600px;
+            margin: 0 auto 3rem;
+        }
+
+        .funding-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, rgba(214, 40, 40, 0.3), rgba(247, 127, 0, 0.2));
+            border: 2px solid var(--fire-orange);
+            padding: 1.5rem 3rem;
+            border-radius: 16px;
+            margin-top: 3rem;
+        }
+
+        .funding-label {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--ash-gray);
+            margin-bottom: 0.5rem;
+        }
+
+        .funding-amount {
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--ember-gold);
+        }
+
+        /* Footer */
+        footer {
+            padding: 3rem 2rem;
+            text-align: center;
+            border-top: 1px solid rgba(255, 107, 53, 0.2);
+        }
+
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--ember-gold), var(--fire-orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .footer-tagline {
+            color: var(--ash-gray);
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-credit {
+            font-size: 0.85rem;
+            color: var(--ash-gray);
+        }
+
+        .footer-credit a {
+            color: var(--ember-gold);
+            text-decoration: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .layer {
+                grid-template-columns: 1fr;
+            }
+
+            .layer:nth-child(even) {
+                direction: ltr;
+            }
+
+            .moats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-stats {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .market-bar {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
+            }
+
+            .projection-timeline {
+                flex-direction: column;
+                gap: 3rem;
+            }
+
+            .projection-timeline::before {
+                width: 4px;
+                height: 100%;
+                left: 50%;
+                top: 0;
+                transform: translateX(-50%);
+            }
+        }
+
+        /* Animations on scroll */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .animate-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Fire Background -->
+    <div class="fire-background">
+        <div class="ember" style="left: 10%; animation-duration: 6s; animation-delay: 0s;"></div>
+        <div class="ember" style="left: 20%; animation-duration: 8s; animation-delay: 1s;"></div>
+        <div class="ember" style="left: 35%; animation-duration: 7s; animation-delay: 2s;"></div>
+        <div class="ember" style="left: 50%; animation-duration: 9s; animation-delay: 0.5s;"></div>
+        <div class="ember" style="left: 65%; animation-duration: 6s; animation-delay: 3s;"></div>
+        <div class="ember" style="left: 80%; animation-duration: 8s; animation-delay: 1.5s;"></div>
+        <div class="ember" style="left: 90%; animation-duration: 7s; animation-delay: 2.5s;"></div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-badge">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+            EVENING DROP — MARCH 26, 2026
+        </div>
+        
+        <h1>WildfireOS</h1>
+        
+        <p class="hero-tagline">
+            The <strong>AI operating system</strong> that predicts, prevents, and coordinates wildfire response.<br>
+            Protecting communities, utilities, and insurers from the growing climate crisis.
+        </p>
+
+        <div class="hero-stats">
+            <div class="stat">
+                <div class="stat-value">$100B+</div>
+                <div class="stat-label">Annual Fire Damages</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">78</div>
+                <div class="stat-label">Days Longer Fire Seasons</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">2 min</div>
+                <div class="stat-label">Detection Time (vs 15+ min)</div>
+            </div>
+        </div>
+
+        <div class="cta-group">
+            <a href="#platform" class="btn btn-primary">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                Explore Platform
+            </a>
+            <a href="#contact" class="btn btn-secondary">
+                Request Demo
+            </a>
+        </div>
+
+        <div class="scroll-indicator">
+            <span>Scroll to explore</span>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
+            </svg>
+        </div>
+    </section>
+
+    <!-- Crisis Section -->
+    <section class="crisis">
+        <div class="section-header">
+            <div class="section-eyebrow">The Crisis</div>
+            <h2 class="section-title">Wildfires Are an Existential Threat</h2>
+            <p class="section-subtitle">Climate change has turned wildfires into a permanent emergency. Current tools are decades behind the threat.</p>
+        </div>
+
+        <div class="crisis-grid">
+            <div class="crisis-card animate-on-scroll">
+                <div class="crisis-icon">🔥</div>
+                <h3>Insurance Exodus</h3>
+                <p>Major carriers have fled high-risk states entirely. Property owners face uninsurability or 500%+ premium increases.</p>
+                <span class="crisis-stat">7 States Abandoned</span>
+            </div>
+
+            <div class="crisis-card animate-on-scroll">
+                <div class="crisis-icon">⚡</div>
+                <h3>Utility Liability Crisis</h3>
+                <p>Power line ignitions have triggered billions in lawsuits. PG&E's $30B bankruptcy was just the beginning.</p>
+                <span class="crisis-stat">$30B+ Liability</span>
+            </div>
+
+            <div class="crisis-card animate-on-scroll">
+                <div class="crisis-icon">🏠</div>
+                <h3>Community Devastation</h3>
+                <p>Paradise. Lahaina. Fort McMurray. Entire towns erased in hours. 10 million+ homes now in high-risk zones.</p>
+                <span class="crisis-stat">10M+ Homes at Risk</span>
+            </div>
+
+            <div class="crisis-card animate-on-scroll">
+                <div class="crisis-icon">⏱️</div>
+                <h3>Detection Gap</h3>
+                <p>Current systems take 15+ minutes to detect new fires. In that time, a fire can grow 10x and become uncontrollable.</p>
+                <span class="crisis-stat">15+ Min Detection</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Platform Section -->
+    <section id="platform">
+        <div class="section-header">
+            <div class="section-eyebrow">The Platform</div>
+            <h2 class="section-title">Intelligence at Every Layer</h2>
+            <p class="section-subtitle">WildfireOS combines satellite imagery, IoT sensors, AI models, and multi-agency coordination into one unified platform.</p>
+        </div>
+
+        <div class="platform-layers">
+            <div class="layer animate-on-scroll">
+                <div class="layer-content">
+                    <div class="layer-number">1</div>
+                    <h3>Omniscient Sensing</h3>
+                    <p>Continuous monitoring from space, ground, and grid. Sub-minute fire detection across millions of acres.</p>
+                    <div class="layer-features">
+                        <span class="layer-feature">Satellite Imagery</span>
+                        <span class="layer-feature">IoT Sensors</span>
+                        <span class="layer-feature">Weather Data</span>
+                        <span class="layer-feature">Grid SCADA</span>
+                        <span class="layer-feature">Social Signals</span>
+                    </div>
+                </div>
+                <div class="layer-visual">
+                    <div class="layer-visual-content">
+                        <div class="layer-visual-icon">🛰️</div>
+                        <div class="layer-visual-text">Real-Time Global Monitoring</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="layer animate-on-scroll">
+                <div class="layer-content">
+                    <div class="layer-number">2</div>
+                    <h3>Predictive Intelligence</h3>
+                    <p>FireMind™ AI predicts ignition risk at property-level and models fire spread 72 hours ahead with physics-informed neural networks.</p>
+                    <div class="layer-features">
+                        <span class="layer-feature">Risk Scoring</span>
+                        <span class="layer-feature">Spread Modeling</span>
+                        <span class="layer-feature">Resource Optimization</span>
+                        <span class="layer-feature">Evacuation Planning</span>
+                    </div>
+                </div>
+                <div class="layer-visual">
+                    <div class="layer-visual-content">
+                        <div class="layer-visual-icon">🧠</div>
+                        <div class="layer-visual-text">FireMind™ AI Engine</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="layer animate-on-scroll">
+                <div class="layer-content">
+                    <div class="layer-number">3</div>
+                    <h3>Command & Coordination</h3>
+                    <p>AgentSwarm™ orchestrates multi-agency response, optimizes resource deployment, and generates compliance documentation automatically.</p>
+                    <div class="layer-features">
+                        <span class="layer-feature">ICS Integration</span>
+                        <span class="layer-feature">Multi-Agency Coord</span>
+                        <span class="layer-feature">Resource Tracking</span>
+                        <span class="layer-feature">Auto Reporting</span>
+                    </div>
+                </div>
+                <div class="layer-visual">
+                    <div class="layer-visual-content">
+                        <div class="layer-visual-icon">🎯</div>
+                        <div class="layer-visual-text">AgentSwarm™ Response</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Market Section -->
+    <section class="market">
+        <div class="section-header">
+            <div class="section-eyebrow">The Opportunity</div>
+            <h2 class="section-title">$47 Billion Addressable Market</h2>
+            <p class="section-subtitle">Wildfire intelligence is required infrastructure for utilities, insurers, and governments.</p>
+        </div>
+
+        <div class="market-bars">
+            <div class="market-bar animate-on-scroll">
+                <div class="market-label">Insurance Intelligence</div>
+                <div class="market-progress">
+                    <div class="market-progress-fill" style="width: 100%;"></div>
+                </div>
+                <div class="market-value">$18B</div>
+            </div>
+
+            <div class="market-bar animate-on-scroll">
+                <div class="market-label">Government Contracts</div>
+                <div class="market-progress">
+                    <div class="market-progress-fill" style="width: 67%;"></div>
+                </div>
+                <div class="market-value">$12B</div>
+            </div>
+
+            <div class="market-bar animate-on-scroll">
+                <div class="market-label">Utility Vegetation Mgmt</div>
+                <div class="market-progress">
+                    <div class="market-progress-fill" style="width: 44%;"></div>
+                </div>
+                <div class="market-value">$8B</div>
+            </div>
+
+            <div class="market-bar animate-on-scroll">
+                <div class="market-label">Real Estate Analytics</div>
+                <div class="market-progress">
+                    <div class="market-progress-fill" style="width: 28%;"></div>
+                </div>
+                <div class="market-value">$5B</div>
+            </div>
+
+            <div class="market-bar animate-on-scroll">
+                <div class="market-label">Agricultural Protection</div>
+                <div class="market-progress">
+                    <div class="market-progress-fill" style="width: 22%;"></div>
+                </div>
+                <div class="market-value">$4B</div>
+            </div>
+        </div>
+
+        <div class="tam-total animate-on-scroll">
+            <div class="tam-total-value">$47B</div>
+            <div class="tam-total-label">Total Addressable Market by 2030</div>
+        </div>
+    </section>
+
+    <!-- Competitive Moats -->
+    <section class="moats">
+        <div class="section-header">
+            <div class="section-eyebrow">The Moat</div>
+            <h2 class="section-title">Compounding Advantages</h2>
+            <p class="section-subtitle">Four reinforcing moats make WildfireOS the category-defining platform.</p>
+        </div>
+
+        <div class="moats-grid">
+            <div class="moat-card animate-on-scroll">
+                <div class="moat-number">01</div>
+                <h3>Data Network Effects</h3>
+                <p>Every fire season compounds our advantage. 10TB+ daily satellite data, 50M+ sensor readings, 1M+ historical fire perimeters. More data → better predictions → more customers → more data.</p>
+            </div>
+
+            <div class="moat-card animate-on-scroll">
+                <div class="moat-number">02</div>
+                <h3>Government Entrenchment</h3>
+                <p>FedRAMP certification, incident data sharing agreements, and training investments create massive switching costs. Once you're in, you're in for decades.</p>
+            </div>
+
+            <div class="moat-card animate-on-scroll">
+                <div class="moat-number">03</div>
+                <h3>Operational Integration</h3>
+                <p>Deep CAD system integration, pre-established mutual aid agreements, and insurance product requirements make WildfireOS essential infrastructure.</p>
+            </div>
+
+            <div class="moat-card animate-on-scroll">
+                <div class="moat-number">04</div>
+                <h3>Proprietary Sensor Network</h3>
+                <p>150,000+ sensors deployed in strategic locations, exclusive cell tower partnerships, and grid-edge deployments create physical infrastructure moat.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Business Model -->
+    <section class="business-model">
+        <div class="section-header">
+            <div class="section-eyebrow">Business Model</div>
+            <h2 class="section-title">Multiple Revenue Engines</h2>
+            <p class="section-subtitle">Enterprise SaaS, API revenue, and hardware services create diversified, high-margin revenue.</p>
+        </div>
+
+        <div class="pricing-grid">
+            <div class="pricing-card animate-on-scroll">
+                <div class="pricing-icon">⚡</div>
+                <div class="pricing-name">PredictShield</div>
+                <div class="pricing-target">For Utilities</div>
+                <div class="pricing-price">$500K - $5M</div>
+                <div class="pricing-period">per year</div>
+            </div>
+
+            <div class="pricing-card featured animate-on-scroll">
+                <div class="pricing-icon">🛡️</div>
+                <div class="pricing-name">InsureIQ</div>
+                <div class="pricing-target">For Insurance</div>
+                <div class="pricing-price">Per-Policy</div>
+                <div class="pricing-period">risk scoring API</div>
+            </div>
+
+            <div class="pricing-card animate-on-scroll">
+                <div class="pricing-icon">🏛️</div>
+                <div class="pricing-name">CommandCenter</div>
+                <div class="pricing-target">For Government</div>
+                <div class="pricing-price">SaaS + Support</div>
+                <div class="pricing-period">multi-year contracts</div>
+            </div>
+
+            <div class="pricing-card animate-on-scroll">
+                <div class="pricing-icon">🏠</div>
+                <div class="pricing-name">PropertyGuard</div>
+                <div class="pricing-target">For Real Estate</div>
+                <div class="pricing-price">API + Sub</div>
+                <div class="pricing-period">per property</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projections -->
+    <section class="projections">
+        <div class="section-header">
+            <div class="section-eyebrow">Growth Trajectory</div>
+            <h2 class="section-title">Path to $500M ARR</h2>
+            <p class="section-subtitle">Capital-efficient growth through land-and-expand with utilities, government, and insurance.</p>
+        </div>
+
+        <div class="projection-timeline">
+            <div class="projection-item animate-on-scroll">
+                <div class="projection-dot"></div>
+                <div class="projection-year">Year 1</div>
+                <div class="projection-arr">$8M</div>
+                <div class="projection-customers">15 customers</div>
+            </div>
+
+            <div class="projection-item animate-on-scroll">
+                <div class="projection-dot"></div>
+                <div class="projection-year">Year 2</div>
+                <div class="projection-arr">$32M</div>
+                <div class="projection-customers">65 customers</div>
+            </div>
+
+            <div class="projection-item animate-on-scroll">
+                <div class="projection-dot"></div>
+                <div class="projection-year">Year 3</div>
+                <div class="projection-arr">$95M</div>
+                <div class="projection-customers">180 customers</div>
+            </div>
+
+            <div class="projection-item animate-on-scroll">
+                <div class="projection-dot"></div>
+                <div class="projection-year">Year 4</div>
+                <div class="projection-arr">$220M</div>
+                <div class="projection-customers">420 customers</div>
+            </div>
+
+            <div class="projection-item animate-on-scroll">
+                <div class="projection-dot"></div>
+                <div class="projection-year">Year 5</div>
+                <div class="projection-arr">$500M</div>
+                <div class="projection-customers">900 customers</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team -->
+    <section class="team">
+        <div class="section-header">
+            <div class="section-eyebrow">The Team</div>
+            <h2 class="section-title">Building the Founding Team</h2>
+            <p class="section-subtitle">Seeking exceptional leaders who want to protect millions of people from the wildfire crisis.</p>
+        </div>
+
+        <div class="team-grid">
+            <div class="team-card animate-on-scroll">
+                <div class="team-avatar">👤</div>
+                <div class="team-role">CEO</div>
+                <div class="team-profile">Utility/GovTech executive with enterprise sales experience</div>
+            </div>
+
+            <div class="team-card animate-on-scroll">
+                <div class="team-avatar">👤</div>
+                <div class="team-role">CTO</div>
+                <div class="team-profile">ML/satellite systems expert from Planet, Descartes Labs, or Google Earth</div>
+            </div>
+
+            <div class="team-card animate-on-scroll">
+                <div class="team-avatar">👤</div>
+                <div class="team-role">VP Engineering</div>
+                <div class="team-profile">Large-scale data systems leader</div>
+            </div>
+
+            <div class="team-card animate-on-scroll">
+                <div class="team-avatar">👤</div>
+                <div class="team-role">Chief Scientist</div>
+                <div class="team-profile">Fire behavior/forestry PhD with research credentials</div>
+            </div>
+
+            <div class="team-card animate-on-scroll">
+                <div class="team-avatar">👤</div>
+                <div class="team-role">VP Sales</div>
+                <div class="team-profile">Utility/government sales veteran</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="final-cta" id="contact">
+        <h2>Protect Communities.<br>Build a Category.</h2>
+        <p>WildfireOS is seeking visionary investors and founding team members ready to tackle one of humanity's most pressing challenges.</p>
+
+        <div class="cta-group">
+            <a href="mailto:founder@wildfireos.ai" class="btn btn-primary">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                Contact Us
+            </a>
+            <a href="2026-03-26-evening.pdf" class="btn btn-secondary">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+                Download Playbook
+            </a>
+        </div>
+
+        <div class="funding-badge animate-on-scroll">
+            <div class="funding-label">Seed Round Target</div>
+            <div class="funding-amount">$8M</div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-logo">WildfireOS</div>
+        <p class="footer-tagline">The future of wildfire prevention is intelligent.</p>
+        <p class="footer-credit">Concept by <a href="#">The Godfather</a> 🎩 — March 26, 2026</p>
+    </footer>
+
+    <script>
+        // Animate elements on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.animate-on-scroll').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
