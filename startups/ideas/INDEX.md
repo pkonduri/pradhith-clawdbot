@@ -169,6 +169,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-03-27 | Evening | Benchmark AI — The Moody's for AI Systems | [Playbook](2026-03-27-evening.md) • [Landing](2026-03-27-evening-landing.html) • [PDF](2026-03-27-evening.pdf) |
 | 2026-03-27 | Morning | AgentKYC — Identity & Trust Infrastructure for AI Agents | [Playbook](2026-03-27-morning.md) • [Landing](2026-03-27-morning-landing.html) • [PDF](2026-03-27-morning.pdf) |
 | 2026-03-27 | Afternoon | MainStreet AI — The AI Operating System for Small Business Automation | [Playbook](2026-03-27-afternoon.md) • [Landing](2026-03-27-afternoon-landing.html) • [PDF](2026-03-27-afternoon.pdf) |
+| 2026-03-28 | Evening | NeuroBoost AI — The AI Operating System for ADHD & Neurodivergent Productivity | [Playbook](2026-03-28-evening.md) • [Landing](2026-03-28-evening-landing.html) • [PDF](2026-03-28-evening.pdf) |
 <!-- New entries will be added above this line -->
 
 ---
