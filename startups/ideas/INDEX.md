@@ -173,6 +173,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-03-28 | Morning | FluxOS — The AI Operating System for Dynamic Pricing Intelligence | [Playbook](2026-03-28-morning.md) • [Landing](2026-03-28-morning-landing.html) • [PDF](2026-03-28-morning.pdf) |
 | 2026-03-28 | Afternoon | OrbitFlow AI — The AI Operating System for Space Logistics | [Playbook](2026-03-28-afternoon.md) • [Landing](2026-03-28-afternoon-landing.html) • [PDF](2026-03-28-afternoon.pdf) |
 | 2026-03-29 | Evening | EmotionOS — The AI Operating System for Emotional Intelligence & Relationship Health | [Playbook](2026-03-29-evening.md) • [Landing](2026-03-29-evening-landing.html) • [PDF](2026-03-29-evening.pdf) |
+| 2026-03-29 | Morning | CredentialOS — Universal Trust Infrastructure for Human-AI Capability Verification | [Playbook](2026-03-29-morning.md) • [Landing](2026-03-29-morning-landing.html) • [PDF](2026-03-29-morning.pdf) |
 <!-- New entries will be added above this line -->
 
 ---
