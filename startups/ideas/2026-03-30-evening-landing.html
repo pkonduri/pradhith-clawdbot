@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TransitionOS — The AI Operating System for Workforce Transition</title>
+    <meta name="description" content="Navigate the AI revolution with confidence. TransitionOS provides personalized career intelligence, reskilling pathways, and transition support for the 85 million workers facing displacement.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366F1;
+            --primary-dark: #4F46E5;
+            --primary-light: #818CF8;
+            --secondary: #0EA5E9;
+            --accent: #F59E0B;
+            --success: #10B981;
+            --danger: #EF4444;
+            --dark: #0F172A;
+            --dark-soft: #1E293B;
+            --gray: #64748B;
+            --light: #F1F5F9;
+            --white: #FFFFFF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--dark);
+            color: var(--white);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(14, 165, 233, 0.12) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(245, 158, 11, 0.08) 0%, transparent 40%);
+            animation: bgFloat 30s ease-in-out infinite;
+        }
+
+        @keyframes bgFloat {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(30px, -30px) rotate(3deg); }
+            66% { transform: translate(-20px, 20px) rotate(-2deg); }
+        }
+
+        /* Grid Pattern Overlay */
+        .grid-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(99, 102, 241, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Floating Particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 50%;
+            opacity: 0.4;
+            animation: float 20s infinite;
+        }
+
+        .particle:nth-child(1) { left: 10%; animation-delay: 0s; animation-duration: 25s; }
+        .particle:nth-child(2) { left: 20%; animation-delay: 2s; animation-duration: 20s; }
+        .particle:nth-child(3) { left: 30%; animation-delay: 4s; animation-duration: 28s; }
+        .particle:nth-child(4) { left: 40%; animation-delay: 1s; animation-duration: 22s; }
+        .particle:nth-child(5) { left: 50%; animation-delay: 3s; animation-duration: 26s; }
+        .particle:nth-child(6) { left: 60%; animation-delay: 5s; animation-duration: 24s; }
+        .particle:nth-child(7) { left: 70%; animation-delay: 2s; animation-duration: 27s; }
+        .particle:nth-child(8) { left: 80%; animation-delay: 4s; animation-duration: 21s; }
+        .particle:nth-child(9) { left: 90%; animation-delay: 1s; animation-duration: 29s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(100vh) scale(0); opacity: 0; }
+            10% { opacity: 0.6; transform: scale(1); }
+            90% { opacity: 0.6; }
+            100% { transform: translateY(-100vh) scale(0); opacity: 0; }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 20px 0;
+            transition: all 0.3s ease;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(99, 102, 241, 0.1);
+        }
+
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--gray);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--white);
+        }
+
+        .nav-cta {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 12px 28px;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(99, 102, 241, 0.5);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 140px 0 100px;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 800px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            color: var(--primary-light);
+            margin-bottom: 30px;
+            animation: pulse-glow 3s infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(99, 102, 241, 0.2); }
+            50% { box-shadow: 0 0 40px rgba(99, 102, 241, 0.4); }
+        }
+
+        .hero-badge span {
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50%, 100% { opacity: 1; }
+            25%, 75% { opacity: 0.3; }
+        }
+
+        .hero h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(3rem, 6vw, 5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 30px;
+            letter-spacing: -2px;
+        }
+
+        .hero h1 .gradient {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 50%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.4rem;
+            color: var(--gray);
+            margin-bottom: 20px;
+            max-width: 600px;
+            line-height: 1.8;
+        }
+
+        .hero-stat {
+            font-size: 1.1rem;
+            color: var(--accent);
+            font-weight: 600;
+            margin-bottom: 40px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 18px 40px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 30px rgba(99, 102, 241, 0.4);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 40px rgba(99, 102, 241, 0.5);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 18px 40px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Visual Element */
+        .hero-visual {
+            position: absolute;
+            right: -100px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 700px;
+            height: 700px;
+            opacity: 0.8;
+        }
+
+        .visual-rings {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .ring {
+            position: absolute;
+            border-radius: 50%;
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .ring-1 { width: 200px; height: 200px; animation: rotate 30s linear infinite; }
+        .ring-2 { width: 350px; height: 350px; animation: rotate 40s linear infinite reverse; }
+        .ring-3 { width: 500px; height: 500px; animation: rotate 50s linear infinite; }
+
+        @keyframes rotate {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .ring::before {
+            content: '';
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: var(--primary);
+            border-radius: 50%;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 0 20px var(--primary);
+        }
+
+        /* Crisis Section */
+        .crisis {
+            padding: 120px 0;
+            background: linear-gradient(180deg, transparent 0%, rgba(239, 68, 68, 0.05) 50%, transparent 100%);
+        }
+
+        .section-label {
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-size: 0.85rem;
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2.5rem, 4vw, 3.5rem);
+            font-weight: 700;
+            margin-bottom: 60px;
+            line-height: 1.2;
+        }
+
+        .crisis-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .crisis-stat {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(239, 68, 68, 0.05) 100%);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 24px;
+            padding: 40px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .crisis-stat:hover {
+            transform: translateY(-5px);
+        }
+
+        .crisis-stat-number {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 4rem;
+            font-weight: 700;
+            color: var(--danger);
+            line-height: 1;
+            margin-bottom: 15px;
+        }
+
+        .crisis-stat-label {
+            font-size: 1.1rem;
+            color: var(--gray);
+        }
+
+        .crisis-problems {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .problem-card {
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 35px;
+            transition: all 0.3s ease;
+        }
+
+        .problem-card:hover {
+            border-color: rgba(239, 68, 68, 0.3);
+            transform: translateY(-3px);
+        }
+
+        .problem-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+        }
+
+        .problem-card h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .problem-card p {
+            color: var(--gray);
+            font-size: 1rem;
+        }
+
+        /* Solution Section */
+        .solution {
+            padding: 120px 0;
+            position: relative;
+        }
+
+        .solution-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .solution-card {
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.8) 0%, rgba(30, 41, 59, 0.4) 100%);
+            border: 1px solid rgba(99, 102, 241, 0.1);
+            border-radius: 28px;
+            padding: 45px;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .solution-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .solution-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .solution-card:hover {
+            border-color: rgba(99, 102, 241, 0.3);
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .solution-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(14, 165, 233, 0.1));
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+        }
+
+        .solution-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .solution-card p {
+            color: var(--gray);
+            font-size: 1.05rem;
+            line-height: 1.8;
+        }
+
+        /* How It Works */
+        .how-it-works {
+            padding: 120px 0;
+            background: linear-gradient(180deg, transparent 0%, rgba(99, 102, 241, 0.03) 50%, transparent 100%);
+        }
+
+        .steps {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            position: relative;
+        }
+
+        .steps::before {
+            content: '';
+            position: absolute;
+            left: 40px;
+            top: 60px;
+            bottom: 60px;
+            width: 3px;
+            background: linear-gradient(180deg, var(--primary), var(--secondary), var(--success));
+            border-radius: 10px;
+        }
+
+        .step {
+            display: flex;
+            gap: 50px;
+            align-items: flex-start;
+            padding: 40px 0;
+        }
+
+        .step-number {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            flex-shrink: 0;
+            box-shadow: 0 10px 40px rgba(99, 102, 241, 0.4);
+            position: relative;
+            z-index: 2;
+        }
+
+        .step-content {
+            flex: 1;
+            padding-top: 15px;
+        }
+
+        .step-content h3 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .step-content p {
+            color: var(--gray);
+            font-size: 1.1rem;
+            line-height: 1.8;
+            max-width: 600px;
+        }
+
+        /* Market Section */
+        .market {
+            padding: 120px 0;
+        }
+
+        .market-visual {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: 60px;
+        }
+
+        .market-segment {
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            padding: 45px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .market-segment:hover {
+            border-color: var(--primary);
+            transform: scale(1.03);
+        }
+
+        .market-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .market-label {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .market-desc {
+            color: var(--gray);
+            font-size: 1rem;
+        }
+
+        /* Audiences Section */
+        .audiences {
+            padding: 120px 0;
+            background: linear-gradient(180deg, transparent 0%, rgba(14, 165, 233, 0.03) 50%, transparent 100%);
+        }
+
+        .audience-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .audience-card {
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 28px;
+            padding: 50px 40px;
+            text-align: center;
+            transition: all 0.4s ease;
+        }
+
+        .audience-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--secondary);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .audience-icon {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, rgba(14, 165, 233, 0.2), rgba(99, 102, 241, 0.1));
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            margin: 0 auto 30px;
+        }
+
+        .audience-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .audience-card p {
+            color: var(--gray);
+            font-size: 1.05rem;
+            margin-bottom: 30px;
+        }
+
+        .audience-features {
+            text-align: left;
+        }
+
+        .audience-features li {
+            color: var(--gray);
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .audience-features li:last-child {
+            border: none;
+        }
+
+        .audience-features .check {
+            color: var(--success);
+        }
+
+        /* Testimonial / Quote Section */
+        .vision {
+            padding: 120px 0;
+            text-align: center;
+        }
+
+        .vision-quote {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 600;
+            line-height: 1.4;
+            max-width: 900px;
+            margin: 0 auto 40px;
+            color: var(--white);
+        }
+
+        .vision-quote span {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .vision-attribution {
+            color: var(--gray);
+            font-size: 1.1rem;
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 120px 0;
+            text-align: center;
+            position: relative;
+        }
+
+        .cta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .cta h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            margin-bottom: 25px;
+        }
+
+        .cta-subtitle {
+            font-size: 1.3rem;
+            color: var(--gray);
+            margin-bottom: 50px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Footer */
+        footer {
+            padding: 60px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+        }
+
+        .footer-tagline {
+            color: var(--gray);
+            margin-bottom: 30px;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+
+        .footer-links a {
+            color: var(--gray);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--white);
+        }
+
+        .copyright {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero-visual {
+                display: none;
+            }
+
+            .market-visual,
+            .audience-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .steps::before {
+                left: 30px;
+            }
+
+            .step {
+                flex-direction: column;
+                gap: 25px;
+            }
+
+            .step-number {
+                width: 60px;
+                height: 60px;
+                font-size: 1.5rem;
+            }
+
+            .solution-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    <div class="grid-pattern"></div>
+    <div class="particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+
+    <nav>
+        <div class="container">
+            <div class="logo">
+                <div class="logo-icon">↗</div>
+                TransitionOS
+            </div>
+            <ul class="nav-links">
+                <li><a href="#problem">The Crisis</a></li>
+                <li><a href="#solution">Solution</a></li>
+                <li><a href="#how">How It Works</a></li>
+                <li><a href="#market">Market</a></li>
+            </ul>
+            <a href="#cta" class="nav-cta">Get Early Access</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <span>●</span> AI-Powered Career Intelligence
+                </div>
+                <h1>
+                    Navigate the<br>
+                    <span class="gradient">AI Revolution</span><br>
+                    With Confidence
+                </h1>
+                <p class="hero-subtitle">
+                    TransitionOS transforms workforce disruption into opportunity with personalized career pathways, real-time reskilling, and intelligent transition support.
+                </p>
+                <p class="hero-stat">
+                    ⚠️ 85 million jobs will be displaced by 2030. Are you ready?
+                </p>
+                <div class="hero-cta">
+                    <a href="#cta" class="btn-primary">
+                        Start Your Transition →
+                    </a>
+                    <a href="#solution" class="btn-secondary">
+                        See How It Works
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <div class="visual-rings">
+                <div class="ring ring-1"></div>
+                <div class="ring ring-2"></div>
+                <div class="ring ring-3"></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="crisis" id="problem">
+        <div class="container">
+            <p class="section-label">The Crisis</p>
+            <h2 class="section-title">The Workforce Apocalypse<br>No One's Prepared For</h2>
+            
+            <div class="crisis-stats">
+                <div class="crisis-stat">
+                    <div class="crisis-stat-number">85M</div>
+                    <div class="crisis-stat-label">Jobs displaced by AI by 2030</div>
+                </div>
+                <div class="crisis-stat">
+                    <div class="crisis-stat-number">50%</div>
+                    <div class="crisis-stat-label">Of workers need reskilling by 2027</div>
+                </div>
+                <div class="crisis-stat">
+                    <div class="crisis-stat-number">3-5x</div>
+                    <div class="crisis-stat-label">Career changes per lifetime</div>
+                </div>
+                <div class="crisis-stat">
+                    <div class="crisis-stat-number">18mo</div>
+                    <div class="crisis-stat-label">Average time for entire industries to vanish</div>
+                </div>
+            </div>
+
+            <div class="crisis-problems">
+                <div class="problem-card">
+                    <div class="problem-icon">🐢</div>
+                    <h3>Broken Infrastructure</h3>
+                    <p>Government programs take 2-3 years. Displacement happens in months. The gap is devastating.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">🔮</div>
+                    <h3>Zero Visibility</h3>
+                    <p>Workers can't see which skills will matter in 6 months. Traditional career advice is obsolete.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">😰</div>
+                    <h3>Paralysis & Anxiety</h3>
+                    <p>Career identity crisis, financial stress, and overwhelming uncertainty freeze people in place.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">🎓</div>
+                    <h3>Education Can't Keep Up</h3>
+                    <p>New roles require skills that didn't exist 3 years ago. Degrees become obsolete before graduation.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="solution" id="solution">
+        <div class="container">
+            <p class="section-label">The Solution</p>
+            <h2 class="section-title">Your AI-Powered<br>Career Navigation System</h2>
+
+            <div class="solution-grid">
+                <div class="solution-card">
+                    <div class="solution-icon">🧠</div>
+                    <h3>Personal Career Intelligence</h3>
+                    <p>AI analyzes your skills, experience, and strengths to simulate 10,000+ career paths with personalized probability scores for each trajectory.</p>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon">🛤️</div>
+                    <h3>Dynamic Reskilling Pathways</h3>
+                    <p>Custom learning journeys generated in real-time with just-in-time micro-credentials, time-to-competency projections, and 500+ platform integrations.</p>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon">📊</div>
+                    <h3>Labor Market Intelligence</h3>
+                    <p>Real-time tracking of emerging vs. declining roles, geographic opportunity mapping, and "time-to-automation" scores for any position.</p>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon">🤝</div>
+                    <h3>24/7 AI Career Coach</h3>
+                    <p>SAGE (Strategic Autonomous Guidance Engine) provides emotional support, actionable advice, and personalized intervention throughout your transition.</p>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon">💰</div>
+                    <h3>Financial Runway Planning</h3>
+                    <p>Model different transition scenarios with financial projections, bridge income options, and optimization strategies for your circumstances.</p>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon">👥</div>
+                    <h3>Transition Community</h3>
+                    <p>Connect with workers navigating similar transitions, share experiences, and access peer support from those who've successfully pivoted.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="how-it-works" id="how">
+        <div class="container">
+            <p class="section-label">How It Works</p>
+            <h2 class="section-title">From Uncertainty to Opportunity<br>in Four Steps</h2>
+
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Skills Discovery & Mapping</h3>
+                        <p>Our AI analyzes your complete professional history, identifying both obvious and hidden transferable skills. We map your capabilities against our dynamic skills graph of 50,000+ competencies.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Path Simulation & Selection</h3>
+                        <p>Monte Carlo simulations model thousands of career trajectories personalized to your situation. You see probability-weighted paths with time, financial, and fulfillment projections for each.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Personalized Reskilling Journey</h3>
+                        <p>We generate your custom learning pathway with micro-credentials, courses, and practical projects. Just-in-time content adapts as you progress and the market evolves.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>Transition & Landing</h3>
+                        <p>Intelligent job matching, interview preparation, and offer negotiation support guide you to successful placement. Continuous coaching ensures you thrive in your new role.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="market" id="market">
+        <div class="container">
+            <p class="section-label">Market Opportunity</p>
+            <h2 class="section-title">A $250B+ Market<br>Desperately Needing Intelligence</h2>
+
+            <div class="market-visual">
+                <div class="market-segment">
+                    <div class="market-value">$80B</div>
+                    <div class="market-label">Enterprise Reskilling</div>
+                    <div class="market-desc">Companies transforming workforces for AI</div>
+                </div>
+                <div class="market-segment">
+                    <div class="market-value">$100B</div>
+                    <div class="market-label">Government Programs</div>
+                    <div class="market-desc">Workforce development & unemployment</div>
+                </div>
+                <div class="market-segment">
+                    <div class="market-value">$50B</div>
+                    <div class="market-label">Consumer Career</div>
+                    <div class="market-desc">Coaching, learning, and career services</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="audiences">
+        <div class="container">
+            <p class="section-label">Who We Serve</p>
+            <h2 class="section-title">Intelligent Transitions for Everyone</h2>
+
+            <div class="audience-grid">
+                <div class="audience-card">
+                    <div class="audience-icon">👤</div>
+                    <h3>Individual Workers</h3>
+                    <p>Navigate career uncertainty with AI-powered guidance and personalized reskilling</p>
+                    <ul class="audience-features">
+                        <li><span class="check">✓</span> Personal career intelligence</li>
+                        <li><span class="check">✓</span> Custom learning pathways</li>
+                        <li><span class="check">✓</span> 24/7 AI career coach</li>
+                        <li><span class="check">✓</span> Financial planning tools</li>
+                    </ul>
+                </div>
+                <div class="audience-card">
+                    <div class="audience-icon">🏢</div>
+                    <h3>Enterprises</h3>
+                    <p>Transform your workforce proactively with intelligent reskilling at scale</p>
+                    <ul class="audience-features">
+                        <li><span class="check">✓</span> Displacement forecasting</li>
+                        <li><span class="check">✓</span> Internal mobility optimization</li>
+                        <li><span class="check">✓</span> Reskilling ROI analytics</li>
+                        <li><span class="check">✓</span> Compliance automation</li>
+                    </ul>
+                </div>
+                <div class="audience-card">
+                    <div class="audience-icon">🏛️</div>
+                    <h3>Governments</h3>
+                    <p>Modernize workforce programs with real-time intelligence and policy optimization</p>
+                    <ul class="audience-features">
+                        <li><span class="check">✓</span> Program effectiveness metrics</li>
+                        <li><span class="check">✓</span> Intervention timing models</li>
+                        <li><span class="check">✓</span> Cross-jurisdiction insights</li>
+                        <li><span class="check">✓</span> Policy recommendation engine</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="vision">
+        <div class="container">
+            <p class="vision-quote">
+                "In a world where AI reshapes work overnight, <span>no one should face the revolution alone</span>. TransitionOS ensures every displaced worker has a clear path to their next chapter."
+            </p>
+            <p class="vision-attribution">— The TransitionOS Vision</p>
+        </div>
+    </section>
+
+    <section class="cta" id="cta">
+        <div class="container">
+            <h2>Ready to Navigate<br>Your Future?</h2>
+            <p class="cta-subtitle">
+                Join thousands of forward-thinking workers, enterprises, and governments preparing for the AI-transformed workforce.
+            </p>
+            <div class="cta-buttons">
+                <a href="mailto:invest@transitionos.ai" class="btn-primary">
+                    Request Early Access →
+                </a>
+                <a href="mailto:invest@transitionos.ai" class="btn-secondary">
+                    Partner With Us
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-logo">TransitionOS</div>
+            <p class="footer-tagline">The AI Operating System for Workforce Transition</p>
+            <div class="footer-links">
+                <a href="#problem">The Crisis</a>
+                <a href="#solution">Solution</a>
+                <a href="#how">How It Works</a>
+                <a href="#market">Market</a>
+                <a href="#cta">Contact</a>
+            </div>
+            <p class="copyright">© 2026 TransitionOS. Turning disruption into opportunity.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scroll for nav links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Animate stats on scroll
+        const observerOptions = {
+            threshold: 0.5
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.crisis-stat, .solution-card, .market-segment, .audience-card').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'all 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
