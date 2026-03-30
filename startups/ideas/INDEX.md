@@ -176,6 +176,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-03-29 | Morning | CredentialOS — Universal Trust Infrastructure for Human-AI Capability Verification | [Playbook](2026-03-29-morning.md) • [Landing](2026-03-29-morning-landing.html) • [PDF](2026-03-29-morning.pdf) |
 | 2026-03-29 | Afternoon | RepairOS — The AI Operating System for the Right to Repair Economy | [Playbook](2026-03-29-afternoon.md) • [Landing](2026-03-29-afternoon-landing.html) • [PDF](2026-03-29-afternoon.pdf) |
 | 2026-03-30 | Evening | TransitionOS — The AI Operating System for Workforce Transition & Career Reinvention | [Playbook](2026-03-30-evening.md) • [Landing](2026-03-30-evening-landing.html) • [PDF](2026-03-30-evening.pdf) |
+| 2026-03-30 | Morning | JourneyMind AI — The AI Operating System for Multimodal Travel Intelligence | [Playbook](2026-03-30-morning.md) • [Landing](2026-03-30-morning-landing.html) • [PDF](2026-03-30-morning.pdf) |
 <!-- New entries will be added above this line -->
 
 ---

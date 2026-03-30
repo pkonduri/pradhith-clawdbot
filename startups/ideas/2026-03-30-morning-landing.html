@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JourneyMind AI — The AI Operating System for Multimodal Travel</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0066FF;
+            --primary-dark: #0052CC;
+            --secondary: #00D4AA;
+            --accent: #FF6B35;
+            --dark: #0A0F1C;
+            --darker: #060912;
+            --light: #F8FAFC;
+            --gray: #64748B;
+            --gradient-1: linear-gradient(135deg, #0066FF 0%, #00D4AA 50%, #00FF88 100%);
+            --gradient-2: linear-gradient(135deg, #0A0F1C 0%, #1A1F3C 100%);
+            --gradient-3: linear-gradient(180deg, rgba(0,102,255,0.1) 0%, rgba(0,212,170,0.1) 100%);
+            --glow: 0 0 60px rgba(0,102,255,0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--darker);
+            color: var(--light);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(ellipse at center, rgba(0,102,255,0.08) 0%, transparent 50%),
+                        radial-gradient(ellipse at 80% 20%, rgba(0,212,170,0.06) 0%, transparent 40%),
+                        radial-gradient(ellipse at 20% 80%, rgba(255,107,53,0.04) 0%, transparent 40%);
+            animation: bgPulse 20s ease-in-out infinite;
+        }
+
+        @keyframes bgPulse {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(5deg) scale(1.1); }
+        }
+
+        /* Grid Lines */
+        .grid-lines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-image: 
+                linear-gradient(rgba(0,102,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,102,255,0.03) 1px, transparent 1px);
+            background-size: 80px 80px;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1.5rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(6,9,18,0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            -webkit-text-fill-color: white;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--gray);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--light);
+        }
+
+        .nav-cta {
+            background: var(--gradient-1);
+            color: white;
+            padding: 0.75rem 1.75rem;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--glow);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 8rem 2rem 4rem;
+            position: relative;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1.25rem;
+            background: rgba(0,102,255,0.1);
+            border: 1px solid rgba(0,102,255,0.3);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--primary);
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .hero-badge::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--secondary);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        .hero h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 800;
+            line-height: 1.05;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.8s ease-out 0.1s both;
+        }
+
+        .hero h1 span {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-sub {
+            font-size: clamp(1.1rem, 2vw, 1.4rem);
+            color: var(--gray);
+            max-width: 700px;
+            margin-bottom: 2.5rem;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        .hero-ctas {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            animation: fadeInUp 0.8s ease-out 0.3s both;
+        }
+
+        .btn-primary {
+            background: var(--gradient-1);
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--glow);
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.05);
+            color: var(--light);
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-decoration: none;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.2);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Live Stats Ticker */
+        .stats-ticker {
+            margin-top: 4rem;
+            display: flex;
+            gap: 3rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            animation: fadeInUp 0.8s ease-out 0.4s both;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--gray);
+            margin-top: 0.25rem;
+        }
+
+        /* Crisis Alert Section */
+        .crisis-section {
+            padding: 6rem 2rem;
+            background: linear-gradient(180deg, transparent 0%, rgba(255,107,53,0.05) 50%, transparent 100%);
+        }
+
+        .crisis-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-tag {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(255,107,53,0.1);
+            border: 1px solid rgba(255,107,53,0.3);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .section-desc {
+            color: var(--gray);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .crisis-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .crisis-card {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,107,53,0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: transform 0.3s, border-color 0.3s;
+        }
+
+        .crisis-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255,107,53,0.4);
+        }
+
+        .crisis-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .crisis-card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .crisis-card p {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        /* Solution Section */
+        .solution-section {
+            padding: 8rem 2rem;
+        }
+
+        .solution-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .solution-tag {
+            background: rgba(0,212,170,0.1);
+            border-color: rgba(0,212,170,0.3);
+            color: var(--secondary);
+        }
+
+        .solution-visual {
+            margin-top: 4rem;
+            background: var(--gradient-2);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 30px;
+            padding: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .solution-visual::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--gradient-1);
+        }
+
+        .journey-demo {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .journey-node {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .journey-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(0,102,255,0.1);
+            border: 2px solid rgba(0,102,255,0.3);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            transition: all 0.3s;
+        }
+
+        .journey-icon.active {
+            background: var(--gradient-1);
+            border-color: transparent;
+            box-shadow: var(--glow);
+        }
+
+        .journey-label {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .journey-connector {
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            position: relative;
+        }
+
+        .journey-connector::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-left: 8px solid var(--secondary);
+            border-top: 5px solid transparent;
+            border-bottom: 5px solid transparent;
+        }
+
+        /* Features Section */
+        .features-section {
+            padding: 6rem 2rem;
+            background: var(--gradient-3);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 4rem auto 0;
+        }
+
+        .feature-card {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 24px;
+            padding: 2.5rem;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-1);
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover {
+            border-color: rgba(0,102,255,0.3);
+            transform: translateY(-5px);
+        }
+
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(0,102,255,0.1);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.35rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .feature-card p {
+            color: var(--gray);
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        /* Market Section */
+        .market-section {
+            padding: 8rem 2rem;
+        }
+
+        .market-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .market-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+
+        .market-card {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 20px;
+            transition: all 0.3s;
+        }
+
+        .market-card:hover {
+            border-color: rgba(0,102,255,0.3);
+            transform: scale(1.05);
+        }
+
+        .market-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .market-label {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        /* Comparison Section */
+        .comparison-section {
+            padding: 6rem 2rem;
+            background: linear-gradient(180deg, transparent 0%, rgba(0,102,255,0.03) 100%);
+        }
+
+        .comparison-table {
+            max-width: 1000px;
+            margin: 4rem auto 0;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 24px;
+            overflow: hidden;
+        }
+
+        .comparison-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            padding: 1.25rem 2rem;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            align-items: center;
+        }
+
+        .comparison-row:last-child {
+            border-bottom: none;
+        }
+
+        .comparison-header {
+            background: rgba(0,102,255,0.1);
+            font-weight: 600;
+        }
+
+        .comparison-row span:nth-child(2),
+        .comparison-row span:nth-child(3) {
+            text-align: center;
+        }
+
+        .check {
+            color: var(--secondary);
+            font-size: 1.25rem;
+        }
+
+        .cross {
+            color: var(--accent);
+            font-size: 1.25rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 8rem 2rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(0,102,255,0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .cta-content {
+            position: relative;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .cta-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-title span {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .cta-desc {
+            color: var(--gray);
+            font-size: 1.2rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .cta-form {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cta-input {
+            padding: 1rem 1.5rem;
+            font-size: 1rem;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 50px;
+            background: rgba(255,255,255,0.05);
+            color: var(--light);
+            width: 300px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .cta-input:focus {
+            border-color: var(--primary);
+        }
+
+        .cta-input::placeholder {
+            color: var(--gray);
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 2rem;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--gray);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--light);
+        }
+
+        .footer-copy {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem 1.5rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero {
+                padding: 6rem 1.5rem 3rem;
+            }
+
+            .stats-ticker {
+                gap: 1.5rem;
+            }
+
+            .stat-value {
+                font-size: 2rem;
+            }
+
+            .journey-connector {
+                display: none;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .comparison-row {
+                grid-template-columns: 1.5fr 1fr 1fr;
+                padding: 1rem;
+                font-size: 0.9rem;
+            }
+
+            .cta-form {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .cta-input {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    <div class="grid-lines"></div>
+
+    <nav>
+        <div class="logo">
+            <div class="logo-icon">🚄</div>
+            JourneyMind
+        </div>
+        <ul class="nav-links">
+            <li><a href="#problem">The Problem</a></li>
+            <li><a href="#solution">Solution</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#market">Market</a></li>
+        </ul>
+        <a href="#cta" class="nav-cta">Get Early Access</a>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-badge">
+            <span></span>
+            Launching Q3 2026 — NEC First
+        </div>
+        <h1>Travel is broken.<br><span>JourneyMind</span> fixes it.</h1>
+        <p class="hero-sub">The first AI operating system that sees across all transportation modes, predicts chaos before it happens, and gets you where you need to be.</p>
+        <div class="hero-ctas">
+            <a href="#cta" class="btn-primary">
+                Join the Waitlist
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <a href="#solution" class="btn-secondary">See How It Works</a>
+        </div>
+        <div class="stats-ticker">
+            <div class="stat-item">
+                <div class="stat-value">$60B</div>
+                <div class="stat-label">Lost to travel disruptions annually</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">34%</div>
+                <div class="stat-label">Rail ridership surge YoY</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">4-6hrs</div>
+                <div class="stat-label">Earlier disruption prediction</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="crisis-section" id="problem">
+        <div class="crisis-container">
+            <div class="section-header">
+                <span class="section-tag">🚨 The Crisis</span>
+                <h2 class="section-title">Airports Are Collapsing</h2>
+                <p class="section-desc">This isn't a blip. It's a structural failure. And travelers are discovering that alternatives exist.</p>
+            </div>
+            <div class="crisis-grid">
+                <div class="crisis-card">
+                    <div class="crisis-icon">⏰</div>
+                    <h3>3-Hour Security Lines</h3>
+                    <p>TSA staffing shortages have turned airport security into a lottery. Your 6am flight? Better arrive at midnight.</p>
+                </div>
+                <div class="crisis-card">
+                    <div class="crisis-icon">🌪️</div>
+                    <h3>Cascade Failures</h3>
+                    <p>One weather delay in Chicago ripples across the entire national network. No system reroutes you proactively.</p>
+                </div>
+                <div class="crisis-card">
+                    <div class="crisis-icon">🔌</div>
+                    <h3>Modal Silos</h3>
+                    <p>Airlines don't talk to Amtrak. Amtrak doesn't integrate with transit. You're on your own to coordinate.</p>
+                </div>
+                <div class="crisis-card">
+                    <div class="crisis-icon">📱</div>
+                    <h3>6 Apps, Zero Answers</h3>
+                    <p>Check flight status here, train times there, hope your Uber shows up. In 2026, this is insane.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="solution-section" id="solution">
+        <div class="solution-container">
+            <div class="section-header">
+                <span class="section-tag solution-tag">✨ The Solution</span>
+                <h2 class="section-title">One Platform. Every Mode.<br>Zero Chaos.</h2>
+                <p class="section-desc">JourneyMind AI sees across flights, trains, buses, and rideshare—predicting problems and routing you around them.</p>
+            </div>
+            <div class="solution-visual">
+                <div class="journey-demo">
+                    <div class="journey-node">
+                        <div class="journey-icon">🏠</div>
+                        <span class="journey-label">Home</span>
+                    </div>
+                    <div class="journey-connector"></div>
+                    <div class="journey-node">
+                        <div class="journey-icon">🚗</div>
+                        <span class="journey-label">Rideshare</span>
+                    </div>
+                    <div class="journey-connector"></div>
+                    <div class="journey-node">
+                        <div class="journey-icon active">🚄</div>
+                        <span class="journey-label">Train (AI Pick)</span>
+                    </div>
+                    <div class="journey-connector"></div>
+                    <div class="journey-node">
+                        <div class="journey-icon">🚇</div>
+                        <span class="journey-label">Transit</span>
+                    </div>
+                    <div class="journey-connector"></div>
+                    <div class="journey-node">
+                        <div class="journey-icon">🏢</div>
+                        <span class="journey-label">Meeting</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features-section" id="features">
+        <div class="section-header">
+            <span class="section-tag solution-tag">🛠 Capabilities</span>
+            <h2 class="section-title">Intelligent Travel, Finally</h2>
+            <p class="section-desc">Powered by real-time data from 500+ feeds and ML models that predict chaos hours before it hits.</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🔮</div>
+                <h3>Chaos-Aware Routing</h3>
+                <p>We predict delays 4-6 hours before they happen. When your flight looks risky, we've already found you the train that gets you there faster.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎫</div>
+                <h3>Unified Booking</h3>
+                <p>Flight + train + rideshare in one checkout. No more juggling apps, copying confirmation codes, or praying connections work.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🌱</div>
+                <h3>Carbon Intelligence</h3>
+                <p>"This train saves 340kg CO2 vs. flying—and costs $47 less." Make sustainable choices without sacrifice.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>Predictive Rebooking</h3>
+                <p>AI holds backup reservations automatically. When disaster strikes, one tap switches you to the safe route.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🏢</div>
+                <h3>Enterprise Command Center</h3>
+                <p>Real-time visibility into all employee travel. Duty of care during disruptions. Policy enforcement with AI flexibility.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🤖</div>
+                <h3>AI Travel Agent</h3>
+                <p>"Get me to the NYC office by 2pm, minimize carbon, keep me under budget." Natural language, instant itineraries.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="market-section" id="market">
+        <div class="market-container">
+            <div class="section-header">
+                <span class="section-tag">📊 Market</span>
+                <h2 class="section-title">A $1T+ Market in Disruption</h2>
+                <p class="section-desc">Travel infrastructure is failing. The companies that provide alternatives will capture massive value.</p>
+            </div>
+            <div class="market-grid">
+                <div class="market-card">
+                    <div class="market-value">$11.1T</div>
+                    <div class="market-label">Global Travel & Tourism</div>
+                </div>
+                <div class="market-card">
+                    <div class="market-value">$1.4T</div>
+                    <div class="market-label">Corporate Travel</div>
+                </div>
+                <div class="market-card">
+                    <div class="market-value">$52B</div>
+                    <div class="market-label">Multimodal Software (2031)</div>
+                </div>
+                <div class="market-card">
+                    <div class="market-value">$60B</div>
+                    <div class="market-label">Disruption Costs/Year</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="comparison-section">
+        <div class="section-header">
+            <span class="section-tag solution-tag">⚔️ Comparison</span>
+            <h2 class="section-title">Why JourneyMind Wins</h2>
+        </div>
+        <div class="comparison-table">
+            <div class="comparison-row comparison-header">
+                <span>Capability</span>
+                <span>Others</span>
+                <span>JourneyMind</span>
+            </div>
+            <div class="comparison-row">
+                <span>True multimodal (all modes)</span>
+                <span class="cross">✗</span>
+                <span class="check">✓</span>
+            </div>
+            <div class="comparison-row">
+                <span>Unified booking & checkout</span>
+                <span class="cross">✗</span>
+                <span class="check">✓</span>
+            </div>
+            <div class="comparison-row">
+                <span>Predictive disruption alerts</span>
+                <span class="cross">✗</span>
+                <span class="check">✓</span>
+            </div>
+            <div class="comparison-row">
+                <span>Automatic rebooking</span>
+                <span class="cross">✗</span>
+                <span class="check">✓</span>
+            </div>
+            <div class="comparison-row">
+                <span>Real-time carbon comparison</span>
+                <span class="cross">✗</span>
+                <span class="check">✓</span>
+            </div>
+            <div class="comparison-row">
+                <span>Enterprise duty of care</span>
+                <span class="cross">✗</span>
+                <span class="check">✓</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section" id="cta">
+        <div class="cta-content">
+            <h2 class="cta-title">Be First to <span>Travel Smarter</span></h2>
+            <p class="cta-desc">Join the waitlist for early access. Launching on the Northeast Corridor Q3 2026.</p>
+            <form class="cta-form" onsubmit="event.preventDefault(); alert('Thanks! You\'re on the list.');">
+                <input type="email" class="cta-input" placeholder="Enter your email" required>
+                <button type="submit" class="btn-primary">Get Early Access</button>
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">JourneyMind AI</div>
+            <div class="footer-links">
+                <a href="#">About</a>
+                <a href="#">Careers</a>
+                <a href="#">Press</a>
+                <a href="#">Contact</a>
+                <a href="#">Privacy</a>
+                <a href="#">Terms</a>
+            </div>
+            <p class="footer-copy">© 2026 JourneyMind AI. The future of human movement.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth reveal on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.crisis-card, .feature-card, .market-card').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'all 0.6s ease-out';
+            observer.observe(el);
+        });
+
+        // Nav background on scroll
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 50) {
+                nav.style.background = 'rgba(6,9,18,0.95)';
+            } else {
+                nav.style.background = 'rgba(6,9,18,0.8)';
+            }
+        });
+    </script>
+</body>
+</html>
