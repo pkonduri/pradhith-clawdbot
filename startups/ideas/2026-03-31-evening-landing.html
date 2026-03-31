@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TariffMind AI — Turn Trade Chaos Into Competitive Advantage</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --navy: #0a1628;
+            --navy-light: #132440;
+            --blue: #3b82f6;
+            --blue-light: #60a5fa;
+            --gold: #f59e0b;
+            --gold-light: #fbbf24;
+            --emerald: #10b981;
+            --slate: #64748b;
+            --white: #ffffff;
+            --gradient-1: linear-gradient(135deg, #0a1628 0%, #1e3a5f 50%, #0a1628 100%);
+            --gradient-glow: linear-gradient(135deg, #3b82f6 0%, #10b981 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--navy);
+            color: var(--white);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .trade-line {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.4), transparent);
+            animation: tradeLine 8s linear infinite;
+        }
+
+        .trade-line:nth-child(1) { top: 15%; animation-delay: 0s; width: 40%; left: -40%; }
+        .trade-line:nth-child(2) { top: 35%; animation-delay: 2s; width: 60%; left: -60%; }
+        .trade-line:nth-child(3) { top: 55%; animation-delay: 4s; width: 35%; left: -35%; }
+        .trade-line:nth-child(4) { top: 75%; animation-delay: 6s; width: 55%; left: -55%; }
+        .trade-line:nth-child(5) { top: 90%; animation-delay: 1s; width: 45%; left: -45%; }
+
+        @keyframes tradeLine {
+            0% { transform: translateX(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateX(250vw); opacity: 0; }
+        }
+
+        .globe-grid {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 800px;
+            height: 800px;
+            border-radius: 50%;
+            border: 1px solid rgba(59, 130, 246, 0.1);
+            animation: spin 60s linear infinite;
+        }
+
+        .globe-grid::before, .globe-grid::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            border: 1px solid rgba(59, 130, 246, 0.08);
+        }
+
+        .globe-grid::before {
+            top: 10%; left: 10%; right: 10%; bottom: 10%;
+        }
+
+        .globe-grid::after {
+            top: 20%; left: 20%; right: 20%; bottom: 20%;
+        }
+
+        @keyframes spin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1.5rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10, 22, 40, 0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--white);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-glow);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .nav-cta {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.875rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--white);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--blue);
+            color: var(--blue);
+        }
+
+        .btn-primary {
+            background: var(--gradient-glow);
+            color: var(--white);
+            box-shadow: 0 4px 20px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(59, 130, 246, 0.5);
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 2rem 4rem;
+            text-align: center;
+        }
+
+        .hero-content {
+            max-width: 1000px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1.25rem;
+            background: rgba(59, 130, 246, 0.15);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 100px;
+            font-size: 0.875rem;
+            color: var(--blue-light);
+            margin-bottom: 2rem;
+        }
+
+        .badge-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--emerald);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.8); }
+        }
+
+        h1 {
+            font-size: clamp(3rem, 7vw, 5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 50%, #94a3b8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .highlight {
+            background: var(--gradient-glow);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: var(--slate);
+            margin-bottom: 3rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-ctas {
+            display: flex;
+            justify-content: center;
+            gap: 1.25rem;
+            flex-wrap: wrap;
+            margin-bottom: 4rem;
+        }
+
+        .btn-large {
+            padding: 1.125rem 2.5rem;
+            font-size: 1.1rem;
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 4rem;
+            flex-wrap: wrap;
+            padding: 2rem 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 2rem;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--gold);
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--slate);
+            margin-top: 0.25rem;
+        }
+
+        /* Problem Section */
+        .section {
+            position: relative;
+            z-index: 1;
+            padding: 6rem 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(245, 158, 11, 0.15);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 100px;
+            font-size: 0.8rem;
+            color: var(--gold);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .section-subtitle {
+            font-size: 1.25rem;
+            color: var(--slate);
+            max-width: 700px;
+            margin-bottom: 3rem;
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .problem-card {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(185, 28, 28, 0.05) 100%);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(239, 68, 68, 0.4);
+        }
+
+        .problem-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.2) 0%, rgba(185, 28, 28, 0.1) 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .problem-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            color: #fca5a5;
+        }
+
+        .problem-card p {
+            color: var(--slate);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Cost Callout */
+        .cost-callout {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(217, 119, 6, 0.1) 100%);
+            border: 2px solid rgba(245, 158, 11, 0.3);
+            border-radius: 20px;
+            padding: 3rem;
+            text-align: center;
+            margin-top: 3rem;
+        }
+
+        .cost-callout h3 {
+            font-size: 2rem;
+            color: var(--gold);
+            margin-bottom: 0.5rem;
+        }
+
+        .cost-amount {
+            font-size: 4rem;
+            font-weight: 900;
+            color: var(--gold-light);
+            display: block;
+            margin: 1rem 0;
+        }
+
+        /* Solution Section */
+        .solution-section {
+            background: linear-gradient(180deg, rgba(59, 130, 246, 0.05) 0%, transparent 100%);
+        }
+
+        .capabilities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .capability-card {
+            background: linear-gradient(135deg, var(--navy-light) 0%, rgba(30, 58, 95, 0.5) 100%);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .capability-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--blue);
+            box-shadow: 0 20px 40px rgba(59, 130, 246, 0.15);
+        }
+
+        .capability-number {
+            width: 48px;
+            height: 48px;
+            background: var(--gradient-glow);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+        }
+
+        .capability-card h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--white);
+        }
+
+        .capability-card p {
+            color: var(--slate);
+            margin-bottom: 1.25rem;
+            font-size: 1rem;
+        }
+
+        .capability-features {
+            list-style: none;
+        }
+
+        .capability-features li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 0;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+        }
+
+        .capability-features li::before {
+            content: '✓';
+            color: var(--emerald);
+            font-weight: bold;
+        }
+
+        /* How It Works */
+        .how-section {
+            background: var(--navy-light);
+        }
+
+        .flow-container {
+            display: flex;
+            justify-content: center;
+            align-items: stretch;
+            gap: 0;
+            margin-top: 4rem;
+            flex-wrap: wrap;
+        }
+
+        .flow-step {
+            flex: 1;
+            min-width: 250px;
+            max-width: 320px;
+            text-align: center;
+            padding: 2.5rem 2rem;
+            position: relative;
+        }
+
+        .flow-step:not(:last-child)::after {
+            content: '→';
+            position: absolute;
+            right: -15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2rem;
+            color: var(--blue);
+        }
+
+        .flow-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--gradient-glow);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin: 0 auto 1.5rem;
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
+        }
+
+        .flow-step h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .flow-step p {
+            color: var(--slate);
+            font-size: 0.95rem;
+        }
+
+        /* ROI Section */
+        .roi-section {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(5, 150, 105, 0.05) 100%);
+        }
+
+        .roi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .roi-card {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .roi-card:hover {
+            transform: scale(1.05);
+            border-color: var(--emerald);
+        }
+
+        .roi-value {
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--emerald);
+            display: block;
+        }
+
+        .roi-label {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Testimonials */
+        .testimonial-section {
+            text-align: center;
+        }
+
+        .testimonial-card {
+            background: var(--navy-light);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 3rem;
+            max-width: 800px;
+            margin: 3rem auto;
+        }
+
+        .quote-mark {
+            font-size: 4rem;
+            color: var(--blue);
+            line-height: 1;
+            margin-bottom: 1rem;
+        }
+
+        .testimonial-text {
+            font-size: 1.4rem;
+            font-style: italic;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 2rem;
+            line-height: 1.7;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .author-avatar {
+            width: 56px;
+            height: 56px;
+            background: var(--gradient-glow);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .author-info h4 {
+            font-weight: 600;
+            color: var(--white);
+        }
+
+        .author-info p {
+            color: var(--slate);
+            font-size: 0.9rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            text-align: center;
+            padding: 8rem 2rem;
+            background: linear-gradient(180deg, transparent 0%, rgba(59, 130, 246, 0.1) 100%);
+        }
+
+        .cta-section h2 {
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-section p {
+            font-size: 1.25rem;
+            color: var(--slate);
+            max-width: 600px;
+            margin: 0 auto 3rem;
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--slate);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--white);
+        }
+
+        .copyright {
+            color: var(--slate);
+            font-size: 0.875rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem 1.5rem;
+            }
+
+            .nav-cta {
+                display: none;
+            }
+
+            .stats-bar {
+                gap: 2rem;
+            }
+
+            .flow-step:not(:last-child)::after {
+                display: none;
+            }
+
+            .capabilities-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Animation -->
+    <div class="bg-animation">
+        <div class="trade-line"></div>
+        <div class="trade-line"></div>
+        <div class="trade-line"></div>
+        <div class="trade-line"></div>
+        <div class="trade-line"></div>
+        <div class="globe-grid"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <a href="#" class="logo">
+            <span class="logo-icon">🌐</span>
+            TariffMind AI
+        </a>
+        <div class="nav-cta">
+            <a href="#demo" class="btn btn-outline">Request Demo</a>
+            <a href="#start" class="btn btn-primary">Get Started</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="badge">
+                <span class="badge-dot"></span>
+                Global Trade Intelligence Platform
+            </div>
+            <h1>Turn Trade Chaos Into <span class="highlight">Competitive Advantage</span></h1>
+            <p class="subtitle">The AI operating system that navigates tariffs, optimizes duties, and transforms global trade complexity into strategic opportunity—autonomously.</p>
+            <div class="hero-ctas">
+                <a href="#demo" class="btn btn-primary btn-large">Calculate Your Savings →</a>
+                <a href="#learn" class="btn btn-outline btn-large">See How It Works</a>
+            </div>
+            <div class="stats-bar">
+                <div class="stat">
+                    <span class="stat-value">$847B</span>
+                    <span class="stat-label">U.S. tariffs paid (5 years)</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value">15,000+</span>
+                    <span class="stat-label">Tariff codes to navigate</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value">99.4%</span>
+                    <span class="stat-label">Classification accuracy</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value">37%</span>
+                    <span class="stat-label">Avg. duty savings found</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="section">
+        <div class="container">
+            <span class="section-badge">⚠️ The Crisis</span>
+            <h2>Global Trade Has Become <span class="highlight">Impossible</span></h2>
+            <p class="section-subtitle">Trade wars, regulatory whiplash, and fracturing supply chains have created unprecedented complexity. Most companies are flying blind.</p>
+            
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="problem-icon">📊</div>
+                    <h3>Tariff Chaos</h3>
+                    <p>15,000+ tariff codes across 200+ countries. Rates changing monthly with geopolitical shifts. Average enterprise loses $2.3M annually to misclassification.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">🔍</div>
+                    <h3>Rules of Origin Nightmare</h3>
+                    <p>Complex calculations, conflicting FTA requirements, one wrong component voids preferential treatment. Manual tracking is impossible.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">🔗</div>
+                    <h3>Hidden Supply Chain Costs</h3>
+                    <p>Tariffs buried in supplier pricing. Multi-tier blind spots. Restructuring decisions made with incomplete data. The true cost is invisible.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">⚡</div>
+                    <h3>Regulatory Whiplash</h3>
+                    <p>New trade regulations weekly. Section 301, 232, anti-dumping duties constantly shifting. Export controls expanding. Impossible to keep up.</p>
+                </div>
+            </div>
+
+            <div class="cost-callout">
+                <h3>The Question Every CFO Asks</h3>
+                <span class="cost-amount">How much is avoidable?</span>
+                <p style="color: var(--slate); max-width: 600px; margin: 0 auto;">Your competitors who figure this out first gain permanent cost advantages. Those who don't get left behind.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="section solution-section" id="learn">
+        <div class="container">
+            <span class="section-badge">💡 The Solution</span>
+            <h2>Autonomous Trade Intelligence</h2>
+            <p class="section-subtitle">TariffMind AI sees all global trade complexity and turns it into actionable strategy—automatically. No manual research. No guesswork. Just results.</p>
+
+            <div class="capabilities-grid">
+                <div class="capability-card">
+                    <div class="capability-number">1</div>
+                    <h3>Intelligent Classification</h3>
+                    <p>AI-powered HS code determination with 99.4% accuracy—vs. 72% industry average.</p>
+                    <ul class="capability-features">
+                        <li>Multi-jurisdiction alignment</li>
+                        <li>Automatic ruling preparation</li>
+                        <li>Continuous optimization</li>
+                    </ul>
+                </div>
+                <div class="capability-card">
+                    <div class="capability-number">2</div>
+                    <h3>Duty Minimization Engine</h3>
+                    <p>Find every dollar of savings hiding in your trade operations.</p>
+                    <ul class="capability-features">
+                        <li>FTA utilization optimization</li>
+                        <li>Foreign trade zone analysis</li>
+                        <li>Drawback automation</li>
+                    </ul>
+                </div>
+                <div class="capability-card">
+                    <div class="capability-number">3</div>
+                    <h3>Supply Chain Mapping</h3>
+                    <p>Complete visibility into tariff exposure across all supply chain tiers.</p>
+                    <ul class="capability-features">
+                        <li>Scenario modeling</li>
+                        <li>Origin compliance</li>
+                        <li>Component tracking</li>
+                    </ul>
+                </div>
+                <div class="capability-card">
+                    <div class="capability-number">4</div>
+                    <h3>Trade War Intelligence</h3>
+                    <p>Predictive modeling and early warnings for regulatory changes.</p>
+                    <ul class="capability-features">
+                        <li>Geopolitical risk scoring</li>
+                        <li>Alternative sourcing</li>
+                        <li>Strategic planning</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="section how-section">
+        <div class="container">
+            <span class="section-badge">⚙️ How It Works</span>
+            <h2 style="text-align: center;">From Chaos to Clarity in Three Steps</h2>
+
+            <div class="flow-container">
+                <div class="flow-step">
+                    <div class="flow-icon">📥</div>
+                    <h3>Connect Your Data</h3>
+                    <p>Integrate with your ERP, TMS, and existing systems. We ingest your trade data automatically.</p>
+                </div>
+                <div class="flow-step">
+                    <div class="flow-icon">🧠</div>
+                    <h3>AI Analysis</h3>
+                    <p>Our models analyze your products, suppliers, and trade flows against global tariff schedules and FTAs.</p>
+                </div>
+                <div class="flow-step">
+                    <div class="flow-icon">💰</div>
+                    <h3>Realize Savings</h3>
+                    <p>Get specific recommendations with projected savings. Implement with one click or automated workflows.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ROI Section -->
+    <section class="section roi-section">
+        <div class="container">
+            <span class="section-badge">📈 Results</span>
+            <h2 style="text-align: center;">Measurable ROI from Day One</h2>
+            <p class="section-subtitle" style="text-align: center; margin-left: auto; margin-right: auto;">Our customers see average returns within the first 90 days.</p>
+
+            <div class="roi-grid">
+                <div class="roi-card">
+                    <span class="roi-value">37%</span>
+                    <span class="roi-label">Average duty reduction</span>
+                </div>
+                <div class="roi-card">
+                    <span class="roi-value">85%</span>
+                    <span class="roi-label">FTA utilization increase</span>
+                </div>
+                <div class="roi-card">
+                    <span class="roi-value">90%</span>
+                    <span class="roi-label">Classification time saved</span>
+                </div>
+                <div class="roi-card">
+                    <span class="roi-value">4x</span>
+                    <span class="roi-label">Average ROI in Year 1</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonial -->
+    <section class="section testimonial-section">
+        <div class="container">
+            <div class="testimonial-card">
+                <div class="quote-mark">"</div>
+                <p class="testimonial-text">TariffMind found $4.2M in duty savings we didn't know existed. The FTA utilization analysis alone paid for three years of the platform in the first quarter.</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">👤</div>
+                    <div class="author-info">
+                        <h4>VP of Supply Chain</h4>
+                        <p>Fortune 500 Consumer Electronics Company</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section" id="demo">
+        <div class="container">
+            <h2>Ready to Turn Trade Chaos Into <span class="highlight">Competitive Advantage</span>?</h2>
+            <p>Get a free tariff exposure analysis and see exactly how much you could save.</p>
+            <div class="hero-ctas">
+                <a href="#start" class="btn btn-primary btn-large">Get Your Free Analysis →</a>
+                <a href="#contact" class="btn btn-outline btn-large">Talk to an Expert</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-links">
+            <a href="#">Product</a>
+            <a href="#">Solutions</a>
+            <a href="#">Pricing</a>
+            <a href="#">Company</a>
+            <a href="#">Resources</a>
+            <a href="#">Contact</a>
+        </div>
+        <p class="copyright">© 2026 TariffMind AI. All rights reserved. | A Godfather Production 🎩</p>
+    </footer>
+</body>
+</html>
