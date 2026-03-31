@@ -180,6 +180,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-03-30 | Afternoon | GridLock AI — The Operating System for Urban Traffic Intelligence | [Playbook](2026-03-30-afternoon.md) • [Landing](2026-03-30-afternoon-landing.html) • [PDF](2026-03-30-afternoon.pdf) |
 | 2026-03-31 | Evening | TariffMind AI — Global Trade & Tariff Intelligence | [Playbook](2026-03-31-evening.md) • [Landing](2026-03-31-evening-landing.html) • [PDF](2026-03-31-evening.pdf) |
 | 2026-03-31 | Morning | AgentHire — The AI Operating System for AI Workforce Management | [Playbook](2026-03-31-morning.md) • [Landing](2026-03-31-morning-landing.html) • [PDF](2026-03-31-morning.pdf) |
+| 2026-03-31 | Afternoon | InfraGuard AI — Critical Infrastructure Health & Failure Prevention | [Playbook](2026-03-31-afternoon.md) • [Landing](2026-03-31-afternoon-landing.html) • [PDF](2026-03-31-afternoon.pdf) |
 <!-- New entries will be added above this line -->
 
 ---
