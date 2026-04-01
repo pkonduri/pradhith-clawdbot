@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BitScale — The AWS for Ultra-Efficient AI</title>
+    <meta name="description" content="10-100x cheaper AI inference. Purpose-built infrastructure for 1-bit LLMs, quantized models, and edge deployment.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0a0a0f;
+            --bg-card: #12121a;
+            --bg-elevated: #1a1a25;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0b0;
+            --text-muted: #606070;
+            --accent-primary: #00ff88;
+            --accent-secondary: #00cc6a;
+            --accent-glow: rgba(0, 255, 136, 0.3);
+            --accent-blue: #3b82f6;
+            --accent-purple: #8b5cf6;
+            --accent-orange: #f97316;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --gradient-primary: linear-gradient(135deg, #00ff88 0%, #00cc6a 50%, #00aa55 100%);
+            --gradient-hero: linear-gradient(180deg, rgba(0, 255, 136, 0.1) 0%, transparent 50%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Binary Background Animation */
+        .binary-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.03;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            color: var(--accent-primary);
+            overflow: hidden;
+        }
+
+        .binary-column {
+            position: absolute;
+            top: -100%;
+            animation: fall linear infinite;
+            white-space: nowrap;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(200vh); }
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 120px 24px 80px;
+            background: var(--gradient-hero);
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            max-width: 1000px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            border-radius: 100px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--accent-primary);
+            margin-bottom: 32px;
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(0, 255, 136, 0.2); }
+            50% { box-shadow: 0 0 40px rgba(0, 255, 136, 0.4); }
+        }
+
+        .badge-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent-primary);
+            border-radius: 50%;
+            animation: blink 1s ease-in-out infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        h1 {
+            font-size: clamp(48px, 8vw, 96px);
+            font-weight: 900;
+            line-height: 1.05;
+            margin-bottom: 24px;
+            letter-spacing: -0.03em;
+        }
+
+        .gradient-text {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(18px, 2.5vw, 24px);
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto 48px;
+            line-height: 1.5;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 48px;
+            flex-wrap: wrap;
+            margin-bottom: 48px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 48px;
+            font-weight: 800;
+            color: var(--accent-primary);
+            line-height: 1;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-top: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: var(--bg-dark);
+            box-shadow: 0 4px 30px var(--accent-glow);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 40px var(--accent-glow);
+        }
+
+        .btn-secondary {
+            background: var(--bg-elevated);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-card);
+            border-color: var(--accent-primary);
+        }
+
+        /* Nav */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--text-primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--gradient-primary);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--bg-dark);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-primary);
+        }
+
+        /* Sections */
+        section {
+            position: relative;
+            padding: 120px 24px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 64px;
+        }
+
+        .section-tag {
+            display: inline-block;
+            padding: 6px 12px;
+            background: rgba(0, 255, 136, 0.1);
+            border-radius: 100px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--accent-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 16px;
+        }
+
+        h2 {
+            font-size: clamp(32px, 5vw, 48px);
+            font-weight: 800;
+            margin-bottom: 16px;
+            letter-spacing: -0.02em;
+        }
+
+        .section-subtitle {
+            font-size: 18px;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Problem Section */
+        .problem-section {
+            background: linear-gradient(180deg, var(--bg-dark) 0%, var(--bg-card) 100%);
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .problem-card {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 32px;
+            transition: all 0.3s ease;
+        }
+
+        .problem-card:hover {
+            border-color: rgba(255, 100, 100, 0.3);
+            transform: translateY(-4px);
+        }
+
+        .problem-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(255, 100, 100, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .problem-card h3 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #ff6b6b;
+        }
+
+        .problem-card p {
+            color: var(--text-secondary);
+            font-size: 15px;
+        }
+
+        /* Solution Section */
+        .solution-section {
+            background: var(--bg-card);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 32px;
+        }
+
+        .feature-card {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 40px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-primary);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .feature-card:hover {
+            border-color: var(--accent-primary);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .feature-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            color: var(--accent-primary);
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .feature-card h3 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            font-size: 15px;
+            line-height: 1.7;
+        }
+
+        /* Performance Section */
+        .performance-section {
+            background: var(--bg-dark);
+            overflow: hidden;
+        }
+
+        .performance-table {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .performance-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .performance-table th,
+        .performance-table td {
+            padding: 20px 24px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .performance-table th {
+            background: var(--bg-elevated);
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+        }
+
+        .performance-table td {
+            font-size: 16px;
+        }
+
+        .performance-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .performance-table tr:hover td {
+            background: rgba(0, 255, 136, 0.03);
+        }
+
+        .improvement {
+            color: var(--accent-primary);
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Pricing Section */
+        .pricing-section {
+            background: linear-gradient(180deg, var(--bg-card) 0%, var(--bg-dark) 100%);
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .pricing-card.featured {
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 60px var(--accent-glow);
+            transform: scale(1.02);
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .pricing-card.featured:hover {
+            transform: scale(1.02) translateY(-4px);
+        }
+
+        .pricing-tier {
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .pricing-card.featured .pricing-tier {
+            color: var(--accent-primary);
+        }
+
+        .pricing-price {
+            font-size: 48px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .pricing-price span {
+            font-size: 18px;
+            font-weight: 400;
+            color: var(--text-muted);
+        }
+
+        .pricing-desc {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 32px;
+        }
+
+        .pricing-features {
+            list-style: none;
+            text-align: left;
+            margin-bottom: 32px;
+        }
+
+        .pricing-features li {
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .pricing-features li:last-child {
+            border-bottom: none;
+        }
+
+        .check-icon {
+            color: var(--accent-primary);
+            font-weight: bold;
+        }
+
+        /* Use Cases */
+        .use-cases-section {
+            background: var(--bg-dark);
+        }
+
+        .use-cases-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .use-case {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 28px;
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .use-case:hover {
+            border-color: var(--accent-primary);
+            transform: translateX(4px);
+        }
+
+        .use-case-icon {
+            font-size: 32px;
+            flex-shrink: 0;
+        }
+
+        .use-case h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .use-case p {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(180deg, var(--bg-card) 0%, var(--bg-dark) 100%);
+            text-align: center;
+        }
+
+        .cta-box {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 64px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-box::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 50%);
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        .cta-box h2 {
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-box p {
+            position: relative;
+            z-index: 1;
+            color: var(--text-secondary);
+            font-size: 18px;
+            max-width: 500px;
+            margin: 16px auto 32px;
+        }
+
+        .cta-box .cta-group {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--bg-dark);
+            border-top: 1px solid var(--border-color);
+            padding: 48px 24px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 24px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 32px;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-primary);
+        }
+
+        .footer-copy {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        /* Code Block */
+        .code-block {
+            background: var(--bg-dark);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            margin: 32px auto;
+            max-width: 600px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+        }
+
+        .code-comment {
+            color: var(--text-muted);
+        }
+
+        .code-keyword {
+            color: var(--accent-purple);
+        }
+
+        .code-string {
+            color: var(--accent-primary);
+        }
+
+        .code-function {
+            color: var(--accent-blue);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav {
+                padding: 16px 20px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero {
+                padding: 100px 20px 60px;
+            }
+
+            .hero-stats {
+                gap: 32px;
+            }
+
+            .stat-value {
+                font-size: 36px;
+            }
+
+            section {
+                padding: 80px 20px;
+            }
+
+            .cta-box {
+                padding: 40px 24px;
+            }
+
+            .performance-table {
+                overflow-x: auto;
+            }
+
+            .performance-table table {
+                min-width: 600px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Binary Background -->
+    <div class="binary-bg" id="binary-bg"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <a href="#" class="logo">
+            <div class="logo-icon">01</div>
+            BitScale
+        </a>
+        <div class="nav-links">
+            <a href="#features">Features</a>
+            <a href="#performance">Performance</a>
+            <a href="#pricing">Pricing</a>
+            <a href="#" class="btn btn-primary" style="padding: 10px 20px; font-size: 14px;">Get Started</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="badge">
+                <span class="badge-dot"></span>
+                Powering the 1-Bit AI Revolution
+            </div>
+            <h1>
+                <span class="gradient-text">10-100x Cheaper</span><br>
+                AI Inference
+            </h1>
+            <p class="hero-subtitle">
+                The infrastructure platform built for 1-bit LLMs, quantized models, and edge AI. 
+                Deploy anywhere. Pay for actual compute, not GPU hours.
+            </p>
+            
+            <div class="hero-stats">
+                <div class="stat">
+                    <div class="stat-value">74x</div>
+                    <div class="stat-label">Faster Inference</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">50x</div>
+                    <div class="stat-label">Less Memory</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">67x</div>
+                    <div class="stat-label">Energy Savings</div>
+                </div>
+            </div>
+
+            <div class="cta-group">
+                <a href="#" class="btn btn-primary">
+                    Start Free Trial
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
+                <a href="#" class="btn btn-secondary">View Documentation</a>
+            </div>
+
+            <div class="code-block">
+                <span class="code-comment"># Deploy a 1-bit model in seconds</span><br>
+                <span class="code-keyword">import</span> bitscale<br><br>
+                model = bitscale.<span class="code-function">load</span>(<span class="code-string">"llama-3-1bit"</span>)<br>
+                response = model.<span class="code-function">generate</span>(<span class="code-string">"Hello, world!"</span>)<br>
+                <span class="code-comment"># That's it. 74x faster. 50x cheaper.</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="problem-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">The Problem</span>
+                <h2>AI Efficiency Has <span class="gradient-text">No Home</span></h2>
+                <p class="section-subtitle">1-bit LLMs are now commercially viable. But the infrastructure hasn't caught up.</p>
+            </div>
+
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="problem-icon">💸</div>
+                    <h3>Inference Costs Explode</h3>
+                    <p>78% of AI compute cost is inference. Traditional providers optimize for big models, not efficient ones.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">🔧</div>
+                    <h3>No Specialized Kernels</h3>
+                    <p>Standard frameworks are 50-100x slower on 1-bit models. You're paying for waste.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">📱</div>
+                    <h3>Edge is Fragmented</h3>
+                    <p>50+ device architectures, custom code for each. 92% of edge AI projects fail.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">📊</div>
+                    <h3>Wrong Pricing Model</h3>
+                    <p>Pay per GPU-hour punishes efficiency. Your 1-bit model costs the same as a 70B behemoth.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="solution-section" id="features">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">The Solution</span>
+                <h2>Purpose-Built for <span class="gradient-text">Efficient AI</span></h2>
+                <p class="section-subtitle">Everything you need to deploy, scale, and monetize ultra-efficient models.</p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-number">01</div>
+                    <h3>BitKernel Engine</h3>
+                    <p>Custom CUDA kernels optimized from scratch for 1-bit, 2-bit, and 4-bit inference. 74x faster than standard frameworks. Native support for BitNet, GPTQ, AWQ, and novel architectures.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-number">02</div>
+                    <h3>Universal Edge Deploy</h3>
+                    <p>One-click deployment to 200+ device architectures. WebAssembly for browsers, native SDKs for iOS/Android, and full support for RISC-V and IoT microcontrollers.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-number">03</div>
+                    <h3>Hybrid Orchestration</h3>
+                    <p>Intelligent routing between edge and cloud. Latency-based decisions in real-time. Offline-first architecture with smart model caching and sync.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-number">04</div>
+                    <h3>Efficiency-First Pricing</h3>
+                    <p>Pay per actual compute, not GPU time. 10-50x cheaper than traditional providers. Free tier for sub-1B parameter models.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-number">05</div>
+                    <h3>Auto-Optimization Pipeline</h3>
+                    <p>One-click quantization from FP16 to 1-bit with quality preservation. Distillation-as-a-service. Continuous optimization recommendations.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-number">06</div>
+                    <h3>Enterprise Security</h3>
+                    <p>On-premise deployment options. Data never leaves your infrastructure. SOC2, HIPAA, GDPR compliant. Model encryption at rest and in transit.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Performance Section -->
+    <section class="performance-section" id="performance">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Performance</span>
+                <h2>The <span class="gradient-text">BitKernel</span> Advantage</h2>
+                <p class="section-subtitle">Purpose-built inference engine vs. standard frameworks</p>
+            </div>
+
+            <div class="performance-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Metric</th>
+                            <th>Standard Framework</th>
+                            <th>BitScale BitKernel</th>
+                            <th>Improvement</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1-bit Inference Speed</td>
+                            <td>12 tok/s</td>
+                            <td>890 tok/s</td>
+                            <td class="improvement">74x faster</td>
+                        </tr>
+                        <tr>
+                            <td>Memory Footprint</td>
+                            <td>14 GB</td>
+                            <td>280 MB</td>
+                            <td class="improvement">50x smaller</td>
+                        </tr>
+                        <tr>
+                            <td>Energy per Token</td>
+                            <td>0.8 J</td>
+                            <td>0.012 J</td>
+                            <td class="improvement">67x efficient</td>
+                        </tr>
+                        <tr>
+                            <td>Cold Start Time</td>
+                            <td>4.2 s</td>
+                            <td>0.08 s</td>
+                            <td class="improvement">52x faster</td>
+                        </tr>
+                        <tr>
+                            <td>Cost per Million Tokens</td>
+                            <td>$2.40</td>
+                            <td>$0.03</td>
+                            <td class="improvement">80x cheaper</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Use Cases -->
+    <section class="use-cases-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Use Cases</span>
+                <h2>AI <span class="gradient-text">Everywhere</span></h2>
+                <p class="section-subtitle">From cloud to pocket to factory floor</p>
+            </div>
+
+            <div class="use-cases-grid">
+                <div class="use-case">
+                    <div class="use-case-icon">📱</div>
+                    <div>
+                        <h4>Mobile Apps</h4>
+                        <p>On-device AI with zero latency</p>
+                    </div>
+                </div>
+                <div class="use-case">
+                    <div class="use-case-icon">🌐</div>
+                    <div>
+                        <h4>Browser AI</h4>
+                        <p>WebAssembly models, no server needed</p>
+                    </div>
+                </div>
+                <div class="use-case">
+                    <div class="use-case-icon">🏭</div>
+                    <div>
+                        <h4>Industrial IoT</h4>
+                        <p>Predictive maintenance on edge</p>
+                    </div>
+                </div>
+                <div class="use-case">
+                    <div class="use-case-icon">🚗</div>
+                    <div>
+                        <h4>Automotive</h4>
+                        <p>In-vehicle AI assistants</p>
+                    </div>
+                </div>
+                <div class="use-case">
+                    <div class="use-case-icon">🏥</div>
+                    <div>
+                        <h4>Healthcare</h4>
+                        <p>HIPAA-compliant on-device diagnosis</p>
+                    </div>
+                </div>
+                <div class="use-case">
+                    <div class="use-case-icon">🎮</div>
+                    <div>
+                        <h4>Gaming</h4>
+                        <p>Real-time NPC intelligence</p>
+                    </div>
+                </div>
+                <div class="use-case">
+                    <div class="use-case-icon">🛒</div>
+                    <div>
+                        <h4>Retail</h4>
+                        <p>Smart shelf and checkout AI</p>
+                    </div>
+                </div>
+                <div class="use-case">
+                    <div class="use-case-icon">🏠</div>
+                    <div>
+                        <h4>Smart Home</h4>
+                        <p>Privacy-first local assistants</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="pricing-section" id="pricing">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Pricing</span>
+                <h2>Pay for <span class="gradient-text">Efficiency</span>, Not Waste</h2>
+                <p class="section-subtitle">Finally, pricing that rewards smaller, smarter models</p>
+            </div>
+
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <div class="pricing-tier">Starter</div>
+                    <div class="pricing-price">$0<span>/mo</span></div>
+                    <div class="pricing-desc">For indie devs and experimentation</div>
+                    <ul class="pricing-features">
+                        <li><span class="check-icon">✓</span> 1M tokens/month free</li>
+                        <li><span class="check-icon">✓</span> Sub-1B parameter models</li>
+                        <li><span class="check-icon">✓</span> Community support</li>
+                        <li><span class="check-icon">✓</span> 3 edge deployments</li>
+                    </ul>
+                    <a href="#" class="btn btn-secondary" style="width: 100%;">Start Free</a>
+                </div>
+
+                <div class="pricing-card featured">
+                    <div class="pricing-tier">Scale</div>
+                    <div class="pricing-price">$499<span>/mo</span></div>
+                    <div class="pricing-desc">For growing teams and products</div>
+                    <ul class="pricing-features">
+                        <li><span class="check-icon">✓</span> 100M tokens/month</li>
+                        <li><span class="check-icon">✓</span> All model sizes</li>
+                        <li><span class="check-icon">✓</span> Priority support</li>
+                        <li><span class="check-icon">✓</span> Unlimited edge deployments</li>
+                        <li><span class="check-icon">✓</span> Auto-optimization pipeline</li>
+                    </ul>
+                    <a href="#" class="btn btn-primary" style="width: 100%;">Start Trial</a>
+                </div>
+
+                <div class="pricing-card">
+                    <div class="pricing-tier">Enterprise</div>
+                    <div class="pricing-price">Custom</div>
+                    <div class="pricing-desc">For large-scale deployments</div>
+                    <ul class="pricing-features">
+                        <li><span class="check-icon">✓</span> Unlimited everything</li>
+                        <li><span class="check-icon">✓</span> On-premise deployment</li>
+                        <li><span class="check-icon">✓</span> Dedicated support & SLA</li>
+                        <li><span class="check-icon">✓</span> Custom kernel development</li>
+                        <li><span class="check-icon">✓</span> SOC2, HIPAA, FedRAMP</li>
+                    </ul>
+                    <a href="#" class="btn btn-secondary" style="width: 100%;">Contact Sales</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-box">
+                <h2>Ready to <span class="gradient-text">Scale Efficiently</span>?</h2>
+                <p>Join 3,200+ developers building the future of AI infrastructure.</p>
+                <div class="cta-group">
+                    <a href="#" class="btn btn-primary">
+                        Get Started Free
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </a>
+                    <a href="#" class="btn btn-secondary">Book a Demo</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <a href="#" class="logo">
+                <div class="logo-icon">01</div>
+                BitScale
+            </a>
+            <div class="footer-links">
+                <a href="#">Documentation</a>
+                <a href="#">Blog</a>
+                <a href="#">Careers</a>
+                <a href="#">Contact</a>
+            </div>
+            <div class="footer-copy">© 2026 BitScale. All rights reserved.</div>
+        </div>
+    </footer>
+
+    <!-- Binary Background Script -->
+    <script>
+        const binaryBg = document.getElementById('binary-bg');
+        const columns = 30;
+        
+        for (let i = 0; i < columns; i++) {
+            const column = document.createElement('div');
+            column.className = 'binary-column';
+            column.style.left = `${(i / columns) * 100}%`;
+            column.style.animationDuration = `${15 + Math.random() * 10}s`;
+            column.style.animationDelay = `${Math.random() * -20}s`;
+            
+            let binary = '';
+            for (let j = 0; j < 100; j++) {
+                binary += Math.random() > 0.5 ? '1' : '0';
+                if (j % 8 === 7) binary += '<br>';
+            }
+            column.innerHTML = binary;
+            binaryBg.appendChild(column);
+        }
+    </script>
+</body>
+</html>
