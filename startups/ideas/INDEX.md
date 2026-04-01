@@ -182,6 +182,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-03-31 | Morning | AgentHire — The AI Operating System for AI Workforce Management | [Playbook](2026-03-31-morning.md) • [Landing](2026-03-31-morning-landing.html) • [PDF](2026-03-31-morning.pdf) |
 | 2026-03-31 | Afternoon | InfraGuard AI — Critical Infrastructure Health & Failure Prevention | [Playbook](2026-03-31-afternoon.md) • [Landing](2026-03-31-afternoon-landing.html) • [PDF](2026-03-31-afternoon.pdf) |
 | 2026-04-01 | Morning | BitScale — The AWS for 1-Bit and Ultra-Efficient AI Models | [Playbook](2026-04-01-morning.md) • [Landing](2026-04-01-morning-landing.html) • [PDF](2026-04-01-morning.pdf) |
+| 2026-04-01 | Afternoon | ThreadLoop AI — Fashion Circularity & Authenticity Platform | [Playbook](2026-04-01-afternoon.md) • [Landing](2026-04-01-afternoon-landing.html) • [PDF](2026-04-01-afternoon.pdf) |
 <!-- New entries will be added above this line -->
 
 ---
