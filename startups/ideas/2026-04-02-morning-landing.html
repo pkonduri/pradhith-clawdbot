@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SubscriptionOS — Freedom From Subscription Hell</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #10b981;
+            --accent: #f59e0b;
+            --dark: #0f172a;
+            --darker: #020617;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --gradient-primary: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%);
+            --gradient-secondary: linear-gradient(135deg, #10b981 0%, #06b6d4 100%);
+            --gradient-dark: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+            --glow-primary: 0 0 60px rgba(99, 102, 241, 0.4);
+            --glow-secondary: 0 0 60px rgba(16, 185, 129, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--darker);
+            color: var(--light);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.08) 0%, transparent 50%);
+            animation: pulse 20s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.1) rotate(5deg); }
+        }
+
+        /* Floating Subscription Cards Animation */
+        .floating-subs {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .sub-card {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 12px 20px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: float 20s ease-in-out infinite;
+            opacity: 0.6;
+        }
+
+        .sub-card::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: #ef4444;
+            border-radius: 50%;
+            animation: blink 2s ease-in-out infinite;
+        }
+
+        .sub-card.cancelled::before {
+            background: #10b981;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(-2deg); }
+            50% { transform: translateY(-30px) rotate(2deg); }
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .sub-card:nth-child(1) { top: 15%; left: 5%; animation-delay: 0s; }
+        .sub-card:nth-child(2) { top: 25%; right: 8%; animation-delay: -3s; }
+        .sub-card:nth-child(3) { top: 45%; left: 3%; animation-delay: -6s; }
+        .sub-card:nth-child(4) { top: 65%; right: 5%; animation-delay: -9s; }
+        .sub-card:nth-child(5) { top: 80%; left: 8%; animation-delay: -12s; }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 20px 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(2, 6, 23, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: var(--gradient-primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--gray);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--light);
+        }
+
+        .nav-cta {
+            padding: 12px 28px;
+            background: var(--gradient-primary);
+            border: none;
+            border-radius: 30px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--glow-primary);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 140px 60px 100px;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 20px;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 50px;
+            font-size: 14px;
+            color: #a5b4fc;
+            margin-bottom: 30px;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .hero-badge::before {
+            content: '🔥';
+        }
+
+        .hero h1 {
+            font-size: 72px;
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 30px;
+            animation: fadeInUp 0.8s ease-out 0.1s both;
+        }
+
+        .hero h1 .highlight {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero h1 .crossed {
+            position: relative;
+            color: #ef4444;
+        }
+
+        .hero h1 .crossed::after {
+            content: '';
+            position: absolute;
+            left: -5%;
+            top: 50%;
+            width: 110%;
+            height: 4px;
+            background: #ef4444;
+            transform: rotate(-5deg);
+        }
+
+        .hero p {
+            font-size: 22px;
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto 40px;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        .hero-ctas {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            animation: fadeInUp 0.8s ease-out 0.3s both;
+        }
+
+        .cta-primary {
+            padding: 18px 40px;
+            background: var(--gradient-primary);
+            border: none;
+            border-radius: 50px;
+            color: white;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .cta-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--glow-primary);
+        }
+
+        .cta-secondary {
+            padding: 18px 40px;
+            background: transparent;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .cta-secondary:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            margin-top: 80px;
+            animation: fadeInUp 0.8s ease-out 0.4s both;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 48px;
+            font-weight: 800;
+            background: var(--gradient-secondary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            color: var(--gray);
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Problem Section */
+        .problem {
+            padding: 120px 60px;
+            background: var(--gradient-dark);
+            position: relative;
+        }
+
+        .problem::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .section-tag {
+            display: inline-block;
+            padding: 6px 16px;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 20px;
+            color: #fca5a5;
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
+
+        .section-header h2 {
+            font-size: 48px;
+            font-weight: 800;
+            margin-bottom: 20px;
+        }
+
+        .section-header p {
+            font-size: 20px;
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .problem-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 40px;
+            transition: all 0.4s;
+        }
+
+        .problem-card:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(239, 68, 68, 0.3);
+            transform: translateY(-5px);
+        }
+
+        .problem-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin-bottom: 25px;
+        }
+
+        .problem-card h3 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .problem-card p {
+            color: var(--gray);
+            font-size: 16px;
+        }
+
+        /* Two-Sided Solution */
+        .solution {
+            padding: 120px 60px;
+            position: relative;
+        }
+
+        .solution .section-tag {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: rgba(16, 185, 129, 0.3);
+            color: #6ee7b7;
+        }
+
+        .solution-split {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .solution-side {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 30px;
+            padding: 50px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .solution-side::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+        }
+
+        .solution-side.business::before {
+            background: var(--gradient-primary);
+        }
+
+        .solution-side.consumer::before {
+            background: var(--gradient-secondary);
+        }
+
+        .side-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 25px;
+        }
+
+        .business .side-badge {
+            background: rgba(99, 102, 241, 0.1);
+            color: #a5b4fc;
+        }
+
+        .consumer .side-badge {
+            background: rgba(16, 185, 129, 0.1);
+            color: #6ee7b7;
+        }
+
+        .solution-side h3 {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 15px;
+        }
+
+        .solution-side > p {
+            color: var(--gray);
+            font-size: 18px;
+            margin-bottom: 35px;
+        }
+
+        .feature-list {
+            list-style: none;
+        }
+
+        .feature-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 12px;
+            transition: background 0.3s;
+        }
+
+        .feature-list li:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .feature-icon {
+            width: 24px;
+            height: 24px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .business .feature-icon {
+            color: #a5b4fc;
+        }
+
+        .consumer .feature-icon {
+            color: #6ee7b7;
+        }
+
+        .feature-text strong {
+            display: block;
+            margin-bottom: 3px;
+        }
+
+        .feature-text span {
+            color: var(--gray);
+            font-size: 14px;
+        }
+
+        /* Market Section */
+        .market {
+            padding: 120px 60px;
+            background: var(--gradient-dark);
+        }
+
+        .market-numbers {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .market-card {
+            text-align: center;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            transition: all 0.4s;
+        }
+
+        .market-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--primary);
+            box-shadow: var(--glow-primary);
+        }
+
+        .market-value {
+            font-size: 56px;
+            font-weight: 900;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .market-label {
+            color: var(--gray);
+            font-size: 16px;
+        }
+
+        /* How It Works */
+        .how-it-works {
+            padding: 120px 60px;
+        }
+
+        .steps {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+        }
+
+        .step {
+            flex: 1;
+            min-width: 280px;
+            max-width: 350px;
+            text-align: center;
+            padding: 40px 30px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            position: relative;
+        }
+
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            font-weight: 800;
+            margin: 0 auto 25px;
+        }
+
+        .step h3 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .step p {
+            color: var(--gray);
+            font-size: 16px;
+        }
+
+        .step-arrow {
+            position: absolute;
+            right: -35px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 24px;
+            color: var(--primary);
+        }
+
+        /* Regulatory Ticker */
+        .ticker-section {
+            padding: 60px 0;
+            background: rgba(239, 68, 68, 0.05);
+            border-top: 1px solid rgba(239, 68, 68, 0.2);
+            border-bottom: 1px solid rgba(239, 68, 68, 0.2);
+            overflow: hidden;
+        }
+
+        .ticker-title {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #fca5a5;
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .ticker-wrap {
+            overflow: hidden;
+        }
+
+        .ticker {
+            display: flex;
+            animation: ticker 30s linear infinite;
+            gap: 60px;
+        }
+
+        .ticker-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            white-space: nowrap;
+            padding: 15px 30px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 12px;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        .ticker-flag {
+            font-size: 28px;
+        }
+
+        .ticker-text {
+            font-size: 15px;
+        }
+
+        .ticker-text strong {
+            color: #ef4444;
+        }
+
+        @keyframes ticker {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* CTA Section */
+        .final-cta {
+            padding: 150px 60px;
+            text-align: center;
+            position: relative;
+        }
+
+        .final-cta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.2) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .final-cta h2 {
+            font-size: 56px;
+            font-weight: 900;
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .final-cta p {
+            font-size: 22px;
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto 50px;
+            position: relative;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            position: relative;
+        }
+
+        .cta-giant {
+            padding: 22px 50px;
+            font-size: 20px;
+            background: var(--gradient-primary);
+            border: none;
+            border-radius: 50px;
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .cta-giant:hover {
+            transform: scale(1.05);
+            box-shadow: var(--glow-primary);
+        }
+
+        .cta-outline {
+            padding: 22px 50px;
+            font-size: 20px;
+            background: transparent;
+            border: 2px solid var(--primary);
+            border-radius: 50px;
+            color: var(--primary);
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .cta-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Footer */
+        footer {
+            padding: 60px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-size: 28px;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+        }
+
+        .footer-tagline {
+            color: var(--gray);
+            font-size: 16px;
+            margin-bottom: 30px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 40px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .footer-links a {
+            color: var(--gray);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--light);
+        }
+
+        .footer-copy {
+            color: var(--gray);
+            font-size: 14px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero h1 { font-size: 52px; }
+            .solution-split { grid-template-columns: 1fr; }
+            .market-numbers { grid-template-columns: repeat(2, 1fr); }
+            .problem-grid { grid-template-columns: 1fr; }
+            .sub-card { display: none; }
+        }
+
+        @media (max-width: 768px) {
+            nav { padding: 15px 20px; }
+            .nav-links { display: none; }
+            .hero { padding: 120px 20px 80px; }
+            .hero h1 { font-size: 36px; }
+            .hero p { font-size: 18px; }
+            .hero-ctas { flex-direction: column; }
+            .hero-stats { flex-direction: column; gap: 30px; }
+            section { padding: 80px 20px; }
+            .section-header h2 { font-size: 32px; }
+            .final-cta h2 { font-size: 36px; }
+            .cta-buttons { flex-direction: column; align-items: center; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation">
+        <div class="floating-subs">
+            <div class="sub-card">$14.99/mo — Streaming Service</div>
+            <div class="sub-card">$9.99/mo — Cloud Storage</div>
+            <div class="sub-card cancelled">CANCELLED — $19.99 saved</div>
+            <div class="sub-card">$49.99/mo — Gym Membership</div>
+            <div class="sub-card cancelled">CANCELLED — $29.99 saved</div>
+        </div>
+    </div>
+
+    <nav>
+        <div class="logo">
+            <div class="logo-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5">
+                    <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                    <path d="M2 17l10 5 10-5"/>
+                    <path d="M2 12l10 5 10-5"/>
+                </svg>
+            </div>
+            SubscriptionOS
+        </div>
+        <div class="nav-links">
+            <a href="#business">For Business</a>
+            <a href="#consumers">For Consumers</a>
+            <a href="#developers">API</a>
+            <a href="#pricing">Pricing</a>
+            <button class="nav-cta">Get Early Access</button>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">New UK & FTC Regulations Now in Effect</div>
+            <h1>
+                <span class="crossed">Subscription Hell</span><br>
+                Is <span class="highlight">Officially Over</span>
+            </h1>
+            <p>
+                The AI-powered platform that helps businesses comply with the new click-to-cancel laws—while giving consumers the freedom to escape subscription traps forever.
+            </p>
+            <div class="hero-ctas">
+                <button class="cta-primary">
+                    <span>Start Free Trial</span>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </button>
+                <button class="cta-secondary">Watch Demo</button>
+            </div>
+            <div class="hero-stats">
+                <div class="stat">
+                    <div class="stat-value">$300B+</div>
+                    <div class="stat-label">Subscription Economy</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">42%</div>
+                    <div class="stat-label">Forgotten Subscriptions</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">$50K</div>
+                    <div class="stat-label">FTC Fine Per Violation</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="problem">
+        <div class="section-header">
+            <div class="section-tag">The Problem</div>
+            <h2>Subscriptions Were Built on Friction</h2>
+            <p>The entire industry optimized for making cancellation impossible. Now the regulators have had enough.</p>
+        </div>
+        <div class="problem-grid">
+            <div class="problem-card">
+                <div class="problem-icon">🔒</div>
+                <h3>Hidden Cancellation Flows</h3>
+                <p>Buried settings, endless confirmation dialogs, "are you sure?" guilt trips designed to make you give up.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">📞</div>
+                <h3>Phone-Only Cancellation</h3>
+                <p>Sign up in 30 seconds online, but need to call and wait on hold for 45 minutes to cancel.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">🎭</div>
+                <h3>Dark Patterns Everywhere</h3>
+                <p>Confusing UI, pre-selected options, "pause" buttons that resume automatically.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">💸</div>
+                <h3>Forgotten Charges</h3>
+                <p>The average American pays for 12+ subscriptions and forgets about nearly half of them.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">⚖️</div>
+                <h3>Regulatory Hammer</h3>
+                <p>FTC click-to-cancel rule, UK Consumer Rights Act, EU Digital Services Act — fines are coming.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">🏃</div>
+                <h3>No Time to Fight</h3>
+                <p>Consumers don't have hours to navigate cancellation mazes for every unwanted subscription.</p>
+            </div>
+        </div>
+    </section>
+
+    <div class="ticker-section">
+        <div class="ticker-title">⚠️ Regulatory Pressure Building Worldwide</div>
+        <div class="ticker-wrap">
+            <div class="ticker">
+                <div class="ticker-item">
+                    <span class="ticker-flag">🇺🇸</span>
+                    <span class="ticker-text"><strong>FTC:</strong> Click-to-cancel rule now enforced</span>
+                </div>
+                <div class="ticker-item">
+                    <span class="ticker-flag">🇬🇧</span>
+                    <span class="ticker-text"><strong>UK:</strong> New subscription laws passed April 2026</span>
+                </div>
+                <div class="ticker-item">
+                    <span class="ticker-flag">🇪🇺</span>
+                    <span class="ticker-text"><strong>EU:</strong> Dark pattern enforcement ramping up</span>
+                </div>
+                <div class="ticker-item">
+                    <span class="ticker-flag">🇦🇺</span>
+                    <span class="ticker-text"><strong>Australia:</strong> Consumer protection reforms incoming</span>
+                </div>
+                <div class="ticker-item">
+                    <span class="ticker-flag">🇨🇦</span>
+                    <span class="ticker-text"><strong>Canada:</strong> Following US & UK lead</span>
+                </div>
+                <div class="ticker-item">
+                    <span class="ticker-flag">🇺🇸</span>
+                    <span class="ticker-text"><strong>FTC:</strong> Click-to-cancel rule now enforced</span>
+                </div>
+                <div class="ticker-item">
+                    <span class="ticker-flag">🇬🇧</span>
+                    <span class="ticker-text"><strong>UK:</strong> New subscription laws passed April 2026</span>
+                </div>
+                <div class="ticker-item">
+                    <span class="ticker-flag">🇪🇺</span>
+                    <span class="ticker-text"><strong>EU:</strong> Dark pattern enforcement ramping up</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="solution" id="business">
+        <div class="section-header">
+            <div class="section-tag">The Solution</div>
+            <h2>Two Sides. One Platform. Total Freedom.</h2>
+            <p>We help businesses comply while empowering consumers to take control.</p>
+        </div>
+        <div class="solution-split">
+            <div class="solution-side business">
+                <div class="side-badge">🏢 For Business</div>
+                <h3>Compliance Made Simple</h3>
+                <p>Drop-in SDK that makes your subscriptions legally compliant—while protecting your revenue.</p>
+                <ul class="feature-list">
+                    <li>
+                        <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <div class="feature-text">
+                            <strong>One-Click Compliance</strong>
+                            <span>Drop-in SDK implements legally compliant cancellation flows instantly</span>
+                        </div>
+                    </li>
+                    <li>
+                        <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                        </svg>
+                        <div class="feature-text">
+                            <strong>Smart Retention</strong>
+                            <span>AI-powered offers that are transparent, legal, and actually work</span>
+                        </div>
+                    </li>
+                    <li>
+                        <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064"/>
+                        </svg>
+                        <div class="feature-text">
+                            <strong>Regulatory Autopilot</strong>
+                            <span>Automatically adapts to new laws in any jurisdiction worldwide</span>
+                        </div>
+                    </li>
+                    <li>
+                        <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                        </svg>
+                        <div class="feature-text">
+                            <strong>Churn Analytics</strong>
+                            <span>Understand why customers leave without dark patterns</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="solution-side consumer" id="consumers">
+                <div class="side-badge">👤 For Consumers</div>
+                <h3>Your AI Subscription Concierge</h3>
+                <p>One app to find, manage, negotiate, and cancel all your subscriptions automatically.</p>
+                <ul class="feature-list">
+                    <li>
+                        <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                        </svg>
+                        <div class="feature-text">
+                            <strong>Universal Discovery</strong>
+                            <span>Connects to email, bank, and cards to find ALL your subscriptions</span>
+                        </div>
+                    </li>
+                    <li>
+                        <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                        </svg>
+                        <div class="feature-text">
+                            <strong>AI Cancellation Agent</strong>
+                            <span>One tap to cancel anything — AI handles the entire process for you</span>
+                        </div>
+                    </li>
+                    <li>
+                        <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <div class="feature-text">
+                            <strong>Bill Negotiation</strong>
+                            <span>AI negotiates better rates with your service providers automatically</span>
+                        </div>
+                    </li>
+                    <li>
+                        <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+                        </svg>
+                        <div class="feature-text">
+                            <strong>Free Trial Alerts</strong>
+                            <span>Never forget a trial again — get reminded before it converts to paid</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="market">
+        <div class="section-header">
+            <div class="section-tag" style="background: rgba(99, 102, 241, 0.1); border-color: rgba(99, 102, 241, 0.3); color: #a5b4fc;">Market Opportunity</div>
+            <h2>The Numbers Don't Lie</h2>
+        </div>
+        <div class="market-numbers">
+            <div class="market-card">
+                <div class="market-value">$300B+</div>
+                <div class="market-label">Global Subscription Economy</div>
+            </div>
+            <div class="market-card">
+                <div class="market-value">10M+</div>
+                <div class="market-label">Subscription Businesses</div>
+            </div>
+            <div class="market-card">
+                <div class="market-value">12+</div>
+                <div class="market-label">Avg. Subscriptions per Person</div>
+            </div>
+            <div class="market-card">
+                <div class="market-value">20%</div>
+                <div class="market-label">YoY Market Growth</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="how-it-works">
+        <div class="section-header">
+            <div class="section-tag" style="background: rgba(99, 102, 241, 0.1); border-color: rgba(99, 102, 241, 0.3); color: #a5b4fc;">How It Works</div>
+            <h2>Freedom in Three Steps</h2>
+        </div>
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <h3>Connect</h3>
+                <p>Link your email and bank accounts. Our AI discovers every subscription you're paying for.</p>
+                <span class="step-arrow">→</span>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <h3>Review</h3>
+                <p>See your complete subscription map. Identify forgotten charges and opportunities to save.</p>
+                <span class="step-arrow">→</span>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <h3>Act</h3>
+                <p>One tap to cancel, negotiate, or optimize. Our AI agent handles everything automatically.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="final-cta">
+        <h2>Join the Subscription Revolution</h2>
+        <p>Whether you're a business that needs to comply or a consumer who's had enough — we've got you covered.</p>
+        <div class="cta-buttons">
+            <button class="cta-giant">
+                <span>Get Early Access</span>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+            </button>
+            <button class="cta-outline">Talk to Sales</button>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-logo">SubscriptionOS</div>
+        <p class="footer-tagline">Freedom from subscription hell. Finally.</p>
+        <div class="footer-links">
+            <a href="#">Product</a>
+            <a href="#">Pricing</a>
+            <a href="#">API Docs</a>
+            <a href="#">Company</a>
+            <a href="#">Blog</a>
+            <a href="#">Contact</a>
+        </div>
+        <p class="footer-copy">© 2026 SubscriptionOS, Inc. All rights reserved.</p>
+    </footer>
+</body>
+</html>
