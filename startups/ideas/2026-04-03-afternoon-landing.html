@@ -1,0 +1,1391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SchoolOS — The AI Operating System for K-12 Education</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #10b981;
+            --accent: #f59e0b;
+            --dark: #0f172a;
+            --darker: #020617;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --success: #22c55e;
+            --gradient-1: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
+            --gradient-2: linear-gradient(135deg, #10b981 0%, #14b8a6 50%, #06b6d4 100%);
+            --gradient-3: linear-gradient(135deg, #f59e0b 0%, #f97316 100%);
+            --glow: 0 0 60px rgba(99, 102, 241, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--darker);
+            color: var(--light);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(16, 185, 129, 0.08) 0%, transparent 40%);
+            animation: bgPulse 20s ease-in-out infinite;
+        }
+
+        @keyframes bgPulse {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(-5%, -5%) scale(1.1); }
+        }
+
+        /* Floating Particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: float 15s infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.3; }
+            90% { opacity: 0.3; }
+            100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(20px);
+            background: rgba(15, 23, 42, 0.8);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-icon {
+            font-size: 2rem;
+        }
+
+        .nav-cta {
+            padding: 0.75rem 2rem;
+            background: var(--gradient-1);
+            border: none;
+            border-radius: 50px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--glow);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 5% 4rem;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 1400px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 50px;
+            font-size: 0.9rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .hero-badge .dot {
+            width: 8px;
+            height: 8px;
+            background: var(--secondary);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        .hero h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.8s ease 0.1s both;
+        }
+
+        .hero h1 .gradient-text {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--gray);
+            margin-bottom: 2.5rem;
+            max-width: 540px;
+            animation: fadeInUp 0.8s ease 0.2s both;
+        }
+
+        .hero-ctas {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.8s ease 0.3s both;
+        }
+
+        .btn-primary {
+            padding: 1rem 2.5rem;
+            background: var(--gradient-1);
+            border: none;
+            border-radius: 50px;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--glow);
+        }
+
+        .btn-secondary {
+            padding: 1rem 2.5rem;
+            background: transparent;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Hero Visual */
+        .hero-visual {
+            position: relative;
+            animation: fadeInUp 0.8s ease 0.4s both;
+        }
+
+        .hero-image-container {
+            position: relative;
+            background: linear-gradient(145deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.05) 100%);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 24px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .dashboard-mockup {
+            width: 100%;
+            border-radius: 16px;
+            background: var(--dark);
+            aspect-ratio: 16/10;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.4);
+        }
+
+        .dashboard-header {
+            height: 40px;
+            background: rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            padding: 0 1rem;
+            gap: 0.5rem;
+        }
+
+        .window-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .window-dot.red { background: #ff5f57; }
+        .window-dot.yellow { background: #febc2e; }
+        .window-dot.green { background: #28c840; }
+
+        .dashboard-content {
+            padding: 1.5rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .dashboard-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 12px;
+            padding: 1rem;
+        }
+
+        .dashboard-card h4 {
+            font-size: 0.75rem;
+            color: var(--gray);
+            margin-bottom: 0.5rem;
+        }
+
+        .dashboard-stat {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .mini-chart {
+            height: 40px;
+            display: flex;
+            align-items: flex-end;
+            gap: 3px;
+            margin-top: 0.5rem;
+        }
+
+        .mini-bar {
+            flex: 1;
+            background: var(--gradient-1);
+            border-radius: 3px;
+            animation: barGrow 1s ease forwards;
+            transform-origin: bottom;
+        }
+
+        @keyframes barGrow {
+            from { transform: scaleY(0); }
+            to { transform: scaleY(1); }
+        }
+
+        .floating-card {
+            position: absolute;
+            background: var(--dark);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 12px;
+            padding: 1rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            animation: floatCard 4s ease-in-out infinite;
+        }
+
+        .floating-card.card-1 {
+            top: -20px;
+            right: -30px;
+            animation-delay: 0s;
+        }
+
+        .floating-card.card-2 {
+            bottom: 40px;
+            left: -40px;
+            animation-delay: 1s;
+        }
+
+        @keyframes floatCard {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .floating-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .floating-card p {
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .floating-card span {
+            font-size: 0.75rem;
+            color: var(--gray);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Stats Section */
+        .stats {
+            padding: 4rem 5%;
+            background: linear-gradient(180deg, transparent 0%, rgba(99, 102, 241, 0.03) 100%);
+        }
+
+        .stats-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(99, 102, 241, 0.3);
+            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.1);
+        }
+
+        .stat-number {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        /* Problem Section */
+        .problem {
+            padding: 8rem 5%;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 4rem;
+        }
+
+        .section-label {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 50px;
+            color: #ef4444;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .section-label.green {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: rgba(16, 185, 129, 0.3);
+            color: var(--secondary);
+        }
+
+        .section-label.purple {
+            background: rgba(99, 102, 241, 0.1);
+            border-color: rgba(99, 102, 241, 0.3);
+            color: var(--primary);
+        }
+
+        .section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: var(--gray);
+        }
+
+        .problem-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .problem-card {
+            background: linear-gradient(145deg, rgba(239, 68, 68, 0.05) 0%, rgba(239, 68, 68, 0.02) 100%);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(239, 68, 68, 0.1);
+        }
+
+        .problem-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .problem-card h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .problem-card p {
+            color: var(--gray);
+            line-height: 1.7;
+        }
+
+        .problem-stat {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 8px;
+            color: #ef4444;
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-top: 1rem;
+        }
+
+        /* Solution Section */
+        .solution {
+            padding: 8rem 5%;
+            background: linear-gradient(180deg, rgba(16, 185, 129, 0.03) 0%, transparent 100%);
+        }
+
+        .solution-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .solution-card {
+            background: linear-gradient(145deg, rgba(16, 185, 129, 0.08) 0%, rgba(16, 185, 129, 0.02) 100%);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 24px;
+            padding: 2.5rem;
+            text-align: center;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .solution-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-2);
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .solution-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .solution-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 30px 60px rgba(16, 185, 129, 0.15);
+        }
+
+        .solution-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            background: var(--gradient-2);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+        }
+
+        .solution-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .solution-card .subtitle {
+            color: var(--secondary);
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .solution-card p {
+            color: var(--gray);
+            line-height: 1.7;
+        }
+
+        .solution-features {
+            margin-top: 1.5rem;
+            text-align: left;
+        }
+
+        .solution-feature {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 0;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .solution-feature::before {
+            content: '✓';
+            color: var(--secondary);
+            font-weight: bold;
+        }
+
+        /* Architecture Section */
+        .architecture {
+            padding: 8rem 5%;
+        }
+
+        .arch-visual {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: linear-gradient(145deg, rgba(99, 102, 241, 0.05) 0%, rgba(139, 92, 246, 0.02) 100%);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 24px;
+            padding: 3rem;
+        }
+
+        .arch-layers {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .arch-layer {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 1.5rem 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .arch-layer:hover {
+            background: rgba(99, 102, 241, 0.1);
+            border-color: rgba(99, 102, 241, 0.3);
+            transform: translateX(10px);
+        }
+
+        .arch-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .arch-layer h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .arch-layer p {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        /* Market Section */
+        .market {
+            padding: 8rem 5%;
+            background: linear-gradient(180deg, transparent 0%, rgba(245, 158, 11, 0.03) 100%);
+        }
+
+        .market-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .market-content h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+        }
+
+        .market-content p {
+            color: var(--gray);
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            line-height: 1.8;
+        }
+
+        .market-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        .market-stat {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            border-radius: 16px;
+            padding: 1.5rem;
+        }
+
+        .market-stat .number {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--accent);
+        }
+
+        .market-stat .label {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-top: 0.25rem;
+        }
+
+        .market-chart {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 2rem;
+        }
+
+        .chart-header {
+            margin-bottom: 2rem;
+        }
+
+        .chart-header h4 {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .chart-header span {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .chart-bars {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .chart-bar {
+            display: grid;
+            grid-template-columns: 80px 1fr 80px;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .chart-bar .year {
+            font-weight: 600;
+        }
+
+        .chart-bar .bar-bg {
+            height: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .chart-bar .bar-fill {
+            height: 100%;
+            background: var(--gradient-3);
+            border-radius: 6px;
+            transition: width 1s ease;
+        }
+
+        .chart-bar .value {
+            text-align: right;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 8rem 5%;
+            text-align: center;
+            position: relative;
+        }
+
+        .cta-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: linear-gradient(145deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.05) 100%);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 32px;
+            padding: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, transparent 60%);
+            animation: rotateBg 20s linear infinite;
+        }
+
+        @keyframes rotateBg {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .cta p {
+            color: var(--gray);
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 5% 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .footer-logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--gray);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--light);
+        }
+
+        .footer-copy {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* Quote */
+        .quote {
+            padding: 4rem 5%;
+            text-align: center;
+        }
+
+        .quote-text {
+            max-width: 800px;
+            margin: 0 auto;
+            font-size: 1.5rem;
+            font-style: italic;
+            color: var(--gray);
+            line-height: 1.8;
+        }
+
+        .quote-author {
+            margin-top: 1.5rem;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-subtitle {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .hero-ctas {
+                justify-content: center;
+            }
+
+            .solution-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .market-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .problem-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            nav {
+                padding: 1rem 5%;
+            }
+
+            .logo {
+                font-size: 1.4rem;
+            }
+
+            .nav-cta {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+
+            .floating-card {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="bg-animation"></div>
+    
+    <!-- Particles -->
+    <div class="particles">
+        <div class="particle" style="left: 10%; animation-delay: 0s;"></div>
+        <div class="particle" style="left: 20%; animation-delay: 2s;"></div>
+        <div class="particle" style="left: 30%; animation-delay: 4s;"></div>
+        <div class="particle" style="left: 50%; animation-delay: 1s;"></div>
+        <div class="particle" style="left: 70%; animation-delay: 3s;"></div>
+        <div class="particle" style="left: 80%; animation-delay: 5s;"></div>
+        <div class="particle" style="left: 90%; animation-delay: 2.5s;"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">
+            <span class="logo-icon">🎓</span>
+            SchoolOS
+        </div>
+        <a href="#contact" class="nav-cta">Get Early Access</a>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <div class="hero-badge">
+                    <span class="dot"></span>
+                    Transforming K-12 Education
+                </div>
+                <h1>The <span class="gradient-text">AI Operating System</span> for Every School</h1>
+                <p class="hero-subtitle">
+                    Every school deserves a genius assistant for every student, teacher, and administrator. SchoolOS delivers personalized learning, intelligent teaching support, and autonomous administration—all in one unified platform.
+                </p>
+                <div class="hero-ctas">
+                    <a href="#contact" class="btn-primary">
+                        Request Demo
+                        <span>→</span>
+                    </a>
+                    <a href="#solution" class="btn-secondary">See How It Works</a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="hero-image-container">
+                    <div class="dashboard-mockup">
+                        <div class="dashboard-header">
+                            <span class="window-dot red"></span>
+                            <span class="window-dot yellow"></span>
+                            <span class="window-dot green"></span>
+                        </div>
+                        <div class="dashboard-content">
+                            <div class="dashboard-card">
+                                <h4>STUDENT PROGRESS</h4>
+                                <div class="dashboard-stat">92%</div>
+                                <div class="mini-chart">
+                                    <div class="mini-bar" style="height: 60%;"></div>
+                                    <div class="mini-bar" style="height: 75%;"></div>
+                                    <div class="mini-bar" style="height: 65%;"></div>
+                                    <div class="mini-bar" style="height: 85%;"></div>
+                                    <div class="mini-bar" style="height: 90%;"></div>
+                                    <div class="mini-bar" style="height: 95%;"></div>
+                                </div>
+                            </div>
+                            <div class="dashboard-card">
+                                <h4>TEACHER TIME SAVED</h4>
+                                <div class="dashboard-stat">15hrs</div>
+                                <div class="mini-chart">
+                                    <div class="mini-bar" style="height: 40%;"></div>
+                                    <div class="mini-bar" style="height: 55%;"></div>
+                                    <div class="mini-bar" style="height: 70%;"></div>
+                                    <div class="mini-bar" style="height: 80%;"></div>
+                                    <div class="mini-bar" style="height: 95%;"></div>
+                                    <div class="mini-bar" style="height: 100%;"></div>
+                                </div>
+                            </div>
+                            <div class="dashboard-card">
+                                <h4>INTERVENTIONS TRIGGERED</h4>
+                                <div class="dashboard-stat">47</div>
+                            </div>
+                            <div class="dashboard-card">
+                                <h4>PARENT ENGAGEMENT</h4>
+                                <div class="dashboard-stat">+156%</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="floating-card card-1">
+                        <div class="floating-icon">🤖</div>
+                        <p>Student AI Active</p>
+                        <span>24/7 personalized tutoring</span>
+                    </div>
+                    <div class="floating-card card-2">
+                        <div class="floating-icon">📊</div>
+                        <p>At-Risk Alert</p>
+                        <span>3 students flagged for review</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">50M+</div>
+                <div class="stat-label">US K-12 Students</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">300K</div>
+                <div class="stat-label">Teacher Shortage</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">$800B</div>
+                <div class="stat-label">Annual Education Spend</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">33%</div>
+                <div class="stat-label">Reading Proficiency</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="problem">
+        <div class="section-header">
+            <span class="section-label">THE CRISIS</span>
+            <h2 class="section-title">Education is Broken</h2>
+            <p class="section-subtitle">Teachers are burning out, students are falling behind, and schools are drowning in administrative chaos</p>
+        </div>
+        <div class="problem-grid">
+            <div class="problem-card">
+                <div class="problem-icon">😰</div>
+                <h3>Teacher Burnout Crisis</h3>
+                <p>44% of teachers leave within 5 years. Average teacher works 54 hours/week but only 46% on actual instruction. The profession is collapsing.</p>
+                <div class="problem-stat">11 hrs/week on paperwork</div>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">📚</div>
+                <h3>Student Achievement Gap</h3>
+                <p>1 teacher to 25 students means no personalization. Post-pandemic learning loss equals 5-9 months behind grade level. Kids are failing.</p>
+                <div class="problem-stat">Only 33% reading proficient</div>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">🗂️</div>
+                <h3>Administrative Nightmare</h3>
+                <p>15+ different software systems per district. Principals spend 62% of time on non-instructional tasks. $7B+ wasted annually on inefficiency.</p>
+                <div class="problem-stat">15+ systems per district</div>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">👨‍👩‍👧</div>
+                <h3>Parent Disconnect</h3>
+                <p>73% of parents want more communication. Average parent logs into 4+ different portals. Report cards arrive weeks after grades are determined.</p>
+                <div class="problem-stat">4+ portals per parent</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section id="solution" class="solution">
+        <div class="section-header">
+            <span class="section-label green">THE SOLUTION</span>
+            <h2 class="section-title">Three AI Layers. One Platform.</h2>
+            <p class="section-subtitle">SchoolOS unifies personalized learning, teaching support, and administration into one intelligent system</p>
+        </div>
+        <div class="solution-grid">
+            <div class="solution-card">
+                <div class="solution-icon">🎒</div>
+                <h3>Student AI</h3>
+                <div class="subtitle">"My Tutor"</div>
+                <p>Personalized learning companion available 24/7 on any device. Teaches concepts through Socratic dialogue—never just gives answers.</p>
+                <div class="solution-features">
+                    <div class="solution-feature">Adapts to learning style and pace</div>
+                    <div class="solution-feature">100+ languages for ELL students</div>
+                    <div class="solution-feature">Accessibility-first design</div>
+                    <div class="solution-feature">College & career guidance</div>
+                </div>
+            </div>
+            <div class="solution-card">
+                <div class="solution-icon">👩‍🏫</div>
+                <h3>Teacher AI</h3>
+                <div class="subtitle">"Co-Teacher"</div>
+                <p>Intelligent teaching partner that reduces workload by 15+ hours/week. Augments, never replaces, human educators.</p>
+                <div class="solution-features">
+                    <div class="solution-feature">Auto-generates lesson plans</div>
+                    <div class="solution-feature">Smart grading with feedback</div>
+                    <div class="solution-feature">IEP/504 compliance tracking</div>
+                    <div class="solution-feature">Parent communication drafts</div>
+                </div>
+            </div>
+            <div class="solution-card">
+                <div class="solution-icon">🏫</div>
+                <h3>Admin AI</h3>
+                <div class="subtitle">"SchoolBrain"</div>
+                <p>Autonomous operations intelligence for scheduling, compliance, safety, and finance. Finally, one system that does it all.</p>
+                <div class="solution-features">
+                    <div class="solution-feature">Master schedule optimization</div>
+                    <div class="solution-feature">Automatic state/federal reporting</div>
+                    <div class="solution-feature">Early warning system for at-risk students</div>
+                    <div class="solution-feature">Budget forecasting & analysis</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Architecture Section -->
+    <section class="architecture">
+        <div class="section-header">
+            <span class="section-label purple">THE PLATFORM</span>
+            <h2 class="section-title">Privacy-First Architecture</h2>
+            <p class="section-subtitle">All student data stays within district infrastructure. FERPA, COPPA, and state law compliant by design.</p>
+        </div>
+        <div class="arch-visual">
+            <div class="arch-layers">
+                <div class="arch-layer">
+                    <div class="arch-icon">🔒</div>
+                    <div>
+                        <h4>District-Controlled Data Layer</h4>
+                        <p>All PII stays within district infrastructure. Zero data sold or shared externally. Parent opt-out at any level.</p>
+                    </div>
+                </div>
+                <div class="arch-layer">
+                    <div class="arch-icon">⚡</div>
+                    <div>
+                        <h4>Edge AI Processing</h4>
+                        <p>Student AI runs locally where possible. Sensitive analysis at district edge. Only anonymized data leaves district.</p>
+                    </div>
+                </div>
+                <div class="arch-layer">
+                    <div class="arch-icon">🔍</div>
+                    <div>
+                        <h4>Audit & Transparency</h4>
+                        <p>Every AI decision logged and explainable. Parent portal shows exactly what AI knows. Teacher override on any recommendation.</p>
+                    </div>
+                </div>
+                <div class="arch-layer">
+                    <div class="arch-icon">🔌</div>
+                    <div>
+                        <h4>Universal Integration</h4>
+                        <p>Connects to PowerSchool, Canvas, MAP, and 50+ other systems. Works with your existing tools, not against them.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Market Section -->
+    <section class="market">
+        <div class="market-grid">
+            <div class="market-content">
+                <h3>The $400B Opportunity</h3>
+                <p>Education technology reaches $400B by 2027, yet schools still drown in disconnected tools. SchoolOS captures the massive opportunity to unify the entire education stack.</p>
+                <div class="market-stats">
+                    <div class="market-stat">
+                        <div class="number">$7T</div>
+                        <div class="label">Global Education Market</div>
+                    </div>
+                    <div class="market-stat">
+                        <div class="number">130K</div>
+                        <div class="label">US Schools</div>
+                    </div>
+                    <div class="market-stat">
+                        <div class="number">1.5B</div>
+                        <div class="label">Students Worldwide</div>
+                    </div>
+                    <div class="market-stat">
+                        <div class="number">$2.1B</div>
+                        <div class="label">2030 ARR Target</div>
+                    </div>
+                </div>
+            </div>
+            <div class="market-chart">
+                <div class="chart-header">
+                    <h4>Revenue Projection</h4>
+                    <span>Annual Recurring Revenue</span>
+                </div>
+                <div class="chart-bars">
+                    <div class="chart-bar">
+                        <span class="year">2026</span>
+                        <div class="bar-bg"><div class="bar-fill" style="width: 5%;"></div></div>
+                        <span class="value">$10M</span>
+                    </div>
+                    <div class="chart-bar">
+                        <span class="year">2027</span>
+                        <div class="bar-bg"><div class="bar-fill" style="width: 15%;"></div></div>
+                        <span class="value">$90M</span>
+                    </div>
+                    <div class="chart-bar">
+                        <span class="year">2028</span>
+                        <div class="bar-bg"><div class="bar-fill" style="width: 30%;"></div></div>
+                        <span class="value">$350M</span>
+                    </div>
+                    <div class="chart-bar">
+                        <span class="year">2029</span>
+                        <div class="bar-bg"><div class="bar-fill" style="width: 55%;"></div></div>
+                        <span class="value">$900M</span>
+                    </div>
+                    <div class="chart-bar">
+                        <span class="year">2030</span>
+                        <div class="bar-bg"><div class="bar-fill" style="width: 100%;"></div></div>
+                        <span class="value">$2.1B</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quote -->
+    <section class="quote">
+        <p class="quote-text">"The mediocre teacher tells. The good teacher explains. The superior teacher demonstrates. The great teacher inspires."</p>
+        <p class="quote-author">— William Arthur Ward</p>
+        <p style="color: var(--gray); margin-top: 1rem; font-size: 1.1rem;">SchoolOS gives every teacher the tools to be great.</p>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="contact" class="cta">
+        <div class="cta-container">
+            <div class="cta-content">
+                <h2>Ready to Transform Your District?</h2>
+                <p>Join our pilot program and give your teachers superpowers. We're accepting applications from forward-thinking school districts.</p>
+                <div class="cta-buttons">
+                    <a href="mailto:founders@schoolos.ai" class="btn-primary">
+                        Request Demo
+                        <span>→</span>
+                    </a>
+                    <a href="#" class="btn-secondary">Download Overview</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">🎓 SchoolOS</div>
+            <div class="footer-links">
+                <a href="#">About</a>
+                <a href="#">Careers</a>
+                <a href="#">Contact</a>
+                <a href="#">Privacy</a>
+            </div>
+            <div class="footer-copy">© 2026 SchoolOS. Built with 💜 for educators everywhere.</div>
+        </div>
+    </footer>
+
+    <script>
+        // Animate stats on scroll
+        const observerOptions = {
+            threshold: 0.5
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.stat-card, .problem-card, .solution-card').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
