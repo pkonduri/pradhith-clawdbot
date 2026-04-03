@@ -186,6 +186,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-04-02 | Evening | SoloAge AI — The Operating System for Thriving While Aging Independently | [Playbook](2026-04-02-evening.md) • [Landing](2026-04-02-evening-landing.html) • [PDF](2026-04-02-evening.pdf) |
 | 2026-04-02 | Morning | SubscriptionOS — Subscription Economy Compliance & Freedom | [Playbook](2026-04-02-morning.md) • [Landing](2026-04-02-morning-landing.html) • [PDF](2026-04-02-morning.pdf) |
 | 2026-04-02 | Afternoon | DataValve AI — Personal Data Monetization | [Playbook](2026-04-02-afternoon.md) • [Landing](2026-04-02-afternoon-landing.html) • [PDF](2026-04-02-afternoon.pdf) |
+| 2026-04-03 | Evening | FacilityOS — Autonomous Commercial Facilities Intelligence | [Playbook](2026-04-03-evening.md) • [Landing](2026-04-03-evening-landing.html) • [PDF](2026-04-03-evening.pdf) |
 <!-- New entries will be added above this line -->
 
 ---
