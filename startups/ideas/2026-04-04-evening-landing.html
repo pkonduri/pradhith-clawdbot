@@ -1,0 +1,1757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindFeed AI — Your Algorithms, Your Rules</title>
+    <meta name="description" content="The AI Operating System for Algorithmic Wellness. Take back control of your content feeds.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #10b981;
+            --accent: #f59e0b;
+            --warning: #ef4444;
+            --dark: #0f172a;
+            --darker: #020617;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --gradient-1: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%);
+            --gradient-2: linear-gradient(135deg, #10b981 0%, #06b6d4 100%);
+            --gradient-3: linear-gradient(135deg, #f59e0b 0%, #f97316 100%);
+            --gradient-dark: linear-gradient(180deg, #0f172a 0%, #020617 100%);
+            --glow: 0 0 60px rgba(99, 102, 241, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--darker);
+            color: var(--light);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 20% 80%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 40%, rgba(217, 70, 239, 0.05) 0%, transparent 40%);
+            animation: bgPulse 20s ease-in-out infinite;
+        }
+
+        @keyframes bgPulse {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(-5%, -5%) scale(1.1); }
+        }
+
+        /* Feed Animation Background */
+        .feed-particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .feed-particle {
+            position: absolute;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 8px;
+            animation: feedFloat 15s linear infinite;
+        }
+
+        @keyframes feedFloat {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.5; }
+            90% { opacity: 0.5; }
+            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1rem 2rem;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        nav.scrolled {
+            padding: 0.75rem 2rem;
+            background: rgba(15, 23, 42, 0.95);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.75rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            -webkit-text-fill-color: white;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--gray);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--light);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-1);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-cta {
+            display: flex;
+            gap: 1rem;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.875rem 1.75rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--gradient-1);
+            color: white;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(99, 102, 241, 0.5);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--light);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-large {
+            padding: 1.125rem 2.5rem;
+            font-size: 1.1rem;
+            border-radius: 16px;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 2rem 4rem;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .hero-text {
+            max-width: 650px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 100px;
+            font-size: 0.875rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            animation: badgePulse 2s ease-in-out infinite;
+        }
+
+        @keyframes badgePulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.3); }
+            50% { box-shadow: 0 0 0 10px rgba(99, 102, 241, 0); }
+        }
+
+        .hero h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 4.5rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .hero h1 .highlight {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.35rem;
+            color: var(--gray);
+            margin-bottom: 2.5rem;
+            line-height: 1.7;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 3rem;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stat {
+            text-align: left;
+        }
+
+        .stat-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--gray);
+            margin-top: 0.25rem;
+        }
+
+        /* Hero Visual */
+        .hero-visual {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .feed-demo {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .phone-frame {
+            background: linear-gradient(145deg, #1e293b 0%, #0f172a 100%);
+            border-radius: 40px;
+            padding: 12px;
+            box-shadow: var(--glow), 0 25px 50px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .phone-screen {
+            background: #0f172a;
+            border-radius: 32px;
+            overflow: hidden;
+            aspect-ratio: 9/16;
+            max-height: 600px;
+        }
+
+        .phone-notch {
+            width: 40%;
+            height: 30px;
+            background: #0f172a;
+            margin: 0 auto;
+            border-radius: 0 0 20px 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .feed-content {
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            animation: feedScroll 20s linear infinite;
+        }
+
+        @keyframes feedScroll {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-50%); }
+        }
+
+        .feed-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            padding: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .feed-item.blocked {
+            opacity: 0.3;
+            filter: blur(1px);
+            border-color: rgba(239, 68, 68, 0.3);
+            position: relative;
+        }
+
+        .feed-item.blocked::after {
+            content: '🛡️ Filtered';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(239, 68, 68, 0.9);
+            padding: 0.25rem 0.75rem;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .feed-item.boosted {
+            border-color: rgba(16, 185, 129, 0.4);
+            background: rgba(16, 185, 129, 0.05);
+        }
+
+        .feed-item.boosted::before {
+            content: '⭐ Goal-Aligned';
+            display: block;
+            font-size: 0.7rem;
+            color: var(--secondary);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .feed-item-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .feed-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--gradient-1);
+        }
+
+        .feed-user {
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .feed-text {
+            font-size: 0.8rem;
+            color: var(--gray);
+            line-height: 1.5;
+        }
+
+        .mindfeed-overlay {
+            position: absolute;
+            top: 50%;
+            right: -80px;
+            transform: translateY(-50%);
+            background: rgba(99, 102, 241, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 16px;
+            padding: 1rem;
+            width: 200px;
+            animation: overlayPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes overlayPulse {
+            0%, 100% { transform: translateY(-50%) scale(1); }
+            50% { transform: translateY(-50%) scale(1.02); }
+        }
+
+        .mindfeed-overlay h4 {
+            font-size: 0.8rem;
+            color: var(--primary);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .mindfeed-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .mindfeed-stat {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+        }
+
+        .mindfeed-stat-label {
+            color: var(--gray);
+        }
+
+        .mindfeed-stat-value {
+            font-weight: 600;
+        }
+
+        .mindfeed-stat-value.positive {
+            color: var(--secondary);
+        }
+
+        .mindfeed-stat-value.negative {
+            color: var(--warning);
+        }
+
+        /* Problem Section */
+        .section {
+            padding: 6rem 2rem;
+            position: relative;
+        }
+
+        .section-dark {
+            background: var(--dark);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-label {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 100px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .section-subtitle {
+            font-size: 1.25rem;
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Problem Cards */
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .problem-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(239, 68, 68, 0.3);
+            box-shadow: 0 20px 40px rgba(239, 68, 68, 0.1);
+        }
+
+        .problem-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .problem-card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .problem-card p {
+            color: var(--gray);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .problem-stat {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 100px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--warning);
+            margin-top: 1rem;
+        }
+
+        /* Solution Section */
+        .solution-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .solution-card {
+            background: linear-gradient(145deg, rgba(99, 102, 241, 0.05) 0%, rgba(139, 92, 246, 0.02) 100%);
+            border: 1px solid rgba(99, 102, 241, 0.1);
+            border-radius: 24px;
+            padding: 2.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .solution-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(99, 102, 241, 0.3);
+            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.15);
+        }
+
+        .solution-card.featured {
+            grid-column: span 2;
+            background: linear-gradient(145deg, rgba(16, 185, 129, 0.05) 0%, rgba(6, 182, 212, 0.02) 100%);
+            border-color: rgba(16, 185, 129, 0.1);
+        }
+
+        .solution-card.featured:hover {
+            border-color: rgba(16, 185, 129, 0.3);
+            box-shadow: 0 20px 40px rgba(16, 185, 129, 0.15);
+        }
+
+        .solution-icon {
+            width: 64px;
+            height: 64px;
+            background: var(--gradient-1);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .solution-card.featured .solution-icon {
+            background: var(--gradient-2);
+        }
+
+        .solution-card h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .solution-card p {
+            color: var(--gray);
+            font-size: 1rem;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .solution-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .solution-feature {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 100px;
+            font-size: 0.85rem;
+        }
+
+        .solution-feature .check {
+            color: var(--secondary);
+        }
+
+        /* How It Works */
+        .how-it-works {
+            position: relative;
+        }
+
+        .timeline {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            padding: 2rem 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 10%;
+            right: 10%;
+            height: 4px;
+            background: var(--gradient-1);
+            border-radius: 2px;
+            transform: translateY(-50%);
+            z-index: 0;
+        }
+
+        .timeline-step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .step-number {
+            width: 80px;
+            height: 80px;
+            background: var(--dark);
+            border: 3px solid var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--primary);
+            box-shadow: var(--glow);
+        }
+
+        .timeline-step h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-step p {
+            color: var(--gray);
+            font-size: 0.95rem;
+            max-width: 200px;
+            margin: 0 auto;
+        }
+
+        /* Market Section */
+        .market-visual {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .market-chart {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            padding: 2rem;
+        }
+
+        .chart-bar {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .chart-bar-label {
+            width: 120px;
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .chart-bar-track {
+            flex: 1;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .chart-bar-fill {
+            height: 100%;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 1rem;
+            font-weight: 600;
+            font-size: 0.85rem;
+            animation: barGrow 1.5s ease-out forwards;
+        }
+
+        @keyframes barGrow {
+            from { width: 0; }
+        }
+
+        .chart-bar-fill.tam {
+            background: var(--gradient-1);
+            width: 100%;
+        }
+
+        .chart-bar-fill.sam {
+            background: var(--gradient-2);
+            width: 60%;
+        }
+
+        .chart-bar-fill.som {
+            background: var(--gradient-3);
+            width: 35%;
+        }
+
+        .market-highlights {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .market-highlight {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .market-highlight:hover {
+            border-color: rgba(99, 102, 241, 0.2);
+        }
+
+        .market-highlight h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .market-highlight p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* Pricing Section */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .pricing-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            padding: 2.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(99, 102, 241, 0.2);
+        }
+
+        .pricing-card.featured {
+            background: linear-gradient(145deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.05) 100%);
+            border-color: var(--primary);
+            transform: scale(1.05);
+        }
+
+        .pricing-card.featured:hover {
+            transform: scale(1.05) translateY(-4px);
+        }
+
+        .pricing-badge {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--gradient-1);
+            padding: 0.5rem 1.5rem;
+            border-radius: 100px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .pricing-tier {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--gray);
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-price {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-price span {
+            font-size: 1rem;
+            color: var(--gray);
+            font-weight: 400;
+        }
+
+        .pricing-desc {
+            color: var(--gray);
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-features {
+            text-align: left;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-feature {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 0.95rem;
+        }
+
+        .pricing-feature:last-child {
+            border-bottom: none;
+        }
+
+        .pricing-feature .check {
+            color: var(--secondary);
+            font-weight: bold;
+        }
+
+        /* Testimonials */
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .testimonial-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(99, 102, 241, 0.2);
+        }
+
+        .testimonial-quote {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+            color: var(--light);
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .testimonial-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--gradient-1);
+        }
+
+        .testimonial-name {
+            font-weight: 600;
+        }
+
+        .testimonial-title {
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            text-align: center;
+            padding: 8rem 2rem;
+            background: radial-gradient(ellipse at center, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
+        }
+
+        .cta-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cta-content h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .cta-content p {
+            font-size: 1.25rem;
+            color: var(--gray);
+            margin-bottom: 2.5rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--darker);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 4rem 2rem 2rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-brand {
+            max-width: 300px;
+        }
+
+        .footer-brand .logo {
+            margin-bottom: 1rem;
+        }
+
+        .footer-brand p {
+            color: var(--gray);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .footer-links h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--light);
+        }
+
+        .footer-links ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .footer-links a {
+            color: var(--gray);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            color: var(--gray);
+            font-size: 0.85rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-text {
+                max-width: 100%;
+            }
+
+            .hero h1 {
+                font-size: 3rem;
+            }
+
+            .hero-buttons {
+                justify-content: center;
+            }
+
+            .hero-stats {
+                justify-content: center;
+            }
+
+            .hero-visual {
+                display: none;
+            }
+
+            .solution-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .solution-card.featured {
+                grid-column: span 1;
+            }
+
+            .timeline {
+                flex-direction: column;
+                gap: 2rem;
+            }
+
+            .timeline::before {
+                display: none;
+            }
+
+            .market-visual {
+                grid-template-columns: 1fr;
+            }
+
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pricing-card.featured {
+                transform: none;
+            }
+
+            .pricing-card.featured:hover {
+                transform: translateY(-4px);
+            }
+
+            .testimonial-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .nav-links {
+                display: none;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .hero h1 {
+                font-size: 2.25rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .cta-content h2 {
+                font-size: 2rem;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Animation -->
+    <div class="bg-animation">
+        <div class="feed-particles">
+            <div class="feed-particle" style="width: 80px; height: 60px; left: 10%; animation-delay: 0s;"></div>
+            <div class="feed-particle" style="width: 60px; height: 45px; left: 25%; animation-delay: 2s;"></div>
+            <div class="feed-particle" style="width: 100px; height: 75px; left: 40%; animation-delay: 4s;"></div>
+            <div class="feed-particle" style="width: 70px; height: 50px; left: 55%; animation-delay: 6s;"></div>
+            <div class="feed-particle" style="width: 90px; height: 65px; left: 70%; animation-delay: 8s;"></div>
+            <div class="feed-particle" style="width: 50px; height: 40px; left: 85%; animation-delay: 10s;"></div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <div class="logo-icon">🧠</div>
+                MindFeed
+            </div>
+            <ul class="nav-links">
+                <li><a href="#problem">Problem</a></li>
+                <li><a href="#solution">Solution</a></li>
+                <li><a href="#how-it-works">How It Works</a></li>
+                <li><a href="#market">Market</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+            </ul>
+            <div class="nav-cta">
+                <a href="#cta" class="btn btn-primary">Get Early Access</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <div class="hero-badge">
+                    <span>🚀</span>
+                    Now in Private Beta
+                </div>
+                <h1>
+                    Your <span class="highlight">Algorithms</span>,<br>
+                    Your Rules
+                </h1>
+                <p>
+                    Take back control of your content feeds. MindFeed AI curates what you see based on <em>your</em> goals and values — not engagement metrics.
+                </p>
+                <div class="hero-buttons">
+                    <a href="#cta" class="btn btn-primary btn-large">
+                        Join the Waitlist
+                        <span>→</span>
+                    </a>
+                    <a href="#solution" class="btn btn-secondary btn-large">
+                        See How It Works
+                    </a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <div class="stat-value">67%</div>
+                        <div class="stat-label">Feel time was "wasted"</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">2.5hrs</div>
+                        <div class="stat-label">Daily social media use</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">10K+</div>
+                        <div class="stat-label">Recommendations/day</div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="feed-demo">
+                    <div class="phone-frame">
+                        <div class="phone-screen">
+                            <div class="phone-notch"></div>
+                            <div class="feed-content">
+                                <div class="feed-item boosted">
+                                    <div class="feed-item-header">
+                                        <div class="feed-avatar"></div>
+                                        <span class="feed-user">TechCrunch</span>
+                                    </div>
+                                    <p class="feed-text">How to launch your startup in 2026: A comprehensive guide to finding product-market fit...</p>
+                                </div>
+                                <div class="feed-item blocked">
+                                    <div class="feed-item-header">
+                                        <div class="feed-avatar"></div>
+                                        <span class="feed-user">DramaAlert</span>
+                                    </div>
+                                    <p class="feed-text">You won't BELIEVE what happened! Celebrity drama that will SHOCK you...</p>
+                                </div>
+                                <div class="feed-item">
+                                    <div class="feed-item-header">
+                                        <div class="feed-avatar"></div>
+                                        <span class="feed-user">Friend</span>
+                                    </div>
+                                    <p class="feed-text">Had an amazing day hiking! Here are some photos from the trail...</p>
+                                </div>
+                                <div class="feed-item boosted">
+                                    <div class="feed-item-header">
+                                        <div class="feed-avatar"></div>
+                                        <span class="feed-user">Y Combinator</span>
+                                    </div>
+                                    <p class="feed-text">The most common mistake founders make when pitching investors...</p>
+                                </div>
+                                <div class="feed-item blocked">
+                                    <div class="feed-item-header">
+                                        <div class="feed-avatar"></div>
+                                        <span class="feed-user">AngryPolitics</span>
+                                    </div>
+                                    <p class="feed-text">Can you believe they said THIS?! Share if you agree...</p>
+                                </div>
+                                <div class="feed-item">
+                                    <div class="feed-item-header">
+                                        <div class="feed-avatar"></div>
+                                        <span class="feed-user">Fitness Pro</span>
+                                    </div>
+                                    <p class="feed-text">5 exercises to build strength and endurance this month...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mindfeed-overlay">
+                        <h4>🧠 MindFeed Active</h4>
+                        <div class="mindfeed-stats">
+                            <div class="mindfeed-stat">
+                                <span class="mindfeed-stat-label">Quality Score</span>
+                                <span class="mindfeed-stat-value positive">87%</span>
+                            </div>
+                            <div class="mindfeed-stat">
+                                <span class="mindfeed-stat-label">Filtered</span>
+                                <span class="mindfeed-stat-value negative">-12 items</span>
+                            </div>
+                            <div class="mindfeed-stat">
+                                <span class="mindfeed-stat-label">Goal Aligned</span>
+                                <span class="mindfeed-stat-value positive">+8 items</span>
+                            </div>
+                            <div class="mindfeed-stat">
+                                <span class="mindfeed-stat-label">Time Saved</span>
+                                <span class="mindfeed-stat-value positive">47 min</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="section section-dark" id="problem">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">The Problem</span>
+                <h2 class="section-title">Algorithms Designed Against You</h2>
+                <p class="section-subtitle">
+                    Platforms spend billions engineering engagement. You have... willpower. That's not a fair fight.
+                </p>
+            </div>
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="problem-icon">⏰</div>
+                    <h3>Time Theft</h3>
+                    <p>Average user regrets 67% of their social media time. That's ~2 hours of life stolen daily.</p>
+                    <span class="problem-stat">730+ hours/year wasted</span>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">😰</div>
+                    <h3>Mental Health Crisis</h3>
+                    <p>78% feel worse after using social media. Anxiety, depression, and FOMO by design.</p>
+                    <span class="problem-stat">3x depression in heavy users</span>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">🎯</div>
+                    <h3>Goals Derailed</h3>
+                    <p>Opened the app to message a friend. 45 minutes later, you've achieved nothing.</p>
+                    <span class="problem-stat">81% feel manipulated</span>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">💼</div>
+                    <h3>Productivity Destroyed</h3>
+                    <p>Knowledge workers lose 2.1 hours daily to algorithmic distractions. That's $47B in lost productivity.</p>
+                    <span class="problem-stat">2.1 hours/day lost</span>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">😡</div>
+                    <h3>Outrage Amplification</h3>
+                    <p>Extreme content gets 3x more engagement. Algorithms are radicalizing feeds.</p>
+                    <span class="problem-stat">6x faster misinformation spread</span>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">🔄</div>
+                    <h3>Addiction by Design</h3>
+                    <p>Variable reward schedules, infinite scroll, autoplay — the same techniques as slot machines.</p>
+                    <span class="problem-stat">$250B attention economy</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="section" id="solution">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">The Solution</span>
+                <h2 class="section-title">AI That Fights For You</h2>
+                <p class="section-subtitle">
+                    MindFeed sits between you and your feeds, curating content based on your goals — not engagement metrics.
+                </p>
+            </div>
+            <div class="solution-grid">
+                <div class="solution-card featured">
+                    <div class="solution-icon">🎯</div>
+                    <h3>Goal-Aligned Curation</h3>
+                    <p>
+                        Tell MindFeed your goals — "Learn Spanish," "Launch my startup," "Improve mental health" — and watch your feeds transform to serve them.
+                    </p>
+                    <div class="solution-features">
+                        <span class="solution-feature"><span class="check">✓</span> Natural language goals</span>
+                        <span class="solution-feature"><span class="check">✓</span> Progress tracking</span>
+                        <span class="solution-feature"><span class="check">✓</span> Smart prioritization</span>
+                        <span class="solution-feature"><span class="check">✓</span> Content quality scoring</span>
+                    </div>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon">🛡️</div>
+                    <h3>Wellness Guardian</h3>
+                    <p>
+                        Detects doom-scrolling, outrage bait, and addiction patterns. Protects your mental health proactively.
+                    </p>
+                    <div class="solution-features">
+                        <span class="solution-feature"><span class="check">✓</span> Doom-scroll detection</span>
+                        <span class="solution-feature"><span class="check">✓</span> Outrage filtering</span>
+                        <span class="solution-feature"><span class="check">✓</span> FOMO shield</span>
+                    </div>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon">🔗</div>
+                    <h3>Cross-Platform Intelligence</h3>
+                    <p>
+                        Unlike single-app tools, MindFeed sees your entire digital diet and optimizes holistically.
+                    </p>
+                    <div class="solution-features">
+                        <span class="solution-feature"><span class="check">✓</span> All platforms unified</span>
+                        <span class="solution-feature"><span class="check">✓</span> Total time budgets</span>
+                        <span class="solution-feature"><span class="check">✓</span> Overlap detection</span>
+                    </div>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon">🔒</div>
+                    <h3>Privacy-First Architecture</h3>
+                    <p>
+                        All processing happens on your device. We never see your content. Your data stays yours.
+                    </p>
+                    <div class="solution-features">
+                        <span class="solution-feature"><span class="check">✓</span> On-device AI</span>
+                        <span class="solution-feature"><span class="check">✓</span> Zero data collection</span>
+                        <span class="solution-feature"><span class="check">✓</span> Full transparency</span>
+                    </div>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon">👥</div>
+                    <h3>Social Graph Optimization</h3>
+                    <p>
+                        Prioritize real connections, deprioritize engagement traps, and detect parasocial relationships.
+                    </p>
+                    <div class="solution-features">
+                        <span class="solution-feature"><span class="check">✓</span> Close friends first</span>
+                        <span class="solution-feature"><span class="check">✓</span> Bot detection</span>
+                        <span class="solution-feature"><span class="check">✓</span> Reciprocity analysis</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="section section-dark" id="how-it-works">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">How It Works</span>
+                <h2 class="section-title">From Chaos to Control</h2>
+                <p class="section-subtitle">
+                    Setup takes 5 minutes. Results are immediate.
+                </p>
+            </div>
+            <div class="timeline">
+                <div class="timeline-step">
+                    <div class="step-number">1</div>
+                    <h3>Install</h3>
+                    <p>Browser extension or mobile app. Works with all major platforms.</p>
+                </div>
+                <div class="timeline-step">
+                    <div class="step-number">2</div>
+                    <h3>Set Goals</h3>
+                    <p>Tell us what matters: career, health, learning, relationships.</p>
+                </div>
+                <div class="timeline-step">
+                    <div class="step-number">3</div>
+                    <h3>Experience</h3>
+                    <p>Watch your feeds transform. More value, less noise.</p>
+                </div>
+                <div class="timeline-step">
+                    <div class="step-number">4</div>
+                    <h3>Evolve</h3>
+                    <p>MindFeed learns from your satisfaction, not your clicks.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Market Section -->
+    <section class="section" id="market">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">Market Opportunity</span>
+                <h2 class="section-title">$166B and Growing</h2>
+                <p class="section-subtitle">
+                    The backlash against attention exploitation has arrived. Regulations are coming. Users are ready.
+                </p>
+            </div>
+            <div class="market-visual">
+                <div class="market-chart">
+                    <div class="chart-bar">
+                        <span class="chart-bar-label">TAM</span>
+                        <div class="chart-bar-track">
+                            <div class="chart-bar-fill tam">$166B</div>
+                        </div>
+                    </div>
+                    <div class="chart-bar">
+                        <span class="chart-bar-label">SAM</span>
+                        <div class="chart-bar-track">
+                            <div class="chart-bar-fill sam">$23B</div>
+                        </div>
+                    </div>
+                    <div class="chart-bar">
+                        <span class="chart-bar-label">SOM (Y5)</span>
+                        <div class="chart-bar-track">
+                            <div class="chart-bar-fill som">$1B ARR</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="market-highlights">
+                    <div class="market-highlight">
+                        <h4>🏛️ Regulatory Tailwinds</h4>
+                        <p>EU Digital Services Act, US state legislation, and algorithmic transparency laws create demand for user control tools.</p>
+                    </div>
+                    <div class="market-highlight">
+                        <h4>🧠 Cultural Shift</h4>
+                        <p>"Dumb phone" movement, Gen Z digital burnout, and corporate wellness programs prioritizing digital health.</p>
+                    </div>
+                    <div class="market-highlight">
+                        <h4>💼 Enterprise Opportunity</h4>
+                        <p>$47B lost annually to digital distractions. Companies are desperate for solutions that don't kill utility.</p>
+                    </div>
+                    <div class="market-highlight">
+                        <h4>🏥 Healthcare Integration</h4>
+                        <p>Mental health costs tied to social media create insurer demand for preventive digital wellness tools.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="section section-dark" id="pricing">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">Pricing</span>
+                <h2 class="section-title">Invest in Your Attention</h2>
+                <p class="section-subtitle">
+                    Less than the cost of a streaming subscription. Worth infinitely more.
+                </p>
+            </div>
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <div class="pricing-tier">Free</div>
+                    <div class="pricing-price">$0<span>/mo</span></div>
+                    <p class="pricing-desc">Get started with basic protection</p>
+                    <div class="pricing-features">
+                        <div class="pricing-feature"><span class="check">✓</span> 1 platform integration</div>
+                        <div class="pricing-feature"><span class="check">✓</span> Basic feed health score</div>
+                        <div class="pricing-feature"><span class="check">✓</span> Simple time awareness</div>
+                        <div class="pricing-feature"><span class="check">✓</span> Limited goal tracking</div>
+                    </div>
+                    <a href="#cta" class="btn btn-secondary" style="width: 100%;">Start Free</a>
+                </div>
+                <div class="pricing-card featured">
+                    <div class="pricing-badge">Most Popular</div>
+                    <div class="pricing-tier">Premium</div>
+                    <div class="pricing-price">$9.99<span>/mo</span></div>
+                    <p class="pricing-desc">Full algorithmic wellness suite</p>
+                    <div class="pricing-features">
+                        <div class="pricing-feature"><span class="check">✓</span> Unlimited platforms</div>
+                        <div class="pricing-feature"><span class="check">✓</span> Full goal alignment engine</div>
+                        <div class="pricing-feature"><span class="check">✓</span> Advanced wellness guardian</div>
+                        <div class="pricing-feature"><span class="check">✓</span> Cross-platform analytics</div>
+                        <div class="pricing-feature"><span class="check">✓</span> Family sharing (6)</div>
+                    </div>
+                    <a href="#cta" class="btn btn-primary" style="width: 100%;">Get Premium</a>
+                </div>
+                <div class="pricing-card">
+                    <div class="pricing-tier">Enterprise</div>
+                    <div class="pricing-price">$35<span>/seat/mo</span></div>
+                    <p class="pricing-desc">Team productivity + compliance</p>
+                    <div class="pricing-features">
+                        <div class="pricing-feature"><span class="check">✓</span> Everything in Premium</div>
+                        <div class="pricing-feature"><span class="check">✓</span> Admin dashboard</div>
+                        <div class="pricing-feature"><span class="check">✓</span> Policy controls</div>
+                        <div class="pricing-feature"><span class="check">✓</span> Compliance reporting</div>
+                        <div class="pricing-feature"><span class="check">✓</span> SSO integration</div>
+                    </div>
+                    <a href="#cta" class="btn btn-secondary" style="width: 100%;">Contact Sales</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">Early Adopters</span>
+                <h2 class="section-title">What Users Are Saying</h2>
+            </div>
+            <div class="testimonial-grid">
+                <div class="testimonial-card">
+                    <p class="testimonial-quote">
+                        "I got 2 hours of my day back. Not by using apps less — by using them better. MindFeed made my feeds actually useful."
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar"></div>
+                        <div>
+                            <div class="testimonial-name">Sarah K.</div>
+                            <div class="testimonial-title">Startup Founder</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <p class="testimonial-quote">
+                        "The wellness guardian caught my doom-scrolling pattern before I even realized I was doing it. It's like having a therapist for my phone."
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar"></div>
+                        <div>
+                            <div class="testimonial-name">Marcus J.</div>
+                            <div class="testimonial-title">Product Manager</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <p class="testimonial-quote">
+                        "Deployed to our whole team. Productivity metrics improved 20% in the first month. The ROI is insane."
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar"></div>
+                        <div>
+                            <div class="testimonial-name">Jennifer L.</div>
+                            <div class="testimonial-title">VP of People, Series B Startup</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section" id="cta">
+        <div class="cta-content">
+            <h2>Take Back Your Attention</h2>
+            <p>
+                Join thousands who've reclaimed their digital lives. Early access spots are limited.
+            </p>
+            <div class="cta-buttons">
+                <a href="mailto:invest@mindfeed.ai" class="btn btn-primary btn-large">
+                    🚀 Get Early Access
+                </a>
+                <a href="mailto:invest@mindfeed.ai" class="btn btn-secondary btn-large">
+                    💼 Enterprise Demo
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <div class="logo">
+                    <div class="logo-icon">🧠</div>
+                    MindFeed
+                </div>
+                <p>
+                    The AI Operating System for Algorithmic Wellness. Your algorithms, your rules.
+                </p>
+            </div>
+            <div class="footer-links">
+                <h4>Product</h4>
+                <ul>
+                    <li><a href="#solution">Features</a></li>
+                    <li><a href="#pricing">Pricing</a></li>
+                    <li><a href="#how-it-works">How It Works</a></li>
+                    <li><a href="#">Enterprise</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Press</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Legal</h4>
+                <ul>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">Security</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 MindFeed AI. All rights reserved. | Your algorithms, your rules.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Navbar scroll effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Animate elements on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.problem-card, .solution-card, .pricing-card, .testimonial-card, .market-highlight').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
