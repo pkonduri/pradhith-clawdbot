@@ -1,0 +1,1301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpectrumOS — The AI Operating System for RF Spectrum Intelligence</title>
+    <meta name="description" content="See the invisible. Own the airwaves. AI-powered spectrum intelligence for telecoms, defense, and enterprises.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-glow: rgba(99, 102, 241, 0.4);
+            --secondary: #06b6d4;
+            --secondary-glow: rgba(6, 182, 212, 0.4);
+            --accent: #f59e0b;
+            --dark: #0a0a0f;
+            --darker: #050508;
+            --surface: #12121a;
+            --surface-light: #1a1a25;
+            --text: #f1f5f9;
+            --text-muted: #94a3b8;
+            --success: #10b981;
+            --warning: #f59e0b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--darker);
+            color: var(--text);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* Animated Spectrum Background */
+        .spectrum-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: var(--darker);
+            overflow: hidden;
+        }
+
+        .spectrum-waves {
+            position: absolute;
+            width: 200%;
+            height: 100%;
+            top: 0;
+            left: -50%;
+        }
+
+        .wave {
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            left: 0;
+            opacity: 0.3;
+            animation: waveMove 8s linear infinite;
+        }
+
+        .wave::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                var(--primary) 10%, 
+                var(--secondary) 30%, 
+                var(--primary) 50%, 
+                var(--secondary) 70%, 
+                var(--primary) 90%, 
+                transparent 100%);
+            filter: blur(1px);
+        }
+
+        @keyframes waveMove {
+            0% { transform: translateX(-50%); }
+            100% { transform: translateX(0%); }
+        }
+
+        .wave:nth-child(1) { top: 15%; animation-duration: 12s; opacity: 0.2; }
+        .wave:nth-child(2) { top: 25%; animation-duration: 8s; animation-delay: -2s; }
+        .wave:nth-child(3) { top: 35%; animation-duration: 10s; animation-delay: -4s; opacity: 0.25; }
+        .wave:nth-child(4) { top: 45%; animation-duration: 7s; animation-delay: -1s; }
+        .wave:nth-child(5) { top: 55%; animation-duration: 9s; animation-delay: -3s; opacity: 0.2; }
+        .wave:nth-child(6) { top: 65%; animation-duration: 11s; animation-delay: -5s; }
+        .wave:nth-child(7) { top: 75%; animation-duration: 8s; animation-delay: -2s; opacity: 0.25; }
+        .wave:nth-child(8) { top: 85%; animation-duration: 6s; opacity: 0.15; }
+
+        /* Signal pulses */
+        .signal-pulse {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--primary);
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.8; box-shadow: 0 0 20px var(--primary-glow); }
+            50% { transform: scale(1.5); opacity: 0.4; box-shadow: 0 0 40px var(--primary-glow); }
+        }
+
+        .signal-pulse:nth-child(9) { top: 20%; left: 10%; animation-delay: 0s; }
+        .signal-pulse:nth-child(10) { top: 40%; left: 85%; animation-delay: 1s; background: var(--secondary); }
+        .signal-pulse:nth-child(11) { top: 70%; left: 25%; animation-delay: 2s; }
+        .signal-pulse:nth-child(12) { top: 30%; left: 60%; animation-delay: 0.5s; background: var(--accent); }
+        .signal-pulse:nth-child(13) { top: 80%; left: 70%; animation-delay: 1.5s; background: var(--secondary); }
+
+        /* Grid overlay */
+        .grid-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(99, 102, 241, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(20px);
+            background: rgba(10, 10, 15, 0.7);
+            border-bottom: 1px solid rgba(99, 102, 241, 0.1);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            position: relative;
+        }
+
+        .logo-icon::before {
+            content: '📡';
+            filter: grayscale(1) brightness(10);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 3rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .cta-button {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px var(--primary-glow);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px var(--primary-glow);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 8rem 5% 4rem;
+            position: relative;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            padding: 0.6rem 1.2rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            color: var(--secondary);
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .hero-badge .pulse {
+            width: 8px;
+            height: 8px;
+            background: var(--success);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.8s ease 0.2s both;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 50%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+            color: var(--text-muted);
+            max-width: 800px;
+            margin-bottom: 3rem;
+            animation: fadeInUp 0.8s ease 0.4s both;
+        }
+
+        .hero-ctas {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            animation: fadeInUp 0.8s ease 0.6s both;
+        }
+
+        .secondary-button {
+            background: transparent;
+            color: var(--text);
+            padding: 0.8rem 2rem;
+            border: 2px solid rgba(99, 102, 241, 0.5);
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .secondary-button:hover {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 4rem;
+            flex-wrap: wrap;
+            margin-top: 5rem;
+            padding: 2rem 0;
+            border-top: 1px solid rgba(99, 102, 241, 0.1);
+            border-bottom: 1px solid rgba(99, 102, 241, 0.1);
+            animation: fadeInUp 0.8s ease 0.8s both;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Spectrum Visualizer */
+        .spectrum-visual {
+            margin: 5rem 0;
+            padding: 2rem;
+            background: linear-gradient(180deg, rgba(99, 102, 241, 0.05), transparent);
+            border-radius: 20px;
+            border: 1px solid rgba(99, 102, 241, 0.1);
+            max-width: 1000px;
+            width: 90%;
+        }
+
+        .spectrum-display {
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 3px;
+            height: 120px;
+            padding: 1rem;
+        }
+
+        .spectrum-bar {
+            width: 6px;
+            background: linear-gradient(180deg, var(--secondary), var(--primary));
+            border-radius: 3px 3px 0 0;
+            animation: spectrumAnimate 1.5s ease-in-out infinite;
+        }
+
+        @keyframes spectrumAnimate {
+            0%, 100% { height: var(--h1); }
+            50% { height: var(--h2); }
+        }
+
+        /* Problem Section */
+        .section {
+            padding: 8rem 5%;
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 4rem;
+        }
+
+        .section-label {
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-size: 0.85rem;
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+        }
+
+        /* Problem Cards */
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .problem-card {
+            background: linear-gradient(135deg, var(--surface), var(--surface-light));
+            border: 1px solid rgba(99, 102, 241, 0.1);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .problem-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+
+        .problem-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .problem-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(99, 102, 241, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .problem-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(6, 182, 212, 0.2));
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .problem-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .problem-card p {
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        .problem-stat {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(99, 102, 241, 0.1);
+        }
+
+        .problem-stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--warning);
+        }
+
+        .problem-stat-label {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        /* Solution Section */
+        .solution-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .solution-card {
+            background: var(--surface);
+            border: 1px solid rgba(99, 102, 241, 0.15);
+            border-radius: 24px;
+            padding: 3rem;
+            position: relative;
+            transition: all 0.4s ease;
+        }
+
+        .solution-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 0 50px var(--primary-glow);
+        }
+
+        .solution-number {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            font-size: 4rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(6, 182, 212, 0.1));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .solution-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .solution-card h3 {
+            font-size: 1.6rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .solution-card p {
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-list {
+            list-style: none;
+        }
+
+        .feature-list li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 0;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .feature-list li::before {
+            content: '✓';
+            color: var(--success);
+            font-weight: bold;
+        }
+
+        /* Market Section */
+        .market-section {
+            background: linear-gradient(180deg, transparent, rgba(99, 102, 241, 0.03), transparent);
+        }
+
+        .market-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .market-visual {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .market-chart {
+            background: var(--surface);
+            border-radius: 24px;
+            padding: 3rem;
+            border: 1px solid rgba(99, 102, 241, 0.1);
+        }
+
+        .chart-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            color: var(--text-muted);
+        }
+
+        .chart-bars {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .chart-bar-row {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .chart-bar-label {
+            width: 140px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .chart-bar-track {
+            flex: 1;
+            height: 24px;
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .chart-bar-fill {
+            height: 100%;
+            border-radius: 12px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: width 1s ease;
+        }
+
+        .chart-bar-value {
+            width: 60px;
+            text-align: right;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .market-content h3 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+        }
+
+        .market-content p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+
+        .market-highlights {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .market-highlight {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(6, 182, 212, 0.05));
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 16px;
+            padding: 1.5rem;
+        }
+
+        .market-highlight-value {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .market-highlight-label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 0.25rem;
+        }
+
+        /* Tech Stack */
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .tech-card {
+            background: var(--surface);
+            border: 1px solid rgba(99, 102, 241, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .tech-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+        }
+
+        .tech-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .tech-card h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .tech-card p {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 8rem 5%;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, var(--primary-glow) 0%, transparent 70%);
+            transform: translate(-50%, -50%);
+            animation: ctaPulse 4s ease-in-out infinite;
+        }
+
+        @keyframes ctaPulse {
+            0%, 100% { opacity: 0.3; transform: translate(-50%, -50%) scale(1); }
+            50% { opacity: 0.5; transform: translate(-50%, -50%) scale(1.1); }
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-section h2 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-section p {
+            font-size: 1.3rem;
+            color: var(--text-muted);
+            max-width: 700px;
+            margin: 0 auto 2.5rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cta-large {
+            padding: 1.2rem 3rem;
+            font-size: 1.1rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--surface);
+            padding: 4rem 5% 2rem;
+            border-top: 1px solid rgba(99, 102, 241, 0.1);
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 4rem;
+        }
+
+        .footer-brand p {
+            color: var(--text-muted);
+            margin-top: 1rem;
+            max-width: 300px;
+        }
+
+        .footer-links h4 {
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            color: var(--text);
+        }
+
+        .footer-links ul {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        .footer-bottom {
+            max-width: 1400px;
+            margin: 3rem auto 0;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(99, 102, 241, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .market-visual {
+                grid-template-columns: 1fr;
+            }
+
+            .tech-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .stats-bar {
+                gap: 2rem;
+            }
+
+            .tech-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+
+        /* Animations on scroll */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s ease;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="spectrum-bg">
+        <div class="grid-overlay"></div>
+        <div class="spectrum-waves">
+            <div class="wave"></div>
+            <div class="wave"></div>
+            <div class="wave"></div>
+            <div class="wave"></div>
+            <div class="wave"></div>
+            <div class="wave"></div>
+            <div class="wave"></div>
+            <div class="wave"></div>
+        </div>
+        <div class="signal-pulse"></div>
+        <div class="signal-pulse"></div>
+        <div class="signal-pulse"></div>
+        <div class="signal-pulse"></div>
+        <div class="signal-pulse"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">
+            <div class="logo-icon"></div>
+            SpectrumOS
+        </div>
+        <ul class="nav-links">
+            <li><a href="#problem">Problem</a></li>
+            <li><a href="#solution">Solution</a></li>
+            <li><a href="#market">Market</a></li>
+            <li><a href="#tech">Technology</a></li>
+        </ul>
+        <a href="#contact" class="cta-button">Request Demo</a>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-badge">
+            <span class="pulse"></span>
+            AI-Powered Spectrum Intelligence
+        </div>
+        <h1>
+            <span class="gradient-text">See the Invisible.</span><br>
+            Own the Airwaves.
+        </h1>
+        <p class="hero-subtitle">
+            The first comprehensive AI platform for RF spectrum intelligence. Real-time visibility, interference detection, and optimization for the $700B wireless industry.
+        </p>
+        <div class="hero-ctas">
+            <a href="#contact" class="cta-button">Get Early Access</a>
+            <a href="#solution" class="secondary-button">See How It Works</a>
+        </div>
+
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div class="stat-value">$47B</div>
+                <div class="stat-label">Total Addressable Market</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">60-70%</div>
+                <div class="stat-label">Spectrum Sits Idle</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">50,000+</div>
+                <div class="stat-label">Satellites Deploying</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">3-4 Years</div>
+                <div class="stat-label">Current Allocation Cycles</div>
+            </div>
+        </div>
+
+        <!-- Spectrum Visualizer -->
+        <div class="spectrum-visual">
+            <div class="spectrum-display">
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const display = document.querySelector('.spectrum-display');
+                        for (let i = 0; i < 80; i++) {
+                            const bar = document.createElement('div');
+                            bar.className = 'spectrum-bar';
+                            const h1 = Math.random() * 80 + 20;
+                            const h2 = Math.random() * 80 + 20;
+                            bar.style.setProperty('--h1', h1 + 'px');
+                            bar.style.setProperty('--h2', h2 + 'px');
+                            bar.style.animationDelay = (Math.random() * 2) + 's';
+                            bar.style.height = h1 + 'px';
+                            display.appendChild(bar);
+                        }
+                    });
+                </script>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section id="problem" class="section">
+        <div class="section-header reveal">
+            <div class="section-label">The Problem</div>
+            <h2 class="section-title">The Invisible Crisis Choking Connectivity</h2>
+            <p class="section-subtitle">
+                The electromagnetic spectrum is the most valuable and contested real estate on Earth—yet nobody can actually see it.
+            </p>
+        </div>
+
+        <div class="problem-grid">
+            <div class="problem-card reveal">
+                <div class="problem-icon">📊</div>
+                <h3>Medieval Management</h3>
+                <p>Spectrum allocation still requires 12-24 month approval cycles. Coordination happens via spreadsheets and phone calls.</p>
+                <div class="problem-stat">
+                    <div class="problem-stat-value">2+ Years</div>
+                    <div class="problem-stat-label">Typical approval timeline</div>
+                </div>
+            </div>
+
+            <div class="problem-card reveal">
+                <div class="problem-icon">⚡</div>
+                <h3>Interference Blindness</h3>
+                <p>Current detection method: "Someone called to complain." Network interference causes 15-30% capacity loss across operators.</p>
+                <div class="problem-stat">
+                    <div class="problem-stat-value">$50B</div>
+                    <div class="problem-stat-label">Annual interference costs</div>
+                </div>
+            </div>
+
+            <div class="problem-card reveal">
+                <div class="problem-icon">🛰️</div>
+                <h3>Satellite Chaos</h3>
+                <p>50,000+ satellites being deployed. Starlink vs. 5G interference battles emerging. No unified coordination system.</p>
+                <div class="problem-stat">
+                    <div class="problem-stat-value">50K+</div>
+                    <div class="problem-stat-label">Satellites launching</div>
+                </div>
+            </div>
+
+            <div class="problem-card reveal">
+                <div class="problem-icon">🏭</div>
+                <h3>Private Network Explosion</h3>
+                <p>Enterprises deploying private 5G without expertise. Creating interference with no visibility or management tools.</p>
+                <div class="problem-stat">
+                    <div class="problem-stat-value">500%</div>
+                    <div class="problem-stat-label">Private 5G growth YoY</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section id="solution" class="section">
+        <div class="section-header reveal">
+            <div class="section-label">The Solution</div>
+            <h2 class="section-title">AI That Sees the Invisible</h2>
+            <p class="section-subtitle">
+                SpectrumOS provides complete visibility, intelligence, and optimization for the electromagnetic spectrum.
+            </p>
+        </div>
+
+        <div class="solution-grid">
+            <div class="solution-card reveal">
+                <span class="solution-number">01</span>
+                <div class="solution-icon">👁️</div>
+                <h3>SpectrumVision™</h3>
+                <p>Real-time RF environment monitoring with AI-powered signal classification and 3D visualization.</p>
+                <ul class="feature-list">
+                    <li>Continuous monitoring via distributed sensors</li>
+                    <li>AI signal classification (99%+ accuracy)</li>
+                    <li>3D spectrum utilization mapping</li>
+                    <li>Unauthorized transmitter detection</li>
+                </ul>
+            </div>
+
+            <div class="solution-card reveal">
+                <span class="solution-number">02</span>
+                <div class="solution-icon">🛡️</div>
+                <h3>SpectrumGuard™</h3>
+                <p>Automatic interference detection, classification, geolocation, and evidence documentation.</p>
+                <ul class="feature-list">
+                    <li>Root cause analysis in minutes</li>
+                    <li>Impact quantification (lost revenue)</li>
+                    <li>Automated mitigation recommendations</li>
+                    <li>Regulatory complaint packages</li>
+                </ul>
+            </div>
+
+            <div class="solution-card reveal">
+                <span class="solution-number">03</span>
+                <div class="solution-icon">⚡</div>
+                <h3>SpectrumOptimize™</h3>
+                <p>Dynamic spectrum access with AI-driven channel selection and predictive demand forecasting.</p>
+                <ul class="feature-list">
+                    <li>Real-time availability mapping</li>
+                    <li>AI frequency optimization</li>
+                    <li>Automatic neighbor coordination</li>
+                    <li>Predictive demand forecasting</li>
+                </ul>
+            </div>
+
+            <div class="solution-card reveal">
+                <span class="solution-number">04</span>
+                <div class="solution-icon">💹</div>
+                <h3>SpectrumTrade™</h3>
+                <p>Market intelligence platform with real-time valuation, trading facilitation, and portfolio management.</p>
+                <ul class="feature-list">
+                    <li>Real-time $/MHz-POP valuation</li>
+                    <li>Secondary market facilitation</li>
+                    <li>Auction strategy optimization</li>
+                    <li>Portfolio analytics</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Market Section -->
+    <section id="market" class="section market-section">
+        <div class="section-header reveal">
+            <div class="section-label">Market Opportunity</div>
+            <h2 class="section-title">A $47 Billion Opportunity</h2>
+            <p class="section-subtitle">
+                The intelligence layer for the entire wireless industry.
+            </p>
+        </div>
+
+        <div class="market-container">
+            <div class="market-visual reveal">
+                <div class="market-chart">
+                    <div class="chart-title">Market Segments (TAM)</div>
+                    <div class="chart-bars">
+                        <div class="chart-bar-row">
+                            <span class="chart-bar-label">Mobile Operators</span>
+                            <div class="chart-bar-track">
+                                <div class="chart-bar-fill" style="width: 100%"></div>
+                            </div>
+                            <span class="chart-bar-value">$15B</span>
+                        </div>
+                        <div class="chart-bar-row">
+                            <span class="chart-bar-label">Gov/Defense</span>
+                            <div class="chart-bar-track">
+                                <div class="chart-bar-fill" style="width: 80%"></div>
+                            </div>
+                            <span class="chart-bar-value">$12B</span>
+                        </div>
+                        <div class="chart-bar-row">
+                            <span class="chart-bar-label">Satellite</span>
+                            <div class="chart-bar-track">
+                                <div class="chart-bar-fill" style="width: 53%"></div>
+                            </div>
+                            <span class="chart-bar-value">$8B</span>
+                        </div>
+                        <div class="chart-bar-row">
+                            <span class="chart-bar-label">Enterprise</span>
+                            <div class="chart-bar-track">
+                                <div class="chart-bar-fill" style="width: 40%"></div>
+                            </div>
+                            <span class="chart-bar-value">$6B</span>
+                        </div>
+                        <div class="chart-bar-row">
+                            <span class="chart-bar-label">Brokers/Investors</span>
+                            <div class="chart-bar-track">
+                                <div class="chart-bar-fill" style="width: 27%"></div>
+                            </div>
+                            <span class="chart-bar-value">$4B</span>
+                        </div>
+                        <div class="chart-bar-row">
+                            <span class="chart-bar-label">Regulators</span>
+                            <div class="chart-bar-track">
+                                <div class="chart-bar-fill" style="width: 13%"></div>
+                            </div>
+                            <span class="chart-bar-value">$2B</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="market-content">
+                    <h3>The Infrastructure of Infrastructure</h3>
+                    <p>
+                        Every 5G tower, satellite, IoT device, and autonomous vehicle needs spectrum. We're building the intelligence layer that makes it all work together.
+                    </p>
+                    <div class="market-highlights">
+                        <div class="market-highlight">
+                            <div class="market-highlight-value">$400M</div>
+                            <div class="market-highlight-label">Year 5 ARR Target</div>
+                        </div>
+                        <div class="market-highlight">
+                            <div class="market-highlight-value">750+</div>
+                            <div class="market-highlight-label">Enterprise Customers</div>
+                        </div>
+                        <div class="market-highlight">
+                            <div class="market-highlight-value">50x</div>
+                            <div class="market-highlight-label">Customer ROI</div>
+                        </div>
+                        <div class="market-highlight">
+                            <div class="market-highlight-value">$10B+</div>
+                            <div class="market-highlight-label">Exit Potential</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technology Section -->
+    <section id="tech" class="section">
+        <div class="section-header reveal">
+            <div class="section-label">Technology</div>
+            <h2 class="section-title">AI-Native Architecture</h2>
+            <p class="section-subtitle">
+                Purpose-built for real-time RF intelligence at global scale.
+            </p>
+        </div>
+
+        <div class="tech-grid">
+            <div class="tech-card reveal">
+                <div class="tech-icon">🎯</div>
+                <h4>Signal Classification</h4>
+                <p>Deep learning with 99%+ accuracy on known waveforms</p>
+            </div>
+            <div class="tech-card reveal">
+                <div class="tech-icon">📍</div>
+                <h4>Geolocation</h4>
+                <p>Sub-meter accuracy for interference source finding</p>
+            </div>
+            <div class="tech-card reveal">
+                <div class="tech-icon">⚡</div>
+                <h4>Edge Processing</h4>
+                <p>Sub-second detection with local ML inference</p>
+            </div>
+            <div class="tech-card reveal">
+                <div class="tech-icon">🌐</div>
+                <h4>Global Scale</h4>
+                <p>Designed for international multi-regulatory deployment</p>
+            </div>
+            <div class="tech-card reveal">
+                <div class="tech-icon">🔮</div>
+                <h4>Predictive AI</h4>
+                <p>Forecast spectrum demand and interference patterns</p>
+            </div>
+            <div class="tech-card reveal">
+                <div class="tech-icon">🔗</div>
+                <h4>API-First</h4>
+                <p>RESTful, GraphQL, and streaming APIs for integration</p>
+            </div>
+            <div class="tech-card reveal">
+                <div class="tech-icon">🛡️</div>
+                <h4>Security</h4>
+                <p>Defense-grade security for sensitive spectrum data</p>
+            </div>
+            <div class="tech-card reveal">
+                <div class="tech-icon">📊</div>
+                <h4>3D Visualization</h4>
+                <p>Interactive spectrum maps with time-frequency analysis</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="contact" class="cta-section">
+        <div class="cta-content">
+            <h2><span class="gradient-text">Ready to See</span> the Invisible?</h2>
+            <p>Join the operators, governments, and enterprises gaining spectrum intelligence advantage.</p>
+            <div class="cta-buttons">
+                <a href="mailto:hello@spectrumos.ai" class="cta-button cta-large">Request Demo</a>
+                <a href="#" class="secondary-button">Download Whitepaper</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <div class="logo">
+                    <div class="logo-icon"></div>
+                    SpectrumOS
+                </div>
+                <p>The AI Operating System for RF Spectrum Intelligence. See the invisible. Own the airwaves.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Platform</h4>
+                <ul>
+                    <li><a href="#">SpectrumVision</a></li>
+                    <li><a href="#">SpectrumGuard</a></li>
+                    <li><a href="#">SpectrumOptimize</a></li>
+                    <li><a href="#">SpectrumTrade</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Industries</h4>
+                <ul>
+                    <li><a href="#">Mobile Operators</a></li>
+                    <li><a href="#">Government</a></li>
+                    <li><a href="#">Satellite</a></li>
+                    <li><a href="#">Enterprise</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 SpectrumOS. All rights reserved.</p>
+            <p>The Godfather 🎩 Production</p>
+        </div>
+    </footer>
+
+    <!-- Scroll Reveal Script -->
+    <script>
+        function reveal() {
+            const reveals = document.querySelectorAll('.reveal');
+            reveals.forEach(element => {
+                const windowHeight = window.innerHeight;
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 150;
+
+                if (elementTop < windowHeight - elementVisible) {
+                    element.classList.add('active');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', reveal);
+        reveal();
+    </script>
+</body>
+</html>
