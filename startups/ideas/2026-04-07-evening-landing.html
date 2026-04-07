@@ -1,0 +1,1262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VoiceEstate AI — Own Your Voice. Control Your Identity.</title>
+    <meta name="description" content="The AI Platform for Voice Identity Ownership, Licensing & Protection. Register, protect, and monetize your voice in the age of AI cloning.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #7C3AED;
+            --primary-dark: #5B21B6;
+            --primary-light: #A78BFA;
+            --secondary: #06B6D4;
+            --accent: #F97316;
+            --dark: #0F0F1A;
+            --darker: #070710;
+            --light: #F8FAFC;
+            --gray: #94A3B8;
+            --card-bg: rgba(124, 58, 237, 0.05);
+            --border: rgba(124, 58, 237, 0.2);
+            --glow: rgba(124, 58, 237, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--darker);
+            color: var(--light);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            background: radial-gradient(ellipse at 30% 20%, rgba(124, 58, 237, 0.15) 0%, transparent 50%),
+                        radial-gradient(ellipse at 70% 80%, rgba(6, 182, 212, 0.1) 0%, transparent 50%),
+                        radial-gradient(ellipse at 50% 50%, rgba(249, 115, 22, 0.05) 0%, transparent 50%);
+            animation: bgPulse 20s ease-in-out infinite;
+        }
+
+        @keyframes bgPulse {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(-5%, 5%) scale(1.05); }
+            66% { transform: translate(5%, -5%) scale(0.95); }
+        }
+
+        /* Sound wave animation */
+        .sound-waves {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0.1;
+        }
+
+        .wave-line {
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary), var(--secondary), var(--primary), transparent);
+            animation: waveMove 3s ease-in-out infinite;
+        }
+
+        .wave-line:nth-child(1) { top: 20%; animation-delay: 0s; }
+        .wave-line:nth-child(2) { top: 35%; animation-delay: 0.5s; }
+        .wave-line:nth-child(3) { top: 50%; animation-delay: 1s; }
+        .wave-line:nth-child(4) { top: 65%; animation-delay: 1.5s; }
+        .wave-line:nth-child(5) { top: 80%; animation-delay: 2s; }
+
+        @keyframes waveMove {
+            0%, 100% { transform: scaleX(0.5); opacity: 0.3; }
+            50% { transform: scaleX(1); opacity: 0.8; }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(7, 7, 16, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.75rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-light), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--gray);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--light);
+        }
+
+        .nav-cta {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 0.75rem 1.75rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+            box-shadow: 0 4px 20px var(--glow);
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 30px var(--glow);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 120px 5% 80px;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 0.5rem 1.25rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            color: var(--primary-light);
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .hero-badge::before {
+            content: '🎙️';
+        }
+
+        .hero h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(3rem, 8vw, 5.5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.8s ease 0.2s backwards;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(135deg, var(--primary-light), var(--secondary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.35rem;
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto 2.5rem;
+            animation: fadeInUp 0.8s ease 0.4s backwards;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.8s ease 0.6s backwards;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            box-shadow: 0 4px 30px var(--glow);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 40px var(--glow);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--light);
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            border: 2px solid var(--border);
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary);
+            background: var(--card-bg);
+        }
+
+        /* Voice Visualizer */
+        .voice-visualizer {
+            margin: 4rem auto 0;
+            max-width: 600px;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            animation: fadeInUp 0.8s ease 0.8s backwards;
+        }
+
+        .voice-bar {
+            width: 6px;
+            background: linear-gradient(to top, var(--primary), var(--secondary));
+            border-radius: 3px;
+            animation: voiceBar 1s ease-in-out infinite;
+        }
+
+        @keyframes voiceBar {
+            0%, 100% { height: 20px; }
+            50% { height: var(--h, 60px); }
+        }
+
+        /* Problem Section */
+        .problem {
+            padding: 100px 5%;
+            background: linear-gradient(180deg, transparent, rgba(124, 58, 237, 0.03));
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 4rem;
+        }
+
+        .section-label {
+            color: var(--primary-light);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .section-header h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-header p {
+            color: var(--gray);
+            font-size: 1.2rem;
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .problem-card {
+            background: rgba(15, 15, 26, 0.8);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.3s;
+        }
+
+        .problem-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .problem-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(239, 68, 68, 0.05));
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .problem-card h3 {
+            font-size: 1.35rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .problem-card p {
+            color: var(--gray);
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        /* Solution Section */
+        .solution {
+            padding: 100px 5%;
+            position: relative;
+        }
+
+        .solution-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 900px) {
+            .solution-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .solution-card {
+            background: linear-gradient(145deg, rgba(124, 58, 237, 0.08), rgba(6, 182, 212, 0.03));
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 3rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s;
+        }
+
+        .solution-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .solution-card:hover::before {
+            opacity: 1;
+        }
+
+        .solution-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .solution-number {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 4rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), transparent);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            opacity: 0.3;
+        }
+
+        .solution-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 10px 30px var(--glow);
+        }
+
+        .solution-card h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .solution-card p {
+            color: var(--gray);
+            font-size: 1.05rem;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .solution-features {
+            list-style: none;
+        }
+
+        .solution-features li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 0;
+            color: var(--light);
+            font-size: 0.95rem;
+        }
+
+        .solution-features li::before {
+            content: '✓';
+            color: var(--secondary);
+            font-weight: bold;
+        }
+
+        /* Stats Section */
+        .stats {
+            padding: 80px 5%;
+            background: linear-gradient(180deg, rgba(124, 58, 237, 0.05), transparent);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 800px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .stat-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-light), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--gray);
+            font-size: 1rem;
+        }
+
+        /* How It Works */
+        .how-it-works {
+            padding: 100px 5%;
+        }
+
+        .steps-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .steps-line {
+            position: absolute;
+            left: 30px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--primary), var(--secondary), var(--accent));
+        }
+
+        .step {
+            display: flex;
+            gap: 3rem;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            flex-shrink: 0;
+            z-index: 2;
+            box-shadow: 0 0 30px var(--glow);
+        }
+
+        .step-content {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2rem;
+            flex: 1;
+        }
+
+        .step-content h3 {
+            font-size: 1.4rem;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+        }
+
+        .step-content p {
+            color: var(--gray);
+            font-size: 1.05rem;
+        }
+
+        /* Market Section */
+        .market {
+            padding: 100px 5%;
+            background: linear-gradient(180deg, transparent, rgba(6, 182, 212, 0.03));
+        }
+
+        .market-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .market-card {
+            background: rgba(15, 15, 26, 0.6);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .market-card:hover {
+            border-color: var(--secondary);
+            transform: scale(1.03);
+        }
+
+        .market-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .market-label {
+            color: var(--light);
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .market-desc {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* Use Cases */
+        .use-cases {
+            padding: 100px 5%;
+        }
+
+        .use-cases-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 900px) {
+            .use-cases-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .use-case-card {
+            background: linear-gradient(145deg, rgba(124, 58, 237, 0.05), transparent);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.3s;
+        }
+
+        .use-case-card:hover {
+            border-color: var(--primary-light);
+            background: linear-gradient(145deg, rgba(124, 58, 237, 0.1), transparent);
+        }
+
+        .use-case-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .use-case-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .use-case-card p {
+            color: var(--gray);
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 120px 5%;
+            text-align: center;
+            position: relative;
+        }
+
+        .cta-bg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, var(--glow) 0%, transparent 70%);
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 2;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .cta h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta h2 span {
+            background: linear-gradient(135deg, var(--primary-light), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .cta p {
+            color: var(--gray);
+            font-size: 1.25rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Footer */
+        footer {
+            padding: 60px 5% 30px;
+            border-top: 1px solid var(--border);
+            background: var(--darker);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 4rem;
+        }
+
+        @media (max-width: 800px) {
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+                gap: 2rem;
+            }
+        }
+
+        .footer-brand {
+            max-width: 300px;
+        }
+
+        .footer-brand .logo {
+            margin-bottom: 1rem;
+        }
+
+        .footer-brand p {
+            color: var(--gray);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .footer-links h4 {
+            color: var(--light);
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 1.25rem;
+        }
+
+        .footer-links ul {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-links a {
+            color: var(--gray);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-light);
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 3rem auto 0;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer-bottom p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .social-links a:hover {
+            border-color: var(--primary);
+            color: var(--primary-light);
+            transform: translateY(-2px);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero {
+                padding: 100px 5% 60px;
+            }
+
+            .voice-visualizer {
+                height: 80px;
+            }
+
+            .steps-line {
+                left: 15px;
+            }
+
+            .step {
+                gap: 1.5rem;
+            }
+
+            .step-number {
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .footer-brand {
+                max-width: 100%;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation">
+        <div class="sound-waves">
+            <div class="wave-line"></div>
+            <div class="wave-line"></div>
+            <div class="wave-line"></div>
+            <div class="wave-line"></div>
+            <div class="wave-line"></div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">
+            <div class="logo-icon">🎙️</div>
+            VoiceEstate
+        </div>
+        <ul class="nav-links">
+            <li><a href="#problem">Problem</a></li>
+            <li><a href="#solution">Solution</a></li>
+            <li><a href="#how-it-works">How It Works</a></li>
+            <li><a href="#market">Market</a></li>
+        </ul>
+        <a href="#cta" class="nav-cta">Register Your Voice</a>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">Voice Identity Infrastructure for the AI Age</div>
+            <h1>Own Your Voice.<br><span>Control Your Identity.</span></h1>
+            <p class="hero-subtitle">In an age where anyone can clone any voice, VoiceEstate gives you the power to register, protect, license, and monetize your voice identity.</p>
+            <div class="hero-cta">
+                <a href="#cta" class="btn-primary">🎙️ Register Your Voice</a>
+                <a href="#solution" class="btn-secondary">▶ See How It Works</a>
+            </div>
+            <div class="voice-visualizer">
+                <script>
+                    // Generate voice bars
+                    const heights = [30, 60, 90, 50, 80, 100, 70, 40, 85, 55, 95, 45, 75, 65, 90, 35, 80, 50, 70, 60, 85, 40, 95, 55, 75, 45, 80, 60, 90, 50];
+                    heights.forEach((h, i) => {
+                        document.write(`<div class="voice-bar" style="--h: ${h}px; animation-delay: ${i * 0.05}s"></div>`);
+                    });
+                </script>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="problem" id="problem">
+        <div class="section-header">
+            <span class="section-label">The Problem</span>
+            <h2>Voice Cloning is Everywhere. Protection is Nowhere.</h2>
+            <p>AI can clone any voice in seconds. But there's no infrastructure to prove ownership, prevent misuse, or monetize legitimate use.</p>
+        </div>
+        <div class="problem-grid">
+            <div class="problem-card">
+                <div class="problem-icon">🎭</div>
+                <h3>Unauthorized Cloning</h3>
+                <p>Your voice can be cloned from 3 seconds of audio. Fake endorsements, scam calls, and deepfake harassment are exploding—with no way to stop them.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">💸</div>
+                <h3>No Monetization Path</h3>
+                <p>Your voice has value, but there's no infrastructure to license it. Celebrities leave millions on the table while creators can't monetize at all.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">🔓</div>
+                <h3>No Ownership Proof</h3>
+                <p>When your voice is cloned, how do you prove it's yours? There's no registry, no chain of custody, no legal infrastructure.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">📱</div>
+                <h3>Voice Phishing Epidemic</h3>
+                <p>Voice phishing attacks using cloned executive voices are up 3,400%. $25B+ in losses in 2025 alone.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">⚖️</div>
+                <h3>Regulatory Chaos</h3>
+                <p>EU AI Act, FTC rules, state laws—all requiring synthetic voice disclosure. But no standard way to comply.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">🌐</div>
+                <h3>Platform Liability</h3>
+                <p>Social platforms, call centers, and AI companies are exposed to massive liability with no voice authenticity infrastructure.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="solution" id="solution">
+        <div class="section-header">
+            <span class="section-label">The Solution</span>
+            <h2>Complete Voice Identity Infrastructure</h2>
+            <p>Register, protect, license, and monetize your voice with one platform.</p>
+        </div>
+        <div class="solution-grid">
+            <div class="solution-card">
+                <span class="solution-number">01</span>
+                <div class="solution-icon">🆔</div>
+                <h3>VoiceID Registration</h3>
+                <p>Cryptographically register your unique voice signature. Create an immutable proof of ownership that holds up in court.</p>
+                <ul class="solution-features">
+                    <li>512-dimensional voiceprint encoding</li>
+                    <li>Blockchain-anchored timestamps</li>
+                    <li>Privacy-preserving verification</li>
+                    <li>Legal chain of custody</li>
+                </ul>
+            </div>
+            <div class="solution-card">
+                <span class="solution-number">02</span>
+                <div class="solution-icon">📜</div>
+                <h3>VoiceLicense</h3>
+                <p>Define how your voice can be used and get paid automatically. Smart contracts handle royalties and enforcement.</p>
+                <ul class="solution-features">
+                    <li>Granular usage rights control</li>
+                    <li>Automated royalty distribution</li>
+                    <li>Revocable time-limited licenses</li>
+                    <li>API for instant verification</li>
+                </ul>
+            </div>
+            <div class="solution-card">
+                <span class="solution-number">03</span>
+                <div class="solution-icon">🛡️</div>
+                <h3>VoiceShield Detection</h3>
+                <p>Real-time monitoring across the internet. Find unauthorized clones and take action automatically.</p>
+                <ul class="solution-features">
+                    <li>Continuous platform monitoring</li>
+                    <li>Invisible watermark detection</li>
+                    <li>AI synthesis artifact detection</li>
+                    <li>Automated takedown requests</li>
+                </ul>
+            </div>
+            <div class="solution-card">
+                <span class="solution-number">04</span>
+                <div class="solution-icon">🏪</div>
+                <h3>VoiceExchange Marketplace</h3>
+                <p>The legitimate marketplace for voice licensing. Brands find voices, creators earn money, everyone wins.</p>
+                <ul class="solution-features">
+                    <li>Curated voice asset marketplace</li>
+                    <li>Creator storefronts</li>
+                    <li>Enterprise procurement portal</li>
+                    <li>Escrow and dispute resolution</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">$50B+</div>
+                <div class="stat-label">Total Addressable Market</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">3,400%</div>
+                <div class="stat-label">Rise in Voice Phishing</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">3 sec</div>
+                <div class="stat-label">To Clone Any Voice</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">$25B</div>
+                <div class="stat-label">Annual Fraud Losses</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works" id="how-it-works">
+        <div class="section-header">
+            <span class="section-label">How It Works</span>
+            <h2>Secure Your Voice in Minutes</h2>
+            <p>A simple process to take control of your voice identity.</p>
+        </div>
+        <div class="steps-container">
+            <div class="steps-line"></div>
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h3>Record & Enroll</h3>
+                    <p>Provide 30+ seconds of varied speech. Our neural encoder creates your unique voiceprint without storing raw audio.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h3>Register & Verify</h3>
+                    <p>Your voiceprint is cryptographically hashed and anchored to our distributed ledger. You now have provable ownership.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h3>Set Your Terms</h3>
+                    <p>Define how your voice can be used, pricing tiers, and restrictions. Set up automated licensing through our smart contract system.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <h3>Monitor & Protect</h3>
+                    <p>VoiceShield continuously scans for unauthorized clones. Get instant alerts and automated takedown capabilities.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">5</div>
+                <div class="step-content">
+                    <h3>License & Earn</h3>
+                    <p>List on VoiceExchange or respond to enterprise requests. Royalties flow automatically through our payment infrastructure.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Market Section -->
+    <section class="market" id="market">
+        <div class="section-header">
+            <span class="section-label">Market Opportunity</span>
+            <h2>A $50B+ Infrastructure Layer</h2>
+            <p>Voice identity becomes as fundamental as domain names or SSL certificates.</p>
+        </div>
+        <div class="market-cards">
+            <div class="market-card">
+                <div class="market-value">$8B</div>
+                <div class="market-label">Voice Licensing</div>
+                <div class="market-desc">Celebrity voices, creator monetization, corporate assets</div>
+            </div>
+            <div class="market-card">
+                <div class="market-value">$15B</div>
+                <div class="market-label">Fraud Prevention</div>
+                <div class="market-desc">Enterprise phishing protection, call center auth</div>
+            </div>
+            <div class="market-card">
+                <div class="market-value">$12B</div>
+                <div class="market-label">Content Authentication</div>
+                <div class="market-desc">Media verification, platform trust & safety</div>
+            </div>
+            <div class="market-card">
+                <div class="market-value">$15B+</div>
+                <div class="market-label">Compliance</div>
+                <div class="market-desc">AI Act, FTC rules, synthetic media regulations</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Use Cases -->
+    <section class="use-cases">
+        <div class="section-header">
+            <span class="section-label">Use Cases</span>
+            <h2>Who Uses VoiceEstate?</h2>
+            <p>From individual creators to enterprise security teams.</p>
+        </div>
+        <div class="use-cases-grid">
+            <div class="use-case-card">
+                <div class="use-case-icon">🎤</div>
+                <h3>Voice Actors & Creators</h3>
+                <p>Protect your voice from unauthorized cloning. License it legitimately and earn passive income from your unique instrument.</p>
+            </div>
+            <div class="use-case-card">
+                <div class="use-case-icon">⭐</div>
+                <h3>Celebrities & Estates</h3>
+                <p>Control how your voice is used in AI-generated content. Stop fake endorsements and monetize legitimate licensing at scale.</p>
+            </div>
+            <div class="use-case-card">
+                <div class="use-case-icon">🏢</div>
+                <h3>Enterprises</h3>
+                <p>Protect executives from voice phishing attacks. Authenticate voice communications and comply with synthetic media regulations.</p>
+            </div>
+            <div class="use-case-card">
+                <div class="use-case-icon">📱</div>
+                <h3>Social Platforms</h3>
+                <p>Verify voice authenticity at scale. Reduce liability from deepfake content and meet regulatory requirements.</p>
+            </div>
+            <div class="use-case-card">
+                <div class="use-case-icon">🤖</div>
+                <h3>AI Companies</h3>
+                <p>License voices legitimately for your synthetic voice products. Embed watermarks and prove provenance for compliance.</p>
+            </div>
+            <div class="use-case-card">
+                <div class="use-case-icon">📞</div>
+                <h3>Call Centers</h3>
+                <p>Authenticate callers even against cloned voices. Protect customers from sophisticated voice-based fraud.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta" id="cta">
+        <div class="cta-bg"></div>
+        <div class="cta-content">
+            <h2>Your Voice is <span>Your Identity</span></h2>
+            <p>In the age of AI cloning, taking control of your voice isn't optional—it's essential. Register today and own your most personal asset.</p>
+            <div class="cta-buttons">
+                <a href="mailto:founders@voiceestate.ai" class="btn-primary">🎙️ Register Your Voice Free</a>
+                <a href="mailto:enterprise@voiceestate.ai" class="btn-secondary">🏢 Enterprise Solutions</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <div class="logo">
+                    <div class="logo-icon">🎙️</div>
+                    VoiceEstate
+                </div>
+                <p>The AI Platform for Voice Identity Ownership, Licensing & Protection. Own your voice. Control your identity. Trust restored.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Platform</h4>
+                <ul>
+                    <li><a href="#">VoiceID</a></li>
+                    <li><a href="#">VoiceLicense</a></li>
+                    <li><a href="#">VoiceShield</a></li>
+                    <li><a href="#">VoiceExchange</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Solutions</h4>
+                <ul>
+                    <li><a href="#">For Creators</a></li>
+                    <li><a href="#">For Enterprise</a></li>
+                    <li><a href="#">For Platforms</a></li>
+                    <li><a href="#">For AI Companies</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 VoiceEstate AI. All rights reserved.</p>
+            <div class="social-links">
+                <a href="#">𝕏</a>
+                <a href="#">in</a>
+                <a href="#">▶</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

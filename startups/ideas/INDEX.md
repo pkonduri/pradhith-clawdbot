@@ -198,6 +198,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-04-06 | Evening | SecondSelf AI — The Operating System for Persistent Digital Identity & Representation | [Playbook](2026-04-06-evening.md) • [Landing](2026-04-06-evening-landing.html) • [PDF](2026-04-06-evening.pdf) |
 | 2026-04-06 | Morning | DataArmor AI — The Personal Counter-Intelligence Platform | [Playbook](2026-04-06-morning.md) • [Landing](2026-04-06-morning-landing.html) • [PDF](2026-04-06-morning.pdf) |
 | 2026-04-06 | Afternoon | SilverBridge — The AI Access Layer for the App-Excluded Generation | [Playbook](2026-04-06-afternoon.md) • [Landing](2026-04-06-afternoon-landing.html) • [PDF](2026-04-06-afternoon.pdf) |
+| 2026-04-07 | Evening | VoiceEstate AI — Voice Identity Ownership, Licensing & Protection | [Playbook](2026-04-07-evening.md) • [Landing](2026-04-07-evening-landing.html) • [PDF](2026-04-07-evening.pdf) |
 <!-- New entries will be added above this line -->
 
 ---
