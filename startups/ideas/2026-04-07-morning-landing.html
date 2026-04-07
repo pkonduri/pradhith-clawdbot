@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NegaWatt AI — The Operating System for Energy Flexibility & Negative Price Arbitrage</title>
+    <meta name="description" content="Turn negative energy prices into positive returns. AI-powered platform for energy flexibility, grid optimization, and autonomous energy trading.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --electric-green: #00ff88;
+            --neon-cyan: #00f0ff;
+            --deep-purple: #7c3aed;
+            --voltage-yellow: #fbbf24;
+            --grid-blue: #0ea5e9;
+            --dark-bg: #0a0a0f;
+            --card-bg: #111118;
+            --card-border: #1f1f2e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--dark-bg);
+            color: #e4e4e7;
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* Animated Grid Background */
+        .grid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: 
+                linear-gradient(90deg, rgba(0,255,136,0.03) 1px, transparent 1px),
+                linear-gradient(rgba(0,255,136,0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridPulse 4s ease-in-out infinite;
+        }
+
+        @keyframes gridPulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 0.8; }
+        }
+
+        /* Energy Flow Animation */
+        .energy-flow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .flow-line {
+            position: absolute;
+            width: 2px;
+            height: 100px;
+            background: linear-gradient(to bottom, transparent, var(--electric-green), transparent);
+            animation: flowDown 3s linear infinite;
+            opacity: 0.3;
+        }
+
+        @keyframes flowDown {
+            0% { transform: translateY(-100px); }
+            100% { transform: translateY(calc(100vh + 100px)); }
+        }
+
+        /* Header */
+        header {
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+            background: rgba(10, 10, 15, 0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 800;
+            font-size: 1.5rem;
+        }
+
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, var(--electric-green), var(--neon-cyan));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.4);
+        }
+
+        .logo-text {
+            background: linear-gradient(135deg, var(--electric-green), var(--neon-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-cta {
+            background: linear-gradient(135deg, var(--electric-green), var(--neon-cyan));
+            color: #000;
+            padding: 0.75rem 1.75rem;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 40px rgba(0, 255, 136, 0.5);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 8rem 2rem 4rem;
+            position: relative;
+        }
+
+        .breaking-news {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: rgba(251, 191, 36, 0.1);
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            padding: 0.5rem 1.25rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .breaking-news .dot {
+            width: 8px;
+            height: 8px;
+            background: var(--voltage-yellow);
+            border-radius: 50%;
+            animation: blink 1s ease-in-out infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            max-width: 1000px;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(135deg, var(--electric-green), var(--neon-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero h1 .negative {
+            background: linear-gradient(135deg, #ef4444, var(--voltage-yellow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: #a1a1aa;
+            max-width: 700px;
+            margin-bottom: 3rem;
+            line-height: 1.6;
+        }
+
+        .price-ticker {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .ticker-item {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            padding: 1rem 1.5rem;
+            border-radius: 16px;
+            text-align: center;
+            min-width: 160px;
+        }
+
+        .ticker-label {
+            font-size: 0.85rem;
+            color: #71717a;
+            margin-bottom: 0.5rem;
+        }
+
+        .ticker-value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .ticker-value.negative {
+            color: #ef4444;
+        }
+
+        .ticker-value.positive {
+            color: var(--electric-green);
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--electric-green), var(--neon-cyan));
+            color: #000;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 0 40px rgba(0, 255, 136, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 60px rgba(0, 255, 136, 0.5);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #fff;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-decoration: none;
+            border: 2px solid var(--card-border);
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--electric-green);
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.2);
+        }
+
+        /* Problem Section */
+        .problem-section {
+            padding: 6rem 2rem;
+            background: linear-gradient(180deg, transparent, rgba(124, 58, 237, 0.05), transparent);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-label {
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            color: var(--deep-purple);
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 2rem;
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .problem-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            padding: 2rem;
+            border-radius: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .problem-card:hover {
+            border-color: #ef4444;
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(239, 68, 68, 0.1);
+        }
+
+        .problem-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .problem-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .problem-stat {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #ef4444;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Solution Section */
+        .solution-section {
+            padding: 6rem 2rem;
+        }
+
+        .solution-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .solution-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            padding: 2rem;
+            border-radius: 24px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .solution-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--electric-green), var(--neon-cyan));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .solution-card:hover::before {
+            opacity: 1;
+        }
+
+        .solution-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 255, 136, 0.1);
+        }
+
+        .solution-number {
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--electric-green), var(--neon-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            opacity: 0.3;
+            position: absolute;
+            top: 1rem;
+            right: 1.5rem;
+        }
+
+        .solution-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .solution-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        /* Market Opportunity */
+        .market-section {
+            padding: 6rem 2rem;
+            background: linear-gradient(180deg, transparent, rgba(0, 255, 136, 0.03), transparent);
+        }
+
+        .market-visual {
+            display: flex;
+            justify-content: center;
+            gap: 4rem;
+            margin-top: 4rem;
+            flex-wrap: wrap;
+        }
+
+        .market-circle {
+            text-align: center;
+        }
+
+        .circle-value {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .circle-value::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            padding: 4px;
+            background: linear-gradient(135deg, var(--electric-green), var(--neon-cyan));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+        }
+
+        .circle-number {
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--electric-green), var(--neon-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .circle-unit {
+            font-size: 1.25rem;
+            color: #71717a;
+        }
+
+        .circle-label {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        /* Business Model */
+        .business-section {
+            padding: 6rem 2rem;
+        }
+
+        .revenue-streams {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .revenue-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            padding: 1.5rem;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .revenue-card:hover {
+            border-color: var(--voltage-yellow);
+            transform: translateY(-3px);
+        }
+
+        .revenue-name {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .revenue-model {
+            font-size: 0.9rem;
+            color: #71717a;
+            margin-bottom: 0.75rem;
+        }
+
+        .revenue-potential {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--voltage-yellow);
+        }
+
+        /* Why Now Timeline */
+        .timeline-section {
+            padding: 6rem 2rem;
+            background: linear-gradient(180deg, transparent, rgba(14, 165, 233, 0.05), transparent);
+        }
+
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 3rem auto 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--electric-green), var(--neon-cyan), var(--deep-purple));
+        }
+
+        .timeline-item {
+            display: flex;
+            justify-content: flex-end;
+            padding-right: 3rem;
+            position: relative;
+            margin-bottom: 2rem;
+            width: 50%;
+        }
+
+        .timeline-item:nth-child(even) {
+            justify-content: flex-start;
+            padding-left: 3rem;
+            padding-right: 0;
+            margin-left: 50%;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background: var(--electric-green);
+            border-radius: 50%;
+            right: -8px;
+            top: 0;
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+        }
+
+        .timeline-item:nth-child(even)::before {
+            right: auto;
+            left: -8px;
+        }
+
+        .timeline-content {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            padding: 1.5rem;
+            border-radius: 16px;
+            max-width: 350px;
+        }
+
+        .timeline-year {
+            font-size: 0.9rem;
+            color: var(--electric-green);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Traction Preview */
+        .traction-section {
+            padding: 6rem 2rem;
+        }
+
+        .traction-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        @media (max-width: 768px) {
+            .traction-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .traction-item {
+            text-align: center;
+            padding: 2rem;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+        }
+
+        .traction-value {
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--electric-green), var(--neon-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .traction-label {
+            font-size: 0.95rem;
+            color: #71717a;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 8rem 2rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at center, rgba(0, 255, 136, 0.1), transparent 70%);
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-title {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-subtitle {
+            font-size: 1.25rem;
+            color: #a1a1aa;
+            max-width: 600px;
+            margin: 0 auto 3rem;
+        }
+
+        /* Footer */
+        footer {
+            padding: 3rem 2rem;
+            border-top: 1px solid var(--card-border);
+            text-align: center;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer-brand {
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-links a {
+            color: #71717a;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--electric-green);
+        }
+
+        .footer-copy {
+            color: #52525b;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header {
+                padding: 1rem;
+            }
+
+            .hero {
+                padding: 6rem 1rem 3rem;
+            }
+
+            .price-ticker {
+                gap: 1rem;
+            }
+
+            .ticker-item {
+                min-width: 140px;
+                padding: 0.75rem 1rem;
+            }
+
+            .market-visual {
+                gap: 2rem;
+            }
+
+            .circle-value {
+                width: 150px;
+                height: 150px;
+            }
+
+            .circle-number {
+                font-size: 2rem;
+            }
+
+            .timeline::before {
+                left: 20px;
+            }
+
+            .timeline-item,
+            .timeline-item:nth-child(even) {
+                width: 100%;
+                padding-left: 50px;
+                padding-right: 0;
+                margin-left: 0;
+                justify-content: flex-start;
+            }
+
+            .timeline-item::before,
+            .timeline-item:nth-child(even)::before {
+                left: 12px;
+                right: auto;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        /* Animations */
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.8s ease-out forwards;
+            opacity: 0;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="grid-bg"></div>
+    <div class="energy-flow">
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const flow = document.querySelector('.energy-flow');
+                for (let i = 0; i < 20; i++) {
+                    const line = document.createElement('div');
+                    line.className = 'flow-line';
+                    line.style.left = `${Math.random() * 100}%`;
+                    line.style.animationDelay = `${Math.random() * 3}s`;
+                    line.style.animationDuration = `${2 + Math.random() * 2}s`;
+                    flow.appendChild(line);
+                }
+            });
+        </script>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <div class="logo">
+            <div class="logo-icon">⚡</div>
+            <span class="logo-text">NegaWatt AI</span>
+        </div>
+        <a href="mailto:founders@negawatt.ai" class="nav-cta">Get Early Access</a>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="breaking-news">
+            <span class="dot"></span>
+            <span>BREAKING: Germany power prices hit <strong>-€500/MWh</strong> today</span>
+        </div>
+        
+        <h1>
+            Turn <span class="negative">Negative</span> Prices<br>
+            Into <span>Positive</span> Returns
+        </h1>
+        
+        <p class="hero-subtitle">
+            The AI operating system for energy flexibility. When renewables flood the grid, 
+            we turn chaos into profit.
+        </p>
+
+        <div class="price-ticker">
+            <div class="ticker-item">
+                <div class="ticker-label">Germany (Now)</div>
+                <div class="ticker-value negative">-€127/MWh</div>
+            </div>
+            <div class="ticker-item">
+                <div class="ticker-label">California CAISO</div>
+                <div class="ticker-value negative">-$89/MWh</div>
+            </div>
+            <div class="ticker-item">
+                <div class="ticker-label">Your Opportunity</div>
+                <div class="ticker-value positive">+$2.5M/yr</div>
+            </div>
+        </div>
+
+        <div class="hero-buttons">
+            <a href="mailto:founders@negawatt.ai" class="btn-primary">
+                Join the Waitlist
+                <span>→</span>
+            </a>
+            <a href="#how-it-works" class="btn-secondary">See How It Works</a>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="problem-section">
+        <div class="container">
+            <div class="section-label">The $400B Problem</div>
+            <h2 class="section-title">
+                The Grid Wasn't Built for<br>Infinite Clean Energy
+            </h2>
+            <p style="color: #a1a1aa; font-size: 1.2rem; max-width: 800px;">
+                Renewable capacity is exploding. When supply exceeds demand, prices collapse — 
+                sometimes below zero. This creates massive inefficiency and stranded value.
+            </p>
+
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="problem-icon">🗑️</div>
+                    <div class="problem-stat">$12B+</div>
+                    <div class="problem-title">Curtailment Waste</div>
+                    <p style="color: #71717a;">Clean energy thrown away annually because the grid can't absorb it</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">⚠️</div>
+                    <div class="problem-stat">300+</div>
+                    <div class="problem-title">Negative Price Hours</div>
+                    <p style="color: #71717a;">Germany alone saw 300+ hours of negative pricing in 2026</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">💰</div>
+                    <div class="problem-stat">$400B</div>
+                    <div class="problem-title">Stranded Value</div>
+                    <p style="color: #71717a;">Industries that could profit from free power don't know it's available</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="solution-section" id="how-it-works">
+        <div class="container">
+            <div class="section-label">Our Solution</div>
+            <h2 class="section-title">
+                AI That Turns Volatility<br>Into Predictable Profit
+            </h2>
+
+            <div class="solution-grid">
+                <div class="solution-card">
+                    <div class="solution-number">01</div>
+                    <div class="solution-icon">🎯</div>
+                    <h3 class="solution-title">Price Prediction Engine</h3>
+                    <p style="color: #a1a1aa;">ML models predict 15-minute to 72-hour prices with 94%+ accuracy. Know when negative pricing is coming before it hits.</p>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-number">02</div>
+                    <div class="solution-icon">🎛️</div>
+                    <h3 class="solution-title">Asset Orchestration</h3>
+                    <p style="color: #a1a1aa;">Unified control of batteries, EVs, HVAC, industrial loads. Millisecond response to price signals.</p>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-number">03</div>
+                    <div class="solution-icon">🔄</div>
+                    <h3 class="solution-title">Flexibility Marketplace</h3>
+                    <p style="color: #a1a1aa;">Connect your load flexibility to energy traders. Get paid to be flexible.</p>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-number">04</div>
+                    <div class="solution-icon">🤖</div>
+                    <h3 class="solution-title">Autonomous Trading</h3>
+                    <p style="color: #a1a1aa;">AI agents trade energy futures, day-ahead, and real-time markets 24/7. Cross-market arbitrage across regions.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Market Section -->
+    <section class="market-section">
+        <div class="container">
+            <div class="section-label">Market Opportunity</div>
+            <h2 class="section-title">
+                The Renewable Tsunami Is Here
+            </h2>
+
+            <div class="market-visual">
+                <div class="market-circle">
+                    <div class="circle-value">
+                        <span class="circle-number">500+</span>
+                        <span class="circle-unit">GW</span>
+                    </div>
+                    <div class="circle-label">Renewables Added in 2025</div>
+                </div>
+                <div class="market-circle">
+                    <div class="circle-value">
+                        <span class="circle-number">$50B</span>
+                        <span class="circle-unit"></span>
+                    </div>
+                    <div class="circle-label">Demand Response Market by 2030</div>
+                </div>
+                <div class="market-circle">
+                    <div class="circle-value">
+                        <span class="circle-number">200%</span>
+                        <span class="circle-unit">YoY</span>
+                    </div>
+                    <div class="circle-label">Grid Storage Growth</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Business Model Section -->
+    <section class="business-section">
+        <div class="container">
+            <div class="section-label">Business Model</div>
+            <h2 class="section-title">Multiple Revenue Streams</h2>
+
+            <div class="revenue-streams">
+                <div class="revenue-card">
+                    <div class="revenue-name">Enterprise SaaS</div>
+                    <div class="revenue-model">$50K-$500K/year per facility</div>
+                    <div class="revenue-potential">$200M ARR potential</div>
+                </div>
+                <div class="revenue-card">
+                    <div class="revenue-name">Trading Performance Fee</div>
+                    <div class="revenue-model">15-20% of arbitrage profits</div>
+                    <div class="revenue-potential">Unlimited upside</div>
+                </div>
+                <div class="revenue-card">
+                    <div class="revenue-name">Flexibility Aggregation</div>
+                    <div class="revenue-model">$5-15/kW/year aggregated</div>
+                    <div class="revenue-potential">$100M+ at scale</div>
+                </div>
+                <div class="revenue-card">
+                    <div class="revenue-name">Grid Operator Licensing</div>
+                    <div class="revenue-model">$1M-$10M/year per utility</div>
+                    <div class="revenue-potential">$500M market</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Now Timeline -->
+    <section class="timeline-section">
+        <div class="container">
+            <div class="section-label">Why Now</div>
+            <h2 class="section-title">Perfect Storm of Opportunity</h2>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-year">2024-2026</div>
+                        <div class="timeline-title">Renewable Tsunami</div>
+                        <p style="color: #a1a1aa; font-size: 0.95rem;">500GW+ added globally. Negative pricing events 4x increase.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-year">Battery Revolution</div>
+                        <div class="timeline-title">Below $100/kWh</div>
+                        <p style="color: #a1a1aa; font-size: 0.95rem;">Grid-scale storage deployments up 200% YoY. Every battery needs optimization.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-year">FERC Order 2222</div>
+                        <div class="timeline-title">Market Deregulation</div>
+                        <p style="color: #a1a1aa; font-size: 0.95rem;">Wholesale markets now open to distributed resources. EU, UK, Australia following.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-year">AI Maturity</div>
+                        <div class="timeline-title">Real-Time Intelligence</div>
+                        <p style="color: #a1a1aa; font-size: 0.95rem;">RL agents excel at sequential decisions. Inference fast enough for grid response.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Traction Section -->
+    <section class="traction-section">
+        <div class="container">
+            <div class="section-label">Early Traction</div>
+            <h2 class="section-title">Building the Future Grid</h2>
+
+            <div class="traction-grid">
+                <div class="traction-item">
+                    <div class="traction-value">94%</div>
+                    <div class="traction-label">Price Prediction Accuracy</div>
+                </div>
+                <div class="traction-item">
+                    <div class="traction-value">40%</div>
+                    <div class="traction-label">Better Than Manual Trading</div>
+                </div>
+                <div class="traction-item">
+                    <div class="traction-value">12-25%</div>
+                    <div class="traction-label">Energy Cost Savings</div>
+                </div>
+                <div class="traction-item">
+                    <div class="traction-value">30:1</div>
+                    <div class="traction-label">Target LTV:CAC</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="cta-content">
+            <h2 class="cta-title">
+                Ready to Profit from the<br>
+                <span style="background: linear-gradient(135deg, var(--electric-green), var(--neon-cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Renewable Revolution?</span>
+            </h2>
+            <p class="cta-subtitle">
+                Join the waitlist for early access. Be among the first to turn negative prices into positive returns.
+            </p>
+            <a href="mailto:founders@negawatt.ai" class="btn-primary" style="font-size: 1.25rem; padding: 1.25rem 3rem;">
+                Get Early Access
+                <span>⚡</span>
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                ⚡ NegaWatt AI
+            </div>
+            <div class="footer-links">
+                <a href="mailto:founders@negawatt.ai">Contact</a>
+                <a href="#">Investors</a>
+                <a href="#">Careers</a>
+            </div>
+            <div class="footer-copy">
+                © 2026 NegaWatt AI. The future of energy is autonomous.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Intersection Observer for animations -->
+    <script>
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.problem-card, .solution-card, .revenue-card, .timeline-item, .traction-item').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
