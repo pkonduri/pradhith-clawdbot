@@ -201,6 +201,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-04-07 | Evening | VoiceEstate AI — Voice Identity Ownership, Licensing & Protection | [Playbook](2026-04-07-evening.md) • [Landing](2026-04-07-evening-landing.html) • [PDF](2026-04-07-evening.pdf) |
 | 2026-04-07 | Morning | NegaWatt AI — Energy Flexibility & Negative Price Arbitrage | [Playbook](2026-04-07-morning.md) • [Landing](2026-04-07-morning-landing.html) • [PDF](2026-04-07-morning.pdf) |
 | 2026-04-07 | Afternoon | ChronicOS — AI Operating System for Chronic Illness | [Playbook](2026-04-07-afternoon.md) • [Landing](2026-04-07-afternoon-landing.html) • [PDF](2026-04-07-afternoon.pdf) |
+| 2026-04-08 | Morning | LegacyMind AI — Enterprise Knowledge Immortality Platform | [Playbook](2026-04-08-morning.md) • [Landing](2026-04-08-morning-landing.html) • [PDF](2026-04-08-morning.pdf) |
 <!-- New entries will be added above this line -->
 
 ---
