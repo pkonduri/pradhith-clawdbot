@@ -202,6 +202,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-04-07 | Morning | NegaWatt AI — Energy Flexibility & Negative Price Arbitrage | [Playbook](2026-04-07-morning.md) • [Landing](2026-04-07-morning-landing.html) • [PDF](2026-04-07-morning.pdf) |
 | 2026-04-07 | Afternoon | ChronicOS — AI Operating System for Chronic Illness | [Playbook](2026-04-07-afternoon.md) • [Landing](2026-04-07-afternoon-landing.html) • [PDF](2026-04-07-afternoon.pdf) |
 | 2026-04-08 | Morning | LegacyMind AI — Enterprise Knowledge Immortality Platform | [Playbook](2026-04-08-morning.md) • [Landing](2026-04-08-morning-landing.html) • [PDF](2026-04-08-morning.pdf) |
+| 2026-04-08 | Afternoon | ApprenticeMind AI — AI Operating System for Skilled Trade Acceleration | [Playbook](2026-04-08-afternoon.md) • [Landing](2026-04-08-afternoon-landing.html) • [PDF](2026-04-08-afternoon.pdf) |
 <!-- New entries will be added above this line -->
 
 ---
