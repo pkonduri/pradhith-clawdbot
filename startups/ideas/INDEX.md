@@ -204,6 +204,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-04-08 | Morning | LegacyMind AI — Enterprise Knowledge Immortality Platform | [Playbook](2026-04-08-morning.md) • [Landing](2026-04-08-morning-landing.html) • [PDF](2026-04-08-morning.pdf) |
 | 2026-04-08 | Afternoon | ApprenticeMind AI — AI Operating System for Skilled Trade Acceleration | [Playbook](2026-04-08-afternoon.md) • [Landing](2026-04-08-afternoon-landing.html) • [PDF](2026-04-08-afternoon.pdf) |
 | 2026-04-09 | Evening | DisasterOS — AI Operating System for Disaster Prediction, Response & Recovery | [Playbook](2026-04-09-evening.md) • [Landing](2026-04-09-evening-landing.html) • [PDF](2026-04-09-evening.pdf) |
+| 2026-04-09 | Morning | TestPilot AI — The AI Operating System for Autonomous Software QA | [Playbook](2026-04-09-morning.md) • [Landing](2026-04-09-morning-landing.html) • [PDF](2026-04-09-morning.pdf) |
 <!-- New entries will be added above this line -->
 
 ---
