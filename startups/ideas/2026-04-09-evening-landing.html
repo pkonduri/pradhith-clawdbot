@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DisasterOS — AI-Powered Disaster Intelligence</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #dc2626;
+            --primary-dark: #991b1b;
+            --secondary: #1e40af;
+            --accent: #f97316;
+            --dark: #0f172a;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --success: #059669;
+            --warning: #d97706;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--dark);
+            color: var(--light);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Hero Section with Animated Background */
+        .hero {
+            min-height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        /* Radar Sweep Animation */
+        .radar-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 800px;
+            height: 800px;
+        }
+
+        .radar-circle {
+            position: absolute;
+            border: 1px solid rgba(220, 38, 38, 0.2);
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .radar-circle:nth-child(1) { width: 200px; height: 200px; }
+        .radar-circle:nth-child(2) { width: 400px; height: 400px; }
+        .radar-circle:nth-child(3) { width: 600px; height: 600px; }
+        .radar-circle:nth-child(4) { width: 800px; height: 800px; }
+
+        .radar-sweep {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 400px;
+            height: 2px;
+            background: linear-gradient(90deg, rgba(220, 38, 38, 0.8) 0%, transparent 100%);
+            transform-origin: left center;
+            animation: sweep 4s linear infinite;
+        }
+
+        @keyframes sweep {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Alert Dots */
+        .alert-dot {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            animation: pulse-alert 2s ease-out infinite;
+        }
+
+        .alert-dot.hurricane {
+            background: var(--primary);
+            top: 30%;
+            left: 70%;
+            animation-delay: 0.5s;
+        }
+
+        .alert-dot.wildfire {
+            background: var(--accent);
+            top: 60%;
+            left: 25%;
+            animation-delay: 1s;
+        }
+
+        .alert-dot.flood {
+            background: var(--secondary);
+            top: 45%;
+            left: 55%;
+            animation-delay: 1.5s;
+        }
+
+        @keyframes pulse-alert {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+                box-shadow: 0 0 0 0 currentColor;
+            }
+            70% {
+                transform: scale(1);
+                opacity: 0.7;
+                box-shadow: 0 0 0 20px transparent;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+                box-shadow: 0 0 0 0 transparent;
+            }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 2rem;
+            max-width: 900px;
+        }
+
+        .emergency-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(220, 38, 38, 0.15);
+            border: 1px solid rgba(220, 38, 38, 0.4);
+            padding: 8px 20px;
+            border-radius: 100px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 2rem;
+            animation: emergency-pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes emergency-pulse {
+            0%, 100% { border-color: rgba(220, 38, 38, 0.4); }
+            50% { border-color: rgba(220, 38, 38, 0.8); }
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 5.5rem);
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 50%, var(--warning) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.35rem;
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto 2.5rem;
+            line-height: 1.7;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 4rem;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 1rem 2.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            box-shadow: 0 4px 20px rgba(220, 38, 38, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 30px rgba(220, 38, 38, 0.5);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* Problem Section */
+        .problem {
+            padding: 8rem 2rem;
+            background: linear-gradient(180deg, var(--dark) 0%, #1a1a2e 100%);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-tag {
+            color: var(--primary);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .crisis-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .crisis-card {
+            background: linear-gradient(145deg, rgba(220, 38, 38, 0.1), rgba(220, 38, 38, 0.02));
+            border: 1px solid rgba(220, 38, 38, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .crisis-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--primary), var(--accent));
+        }
+
+        .crisis-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .crisis-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .crisis-label {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        /* Solution Section */
+        .solution {
+            padding: 8rem 2rem;
+            background: var(--dark);
+        }
+
+        .phases-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+
+        @media (max-width: 900px) {
+            .phases-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .phase-card {
+            background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+            border-radius: 24px;
+            padding: 2.5rem;
+            position: relative;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .phase-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255,255,255,0.2);
+        }
+
+        .phase-card.predict {
+            border-top: 4px solid var(--secondary);
+        }
+
+        .phase-card.respond {
+            border-top: 4px solid var(--primary);
+        }
+
+        .phase-card.recover {
+            border-top: 4px solid var(--success);
+        }
+
+        .phase-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .predict .phase-icon { background: rgba(30, 64, 175, 0.2); }
+        .respond .phase-icon { background: rgba(220, 38, 38, 0.2); }
+        .recover .phase-icon { background: rgba(5, 150, 105, 0.2); }
+
+        .phase-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .phase-description {
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+        }
+
+        .phase-features {
+            list-style: none;
+        }
+
+        .phase-features li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            color: rgba(255,255,255,0.8);
+            font-size: 0.95rem;
+        }
+
+        .phase-features li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--gray);
+        }
+
+        /* Features Section */
+        .features {
+            padding: 8rem 2rem;
+            background: linear-gradient(180deg, #1a1a2e 0%, var(--dark) 100%);
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: rgba(255,255,255,0.03);
+            border-radius: 20px;
+            padding: 2.5rem;
+            border: 1px solid rgba(255,255,255,0.08);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            background: rgba(255,255,255,0.05);
+            border-color: rgba(220, 38, 38, 0.3);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .feature-description {
+            color: var(--gray);
+            line-height: 1.7;
+        }
+
+        /* Market Section */
+        .market {
+            padding: 8rem 2rem;
+            background: var(--dark);
+        }
+
+        .market-visual {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            margin-top: 4rem;
+        }
+
+        @media (max-width: 900px) {
+            .market-visual {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .tam-chart {
+            position: relative;
+        }
+
+        .tam-circle {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            border: 20px solid rgba(220, 38, 38, 0.3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .tam-circle::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            right: -20px;
+            bottom: -20px;
+            border-radius: 50%;
+            border: 20px solid transparent;
+            border-top-color: var(--primary);
+            animation: rotate-tam 10s linear infinite;
+        }
+
+        @keyframes rotate-tam {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .tam-value {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .tam-label {
+            color: var(--gray);
+            font-size: 1.1rem;
+        }
+
+        .market-segments {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .segment {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .segment-bar {
+            height: 40px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 1rem;
+            color: white;
+            font-weight: 600;
+        }
+
+        .segment-label {
+            min-width: 150px;
+            color: var(--gray);
+        }
+
+        /* Impact Section */
+        .impact {
+            padding: 8rem 2rem;
+            background: linear-gradient(180deg, var(--dark) 0%, #0a0a14 100%);
+        }
+
+        .impact-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 3rem;
+            margin-top: 4rem;
+        }
+
+        @media (max-width: 900px) {
+            .impact-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .impact-card {
+            text-align: center;
+            padding: 3rem;
+            background: linear-gradient(145deg, rgba(220, 38, 38, 0.1), transparent);
+            border-radius: 24px;
+            border: 1px solid rgba(220, 38, 38, 0.2);
+        }
+
+        .impact-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .impact-value {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .impact-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .impact-description {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 8rem 2rem;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--dark) 50%, var(--secondary) 100%);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 10;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cta-section h2 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-section p {
+            font-size: 1.25rem;
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 2.5rem;
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 2rem;
+            background: #0a0a14;
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .footer-tagline {
+            color: var(--gray);
+            margin-bottom: 2rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--gray);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        .footer-copy {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .float {
+            animation: float 4s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-bg">
+            <div class="radar-container">
+                <div class="radar-circle"></div>
+                <div class="radar-circle"></div>
+                <div class="radar-circle"></div>
+                <div class="radar-circle"></div>
+                <div class="radar-sweep"></div>
+            </div>
+            <div class="alert-dot hurricane"></div>
+            <div class="alert-dot wildfire"></div>
+            <div class="alert-dot flood"></div>
+        </div>
+        
+        <div class="hero-content">
+            <div class="emergency-badge">
+                🚨 CRITICAL INFRASTRUCTURE • MISSION-CRITICAL AI
+            </div>
+            <h1>
+                <span>DisasterOS</span>
+            </h1>
+            <p>The AI Operating System for Disaster Prediction, Response & Recovery. Autonomous intelligence that saves lives when every second counts.</p>
+            
+            <div class="cta-group">
+                <a href="#demo" class="btn btn-primary">
+                    🛡️ Request Emergency Demo
+                </a>
+                <a href="#solution" class="btn btn-secondary">
+                    See How It Works →
+                </a>
+            </div>
+
+            <div class="hero-stats">
+                <div class="stat">
+                    <div class="stat-number">$313B</div>
+                    <div class="stat-label">US Disaster Costs (2025)</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">28</div>
+                    <div class="stat-label">Billion-Dollar Events/Year</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">127M</div>
+                    <div class="stat-label">Americans at Risk</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="problem">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag">The Crisis</div>
+                <h2 class="section-title">Disasters Are Accelerating. Response Systems Aren't.</h2>
+            </div>
+
+            <div class="crisis-grid">
+                <div class="crisis-card">
+                    <div class="crisis-icon">🌀</div>
+                    <div class="crisis-number">3x</div>
+                    <div class="crisis-label">Increase in billion-dollar disasters since the 1990s</div>
+                </div>
+                <div class="crisis-card">
+                    <div class="crisis-icon">⚡</div>
+                    <div class="crisis-number">100+</div>
+                    <div class="crisis-label">Agencies with incompatible systems responding to each disaster</div>
+                </div>
+                <div class="crisis-card">
+                    <div class="crisis-icon">⏱️</div>
+                    <div class="crisis-number">3-7 Years</div>
+                    <div class="crisis-label">Average time for communities to recover from major disasters</div>
+                </div>
+                <div class="crisis-card">
+                    <div class="crisis-icon">📱</div>
+                    <div class="crisis-number">1 Hour</div>
+                    <div class="crisis-label">Before 911 systems overwhelm after disaster strikes</div>
+                </div>
+                <div class="crisis-card">
+                    <div class="crisis-icon">🏪</div>
+                    <div class="crisis-number">40%</div>
+                    <div class="crisis-label">Of small businesses never reopen after major disasters</div>
+                </div>
+                <div class="crisis-card">
+                    <div class="crisis-icon">🏠</div>
+                    <div class="crisis-number">2.3M</div>
+                    <div class="crisis-label">Americans displaced by disasters annually</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="solution" id="solution">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag">The Solution</div>
+                <h2 class="section-title">Three Phases. One Unified Intelligence.</h2>
+                <p style="color: var(--gray); max-width: 700px; margin: 0 auto;">DisasterOS transforms fragmented disaster response into autonomous, coordinated action across the entire disaster lifecycle.</p>
+            </div>
+
+            <div class="phases-container">
+                <div class="phase-card predict">
+                    <div class="phase-icon">🔮</div>
+                    <h3 class="phase-title">PREDICT</h3>
+                    <p class="phase-description">Multi-hazard AI forecasting that sees disasters before they happen.</p>
+                    <ul class="phase-features">
+                        <li>7-14 day hurricane advance warning</li>
+                        <li>Wildfire spread prediction (15-min updates)</li>
+                        <li>Earthquake probability modeling</li>
+                        <li>Cascading infrastructure failure analysis</li>
+                        <li>Social vulnerability mapping</li>
+                    </ul>
+                </div>
+
+                <div class="phase-card respond">
+                    <div class="phase-icon">⚡</div>
+                    <h3 class="phase-title">RESPOND</h3>
+                    <p class="phase-description">Autonomous coordination that orchestrates entire response ecosystems.</p>
+                    <ul class="phase-features">
+                        <li>Real-time resource optimization</li>
+                        <li>AI-optimized evacuation routing</li>
+                        <li>Multi-channel alert distribution</li>
+                        <li>Cross-agency coordination</li>
+                        <li>Volunteer & NGO orchestration</li>
+                    </ul>
+                </div>
+
+                <div class="phase-card recover">
+                    <div class="phase-icon">🔄</div>
+                    <h3 class="phase-title">RECOVER</h3>
+                    <p class="phase-description">Intelligent recovery that rebuilds communities faster and stronger.</p>
+                    <ul class="phase-features">
+                        <li>Satellite damage assessment (hours not weeks)</li>
+                        <li>FEMA application assistance</li>
+                        <li>Insurance claims acceleration</li>
+                        <li>Contractor matching & vetting</li>
+                        <li>Long-term resilience planning</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag">Capabilities</div>
+                <h2 class="section-title">Built for the Worst Days</h2>
+            </div>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🛰️</div>
+                    <h3 class="feature-title">Real-Time Satellite Intelligence</h3>
+                    <p class="feature-description">Process satellite imagery every 15 minutes. See damage, track flooding, and monitor wildfires with unprecedented clarity.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🤖</div>
+                    <h3 class="feature-title">Autonomous Decision Support</h3>
+                    <p class="feature-description">AI that doesn't just alert — it recommends actions, allocates resources, and coordinates responders automatically.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🌐</div>
+                    <h3 class="feature-title">100+ Language Support</h3>
+                    <p class="feature-description">Critical alerts in every language, with accessibility-first design for visual, audio, and cognitive needs.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📡</div>
+                    <h3 class="feature-title">Offline-First Architecture</h3>
+                    <p class="feature-description">Satellite backup, edge computing, and mesh networking ensure operation even when infrastructure fails.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3 class="feature-title">FedRAMP High Security</h3>
+                    <p class="feature-description">Built for government. SOC 2, HIPAA, CJIS compliant. Your data protected at the highest levels.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔗</div>
+                    <h3 class="feature-title">Universal Interoperability</h3>
+                    <p class="feature-description">Integrates with existing CAD, GIS, and notification systems. Enhances what you have, doesn't replace it.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Market Section -->
+    <section class="market">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag">Market Opportunity</div>
+                <h2 class="section-title">A $165B Problem Waiting for AI</h2>
+            </div>
+
+            <div class="market-visual">
+                <div class="tam-chart">
+                    <div class="tam-circle">
+                        <div class="tam-value">$165B</div>
+                        <div class="tam-label">Total Addressable Market</div>
+                    </div>
+                </div>
+                <div class="market-segments">
+                    <div class="segment">
+                        <div class="segment-label">Federal Government</div>
+                        <div class="segment-bar" style="width: 270px;">$45B</div>
+                    </div>
+                    <div class="segment">
+                        <div class="segment-label">International</div>
+                        <div class="segment-bar" style="width: 240px;">$40B</div>
+                    </div>
+                    <div class="segment">
+                        <div class="segment-label">Enterprise</div>
+                        <div class="segment-bar" style="width: 180px;">$30B</div>
+                    </div>
+                    <div class="segment">
+                        <div class="segment-label">State & Local</div>
+                        <div class="segment-bar" style="width: 150px;">$25B</div>
+                    </div>
+                    <div class="segment">
+                        <div class="segment-label">Insurance</div>
+                        <div class="segment-bar" style="width: 90px;">$15B</div>
+                    </div>
+                    <div class="segment">
+                        <div class="segment-label">Humanitarian</div>
+                        <div class="segment-bar" style="width: 60px;">$10B</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Impact Section -->
+    <section class="impact">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag">Impact</div>
+                <h2 class="section-title">Measured in Lives Saved</h2>
+            </div>
+
+            <div class="impact-grid">
+                <div class="impact-card">
+                    <div class="impact-icon">❤️</div>
+                    <div class="impact-value">300+</div>
+                    <div class="impact-title">Lives Saved Annually</div>
+                    <div class="impact-description">10% reduction in US disaster fatalities through better prediction and response</div>
+                </div>
+                <div class="impact-card">
+                    <div class="impact-icon">💰</div>
+                    <div class="impact-value">$75B</div>
+                    <div class="impact-title">Cost Reduction</div>
+                    <div class="impact-description">25% decrease in disaster costs through improved preparation and response</div>
+                </div>
+                <div class="impact-card">
+                    <div class="impact-icon">🏪</div>
+                    <div class="impact-value">40%</div>
+                    <div class="impact-title">Faster Business Recovery</div>
+                    <div class="impact-description">Small businesses reopen faster with streamlined recovery coordination</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section" id="demo">
+        <div class="cta-content">
+            <h2>When Disaster Strikes, Will You Be Ready?</h2>
+            <p>Join the emergency management agencies, enterprises, and communities building resilience with DisasterOS.</p>
+            <div class="cta-group">
+                <a href="mailto:hello@disasteros.ai" class="btn btn-primary">
+                    🚨 Request Emergency Demo
+                </a>
+                <a href="#" class="btn btn-secondary">
+                    📄 Download Whitepaper
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-logo">🛡️ DisasterOS</div>
+        <p class="footer-tagline">Because every life matters when disaster strikes.</p>
+        <div class="footer-links">
+            <a href="#">Platform</a>
+            <a href="#">Solutions</a>
+            <a href="#">Customers</a>
+            <a href="#">Company</a>
+            <a href="#">Careers</a>
+            <a href="#">Contact</a>
+        </div>
+        <p class="footer-copy">© 2026 DisasterOS, Inc. All rights reserved. | Protecting communities worldwide.</p>
+    </footer>
+</body>
+</html>
