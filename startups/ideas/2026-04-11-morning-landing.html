@@ -1,0 +1,1385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MigrationOS — The AI Operating System for Enterprise Platform Migration</title>
+    <meta name="description" content="Transform complex enterprise migrations from multi-year nightmares into predictable, accelerated transitions. AI-native discovery, transformation, and validation.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --primary-light: #3b82f6;
+            --accent: #06b6d4;
+            --accent-glow: rgba(6, 182, 212, 0.4);
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #0f172a;
+            --darker: #020617;
+            --gray-900: #1e293b;
+            --gray-800: #334155;
+            --gray-700: #475569;
+            --gray-600: #64748b;
+            --gray-400: #94a3b8;
+            --gray-300: #cbd5e1;
+            --gray-200: #e2e8f0;
+            --white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--darker);
+            color: var(--gray-200);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(37, 99, 235, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(37, 99, 235, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .floating-orbs {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.3;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .orb-1 {
+            width: 600px;
+            height: 600px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            top: -200px;
+            right: -100px;
+            animation-delay: 0s;
+        }
+
+        .orb-2 {
+            width: 500px;
+            height: 500px;
+            background: linear-gradient(135deg, var(--accent), var(--success));
+            bottom: -150px;
+            left: -100px;
+            animation-delay: -7s;
+        }
+
+        .orb-3 {
+            width: 400px;
+            height: 400px;
+            background: linear-gradient(135deg, var(--primary-light), var(--accent));
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation-delay: -14s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-30px) rotate(5deg); }
+            50% { transform: translateY(20px) rotate(-5deg); }
+            75% { transform: translateY(-15px) rotate(3deg); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1rem 2rem;
+            background: rgba(2, 6, 23, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(37, 99, 235, 0.1);
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-light), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--gray-400);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--white);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: var(--white);
+            box-shadow: 0 4px 20px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(37, 99, 235, 0.4);
+        }
+
+        .btn-outline {
+            border: 2px solid var(--primary);
+            color: var(--primary-light);
+            background: transparent;
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .btn-large {
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 120px 2rem 80px;
+            z-index: 1;
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(37, 99, 235, 0.1);
+            border: 1px solid rgba(37, 99, 235, 0.3);
+            border-radius: 100px;
+            font-size: 0.9rem;
+            color: var(--accent);
+            margin-bottom: 2rem;
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(6, 182, 212, 0.2); }
+            50% { box-shadow: 0 0 40px rgba(6, 182, 212, 0.4); }
+        }
+
+        .hero-badge .dot {
+            width: 8px;
+            height: 8px;
+            background: var(--success);
+            border-radius: 50%;
+            animation: blink 1.5s ease-in-out infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        h1 {
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--white) 0%, var(--gray-400) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        h1 .highlight {
+            background: linear-gradient(135deg, var(--primary-light), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.4rem;
+            color: var(--gray-400);
+            max-width: 700px;
+            margin: 0 auto 3rem;
+            line-height: 1.7;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 4rem;
+        }
+
+        /* Migration Visualization */
+        .migration-visual {
+            position: relative;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .migration-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .platform-box {
+            padding: 1.5rem 2rem;
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid var(--gray-700);
+            border-radius: 12px;
+            text-align: center;
+            min-width: 150px;
+        }
+
+        .platform-box.legacy {
+            border-color: var(--danger);
+            box-shadow: 0 0 30px rgba(239, 68, 68, 0.1);
+        }
+
+        .platform-box.modern {
+            border-color: var(--success);
+            box-shadow: 0 0 30px rgba(16, 185, 129, 0.1);
+        }
+
+        .platform-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .platform-name {
+            font-weight: 600;
+            color: var(--white);
+        }
+
+        .migration-arrow {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .arrow-line {
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            position: relative;
+            border-radius: 3px;
+        }
+
+        .arrow-line::after {
+            content: '';
+            position: absolute;
+            right: -8px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: 6px solid transparent;
+            border-left-color: var(--accent);
+        }
+
+        .migrationos-box {
+            padding: 1.5rem 2.5rem;
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.2), rgba(6, 182, 212, 0.2));
+            border: 2px solid var(--accent);
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 0 50px rgba(6, 182, 212, 0.2);
+            animation: glow-pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes glow-pulse {
+            0%, 100% { box-shadow: 0 0 30px rgba(6, 182, 212, 0.2); }
+            50% { box-shadow: 0 0 60px rgba(6, 182, 212, 0.4); }
+        }
+
+        .migrationos-box .logo-text {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-light), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .migrationos-box .subtitle {
+            font-size: 0.9rem;
+            color: var(--gray-400);
+        }
+
+        /* Stats Section */
+        .stats {
+            position: relative;
+            z-index: 1;
+            padding: 6rem 2rem;
+            background: linear-gradient(180deg, transparent, rgba(15, 23, 42, 0.8));
+        }
+
+        .stats-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .stat-card {
+            padding: 2rem;
+            background: rgba(30, 41, 59, 0.4);
+            border: 1px solid var(--gray-800);
+            border-radius: 16px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .stat-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 40px rgba(37, 99, 235, 0.1);
+        }
+
+        .stat-value {
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary-light), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--gray-400);
+            font-size: 1.1rem;
+        }
+
+        /* Problem Section */
+        .problem {
+            position: relative;
+            z-index: 1;
+            padding: 8rem 2rem;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 4rem;
+        }
+
+        .section-label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+        }
+
+        h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            color: var(--white);
+        }
+
+        .section-description {
+            font-size: 1.2rem;
+            color: var(--gray-400);
+        }
+
+        .problem-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .problem-card {
+            padding: 2.5rem;
+            background: rgba(30, 41, 59, 0.4);
+            border: 1px solid var(--gray-800);
+            border-radius: 20px;
+            transition: all 0.3s;
+        }
+
+        .problem-card:hover {
+            border-color: var(--danger);
+            background: rgba(239, 68, 68, 0.05);
+        }
+
+        .problem-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .problem-card h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 1rem;
+        }
+
+        .problem-card p {
+            color: var(--gray-400);
+            line-height: 1.7;
+        }
+
+        /* Solution Section */
+        .solution {
+            position: relative;
+            z-index: 1;
+            padding: 8rem 2rem;
+            background: linear-gradient(180deg, rgba(15, 23, 42, 0.8), transparent);
+        }
+
+        .capability-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .capability-card {
+            padding: 2.5rem;
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.6), rgba(15, 23, 42, 0.8));
+            border: 1px solid var(--gray-800);
+            border-radius: 20px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .capability-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+
+        .capability-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .capability-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+        }
+
+        .capability-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.2), rgba(6, 182, 212, 0.2));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .capability-card h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 1rem;
+        }
+
+        .capability-card p {
+            color: var(--gray-400);
+            line-height: 1.7;
+            font-size: 0.95rem;
+        }
+
+        .capability-features {
+            margin-top: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .capability-feature {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--gray-300);
+        }
+
+        .capability-feature::before {
+            content: '✓';
+            color: var(--success);
+            font-weight: bold;
+        }
+
+        /* Playbooks Section */
+        .playbooks {
+            position: relative;
+            z-index: 1;
+            padding: 8rem 2rem;
+        }
+
+        .playbook-tabs {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .tab-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 1rem 2rem;
+            background: rgba(30, 41, 59, 0.4);
+            border: 1px solid var(--gray-700);
+            border-radius: 12px;
+            color: var(--gray-400);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .tab-btn.active, .tab-btn:hover {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-color: var(--primary);
+            color: var(--white);
+        }
+
+        .playbook-content {
+            background: rgba(30, 41, 59, 0.4);
+            border: 1px solid var(--gray-800);
+            border-radius: 20px;
+            padding: 3rem;
+        }
+
+        .playbook-header {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .playbook-emoji {
+            font-size: 3rem;
+        }
+
+        .playbook-title h3 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 0.5rem;
+        }
+
+        .playbook-title p {
+            color: var(--gray-400);
+        }
+
+        .phase-timeline {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .phase {
+            display: flex;
+            gap: 1.5rem;
+            align-items: flex-start;
+        }
+
+        .phase-marker {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0;
+        }
+
+        .phase-number {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--white);
+        }
+
+        .phase-line {
+            width: 2px;
+            height: 100%;
+            min-height: 60px;
+            background: linear-gradient(180deg, var(--primary), transparent);
+        }
+
+        .phase-content h4 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--white);
+            margin-bottom: 0.5rem;
+        }
+
+        .phase-content p {
+            color: var(--gray-400);
+            font-size: 0.95rem;
+        }
+
+        .phase-duration {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: rgba(6, 182, 212, 0.1);
+            border-radius: 100px;
+            font-size: 0.8rem;
+            color: var(--accent);
+            margin-left: 0.5rem;
+        }
+
+        /* France Section */
+        .france {
+            position: relative;
+            z-index: 1;
+            padding: 8rem 2rem;
+            background: linear-gradient(180deg, transparent, rgba(37, 99, 235, 0.05));
+        }
+
+        .france-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        @media (max-width: 900px) {
+            .france-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .france-text h2 {
+            margin-bottom: 1.5rem;
+        }
+
+        .france-text p {
+            color: var(--gray-400);
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .france-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        .france-stat {
+            padding: 1.5rem;
+            background: rgba(30, 41, 59, 0.4);
+            border: 1px solid var(--gray-800);
+            border-radius: 12px;
+        }
+
+        .france-stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--accent);
+            margin-bottom: 0.25rem;
+        }
+
+        .france-stat-label {
+            font-size: 0.9rem;
+            color: var(--gray-400);
+        }
+
+        .france-visual {
+            position: relative;
+            padding: 2rem;
+        }
+
+        .flag-container {
+            position: relative;
+            padding: 3rem;
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.1), rgba(239, 68, 68, 0.1));
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        .flag-emoji {
+            font-size: 8rem;
+            margin-bottom: 1rem;
+        }
+
+        .flag-text {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--white);
+        }
+
+        .flag-subtext {
+            color: var(--gray-400);
+        }
+
+        /* CTA Section */
+        .cta {
+            position: relative;
+            z-index: 1;
+            padding: 8rem 2rem;
+            text-align: center;
+        }
+
+        .cta-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 4rem;
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(37, 99, 235, 0.3);
+            border-radius: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(37, 99, 235, 0.1) 0%, transparent 50%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .cta p {
+            font-size: 1.2rem;
+            color: var(--gray-400);
+            margin-bottom: 2rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Footer */
+        footer {
+            position: relative;
+            z-index: 1;
+            padding: 4rem 2rem;
+            border-top: 1px solid var(--gray-800);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .footer-tagline {
+            font-style: italic;
+            color: var(--gray-500);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--gray-400);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero {
+                padding: 100px 1rem 60px;
+            }
+
+            .migration-flow {
+                flex-direction: column;
+            }
+
+            .arrow-line {
+                width: 3px;
+                height: 40px;
+            }
+
+            .arrow-line::after {
+                right: 50%;
+                top: auto;
+                bottom: -8px;
+                transform: translateX(50%) rotate(90deg);
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .problem-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .playbook-content {
+                padding: 1.5rem;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        /* Code Block */
+        .code-block {
+            font-family: 'JetBrains Mono', monospace;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid var(--gray-800);
+            border-radius: 12px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            font-size: 0.9rem;
+            color: var(--gray-300);
+        }
+
+        .code-comment {
+            color: var(--gray-600);
+        }
+
+        .code-keyword {
+            color: var(--primary-light);
+        }
+
+        .code-string {
+            color: var(--success);
+        }
+
+        .code-function {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+    <div class="floating-orbs">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <nav>
+        <div class="nav-content">
+            <div class="logo">
+                <div class="logo-icon">⚡</div>
+                MigrationOS
+            </div>
+            <div class="nav-links">
+                <a href="#problem">Problem</a>
+                <a href="#solution">Solution</a>
+                <a href="#playbooks">Playbooks</a>
+                <a href="#france">Case Study</a>
+                <a href="#contact" class="btn btn-primary">Get Early Access</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span class="dot"></span>
+                France announces €2.3B Windows→Linux migration
+            </div>
+            <h1>
+                Enterprise Migration<br>
+                <span class="highlight">Without the Nightmare</span>
+            </h1>
+            <p class="hero-subtitle">
+                MigrationOS is the AI operating system that transforms complex platform migrations 
+                from multi-year disasters into predictable, accelerated transitions.
+            </p>
+            <div class="hero-cta">
+                <a href="#contact" class="btn btn-primary btn-large">Request Demo →</a>
+                <a href="#solution" class="btn btn-outline btn-large">See How It Works</a>
+            </div>
+
+            <div class="migration-visual">
+                <div class="migration-flow">
+                    <div class="platform-box legacy">
+                        <div class="platform-icon">🪟</div>
+                        <div class="platform-name">Windows</div>
+                    </div>
+                    <div class="migration-arrow">
+                        <div class="arrow-line"></div>
+                    </div>
+                    <div class="migrationos-box">
+                        <div class="logo-text">MigrationOS</div>
+                        <div class="subtitle">AI-Powered Transformation</div>
+                    </div>
+                    <div class="migration-arrow">
+                        <div class="arrow-line"></div>
+                    </div>
+                    <div class="platform-box modern">
+                        <div class="platform-icon">🐧</div>
+                        <div class="platform-name">Linux</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="stats">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">83%</div>
+                <div class="stat-label">of migrations exceed budget</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">2.4x</div>
+                <div class="stat-label">average timeline overrun</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">$127B</div>
+                <div class="stat-label">migration services market</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">70%</div>
+                <div class="stat-label">faster with MigrationOS</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="problem" id="problem">
+        <div class="section-header">
+            <div class="section-label">The Problem</div>
+            <h2>Migrations Are Where Careers Go to Die</h2>
+            <p class="section-description">
+                Every CIO knows the truth. Traditional migrations fail because they can't see what they're moving.
+            </p>
+        </div>
+
+        <div class="problem-grid">
+            <div class="problem-card">
+                <div class="problem-icon">🔍</div>
+                <h3>Discovery Theater</h3>
+                <p>Manual audits capture 60% of dependencies at best. Shadow IT, undocumented integrations, and tribal knowledge remain invisible until go-live — when it's too late.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">🎰</div>
+                <h3>Transformation Roulette</h3>
+                <p>Application compatibility testing is manual, incomplete, and non-deterministic. The same app tested twice yields different results. Hope is not a strategy.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">💣</div>
+                <h3>Big Bang Disasters</h3>
+                <p>Waterfall migration approaches create single points of failure. When the switch flips, everything breaks at once. Recovery takes months.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">🔒</div>
+                <h3>Vendor Lock-in Blindness</h3>
+                <p>Hidden platform dependencies are designed to be invisible. Cloud providers, OS vendors, and SaaS companies profit from your inability to leave.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">👴</div>
+                <h3>Knowledge Attrition</h3>
+                <p>The people who built legacy systems have retired. Documentation doesn't exist. Context is gone forever. You're migrating a mystery.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">💸</div>
+                <h3>Cost Explosions</h3>
+                <p>$12M average hidden cost from undiscovered dependencies. 72% of large-scale migrations experience critical business disruptions.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="solution" id="solution">
+        <div class="section-header">
+            <div class="section-label">The Solution</div>
+            <h2>AI-Native Migration Intelligence</h2>
+            <p class="section-description">
+                End-to-end autonomous capabilities that see everything, transform anything, and guarantee success.
+            </p>
+        </div>
+
+        <div class="capability-grid">
+            <div class="capability-card">
+                <div class="capability-icon">🔬</div>
+                <h3>Discovery AI</h3>
+                <p>Active intelligence agents that map actual dependencies, illuminate shadow IT, and capture tribal knowledge.</p>
+                <div class="capability-features">
+                    <span class="capability-feature">Deep protocol analysis</span>
+                    <span class="capability-feature">Real-time dependency graphs</span>
+                    <span class="capability-feature">Migration complexity scoring</span>
+                </div>
+            </div>
+            <div class="capability-card">
+                <div class="capability-icon">⚙️</div>
+                <h3>Transform AI</h3>
+                <p>Autonomous cross-platform transformation that converts applications, configurations, and data automatically.</p>
+                <div class="capability-features">
+                    <span class="capability-feature">Application transmutation</span>
+                    <span class="capability-feature">Configuration synthesis</span>
+                    <span class="capability-feature">Script translation</span>
+                </div>
+            </div>
+            <div class="capability-card">
+                <div class="capability-icon">✅</div>
+                <h3>Validate AI</h3>
+                <p>Continuous validation eliminates migration surprises through synthetic user simulation and regression hunting.</p>
+                <div class="capability-features">
+                    <span class="capability-feature">Behavioral comparison</span>
+                    <span class="capability-feature">Performance baselining</span>
+                    <span class="capability-feature">Rollback rehearsal</span>
+                </div>
+            </div>
+            <div class="capability-card">
+                <div class="capability-icon">🌐</div>
+                <h3>Migration Fabric</h3>
+                <p>Runtime infrastructure for zero-risk transitions with real-time state sync and atomic cutover.</p>
+                <div class="capability-features">
+                    <span class="capability-feature">Zero-downtime guarantee</span>
+                    <span class="capability-feature">Canary deployment</span>
+                    <span class="capability-feature">Instant rollback</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="playbooks" id="playbooks">
+        <div class="section-header">
+            <div class="section-label">Migration Playbooks</div>
+            <h2>Proven Paths to Success</h2>
+            <p class="section-description">
+                Battle-tested playbooks for every major migration scenario, continuously refined by AI.
+            </p>
+        </div>
+
+        <div class="playbook-tabs">
+            <div class="tab-buttons">
+                <button class="tab-btn active">Windows → Linux</button>
+                <button class="tab-btn">Cloud Repatriation</button>
+                <button class="tab-btn">Mainframe Modernization</button>
+            </div>
+
+            <div class="playbook-content">
+                <div class="playbook-header">
+                    <div class="playbook-emoji">🐧</div>
+                    <div class="playbook-title">
+                        <h3>Windows → Linux Migration</h3>
+                        <p>The playbook powering France's €2.3B government transformation</p>
+                    </div>
+                </div>
+
+                <div class="phase-timeline">
+                    <div class="phase">
+                        <div class="phase-marker">
+                            <div class="phase-number">1</div>
+                            <div class="phase-line"></div>
+                        </div>
+                        <div class="phase-content">
+                            <h4>Discovery <span class="phase-duration">4-6 weeks</span></h4>
+                            <p>Deploy Discovery AI agents across Windows estate. Map all applications, dependencies, and integrations. Identify Linux equivalents and gaps. Create user workflow documentation.</p>
+                        </div>
+                    </div>
+                    <div class="phase">
+                        <div class="phase-marker">
+                            <div class="phase-number">2</div>
+                            <div class="phase-line"></div>
+                        </div>
+                        <div class="phase-content">
+                            <h4>Pilot <span class="phase-duration">8-12 weeks</span></h4>
+                            <p>Select pilot group (typically IT + early adopters). Transform AI converts applications and configurations. Deploy Linux environment with parallel access. Validate AI confirms functionality.</p>
+                        </div>
+                    </div>
+                    <div class="phase">
+                        <div class="phase-marker">
+                            <div class="phase-number">3</div>
+                            <div class="phase-line"></div>
+                        </div>
+                        <div class="phase-content">
+                            <h4>Wave Migration <span class="phase-duration">Ongoing</span></h4>
+                            <p>Department-by-department migration waves with zero-downtime cutover. Continuous validation and support. Rollback capability maintained throughout.</p>
+                        </div>
+                    </div>
+                    <div class="phase">
+                        <div class="phase-marker">
+                            <div class="phase-number">4</div>
+                        </div>
+                        <div class="phase-content">
+                            <h4>Decommission <span class="phase-duration">4-8 weeks</span></h4>
+                            <p>Legacy system monitoring for stragglers. Data archival and compliance. License termination. Migration completion certification.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="france" id="france">
+        <div class="france-content">
+            <div class="france-text">
+                <div class="section-label">Breaking News</div>
+                <h2>France Leads the Digital Sovereignty Revolution</h2>
+                <p>
+                    France's Interministerial Directorate for Digital Affairs has announced 
+                    the largest government Windows→Linux migration in history. €2.3 billion 
+                    in transformation spend. 87 million EU government workers affected by 
+                    the broader sovereignty movement.
+                </p>
+                <p>
+                    This is just the beginning. The EU Digital Sovereignty Act mandates 
+                    European alternatives by 2028. China's Xinchuang policy drives similar 
+                    domestic OS migrations. The wave is here.
+                </p>
+                <a href="#contact" class="btn btn-primary btn-large">Partner With Us →</a>
+
+                <div class="france-stats">
+                    <div class="france-stat">
+                        <div class="france-stat-value">€2.3B</div>
+                        <div class="france-stat-label">French migration budget</div>
+                    </div>
+                    <div class="france-stat">
+                        <div class="france-stat-value">87M</div>
+                        <div class="france-stat-label">EU workers affected</div>
+                    </div>
+                    <div class="france-stat">
+                        <div class="france-stat-value">2028</div>
+                        <div class="france-stat-label">EU mandate deadline</div>
+                    </div>
+                    <div class="france-stat">
+                        <div class="france-stat-value">€12B+</div>
+                        <div class="france-stat-label">Total EU opportunity</div>
+                    </div>
+                </div>
+            </div>
+            <div class="france-visual">
+                <div class="flag-container">
+                    <div class="flag-emoji">🇫🇷</div>
+                    <div class="flag-text">Digital Sovereignty</div>
+                    <div class="flag-subtext">The future is open</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta" id="contact">
+        <div class="cta-container">
+            <div class="cta-content">
+                <h2>The Great Migration Has Begun</h2>
+                <p>Will you be ready to help enterprises navigate it?</p>
+                <div class="cta-buttons">
+                    <a href="mailto:hello@migrationos.ai" class="btn btn-primary btn-large">Request Early Access</a>
+                    <a href="#" class="btn btn-outline btn-large">Download Playbook</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <div class="logo">
+                    <div class="logo-icon">⚡</div>
+                    MigrationOS
+                </div>
+                <span class="footer-tagline">"Rip-and-replace, without the regret."</span>
+            </div>
+            <div class="footer-links">
+                <a href="#">Documentation</a>
+                <a href="#">Playbooks</a>
+                <a href="#">Blog</a>
+                <a href="#">Contact</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Tab functionality
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            });
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Animate on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.stat-card, .problem-card, .capability-card, .phase').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'all 0.6s ease-out';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>

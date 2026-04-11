@@ -209,6 +209,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-04-10 | Morning | AirSentry — The AI Operating System for Indoor Environment Intelligence | [Playbook](2026-04-10-morning.md) • [Landing](2026-04-10-morning-landing.html) • [PDF](2026-04-10-morning.pdf) |
 | 2026-04-10 | Afternoon | VoiceShield AI — The Trust Layer for Human Voice | [Playbook](2026-04-10-afternoon.md) • [Landing](2026-04-10-afternoon-landing.html) • [PDF](2026-04-10-afternoon.pdf) |
 | 2026-04-11 | Evening | NeuroShield AI — Brain Health Intelligence & Neurological Disease Prevention | [Playbook](2026-04-11-evening.md) • [Landing](2026-04-11-evening-landing.html) • [PDF](2026-04-11-evening.pdf) |
+| 2026-04-11 | Morning | MigrationOS — The AI Operating System for Enterprise Platform Migration | [Playbook](2026-04-11-morning.md) • [Landing](2026-04-11-morning-landing.html) • [PDF](2026-04-11-morning.pdf) |
 <!-- New entries will be added above this line -->
 
 ---
