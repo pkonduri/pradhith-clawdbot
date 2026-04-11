@@ -1,0 +1,1555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SleepOS — The AI Operating System for Human Sleep</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --night-deep: #0a0a1a;
+            --night-mid: #12122a;
+            --night-light: #1a1a3a;
+            --dream-purple: #8b5cf6;
+            --dream-blue: #3b82f6;
+            --sleep-cyan: #06b6d4;
+            --moon-glow: #fcd34d;
+            --star-white: #f8fafc;
+            --cloud-gray: #94a3b8;
+            --deep-sleep: #4338ca;
+            --rem-pink: #ec4899;
+            --light-sleep: #22d3ee;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--night-deep);
+            color: var(--star-white);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Animated Starfield Background */
+        .starfield {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .stars {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(2px 2px at 20px 30px, white, transparent),
+                radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.8), transparent),
+                radial-gradient(1px 1px at 90px 40px, white, transparent),
+                radial-gradient(2px 2px at 160px 120px, rgba(255,255,255,0.9), transparent),
+                radial-gradient(1px 1px at 230px 80px, white, transparent),
+                radial-gradient(2px 2px at 300px 150px, rgba(255,255,255,0.7), transparent),
+                radial-gradient(1px 1px at 370px 50px, white, transparent),
+                radial-gradient(2px 2px at 450px 200px, rgba(255,255,255,0.8), transparent);
+            background-repeat: repeat;
+            background-size: 500px 300px;
+            animation: twinkle 8s ease-in-out infinite;
+        }
+
+        .stars:nth-child(2) {
+            background-position: 50% 50%;
+            animation-delay: -4s;
+            opacity: 0.5;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Moon Animation */
+        .moon-container {
+            position: fixed;
+            top: 60px;
+            right: 80px;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .moon {
+            width: 120px;
+            height: 120px;
+            background: radial-gradient(circle at 35% 35%, #fff9c4 0%, #fcd34d 30%, #f59e0b 100%);
+            border-radius: 50%;
+            box-shadow: 
+                0 0 60px rgba(252, 211, 77, 0.4),
+                0 0 120px rgba(252, 211, 77, 0.2),
+                inset -15px -10px 30px rgba(245, 158, 11, 0.3);
+            animation: moonFloat 12s ease-in-out infinite;
+        }
+
+        .moon::before {
+            content: '';
+            position: absolute;
+            top: 20%;
+            left: 25%;
+            width: 15px;
+            height: 15px;
+            background: rgba(245, 158, 11, 0.3);
+            border-radius: 50%;
+        }
+
+        .moon::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 60%;
+            width: 25px;
+            height: 25px;
+            background: rgba(245, 158, 11, 0.2);
+            border-radius: 50%;
+        }
+
+        @keyframes moonFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(3deg); }
+        }
+
+        /* Content */
+        .content {
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Hero */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .hero-bg-gradient {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(ellipse 80% 50% at 50% 100%, rgba(139, 92, 246, 0.15) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 40% at 30% 80%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse 50% 30% at 70% 70%, rgba(236, 72, 153, 0.08) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .logo-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--dream-purple) 0%, var(--dream-blue) 50%, var(--sleep-cyan) 100%);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            box-shadow: 
+                0 10px 40px rgba(139, 92, 246, 0.4),
+                0 0 60px rgba(139, 92, 246, 0.2);
+            animation: logoPulse 4s ease-in-out infinite;
+        }
+
+        @keyframes logoPulse {
+            0%, 100% { box-shadow: 0 10px 40px rgba(139, 92, 246, 0.4), 0 0 60px rgba(139, 92, 246, 0.2); }
+            50% { box-shadow: 0 15px 60px rgba(139, 92, 246, 0.6), 0 0 80px rgba(139, 92, 246, 0.3); }
+        }
+
+        .logo-text {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--star-white) 0%, var(--dream-purple) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            max-width: 900px;
+        }
+
+        .hero h1 .gradient-text {
+            background: linear-gradient(135deg, var(--dream-purple) 0%, var(--sleep-cyan) 50%, var(--rem-pink) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .tagline {
+            font-size: 1.5rem;
+            color: var(--cloud-gray);
+            margin-bottom: 3rem;
+            font-style: italic;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 4rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .hero-stat {
+            text-align: center;
+        }
+
+        .hero-stat-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--moon-glow) 0%, var(--dream-purple) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-stat-label {
+            font-size: 0.9rem;
+            color: var(--cloud-gray);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--dream-purple) 0%, var(--deep-sleep) 100%);
+            color: white;
+            box-shadow: 0 8px 30px rgba(139, 92, 246, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(139, 92, 246, 0.5);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Sleep Visualization */
+        .sleep-viz {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 150px;
+            overflow: hidden;
+        }
+
+        .sleep-wave {
+            position: absolute;
+            bottom: 0;
+            left: -100%;
+            width: 300%;
+            height: 100%;
+        }
+
+        .sleep-wave svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .wave-1 { animation: waveMove 25s linear infinite; }
+        .wave-2 { animation: waveMove 20s linear infinite reverse; opacity: 0.5; }
+        .wave-3 { animation: waveMove 15s linear infinite; opacity: 0.3; }
+
+        @keyframes waveMove {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(33.33%); }
+        }
+
+        /* Problem Section */
+        .section {
+            padding: 8rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 5rem;
+        }
+
+        .section-label {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(59, 130, 246, 0.2));
+            border-radius: 50px;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--dream-purple);
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: var(--cloud-gray);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Problem Cards */
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .problem-card {
+            background: linear-gradient(135deg, rgba(26, 26, 58, 0.8) 0%, rgba(18, 18, 42, 0.9) 100%);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            border-radius: 24px;
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .problem-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--dream-purple), var(--rem-pink), var(--sleep-cyan));
+        }
+
+        .problem-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(139, 92, 246, 0.4);
+            box-shadow: 0 20px 60px rgba(139, 92, 246, 0.15);
+        }
+
+        .problem-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .problem-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--rem-pink);
+            margin-bottom: 0.5rem;
+        }
+
+        .problem-label {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .problem-desc {
+            color: var(--cloud-gray);
+            font-size: 0.95rem;
+        }
+
+        /* Fragmentation Visual */
+        .fragmentation {
+            margin-top: 5rem;
+            background: linear-gradient(135deg, rgba(236, 72, 153, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%);
+            border-radius: 32px;
+            padding: 4rem;
+            border: 1px solid rgba(236, 72, 153, 0.2);
+        }
+
+        .frag-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.8rem;
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .frag-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .frag-item {
+            background: rgba(10, 10, 26, 0.6);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .frag-item:hover {
+            border-color: rgba(139, 92, 246, 0.3);
+            transform: scale(1.02);
+        }
+
+        .frag-category {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--dream-purple);
+            margin-bottom: 0.5rem;
+        }
+
+        .frag-name {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .frag-problem {
+            font-size: 0.85rem;
+            color: var(--rem-pink);
+        }
+
+        /* Solution Section */
+        .solution-section {
+            background: linear-gradient(180deg, transparent 0%, rgba(139, 92, 246, 0.03) 50%, transparent 100%);
+        }
+
+        .architecture {
+            background: linear-gradient(135deg, rgba(18, 18, 42, 0.95) 0%, rgba(26, 26, 58, 0.95) 100%);
+            border-radius: 32px;
+            padding: 3rem;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            margin-bottom: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .architecture::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.1) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .arch-layer {
+            background: rgba(10, 10, 26, 0.6);
+            border-radius: 16px;
+            padding: 1.5rem 2rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid;
+            position: relative;
+        }
+
+        .arch-layer:nth-child(1) { border-color: var(--moon-glow); }
+        .arch-layer:nth-child(2) { border-color: var(--dream-purple); }
+        .arch-layer:nth-child(3) { border-color: var(--sleep-cyan); }
+        .arch-layer:nth-child(4) { border-color: var(--rem-pink); }
+
+        .arch-layer-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .arch-layer-desc {
+            color: var(--cloud-gray);
+            font-size: 0.9rem;
+        }
+
+        .arch-components {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .arch-comp {
+            background: rgba(139, 92, 246, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            border: 1px solid rgba(139, 92, 246, 0.2);
+        }
+
+        /* Capabilities */
+        .capabilities {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .capability-card {
+            background: linear-gradient(135deg, rgba(26, 26, 58, 0.6) 0%, rgba(18, 18, 42, 0.8) 100%);
+            border-radius: 24px;
+            padding: 2.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.4s ease;
+            position: relative;
+        }
+
+        .capability-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 24px;
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.3), transparent, rgba(6, 182, 212, 0.3));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .capability-card:hover::after {
+            opacity: 1;
+        }
+
+        .capability-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .cap-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--dream-purple), var(--deep-sleep));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .cap-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .cap-desc {
+            color: var(--cloud-gray);
+            margin-bottom: 1.5rem;
+        }
+
+        .cap-features {
+            list-style: none;
+        }
+
+        .cap-features li {
+            padding: 0.4rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            color: var(--cloud-gray);
+            font-size: 0.9rem;
+        }
+
+        .cap-features li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--sleep-cyan);
+        }
+
+        /* Sleep Score */
+        .sleep-score-section {
+            text-align: center;
+            padding: 6rem 0;
+        }
+
+        .score-visual {
+            position: relative;
+            width: 280px;
+            height: 280px;
+            margin: 0 auto 3rem;
+        }
+
+        .score-ring {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(
+                var(--deep-sleep) 0deg 72deg,
+                var(--dream-purple) 72deg 144deg,
+                var(--sleep-cyan) 144deg 216deg,
+                var(--rem-pink) 216deg 288deg,
+                var(--moon-glow) 288deg 360deg
+            );
+            padding: 12px;
+            animation: scoreRotate 30s linear infinite;
+        }
+
+        @keyframes scoreRotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .score-inner {
+            width: 100%;
+            height: 100%;
+            background: var(--night-deep);
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .score-number {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 4.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--star-white), var(--dream-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .score-label {
+            font-size: 1.1rem;
+            color: var(--cloud-gray);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .score-breakdown {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1.5rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .score-item {
+            background: rgba(26, 26, 58, 0.5);
+            border-radius: 16px;
+            padding: 1.5rem;
+        }
+
+        .score-item-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .score-item:nth-child(1) .score-item-value { color: var(--deep-sleep); }
+        .score-item:nth-child(2) .score-item-value { color: var(--dream-purple); }
+        .score-item:nth-child(3) .score-item-value { color: var(--sleep-cyan); }
+        .score-item:nth-child(4) .score-item-value { color: var(--rem-pink); }
+        .score-item:nth-child(5) .score-item-value { color: var(--moon-glow); }
+
+        .score-item-label {
+            font-size: 0.85rem;
+            color: var(--cloud-gray);
+        }
+
+        /* Market Section */
+        .market-section {
+            background: linear-gradient(180deg, rgba(139, 92, 246, 0.02) 0%, rgba(6, 182, 212, 0.02) 100%);
+        }
+
+        .market-visual {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+            margin-bottom: 4rem;
+        }
+
+        @media (max-width: 900px) {
+            .market-visual {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .tam-circle {
+            position: relative;
+            width: 350px;
+            height: 350px;
+            margin: 0 auto;
+        }
+
+        .tam-ring {
+            position: absolute;
+            border-radius: 50%;
+            border: 3px solid;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            transition: all 0.4s ease;
+        }
+
+        .tam-ring:hover {
+            transform: scale(1.05);
+        }
+
+        .tam-tam {
+            width: 350px;
+            height: 350px;
+            border-color: rgba(139, 92, 246, 0.4);
+            background: rgba(139, 92, 246, 0.05);
+            top: 0;
+            left: 0;
+        }
+
+        .tam-sam {
+            width: 220px;
+            height: 220px;
+            border-color: rgba(6, 182, 212, 0.5);
+            background: rgba(6, 182, 212, 0.08);
+            top: 65px;
+            left: 65px;
+        }
+
+        .tam-som {
+            width: 100px;
+            height: 100px;
+            border-color: rgba(236, 72, 153, 0.6);
+            background: rgba(236, 72, 153, 0.1);
+            top: 125px;
+            left: 125px;
+        }
+
+        .tam-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--cloud-gray);
+        }
+
+        .tam-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+        }
+
+        .tam-tam .tam-value { font-size: 1.5rem; color: var(--dream-purple); }
+        .tam-sam .tam-value { font-size: 1.2rem; color: var(--sleep-cyan); }
+        .tam-som .tam-value { font-size: 0.9rem; color: var(--rem-pink); }
+
+        .market-segments {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .segment {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .segment-bar {
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            padding: 0 1rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .segment-bar:hover {
+            transform: scaleX(1.02);
+        }
+
+        .segment:nth-child(1) .segment-bar { width: 100%; background: linear-gradient(90deg, rgba(139, 92, 246, 0.4), rgba(139, 92, 246, 0.2)); }
+        .segment:nth-child(2) .segment-bar { width: 50%; background: linear-gradient(90deg, rgba(6, 182, 212, 0.4), rgba(6, 182, 212, 0.2)); }
+        .segment:nth-child(3) .segment-bar { width: 20%; background: linear-gradient(90deg, rgba(236, 72, 153, 0.4), rgba(236, 72, 153, 0.2)); }
+        .segment:nth-child(4) .segment-bar { width: 15%; background: linear-gradient(90deg, rgba(252, 211, 77, 0.4), rgba(252, 211, 77, 0.2)); }
+        .segment:nth-child(5) .segment-bar { width: 45%; background: linear-gradient(90deg, rgba(67, 56, 202, 0.4), rgba(67, 56, 202, 0.2)); }
+
+        .segment-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            min-width: 60px;
+        }
+
+        /* Why Now */
+        .why-now {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .why-card {
+            background: rgba(26, 26, 58, 0.4);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .why-card:hover {
+            background: rgba(26, 26, 58, 0.6);
+            transform: translateY(-5px);
+        }
+
+        .why-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .why-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .why-desc {
+            color: var(--cloud-gray);
+            font-size: 0.9rem;
+        }
+
+        /* Business Model */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .pricing-card {
+            background: linear-gradient(135deg, rgba(26, 26, 58, 0.8) 0%, rgba(18, 18, 42, 0.9) 100%);
+            border-radius: 24px;
+            padding: 2.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            transition: all 0.4s ease;
+        }
+
+        .pricing-card.featured {
+            border-color: var(--dream-purple);
+            transform: scale(1.05);
+        }
+
+        .pricing-card.featured::before {
+            content: 'MOST POPULAR';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--dream-purple), var(--rem-pink));
+            padding: 0.4rem 1.5rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-8px);
+        }
+
+        .pricing-card.featured:hover {
+            transform: scale(1.05) translateY(-8px);
+        }
+
+        .pricing-tier {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--dream-purple);
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-price {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .pricing-price span {
+            font-size: 1rem;
+            color: var(--cloud-gray);
+        }
+
+        .pricing-desc {
+            color: var(--cloud-gray);
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .pricing-features {
+            list-style: none;
+        }
+
+        .pricing-features li {
+            padding: 0.6rem 0;
+            padding-left: 2rem;
+            position: relative;
+            font-size: 0.95rem;
+        }
+
+        .pricing-features li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--sleep-cyan);
+            font-weight: bold;
+        }
+
+        /* Traction */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+
+        .metric-card {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(26, 26, 58, 0.4);
+            border-radius: 20px;
+            border: 1px solid rgba(139, 92, 246, 0.2);
+        }
+
+        .metric-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--dream-purple), var(--sleep-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .metric-label {
+            color: var(--cloud-gray);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            text-align: center;
+            padding: 8rem 2rem;
+            position: relative;
+        }
+
+        .cta-bg {
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(ellipse 80% 60% at 50% 100%, rgba(139, 92, 246, 0.2) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 40% at 30% 80%, rgba(6, 182, 212, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 10;
+        }
+
+        .cta-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-subtitle {
+            font-size: 1.3rem;
+            color: var(--cloud-gray);
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-amount {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 4rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--moon-glow), var(--dream-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .cta-round {
+            color: var(--cloud-gray);
+            margin-bottom: 3rem;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 4rem 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-brand {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .footer-tagline {
+            color: var(--cloud-gray);
+            margin-bottom: 2rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--cloud-gray);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--dream-purple);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .moon-container {
+                top: 20px;
+                right: 20px;
+            }
+
+            .moon {
+                width: 60px;
+                height: 60px;
+            }
+
+            .hero-stats {
+                gap: 2rem;
+            }
+
+            .cta-group {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+
+            .architecture {
+                padding: 1.5rem;
+            }
+
+            .fragmentation {
+                padding: 2rem;
+            }
+
+            .pricing-card.featured {
+                transform: none;
+            }
+
+            .pricing-card.featured:hover {
+                transform: translateY(-8px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Starfield -->
+    <div class="starfield">
+        <div class="stars"></div>
+        <div class="stars"></div>
+    </div>
+
+    <!-- Moon -->
+    <div class="moon-container">
+        <div class="moon"></div>
+    </div>
+
+    <div class="content">
+        <!-- Hero -->
+        <section class="hero">
+            <div class="hero-bg-gradient"></div>
+            
+            <div class="brand">
+                <div class="logo-icon">🌙</div>
+                <span class="logo-text">SleepOS</span>
+            </div>
+
+            <h1>The AI Operating System for <span class="gradient-text">Human Sleep</span></h1>
+            
+            <p class="tagline">"One-third of your life. Zero intelligence. Until now."</p>
+
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <div class="hero-stat-value">$432B</div>
+                    <div class="hero-stat-label">Sleep Economy</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="hero-stat-value">70M</div>
+                    <div class="hero-stat-label">Americans with Sleep Disorders</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="hero-stat-value">$411B</div>
+                    <div class="hero-stat-label">Annual Productivity Loss</div>
+                </div>
+            </div>
+
+            <div class="cta-group">
+                <a href="#invest" class="btn btn-primary">🚀 View Investment Deck</a>
+                <a href="#solution" class="btn btn-secondary">See How It Works</a>
+            </div>
+
+            <div class="sleep-viz">
+                <div class="sleep-wave wave-1">
+                    <svg viewBox="0 0 1200 150" preserveAspectRatio="none">
+                        <path d="M0,75 C200,150 400,0 600,75 C800,150 1000,0 1200,75 L1200,150 L0,150 Z" fill="rgba(139,92,246,0.1)"/>
+                    </svg>
+                </div>
+                <div class="sleep-wave wave-2">
+                    <svg viewBox="0 0 1200 150" preserveAspectRatio="none">
+                        <path d="M0,75 C200,0 400,150 600,75 C800,0 1000,150 1200,75 L1200,150 L0,150 Z" fill="rgba(6,182,212,0.08)"/>
+                    </svg>
+                </div>
+            </div>
+        </section>
+
+        <!-- Problem -->
+        <section class="section">
+            <div class="section-header">
+                <span class="section-label">The Problem</span>
+                <h2 class="section-title">Sleep Is Broken at Scale</h2>
+                <p class="section-subtitle">The most important daily activity for human health has zero unified intelligence.</p>
+            </div>
+
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="problem-icon">😴</div>
+                    <div class="problem-value">1 in 3</div>
+                    <div class="problem-label">Adults Sleep Deprived</div>
+                    <p class="problem-desc">Don't get the recommended 7+ hours, leading to chronic health issues and cognitive decline.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">💰</div>
+                    <div class="problem-value">$411B</div>
+                    <div class="problem-label">Annual Economic Loss</div>
+                    <p class="problem-desc">Lost productivity, accidents, and healthcare costs from sleep deprivation in the US alone.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">🏥</div>
+                    <div class="problem-value">80%</div>
+                    <div class="problem-label">Sleep Apnea Undiagnosed</div>
+                    <p class="problem-desc">22 million Americans have sleep apnea, but 4 out of 5 don't know it.</p>
+                </div>
+            </div>
+
+            <div class="fragmentation">
+                <h3 class="frag-title">The Fragmentation Crisis: Nothing Talks to Anything</h3>
+                <div class="frag-grid">
+                    <div class="frag-item">
+                        <div class="frag-category">Wearables</div>
+                        <div class="frag-name">Oura, Whoop, Apple</div>
+                        <div class="frag-problem">Track but don't intervene</div>
+                    </div>
+                    <div class="frag-item">
+                        <div class="frag-category">Mattresses</div>
+                        <div class="frag-name">Eight Sleep, Sleep Number</div>
+                        <div class="frag-problem">Temperature only</div>
+                    </div>
+                    <div class="frag-item">
+                        <div class="frag-category">Apps</div>
+                        <div class="frag-name">Calm, Headspace</div>
+                        <div class="frag-problem">Passive, no personalization</div>
+                    </div>
+                    <div class="frag-item">
+                        <div class="frag-category">Supplements</div>
+                        <div class="frag-name">Melatonin, Magnesium</div>
+                        <div class="frag-problem">No guidance or optimization</div>
+                    </div>
+                    <div class="frag-item">
+                        <div class="frag-category">Clinics</div>
+                        <div class="frag-name">Sleep Labs, CBT-I</div>
+                        <div class="frag-problem">Expensive, inaccessible</div>
+                    </div>
+                    <div class="frag-item">
+                        <div class="frag-category">Smart Home</div>
+                        <div class="frag-name">Hue, Nest, Alexa</div>
+                        <div class="frag-problem">Zero sleep intelligence</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Solution -->
+        <section class="section solution-section" id="solution">
+            <div class="section-header">
+                <span class="section-label">The Solution</span>
+                <h2 class="section-title">Unified Sleep Intelligence</h2>
+                <p class="section-subtitle">The AI brain that connects and orchestrates every aspect of your sleep ecosystem.</p>
+            </div>
+
+            <div class="architecture">
+                <div class="arch-layer">
+                    <div class="arch-layer-title">☀️ Sleepology Engine</div>
+                    <div class="arch-layer-desc">AI Brain: Prediction, Personalization, Adaptation — learns your unique sleep patterns</div>
+                </div>
+                <div class="arch-layer">
+                    <div class="arch-layer-title">🔌 Integration Layer</div>
+                    <div class="arch-layer-desc">Connects all your devices, apps, and data sources</div>
+                    <div class="arch-components">
+                        <span class="arch-comp">Wearables</span>
+                        <span class="arch-comp">Smart Home</span>
+                        <span class="arch-comp">Health Data</span>
+                        <span class="arch-comp">Calendar</span>
+                    </div>
+                </div>
+                <div class="arch-layer">
+                    <div class="arch-layer-title">⚡ Intervention Layer</div>
+                    <div class="arch-layer-desc">Active optimization across your entire sleep journey</div>
+                    <div class="arch-components">
+                        <span class="arch-comp">Pre-Sleep</span>
+                        <span class="arch-comp">Sleep Onset</span>
+                        <span class="arch-comp">During Sleep</span>
+                        <span class="arch-comp">Wake Protocol</span>
+                    </div>
+                </div>
+                <div class="arch-layer">
+                    <div class="arch-layer-title">📱 User Interface</div>
+                    <div class="arch-layer-desc">Mobile App • Voice • Ambient • Insights Dashboard</div>
+                </div>
+            </div>
+
+            <div class="capabilities">
+                <div class="capability-card">
+                    <div class="cap-icon">🧠</div>
+                    <h3 class="cap-title">The Sleep Graph</h3>
+                    <p class="cap-desc">A unified data model connecting everything that affects your sleep.</p>
+                    <ul class="cap-features">
+                        <li>Biometrics (HRV, temp, movement)</li>
+                        <li>Environment (light, sound, air quality)</li>
+                        <li>Behavior (caffeine, exercise, screens)</li>
+                        <li>Context (stress, travel, calendar)</li>
+                    </ul>
+                </div>
+                <div class="capability-card">
+                    <div class="cap-icon">🎯</div>
+                    <h3 class="cap-title">Causal Intelligence</h3>
+                    <p class="cap-desc">Beyond correlation — identifies what actually disrupts YOUR sleep.</p>
+                    <ul class="cap-features">
+                        <li>Personal experimentation engine</li>
+                        <li>Statistical causal inference</li>
+                        <li>Plain-language explanations</li>
+                        <li>Actionable recommendations</li>
+                    </ul>
+                </div>
+                <div class="capability-card">
+                    <div class="cap-icon">🏠</div>
+                    <h3 class="cap-title">Smart Orchestration</h3>
+                    <p class="cap-desc">Your entire environment optimized for sleep, automatically.</p>
+                    <ul class="cap-features">
+                        <li>Temperature curves to your biology</li>
+                        <li>Light dimming automation</li>
+                        <li>Sound masking calibration</li>
+                        <li>Smart alarm within optimal window</li>
+                    </ul>
+                </div>
+                <div class="capability-card">
+                    <div class="cap-icon">💬</div>
+                    <h3 class="cap-title">AI Sleep Coach</h3>
+                    <p class="cap-desc">24/7 conversational AI delivering clinical protocols.</p>
+                    <ul class="cap-features">
+                        <li>CBT-I for insomnia</li>
+                        <li>Circadian rhythm repair</li>
+                        <li>Jet lag mitigation</li>
+                        <li>Continuous education</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="sleep-score-section">
+                <h3 class="section-title" style="margin-bottom: 2rem;">The SleepScore™</h3>
+                <div class="score-visual">
+                    <div class="score-ring">
+                        <div class="score-inner">
+                            <div class="score-number">87</div>
+                            <div class="score-label">Sleep Score</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="score-breakdown">
+                    <div class="score-item">
+                        <div class="score-item-value">92</div>
+                        <div class="score-item-label">Restorative</div>
+                    </div>
+                    <div class="score-item">
+                        <div class="score-item-value">88</div>
+                        <div class="score-item-label">Efficiency</div>
+                    </div>
+                    <div class="score-item">
+                        <div class="score-item-value">85</div>
+                        <div class="score-item-label">Consistency</div>
+                    </div>
+                    <div class="score-item">
+                        <div class="score-item-value">91</div>
+                        <div class="score-item-label">Readiness</div>
+                    </div>
+                    <div class="score-item">
+                        <div class="score-item-value">↑12%</div>
+                        <div class="score-item-label">Trend</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Market -->
+        <section class="section market-section">
+            <div class="section-header">
+                <span class="section-label">Market Opportunity</span>
+                <h2 class="section-title">The $432B Sleep Economy Awaits</h2>
+                <p class="section-subtitle">A massive, fragmented market ready for unification.</p>
+            </div>
+
+            <div class="market-visual">
+                <div class="tam-circle">
+                    <div class="tam-ring tam-tam">
+                        <span class="tam-label">TAM</span>
+                        <span class="tam-value">$432B</span>
+                    </div>
+                    <div class="tam-ring tam-sam">
+                        <span class="tam-label">SAM</span>
+                        <span class="tam-value">$18B</span>
+                    </div>
+                    <div class="tam-ring tam-som">
+                        <span class="tam-label">SOM</span>
+                        <span class="tam-value">$450M</span>
+                    </div>
+                </div>
+
+                <div class="market-segments">
+                    <div class="segment">
+                        <div class="segment-bar">Mattresses & Bedding</div>
+                        <span class="segment-value">$187B</span>
+                    </div>
+                    <div class="segment">
+                        <div class="segment-bar">Sleep Aids & Supplements</div>
+                        <span class="segment-value">$94B</span>
+                    </div>
+                    <div class="segment">
+                        <div class="segment-bar">Sleep Tech Devices</div>
+                        <span class="segment-value">$38B</span>
+                    </div>
+                    <div class="segment">
+                        <div class="segment-bar">Sleep Services</div>
+                        <span class="segment-value">$28B</span>
+                    </div>
+                    <div class="segment">
+                        <div class="segment-bar">Smart Home (Sleep)</div>
+                        <span class="segment-value">$85B</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="why-now">
+                <div class="why-card">
+                    <div class="why-icon">⌚</div>
+                    <div class="why-title">Hardware Maturity</div>
+                    <p class="why-desc">Smart mattresses, wearables, and home devices finally work reliably.</p>
+                </div>
+                <div class="why-card">
+                    <div class="why-icon">🤖</div>
+                    <div class="why-title">AI Capability</div>
+                    <p class="why-desc">LLMs and foundation models enable true personalization at scale.</p>
+                </div>
+                <div class="why-card">
+                    <div class="why-icon">🏆</div>
+                    <div class="why-title">Cultural Shift</div>
+                    <p class="why-desc">Sleep is now a status symbol among high-performers.</p>
+                </div>
+                <div class="why-card">
+                    <div class="why-icon">🏥</div>
+                    <div class="why-title">Healthcare ROI</div>
+                    <p class="why-desc">Insurers and employers finally recognize sleep's economic impact.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Business Model -->
+        <section class="section">
+            <div class="section-header">
+                <span class="section-label">Business Model</span>
+                <h2 class="section-title">Multiple Revenue Streams</h2>
+                <p class="section-subtitle">Consumer subscriptions, enterprise wellness, and healthcare partnerships.</p>
+            </div>
+
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <div class="pricing-tier">Essential</div>
+                    <div class="pricing-price">Free</div>
+                    <p class="pricing-desc">Get started with basic sleep intelligence</p>
+                    <ul class="pricing-features">
+                        <li>Basic tracking aggregation</li>
+                        <li>Limited insights</li>
+                        <li>Sleep score basics</li>
+                        <li>Community access</li>
+                    </ul>
+                </div>
+                <div class="pricing-card featured">
+                    <div class="pricing-tier">Premium</div>
+                    <div class="pricing-price">$14.99<span>/mo</span></div>
+                    <p class="pricing-desc">Full AI-powered sleep optimization</p>
+                    <ul class="pricing-features">
+                        <li>Full Sleepology AI engine</li>
+                        <li>Environment orchestration</li>
+                        <li>Personalized protocols</li>
+                        <li>Smart home integrations</li>
+                        <li>Advanced analytics</li>
+                    </ul>
+                </div>
+                <div class="pricing-card">
+                    <div class="pricing-tier">Elite</div>
+                    <div class="pricing-price">$29.99<span>/mo</span></div>
+                    <p class="pricing-desc">Concierge sleep optimization</p>
+                    <ul class="pricing-features">
+                        <li>Everything in Premium</li>
+                        <li>Human sleep coach access</li>
+                        <li>Advanced biometrics</li>
+                        <li>Family sharing (4 members)</li>
+                        <li>Priority support</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-value">$420</div>
+                    <div class="metric-label">Consumer LTV</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">$85</div>
+                    <div class="metric-label">Consumer CAC</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">4.9x</div>
+                    <div class="metric-label">LTV:CAC Ratio</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">82%</div>
+                    <div class="metric-label">Gross Margin</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">125%</div>
+                    <div class="metric-label">Net Revenue Retention</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section class="cta-section" id="invest">
+            <div class="cta-bg"></div>
+            <div class="cta-content">
+                <h2 class="cta-title">Own the Future of Sleep</h2>
+                <p class="cta-subtitle">We're raising our Seed round to build the AI that will optimize one-third of human existence.</p>
+                <div class="cta-amount">$8M</div>
+                <p class="cta-round">Seed Round</p>
+                <div class="cta-group">
+                    <a href="mailto:founders@sleepos.ai" class="btn btn-primary">📧 Contact Founders</a>
+                    <a href="#" class="btn btn-secondary">📄 Download Full Deck</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <div class="footer-brand">🌙 SleepOS</div>
+            <p class="footer-tagline">The Operating System for Human Sleep</p>
+            <div class="footer-links">
+                <a href="#">About</a>
+                <a href="#">Science</a>
+                <a href="#">Careers</a>
+                <a href="#">Press</a>
+                <a href="mailto:founders@sleepos.ai">Contact</a>
+            </div>
+            <p style="margin-top: 3rem; color: var(--cloud-gray); font-size: 0.85rem;">
+                © 2026 SleepOS. All rights reserved.<br>
+                Generated by The Godfather 🎩
+            </p>
+        </footer>
+    </div>
+</body>
+</html>
