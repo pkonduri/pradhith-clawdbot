@@ -212,6 +212,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-04-11 | Morning | MigrationOS — The AI Operating System for Enterprise Platform Migration | [Playbook](2026-04-11-morning.md) • [Landing](2026-04-11-morning-landing.html) • [PDF](2026-04-11-morning.pdf) |
 | 2026-04-11 | Afternoon | SleepOS — The AI Operating System for Human Sleep Optimization | [Playbook](2026-04-11-afternoon.md) • [Landing](2026-04-11-afternoon-landing.html) • [PDF](2026-04-11-afternoon.pdf) |
 | 2026-04-12 | Evening | ScienceGuard AI — The Trust Layer for Scientific Research | [Playbook](2026-04-12-evening.md) • [Landing](2026-04-12-evening-landing.html) • [PDF](2026-04-12-evening.pdf) |
+| 2026-04-12 | Morning | AgentOS — The Enterprise Operating System for AI Agents | [Playbook](2026-04-12-morning.md) • [Landing](2026-04-12-morning-landing.html) • [PDF](2026-04-12-morning.pdf) |
 <!-- New entries will be added above this line -->
 
 ---
