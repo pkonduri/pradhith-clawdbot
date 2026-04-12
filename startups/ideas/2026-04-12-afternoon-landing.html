@@ -1,0 +1,1481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VibeForge AI — From Vibe to Production, Secured</title>
+    <meta name="description" content="The enterprise platform for AI-generated applications. Security, compliance, and deployment for the vibe coding era.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #7c3aed;
+            --primary-dark: #5b21b6;
+            --primary-light: #a78bfa;
+            --secondary: #06b6d4;
+            --accent: #f59e0b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --dark: #0f0f23;
+            --darker: #080816;
+            --card: #1a1a2e;
+            --card-hover: #252542;
+            --text: #e2e8f0;
+            --text-muted: #94a3b8;
+            --border: rgba(124, 58, 237, 0.3);
+            --glow: rgba(124, 58, 237, 0.5);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--darker);
+            color: var(--text);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-pattern::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(ellipse 80% 50% at 50% -20%, rgba(124, 58, 237, 0.15), transparent),
+                radial-gradient(ellipse 60% 40% at 80% 60%, rgba(6, 182, 212, 0.1), transparent),
+                radial-gradient(ellipse 50% 30% at 20% 80%, rgba(245, 158, 11, 0.08), transparent);
+        }
+
+        .grid-lines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(124, 58, 237, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(124, 58, 237, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(60px); }
+        }
+
+        /* Floating Orbs */
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.4;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .orb-1 {
+            width: 400px;
+            height: 400px;
+            background: var(--primary);
+            top: 10%;
+            left: -10%;
+            animation-delay: 0s;
+        }
+
+        .orb-2 {
+            width: 300px;
+            height: 300px;
+            background: var(--secondary);
+            top: 60%;
+            right: -5%;
+            animation-delay: -5s;
+        }
+
+        .orb-3 {
+            width: 250px;
+            height: 250px;
+            background: var(--accent);
+            bottom: 10%;
+            left: 30%;
+            animation-delay: -10s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(30px, -30px) scale(1.05); }
+            50% { transform: translate(-20px, 20px) scale(0.95); }
+            75% { transform: translate(20px, 30px) scale(1.02); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 1rem 2rem;
+            background: rgba(8, 8, 22, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 0 30px var(--glow);
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .logo-text span {
+            background: linear-gradient(135deg, var(--primary-light), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-light);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.75rem;
+            border-radius: 10px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            box-shadow: 0 4px 20px rgba(124, 58, 237, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(124, 58, 237, 0.5);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text);
+            border: 2px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary);
+            background: rgba(124, 58, 237, 0.1);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 2rem 4rem;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 1000px;
+            text-align: center;
+            z-index: 10;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1.25rem;
+            background: rgba(124, 58, 237, 0.15);
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            font-size: 0.9rem;
+            color: var(--primary-light);
+            margin-bottom: 2rem;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(124, 58, 237, 0.4); }
+            50% { box-shadow: 0 0 0 10px rgba(124, 58, 237, 0); }
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 5.5rem);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .hero h1 .gradient {
+            background: linear-gradient(135deg, var(--primary-light), var(--secondary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero .subtitle {
+            font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+            color: var(--text-muted);
+            max-width: 700px;
+            margin: 0 auto 3rem;
+            line-height: 1.8;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 4rem;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 3rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            padding-top: 3rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-light), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+        }
+
+        /* Code Animation */
+        .code-window {
+            background: var(--card);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            max-width: 700px;
+            margin: 4rem auto 0;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+        }
+
+        .code-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 1.25rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .code-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .code-dot.red { background: #ff5f57; }
+        .code-dot.yellow { background: #febc2e; }
+        .code-dot.green { background: #28c840; }
+
+        .code-body {
+            padding: 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            line-height: 1.8;
+        }
+
+        .code-line {
+            opacity: 0;
+            animation: typeIn 0.5s forwards;
+        }
+
+        .code-line:nth-child(1) { animation-delay: 0.5s; }
+        .code-line:nth-child(2) { animation-delay: 1s; }
+        .code-line:nth-child(3) { animation-delay: 1.5s; }
+        .code-line:nth-child(4) { animation-delay: 2s; }
+        .code-line:nth-child(5) { animation-delay: 2.5s; }
+        .code-line:nth-child(6) { animation-delay: 3s; }
+        .code-line:nth-child(7) { animation-delay: 3.5s; }
+
+        @keyframes typeIn {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .code-comment { color: #6b7280; }
+        .code-keyword { color: var(--primary-light); }
+        .code-string { color: var(--success); }
+        .code-function { color: var(--secondary); }
+        .code-success { color: var(--success); }
+
+        /* Problem Section */
+        .section {
+            padding: 6rem 2rem;
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 4rem;
+        }
+
+        .section-label {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(124, 58, 237, 0.1);
+            border-radius: 100px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--primary-light);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            line-height: 1.8;
+        }
+
+        /* Problem Cards */
+        .problem-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .problem-card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid var(--border);
+            transition: all 0.3s;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--danger);
+            box-shadow: 0 10px 40px rgba(239, 68, 68, 0.2);
+        }
+
+        .problem-icon {
+            width: 56px;
+            height: 56px;
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .problem-card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--text);
+        }
+
+        .problem-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .problem-stat {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.5rem 1rem;
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 8px;
+            font-size: 0.85rem;
+            color: var(--danger);
+            font-weight: 600;
+        }
+
+        /* Solution Section */
+        .solution-section {
+            background: linear-gradient(180deg, var(--darker) 0%, var(--dark) 100%);
+        }
+
+        .solution-flow {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .flow-diagram {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            padding: 3rem 0;
+        }
+
+        .flow-step {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 1.5rem;
+            background: var(--card);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .flow-icon {
+            font-size: 1.5rem;
+        }
+
+        .flow-text {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .flow-arrow {
+            color: var(--primary);
+            font-size: 1.5rem;
+        }
+
+        /* Features Grid */
+        .features-grid {
+            max-width: 1200px;
+            margin: 4rem auto 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .feature-card {
+            background: var(--card);
+            border-radius: 20px;
+            padding: 2.5rem;
+            border: 1px solid var(--border);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: 0 20px 60px rgba(124, 58, 237, 0.2);
+        }
+
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .feature-icon {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 10px 30px rgba(124, 58, 237, 0.3);
+        }
+
+        .feature-card h3 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .feature-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .feature-list {
+            margin-top: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .feature-list li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .feature-list li::before {
+            content: '✓';
+            color: var(--success);
+            font-weight: bold;
+        }
+
+        /* Market Section */
+        .market-section {
+            background: var(--dark);
+        }
+
+        .market-grid {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .market-card {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: var(--card);
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            transition: all 0.3s;
+        }
+
+        .market-card:hover {
+            transform: scale(1.02);
+            border-color: var(--primary);
+        }
+
+        .market-value {
+            font-size: 3.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-light), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .market-label {
+            font-size: 1.1rem;
+            color: var(--text);
+            margin-top: 0.5rem;
+            font-weight: 600;
+        }
+
+        .market-desc {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+        }
+
+        /* Comparison Table */
+        .comparison-section {
+            background: var(--darker);
+        }
+
+        .comparison-table {
+            max-width: 1000px;
+            margin: 0 auto;
+            overflow-x: auto;
+        }
+
+        .comparison-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 1.25rem 1.5rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .comparison-table th {
+            background: var(--card);
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .comparison-table th:first-child {
+            border-radius: 12px 0 0 0;
+        }
+
+        .comparison-table th:last-child {
+            border-radius: 0 12px 0 0;
+        }
+
+        .comparison-table td {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+        }
+
+        .comparison-table tr:hover td {
+            background: rgba(124, 58, 237, 0.05);
+        }
+
+        .check {
+            color: var(--success);
+            font-size: 1.25rem;
+        }
+
+        .cross {
+            color: var(--text-muted);
+            opacity: 0.5;
+        }
+
+        .highlight-col {
+            background: rgba(124, 58, 237, 0.1);
+            position: relative;
+        }
+
+        .highlight-col::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+
+        /* Testimonials */
+        .testimonials-section {
+            background: var(--dark);
+        }
+
+        .testimonials-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .testimonial-card {
+            background: var(--card);
+            border-radius: 20px;
+            padding: 2.5rem;
+            border: 1px solid var(--border);
+            position: relative;
+        }
+
+        .testimonial-card::before {
+            content: '"';
+            position: absolute;
+            top: 1.5rem;
+            left: 2rem;
+            font-size: 4rem;
+            color: var(--primary);
+            opacity: 0.3;
+            font-family: Georgia, serif;
+            line-height: 1;
+        }
+
+        .testimonial-text {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: var(--text);
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .testimonial-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            color: white;
+            font-weight: 700;
+        }
+
+        .testimonial-info h4 {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .testimonial-info p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 8rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(124, 58, 237, 0.2) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 10;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .cta-content h2 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-content p {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            margin-bottom: 2.5rem;
+            line-height: 1.8;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-cta {
+            padding: 1.1rem 2.5rem;
+            font-size: 1.1rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--darker);
+            border-top: 1px solid var(--border);
+            padding: 4rem 2rem 2rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 3rem;
+        }
+
+        .footer-brand {
+            max-width: 350px;
+        }
+
+        .footer-brand p {
+            color: var(--text-muted);
+            margin-top: 1rem;
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 4rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-column h4 {
+            font-weight: 600;
+            margin-bottom: 1.25rem;
+            font-size: 0.95rem;
+        }
+
+        .footer-column a {
+            display: block;
+            color: var(--text-muted);
+            text-decoration: none;
+            margin-bottom: 0.75rem;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .footer-column a:hover {
+            color: var(--primary-light);
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 3rem auto 0;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer-bottom p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: var(--card);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .social-links a:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero-stats {
+                gap: 2rem;
+            }
+
+            .stat-value {
+                font-size: 2rem;
+            }
+
+            .flow-diagram {
+                flex-direction: column;
+            }
+
+            .flow-arrow {
+                transform: rotate(90deg);
+            }
+
+            .footer-content {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            .footer-links {
+                justify-content: center;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-pattern">
+        <div class="grid-lines"></div>
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <nav>
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <div class="logo-icon">⚡</div>
+                <div class="logo-text">Vibe<span>Forge</span></div>
+            </a>
+            <div class="nav-links">
+                <a href="#problem">Problem</a>
+                <a href="#solution">Solution</a>
+                <a href="#features">Features</a>
+                <a href="#market">Market</a>
+                <a class="btn btn-primary" href="#cta">Get Early Access</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <div class="badge">
+                <span>🚀</span>
+                <span>The Enterprise Platform for AI-Generated Apps</span>
+            </div>
+            <h1>
+                From <span class="gradient">Vibe</span> to<br>
+                Production, <span class="gradient">Secured</span>
+            </h1>
+            <p class="subtitle">
+                Vibe coding is revolutionizing software creation. But who's securing the code? 
+                VibeForge provides security scanning, compliance automation, and deployment 
+                infrastructure for AI-generated applications at enterprise scale.
+            </p>
+            <div class="hero-buttons">
+                <a href="#cta" class="btn btn-primary">Request Early Access →</a>
+                <a href="#solution" class="btn btn-secondary">See How It Works</a>
+            </div>
+
+            <div class="code-window">
+                <div class="code-header">
+                    <div class="code-dot red"></div>
+                    <div class="code-dot yellow"></div>
+                    <div class="code-dot green"></div>
+                </div>
+                <div class="code-body">
+                    <div class="code-line"><span class="code-comment"># Employee vibes a new tool...</span></div>
+                    <div class="code-line"><span class="code-keyword">$</span> vibeforge <span class="code-function">scan</span> ./ai-generated-app</div>
+                    <div class="code-line"><span class="code-string">✓ Security scan complete: 3 issues found, 2 auto-fixed</span></div>
+                    <div class="code-line"><span class="code-string">✓ Compliance: SOC2 requirements verified</span></div>
+                    <div class="code-line"><span class="code-string">✓ Dependencies: All packages verified, SBOM generated</span></div>
+                    <div class="code-line"><span class="code-keyword">$</span> vibeforge <span class="code-function">deploy</span> --env production</div>
+                    <div class="code-line"><span class="code-success">🚀 Deployed to https://app.company.vibeforge.cloud</span></div>
+                </div>
+            </div>
+
+            <div class="hero-stats">
+                <div class="stat">
+                    <div class="stat-value">73%</div>
+                    <div class="stat-label">of AI apps have critical vulnerabilities</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">400+</div>
+                    <div class="stat-label">shadow AI apps per enterprise</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">$4.2B</div>
+                    <div class="stat-label">breach costs from AI code (2025)</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="problem">
+        <div class="section-header">
+            <div class="section-label">The Problem</div>
+            <h2 class="section-title">Vibe Coding Created a Security Crisis</h2>
+            <p class="section-subtitle">
+                Everyone can build apps with AI now. But AI doesn't know your security policies, 
+                compliance requirements, or deployment standards. The result? Enterprise chaos.
+            </p>
+        </div>
+
+        <div class="problem-grid">
+            <div class="problem-card">
+                <div class="problem-icon">🔓</div>
+                <h3>Security Black Holes</h3>
+                <p>AI-generated code contains SQL injection, hardcoded credentials, and insecure dependencies. No one's reviewing it before deployment.</p>
+                <div class="problem-stat">73% have critical vulnerabilities</div>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">📋</div>
+                <h3>Compliance Violations</h3>
+                <p>HIPAA, SOC2, GDPR requirements ignored. AI doesn't know your industry rules. Auditors are not amused.</p>
+                <div class="problem-stat">92% of CISOs cite this as top concern</div>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">🔧</div>
+                <h3>Zero Maintainability</h3>
+                <p>When the original prompt engineer leaves, no one understands the codebase. No documentation. No tests. No hope.</p>
+                <div class="problem-stat">60%+ of apps are abandoned but running</div>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">☁️</div>
+                <h3>Shadow Deployment Chaos</h3>
+                <p>Apps running on personal laptops, random cloud accounts, shared servers with root access. IT has no visibility.</p>
+                <div class="problem-stat">400+ unauthorized apps per enterprise</div>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">📦</div>
+                <h3>Dependency Hell</h3>
+                <p>AI uses whatever packages it prefers—often outdated, sometimes malicious. Supply chain attacks waiting to happen.</p>
+                <div class="problem-stat">34% use deprecated dependencies</div>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">💸</div>
+                <h3>Runaway Cloud Costs</h3>
+                <p>AI loves over-provisioning. No auto-scaling. No cost controls. Finance gets surprised every month.</p>
+                <div class="problem-stat">$2.4M avg. annual waste</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section solution-section" id="solution">
+        <div class="section-header">
+            <div class="section-label">The Solution</div>
+            <h2 class="section-title">Enterprise Infrastructure for AI-Generated Apps</h2>
+            <p class="section-subtitle">
+                VibeForge doesn't replace AI code generation—we make it safe for enterprise use. 
+                Security, compliance, and lifecycle management in one platform.
+            </p>
+        </div>
+
+        <div class="solution-flow">
+            <div class="flow-diagram">
+                <div class="flow-step">
+                    <span class="flow-icon">👤</span>
+                    <span class="flow-text">Employee Vibes</span>
+                </div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-step">
+                    <span class="flow-icon">🤖</span>
+                    <span class="flow-text">AI Generates</span>
+                </div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-step">
+                    <span class="flow-icon">⚡</span>
+                    <span class="flow-text">VibeForge Secures</span>
+                </div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-step">
+                    <span class="flow-icon">🚀</span>
+                    <span class="flow-text">Production Ready</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="features-grid" id="features">
+            <div class="feature-card">
+                <div class="feature-icon">🛡️</div>
+                <h3>VibeScan</h3>
+                <p>AI-specific security scanning that catches what traditional tools miss. Detects hallucinated dependencies, prompt injection vulnerabilities, and AI coding anti-patterns.</p>
+                <ul class="feature-list">
+                    <li>30-second full scans</li>
+                    <li>AI-specific vulnerability detection</li>
+                    <li>Automatic SBOM generation</li>
+                    <li>Malicious package detection</li>
+                </ul>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">✅</div>
+                <h3>VibeGuard</h3>
+                <p>Compliance automation for regulated industries. Pre-built policies for HIPAA, SOC2, PCI-DSS, GDPR. Custom rules for your organization.</p>
+                <ul class="feature-list">
+                    <li>Industry compliance templates</li>
+                    <li>Automatic data flow mapping</li>
+                    <li>PII detection & handling</li>
+                    <li>Audit trail generation</li>
+                </ul>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🚀</div>
+                <h3>VibeDeploy</h3>
+                <p>One-click deployment to any infrastructure. Automatic containerization, secret management, network isolation. No shadow cloud accounts.</p>
+                <ul class="feature-list">
+                    <li>AWS, Azure, GCP, on-prem</li>
+                    <li>Hardened base images</li>
+                    <li>Auto-scaling with cost controls</li>
+                    <li>Zero-trust networking</li>
+                </ul>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔄</div>
+                <h3>VibeMaintain</h3>
+                <p>Lifecycle management for AI-generated apps. Dependency patching, usage monitoring, automatic retirement of abandoned applications.</p>
+                <ul class="feature-list">
+                    <li>Auto-patching vulnerabilities</li>
+                    <li>Usage analytics</li>
+                    <li>Automatic retirement</li>
+                    <li>Documentation generation</li>
+                </ul>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🧠</div>
+                <h3>VibeAssist</h3>
+                <p>AI improvement layer that makes generated code enterprise-ready. Automatic error handling, test generation, and refactoring for maintainability.</p>
+                <ul class="feature-list">
+                    <li>Auto-add error handling</li>
+                    <li>Test generation</li>
+                    <li>Performance optimization</li>
+                    <li>Enterprise code standards</li>
+                </ul>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>VibeInsights</h3>
+                <p>Complete visibility into your AI-generated app portfolio. Risk scoring, cost tracking, and compliance dashboards for security and IT teams.</p>
+                <ul class="feature-list">
+                    <li>Portfolio risk scoring</li>
+                    <li>Cost attribution</li>
+                    <li>Compliance reporting</li>
+                    <li>Executive dashboards</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="section comparison-section">
+        <div class="section-header">
+            <div class="section-label">Why VibeForge</div>
+            <h2 class="section-title">Purpose-Built for the Vibe Coding Era</h2>
+            <p class="section-subtitle">
+                Traditional tools weren't designed for this. We are.
+            </p>
+        </div>
+
+        <div class="comparison-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Capability</th>
+                        <th class="highlight-col">VibeForge</th>
+                        <th>Snyk</th>
+                        <th>Heroku</th>
+                        <th>Retool</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>AI-specific vulnerability detection</td>
+                        <td class="highlight-col"><span class="check">✓</span></td>
+                        <td><span class="cross">✗</span></td>
+                        <td><span class="cross">✗</span></td>
+                        <td><span class="cross">✗</span></td>
+                    </tr>
+                    <tr>
+                        <td>Compliance automation (HIPAA, SOC2)</td>
+                        <td class="highlight-col"><span class="check">✓</span></td>
+                        <td>Partial</td>
+                        <td><span class="cross">✗</span></td>
+                        <td><span class="cross">✗</span></td>
+                    </tr>
+                    <tr>
+                        <td>One-click enterprise deployment</td>
+                        <td class="highlight-col"><span class="check">✓</span></td>
+                        <td><span class="cross">✗</span></td>
+                        <td>Partial</td>
+                        <td><span class="check">✓</span></td>
+                    </tr>
+                    <tr>
+                        <td>App lifecycle management</td>
+                        <td class="highlight-col"><span class="check">✓</span></td>
+                        <td><span class="cross">✗</span></td>
+                        <td><span class="cross">✗</span></td>
+                        <td><span class="cross">✗</span></td>
+                    </tr>
+                    <tr>
+                        <td>Auto-hardening of AI code</td>
+                        <td class="highlight-col"><span class="check">✓</span></td>
+                        <td><span class="cross">✗</span></td>
+                        <td><span class="cross">✗</span></td>
+                        <td><span class="cross">✗</span></td>
+                    </tr>
+                    <tr>
+                        <td>Usage-based app retirement</td>
+                        <td class="highlight-col"><span class="check">✓</span></td>
+                        <td><span class="cross">✗</span></td>
+                        <td><span class="cross">✗</span></td>
+                        <td><span class="cross">✗</span></td>
+                    </tr>
+                    <tr>
+                        <td>Hallucinated dependency detection</td>
+                        <td class="highlight-col"><span class="check">✓</span></td>
+                        <td><span class="cross">✗</span></td>
+                        <td><span class="cross">✗</span></td>
+                        <td><span class="cross">✗</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="section market-section" id="market">
+        <div class="section-header">
+            <div class="section-label">Market Opportunity</div>
+            <h2 class="section-title">The Timing is Perfect</h2>
+            <p class="section-subtitle">
+                Vibe coding just hit escape velocity. Enterprises are panicking. 
+                There's no solution—until now.
+            </p>
+        </div>
+
+        <div class="market-grid">
+            <div class="market-card">
+                <div class="market-value">$47B</div>
+                <div class="market-label">AI Code Generation Market</div>
+                <div class="market-desc">By 2028 (Gartner)</div>
+            </div>
+            <div class="market-card">
+                <div class="market-value">$30B</div>
+                <div class="market-label">Enterprise Security Segment</div>
+                <div class="market-desc">Our primary addressable market</div>
+            </div>
+            <div class="market-card">
+                <div class="market-value">50M+</div>
+                <div class="market-label">Developers Using AI Coding</div>
+                <div class="market-desc">Replit, Cursor, Bolt combined</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section testimonials-section">
+        <div class="section-header">
+            <div class="section-label">Early Feedback</div>
+            <h2 class="section-title">What CISOs Are Saying</h2>
+        </div>
+
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <p class="testimonial-text">
+                    "We discovered 847 AI-generated applications running across our organization. 
+                    No security review, no compliance checks, no lifecycle management. 
+                    This is exactly what we need."
+                </p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">JR</div>
+                    <div class="testimonial-info">
+                        <h4>James Rodriguez</h4>
+                        <p>CISO, Fortune 500 Financial Services</p>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <p class="testimonial-text">
+                    "Vibe coding is unstoppable—our developers love it. But I need visibility 
+                    and control. VibeForge bridges that gap without killing innovation."
+                </p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">SC</div>
+                    <div class="testimonial-info">
+                        <h4>Sarah Chen</h4>
+                        <p>VP Engineering, Series D SaaS Company</p>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <p class="testimonial-text">
+                    "HIPAA compliance for AI-generated code? That's keeping me up at night. 
+                    Finally someone is building for this problem."
+                </p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">MK</div>
+                    <div class="testimonial-info">
+                        <h4>Michael Kim</h4>
+                        <p>CTO, Healthcare Technology</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section" id="cta">
+        <div class="cta-content">
+            <h2>Ready to <span class="gradient">Secure Your Vibes</span>?</h2>
+            <p>
+                Join the enterprises bringing order to the vibe coding revolution. 
+                Get early access to VibeForge and be part of defining the category.
+            </p>
+            <div class="cta-buttons">
+                <a href="mailto:founders@vibeforge.ai" class="btn btn-primary btn-cta">
+                    Request Early Access →
+                </a>
+                <a href="mailto:founders@vibeforge.ai?subject=VibeForge Investment" class="btn btn-secondary btn-cta">
+                    Investment Inquiries
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <a href="#" class="logo">
+                    <div class="logo-icon">⚡</div>
+                    <div class="logo-text">Vibe<span>Forge</span></div>
+                </a>
+                <p>
+                    The enterprise platform for AI-generated applications. 
+                    From vibe to production, secured.
+                </p>
+            </div>
+            <div class="footer-links">
+                <div class="footer-column">
+                    <h4>Product</h4>
+                    <a href="#features">Features</a>
+                    <a href="#solution">How It Works</a>
+                    <a href="#">Documentation</a>
+                    <a href="#">Pricing</a>
+                </div>
+                <div class="footer-column">
+                    <h4>Company</h4>
+                    <a href="#">About</a>
+                    <a href="#">Blog</a>
+                    <a href="#">Careers</a>
+                    <a href="mailto:founders@vibeforge.ai">Contact</a>
+                </div>
+                <div class="footer-column">
+                    <h4>Resources</h4>
+                    <a href="#">Security</a>
+                    <a href="#">Compliance</a>
+                    <a href="#">API Docs</a>
+                    <a href="#">Status</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 VibeForge AI. All rights reserved.</p>
+            <div class="social-links">
+                <a href="#" title="Twitter">𝕏</a>
+                <a href="#" title="LinkedIn">in</a>
+                <a href="#" title="GitHub">GH</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth reveal on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.problem-card, .feature-card, .market-card, .testimonial-card').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'all 0.6s ease-out';
+            observer.observe(el);
+        });
+
+        // Navbar background on scroll
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 50) {
+                nav.style.background = 'rgba(8, 8, 22, 0.95)';
+            } else {
+                nav.style.background = 'rgba(8, 8, 22, 0.8)';
+            }
+        });
+    </script>
+</body>
+</html>
