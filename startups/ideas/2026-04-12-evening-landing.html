@@ -1,0 +1,1447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ScienceGuard AI - The Trust Layer for Scientific Research</title>
+    <meta name="description" content="Defending truth in the age of AI-generated science. Real-time detection of fraudulent research, automated reproducibility analysis, and citation integrity monitoring.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0ea5e9;
+            --primary-dark: #0284c7;
+            --secondary: #8b5cf6;
+            --accent: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #0f172a;
+            --darker: #020617;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --glow-primary: rgba(14, 165, 233, 0.4);
+            --glow-secondary: rgba(139, 92, 246, 0.4);
+            --glow-accent: rgba(16, 185, 129, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--darker);
+            color: var(--light);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(14, 165, 233, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(14, 165, 233, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* DNA Helix Animation */
+        .dna-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.15;
+            overflow: hidden;
+        }
+
+        .dna-strand {
+            position: absolute;
+            width: 4px;
+            height: 100%;
+            animation: dnaFloat 20s ease-in-out infinite;
+        }
+
+        @keyframes dnaFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-50px) rotate(180deg); }
+        }
+
+        /* Scanning Line */
+        .scan-line {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--primary), var(--secondary), transparent);
+            animation: scanDown 8s ease-in-out infinite;
+            z-index: 1;
+            opacity: 0.6;
+        }
+
+        @keyframes scanDown {
+            0% { top: 0; opacity: 0; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% { top: 100%; opacity: 0; }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(2, 6, 23, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(14, 165, 233, 0.1);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 800;
+            font-size: 1.5rem;
+            color: var(--light);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logo-icon::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.2), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--gray);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-cta {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 0.75rem 1.75rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px var(--glow-primary);
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px var(--glow-primary);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 120px 5% 80px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-content {
+            max-width: 1000px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(14, 165, 233, 0.1);
+            border: 1px solid rgba(14, 165, 233, 0.3);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            color: var(--primary);
+            margin-bottom: 2rem;
+            animation: pulse-border 2s infinite;
+        }
+
+        @keyframes pulse-border {
+            0%, 100% { border-color: rgba(14, 165, 233, 0.3); }
+            50% { border-color: rgba(14, 165, 233, 0.8); }
+        }
+
+        .hero-badge::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 5.5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--light) 0%, var(--primary) 50%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto 3rem;
+            font-weight: 400;
+        }
+
+        .hero-subtitle em {
+            color: var(--primary);
+            font-style: normal;
+            font-weight: 600;
+        }
+
+        .hero-ctas {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 4rem;
+        }
+
+        .btn {
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            box-shadow: 0 4px 30px var(--glow-primary);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 40px var(--glow-primary);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--light);
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* Stats Bar */
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2.5rem;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(14, 165, 233, 0.2);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Crisis Section */
+        .crisis {
+            padding: 120px 5%;
+            position: relative;
+            z-index: 2;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 4rem;
+        }
+
+        .section-tag {
+            display: inline-block;
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-tag.blue {
+            background: rgba(14, 165, 233, 0.1);
+            color: var(--primary);
+        }
+
+        .section-tag.green {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--accent);
+        }
+
+        .section-tag.purple {
+            background: rgba(139, 92, 246, 0.1);
+            color: var(--secondary);
+        }
+
+        .section-header h2 {
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-header p {
+            color: var(--gray);
+            font-size: 1.2rem;
+        }
+
+        .crisis-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .crisis-card {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.05), rgba(239, 68, 68, 0.02));
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .crisis-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--danger), var(--warning));
+        }
+
+        .crisis-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(239, 68, 68, 0.4);
+            box-shadow: 0 20px 40px rgba(239, 68, 68, 0.1);
+        }
+
+        .crisis-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .crisis-card h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--danger);
+        }
+
+        .crisis-card p {
+            color: var(--gray);
+            font-size: 1rem;
+        }
+
+        .crisis-stat {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--danger);
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Solution Section */
+        .solution {
+            padding: 120px 5%;
+            position: relative;
+            z-index: 2;
+        }
+
+        .solution-showcase {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .module-card {
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.4));
+            border: 1px solid rgba(14, 165, 233, 0.2);
+            border-radius: 24px;
+            padding: 2.5rem;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .module-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--glow-primary), transparent);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .module-card:hover::before {
+            opacity: 0.1;
+        }
+
+        .module-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--primary);
+            box-shadow: 0 25px 50px rgba(14, 165, 233, 0.15);
+        }
+
+        .module-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .module-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .module-card p {
+            color: var(--gray);
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .module-features {
+            list-style: none;
+            position: relative;
+            z-index: 1;
+        }
+
+        .module-features li {
+            padding: 0.5rem 0;
+            color: var(--gray);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .module-features li::before {
+            content: '✓';
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        /* Live Demo Section */
+        .demo {
+            padding: 120px 5%;
+            position: relative;
+            z-index: 2;
+        }
+
+        .demo-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.6));
+            border: 1px solid rgba(14, 165, 233, 0.2);
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .demo-header {
+            background: rgba(14, 165, 233, 0.1);
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border-bottom: 1px solid rgba(14, 165, 233, 0.2);
+        }
+
+        .demo-dots {
+            display: flex;
+            gap: 8px;
+        }
+
+        .demo-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .demo-dot:nth-child(1) { background: #ef4444; }
+        .demo-dot:nth-child(2) { background: #f59e0b; }
+        .demo-dot:nth-child(3) { background: #10b981; }
+
+        .demo-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .demo-content {
+            padding: 3rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .demo-analysis {
+            margin-bottom: 2rem;
+        }
+
+        .demo-line {
+            display: flex;
+            margin-bottom: 1rem;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .demo-label {
+            color: var(--primary);
+            min-width: 180px;
+            font-size: 0.9rem;
+        }
+
+        .demo-value {
+            color: var(--light);
+            font-size: 0.9rem;
+        }
+
+        .demo-progress {
+            flex: 1;
+            height: 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .demo-progress-fill {
+            height: 100%;
+            border-radius: 4px;
+            animation: fillIn 2s ease-out forwards;
+        }
+
+        @keyframes fillIn {
+            from { width: 0; }
+        }
+
+        .demo-progress-fill.green { background: var(--accent); }
+        .demo-progress-fill.yellow { background: var(--warning); }
+        .demo-progress-fill.red { background: var(--danger); }
+
+        .demo-verdict {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .demo-verdict.warning {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+
+        .demo-verdict h4 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .demo-verdict.warning h4 {
+            color: var(--danger);
+        }
+
+        .demo-verdict p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* Market Section */
+        .market {
+            padding: 120px 5%;
+            position: relative;
+            z-index: 2;
+        }
+
+        .market-visual {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .market-chart {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(14, 165, 233, 0.2);
+            border-radius: 24px;
+            padding: 2.5rem;
+        }
+
+        .chart-bar {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .chart-label {
+            min-width: 120px;
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .chart-track {
+            flex: 1;
+            height: 40px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .chart-fill {
+            height: 100%;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 1rem;
+            font-weight: 700;
+            font-size: 0.9rem;
+            animation: chartGrow 1.5s ease-out forwards;
+        }
+
+        @keyframes chartGrow {
+            from { width: 0; }
+        }
+
+        .chart-fill.tam { background: linear-gradient(90deg, var(--primary), var(--secondary)); }
+        .chart-fill.sam { background: linear-gradient(90deg, var(--secondary), var(--primary)); }
+        .chart-fill.som { background: linear-gradient(90deg, var(--accent), var(--primary)); }
+
+        .market-details {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .market-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(14, 165, 233, 0.2);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .market-card:hover {
+            border-color: var(--primary);
+            transform: translateX(5px);
+        }
+
+        .market-card h4 {
+            color: var(--primary);
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .market-card p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* Traction Section */
+        .traction {
+            padding: 120px 5%;
+            position: relative;
+            z-index: 2;
+            background: linear-gradient(180deg, transparent, rgba(14, 165, 233, 0.03), transparent);
+        }
+
+        .timeline {
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, var(--primary), var(--secondary), var(--accent));
+            transform: translateX(-50%);
+        }
+
+        .timeline-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .timeline-item:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .timeline-content {
+            width: 45%;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(14, 165, 233, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .timeline-content:hover {
+            border-color: var(--primary);
+            box-shadow: 0 15px 30px rgba(14, 165, 233, 0.1);
+        }
+
+        .timeline-year {
+            font-size: 0.85rem;
+            color: var(--primary);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-content h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-content p {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        .timeline-dot {
+            width: 20px;
+            height: 20px;
+            background: var(--primary);
+            border-radius: 50%;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 0 20px var(--glow-primary);
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 120px 5%;
+            position: relative;
+            z-index: 2;
+        }
+
+        .cta-container {
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(14, 165, 233, 0.1), rgba(139, 92, 246, 0.1));
+            border: 1px solid rgba(14, 165, 233, 0.3);
+            border-radius: 40px;
+            padding: 5rem 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, var(--glow-primary) 0%, transparent 50%);
+            opacity: 0.3;
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.3; }
+            50% { transform: scale(1.1); opacity: 0.5; }
+        }
+
+        .cta h2 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta p {
+            color: var(--gray);
+            font-size: 1.2rem;
+            margin-bottom: 2.5rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 5%;
+            border-top: 1px solid rgba(14, 165, 233, 0.1);
+            position: relative;
+            z-index: 2;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .footer-brand span {
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .footer-links a {
+            color: var(--gray);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        .footer-copy {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .modules-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .hero-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .modules-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .market-visual {
+                grid-template-columns: 1fr;
+            }
+
+            .timeline::before {
+                left: 20px;
+            }
+
+            .timeline-item {
+                flex-direction: column !important;
+                align-items: flex-start;
+                padding-left: 50px;
+            }
+
+            .timeline-content {
+                width: 100%;
+            }
+
+            .timeline-dot {
+                left: 20px;
+            }
+
+            .crisis-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Animations on scroll */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .animate-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+    <div class="scan-line"></div>
+    
+    <div class="dna-container">
+        <svg viewBox="0 0 100 1000" style="position: absolute; left: 5%; height: 100%;">
+            <path d="M50,0 Q90,100 50,200 Q10,300 50,400 Q90,500 50,600 Q10,700 50,800 Q90,900 50,1000" 
+                  stroke="url(#gradient)" stroke-width="2" fill="none" opacity="0.3"/>
+        </svg>
+    </div>
+
+    <nav>
+        <a href="#" class="logo">
+            <div class="logo-icon">🛡️</div>
+            ScienceGuard
+        </a>
+        <ul class="nav-links">
+            <li><a href="#problem">The Problem</a></li>
+            <li><a href="#solution">Solution</a></li>
+            <li><a href="#demo">Demo</a></li>
+            <li><a href="#market">Market</a></li>
+        </ul>
+        <a href="#contact" class="nav-cta">Request Demo</a>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span>Protecting Scientific Integrity</span>
+            </div>
+            <h1>The Trust Layer for Scientific Research</h1>
+            <p class="hero-subtitle">
+                <em>Defending truth</em> in the age of AI-generated science. Real-time fraud detection, automated reproducibility analysis, and citation integrity monitoring.
+            </p>
+            <div class="hero-ctas">
+                <a href="#contact" class="btn btn-primary">
+                    <span>🔬</span> Request Demo
+                </a>
+                <a href="#solution" class="btn btn-secondary">
+                    <span>▶</span> See How It Works
+                </a>
+            </div>
+            <div class="hero-stats">
+                <div class="stat">
+                    <div class="stat-value">10K+</div>
+                    <div class="stat-label">Retractions/Year</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">70%</div>
+                    <div class="stat-label">Non-Reproducible</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">$28B</div>
+                    <div class="stat-label">Wasted Annually</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">99.7%</div>
+                    <div class="stat-label">Detection Accuracy</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="crisis" id="problem">
+        <div class="section-header">
+            <div class="section-tag">The Crisis</div>
+            <h2>Science Has a Trust Problem</h2>
+            <p>AI-generated fake papers, data fabrication, and image manipulation are flooding journals at unprecedented scale</p>
+        </div>
+        <div class="crisis-grid">
+            <div class="crisis-card animate-on-scroll">
+                <div class="crisis-icon">🤖</div>
+                <h3>AI-Generated Papers</h3>
+                <p>GPT-4 and successors generate convincing research with fabricated data, fake citations, and manipulated images—at industrial scale</p>
+            </div>
+            <div class="crisis-card animate-on-scroll">
+                <div class="crisis-icon">🏭</div>
+                <h3>Paper Mills</h3>
+                <p>Organized operations selling fake research to academics under publish-or-perish pressure. Thousands of papers, hundreds of journals.</p>
+            </div>
+            <div class="crisis-card animate-on-scroll">
+                <div class="crisis-icon">🖼️</div>
+                <h3>Image Manipulation</h3>
+                <p>Western blots, microscopy images, and graphs routinely duplicated or digitally altered. 35%+ of submissions show signs of manipulation.</p>
+            </div>
+            <div class="crisis-card animate-on-scroll">
+                <div class="crisis-icon">🔗</div>
+                <h3>Citation Cartels</h3>
+                <p>Networks gaming impact factors through coordinated citation schemes. Entire journals compromised by manipulation rings.</p>
+            </div>
+            <div class="crisis-card animate-on-scroll">
+                <div class="crisis-icon">📊</div>
+                <h3>Data Fabrication</h3>
+                <p>Statistical impossibilities and fabricated datasets going undetected for years. Manual review catches less than 30%.</p>
+            </div>
+            <div class="crisis-card animate-on-scroll">
+                <div class="crisis-icon">⏰</div>
+                <h3>Years Behind</h3>
+                <p>Manual peer review takes 2-6 months. Retraction watchdogs are overwhelmed. Bad science pollutes the literature indefinitely.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="solution" id="solution">
+        <div class="section-header">
+            <div class="section-tag blue">The Solution</div>
+            <h2>Autonomous Research Integrity Intelligence</h2>
+            <p>Six integrated modules analyzing manuscripts, data, images, and networks in real-time</p>
+        </div>
+        <div class="solution-showcase">
+            <div class="modules-grid">
+                <div class="module-card animate-on-scroll">
+                    <div class="module-icon">📄</div>
+                    <h3>ManuscriptShield</h3>
+                    <p>AI-generated content detection with 99.7% accuracy</p>
+                    <ul class="module-features">
+                        <li>Detects AI-generated text patterns</li>
+                        <li>Statistical impossibility flagging</li>
+                        <li>Methods-results consistency</li>
+                        <li>Feasibility analysis</li>
+                    </ul>
+                </div>
+                <div class="module-card animate-on-scroll">
+                    <div class="module-icon">🔍</div>
+                    <h3>ImageForensics</h3>
+                    <p>Visual integrity analysis across 200M+ publications</p>
+                    <ul class="module-features">
+                        <li>Duplicated region detection</li>
+                        <li>Western blot forensics</li>
+                        <li>Splicing & retouching detection</li>
+                        <li>Cross-paper image matching</li>
+                    </ul>
+                </div>
+                <div class="module-card animate-on-scroll">
+                    <div class="module-icon">📈</div>
+                    <h3>DataVerify</h3>
+                    <p>Statistical integrity analysis for all numerical results</p>
+                    <ul class="module-features">
+                        <li>GRIM & SPRITE testing</li>
+                        <li>Benford's Law analysis</li>
+                        <li>Distribution forensics</li>
+                        <li>Effect size plausibility</li>
+                    </ul>
+                </div>
+                <div class="module-card animate-on-scroll">
+                    <div class="module-icon">🕸️</div>
+                    <h3>CitationGraph</h3>
+                    <p>Network integrity monitoring across all indexed work</p>
+                    <ul class="module-features">
+                        <li>Citation cartel detection</li>
+                        <li>Orphan citation flagging</li>
+                        <li>Network anomaly analysis</li>
+                        <li>Impact factor gaming alerts</li>
+                    </ul>
+                </div>
+                <div class="module-card animate-on-scroll">
+                    <div class="module-icon">🔄</div>
+                    <h3>ReproScore</h3>
+                    <p>Reproducibility prediction scoring 0-100</p>
+                    <ul class="module-features">
+                        <li>Methodological completeness</li>
+                        <li>Missing details detection</li>
+                        <li>Historical pattern matching</li>
+                        <li>Replication success prediction</li>
+                    </ul>
+                </div>
+                <div class="module-card animate-on-scroll">
+                    <div class="module-icon">👤</div>
+                    <h3>AuthorIntel</h3>
+                    <p>Contributor analysis and paper mill fingerprinting</p>
+                    <ul class="module-features">
+                        <li>Impossible authorship detection</li>
+                        <li>Paper mill pattern matching</li>
+                        <li>Affiliation verification</li>
+                        <li>Collaboration network analysis</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="demo" id="demo">
+        <div class="section-header">
+            <div class="section-tag green">Live Analysis</div>
+            <h2>See ScienceGuard in Action</h2>
+            <p>Real-time manuscript integrity analysis</p>
+        </div>
+        <div class="demo-container">
+            <div class="demo-header">
+                <div class="demo-dots">
+                    <div class="demo-dot"></div>
+                    <div class="demo-dot"></div>
+                    <div class="demo-dot"></div>
+                </div>
+                <span class="demo-title">ScienceGuard Analysis Console — manuscript_2026_04_12.pdf</span>
+            </div>
+            <div class="demo-content">
+                <div class="demo-analysis">
+                    <div class="demo-line">
+                        <span class="demo-label">AI Content Score:</span>
+                        <div class="demo-progress">
+                            <div class="demo-progress-fill green" style="width: 12%"></div>
+                        </div>
+                        <span class="demo-value">12% (Human-written)</span>
+                    </div>
+                    <div class="demo-line">
+                        <span class="demo-label">Image Integrity:</span>
+                        <div class="demo-progress">
+                            <div class="demo-progress-fill green" style="width: 98%"></div>
+                        </div>
+                        <span class="demo-value">98% (No manipulation detected)</span>
+                    </div>
+                    <div class="demo-line">
+                        <span class="demo-label">Statistical Validity:</span>
+                        <div class="demo-progress">
+                            <div class="demo-progress-fill green" style="width: 94%"></div>
+                        </div>
+                        <span class="demo-value">94% (GRIM/SPRITE passed)</span>
+                    </div>
+                    <div class="demo-line">
+                        <span class="demo-label">Citation Integrity:</span>
+                        <div class="demo-progress">
+                            <div class="demo-progress-fill yellow" style="width: 78%"></div>
+                        </div>
+                        <span class="demo-value">78% (2 unverified refs)</span>
+                    </div>
+                    <div class="demo-line">
+                        <span class="demo-label">ReproScore:</span>
+                        <div class="demo-progress">
+                            <div class="demo-progress-fill green" style="width: 85%"></div>
+                        </div>
+                        <span class="demo-value">85/100 (High reproducibility)</span>
+                    </div>
+                </div>
+                <div class="demo-verdict">
+                    <h4>✓ INTEGRITY VERIFIED</h4>
+                    <p>This manuscript passes all major integrity checks. Minor citation verification recommended before publication. Processing time: 4.2 seconds.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="market" id="market">
+        <div class="section-header">
+            <div class="section-tag purple">Market Opportunity</div>
+            <h2>$45B Total Addressable Market</h2>
+            <p>Academic publishing, research funding, corporate R&D, and institutions</p>
+        </div>
+        <div class="market-visual">
+            <div class="market-chart">
+                <div class="chart-bar">
+                    <span class="chart-label">TAM</span>
+                    <div class="chart-track">
+                        <div class="chart-fill tam" style="width: 100%">$45B</div>
+                    </div>
+                </div>
+                <div class="chart-bar">
+                    <span class="chart-label">SAM</span>
+                    <div class="chart-track">
+                        <div class="chart-fill sam" style="width: 27%">$12B</div>
+                    </div>
+                </div>
+                <div class="chart-bar">
+                    <span class="chart-label">SOM (Y5)</span>
+                    <div class="chart-track">
+                        <div class="chart-fill som" style="width: 7%">$800M</div>
+                    </div>
+                </div>
+            </div>
+            <div class="market-details">
+                <div class="market-card">
+                    <h4>Academic Publishing — $30B</h4>
+                    <p>Top 500 journals and publishers desperately need integrity solutions to protect reputation</p>
+                </div>
+                <div class="market-card">
+                    <h4>Research Funding — $8B</h4>
+                    <p>NIH, NSF, EU funding agencies screening $50B+ in grants for integrity</p>
+                </div>
+                <div class="market-card">
+                    <h4>Corporate R&D — $5B</h4>
+                    <p>Pharma, biotech, and tech companies de-risking external research dependencies</p>
+                </div>
+                <div class="market-card">
+                    <h4>Institutions — $2B</h4>
+                    <p>Universities and research institutes protecting institutional reputation</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="traction" id="traction">
+        <div class="section-header">
+            <div class="section-tag blue">Roadmap</div>
+            <h2>Building the Integrity Standard</h2>
+            <p>From pilot to platform dominance</p>
+        </div>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-content animate-on-scroll">
+                    <div class="timeline-year">Year 1</div>
+                    <h3>Protect</h3>
+                    <p>Launch with top 20 publishers. Pre-publication screening becomes the new standard.</p>
+                </div>
+                <div class="timeline-dot"></div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-content animate-on-scroll">
+                    <div class="timeline-year">Year 3</div>
+                    <h3>Verify</h3>
+                    <p>Expand to funders and institutions. Default integrity layer for the research ecosystem.</p>
+                </div>
+                <div class="timeline-dot"></div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-content animate-on-scroll">
+                    <div class="timeline-year">Year 5</div>
+                    <h3>Transform</h3>
+                    <p>Every paper scored, every dataset verified, every claim traceable. Fraud becomes rare.</p>
+                </div>
+                <div class="timeline-dot"></div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-content animate-on-scroll">
+                    <div class="timeline-year">Year 10</div>
+                    <h3>Evolve</h3>
+                    <p>Integrity is invisible infrastructure. Reproducibility is the norm. Science regains trust.</p>
+                </div>
+                <div class="timeline-dot"></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta" id="contact">
+        <div class="cta-container">
+            <h2>Ready to Protect Scientific Truth?</h2>
+            <p>Join the publishers, funders, and institutions building a more trustworthy research ecosystem.</p>
+            <div class="cta-buttons">
+                <a href="mailto:founders@scienceguard.ai" class="btn btn-primary">
+                    <span>📧</span> Contact Founders
+                </a>
+                <a href="#" class="btn btn-secondary">
+                    <span>📄</span> Download Whitepaper
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <div class="logo-icon" style="width: 35px; height: 35px; font-size: 1rem;">🛡️</div>
+                <span>ScienceGuard AI</span>
+            </div>
+            <ul class="footer-links">
+                <li><a href="#">Platform</a></li>
+                <li><a href="#">Research</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+            <p class="footer-copy">© 2026 ScienceGuard AI. Defending truth in science.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Animate on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.animate-on-scroll').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Smooth scroll for nav links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Counter animation for stats
+        function animateValue(element, start, end, duration) {
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                const current = Math.floor(progress * (end - start) + start);
+                element.textContent = current.toLocaleString() + (element.dataset.suffix || '');
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+    </script>
+</body>
+</html>
