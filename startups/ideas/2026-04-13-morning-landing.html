@@ -1,0 +1,1925 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ResonanceAI — Every Machine Speaks. We Teach Enterprises to Listen.</title>
+    <meta name="description" content="The AI Operating System for Acoustic & Vibration Intelligence. Transform sound into actionable business intelligence.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #818cf8;
+            --accent: #06b6d4;
+            --accent-glow: rgba(6, 182, 212, 0.4);
+            --dark: #0f0f1a;
+            --dark-card: #1a1a2e;
+            --dark-border: #2d2d44;
+            --text: #e2e8f0;
+            --text-muted: #94a3b8;
+            --gradient-1: linear-gradient(135deg, #6366f1 0%, #06b6d4 100%);
+            --gradient-2: linear-gradient(135deg, #06b6d4 0%, #10b981 100%);
+            --gradient-3: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--dark);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .sound-wave {
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: radial-gradient(ellipse at center, transparent 0%, var(--dark) 70%);
+        }
+
+        .wave-ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 1px solid rgba(99, 102, 241, 0.1);
+            border-radius: 50%;
+            animation: pulseRing 4s ease-out infinite;
+        }
+
+        .wave-ring:nth-child(1) { width: 300px; height: 300px; animation-delay: 0s; }
+        .wave-ring:nth-child(2) { width: 500px; height: 500px; animation-delay: 0.8s; }
+        .wave-ring:nth-child(3) { width: 700px; height: 700px; animation-delay: 1.6s; }
+        .wave-ring:nth-child(4) { width: 900px; height: 900px; animation-delay: 2.4s; }
+        .wave-ring:nth-child(5) { width: 1100px; height: 1100px; animation-delay: 3.2s; }
+
+        @keyframes pulseRing {
+            0% {
+                transform: translate(-50%, -50%) scale(0.5);
+                opacity: 0.8;
+                border-color: rgba(6, 182, 212, 0.3);
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(2);
+                opacity: 0;
+                border-color: rgba(99, 102, 241, 0);
+            }
+        }
+
+        /* Waveform Animation */
+        .waveform-container {
+            position: absolute;
+            bottom: 10%;
+            left: 0;
+            width: 100%;
+            height: 150px;
+            opacity: 0.1;
+            overflow: hidden;
+        }
+
+        .waveform-bar {
+            display: inline-block;
+            width: 3px;
+            margin: 0 2px;
+            background: var(--gradient-1);
+            border-radius: 3px;
+            animation: waveform 1s ease-in-out infinite;
+        }
+
+        @keyframes waveform {
+            0%, 100% { height: 20px; }
+            50% { height: 80px; }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(15, 15, 26, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(99, 102, 241, 0.1);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--text);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logo-icon::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background: white;
+            animation: soundLine 0.8s ease-in-out infinite;
+        }
+
+        @keyframes soundLine {
+            0%, 100% { transform: scaleX(0.3); }
+            50% { transform: scaleX(0.8); }
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        .nav-cta {
+            background: var(--gradient-1);
+            color: white;
+            padding: 0.75rem 1.75rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(99, 102, 241, 0.3);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 8rem 5% 4rem;
+            position: relative;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            padding: 0.5rem 1.25rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            color: var(--primary-light);
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .hero-badge::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        .hero h1 span {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.1rem, 2vw, 1.5rem);
+            color: var(--text-muted);
+            max-width: 700px;
+            margin-bottom: 2.5rem;
+            animation: fadeInUp 0.8s ease-out 0.4s both;
+        }
+
+        .hero-cta-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            animation: fadeInUp 0.8s ease-out 0.6s both;
+        }
+
+        .cta-primary {
+            background: var(--gradient-1);
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .cta-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 60px rgba(99, 102, 241, 0.4);
+        }
+
+        .cta-secondary {
+            background: transparent;
+            color: var(--text);
+            padding: 1rem 2.5rem;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            border: 2px solid var(--dark-border);
+            transition: border-color 0.3s, background 0.3s;
+        }
+
+        .cta-secondary:hover {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        /* Spectrogram Visualization */
+        .hero-visual {
+            margin-top: 4rem;
+            width: 100%;
+            max-width: 1000px;
+            animation: fadeInUp 0.8s ease-out 0.8s both;
+        }
+
+        .spectrogram {
+            background: var(--dark-card);
+            border: 1px solid var(--dark-border);
+            border-radius: 20px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .spectrogram-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .spectrogram-title {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .spectrogram-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--accent);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        .spectrogram-display {
+            height: 200px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            gap: 4px;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+        }
+
+        .freq-bar {
+            width: 8px;
+            background: var(--gradient-1);
+            border-radius: 4px;
+            animation: freqPulse 0.6s ease-in-out infinite alternate;
+        }
+
+        @keyframes freqPulse {
+            0% { height: var(--min-height, 20px); opacity: 0.6; }
+            100% { height: var(--max-height, 100px); opacity: 1; }
+        }
+
+        .spectrogram-info {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--dark-border);
+        }
+
+        .info-item {
+            text-align: center;
+        }
+
+        .info-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .info-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Stats Section */
+        .stats {
+            padding: 5rem 5%;
+            background: linear-gradient(180deg, transparent 0%, rgba(99, 102, 241, 0.03) 100%);
+        }
+
+        .stats-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+        }
+
+        /* Problem Section */
+        .problem {
+            padding: 8rem 5%;
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 5rem;
+        }
+
+        .section-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--accent);
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+        }
+
+        .problem-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .problem-card {
+            background: var(--dark-card);
+            border: 1px solid var(--dark-border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: transform 0.3s, border-color 0.3s;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+
+        .problem-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .problem-card h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .problem-card p {
+            color: var(--text-muted);
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        .problem-cost {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--dark-border);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .cost-number {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #ef4444;
+        }
+
+        .cost-label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        /* Solution Section */
+        .solution {
+            padding: 8rem 5%;
+            background: linear-gradient(180deg, rgba(99, 102, 241, 0.03) 0%, transparent 100%);
+        }
+
+        .solution-showcase {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .solution-content h2 {
+            font-size: clamp(2rem, 4vw, 2.5rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+        }
+
+        .solution-content p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .solution-features {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .feature-item {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            min-width: 48px;
+            background: var(--gradient-1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .feature-text h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .feature-text p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        /* Platform Visual */
+        .platform-visual {
+            background: var(--dark-card);
+            border: 1px solid var(--dark-border);
+            border-radius: 24px;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .platform-header {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .platform-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .platform-dot:nth-child(1) { background: #ef4444; }
+        .platform-dot:nth-child(2) { background: #f59e0b; }
+        .platform-dot:nth-child(3) { background: #10b981; }
+
+        .platform-screen {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .platform-module {
+            background: var(--dark);
+            border: 1px solid var(--dark-border);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .platform-module:last-child {
+            margin-bottom: 0;
+        }
+
+        .module-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .module-name {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        .module-status {
+            font-size: 0.75rem;
+            color: #10b981;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .module-bar {
+            height: 6px;
+            background: rgba(99, 102, 241, 0.2);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .module-progress {
+            height: 100%;
+            background: var(--gradient-1);
+            border-radius: 3px;
+            animation: progressPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes progressPulse {
+            0%, 100% { width: 75%; }
+            50% { width: 95%; }
+        }
+
+        /* Industries Section */
+        .industries {
+            padding: 8rem 5%;
+        }
+
+        .industries-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .industry-card {
+            background: var(--dark-card);
+            border: 1px solid var(--dark-border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .industry-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient-1);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .industry-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(99, 102, 241, 0.3);
+            box-shadow: 0 20px 60px rgba(99, 102, 241, 0.1);
+        }
+
+        .industry-card:hover::before {
+            opacity: 1;
+        }
+
+        .industry-icon {
+            width: 70px;
+            height: 70px;
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .industry-card h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .industry-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .industry-stats {
+            display: flex;
+            gap: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--dark-border);
+        }
+
+        .industry-stat {
+            text-align: center;
+        }
+
+        .industry-stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .industry-stat-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* ROI Calculator */
+        .roi-section {
+            padding: 8rem 5%;
+            background: linear-gradient(180deg, transparent 0%, rgba(6, 182, 212, 0.05) 100%);
+        }
+
+        .roi-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: var(--dark-card);
+            border: 1px solid var(--dark-border);
+            border-radius: 24px;
+            padding: 3rem;
+        }
+
+        .roi-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .roi-header h2 {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .roi-header p {
+            color: var(--text-muted);
+        }
+
+        .roi-breakdown {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+        }
+
+        .roi-input {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 16px;
+            padding: 2rem;
+        }
+
+        .roi-input h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--text-muted);
+        }
+
+        .roi-metric {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--dark-border);
+        }
+
+        .roi-metric:last-child {
+            border-bottom: none;
+        }
+
+        .roi-metric-label {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+        }
+
+        .roi-metric-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .roi-output {
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .roi-result {
+            font-size: 4rem;
+            font-weight: 900;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+        }
+
+        .roi-result-label {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+        }
+
+        .roi-savings {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(99, 102, 241, 0.2);
+            width: 100%;
+        }
+
+        .roi-savings-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #10b981;
+        }
+
+        .roi-savings-label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        /* Technology Section */
+        .technology {
+            padding: 8rem 5%;
+        }
+
+        .tech-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .tech-card {
+            background: var(--dark-card);
+            border: 1px solid var(--dark-border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: transform 0.3s;
+        }
+
+        .tech-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .tech-card.featured {
+            grid-column: span 2;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .tech-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-2);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .tech-card h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .tech-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .tech-specs {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .spec-item {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+        }
+
+        .spec-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--accent);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .spec-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* Architecture Visual */
+        .architecture-visual {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        .arch-layer {
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            border-radius: 6px;
+            border-left: 3px solid;
+        }
+
+        .arch-layer.input { border-color: var(--accent); background: rgba(6, 182, 212, 0.1); }
+        .arch-layer.encoder { border-color: var(--primary); background: rgba(99, 102, 241, 0.1); }
+        .arch-layer.output { border-color: #10b981; background: rgba(16, 185, 129, 0.1); }
+
+        .arch-label {
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 0.25rem;
+        }
+
+        /* Market Section */
+        .market {
+            padding: 8rem 5%;
+            background: linear-gradient(180deg, rgba(99, 102, 241, 0.03) 0%, transparent 100%);
+        }
+
+        .market-visual {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: var(--dark-card);
+            border: 1px solid var(--dark-border);
+            border-radius: 24px;
+            padding: 3rem;
+        }
+
+        .market-chart {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1.5rem;
+            align-items: flex-end;
+            height: 300px;
+            padding: 2rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 16px;
+            margin-bottom: 2rem;
+        }
+
+        .chart-bar-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100%;
+            justify-content: flex-end;
+        }
+
+        .chart-bar {
+            width: 60px;
+            background: var(--gradient-1);
+            border-radius: 8px 8px 0 0;
+            position: relative;
+            transition: height 0.5s ease-out;
+        }
+
+        .chart-bar::before {
+            content: attr(data-value);
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .chart-label {
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-align: center;
+        }
+
+        .market-segments {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .segment-card {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .segment-value {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: var(--gradient-2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .segment-name {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+        }
+
+        .segment-cagr {
+            font-size: 0.8rem;
+            color: #10b981;
+            margin-top: 0.25rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 8rem 5%;
+            text-align: center;
+            position: relative;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at center, rgba(99, 102, 241, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .cta-content {
+            position: relative;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .cta-content h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-content p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-bottom: 2.5rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 5% 2rem;
+            border-top: 1px solid var(--dark-border);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 4rem;
+        }
+
+        .footer-brand p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-top: 1rem;
+            line-height: 1.7;
+        }
+
+        .footer-links h4 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1.5rem;
+            color: var(--text);
+        }
+
+        .footer-links ul {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 3rem auto 0;
+            padding-top: 2rem;
+            border-top: 1px solid var(--dark-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .problem-grid,
+            .tech-grid,
+            .roi-breakdown {
+                grid-template-columns: 1fr;
+            }
+
+            .solution-showcase {
+                grid-template-columns: 1fr;
+            }
+
+            .industries-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .tech-card.featured {
+                grid-column: span 1;
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .stats-grid,
+            .industries-grid,
+            .market-segments {
+                grid-template-columns: 1fr;
+            }
+
+            .market-chart {
+                grid-template-columns: repeat(5, 1fr);
+                height: 200px;
+            }
+
+            .chart-bar {
+                width: 40px;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="bg-animation">
+        <div class="sound-wave">
+            <div class="wave-ring"></div>
+            <div class="wave-ring"></div>
+            <div class="wave-ring"></div>
+            <div class="wave-ring"></div>
+            <div class="wave-ring"></div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <a href="#" class="logo">
+            <div class="logo-icon">〰️</div>
+            ResonanceAI
+        </a>
+        <ul class="nav-links">
+            <li><a href="#platform">Platform</a></li>
+            <li><a href="#industries">Industries</a></li>
+            <li><a href="#technology">Technology</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+            <li><a href="#about">About</a></li>
+        </ul>
+        <a href="#demo" class="nav-cta">Request Demo</a>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-badge">
+            Acoustic Intelligence Platform
+        </div>
+        <h1>Every Machine <span>Speaks</span>.<br>We Teach Enterprises to <span>Listen</span>.</h1>
+        <p class="hero-subtitle">Transform sound and vibration data into actionable intelligence. Predict failures weeks in advance. Optimize operations by acoustic fingerprint. Enable superhuman hearing at scale.</p>
+        <div class="hero-cta-group">
+            <a href="#demo" class="cta-primary">
+                🎯 Start Listening
+            </a>
+            <a href="#platform" class="cta-secondary">
+                See How It Works
+            </a>
+        </div>
+
+        <!-- Spectrogram Visualization -->
+        <div class="hero-visual">
+            <div class="spectrogram">
+                <div class="spectrogram-header">
+                    <span class="spectrogram-title">REAL-TIME ACOUSTIC ANALYSIS — PRODUCTION LINE 7</span>
+                    <span class="spectrogram-status">
+                        <span class="status-dot"></span>
+                        Monitoring Active
+                    </span>
+                </div>
+                <div class="spectrogram-display">
+                    <div class="freq-bar" style="--min-height: 30px; --max-height: 90px; animation-delay: 0s;"></div>
+                    <div class="freq-bar" style="--min-height: 20px; --max-height: 60px; animation-delay: 0.1s;"></div>
+                    <div class="freq-bar" style="--min-height: 40px; --max-height: 120px; animation-delay: 0.2s;"></div>
+                    <div class="freq-bar" style="--min-height: 15px; --max-height: 45px; animation-delay: 0.3s;"></div>
+                    <div class="freq-bar" style="--min-height: 35px; --max-height: 100px; animation-delay: 0.4s;"></div>
+                    <div class="freq-bar" style="--min-height: 25px; --max-height: 75px; animation-delay: 0.5s;"></div>
+                    <div class="freq-bar" style="--min-height: 45px; --max-height: 130px; animation-delay: 0.6s;"></div>
+                    <div class="freq-bar" style="--min-height: 20px; --max-height: 55px; animation-delay: 0.7s;"></div>
+                    <div class="freq-bar" style="--min-height: 30px; --max-height: 85px; animation-delay: 0.8s;"></div>
+                    <div class="freq-bar" style="--min-height: 50px; --max-height: 140px; animation-delay: 0.9s;"></div>
+                    <div class="freq-bar" style="--min-height: 25px; --max-height: 70px; animation-delay: 1.0s;"></div>
+                    <div class="freq-bar" style="--min-height: 35px; --max-height: 95px; animation-delay: 1.1s;"></div>
+                    <div class="freq-bar" style="--min-height: 15px; --max-height: 40px; animation-delay: 1.2s;"></div>
+                    <div class="freq-bar" style="--min-height: 40px; --max-height: 110px; animation-delay: 1.3s;"></div>
+                    <div class="freq-bar" style="--min-height: 20px; --max-height: 65px; animation-delay: 1.4s;"></div>
+                    <div class="freq-bar" style="--min-height: 30px; --max-height: 80px; animation-delay: 0s;"></div>
+                    <div class="freq-bar" style="--min-height: 45px; --max-height: 125px; animation-delay: 0.15s;"></div>
+                    <div class="freq-bar" style="--min-height: 25px; --max-height: 70px; animation-delay: 0.3s;"></div>
+                    <div class="freq-bar" style="--min-height: 35px; --max-height: 100px; animation-delay: 0.45s;"></div>
+                    <div class="freq-bar" style="--min-height: 20px; --max-height: 55px; animation-delay: 0.6s;"></div>
+                </div>
+                <div class="spectrogram-info">
+                    <div class="info-item">
+                        <div class="info-value">98.7%</div>
+                        <div class="info-label">Health Score</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-value">0.3dB</div>
+                        <div class="info-label">Anomaly Delta</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-value">72hrs</div>
+                        <div class="info-label">Predicted RUL</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-value">247</div>
+                        <div class="info-label">Assets Monitored</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">$647B</div>
+                <div class="stat-label">Annual unplanned downtime cost</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">1%</div>
+                <div class="stat-label">Of acoustic data currently analyzed</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">23%</div>
+                <div class="stat-label">Defects detectable by sound first</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">15x</div>
+                <div class="stat-label">Average customer ROI</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="problem" id="problem">
+        <div class="section-header">
+            <div class="section-label">🔇 The Silent Crisis</div>
+            <h2 class="section-title">The Most Valuable Data Stream Remains Untapped</h2>
+            <p class="section-subtitle">Every machine, structure, and system produces acoustic signatures that reveal health, efficiency, and impending failure. Yet virtually none of this intelligence is captured.</p>
+        </div>
+
+        <div class="problem-grid">
+            <div class="problem-card">
+                <div class="problem-icon">🔧</div>
+                <h3>No AI-Native Sensors</h3>
+                <p>Industrial microphones were built for recording, not machine learning. They generate massive data streams with no on-device intelligence.</p>
+                <div class="problem-cost">
+                    <span class="cost-number">$18B</span>
+                    <span class="cost-label">wasted on reactive maintenance</span>
+                </div>
+            </div>
+
+            <div class="problem-card">
+                <div class="problem-icon">⏱️</div>
+                <h3>Edge Processing Gap</h3>
+                <p>Audio generates terabytes daily. Cloud round-trips add fatal latency. By the time you detect failure, it's already happened.</p>
+                <div class="problem-cost">
+                    <span class="cost-number">200ms</span>
+                    <span class="cost-label">too slow for prevention</span>
+                </div>
+            </div>
+
+            <div class="problem-card">
+                <div class="problem-icon">🧠</div>
+                <h3>No Foundation Models</h3>
+                <p>There's no GPT-4 for acoustic understanding. Every company trains from scratch, if they train at all.</p>
+                <div class="problem-cost">
+                    <span class="cost-number">0</span>
+                    <span class="cost-label">pre-trained acoustic models at scale</span>
+                </div>
+            </div>
+
+            <div class="problem-card">
+                <div class="problem-icon">👴</div>
+                <h3>Expertise Retiring</h3>
+                <p>Experienced technicians literally put ears to machines. They're retiring, and taking decades of acoustic intuition with them.</p>
+                <div class="problem-cost">
+                    <span class="cost-number">40%</span>
+                    <span class="cost-label">of experts retiring by 2030</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="solution" id="platform">
+        <div class="solution-showcase">
+            <div class="solution-content">
+                <div class="section-label">🎯 The Solution</div>
+                <h2>Enterprise Acoustic Intelligence Platform</h2>
+                <p>An end-to-end platform that transforms sound and vibration data into business intelligence. AI-native sensors. Foundation models trained on 50M+ hours. Real-time edge inference. Zero expertise required.</p>
+
+                <div class="solution-features">
+                    <div class="feature-item">
+                        <div class="feature-icon">〰️</div>
+                        <div class="feature-text">
+                            <h4>ResonanceSense Hardware</h4>
+                            <p>AI-native sensors with on-device ML inference, 192kHz sampling, industrial-grade durability</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">🧠</div>
+                        <div class="feature-text">
+                            <h4>ResonanceCore AI</h4>
+                            <p>10B parameter foundation model pre-trained on industrial, medical, and infrastructure audio</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">⚡</div>
+                        <div class="feature-text">
+                            <h4>ResonanceEdge</h4>
+                            <p>Kubernetes-native edge orchestration with <10ms inference latency</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">📊</div>
+                        <div class="feature-text">
+                            <h4>ResonanceInsight</h4>
+                            <p>Real-time dashboards, root cause analysis, and predictive maintenance scheduling</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="platform-visual">
+                <div class="platform-header">
+                    <div class="platform-dot"></div>
+                    <div class="platform-dot"></div>
+                    <div class="platform-dot"></div>
+                </div>
+                <div class="platform-screen">
+                    <div class="platform-module">
+                        <div class="module-header">
+                            <span class="module-name">ResonanceCore AI</span>
+                            <span class="module-status">● Active</span>
+                        </div>
+                        <div class="module-bar">
+                            <div class="module-progress" style="width: 94%;"></div>
+                        </div>
+                    </div>
+                    <div class="platform-module">
+                        <div class="module-header">
+                            <span class="module-name">Anomaly Detection</span>
+                            <span class="module-status">● Processing</span>
+                        </div>
+                        <div class="module-bar">
+                            <div class="module-progress" style="width: 78%; animation-delay: 0.5s;"></div>
+                        </div>
+                    </div>
+                    <div class="platform-module">
+                        <div class="module-header">
+                            <span class="module-name">Failure Prediction</span>
+                            <span class="module-status">● Analyzing</span>
+                        </div>
+                        <div class="module-bar">
+                            <div class="module-progress" style="width: 86%; animation-delay: 1s;"></div>
+                        </div>
+                    </div>
+                    <div class="platform-module">
+                        <div class="module-header">
+                            <span class="module-name">Alert Dispatch</span>
+                            <span class="module-status">● Ready</span>
+                        </div>
+                        <div class="module-bar">
+                            <div class="module-progress" style="width: 100%; animation-delay: 1.5s;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Industries Section -->
+    <section class="industries" id="industries">
+        <div class="section-header">
+            <div class="section-label">🏭 Industries</div>
+            <h2 class="section-title">Acoustic Intelligence for Every Sector</h2>
+            <p class="section-subtitle">From factory floors to hospital rooms, ResonanceAI delivers superhuman hearing wherever sound holds the answers.</p>
+        </div>
+
+        <div class="industries-grid">
+            <div class="industry-card">
+                <div class="industry-icon">⚙️</div>
+                <h3>Manufacturing</h3>
+                <p>Machine health monitoring, quality control by sound, tool wear prediction, and leak detection across production lines.</p>
+                <div class="industry-stats">
+                    <div class="industry-stat">
+                        <div class="industry-stat-value">72hrs</div>
+                        <div class="industry-stat-label">Early warning</div>
+                    </div>
+                    <div class="industry-stat">
+                        <div class="industry-stat-value">$3M+</div>
+                        <div class="industry-stat-label">Saved/event</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="industry-card">
+                <div class="industry-icon">🛢️</div>
+                <h3>Oil & Gas / Energy</h3>
+                <p>Pipeline integrity, rotating equipment health, transformer monitoring, and wind turbine blade analysis.</p>
+                <div class="industry-stats">
+                    <div class="industry-stat">
+                        <div class="industry-stat-value">2 weeks</div>
+                        <div class="industry-stat-label">Leak detection</div>
+                    </div>
+                    <div class="industry-stat">
+                        <div class="industry-stat-value">99.9%</div>
+                        <div class="industry-stat-label">Accuracy</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="industry-card">
+                <div class="industry-icon">🏗️</div>
+                <h3>Infrastructure</h3>
+                <p>Bridge structural health, building vibration analysis, tunnel integrity, and rail track condition assessment.</p>
+                <div class="industry-stats">
+                    <div class="industry-stat">
+                        <div class="industry-stat-value">200+</div>
+                        <div class="industry-stat-label">Bridges monitored</div>
+                    </div>
+                    <div class="industry-stat">
+                        <div class="industry-stat-value">40%</div>
+                        <div class="industry-stat-label">Failures prevented</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="industry-card">
+                <div class="industry-icon">🏥</div>
+                <h3>Healthcare</h3>
+                <p>Heart sound analysis, lung monitoring, joint health assessment, and laboratory equipment tracking.</p>
+                <div class="industry-stats">
+                    <div class="industry-stat">
+                        <div class="industry-stat-value">FDA</div>
+                        <div class="industry-stat-label">Clearance path</div>
+                    </div>
+                    <div class="industry-stat">
+                        <div class="industry-stat-value">92%</div>
+                        <div class="industry-stat-label">Murmur detection</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="industry-card">
+                <div class="industry-icon">🖥️</div>
+                <h3>Data Centers</h3>
+                <p>Hard drive failure prediction, HVAC monitoring, server fan health, and UPS equipment diagnostics.</p>
+                <div class="industry-stats">
+                    <div class="industry-stat">
+                        <div class="industry-stat-value">14 days</div>
+                        <div class="industry-stat-label">CRAC prediction</div>
+                    </div>
+                    <div class="industry-stat">
+                        <div class="industry-stat-value">99.999%</div>
+                        <div class="industry-stat-label">Uptime enabled</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="industry-card">
+                <div class="industry-icon">✈️</div>
+                <h3>Aerospace</h3>
+                <p>Engine health monitoring, structural testing, helicopter rotor analysis, and component verification.</p>
+                <div class="industry-stats">
+                    <div class="industry-stat">
+                        <div class="industry-stat-value">In-flight</div>
+                        <div class="industry-stat-label">Detection</div>
+                    </div>
+                    <div class="industry-stat">
+                        <div class="industry-stat-value">$50M+</div>
+                        <div class="industry-stat-label">Incidents prevented</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ROI Calculator -->
+    <section class="roi-section" id="pricing">
+        <div class="section-header">
+            <div class="section-label">💰 ROI Calculator</div>
+            <h2 class="section-title">The Math Speaks for Itself</h2>
+            <p class="section-subtitle">Typical enterprise deployment achieves payback in 3-6 months</p>
+        </div>
+
+        <div class="roi-container">
+            <div class="roi-breakdown">
+                <div class="roi-input">
+                    <h3>Your Current Reality</h3>
+                    <div class="roi-metric">
+                        <span class="roi-metric-label">Monitored Assets</span>
+                        <span class="roi-metric-value">100</span>
+                    </div>
+                    <div class="roi-metric">
+                        <span class="roi-metric-label">Downtime Cost/Hour</span>
+                        <span class="roi-metric-value">$50,000</span>
+                    </div>
+                    <div class="roi-metric">
+                        <span class="roi-metric-label">Annual Downtime Hours</span>
+                        <span class="roi-metric-value">200</span>
+                    </div>
+                    <div class="roi-metric">
+                        <span class="roi-metric-label">Current Annual Cost</span>
+                        <span class="roi-metric-value">$10,000,000</span>
+                    </div>
+                    <div class="roi-metric">
+                        <span class="roi-metric-label">ResonanceAI Investment</span>
+                        <span class="roi-metric-value">$500,000/yr</span>
+                    </div>
+                </div>
+
+                <div class="roi-output">
+                    <div class="roi-result">15x</div>
+                    <div class="roi-result-label">Return on Investment</div>
+                    <div class="roi-savings">
+                        <div class="roi-savings-value">$7,500,000</div>
+                        <div class="roi-savings-label">Annual Net Savings</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technology Section -->
+    <section class="technology" id="technology">
+        <div class="section-header">
+            <div class="section-label">🔬 Technology</div>
+            <h2 class="section-title">Built on Breakthrough Science</h2>
+            <p class="section-subtitle">The first foundation model trained at scale for acoustic understanding</p>
+        </div>
+
+        <div class="tech-grid">
+            <div class="tech-card featured">
+                <div>
+                    <div class="tech-icon">🧠</div>
+                    <h3>ResonanceCore Foundation Model</h3>
+                    <p>10 billion parameter transformer architecture optimized for acoustic understanding. Pre-trained on 50M+ hours of industrial, medical, and environmental audio. Transfer learning enables 3-5 example adaptation.</p>
+                    <div class="tech-specs">
+                        <div class="spec-item">
+                            <div class="spec-value">10B</div>
+                            <div class="spec-label">Parameters</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-value">50M+</div>
+                            <div class="spec-label">Training Hours</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-value"><10ms</div>
+                            <div class="spec-label">Edge Inference</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-value">500K+</div>
+                            <div class="spec-label">Equipment Types</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="architecture-visual">
+                    <div class="arch-layer input">
+                        <div class="arch-label">INPUT LAYER</div>
+                        Raw Audio → Mel Spectrogram → Patch Embedding<br>
+                        Vibration → FFT → Frequency Embedding
+                    </div>
+                    <div class="arch-layer encoder">
+                        <div class="arch-label">ENCODER STACK (48 layers)</div>
+                        Temporal Attention → Frequency Attention<br>
+                        Cross-Modal Fusion → Sparse MoE (8/64)
+                    </div>
+                    <div class="arch-layer output">
+                        <div class="arch-label">TASK HEADS</div>
+                        Anomaly | Classification | RUL Prediction<br>
+                        Localization | Generation
+                    </div>
+                </div>
+            </div>
+
+            <div class="tech-card">
+                <div class="tech-icon">〰️</div>
+                <h3>AI-Native Sensors</h3>
+                <p>Purpose-built hardware with on-device ML inference. Ultra-wideband capture from 0.1Hz to 100kHz. Industrial-grade durability with 5-year battery life.</p>
+                <div class="tech-specs">
+                    <div class="spec-item">
+                        <div class="spec-value">192kHz</div>
+                        <div class="spec-label">Sample Rate</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="spec-value">120dB</div>
+                        <div class="spec-label">Dynamic Range</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tech-card">
+                <div class="tech-icon">⚡</div>
+                <h3>Edge Intelligence</h3>
+                <p>Kubernetes-native orchestration for acoustic workloads. Federated learning across fleet. 100x compression with zero signal loss.</p>
+                <div class="tech-specs">
+                    <div class="spec-item">
+                        <div class="spec-value"><10ms</div>
+                        <div class="spec-label">Latency</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="spec-value">100x</div>
+                        <div class="spec-label">Compression</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Market Section -->
+    <section class="market">
+        <div class="section-header">
+            <div class="section-label">📈 Market Opportunity</div>
+            <h2 class="section-title">$127B TAM by 2030</h2>
+            <p class="section-subtitle">Acoustic intelligence is an emerging category with no dominant platform player</p>
+        </div>
+
+        <div class="market-visual">
+            <div class="market-chart">
+                <div class="chart-bar-container">
+                    <div class="chart-bar" style="height: 60px;" data-value="$8M"></div>
+                    <div class="chart-label">Year 1</div>
+                </div>
+                <div class="chart-bar-container">
+                    <div class="chart-bar" style="height: 100px;" data-value="$32M"></div>
+                    <div class="chart-label">Year 2</div>
+                </div>
+                <div class="chart-bar-container">
+                    <div class="chart-bar" style="height: 150px;" data-value="$95M"></div>
+                    <div class="chart-label">Year 3</div>
+                </div>
+                <div class="chart-bar-container">
+                    <div class="chart-bar" style="height: 200px;" data-value="$225M"></div>
+                    <div class="chart-label">Year 4</div>
+                </div>
+                <div class="chart-bar-container">
+                    <div class="chart-bar" style="height: 260px;" data-value="$480M"></div>
+                    <div class="chart-label">Year 5</div>
+                </div>
+            </div>
+
+            <div class="market-segments">
+                <div class="segment-card">
+                    <div class="segment-value">$48B</div>
+                    <div class="segment-name">Predictive Maintenance</div>
+                    <div class="segment-cagr">28% CAGR</div>
+                </div>
+                <div class="segment-card">
+                    <div class="segment-value">$35B</div>
+                    <div class="segment-name">Industrial IoT Sensors</div>
+                    <div class="segment-cagr">12% CAGR</div>
+                </div>
+                <div class="segment-card">
+                    <div class="segment-value">$18B</div>
+                    <div class="segment-name">Infrastructure Monitoring</div>
+                    <div class="segment-cagr">22% CAGR</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section" id="demo">
+        <div class="cta-content">
+            <h2>Ready to Give Your Enterprise <span style="background: var(--gradient-1); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Superhuman Hearing</span>?</h2>
+            <p>Join the pioneers transforming sound into competitive advantage. Request a demo to see ResonanceAI in action on your equipment.</p>
+            <div class="cta-buttons">
+                <a href="mailto:founders@resonance.ai" class="cta-primary">🎯 Request Demo</a>
+                <a href="#" class="cta-secondary">📄 Download Whitepaper</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <a href="#" class="logo">
+                    <div class="logo-icon">〰️</div>
+                    ResonanceAI
+                </a>
+                <p>Transforming sound and vibration into actionable intelligence. Every machine speaks. We teach enterprises to listen.</p>
+            </div>
+
+            <div class="footer-links">
+                <h4>Platform</h4>
+                <ul>
+                    <li><a href="#">ResonanceSense</a></li>
+                    <li><a href="#">ResonanceCore</a></li>
+                    <li><a href="#">ResonanceEdge</a></li>
+                    <li><a href="#">ResonanceInsight</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-links">
+                <h4>Industries</h4>
+                <ul>
+                    <li><a href="#">Manufacturing</a></li>
+                    <li><a href="#">Oil & Gas</a></li>
+                    <li><a href="#">Healthcare</a></li>
+                    <li><a href="#">Infrastructure</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-links">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <span>© 2026 ResonanceAI. All rights reserved.</span>
+            <span>🎩 Generated by The Godfather — April 13, 2026</span>
+        </div>
+    </footer>
+
+    <script>
+        // Generate waveform bars
+        const waveformContainer = document.querySelector('.waveform-container');
+        if (waveformContainer) {
+            for (let i = 0; i < 100; i++) {
+                const bar = document.createElement('div');
+                bar.className = 'waveform-bar';
+                bar.style.animationDelay = `${Math.random() * 2}s`;
+                bar.style.animationDuration = `${0.5 + Math.random() * 1}s`;
+                waveformContainer.appendChild(bar);
+            }
+        }
+
+        // Smooth scroll for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Navbar background on scroll
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 50) {
+                nav.style.background = 'rgba(15, 15, 26, 0.95)';
+            } else {
+                nav.style.background = 'rgba(15, 15, 26, 0.8)';
+            }
+        });
+    </script>
+</body>
+</html>
