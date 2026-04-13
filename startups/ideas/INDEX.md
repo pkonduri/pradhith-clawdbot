@@ -216,6 +216,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-04-12 | Afternoon | VibeForge AI — The Enterprise Platform for AI-Generated Applications | [Playbook](2026-04-12-afternoon.md) • [Landing](2026-04-12-afternoon-landing.html) • [PDF](2026-04-12-afternoon.pdf) |
 | 2026-04-13 | Evening | SignalFlow AI — The AI Operating System for B2B Intent Intelligence & Predictive Revenue | [Playbook](2026-04-13-evening.md) • [Landing](2026-04-13-evening-landing.html) • [PDF](2026-04-13-evening.pdf) |
 | 2026-04-13 | Morning | ResonanceAI — The AI Operating System for Acoustic & Vibration Intelligence | [Playbook](2026-04-13-morning.md) • [Landing](2026-04-13-morning-landing.html) • [PDF](2026-04-13-morning.pdf) |
+| 2026-04-13 | Afternoon | QuantumBridge AI — Hybrid Quantum-Classical Computing Orchestration | [Playbook](2026-04-13-afternoon.md) • [Landing](2026-04-13-afternoon-landing.html) • [PDF](2026-04-13-afternoon.pdf) |
 <!-- New entries will be added above this line -->
 
 ---
