@@ -1,0 +1,1482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeneShield AI — Your Genes. Your Rules.</title>
+    <meta name="description" content="Take back control of your genetic data. Privacy, sovereignty, and fair compensation for your most permanent identifier.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --dna-purple: #7C3AED;
+            --dna-purple-dark: #5B21B6;
+            --dna-purple-light: #A78BFA;
+            --dna-cyan: #06B6D4;
+            --dna-cyan-dark: #0891B2;
+            --dna-green: #10B981;
+            --dna-red: #EF4444;
+            --dna-gold: #F59E0B;
+            --bg-dark: #0A0A0F;
+            --bg-card: #12121A;
+            --bg-elevated: #1A1A25;
+            --text-primary: #FFFFFF;
+            --text-secondary: #A1A1AA;
+            --text-muted: #71717A;
+            --border-subtle: rgba(124, 58, 237, 0.2);
+            --glow-purple: rgba(124, 58, 237, 0.4);
+            --glow-cyan: rgba(6, 182, 212, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* DNA Helix Animation Background */
+        .dna-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .dna-strand {
+            position: absolute;
+            width: 4px;
+            height: 100%;
+            opacity: 0.15;
+        }
+
+        .dna-strand::before,
+        .dna-strand::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 20px;
+            background: linear-gradient(90deg, var(--dna-purple), var(--dna-cyan));
+            border-radius: 50%;
+            animation: dnaFloat 3s ease-in-out infinite;
+        }
+
+        .dna-strand::after {
+            animation-delay: -1.5s;
+        }
+
+        @keyframes dnaFloat {
+            0%, 100% { transform: translateX(-20px); }
+            50% { transform: translateX(20px); }
+        }
+
+        .dna-strand:nth-child(1) { left: 5%; animation-delay: 0s; }
+        .dna-strand:nth-child(2) { left: 15%; animation-delay: -0.5s; }
+        .dna-strand:nth-child(3) { left: 25%; animation-delay: -1s; }
+        .dna-strand:nth-child(4) { left: 75%; animation-delay: -1.5s; }
+        .dna-strand:nth-child(5) { left: 85%; animation-delay: -2s; }
+        .dna-strand:nth-child(6) { left: 95%; animation-delay: -2.5s; }
+
+        /* Gradient orbs */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(100px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .orb-1 {
+            width: 600px;
+            height: 600px;
+            background: var(--glow-purple);
+            top: -200px;
+            right: -200px;
+            animation: orbFloat 20s ease-in-out infinite;
+        }
+
+        .orb-2 {
+            width: 500px;
+            height: 500px;
+            background: var(--glow-cyan);
+            bottom: -150px;
+            left: -150px;
+            animation: orbFloat 25s ease-in-out infinite reverse;
+        }
+
+        @keyframes orbFloat {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(50px, 30px) scale(1.1); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1.5rem 2rem;
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 800;
+            font-size: 1.5rem;
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+
+        .logo-icon {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, var(--dna-purple), var(--dna-cyan));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 0 30px var(--glow-purple);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .nav-cta {
+            background: linear-gradient(135deg, var(--dna-purple), var(--dna-purple-dark));
+            color: white;
+            padding: 0.75rem 1.75rem;
+            border-radius: 10px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            box-shadow: 0 4px 20px var(--glow-purple);
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 30px var(--glow-purple);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 2rem 4rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-content {
+            max-width: 1000px;
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(124, 58, 237, 0.15);
+            border: 1px solid var(--border-subtle);
+            padding: 0.5rem 1.25rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            color: var(--dna-purple-light);
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .hero-badge-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--dna-green);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 5.5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.8s ease-out 0.1s both;
+        }
+
+        .hero h1 .gradient-text {
+            background: linear-gradient(135deg, var(--dna-purple-light), var(--dna-cyan), var(--dna-purple-light));
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientFlow 4s linear infinite;
+        }
+
+        @keyframes gradientFlow {
+            0% { background-position: 0% center; }
+            100% { background-position: 200% center; }
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto 3rem;
+            line-height: 1.6;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        .hero-cta-group {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.8s ease-out 0.3s both;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--dna-purple), var(--dna-purple-dark));
+            color: white;
+            padding: 1.1rem 2.5rem;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: all 0.3s;
+            box-shadow: 0 8px 40px var(--glow-purple);
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 50px var(--glow-purple);
+        }
+
+        .btn-secondary {
+            background: var(--bg-card);
+            color: var(--text-primary);
+            padding: 1.1rem 2.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: all 0.3s;
+            border: 1px solid var(--border-subtle);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-elevated);
+            border-color: var(--dna-purple);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Stats Section */
+        .stats-section {
+            padding: 2rem 2rem 6rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .stats-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--dna-purple);
+            box-shadow: 0 20px 40px rgba(124, 58, 237, 0.15);
+        }
+
+        .stat-value {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--dna-purple-light), var(--dna-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Problem Section */
+        .problem-section {
+            padding: 8rem 2rem;
+            position: relative;
+            z-index: 1;
+            background: linear-gradient(180deg, transparent, rgba(239, 68, 68, 0.03), transparent);
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 4rem;
+        }
+
+        .section-label {
+            display: inline-block;
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--dna-red);
+            padding: 0.5rem 1.25rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .section-label.purple {
+            background: rgba(124, 58, 237, 0.15);
+            color: var(--dna-purple-light);
+        }
+
+        .section-label.green {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--dna-green);
+        }
+
+        .section-label.gold {
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--dna-gold);
+        }
+
+        .section-label.cyan {
+            background: rgba(6, 182, 212, 0.15);
+            color: var(--dna-cyan);
+        }
+
+        .section-header h2 {
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .section-header p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+        }
+
+        .problem-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .problem-card {
+            background: var(--bg-card);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 24px;
+            padding: 2.5rem;
+            transition: all 0.3s;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--dna-red);
+        }
+
+        .problem-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(239, 68, 68, 0.15);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .problem-card h3 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .problem-card p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        /* Solution Section */
+        .solution-section {
+            padding: 8rem 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .solution-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .solution-visual {
+            position: relative;
+        }
+
+        .shield-graphic {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, var(--bg-card), var(--bg-elevated));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            border: 2px solid var(--border-subtle);
+        }
+
+        .shield-graphic::before {
+            content: '';
+            position: absolute;
+            inset: -20px;
+            border-radius: 50%;
+            border: 2px dashed var(--dna-purple);
+            opacity: 0.3;
+            animation: rotate 30s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .shield-icon {
+            font-size: 8rem;
+            filter: drop-shadow(0 0 50px var(--glow-purple));
+        }
+
+        .solution-content h2 {
+            font-size: 2.75rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .solution-content p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            line-height: 1.7;
+        }
+
+        .solution-features {
+            list-style: none;
+        }
+
+        .solution-features li {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1.25rem;
+            font-size: 1.1rem;
+        }
+
+        .feature-check {
+            width: 28px;
+            height: 28px;
+            background: rgba(16, 185, 129, 0.2);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--dna-green);
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        /* Features Section */
+        .features-section {
+            padding: 8rem 2rem;
+            position: relative;
+            z-index: 1;
+            background: linear-gradient(180deg, transparent, rgba(124, 58, 237, 0.03), transparent);
+        }
+
+        .features-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 24px;
+            padding: 2.5rem;
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--dna-purple), var(--dna-cyan));
+            transform: scaleX(0);
+            transition: transform 0.4s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--dna-purple);
+            box-shadow: 0 25px 50px rgba(124, 58, 237, 0.2);
+        }
+
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.2), rgba(6, 182, 212, 0.2));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        /* How It Works */
+        .how-section {
+            padding: 8rem 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .how-timeline {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .how-timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(180deg, var(--dna-purple), var(--dna-cyan), var(--dna-green));
+            border-radius: 2px;
+        }
+
+        .how-step {
+            display: flex;
+            align-items: center;
+            gap: 4rem;
+            margin-bottom: 4rem;
+            position: relative;
+        }
+
+        .how-step:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .how-step-content {
+            flex: 1;
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 20px;
+            padding: 2rem;
+        }
+
+        .how-step-number {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--dna-purple), var(--dna-cyan));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 800;
+            flex-shrink: 0;
+            box-shadow: 0 0 30px var(--glow-purple);
+            z-index: 1;
+        }
+
+        .how-step h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .how-step p {
+            color: var(--text-secondary);
+        }
+
+        /* Pricing Section */
+        .pricing-section {
+            padding: 8rem 2rem;
+            position: relative;
+            z-index: 1;
+            background: linear-gradient(180deg, transparent, rgba(6, 182, 212, 0.03), transparent);
+        }
+
+        .pricing-grid {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .pricing-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 24px;
+            padding: 2.5rem;
+            text-align: center;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .pricing-card.featured {
+            border-color: var(--dna-purple);
+            transform: scale(1.05);
+            box-shadow: 0 25px 60px rgba(124, 58, 237, 0.25);
+        }
+
+        .pricing-card.featured::before {
+            content: 'MOST POPULAR';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--dna-purple), var(--dna-cyan));
+            color: white;
+            padding: 0.4rem 1.25rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+        }
+
+        .pricing-card:hover:not(.featured) {
+            transform: translateY(-5px);
+            border-color: var(--dna-purple);
+        }
+
+        .pricing-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .pricing-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-price {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 0.25rem;
+        }
+
+        .pricing-price span {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .pricing-desc {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .pricing-features {
+            list-style: none;
+            text-align: left;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-features li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .pricing-features li::before {
+            content: '✓';
+            color: var(--dna-green);
+            font-weight: 700;
+        }
+
+        .pricing-cta {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .pricing-card.featured .pricing-cta {
+            background: linear-gradient(135deg, var(--dna-purple), var(--dna-purple-dark));
+            color: white;
+            box-shadow: 0 4px 20px var(--glow-purple);
+        }
+
+        .pricing-card:not(.featured) .pricing-cta {
+            background: var(--bg-elevated);
+            color: var(--text-primary);
+            border: 1px solid var(--border-subtle);
+        }
+
+        .pricing-cta:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Testimonials */
+        .testimonials-section {
+            padding: 8rem 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .testimonials-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .testimonial-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 24px;
+            padding: 2rem;
+        }
+
+        .testimonial-quote {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+            font-style: italic;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .testimonial-avatar {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--dna-purple), var(--dna-cyan));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+
+        .testimonial-info h4 {
+            font-weight: 600;
+        }
+
+        .testimonial-info p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 8rem 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, var(--dna-purple-dark), var(--dna-purple));
+            border-radius: 32px;
+            padding: 5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-container::before {
+            content: '🧬';
+            position: absolute;
+            font-size: 15rem;
+            opacity: 0.1;
+            right: -3rem;
+            top: -3rem;
+        }
+
+        .cta-container h2 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-container p {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto 2.5rem;
+        }
+
+        .cta-input-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cta-input-group input {
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            border: none;
+            font-size: 1rem;
+            width: 300px;
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            backdrop-filter: blur(10px);
+        }
+
+        .cta-input-group input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .cta-input-group button {
+            background: white;
+            color: var(--dna-purple-dark);
+            padding: 1rem 2.5rem;
+            border-radius: 12px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .cta-input-group button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 2rem;
+            background: var(--bg-card);
+            border-top: 1px solid var(--border-subtle);
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .footer-brand span {
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .footer-copy {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 1024px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .problem-grid,
+            .features-grid,
+            .testimonials-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .solution-grid {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .pricing-grid {
+                grid-template-columns: 1fr;
+                max-width: 400px;
+            }
+
+            .pricing-card.featured {
+                transform: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.1rem;
+            }
+
+            .stats-grid,
+            .problem-grid,
+            .features-grid,
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .how-timeline::before {
+                left: 30px;
+            }
+
+            .how-step,
+            .how-step:nth-child(even) {
+                flex-direction: column;
+                align-items: flex-start;
+                padding-left: 80px;
+            }
+
+            .how-step-number {
+                position: absolute;
+                left: 0;
+            }
+
+            .cta-container {
+                padding: 3rem 2rem;
+            }
+
+            .cta-container h2 {
+                font-size: 2rem;
+            }
+
+            .cta-input-group {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .cta-input-group input {
+                width: 100%;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- DNA Background Animation -->
+    <div class="dna-background">
+        <div class="dna-strand"></div>
+        <div class="dna-strand"></div>
+        <div class="dna-strand"></div>
+        <div class="dna-strand"></div>
+        <div class="dna-strand"></div>
+        <div class="dna-strand"></div>
+    </div>
+
+    <!-- Gradient Orbs -->
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-content">
+            <a href="#" class="logo">
+                <div class="logo-icon">🧬</div>
+                GeneShield
+            </a>
+            <ul class="nav-links">
+                <li><a href="#problem">Problem</a></li>
+                <li><a href="#solution">Solution</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+            </ul>
+            <a href="#cta" class="nav-cta">Protect My DNA</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <div class="hero-badge-dot"></div>
+                Genetic Privacy Crisis — 100M+ Records Exposed
+            </div>
+            <h1>
+                <span class="gradient-text">Your Genes.</span><br>
+                Your Rules.
+            </h1>
+            <p class="hero-subtitle">
+                Take back control of your genetic data. The only platform that gives you true ownership, privacy protection, and fair compensation for your most permanent identifier.
+            </p>
+            <div class="hero-cta-group">
+                <a href="#cta" class="btn-primary">
+                    🛡️ Start Protecting Now
+                </a>
+                <a href="#solution" class="btn-secondary">
+                    See How It Works →
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">100M+</div>
+                <div class="stat-label">People with DNA data in commercial databases</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">15M</div>
+                <div class="stat-label">Records leaked in genetic data breaches</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">∞</div>
+                <div class="stat-label">Years your genetic data can be exploited</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">0</div>
+                <div class="stat-label">Control most people have over their DNA data</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="problem-section" id="problem">
+        <div class="section-header">
+            <span class="section-label">The Problem</span>
+            <h2>Your DNA Is Forever — And It's Already Out There</h2>
+            <p>Unlike passwords or credit cards, genetic data cannot be changed once exposed. The risks are permanent and growing.</p>
+        </div>
+        <div class="problem-grid">
+            <div class="problem-card">
+                <div class="problem-icon">💔</div>
+                <h3>23andMe's Bankruptcy Wake-Up</h3>
+                <p>When genetic testing companies fail, your DNA becomes an asset to be sold to the highest bidder. Millions of profiles now at risk.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">🏥</div>
+                <h3>Insurance Discrimination</h3>
+                <p>Life, disability, and long-term care insurers increasingly want genetic data. GINA has major gaps that leave you vulnerable.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">👨‍👩‍👧‍👦</div>
+                <h3>Family Exposure</h3>
+                <p>Your DNA reveals information about relatives who never consented. One family member's choice can expose the entire family.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">🤖</div>
+                <h3>AI Inference Power</h3>
+                <p>AI can now predict health conditions, traits, and identities from minimal genetic data. The risks grow every day.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">👮</div>
+                <h3>Law Enforcement Overreach</h3>
+                <p>Genetic genealogy databases used without proper warrants. Your DNA could connect you to distant relatives' activities.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">❓</div>
+                <h3>Unknown Future Risks</h3>
+                <p>What will AI infer from DNA in 10 years? Data you share today could be exploited in ways we can't yet imagine.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="solution-section" id="solution">
+        <div class="solution-grid">
+            <div class="solution-visual">
+                <div class="shield-graphic">
+                    <div class="shield-icon">🛡️</div>
+                </div>
+            </div>
+            <div class="solution-content">
+                <span class="section-label green">The Solution</span>
+                <h2>GeneShield AI: True Genetic Data Sovereignty</h2>
+                <p>
+                    The Plaid for genetic data — giving you complete control, military-grade protection, and the ability to benefit from your data on your terms.
+                </p>
+                <ul class="solution-features">
+                    <li>
+                        <span class="feature-check">✓</span>
+                        <span><strong>Secure Vault:</strong> Your genetic data encrypted and sharded across multiple jurisdictions</span>
+                    </li>
+                    <li>
+                        <span class="feature-check">✓</span>
+                        <span><strong>Exposure Scanner:</strong> Dark web monitoring and breach detection for your genetic profile</span>
+                    </li>
+                    <li>
+                        <span class="feature-check">✓</span>
+                        <span><strong>Zero-Knowledge Proofs:</strong> Share genetic attributes without revealing raw data</span>
+                    </li>
+                    <li>
+                        <span class="feature-check">✓</span>
+                        <span><strong>Rights Management:</strong> Automated deletion requests and consent tracking</span>
+                    </li>
+                    <li>
+                        <span class="feature-check">✓</span>
+                        <span><strong>Compensated Sharing:</strong> Earn from research participation — your data, your earnings</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section" id="features">
+        <div class="section-header">
+            <span class="section-label purple">Platform Features</span>
+            <h2>Complete Genetic Privacy Protection</h2>
+            <p>Everything you need to take back control of your most sensitive data.</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🔐</div>
+                <h3>Genetic Data Vault</h3>
+                <p>Military-grade encryption with data sharding across jurisdictions. No single point of compromise. Your keys, your data.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🌐</div>
+                <h3>Dark Web Monitoring</h3>
+                <p>Continuous scanning for your genetic data in breaches, markets, and leaked databases. Instant alerts when exposure detected.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔍</div>
+                <h3>Inference Attack Detection</h3>
+                <p>AI monitors for patterns suggesting reconstruction attempts. Automatic protective measures when threats detected.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📜</div>
+                <h3>Automated Rights Requests</h3>
+                <p>One-click deletion requests to GDPR, CCPA, and beyond. Track compliance and escalate automatically.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">👨‍👩‍👧</div>
+                <h3>Family Network Protection</h3>
+                <p>See how relatives' sharing exposes you. Coordinate family-wide genetic privacy with shared controls.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💰</div>
+                <h3>Research Marketplace</h3>
+                <p>Opt-in to share data for research with full consent management and fair compensation. Your data works for you.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-section">
+        <div class="section-header">
+            <span class="section-label cyan">How It Works</span>
+            <h2>Protection in Three Steps</h2>
+            <p>From vulnerable to sovereign in minutes.</p>
+        </div>
+        <div class="how-timeline">
+            <div class="how-step">
+                <div class="how-step-content">
+                    <h3>Connect Your Data</h3>
+                    <p>Import genetic data from any source — 23andMe, Ancestry, clinical tests, or raw files. We secure it immediately with end-to-end encryption.</p>
+                </div>
+                <div class="how-step-number">1</div>
+            </div>
+            <div class="how-step">
+                <div class="how-step-content">
+                    <h3>Scan & Protect</h3>
+                    <p>Our AI scans for existing exposure, monitors the dark web, and creates protective measures. Understand your risk and start reducing it.</p>
+                </div>
+                <div class="how-step-number">2</div>
+            </div>
+            <div class="how-step">
+                <div class="how-step-content">
+                    <h3>Control & Benefit</h3>
+                    <p>Manage who has your data, automate deletion requests, and optionally earn from consented research participation.</p>
+                </div>
+                <div class="how-step-number">3</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="pricing-section" id="pricing">
+        <div class="section-header">
+            <span class="section-label gold">Pricing</span>
+            <h2>Protect What Matters Most</h2>
+            <p>Plans for individuals and families. Enterprise solutions available.</p>
+        </div>
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <div class="pricing-icon">🛡️</div>
+                <h3 class="pricing-name">Basic</h3>
+                <div class="pricing-price">Free</div>
+                <p class="pricing-desc">Essential protection</p>
+                <ul class="pricing-features">
+                    <li>Basic genetic vault (1 profile)</li>
+                    <li>Known breach monitoring</li>
+                    <li>Educational resources</li>
+                    <li>Community support</li>
+                </ul>
+                <button class="pricing-cta">Get Started Free</button>
+            </div>
+            <div class="pricing-card featured">
+                <div class="pricing-icon">⚡</div>
+                <h3 class="pricing-name">Premium</h3>
+                <div class="pricing-price">$14.99<span>/mo</span></div>
+                <p class="pricing-desc">Complete individual protection</p>
+                <ul class="pricing-features">
+                    <li>Unlimited genetic data storage</li>
+                    <li>Dark web monitoring & alerts</li>
+                    <li>Automated deletion requests</li>
+                    <li>Zero-knowledge proofs</li>
+                    <li>Research marketplace access</li>
+                    <li>Priority support</li>
+                </ul>
+                <button class="pricing-cta">Start 14-Day Trial</button>
+            </div>
+            <div class="pricing-card">
+                <div class="pricing-icon">👨‍👩‍👧‍👦</div>
+                <h3 class="pricing-name">Family</h3>
+                <div class="pricing-price">$29.99<span>/mo</span></div>
+                <p class="pricing-desc">Protect your whole family</p>
+                <ul class="pricing-features">
+                    <li>Up to 10 family members</li>
+                    <li>Cross-family exposure analysis</li>
+                    <li>Inheritance planning</li>
+                    <li>Family genetic counselor</li>
+                    <li>Coordinated protection</li>
+                    <li>Premium support</li>
+                </ul>
+                <button class="pricing-cta">Protect Your Family</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials-section">
+        <div class="section-header">
+            <span class="section-label purple">Testimonials</span>
+            <h2>Trusted by Privacy-Conscious Individuals</h2>
+        </div>
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <p class="testimonial-quote">"After 23andMe's bankruptcy news, I was terrified. GeneShield gave me peace of mind and actual control over my data for the first time."</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">SK</div>
+                    <div class="testimonial-info">
+                        <h4>Sarah K.</h4>
+                        <p>Early Adopter</p>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <p class="testimonial-quote">"I'm a genetic counselor and I recommend GeneShield to all my patients. Finally a platform that treats genetic data with the respect it deserves."</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">DR</div>
+                    <div class="testimonial-info">
+                        <h4>Dr. Rachel M.</h4>
+                        <p>Genetic Counselor</p>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <p class="testimonial-quote">"The family plan was perfect for us. Now we coordinate our genetic privacy as a family instead of one person's test exposing everyone."</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">JT</div>
+                    <div class="testimonial-info">
+                        <h4>James T.</h4>
+                        <p>Family Plan User</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section" id="cta">
+        <div class="cta-container">
+            <h2>Your DNA Survived Millions of Years</h2>
+            <p>Don't let it be exploited by corporations. Take back control of your genetic identity today.</p>
+            <div class="cta-input-group">
+                <input type="email" placeholder="Enter your email">
+                <button>Get Early Access</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <div class="logo-icon" style="width: 36px; height: 36px; font-size: 1.2rem;">🧬</div>
+                <span>GeneShield AI</span>
+            </div>
+            <ul class="footer-links">
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">Terms of Service</a></li>
+                <li><a href="#">Security</a></li>
+                <li><a href="#">Blog</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+            <p class="footer-copy">© 2026 GeneShield AI. Your Genes. Your Rules.</p>
+        </div>
+    </footer>
+</body>
+</html>
