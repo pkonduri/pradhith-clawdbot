@@ -1,0 +1,1235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SenseOS — The Operating System for Spatial Intelligence</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #a855f7;
+            --accent: #06b6d4;
+            --dark: #0f0f1a;
+            --darker: #07070d;
+            --light: #f8fafc;
+            --gray: #94a3b8;
+            --card-bg: rgba(15, 15, 26, 0.8);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--darker);
+            color: var(--light);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+        
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .grid-overlay {
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            background-image: 
+                linear-gradient(rgba(99, 102, 241, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridMove 30s linear infinite;
+            transform: perspective(1000px) rotateX(60deg);
+        }
+        
+        @keyframes gridMove {
+            0% { transform: perspective(1000px) rotateX(60deg) translateY(0); }
+            100% { transform: perspective(1000px) rotateX(60deg) translateY(60px); }
+        }
+        
+        .floating-shapes {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+            animation: float 20s ease-in-out infinite;
+        }
+        
+        .shape-1 {
+            width: 600px;
+            height: 600px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            top: -200px;
+            right: -200px;
+            animation-delay: 0s;
+        }
+        
+        .shape-2 {
+            width: 500px;
+            height: 500px;
+            background: linear-gradient(135deg, var(--accent), var(--primary));
+            bottom: -150px;
+            left: -150px;
+            animation-delay: -7s;
+        }
+        
+        .shape-3 {
+            width: 400px;
+            height: 400px;
+            background: linear-gradient(135deg, var(--secondary), var(--accent));
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation-delay: -14s;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(30px, -30px) scale(1.05); }
+            50% { transform: translate(-20px, 20px) scale(0.95); }
+            75% { transform: translate(-30px, -20px) scale(1.02); }
+        }
+        
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1.5rem 2rem;
+            background: rgba(7, 7, 13, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(99, 102, 241, 0.1);
+        }
+        
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            -webkit-text-fill-color: white;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            color: var(--gray);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--light);
+        }
+        
+        .btn {
+            padding: 0.75rem 1.75rem;
+            border-radius: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 30px rgba(99, 102, 241, 0.5);
+        }
+        
+        .btn-outline {
+            border: 2px solid rgba(99, 102, 241, 0.5);
+            color: var(--light);
+            background: transparent;
+        }
+        
+        .btn-outline:hover {
+            background: rgba(99, 102, 241, 0.1);
+            border-color: var(--primary);
+        }
+        
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 2rem 4rem;
+            position: relative;
+        }
+        
+        .hero-content {
+            max-width: 900px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(99, 102, 241, 0.15);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 100px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--primary);
+            margin-bottom: 2rem;
+        }
+        
+        .badge-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+        
+        h1 {
+            font-size: clamp(3rem, 8vw, 5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.03em;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, var(--light) 0%, var(--primary) 50%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--gray);
+            margin-bottom: 3rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 4rem;
+        }
+        
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 3rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--gray);
+            margin-top: 0.25rem;
+        }
+        
+        /* 3D Headset Visual */
+        .hero-visual {
+            position: absolute;
+            top: 50%;
+            right: -200px;
+            transform: translateY(-50%);
+            width: 500px;
+            height: 500px;
+            opacity: 0.3;
+        }
+        
+        .headset-ring {
+            position: absolute;
+            border: 2px solid var(--primary);
+            border-radius: 50%;
+            animation: rotate3d 20s linear infinite;
+        }
+        
+        .ring-1 {
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+        }
+        
+        .ring-2 {
+            width: 80%;
+            height: 80%;
+            top: 10%;
+            left: 10%;
+            animation-direction: reverse;
+            border-color: var(--secondary);
+        }
+        
+        .ring-3 {
+            width: 60%;
+            height: 60%;
+            top: 20%;
+            left: 20%;
+            border-color: var(--accent);
+        }
+        
+        @keyframes rotate3d {
+            0% { transform: rotateX(60deg) rotateZ(0deg); }
+            100% { transform: rotateX(60deg) rotateZ(360deg); }
+        }
+        
+        /* Problem Section */
+        .section {
+            padding: 8rem 2rem;
+            position: relative;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        
+        .section-title {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+        
+        .section-subtitle {
+            font-size: 1.25rem;
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+        
+        .problem-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            padding: 2.5rem;
+            backdrop-filter: blur(20px);
+            transition: all 0.4s;
+        }
+        
+        .problem-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(239, 68, 68, 0.3);
+            box-shadow: 0 20px 60px rgba(239, 68, 68, 0.1);
+        }
+        
+        .problem-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(239, 68, 68, 0.1));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .problem-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #ef4444;
+        }
+        
+        .problem-card p {
+            color: var(--gray);
+            line-height: 1.7;
+        }
+        
+        /* Solution Section */
+        .solution {
+            background: linear-gradient(180deg, transparent, rgba(99, 102, 241, 0.05), transparent);
+        }
+        
+        .solution-showcase {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+        
+        .solution-features {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+        
+        .feature {
+            display: flex;
+            gap: 1.5rem;
+            align-items: flex-start;
+        }
+        
+        .feature-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+        
+        .feature h4 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .feature p {
+            color: var(--gray);
+        }
+        
+        .code-window {
+            background: var(--dark);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 30px 100px rgba(0, 0, 0, 0.5);
+        }
+        
+        .code-header {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .code-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        
+        .code-dot.red { background: #ef4444; }
+        .code-dot.yellow { background: #eab308; }
+        .code-dot.green { background: #22c55e; }
+        
+        .code-body {
+            padding: 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
+            line-height: 1.8;
+            overflow-x: auto;
+        }
+        
+        .code-line {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .line-number {
+            color: #4b5563;
+            user-select: none;
+            min-width: 2ch;
+        }
+        
+        .code-content {
+            color: #e5e7eb;
+        }
+        
+        .code-keyword { color: #c084fc; }
+        .code-string { color: #34d399; }
+        .code-function { color: #60a5fa; }
+        .code-comment { color: #6b7280; font-style: italic; }
+        .code-property { color: #fbbf24; }
+        
+        /* Architecture Section */
+        .architecture-visual {
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 3rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .arch-layers {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .arch-layer {
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 16px;
+            padding: 1.5rem 2rem;
+            text-align: center;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .arch-layer:hover {
+            background: rgba(99, 102, 241, 0.2);
+            transform: scale(1.02);
+        }
+        
+        .arch-layer.app {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.3), rgba(168, 85, 247, 0.3));
+        }
+        
+        .arch-layer.os {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            font-size: 1.25rem;
+            padding: 2rem;
+        }
+        
+        .arch-layer.hardware {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            background: rgba(6, 182, 212, 0.1);
+            border-color: rgba(6, 182, 212, 0.3);
+        }
+        
+        .hardware-badge {
+            background: rgba(6, 182, 212, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 100px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        
+        /* Pricing Section */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+        
+        .pricing-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            padding: 3rem;
+            backdrop-filter: blur(20px);
+            transition: all 0.4s;
+            position: relative;
+        }
+        
+        .pricing-card.featured {
+            border-color: var(--primary);
+            transform: scale(1.05);
+        }
+        
+        .pricing-card.featured::before {
+            content: 'Most Popular';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            padding: 0.5rem 1.5rem;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .pricing-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .pricing-card.featured:hover {
+            transform: scale(1.05) translateY(-5px);
+        }
+        
+        .pricing-tier {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--gray);
+            margin-bottom: 1rem;
+        }
+        
+        .pricing-price {
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+        }
+        
+        .pricing-period {
+            color: var(--gray);
+            margin-bottom: 2rem;
+        }
+        
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+        
+        .pricing-features li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .pricing-features li::before {
+            content: '✓';
+            color: var(--accent);
+            font-weight: bold;
+        }
+        
+        .pricing-card .btn {
+            width: 100%;
+            justify-content: center;
+        }
+        
+        /* Market Section */
+        .market-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+        
+        .market-stat {
+            text-align: center;
+            padding: 2.5rem;
+            background: var(--card-bg);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .market-stat-value {
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+        
+        .market-stat-label {
+            color: var(--gray);
+            font-size: 1rem;
+        }
+        
+        /* Use Cases Section */
+        .use-cases {
+            background: linear-gradient(180deg, transparent, rgba(168, 85, 247, 0.05), transparent);
+        }
+        
+        .use-case-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+        
+        .use-case-card {
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 2.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.4s;
+        }
+        
+        .use-case-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(168, 85, 247, 0.3);
+        }
+        
+        .use-case-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .use-case-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .use-case-card p {
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+        }
+        
+        .use-case-benefits {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .benefit-tag {
+            background: rgba(99, 102, 241, 0.15);
+            padding: 0.5rem 1rem;
+            border-radius: 100px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--primary);
+        }
+        
+        /* CTA Section */
+        .cta {
+            text-align: center;
+            padding: 10rem 2rem;
+            position: relative;
+        }
+        
+        .cta-glow {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.3), transparent 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+        }
+        
+        .cta h2 {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .cta p {
+            font-size: 1.25rem;
+            color: var(--gray);
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Footer */
+        footer {
+            padding: 4rem 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .footer-links a {
+            color: var(--gray);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: var(--light);
+        }
+        
+        .footer-copy {
+            color: var(--gray);
+            font-size: 0.875rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .solution-showcase {
+                grid-template-columns: 1fr;
+            }
+            
+            .market-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .use-case-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero-stats {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            
+            .market-stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .pricing-card.featured {
+                transform: none;
+            }
+            
+            .pricing-card.featured:hover {
+                transform: translateY(-5px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation">
+        <div class="grid-overlay"></div>
+        <div class="floating-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+        </div>
+    </div>
+    
+    <nav>
+        <div class="nav-content">
+            <div class="logo">
+                <div class="logo-icon">👁️</div>
+                SenseOS
+            </div>
+            <div class="nav-links">
+                <a href="#solution">Platform</a>
+                <a href="#use-cases">Use Cases</a>
+                <a href="#pricing">Pricing</a>
+                <a href="#market">Market</a>
+                <a href="#cta" class="btn btn-primary">Get Early Access</a>
+            </div>
+        </div>
+    </nav>
+    
+    <section class="hero">
+        <div class="hero-content">
+            <div class="badge">
+                <div class="badge-dot"></div>
+                The Future of Spatial Computing
+            </div>
+            <h1>
+                <span class="gradient-text">Build Once.</span><br>
+                Deploy Everywhere.
+            </h1>
+            <p class="hero-subtitle">
+                The unified operating system for spatial computing. Build AI-powered AR/VR/MR experiences that run on every headset — Vision Pro, Quest, HoloLens, and beyond.
+            </p>
+            <div class="hero-buttons">
+                <a href="#cta" class="btn btn-primary">
+                    🚀 Request Early Access
+                </a>
+                <a href="#solution" class="btn btn-outline">
+                    📖 View Documentation
+                </a>
+            </div>
+            <div class="hero-stats">
+                <div class="stat">
+                    <div class="stat-value">$104B</div>
+                    <div class="stat-label">Market by 2028</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">45%</div>
+                    <div class="stat-label">Annual Growth</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">5x</div>
+                    <div class="stat-label">Faster Development</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="section" id="problem">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">The Spatial Computing Crisis</h2>
+                <p class="section-subtitle">
+                    Building for spatial computing today is like building for mobile before iOS
+                </p>
+            </div>
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="problem-icon">🔀</div>
+                    <h3>Device Fragmentation</h3>
+                    <p>Vision Pro, Quest, HoloLens, Magic Leap — each requires different SDKs, different development paradigms, and separate codebases. Building the same app 4-5 times is insane.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">🧠</div>
+                    <h3>No AI-Native Platform</h3>
+                    <p>Spatial computing IS AI — real-time environment understanding, object recognition, hand tracking. Every developer rebuilds these capabilities from scratch.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">🏢</div>
+                    <h3>Enterprise Nightmare</h3>
+                    <p>No MDM. No analytics. No compliance controls. Companies want to deploy spatial apps but lack enterprise-grade deployment and management tools.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="section solution" id="solution">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Introducing SenseOS</h2>
+                <p class="section-subtitle">
+                    The complete operating system layer for spatial computing
+                </p>
+            </div>
+            <div class="solution-showcase">
+                <div class="solution-features">
+                    <div class="feature">
+                        <div class="feature-icon">🎯</div>
+                        <div>
+                            <h4>Spatial Core — Write Once, Deploy Everywhere</h4>
+                            <p>Unified API for all spatial interactions. One codebase deploys to Vision Pro, Quest, HoloLens, and any future device.</p>
+                        </div>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">🤖</div>
+                        <div>
+                            <h4>AI Engine — Built-In Intelligence</h4>
+                            <p>Pre-trained models for scene understanding, object recognition, spatial reasoning. No ML expertise required.</p>
+                        </div>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">👥</div>
+                        <div>
+                            <h4>Multi-User Infrastructure</h4>
+                            <p>Real-time spatial synchronization, persistent shared spaces, cross-platform multiplayer out of the box.</p>
+                        </div>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">🔒</div>
+                        <div>
+                            <h4>Enterprise Management Console</h4>
+                            <p>Fleet management, deployment controls, analytics, compliance (SOC 2, HIPAA). Enterprise-grade from day one.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="code-window">
+                    <div class="code-header">
+                        <div class="code-dot red"></div>
+                        <div class="code-dot yellow"></div>
+                        <div class="code-dot green"></div>
+                    </div>
+                    <div class="code-body">
+                        <div class="code-line"><span class="line-number">1</span><span class="code-content"><span class="code-comment">// Build for every headset with one codebase</span></span></div>
+                        <div class="code-line"><span class="line-number">2</span><span class="code-content"><span class="code-keyword">import</span> { SpatialScene, Anchor } <span class="code-keyword">from</span> <span class="code-string">'@senseos/core'</span>;</span></div>
+                        <div class="code-line"><span class="line-number">3</span><span class="code-content"></span></div>
+                        <div class="code-line"><span class="line-number">4</span><span class="code-content"><span class="code-keyword">const</span> app = <span class="code-keyword">new</span> <span class="code-function">SpatialScene</span>({</span></div>
+                        <div class="code-line"><span class="line-number">5</span><span class="code-content">  <span class="code-property">target</span>: <span class="code-string">'all'</span>, <span class="code-comment">// Vision Pro, Quest, HoloLens</span></span></div>
+                        <div class="code-line"><span class="line-number">6</span><span class="code-content">  <span class="code-property">quality</span>: <span class="code-string">'adaptive'</span></span></div>
+                        <div class="code-line"><span class="line-number">7</span><span class="code-content">});</span></div>
+                        <div class="code-line"><span class="line-number">8</span><span class="code-content"></span></div>
+                        <div class="code-line"><span class="line-number">9</span><span class="code-content">app.<span class="code-function">createAnchor</span>({</span></div>
+                        <div class="code-line"><span class="line-number">10</span><span class="code-content">  <span class="code-property">position</span>: world.surfaces.nearest,</span></div>
+                        <div class="code-line"><span class="line-number">11</span><span class="code-content">  <span class="code-property">content</span>: &lt;<span class="code-function">ProductViewer</span> /&gt;,</span></div>
+                        <div class="code-line"><span class="line-number">12</span><span class="code-content">  <span class="code-property">interactions</span>: [<span class="code-string">'grab'</span>, <span class="code-string">'rotate'</span>]</span></div>
+                        <div class="code-line"><span class="line-number">13</span><span class="code-content">});</span></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="architecture-visual" style="margin-top: 4rem;">
+                <div class="arch-layers">
+                    <div class="arch-layer app">YOUR SPATIAL APPLICATION</div>
+                    <div class="arch-layer os">
+                        <strong>SenseOS</strong><br>
+                        <small style="font-weight: 400; opacity: 0.8;">Spatial Core • AI Engine • Multi-User • Management</small>
+                    </div>
+                    <div class="arch-layer hardware">
+                        <span class="hardware-badge">Vision Pro</span>
+                        <span class="hardware-badge">Quest 3</span>
+                        <span class="hardware-badge">HoloLens 2</span>
+                        <span class="hardware-badge">Magic Leap</span>
+                        <span class="hardware-badge">+ More</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="section use-cases" id="use-cases">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Enterprise Use Cases</h2>
+                <p class="section-subtitle">
+                    Powering spatial experiences across industries
+                </p>
+            </div>
+            <div class="use-case-grid">
+                <div class="use-case-card">
+                    <div class="use-case-icon">🏭</div>
+                    <h3>Manufacturing & Training</h3>
+                    <p>Deploy immersive training simulations and assembly guidance across your entire workforce. Reduce training time by 60% with hands-on spatial learning.</p>
+                    <div class="use-case-benefits">
+                        <span class="benefit-tag">60% Faster Training</span>
+                        <span class="benefit-tag">Zero Downtime</span>
+                        <span class="benefit-tag">Remote Expert</span>
+                    </div>
+                </div>
+                <div class="use-case-card">
+                    <div class="use-case-icon">🏥</div>
+                    <h3>Healthcare & Medical</h3>
+                    <p>Surgical planning, medical training, and patient education. Give clinicians spatial tools that save lives and reduce errors.</p>
+                    <div class="use-case-benefits">
+                        <span class="benefit-tag">HIPAA Compliant</span>
+                        <span class="benefit-tag">3D Visualization</span>
+                        <span class="benefit-tag">Training Sims</span>
+                    </div>
+                </div>
+                <div class="use-case-card">
+                    <div class="use-case-icon">🛍️</div>
+                    <h3>Retail & Commerce</h3>
+                    <p>Virtual try-on, immersive showrooms, and spatial product configurators. Transform how customers discover and purchase products.</p>
+                    <div class="use-case-benefits">
+                        <span class="benefit-tag">Virtual Try-On</span>
+                        <span class="benefit-tag">3D Configurators</span>
+                        <span class="benefit-tag">Showrooms</span>
+                    </div>
+                </div>
+                <div class="use-case-card">
+                    <div class="use-case-icon">🏗️</div>
+                    <h3>Architecture & Construction</h3>
+                    <p>Walk through designs before they're built. Overlay BIM models on construction sites. Collaborate spatially with global teams.</p>
+                    <div class="use-case-benefits">
+                        <span class="benefit-tag">BIM Integration</span>
+                        <span class="benefit-tag">Site Overlay</span>
+                        <span class="benefit-tag">Design Review</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="section" id="pricing">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Simple, Transparent Pricing</h2>
+                <p class="section-subtitle">
+                    Start free. Scale as you grow.
+                </p>
+            </div>
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <div class="pricing-tier">Developer</div>
+                    <div class="pricing-price">$0</div>
+                    <div class="pricing-period">Free forever</div>
+                    <ul class="pricing-features">
+                        <li>Full SDK access</li>
+                        <li>Deploy to 100 devices</li>
+                        <li>Community support</li>
+                        <li>Basic analytics</li>
+                        <li>All AI features</li>
+                    </ul>
+                    <a href="#cta" class="btn btn-outline">Start Building</a>
+                </div>
+                <div class="pricing-card featured">
+                    <div class="pricing-tier">Pro</div>
+                    <div class="pricing-price">$499</div>
+                    <div class="pricing-period">per month</div>
+                    <ul class="pricing-features">
+                        <li>Unlimited deployments</li>
+                        <li>Priority support</li>
+                        <li>Advanced analytics</li>
+                        <li>Custom branding</li>
+                        <li>API access</li>
+                        <li>Team collaboration</li>
+                    </ul>
+                    <a href="#cta" class="btn btn-primary">Get Started</a>
+                </div>
+                <div class="pricing-card">
+                    <div class="pricing-tier">Enterprise</div>
+                    <div class="pricing-price">Custom</div>
+                    <div class="pricing-period">contact us</div>
+                    <ul class="pricing-features">
+                        <li>Dedicated infrastructure</li>
+                        <li>SSO/SAML integration</li>
+                        <li>SOC 2 & HIPAA</li>
+                        <li>24/7 enterprise support</li>
+                        <li>Custom AI models</li>
+                        <li>On-premise option</li>
+                    </ul>
+                    <a href="#cta" class="btn btn-outline">Contact Sales</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="section" id="market">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">The Opportunity</h2>
+                <p class="section-subtitle">
+                    Spatial computing is the next major computing platform
+                </p>
+            </div>
+            <div class="market-stats">
+                <div class="market-stat">
+                    <div class="market-stat-value">$104B</div>
+                    <div class="market-stat-label">Market Size by 2028</div>
+                </div>
+                <div class="market-stat">
+                    <div class="market-stat-value">45%</div>
+                    <div class="market-stat-label">Annual Growth Rate</div>
+                </div>
+                <div class="market-stat">
+                    <div class="market-stat-value">73M</div>
+                    <div class="market-stat-label">Headsets Shipped 2026</div>
+                </div>
+                <div class="market-stat">
+                    <div class="market-stat-value">82%</div>
+                    <div class="market-stat-label">Enterprise Adoption Intent</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="cta" id="cta">
+        <div class="cta-glow"></div>
+        <h2>
+            <span class="gradient-text">Ready to Build the Future?</span>
+        </h2>
+        <p>
+            Join the spatial computing revolution. Get early access to SenseOS and be among the first to build the next generation of immersive experiences.
+        </p>
+        <div class="cta-buttons">
+            <a href="mailto:founders@senseos.dev" class="btn btn-primary">
+                🚀 Request Early Access
+            </a>
+            <a href="mailto:founders@senseos.dev" class="btn btn-outline">
+                📞 Talk to Founders
+            </a>
+        </div>
+    </section>
+    
+    <footer>
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="#">Documentation</a>
+                <a href="#">Blog</a>
+                <a href="#">Careers</a>
+                <a href="#">Privacy</a>
+                <a href="#">Terms</a>
+            </div>
+            <p class="footer-copy">
+                &copy; 2026 SenseOS. The Operating System for Spatial Intelligence.
+            </p>
+        </div>
+    </footer>
+</body>
+</html>
