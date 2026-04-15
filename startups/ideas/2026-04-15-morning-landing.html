@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EdgePilot — Your AI. Your Device. Your Privacy.</title>
+    <meta name="description" content="The on-device AI agent operating system. Run autonomous AI assistants locally without sending data to the cloud.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #818cf8;
+            --accent: #10b981;
+            --accent-dark: #059669;
+            --dark: #0f172a;
+            --dark-light: #1e293b;
+            --gray: #64748b;
+            --light: #f8fafc;
+            --white: #ffffff;
+            --gradient-start: #6366f1;
+            --gradient-mid: #8b5cf6;
+            --gradient-end: #a855f7;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--dark);
+            color: var(--white);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+        
+        /* Animated Background */
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(99, 102, 241, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .glow-orb {
+            position: fixed;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.15;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .orb-1 {
+            top: -200px;
+            right: -200px;
+            background: var(--primary);
+            animation: float 15s ease-in-out infinite;
+        }
+        
+        .orb-2 {
+            bottom: -300px;
+            left: -200px;
+            background: var(--accent);
+            animation: float 20s ease-in-out infinite reverse;
+        }
+        
+        .orb-3 {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--gradient-mid);
+            width: 400px;
+            height: 400px;
+            animation: pulse 10s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-50px, 50px); }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.1; transform: translate(-50%, -50%) scale(1); }
+            50% { opacity: 0.2; transform: translate(-50%, -50%) scale(1.1); }
+        }
+        
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 1.5rem 2rem;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 800;
+            text-decoration: none;
+            color: var(--white);
+        }
+        
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            color: var(--gray);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--white);
+        }
+        
+        .nav-cta {
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            color: var(--white);
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(99, 102, 241, 0.4);
+        }
+        
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 2rem 4rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hero-content {
+            max-width: 900px;
+            text-align: center;
+        }
+        
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            color: var(--primary-light);
+            margin-bottom: 2rem;
+        }
+        
+        .badge-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: blink 2s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        h1 {
+            font-size: clamp(3rem, 8vw, 5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--white) 0%, var(--gray) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-mid), var(--gradient-end));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto 2.5rem;
+            line-height: 1.8;
+        }
+        
+        .hero-ctas {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            color: var(--white);
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 40px rgba(99, 102, 241, 0.5);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--white);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Stats Row */
+        .stats-row {
+            display: flex;
+            justify-content: center;
+            gap: 4rem;
+            margin-top: 4rem;
+            padding-top: 4rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent), var(--primary-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--gray);
+            margin-top: 0.25rem;
+        }
+        
+        /* Problem Section */
+        .section {
+            padding: 6rem 2rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .section-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        
+        .section-label {
+            color: var(--primary-light);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+        
+        h2 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+        
+        .section-subtitle {
+            color: var(--gray);
+            font-size: 1.125rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        /* Problem Cards */
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .problem-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s;
+        }
+        
+        .problem-card:hover {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(239, 68, 68, 0.3);
+            transform: translateY(-5px);
+        }
+        
+        .problem-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .problem-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            color: #ef4444;
+        }
+        
+        .problem-card p {
+            color: var(--gray);
+            line-height: 1.7;
+        }
+        
+        /* Solution Section */
+        .solution-section {
+            background: linear-gradient(180deg, transparent 0%, rgba(99, 102, 241, 0.03) 50%, transparent 100%);
+        }
+        
+        .solution-visual {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            margin-top: 4rem;
+        }
+        
+        .solution-diagram {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .solution-diagram::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--gradient-start), var(--gradient-end));
+        }
+        
+        .diagram-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .diagram-dots {
+            display: flex;
+            gap: 6px;
+        }
+        
+        .diagram-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        
+        .diagram-dot:nth-child(1) { background: #ef4444; }
+        .diagram-dot:nth-child(2) { background: #fbbf24; }
+        .diagram-dot:nth-child(3) { background: #22c55e; }
+        
+        .diagram-title {
+            color: var(--gray);
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        
+        .architecture-layer {
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .layer-title {
+            font-weight: 600;
+            font-size: 0.875rem;
+            color: var(--primary-light);
+            margin-bottom: 0.5rem;
+        }
+        
+        .layer-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        
+        .layer-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0.25rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            color: var(--gray);
+        }
+        
+        .solution-features {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .solution-feature {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+        
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            min-width: 48px;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+        
+        .feature-content h4 {
+            font-size: 1.125rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+        
+        .feature-content p {
+            color: var(--gray);
+            font-size: 0.9375rem;
+        }
+        
+        /* Comparison Section */
+        .comparison-table {
+            overflow-x: auto;
+            margin-top: 3rem;
+        }
+        
+        .comparison-table table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+        
+        .comparison-table th,
+        .comparison-table td {
+            padding: 1.25rem 1.5rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .comparison-table th {
+            background: rgba(99, 102, 241, 0.1);
+            font-weight: 600;
+            color: var(--white);
+        }
+        
+        .comparison-table th:last-child {
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+        }
+        
+        .comparison-table td {
+            color: var(--gray);
+        }
+        
+        .comparison-table tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+        
+        .comparison-table td:last-child {
+            color: var(--accent);
+            font-weight: 600;
+        }
+        
+        .check {
+            color: var(--accent);
+            font-size: 1.25rem;
+        }
+        
+        .x-mark {
+            color: #ef4444;
+            font-size: 1.25rem;
+        }
+        
+        /* Market Section */
+        .market-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+        
+        .market-card {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(168, 85, 247, 0.05));
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        
+        .market-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(99, 102, 241, 0.4);
+        }
+        
+        .market-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+        
+        .market-label {
+            color: var(--gray);
+            font-size: 0.875rem;
+        }
+        
+        /* Phases Section */
+        .phases-timeline {
+            position: relative;
+            margin-top: 4rem;
+        }
+        
+        .phase-card {
+            display: grid;
+            grid-template-columns: 100px 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+        
+        .phase-marker {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .phase-number {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 800;
+        }
+        
+        .phase-line {
+            width: 2px;
+            flex: 1;
+            background: linear-gradient(180deg, var(--primary), transparent);
+            margin-top: 1rem;
+        }
+        
+        .phase-content {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 2rem;
+        }
+        
+        .phase-content h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .phase-timeline-label {
+            color: var(--primary-light);
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .phase-content p {
+            color: var(--gray);
+            margin-bottom: 1rem;
+        }
+        
+        .phase-agents {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        
+        .agent-tag {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            color: var(--accent);
+            padding: 0.375rem 0.875rem;
+            border-radius: 50px;
+            font-size: 0.8125rem;
+            font-weight: 500;
+        }
+        
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(168, 85, 247, 0.1) 100%);
+            border-top: 1px solid rgba(99, 102, 241, 0.2);
+            border-bottom: 1px solid rgba(99, 102, 241, 0.2);
+        }
+        
+        .cta-content {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .cta-content h2 {
+            margin-bottom: 1rem;
+        }
+        
+        .cta-content p {
+            color: var(--gray);
+            font-size: 1.125rem;
+            margin-bottom: 2rem;
+        }
+        
+        /* Footer */
+        footer {
+            padding: 4rem 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .footer-text {
+            color: var(--gray);
+            font-size: 0.875rem;
+        }
+        
+        .footer-tagline {
+            font-style: italic;
+            color: var(--gray);
+        }
+        
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .solution-visual {
+                grid-template-columns: 1fr;
+            }
+            
+            .market-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .stats-row {
+                flex-direction: column;
+                gap: 2rem;
+            }
+            
+            .phase-card {
+                grid-template-columns: 1fr;
+            }
+            
+            .phase-marker {
+                flex-direction: row;
+                gap: 1rem;
+            }
+            
+            .phase-line {
+                width: auto;
+                height: 2px;
+                margin-top: 0;
+            }
+            
+            .market-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-inner {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+    <div class="glow-orb orb-1"></div>
+    <div class="glow-orb orb-2"></div>
+    <div class="glow-orb orb-3"></div>
+    
+    <nav>
+        <div class="nav-inner">
+            <a href="#" class="logo">
+                <div class="logo-icon">⚡</div>
+                EdgePilot
+            </a>
+            <ul class="nav-links">
+                <li><a href="#problem">Problem</a></li>
+                <li><a href="#solution">Solution</a></li>
+                <li><a href="#market">Market</a></li>
+                <li><a href="#roadmap">Roadmap</a></li>
+            </ul>
+            <a href="#contact" class="nav-cta">Get Early Access</a>
+        </div>
+    </nav>
+    
+    <section class="hero">
+        <div class="hero-content">
+            <div class="badge">
+                <span class="badge-dot"></span>
+                April 2026 Morning Drop
+            </div>
+            <h1>AI That Works <span class="gradient-text">On Your Device</span></h1>
+            <p class="hero-subtitle">
+                The on-device AI agent operating system. Run autonomous AI assistants that actually do things — without ever sending your data to the cloud.
+            </p>
+            <div class="hero-ctas">
+                <a href="#contact" class="btn btn-primary">
+                    <span>🚀</span> Request Demo
+                </a>
+                <a href="#solution" class="btn btn-secondary">
+                    <span>📖</span> Read Strategy
+                </a>
+            </div>
+            <div class="stats-row">
+                <div class="stat">
+                    <div class="stat-value">$47B</div>
+                    <div class="stat-label">Edge AI Market by 2028</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">&lt;50ms</div>
+                    <div class="stat-label">Action Latency</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">100%</div>
+                    <div class="stat-label">Data Stays Local</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="problem" class="section">
+        <div class="section-inner">
+            <div class="section-header">
+                <div class="section-label">The Problem</div>
+                <h2>Cloud AI Has Three Fatal Flaws</h2>
+                <p class="section-subtitle">
+                    Every week, another data breach. Every task, another round-trip. Every flight, a useless assistant.
+                </p>
+            </div>
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="problem-icon">🔓</div>
+                    <h3>Privacy Breach Risk</h3>
+                    <p>Fiverr just exposed customer files publicly. Enterprises are terrified of sending sensitive data through cloud AI services.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">⏳</div>
+                    <h3>Latency Kills Productivity</h3>
+                    <p>200-500ms per cloud roundtrip. For AI agents chaining 10+ actions, that's 2-5 seconds of waiting per task.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">📴</div>
+                    <h3>Offline = Useless</h3>
+                    <p>On a plane? Subway? Rural area? Bad WiFi? Your AI assistant becomes an expensive paperweight.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="solution" class="section solution-section">
+        <div class="section-inner">
+            <div class="section-header">
+                <div class="section-label">The Solution</div>
+                <h2>EdgePilot: AI Agents, Locally</h2>
+                <p class="section-subtitle">
+                    A lightweight AI agent runtime that runs entirely on your device — phone, laptop, or tablet.
+                </p>
+            </div>
+            <div class="solution-visual">
+                <div class="solution-diagram">
+                    <div class="diagram-header">
+                        <div class="diagram-dots">
+                            <div class="diagram-dot"></div>
+                            <div class="diagram-dot"></div>
+                            <div class="diagram-dot"></div>
+                        </div>
+                        <span class="diagram-title">EdgePilot Runtime Architecture</span>
+                    </div>
+                    <div class="architecture-layer">
+                        <div class="layer-title">🧠 Agent Core</div>
+                        <div class="layer-items">
+                            <span class="layer-item">Reasoning Engine</span>
+                            <span class="layer-item">Planning Module</span>
+                            <span class="layer-item">Local Memory</span>
+                        </div>
+                    </div>
+                    <div class="architecture-layer">
+                        <div class="layer-title">⚙️ Model Layer</div>
+                        <div class="layer-items">
+                            <span class="layer-item">Gemma 4</span>
+                            <span class="layer-item">Phi-4</span>
+                            <span class="layer-item">Llama 4</span>
+                            <span class="layer-item">Custom Models</span>
+                        </div>
+                    </div>
+                    <div class="architecture-layer">
+                        <div class="layer-title">🔐 Action Sandbox</div>
+                        <div class="layer-items">
+                            <span class="layer-item">File System</span>
+                            <span class="layer-item">Calendar</span>
+                            <span class="layer-item">Email</span>
+                            <span class="layer-item">Browser</span>
+                        </div>
+                    </div>
+                    <div class="architecture-layer">
+                        <div class="layer-title">🛡️ Permission Layer</div>
+                        <div class="layer-items">
+                            <span class="layer-item">Granular Access</span>
+                            <span class="layer-item">Audit Logging</span>
+                            <span class="layer-item">Approval Flows</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="solution-features">
+                    <div class="solution-feature">
+                        <div class="feature-icon">🏠</div>
+                        <div class="feature-content">
+                            <h4>Local Agent Execution</h4>
+                            <p>AI agents run entirely on-device using optimized models like Gemma 4 and Phi-4. Your data never leaves.</p>
+                        </div>
+                    </div>
+                    <div class="solution-feature">
+                        <div class="feature-icon">🔒</div>
+                        <div class="feature-content">
+                            <h4>Secure Action Framework</h4>
+                            <p>Sandboxed execution environment where agents interact with local apps via permission-controlled APIs.</p>
+                        </div>
+                    </div>
+                    <div class="solution-feature">
+                        <div class="feature-icon">🛒</div>
+                        <div class="feature-content">
+                            <h4>Agent Marketplace</h4>
+                            <p>Third-party developers publish specialized agents — tax prep, fitness coaching, code review, and more.</p>
+                        </div>
+                    </div>
+                    <div class="solution-feature">
+                        <div class="feature-icon">🔄</div>
+                        <div class="feature-content">
+                            <h4>Cross-Device Orchestration</h4>
+                            <p>Your agents sync state across all your devices without syncing your actual data.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="comparison-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th>Cloud AI Agents</th>
+                            <th>EdgePilot</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Data Privacy</td>
+                            <td>Data leaves device</td>
+                            <td>Data never leaves ✓</td>
+                        </tr>
+                        <tr>
+                            <td>Action Latency</td>
+                            <td>200-500ms</td>
+                            <td>&lt;50ms ✓</td>
+                        </tr>
+                        <tr>
+                            <td>Offline Support</td>
+                            <td><span class="x-mark">✗</span> No</td>
+                            <td><span class="check">✓</span> Full functionality</td>
+                        </tr>
+                        <tr>
+                            <td>Enterprise Compliance</td>
+                            <td>Complex setup</td>
+                            <td>Built-in audit trails ✓</td>
+                        </tr>
+                        <tr>
+                            <td>Cost per Query</td>
+                            <td>$0.01-0.10</td>
+                            <td>$0 (device compute) ✓</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+    
+    <section id="market" class="section">
+        <div class="section-inner">
+            <div class="section-header">
+                <div class="section-label">Market Opportunity</div>
+                <h2>A $15B+ Opportunity</h2>
+                <p class="section-subtitle">
+                    At the intersection of edge AI, enterprise agents, and privacy software.
+                </p>
+            </div>
+            <div class="market-grid">
+                <div class="market-card">
+                    <div class="market-value">$47B</div>
+                    <div class="market-label">Edge AI by 2028</div>
+                </div>
+                <div class="market-card">
+                    <div class="market-value">$28B</div>
+                    <div class="market-label">Enterprise AI Agents</div>
+                </div>
+                <div class="market-card">
+                    <div class="market-value">$19B</div>
+                    <div class="market-label">Consumer AI Assistants</div>
+                </div>
+                <div class="market-card">
+                    <div class="market-value">24%</div>
+                    <div class="market-label">CAGR Growth Rate</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="roadmap" class="section">
+        <div class="section-inner">
+            <div class="section-header">
+                <div class="section-label">Go-to-Market</div>
+                <h2>Three-Phase Expansion</h2>
+                <p class="section-subtitle">
+                    Start with privacy-sensitive enterprises, build the ecosystem, then go consumer.
+                </p>
+            </div>
+            <div class="phases-timeline">
+                <div class="phase-card">
+                    <div class="phase-marker">
+                        <div class="phase-number">1</div>
+                        <div class="phase-line"></div>
+                    </div>
+                    <div class="phase-content">
+                        <div class="phase-timeline-label">Months 1-12</div>
+                        <h3>Legal & Healthcare Wedge</h3>
+                        <p>Target industries with extreme privacy sensitivity — attorney-client privilege, HIPAA compliance. Clear ROI: paralegals spend 40% of time on tasks agents can automate.</p>
+                        <div class="phase-agents">
+                            <span class="agent-tag">📄 DocReview Agent</span>
+                            <span class="agent-tag">🔍 Research Agent</span>
+                            <span class="agent-tag">🎤 Dictation Agent</span>
+                            <span class="agent-tag">📁 Filing Agent</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="phase-card">
+                    <div class="phase-marker">
+                        <div class="phase-number">2</div>
+                        <div class="phase-line"></div>
+                    </div>
+                    <div class="phase-content">
+                        <div class="phase-timeline-label">Months 6-18</div>
+                        <h3>Developer Ecosystem</h3>
+                        <p>Open SDK for third-party agent development. Bounty programs, hackathons, bootcamp partnerships. Build the marketplace that creates network effects.</p>
+                        <div class="phase-agents">
+                            <span class="agent-tag">💰 Finance Agents</span>
+                            <span class="agent-tag">💪 Health Agents</span>
+                            <span class="agent-tag">✍️ Creative Agents</span>
+                            <span class="agent-tag">💻 Dev Agents</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="phase-card">
+                    <div class="phase-marker">
+                        <div class="phase-number">3</div>
+                    </div>
+                    <div class="phase-content">
+                        <div class="phase-timeline-label">Months 18-36</div>
+                        <h3>Consumer Expansion</h3>
+                        <p>OEM partnerships for pre-installation. Windows/macOS integration. Smart home devices. Position as "AI that respects your privacy" for mass market.</p>
+                        <div class="phase-agents">
+                            <span class="agent-tag">📱 Android OEMs</span>
+                            <span class="agent-tag">🖥️ Desktop Integration</span>
+                            <span class="agent-tag">🏠 Smart Home</span>
+                            <span class="agent-tag">🤝 VPN Partnerships</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="contact" class="section cta-section">
+        <div class="section-inner">
+            <div class="cta-content">
+                <h2>The Window Is <span class="gradient-text">Now</span></h2>
+                <p>Models run locally. Privacy demand is peaking. Cloud fatigue is real. The next 18 months are the window to build the defining platform for local AI agents.</p>
+                <div class="hero-ctas">
+                    <a href="mailto:invest@edgepilot.ai" class="btn btn-primary">
+                        <span>💼</span> Investor Deck
+                    </a>
+                    <a href="mailto:demo@edgepilot.ai" class="btn btn-secondary">
+                        <span>🎯</span> Enterprise Pilot
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <footer>
+        <div class="footer-inner">
+            <div class="footer-text">
+                <span class="logo" style="font-size: 1.25rem;">
+                    <span class="logo-icon" style="width: 32px; height: 32px; font-size: 1rem;">⚡</span>
+                    EdgePilot
+                </span>
+                <span> · April 2026 Strategy</span>
+            </div>
+            <div class="footer-tagline">
+                "The best AI is the AI that helps you without knowing everything about you."
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
