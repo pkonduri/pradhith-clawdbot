@@ -220,6 +220,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-04-14 | Evening | GeneShield AI — The Privacy & Sovereignty Platform for Genetic Data | [Playbook](2026-04-14-evening.md) • [Landing](2026-04-14-evening-landing.html) • [PDF](2026-04-14-evening.pdf) |
 | 2026-04-14 | Morning | DelegateOS — The Autonomous Delegation Layer for Knowledge Workers | [Playbook](2026-04-14-morning.md) • [Landing](2026-04-14-morning-landing.html) • [PDF](2026-04-14-morning.pdf) |
 | 2026-04-14 | Afternoon | ExecutiveOS — The AI Chief of Staff for the C-Suite | [Playbook](2026-04-14-afternoon.md) • [Landing](2026-04-14-afternoon-landing.html) • [PDF](2026-04-14-afternoon.pdf) |
+| 2026-04-15 | Evening | SpendMind AI — The FinOps Operating System for Enterprise AI Cost Intelligence | [Playbook](2026-04-15-evening.md) • [Landing](2026-04-15-evening-landing.html) • [PDF](2026-04-15-evening.pdf) |
 <!-- New entries will be added above this line -->
 
 ---

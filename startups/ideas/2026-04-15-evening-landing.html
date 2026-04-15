@@ -1,0 +1,1330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpendMind AI — The FinOps Operating System for Enterprise AI</title>
+    <meta name="description" content="Stop burning money on AI. Real-time visibility, intelligent optimization, and governance for every token, every model, every dollar.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #10b981;
+            --primary-dark: #059669;
+            --primary-light: #34d399;
+            --secondary: #6366f1;
+            --accent: #f59e0b;
+            --warning: #ef4444;
+            --dark: #0f172a;
+            --dark-lighter: #1e293b;
+            --dark-card: #1a2234;
+            --text: #f8fafc;
+            --text-muted: #94a3b8;
+            --text-dim: #64748b;
+            --gradient-1: linear-gradient(135deg, #10b981 0%, #059669 50%, #047857 100%);
+            --gradient-2: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            --gradient-hero: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+            --gradient-glow: radial-gradient(ellipse at center, rgba(16, 185, 129, 0.15) 0%, transparent 70%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--dark);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(16, 185, 129, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(16, 185, 129, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Floating particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.3; }
+            90% { opacity: 0.3; }
+            100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 1rem 2rem;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(16, 185, 129, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 800;
+            font-size: 1.5rem;
+            text-decoration: none;
+            color: var(--text);
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .cta-button {
+            background: var(--gradient-1);
+            color: var(--dark);
+            padding: 0.75rem 1.75rem;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 2rem 4rem;
+            position: relative;
+            background: var(--gradient-hero);
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-glow);
+            pointer-events: none;
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            padding: 0.5rem 1.25rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--primary-light);
+            margin-bottom: 2rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+            50% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.03em;
+        }
+
+        .hero h1 .gradient-text {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.125rem, 2vw, 1.375rem);
+            color: var(--text-muted);
+            max-width: 700px;
+            margin: 0 auto 2.5rem;
+            line-height: 1.7;
+        }
+
+        .hero-ctas {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 4rem;
+        }
+
+        .btn-primary {
+            background: var(--gradient-1);
+            color: var(--dark);
+            padding: 1rem 2.5rem;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(16, 185, 129, 0.5);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text);
+            padding: 1rem 2.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        /* Live Dashboard Preview */
+        .dashboard-preview {
+            background: var(--dark-card);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 16px;
+            padding: 1.5rem;
+            max-width: 900px;
+            margin: 0 auto;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dashboard-preview::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-1);
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .dashboard-title {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 600;
+        }
+
+        .live-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary);
+            font-size: 0.875rem;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 10px;
+            padding: 1rem;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .stat-value.green { color: var(--primary); }
+        .stat-value.yellow { color: var(--accent); }
+        .stat-value.red { color: var(--warning); }
+
+        .stat-change {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+        }
+
+        .stat-change.positive { color: var(--primary); }
+        .stat-change.negative { color: var(--warning); }
+
+        .optimization-card {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 10px;
+            padding: 1rem;
+        }
+
+        .optimization-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--primary-light);
+        }
+
+        .optimization-item {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .optimization-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .savings-badge {
+            background: var(--gradient-1);
+            color: var(--dark);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        /* Problem Section */
+        .problem-section {
+            padding: 8rem 2rem;
+            background: var(--dark-lighter);
+            position: relative;
+        }
+
+        .section-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-label {
+            display: inline-block;
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--warning);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .section-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            max-width: 700px;
+            margin-bottom: 4rem;
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .problem-card {
+            background: var(--dark-card);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 12px;
+            padding: 2rem;
+            transition: all 0.3s;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(239, 68, 68, 0.4);
+            box-shadow: 0 10px 40px rgba(239, 68, 68, 0.1);
+        }
+
+        .problem-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .problem-stat {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--warning);
+            margin-bottom: 0.5rem;
+        }
+
+        .problem-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .problem-desc {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* Solution Section */
+        .solution-section {
+            padding: 8rem 2rem;
+            position: relative;
+        }
+
+        .section-label.green {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--primary);
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: var(--dark-card);
+            border: 1px solid rgba(16, 185, 129, 0.15);
+            border-radius: 16px;
+            padding: 2.5rem;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-1);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 50px rgba(16, 185, 129, 0.1);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-title {
+            font-size: 1.375rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .feature-desc {
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+
+        .feature-list {
+            list-style: none;
+        }
+
+        .feature-list li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 0;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .feature-list li::before {
+            content: '✓';
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        /* How It Works */
+        .how-section {
+            padding: 8rem 2rem;
+            background: var(--dark-lighter);
+        }
+
+        .steps {
+            display: flex;
+            flex-direction: column;
+            gap: 3rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .step {
+            display: flex;
+            gap: 2rem;
+            align-items: flex-start;
+        }
+
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--dark);
+            flex-shrink: 0;
+        }
+
+        .step-content h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .step-content p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            line-height: 1.7;
+        }
+
+        /* Integrations */
+        .integrations-section {
+            padding: 8rem 2rem;
+        }
+
+        .integrations-section .section-title {
+            text-align: center;
+        }
+
+        .integrations-section .section-subtitle {
+            text-align: center;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .integration-categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .integration-category {
+            background: var(--dark-card);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 12px;
+            padding: 2rem;
+        }
+
+        .category-title {
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+
+        .integration-logos {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .integration-logo {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0.75rem 1.25rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        /* Pricing */
+        .pricing-section {
+            padding: 8rem 2rem;
+            background: var(--dark-lighter);
+        }
+
+        .pricing-section .section-title {
+            text-align: center;
+        }
+
+        .pricing-section .section-subtitle {
+            text-align: center;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            background: var(--dark-card);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            padding: 2.5rem;
+            transition: all 0.3s;
+        }
+
+        .pricing-card.featured {
+            border-color: var(--primary);
+            position: relative;
+            transform: scale(1.05);
+        }
+
+        .pricing-card.featured::before {
+            content: 'Most Popular';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--gradient-1);
+            color: var(--dark);
+            padding: 0.25rem 1rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .pricing-tier {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-desc {
+            color: var(--text-dim);
+            font-size: 0.875rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .pricing-price {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 0.25rem;
+        }
+
+        .pricing-price span {
+            font-size: 1rem;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .pricing-limit {
+            color: var(--text-dim);
+            font-size: 0.875rem;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-features li {
+            padding: 0.5rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .pricing-features li::before {
+            content: '✓';
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .pricing-cta {
+            display: block;
+            text-align: center;
+            padding: 1rem;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .pricing-card:not(.featured) .pricing-cta {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .pricing-card:not(.featured) .pricing-cta:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .pricing-card.featured .pricing-cta {
+            background: var(--gradient-1);
+            color: var(--dark);
+        }
+
+        /* CTA Section */
+        .final-cta {
+            padding: 8rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .final-cta::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.15) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .final-cta h2 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .final-cta p {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto 2.5rem;
+            position: relative;
+        }
+
+        .guarantee {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 2rem;
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 2rem 2rem;
+            background: var(--dark-card);
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        .footer-copy {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            color: var(--text-dim);
+            font-size: 0.875rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero {
+                padding: 6rem 1.5rem 3rem;
+            }
+
+            .dashboard-preview {
+                padding: 1rem;
+            }
+
+            .stats-row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .step {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .step-number {
+                margin: 0 auto;
+            }
+
+            .pricing-card.featured {
+                transform: none;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .footer-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+    <div class="particles">
+        <div class="particle" style="left: 10%; animation-delay: 0s;"></div>
+        <div class="particle" style="left: 20%; animation-delay: 2s;"></div>
+        <div class="particle" style="left: 30%; animation-delay: 4s;"></div>
+        <div class="particle" style="left: 40%; animation-delay: 1s;"></div>
+        <div class="particle" style="left: 50%; animation-delay: 3s;"></div>
+        <div class="particle" style="left: 60%; animation-delay: 5s;"></div>
+        <div class="particle" style="left: 70%; animation-delay: 2.5s;"></div>
+        <div class="particle" style="left: 80%; animation-delay: 4.5s;"></div>
+        <div class="particle" style="left: 90%; animation-delay: 1.5s;"></div>
+    </div>
+
+    <nav>
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <div class="logo-icon">💰</div>
+                SpendMind AI
+            </a>
+            <div class="nav-links">
+                <a href="#problem">Problem</a>
+                <a href="#solution">Solution</a>
+                <a href="#how">How It Works</a>
+                <a href="#pricing">Pricing</a>
+                <a href="#cta" class="cta-button">Get Early Access</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span>💡</span>
+                Stop Burning Money on AI
+            </div>
+            <h1>
+                The <span class="gradient-text">FinOps Platform</span><br>
+                for Enterprise AI
+            </h1>
+            <p class="hero-subtitle">
+                Real-time visibility, intelligent optimization, and governance for every token, every model, every dollar. Cut AI costs by 40-60% while improving performance.
+            </p>
+            <div class="hero-ctas">
+                <a href="#cta" class="btn-primary">
+                    Calculate Your Savings →
+                </a>
+                <a href="#solution" class="btn-secondary">
+                    See How It Works
+                </a>
+            </div>
+
+            <div class="dashboard-preview">
+                <div class="dashboard-header">
+                    <div class="dashboard-title">
+                        <span>📊</span>
+                        AI Cost Intelligence Dashboard
+                    </div>
+                    <div class="live-indicator">
+                        <div class="live-dot"></div>
+                        Live
+                    </div>
+                </div>
+                <div class="stats-row">
+                    <div class="stat-card">
+                        <div class="stat-label">Monthly AI Spend</div>
+                        <div class="stat-value">$847,293</div>
+                        <div class="stat-change negative">↑ 23% vs last month</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Optimization Savings</div>
+                        <div class="stat-value green">$312,847</div>
+                        <div class="stat-change positive">Available this month</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Cost Per Query</div>
+                        <div class="stat-value yellow">$0.0043</div>
+                        <div class="stat-change positive">↓ 18% optimized</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Shadow AI Detected</div>
+                        <div class="stat-value red">23 tools</div>
+                        <div class="stat-change">$47K untracked spend</div>
+                    </div>
+                </div>
+                <div class="optimization-card">
+                    <div class="optimization-header">
+                        <span>🎯</span>
+                        Top Optimization Opportunities
+                    </div>
+                    <div class="optimization-item">
+                        <span>Route 67% of support queries to Claude Haiku</span>
+                        <span class="savings-badge">Save $89K/mo</span>
+                    </div>
+                    <div class="optimization-item">
+                        <span>Enable semantic caching for product search</span>
+                        <span class="savings-badge">Save $67K/mo</span>
+                    </div>
+                    <div class="optimization-item">
+                        <span>Compress system prompts in sales-assistant</span>
+                        <span class="savings-badge">Save $34K/mo</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="problem" class="problem-section">
+        <div class="section-container">
+            <span class="section-label">⚠️ The Problem</span>
+            <h2 class="section-title">Enterprises Are Bleeding Money on AI</h2>
+            <p class="section-subtitle">
+                $500B+ will be spent on AI in 2026. Most companies have no idea where it's going or whether it's working.
+            </p>
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="problem-icon">🕳️</div>
+                    <div class="problem-stat">73%</div>
+                    <h3 class="problem-title">No Visibility</h3>
+                    <p class="problem-desc">of enterprises have zero visibility into AI cost allocation across teams and projects.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">💸</div>
+                    <div class="problem-stat">40-60%</div>
+                    <h3 class="problem-title">Wasted Spend</h3>
+                    <p class="problem-desc">of AI spending delivers no measurable ROI. Inefficient prompts, wrong models, no optimization.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">👻</div>
+                    <div class="problem-stat">15+ tools</div>
+                    <h3 class="problem-title">Shadow AI</h3>
+                    <p class="problem-desc">Average enterprise has employees using 15+ AI tools without IT oversight or cost tracking.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">🎰</div>
+                    <div class="problem-stat">0</div>
+                    <h3 class="problem-title">Model Comparison</h3>
+                    <p class="problem-desc">No systematic way to compare cost/quality tradeoffs across dozens of available models.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="solution" class="solution-section">
+        <div class="section-container">
+            <span class="section-label green">✨ The Solution</span>
+            <h2 class="section-title">Complete AI Financial Intelligence</h2>
+            <p class="section-subtitle">
+                SpendMind AI gives you visibility, optimization, and governance across your entire AI stack.
+            </p>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">👁️</div>
+                    <h3 class="feature-title">Universal Visibility</h3>
+                    <p class="feature-desc">See every dollar of AI spend in real-time, across every provider, framework, and application.</p>
+                    <ul class="feature-list">
+                        <li>Token-level cost tracking</li>
+                        <li>Multi-provider aggregation</li>
+                        <li>Shadow AI discovery</li>
+                        <li>Cost attribution by team/project</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3 class="feature-title">Intelligent Optimization</h3>
+                    <p class="feature-desc">AI-powered recommendations and automatic optimizations that cut costs without sacrificing quality.</p>
+                    <ul class="feature-list">
+                        <li>Smart model routing</li>
+                        <li>Semantic caching</li>
+                        <li>Prompt efficiency analysis</li>
+                        <li>A/B cost testing</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🛡️</div>
+                    <h3 class="feature-title">Enterprise Governance</h3>
+                    <p class="feature-desc">Budget controls, policy enforcement, and compliance reporting for AI spending.</p>
+                    <ul class="feature-list">
+                        <li>Real-time budget alerts</li>
+                        <li>Approval workflows</li>
+                        <li>Chargeback automation</li>
+                        <li>Audit trails</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="how" class="how-section">
+        <div class="section-container">
+            <span class="section-label green">🔧 How It Works</span>
+            <h2 class="section-title">Deploy in Minutes, Save in Hours</h2>
+            <p class="section-subtitle">
+                SpendMind integrates seamlessly with your existing AI stack. No code changes required.
+            </p>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Connect Your AI Stack</h3>
+                        <p>One-click integrations with OpenAI, Anthropic, Google, Azure, AWS, and 50+ other providers. Drop-in SDKs for LangChain, LlamaIndex, and custom applications.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>See Your True Costs</h3>
+                        <p>Within hours, get complete visibility into your AI spend. Discover shadow AI, see cost attribution by team, and understand your unit economics.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Optimize Automatically</h3>
+                        <p>SpendMind's AI analyzes your usage patterns and implements optimizations. Smart routing, caching, and prompt efficiency — all automatic.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>Govern & Scale</h3>
+                        <p>Set budgets, enforce policies, and automate chargebacks. Scale your AI initiatives with confidence that costs are under control.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="integrations-section">
+        <div class="section-container">
+            <h2 class="section-title">Works With Your Entire AI Stack</h2>
+            <p class="section-subtitle">
+                Universal coverage across providers, frameworks, and enterprise systems.
+            </p>
+            <div class="integration-categories">
+                <div class="integration-category">
+                    <div class="category-title">AI Providers</div>
+                    <div class="integration-logos">
+                        <span class="integration-logo">OpenAI</span>
+                        <span class="integration-logo">Anthropic</span>
+                        <span class="integration-logo">Google AI</span>
+                        <span class="integration-logo">Azure OpenAI</span>
+                        <span class="integration-logo">AWS Bedrock</span>
+                        <span class="integration-logo">Mistral</span>
+                        <span class="integration-logo">Cohere</span>
+                    </div>
+                </div>
+                <div class="integration-category">
+                    <div class="category-title">AI Frameworks</div>
+                    <div class="integration-logos">
+                        <span class="integration-logo">LangChain</span>
+                        <span class="integration-logo">LlamaIndex</span>
+                        <span class="integration-logo">AutoGen</span>
+                        <span class="integration-logo">CrewAI</span>
+                        <span class="integration-logo">Haystack</span>
+                        <span class="integration-logo">Semantic Kernel</span>
+                    </div>
+                </div>
+                <div class="integration-category">
+                    <div class="category-title">Enterprise Systems</div>
+                    <div class="integration-logos">
+                        <span class="integration-logo">Datadog</span>
+                        <span class="integration-logo">New Relic</span>
+                        <span class="integration-logo">ServiceNow</span>
+                        <span class="integration-logo">NetSuite</span>
+                        <span class="integration-logo">SAP</span>
+                        <span class="integration-logo">Workday</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="pricing" class="pricing-section">
+        <div class="section-container">
+            <span class="section-label green">💎 Pricing</span>
+            <h2 class="section-title">Simple, Transparent Pricing</h2>
+            <p class="section-subtitle">
+                Pay based on AI spend managed. Savings guarantee on all plans.
+            </p>
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <div class="pricing-tier">Startup</div>
+                    <div class="pricing-desc">For growing AI teams</div>
+                    <div class="pricing-price">$500<span>/mo</span></div>
+                    <div class="pricing-limit">Up to $10K AI spend managed</div>
+                    <ul class="pricing-features">
+                        <li>Universal visibility</li>
+                        <li>Basic optimization</li>
+                        <li>5 team members</li>
+                        <li>Email support</li>
+                    </ul>
+                    <a href="#cta" class="pricing-cta">Start Free Trial</a>
+                </div>
+                <div class="pricing-card featured">
+                    <div class="pricing-tier">Growth</div>
+                    <div class="pricing-desc">For scaling enterprises</div>
+                    <div class="pricing-price">$2,500<span>/mo</span></div>
+                    <div class="pricing-limit">Up to $100K AI spend managed</div>
+                    <ul class="pricing-features">
+                        <li>Everything in Startup</li>
+                        <li>Smart model routing</li>
+                        <li>Semantic caching</li>
+                        <li>Budget governance</li>
+                        <li>Unlimited team members</li>
+                        <li>Priority support</li>
+                    </ul>
+                    <a href="#cta" class="pricing-cta">Start Free Trial</a>
+                </div>
+                <div class="pricing-card">
+                    <div class="pricing-tier">Enterprise</div>
+                    <div class="pricing-desc">For AI-first organizations</div>
+                    <div class="pricing-price">Custom</div>
+                    <div class="pricing-limit">Unlimited AI spend</div>
+                    <ul class="pricing-features">
+                        <li>Everything in Growth</li>
+                        <li>Custom integrations</li>
+                        <li>Dedicated success manager</li>
+                        <li>SLA guarantees</li>
+                        <li>On-premise deployment</li>
+                        <li>Savings share model</li>
+                    </ul>
+                    <a href="#cta" class="pricing-cta">Contact Sales</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="cta" class="final-cta">
+        <div class="section-container">
+            <h2>Stop Burning Money on AI</h2>
+            <p>Join the enterprises saving 40-60% on AI costs while improving performance. Calculate your potential savings in 60 seconds.</p>
+            <a href="mailto:founders@spendmind.ai" class="btn-primary">
+                Get Your Free AI Cost Analysis →
+            </a>
+            <div class="guarantee">
+                <span>🛡️</span>
+                3x ROI Guarantee — Save 3x your platform cost or your money back
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">
+                <div class="logo-icon" style="width: 32px; height: 32px; font-size: 1rem;">💰</div>
+                SpendMind AI
+            </div>
+            <div class="footer-links">
+                <a href="#">Product</a>
+                <a href="#">Pricing</a>
+                <a href="#">Documentation</a>
+                <a href="#">Blog</a>
+                <a href="#">Careers</a>
+            </div>
+        </div>
+        <div class="footer-copy">
+            <p>© 2026 SpendMind AI. All rights reserved. | The Godfather 🎩 Evening Drop</p>
+        </div>
+    </footer>
+</body>
+</html>
