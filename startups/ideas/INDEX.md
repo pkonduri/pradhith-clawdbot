@@ -224,6 +224,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-04-15 | Morning | EdgePilot — The On-Device AI Agent Operating System | [Playbook](2026-04-15-morning.md) • [Landing](2026-04-15-morning-landing.html) • [PDF](2026-04-15-morning.pdf) |
 | 2026-04-15 | Afternoon | SenseOS — The Operating System for Spatial Intelligence | [Playbook](2026-04-15-afternoon.md) • [Landing](2026-04-15-afternoon-landing.html) • [PDF](2026-04-15-afternoon.pdf) |
 | 2026-04-16 | Evening | LiveShield AI — Real-Time Manipulation Detection for Live Events | [Playbook](2026-04-16-evening.md) • [Landing](2026-04-16-evening-landing.html) • [PDF](2026-04-16-evening.pdf) |
+| 2026-04-16 | Morning | CortexLoop — The Autonomous Intelligence Compounding Engine | [Playbook](2026-04-16-morning.md) • [Landing](2026-04-16-morning-landing.html) • [PDF](2026-04-16-morning.pdf) |
 <!-- New entries will be added above this line -->
 
 ---
