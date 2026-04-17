@@ -228,6 +228,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-04-16 | Afternoon | ShadowCFO — The AI Chief Financial Officer for Every Business | [Playbook](2026-04-16-afternoon.md) • [Landing](2026-04-16-afternoon-landing.html) • [PDF](2026-04-16-afternoon.pdf) |
 | 2026-04-17 | Evening | BridgeGuard AI — Autonomous Operating System for Bridge & Infrastructure Inspection | [Playbook](2026-04-17-evening.md) • [Landing](2026-04-17-evening-landing.html) • [PDF](2026-04-17-evening.pdf) |
 | 2026-04-17 | Morning | CodeGuardian AI — Autonomous Security for AI-Generated Code | [Playbook](2026-04-17-morning.md) • [Landing](2026-04-17-morning-landing.html) • [PDF](2026-04-17-morning.pdf) |
+| 2026-04-17 | Afternoon | RetailBrain AI — The Autonomous Operating System for Physical Retail | [Playbook](2026-04-17-afternoon.md) • [Landing](2026-04-17-afternoon-landing.html) • [PDF](2026-04-17-afternoon.pdf) |
 <!-- New entries will be added above this line -->
 
 ---
