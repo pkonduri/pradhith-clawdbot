@@ -1,0 +1,1439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeGuardian AI — Autonomous Security for AI-Generated Code</title>
+    <meta name="description" content="100x code velocity demands 100x security intelligence. CodeGuardian AI secures the AI-coded future.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00ff88;
+            --primary-dark: #00cc6a;
+            --secondary: #ff3366;
+            --accent: #00d4ff;
+            --bg-dark: #0a0a0f;
+            --bg-card: #12121a;
+            --bg-card-hover: #1a1a25;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0b0;
+            --text-muted: #606070;
+            --border: #2a2a3a;
+            --gradient-primary: linear-gradient(135deg, #00ff88 0%, #00d4ff 100%);
+            --gradient-danger: linear-gradient(135deg, #ff3366 0%, #ff6b35 100%);
+            --gradient-dark: linear-gradient(180deg, #0a0a0f 0%, #12121a 100%);
+            --shadow-glow: 0 0 60px rgba(0, 255, 136, 0.15);
+            --shadow-card: 0 10px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Background Effects */
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 255, 136, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 136, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .bg-glow {
+            position: fixed;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            filter: blur(150px);
+            opacity: 0.15;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .bg-glow-1 {
+            top: -200px;
+            right: -200px;
+            background: var(--primary);
+        }
+
+        .bg-glow-2 {
+            bottom: -200px;
+            left: -200px;
+            background: var(--accent);
+        }
+
+        .bg-glow-3 {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--secondary);
+            opacity: 0.08;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1rem 2rem;
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-cta {
+            display: flex;
+            gap: 1rem;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: var(--bg-dark);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 255, 136, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-card);
+            border-color: var(--primary);
+        }
+
+        .btn-large {
+            padding: 1rem 2rem;
+            font-size: 1rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 8rem 2rem 4rem;
+            z-index: 1;
+        }
+
+        .hero-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .hero-content {
+            max-width: 600px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            border-radius: 100px;
+            font-size: 0.85rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-badge::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #fff 0%, #a0a0b0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero h1 span {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            line-height: 1.7;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 3rem;
+        }
+
+        .hero-stat {
+            text-align: left;
+        }
+
+        .hero-stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .hero-stat-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* Hero Visual */
+        .hero-visual {
+            position: relative;
+        }
+
+        .code-scanner {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--shadow-card);
+        }
+
+        .code-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .code-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .code-dot.red { background: #ff5f56; }
+        .code-dot.yellow { background: #ffbd2e; }
+        .code-dot.green { background: #27ca40; }
+
+        .code-title {
+            margin-left: auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .code-content {
+            padding: 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            line-height: 1.8;
+        }
+
+        .code-line {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .line-number {
+            color: var(--text-muted);
+            user-select: none;
+            min-width: 2rem;
+        }
+
+        .code-text {
+            color: var(--text-secondary);
+        }
+
+        .code-keyword { color: #ff79c6; }
+        .code-function { color: #50fa7b; }
+        .code-string { color: #f1fa8c; }
+        .code-comment { color: #6272a4; font-style: italic; }
+
+        .vuln-highlight {
+            position: relative;
+            background: rgba(255, 51, 102, 0.1);
+            border-left: 3px solid var(--secondary);
+            padding-left: 0.5rem;
+            margin-left: -0.5rem;
+        }
+
+        .vuln-badge {
+            position: absolute;
+            right: -120px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--gradient-danger);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            white-space: nowrap;
+            animation: slideIn 0.5s ease forwards;
+        }
+
+        .fix-highlight {
+            position: relative;
+            background: rgba(0, 255, 136, 0.1);
+            border-left: 3px solid var(--primary);
+            padding-left: 0.5rem;
+            margin-left: -0.5rem;
+        }
+
+        .fix-badge {
+            position: absolute;
+            right: -100px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--gradient-primary);
+            color: var(--bg-dark);
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-50%) translateX(-10px); }
+            to { opacity: 1; transform: translateY(-50%) translateX(0); }
+        }
+
+        .scanner-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+            animation: scan 3s ease-in-out infinite;
+            opacity: 0.8;
+            box-shadow: 0 0 20px var(--primary);
+        }
+
+        @keyframes scan {
+            0%, 100% { top: 60px; }
+            50% { top: calc(100% - 4px); }
+        }
+
+        /* Problem Section */
+        .problem {
+            position: relative;
+            padding: 6rem 2rem;
+            z-index: 1;
+            background: linear-gradient(180deg, transparent 0%, rgba(255, 51, 102, 0.03) 50%, transparent 100%);
+        }
+
+        .section-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 4rem;
+        }
+
+        .section-label {
+            display: inline-block;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--secondary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: 2.75rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            font-size: 1.15rem;
+            color: var(--text-secondary);
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .problem-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--secondary);
+            box-shadow: 0 20px 40px rgba(255, 51, 102, 0.1);
+        }
+
+        .problem-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 51, 102, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .problem-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .problem-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .problem-stat {
+            display: flex;
+            align-items: baseline;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .problem-stat-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--secondary);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .problem-stat-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* Solution Section */
+        .solution {
+            position: relative;
+            padding: 6rem 2rem;
+            z-index: 1;
+        }
+
+        .solution .section-label {
+            color: var(--primary);
+        }
+
+        .solution-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .solution-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .solution-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .solution-card.featured {
+            grid-column: span 2;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.05) 0%, rgba(0, 212, 255, 0.05) 100%);
+        }
+
+        .solution-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(0, 255, 136, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .solution-card h3 {
+            font-size: 1.35rem;
+            margin-bottom: 1rem;
+        }
+
+        .solution-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .solution-features {
+            list-style: none;
+        }
+
+        .solution-features li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .solution-features li::before {
+            content: '✓';
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        /* How It Works */
+        .how-it-works {
+            position: relative;
+            padding: 6rem 2rem;
+            z-index: 1;
+            background: linear-gradient(180deg, transparent 0%, rgba(0, 212, 255, 0.03) 50%, transparent 100%);
+        }
+
+        .how-it-works .section-label {
+            color: var(--accent);
+        }
+
+        .process-flow {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            position: relative;
+            margin-top: 3rem;
+        }
+
+        .process-flow::before {
+            content: '';
+            position: absolute;
+            top: 50px;
+            left: 100px;
+            right: 100px;
+            height: 2px;
+            background: var(--gradient-primary);
+            opacity: 0.3;
+        }
+
+        .process-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            max-width: 250px;
+            position: relative;
+        }
+
+        .process-number {
+            width: 100px;
+            height: 100px;
+            background: var(--bg-card);
+            border: 2px solid var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .process-step h3 {
+            font-size: 1.15rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .process-step p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Pricing */
+        .pricing {
+            position: relative;
+            padding: 6rem 2rem;
+            z-index: 1;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .pricing-card.popular {
+            border-color: var(--primary);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .popular-badge {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--gradient-primary);
+            color: var(--bg-dark);
+            padding: 0.35rem 1rem;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .pricing-tier {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .pricing-price {
+            display: flex;
+            align-items: baseline;
+            gap: 0.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-amount {
+            font-size: 3rem;
+            font-weight: 800;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .pricing-period {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .pricing-desc {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-features li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .pricing-features li::before {
+            content: '✓';
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        .pricing-card .btn {
+            width: 100%;
+            justify-content: center;
+        }
+
+        /* Testimonials / Social Proof */
+        .social-proof {
+            position: relative;
+            padding: 6rem 2rem;
+            z-index: 1;
+            background: var(--bg-card);
+        }
+
+        .logos-grid {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 4rem;
+            flex-wrap: wrap;
+            opacity: 0.6;
+        }
+
+        .logo-item {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+        }
+
+        /* CTA Section */
+        .cta {
+            position: relative;
+            padding: 8rem 2rem;
+            z-index: 1;
+            text-align: center;
+        }
+
+        .cta-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cta h2 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 2.5rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        /* Footer */
+        footer {
+            position: relative;
+            padding: 4rem 2rem 2rem;
+            border-top: 1px solid var(--border);
+            z-index: 1;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 3rem;
+        }
+
+        .footer-brand {
+            max-width: 300px;
+        }
+
+        .footer-brand .logo {
+            margin-bottom: 1rem;
+        }
+
+        .footer-brand p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 4rem;
+        }
+
+        .footer-column h4 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-column a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .footer-column a:hover {
+            color: var(--primary);
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .footer-copyright {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .footer-social a {
+            width: 40px;
+            height: 40px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .footer-social a:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-content {
+                max-width: 100%;
+            }
+
+            .hero-buttons {
+                justify-content: center;
+            }
+
+            .hero-stats {
+                justify-content: center;
+            }
+
+            .hero-visual {
+                display: none;
+            }
+
+            .problem-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .solution-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .solution-card.featured {
+                grid-column: span 1;
+                grid-template-columns: 1fr;
+            }
+
+            .process-flow {
+                flex-direction: column;
+                align-items: center;
+                gap: 2rem;
+            }
+
+            .process-flow::before {
+                display: none;
+            }
+
+            .pricing-grid {
+                grid-template-columns: 1fr;
+                max-width: 400px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .cta h2 {
+                font-size: 2rem;
+            }
+
+            .footer-top {
+                flex-direction: column;
+                gap: 2rem;
+            }
+
+            .footer-links {
+                flex-wrap: wrap;
+                gap: 2rem;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+            }
+        }
+
+        /* Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .float {
+            animation: float 6s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Effects -->
+    <div class="bg-grid"></div>
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-2"></div>
+    <div class="bg-glow bg-glow-3"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <div class="logo-icon">🛡️</div>
+                CodeGuardian AI
+            </a>
+            <ul class="nav-links">
+                <li><a href="#problem">Problem</a></li>
+                <li><a href="#solution">Solution</a></li>
+                <li><a href="#how-it-works">How It Works</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+            </ul>
+            <div class="nav-cta">
+                <a href="#" class="btn btn-secondary">Sign In</a>
+                <a href="#" class="btn btn-primary">Start Free</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <div class="hero-badge">Now in Developer Preview</div>
+                <h1>Autonomous Security for <span>AI-Generated Code</span></h1>
+                <p>100x code velocity demands 100x security intelligence. CodeGuardian AI detects, triages, and fixes vulnerabilities in AI-generated code — before they ship.</p>
+                <div class="hero-buttons">
+                    <a href="#" class="btn btn-primary btn-large">
+                        Start Free Trial
+                        <span>→</span>
+                    </a>
+                    <a href="#" class="btn btn-secondary btn-large">
+                        Watch Demo
+                    </a>
+                </div>
+                <div class="hero-stats">
+                    <div class="hero-stat">
+                        <div class="hero-stat-value">87%</div>
+                        <div class="hero-stat-label">of code is now AI-generated</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="hero-stat-value">&lt;5%</div>
+                        <div class="hero-stat-label">false positive rate</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="hero-stat-value">30s</div>
+                        <div class="hero-stat-label">avg scan time per 10K LOC</div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual float">
+                <div class="code-scanner">
+                    <div class="scanner-overlay"></div>
+                    <div class="code-header">
+                        <span class="code-dot red"></span>
+                        <span class="code-dot yellow"></span>
+                        <span class="code-dot green"></span>
+                        <span class="code-title">auth_handler.py</span>
+                    </div>
+                    <div class="code-content">
+                        <div class="code-line">
+                            <span class="line-number">14</span>
+                            <span class="code-text"><span class="code-keyword">def</span> <span class="code-function">verify_token</span>(token):</span>
+                        </div>
+                        <div class="code-line">
+                            <span class="line-number">15</span>
+                            <span class="code-text code-comment">    # AI-generated validation</span>
+                        </div>
+                        <div class="code-line vuln-highlight">
+                            <span class="line-number">16</span>
+                            <span class="code-text">    <span class="code-keyword">if</span> token == stored_token:</span>
+                            <span class="vuln-badge">⚠️ TIMING ATTACK</span>
+                        </div>
+                        <div class="code-line">
+                            <span class="line-number">17</span>
+                            <span class="code-text">        <span class="code-keyword">return</span> <span class="code-function">True</span></span>
+                        </div>
+                        <div class="code-line">
+                            <span class="line-number">18</span>
+                            <span class="code-text"></span>
+                        </div>
+                        <div class="code-line">
+                            <span class="line-number">19</span>
+                            <span class="code-text code-comment"># CodeGuardian fix:</span>
+                        </div>
+                        <div class="code-line fix-highlight">
+                            <span class="line-number">20</span>
+                            <span class="code-text">    <span class="code-keyword">if</span> <span class="code-function">hmac.compare_digest</span>(token, stored):</span>
+                            <span class="fix-badge">✓ AUTO-FIXED</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="problem" id="problem">
+        <div class="section-container">
+            <div class="section-header">
+                <span class="section-label">// The Crisis</span>
+                <h2 class="section-title">AI Code is Shipping Faster Than Security Can Review</h2>
+                <p class="section-subtitle">Enterprises deploy 40x more code than in 2023. Security teams grew by 12%. The math doesn't work.</p>
+            </div>
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="problem-icon">⚡</div>
+                    <h3>Velocity Mismatch</h3>
+                    <p>AI generates code at 100x human speed. Traditional security tools and manual reviews can't keep pace.</p>
+                    <div class="problem-stat">
+                        <span class="problem-stat-value">73%</span>
+                        <span class="problem-stat-label">of CISOs can't adequately review AI code</span>
+                    </div>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">🎯</div>
+                    <h3>Unique Vulnerabilities</h3>
+                    <p>AI-generated code has distinct vulnerability patterns — timing attacks, context loss, dependency hallucinations.</p>
+                    <div class="problem-stat">
+                        <span class="problem-stat-value">$4.2B</span>
+                        <span class="problem-stat-label">in breaches traced to AI code last year</span>
+                    </div>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">🔄</div>
+                    <h3>Homogeneous Risk</h3>
+                    <p>Millions of developers use the same AI models. The same vulnerabilities appear everywhere simultaneously.</p>
+                    <div class="problem-stat">
+                        <span class="problem-stat-value">90%+</span>
+                        <span class="problem-stat-label">false positive rate with legacy SAST</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="solution" id="solution">
+        <div class="section-container">
+            <div class="section-header">
+                <span class="section-label">// The Solution</span>
+                <h2 class="section-title">Security That Moves at AI Speed</h2>
+                <p class="section-subtitle">CodeGuardian AI is purpose-built to secure AI-generated code. We don't just scan — we understand, predict, and fix.</p>
+            </div>
+            <div class="solution-grid">
+                <div class="solution-card featured">
+                    <div>
+                        <div class="solution-icon">🧠</div>
+                        <h3>AI-Native Static Analysis</h3>
+                        <p>Our models are trained on 50M+ AI-generated vulnerability patterns. We understand how AI writes code — and where it goes wrong.</p>
+                        <ul class="solution-features">
+                            <li>Model-aware scanning (knows which AI generated the code)</li>
+                            <li>Semantic security analysis beyond pattern matching</li>
+                            <li>Prompt reconstruction to identify risky generation patterns</li>
+                            <li>Context-aware detection across full system architecture</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <div class="solution-icon">🔧</div>
+                        <h3>Autonomous Remediation</h3>
+                        <p>Don't just find vulnerabilities — fix them. CodeGuardian generates secure code that maintains functionality.</p>
+                        <ul class="solution-features">
+                            <li>Self-healing pull requests with one click</li>
+                            <li>Context-preserving fixes that don't break code</li>
+                            <li>Human-readable explanations for every fix</li>
+                            <li>Configurable approval workflows for critical systems</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon">⚡</div>
+                    <h3>Real-Time IDE Protection</h3>
+                    <p>Catch vulnerabilities before code leaves the developer's machine. Security at the speed of thought.</p>
+                    <ul class="solution-features">
+                        <li>Pre-commit vulnerability interception</li>
+                        <li>AI assistant overlay with security guardrails</li>
+                        <li>Inline remediation suggestions as you code</li>
+                    </ul>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon">🔗</div>
+                    <h3>CI/CD Integration</h3>
+                    <p>Gate deployments on security. Risk-based approvals that don't slow down shipping.</p>
+                    <ul class="solution-features">
+                        <li>Pipeline gates for unresolved critical issues</li>
+                        <li>Auto-approve low-risk, flag high-risk</li>
+                        <li>Compliance documentation generated automatically</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works" id="how-it-works">
+        <div class="section-container">
+            <div class="section-header">
+                <span class="section-label">// How It Works</span>
+                <h2 class="section-title">From Vulnerable to Secure in Minutes</h2>
+                <p class="section-subtitle">Three steps to autonomous code security</p>
+            </div>
+            <div class="process-flow">
+                <div class="process-step">
+                    <div class="process-number">📥</div>
+                    <h3>Connect</h3>
+                    <p>Integrate with your Git provider, IDE, and CI/CD pipeline in under 5 minutes. Zero config required.</p>
+                </div>
+                <div class="process-step">
+                    <div class="process-number">🔍</div>
+                    <h3>Scan</h3>
+                    <p>Our AI analyzes every commit against 50M+ vulnerability patterns, understanding context and intent.</p>
+                </div>
+                <div class="process-step">
+                    <div class="process-number">🛡️</div>
+                    <h3>Secure</h3>
+                    <p>Receive actionable findings with auto-generated fixes. Approve with one click or customize as needed.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section class="pricing" id="pricing">
+        <div class="section-container">
+            <div class="section-header">
+                <span class="section-label">// Pricing</span>
+                <h2 class="section-title">Start Free. Scale Securely.</h2>
+                <p class="section-subtitle">Security that grows with your team</p>
+            </div>
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <div class="pricing-tier">Starter</div>
+                    <div class="pricing-name">Developer</div>
+                    <div class="pricing-price">
+                        <span class="pricing-amount">$0</span>
+                    </div>
+                    <p class="pricing-desc">Perfect for individual developers and small projects</p>
+                    <ul class="pricing-features">
+                        <li>Up to 5 users</li>
+                        <li>VS Code & JetBrains plugins</li>
+                        <li>Basic vulnerability scanning</li>
+                        <li>Community support</li>
+                        <li>Public repo scanning</li>
+                    </ul>
+                    <a href="#" class="btn btn-secondary">Start Free</a>
+                </div>
+                <div class="pricing-card popular">
+                    <span class="popular-badge">Most Popular</span>
+                    <div class="pricing-tier">Growth</div>
+                    <div class="pricing-name">Team</div>
+                    <div class="pricing-price">
+                        <span class="pricing-amount">$49</span>
+                        <span class="pricing-period">/user/month</span>
+                    </div>
+                    <p class="pricing-desc">For growing teams that ship fast and secure</p>
+                    <ul class="pricing-features">
+                        <li>Everything in Developer</li>
+                        <li>Full CI/CD integration</li>
+                        <li>Autonomous remediation</li>
+                        <li>Team analytics dashboard</li>
+                        <li>Private repo scanning</li>
+                        <li>Priority email support</li>
+                    </ul>
+                    <a href="#" class="btn btn-primary">Start Trial</a>
+                </div>
+                <div class="pricing-card">
+                    <div class="pricing-tier">Scale</div>
+                    <div class="pricing-name">Enterprise</div>
+                    <div class="pricing-price">
+                        <span class="pricing-amount">$149</span>
+                        <span class="pricing-period">/user/month</span>
+                    </div>
+                    <p class="pricing-desc">For organizations with advanced security requirements</p>
+                    <ul class="pricing-features">
+                        <li>Everything in Team</li>
+                        <li>Custom security policies</li>
+                        <li>SSO/SCIM integration</li>
+                        <li>Dedicated success manager</li>
+                        <li>On-premise deployment option</li>
+                        <li>99.99% SLA guarantee</li>
+                    </ul>
+                    <a href="#" class="btn btn-secondary">Contact Sales</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Social Proof -->
+    <section class="social-proof">
+        <div class="section-container">
+            <div class="section-header">
+                <span class="section-label">// Trusted By</span>
+                <h2 class="section-title">Security Teams at Leading Companies</h2>
+            </div>
+            <div class="logos-grid">
+                <div class="logo-item">Acme Corp</div>
+                <div class="logo-item">TechFlow</div>
+                <div class="logo-item">DataSphere</div>
+                <div class="logo-item">CloudNine</div>
+                <div class="logo-item">Quantum Inc</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="cta-container">
+            <h2>Secure Your AI-Generated Code Today</h2>
+            <p>Join the thousands of developers who ship secure code at AI speed. Start your free trial — no credit card required.</p>
+            <div class="cta-buttons">
+                <a href="#" class="btn btn-primary btn-large">
+                    Start Free Trial
+                    <span>→</span>
+                </a>
+                <a href="#" class="btn btn-secondary btn-large">
+                    Schedule Demo
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <a href="#" class="logo">
+                        <div class="logo-icon">🛡️</div>
+                        CodeGuardian AI
+                    </a>
+                    <p>Autonomous security for the AI-coded future. Securing software at the speed it's being written.</p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Product</h4>
+                        <ul>
+                            <li><a href="#">Features</a></li>
+                            <li><a href="#">Pricing</a></li>
+                            <li><a href="#">Integrations</a></li>
+                            <li><a href="#">Changelog</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Resources</h4>
+                        <ul>
+                            <li><a href="#">Documentation</a></li>
+                            <li><a href="#">Blog</a></li>
+                            <li><a href="#">Security Research</a></li>
+                            <li><a href="#">API Reference</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Company</h4>
+                        <ul>
+                            <li><a href="#">About</a></li>
+                            <li><a href="#">Careers</a></li>
+                            <li><a href="#">Contact</a></li>
+                            <li><a href="#">Press</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Legal</h4>
+                        <ul>
+                            <li><a href="#">Privacy</a></li>
+                            <li><a href="#">Terms</a></li>
+                            <li><a href="#">Security</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="footer-copyright">© 2026 CodeGuardian AI. All rights reserved.</p>
+                <div class="footer-social">
+                    <a href="#">𝕏</a>
+                    <a href="#">in</a>
+                    <a href="#">GH</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
