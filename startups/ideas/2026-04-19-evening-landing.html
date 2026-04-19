@@ -1,0 +1,1187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CircadianOS — The AI Operating System for Human Chronobiological Intelligence</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366F1;
+            --primary-dark: #4F46E5;
+            --secondary: #F97316;
+            --accent: #14B8A6;
+            --dark: #0F172A;
+            --darker: #020617;
+            --light: #F8FAFC;
+            --gray: #64748B;
+            --gradient-main: linear-gradient(135deg, #6366F1 0%, #8B5CF6 50%, #D946EF 100%);
+            --gradient-warm: linear-gradient(135deg, #F97316 0%, #FBBF24 100%);
+            --gradient-cool: linear-gradient(135deg, #14B8A6 0%, #06B6D4 100%);
+            --gradient-night: linear-gradient(180deg, #0F172A 0%, #1E1B4B 50%, #312E81 100%);
+            --glow: 0 0 60px rgba(99, 102, 241, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--darker);
+            color: var(--light);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: var(--gradient-night);
+            overflow: hidden;
+        }
+
+        .circadian-ring {
+            position: absolute;
+            border-radius: 50%;
+            border: 2px solid rgba(99, 102, 241, 0.1);
+            animation: rotate-ring 30s linear infinite;
+        }
+
+        .circadian-ring:nth-child(1) {
+            width: 800px;
+            height: 800px;
+            top: -200px;
+            right: -200px;
+            border-color: rgba(99, 102, 241, 0.15);
+            animation-duration: 40s;
+        }
+
+        .circadian-ring:nth-child(2) {
+            width: 600px;
+            height: 600px;
+            top: -100px;
+            right: -100px;
+            border-color: rgba(139, 92, 246, 0.1);
+            animation-duration: 30s;
+            animation-direction: reverse;
+        }
+
+        .circadian-ring:nth-child(3) {
+            width: 400px;
+            height: 400px;
+            top: 0;
+            right: 0;
+            border-color: rgba(217, 70, 239, 0.1);
+            animation-duration: 20s;
+        }
+
+        .time-pulse {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: var(--secondary);
+            border-radius: 50%;
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+
+        .time-pulse:nth-child(4) {
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .time-pulse:nth-child(5) {
+            top: 60%;
+            left: 80%;
+            animation-delay: 0.5s;
+            background: var(--primary);
+        }
+
+        .time-pulse:nth-child(6) {
+            top: 80%;
+            left: 30%;
+            animation-delay: 1s;
+            background: var(--accent);
+        }
+
+        @keyframes rotate-ring {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 0 20px currentColor;
+                opacity: 0.6;
+            }
+            50% {
+                transform: scale(1.5);
+                box-shadow: 0 0 40px currentColor;
+                opacity: 1;
+            }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(99, 102, 241, 0.1);
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: var(--gradient-main);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-main);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .logo-icon::before {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 3px solid white;
+            border-radius: 50%;
+        }
+
+        .logo-icon::after {
+            content: '';
+            position: absolute;
+            width: 2px;
+            height: 12px;
+            background: white;
+            transform-origin: bottom center;
+            transform: rotate(-45deg);
+            bottom: 50%;
+        }
+
+        .nav-cta {
+            padding: 0.8rem 2rem;
+            background: var(--gradient-main);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: var(--glow);
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 80px rgba(99, 102, 241, 0.6);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 8rem 5% 4rem;
+            position: relative;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1.2rem;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 50px;
+            font-size: 0.9rem;
+            color: var(--primary);
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .badge-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--secondary);
+            border-radius: 50%;
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+
+        .hero h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(3rem, 8vw, 5.5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.8s ease-out 0.2s backwards;
+        }
+
+        .hero h1 span {
+            background: var(--gradient-main);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+            color: var(--gray);
+            max-width: 700px;
+            margin-bottom: 3rem;
+            animation: fadeInUp 0.8s ease-out 0.4s backwards;
+        }
+
+        .hero-cta-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            animation: fadeInUp 0.8s ease-out 0.6s backwards;
+        }
+
+        .btn-primary {
+            padding: 1rem 2.5rem;
+            background: var(--gradient-main);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: var(--glow);
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 0 100px rgba(99, 102, 241, 0.6);
+        }
+
+        .btn-secondary {
+            padding: 1rem 2.5rem;
+            background: transparent;
+            color: var(--light);
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            border: 2px solid rgba(99, 102, 241, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(99, 102, 241, 0.1);
+            border-color: var(--primary);
+        }
+
+        /* Circadian Clock Visual */
+        .clock-visual {
+            margin-top: 4rem;
+            position: relative;
+            width: 300px;
+            height: 300px;
+            animation: fadeInUp 0.8s ease-out 0.8s backwards;
+        }
+
+        .clock-ring {
+            position: absolute;
+            border-radius: 50%;
+            border: 3px solid;
+        }
+
+        .clock-ring-outer {
+            width: 100%;
+            height: 100%;
+            border-color: rgba(99, 102, 241, 0.3);
+        }
+
+        .clock-ring-mid {
+            width: 70%;
+            height: 70%;
+            top: 15%;
+            left: 15%;
+            border-color: rgba(139, 92, 246, 0.4);
+        }
+
+        .clock-ring-inner {
+            width: 40%;
+            height: 40%;
+            top: 30%;
+            left: 30%;
+            border-color: rgba(217, 70, 239, 0.5);
+        }
+
+        .clock-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-main);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--glow);
+        }
+
+        .clock-center span {
+            font-size: 1.5rem;
+        }
+
+        .clock-segments {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .segment {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+        }
+
+        .segment-dawn { 
+            background: #FBBF24; 
+            transform: translate(-50%, -50%) rotate(0deg) translateY(-140px);
+        }
+        .segment-morning { 
+            background: #F97316; 
+            transform: translate(-50%, -50%) rotate(45deg) translateY(-140px);
+        }
+        .segment-noon { 
+            background: #EF4444; 
+            transform: translate(-50%, -50%) rotate(90deg) translateY(-140px);
+        }
+        .segment-afternoon { 
+            background: #F97316; 
+            transform: translate(-50%, -50%) rotate(135deg) translateY(-140px);
+        }
+        .segment-evening { 
+            background: #8B5CF6; 
+            transform: translate(-50%, -50%) rotate(180deg) translateY(-140px);
+        }
+        .segment-night { 
+            background: #6366F1; 
+            transform: translate(-50%, -50%) rotate(225deg) translateY(-140px);
+        }
+        .segment-midnight { 
+            background: #1E1B4B; 
+            transform: translate(-50%, -50%) rotate(270deg) translateY(-140px);
+        }
+        .segment-predawn { 
+            background: #312E81; 
+            transform: translate(-50%, -50%) rotate(315deg) translateY(-140px);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Stats Section */
+        .stats {
+            padding: 4rem 5%;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .stat {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(99, 102, 241, 0.05);
+            border-radius: 20px;
+            border: 1px solid rgba(99, 102, 241, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .stat:hover {
+            transform: translateY(-5px);
+            border-color: rgba(99, 102, 241, 0.3);
+            box-shadow: 0 10px 40px rgba(99, 102, 241, 0.1);
+        }
+
+        .stat-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            background: var(--gradient-main);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            color: var(--gray);
+            margin-top: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        /* Problem Section */
+        .problem {
+            padding: 6rem 5%;
+            background: linear-gradient(180deg, transparent 0%, rgba(99, 102, 241, 0.05) 50%, transparent 100%);
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 4rem;
+        }
+
+        .section-label {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(249, 115, 22, 0.1);
+            color: var(--secondary);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            color: var(--gray);
+            font-size: 1.1rem;
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .problem-card {
+            padding: 2rem;
+            background: rgba(239, 68, 68, 0.05);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(239, 68, 68, 0.4);
+        }
+
+        .problem-stat {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #EF4444;
+            margin-bottom: 0.5rem;
+        }
+
+        .problem-text {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        /* Solution Section */
+        .solution {
+            padding: 6rem 5%;
+        }
+
+        .solution .section-label {
+            background: rgba(20, 184, 166, 0.1);
+            color: var(--accent);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            padding: 2.5rem;
+            background: rgba(99, 102, 241, 0.05);
+            border: 1px solid rgba(99, 102, 241, 0.1);
+            border-radius: 24px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient-main);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(99, 102, 241, 0.3);
+            box-shadow: 0 20px 60px rgba(99, 102, 241, 0.15);
+        }
+
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-main);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-card h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card p {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        /* How It Works */
+        .how-it-works {
+            padding: 6rem 5%;
+            background: linear-gradient(180deg, transparent 0%, rgba(139, 92, 246, 0.05) 50%, transparent 100%);
+        }
+
+        .how-it-works .section-label {
+            background: rgba(139, 92, 246, 0.1);
+            color: #A78BFA;
+        }
+
+        .steps {
+            display: flex;
+            flex-direction: column;
+            gap: 3rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .step {
+            display: flex;
+            gap: 2rem;
+            align-items: flex-start;
+        }
+
+        .step-number {
+            flex-shrink: 0;
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-main);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            box-shadow: var(--glow);
+        }
+
+        .step-content h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .step-content p {
+            color: var(--gray);
+        }
+
+        /* Pricing Section */
+        .pricing {
+            padding: 6rem 5%;
+        }
+
+        .pricing .section-label {
+            background: rgba(249, 115, 22, 0.1);
+            color: var(--secondary);
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            padding: 2.5rem;
+            background: rgba(99, 102, 241, 0.05);
+            border: 1px solid rgba(99, 102, 241, 0.1);
+            border-radius: 24px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .pricing-card.featured {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.1);
+            transform: scale(1.05);
+        }
+
+        .pricing-card.featured::before {
+            content: 'MOST POPULAR';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 0.3rem 1rem;
+            background: var(--gradient-main);
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border-radius: 50px;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(99, 102, 241, 0.3);
+        }
+
+        .pricing-card.featured:hover {
+            transform: scale(1.05) translateY(-5px);
+        }
+
+        .pricing-tier {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .pricing-price {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-price span {
+            font-size: 1rem;
+            color: var(--gray);
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin: 2rem 0;
+            text-align: left;
+        }
+
+        .pricing-features li {
+            padding: 0.5rem 0;
+            color: var(--gray);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .pricing-features li::before {
+            content: '✓';
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        /* Market Section */
+        .market {
+            padding: 6rem 5%;
+            background: linear-gradient(180deg, transparent 0%, rgba(20, 184, 166, 0.05) 50%, transparent 100%);
+        }
+
+        .market .section-label {
+            background: rgba(20, 184, 166, 0.1);
+            color: var(--accent);
+        }
+
+        .market-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .market-stat {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .market-stat-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            background: var(--gradient-cool);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .market-stat-label {
+            color: var(--gray);
+            margin-top: 0.5rem;
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 8rem 5%;
+            text-align: center;
+            position: relative;
+        }
+
+        .cta::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.2) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .cta h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .cta p {
+            color: var(--gray);
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            position: relative;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            position: relative;
+        }
+
+        /* Footer */
+        footer {
+            padding: 3rem 5%;
+            border-top: 1px solid rgba(99, 102, 241, 0.1);
+            text-align: center;
+            color: var(--gray);
+        }
+
+        footer .logo {
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        footer p {
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .step {
+                flex-direction: column;
+                text-align: center;
+                align-items: center;
+            }
+
+            .pricing-card.featured {
+                transform: scale(1);
+            }
+
+            .pricing-card.featured:hover {
+                transform: translateY(-5px);
+            }
+
+            .clock-visual {
+                width: 250px;
+                height: 250px;
+            }
+
+            .segment-dawn { transform: translate(-50%, -50%) rotate(0deg) translateY(-115px); }
+            .segment-morning { transform: translate(-50%, -50%) rotate(45deg) translateY(-115px); }
+            .segment-noon { transform: translate(-50%, -50%) rotate(90deg) translateY(-115px); }
+            .segment-afternoon { transform: translate(-50%, -50%) rotate(135deg) translateY(-115px); }
+            .segment-evening { transform: translate(-50%, -50%) rotate(180deg) translateY(-115px); }
+            .segment-night { transform: translate(-50%, -50%) rotate(225deg) translateY(-115px); }
+            .segment-midnight { transform: translate(-50%, -50%) rotate(270deg) translateY(-115px); }
+            .segment-predawn { transform: translate(-50%, -50%) rotate(315deg) translateY(-115px); }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation">
+        <div class="circadian-ring"></div>
+        <div class="circadian-ring"></div>
+        <div class="circadian-ring"></div>
+        <div class="time-pulse"></div>
+        <div class="time-pulse"></div>
+        <div class="time-pulse"></div>
+    </div>
+
+    <nav>
+        <div class="logo">
+            <div class="logo-icon"></div>
+            CircadianOS
+        </div>
+        <a href="#waitlist" class="nav-cta">Join Waitlist</a>
+    </nav>
+
+    <section class="hero">
+        <div class="badge">
+            <span class="badge-dot"></span>
+            Nobel Prize-Validated Science
+        </div>
+        <h1>Your 24-Hour <span>Biological Clock</span>, Made Intelligent</h1>
+        <p class="hero-subtitle">The AI operating system that optimizes your entire circadian rhythm — light, sleep, meals, exercise, medications, and productivity — personalized to your unique chronobiology.</p>
+        <div class="hero-cta-group">
+            <a href="#waitlist" class="btn-primary">Join the Waitlist</a>
+            <a href="#how" class="btn-secondary">See How It Works</a>
+        </div>
+        
+        <div class="clock-visual">
+            <div class="clock-ring clock-ring-outer"></div>
+            <div class="clock-ring clock-ring-mid"></div>
+            <div class="clock-ring clock-ring-inner"></div>
+            <div class="clock-center"><span>⏱️</span></div>
+            <div class="clock-segments">
+                <div class="segment segment-dawn"></div>
+                <div class="segment segment-morning"></div>
+                <div class="segment segment-noon"></div>
+                <div class="segment segment-afternoon"></div>
+                <div class="segment segment-evening"></div>
+                <div class="segment segment-night"></div>
+                <div class="segment segment-midnight"></div>
+                <div class="segment segment-predawn"></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="stats">
+        <div class="stat">
+            <div class="stat-value">$411B</div>
+            <div class="stat-label">Lost annually to circadian disruption in the US</div>
+        </div>
+        <div class="stat">
+            <div class="stat-value">56%</div>
+            <div class="stat-label">Adults with work-sleep schedule conflict</div>
+        </div>
+        <div class="stat">
+            <div class="stat-value">400%</div>
+            <div class="stat-label">Medication efficacy variation by timing</div>
+        </div>
+        <div class="stat">
+            <div class="stat-value">70%</div>
+            <div class="stat-label">Shift workers with circadian disorders</div>
+        </div>
+    </section>
+
+    <section class="problem">
+        <div class="section-header">
+            <span class="section-label">The Problem</span>
+            <h2 class="section-title">We're Living Against Our Biology</h2>
+            <p class="section-subtitle">Modern life is designed to destroy your circadian rhythm. The result? Chronic fatigue, poor health, and lost performance.</p>
+        </div>
+        <div class="problem-grid">
+            <div class="problem-card">
+                <div class="problem-stat">$2,000+</div>
+                <div class="problem-text">Per employee annual cost when work schedules conflict with natural chronotypes</div>
+            </div>
+            <div class="problem-card">
+                <div class="problem-stat">35%</div>
+                <div class="problem-text">Of adults get less than recommended sleep due to schedule misalignment</div>
+            </div>
+            <div class="problem-card">
+                <div class="problem-stat">2.5x</div>
+                <div class="problem-text">Higher accident risk for night shift workers vs. day shift</div>
+            </div>
+            <div class="problem-card">
+                <div class="problem-stat">Zero</div>
+                <div class="problem-text">Unified platforms exist to optimize your entire 24-hour biological cycle</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="solution">
+        <div class="section-header">
+            <span class="section-label">The Solution</span>
+            <h2 class="section-title">Your Personal Circadian Intelligence</h2>
+            <p class="section-subtitle">CircadianOS maps your unique chronobiology and optimizes every domain of your 24-hour cycle in real-time.</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">☀️</div>
+                <h3>Light Intelligence</h3>
+                <p>Automated light spectrum optimization via smart home integration. Dawn simulation, blue light management, and workplace recommendations.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🍽️</div>
+                <h3>Chrono-Nutrition</h3>
+                <p>Personalized meal timing windows based on your metabolic cycles. Optimize glucose response and energy throughout the day.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💪</div>
+                <h3>Chrono-Exercise</h3>
+                <p>Identify your peak physical performance windows. Time strength training, cardio, and recovery for maximum results.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💊</div>
+                <h3>Chrono-Pharmacology</h3>
+                <p>Medication timing optimization for maximum efficacy. Integration with pharmacy systems and clinical protocols.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🧠</div>
+                <h3>Chrono-Productivity</h3>
+                <p>Deep work window identification. Calendar integration that schedules important meetings during your cognitive peaks.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">😴</div>
+                <h3>Chrono-Sleep</h3>
+                <p>Dynamic sleep window calculation, pre-sleep protocol automation, strategic nap placement, and wake optimization.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="how-it-works" id="how">
+        <div class="section-header">
+            <span class="section-label">How It Works</span>
+            <h2 class="section-title">Intelligence That Adapts to You</h2>
+            <p class="section-subtitle">CircadianOS learns your unique biology and continuously optimizes your day.</p>
+        </div>
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h3>Map Your Chronotype</h3>
+                    <p>Connect your wearables and optionally add genetic data. Our AI analyzes your sleep patterns, activity, and biomarkers to build your unique circadian profile — understanding whether you're a morning lark, night owl, or somewhere in between.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h3>Get Personalized Protocols</h3>
+                    <p>Receive AI-generated recommendations for every aspect of your day: optimal wake/sleep times, meal windows, exercise timing, medication schedules, and deep work blocks — all personalized to your biology.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h3>Automated Interventions</h3>
+                    <p>CircadianOS integrates with your smart home, calendar, and devices to automatically adjust lighting, block distracting meetings during your focus windows, and send perfectly-timed nudges.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <h3>Continuous Optimization</h3>
+                    <p>The system learns from your responses and outcomes, continuously refining its understanding of your biology. It adapts to travel, shift changes, seasons, and life events in real-time.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="pricing" id="pricing">
+        <div class="section-header">
+            <span class="section-label">Pricing</span>
+            <h2 class="section-title">Invest in Your Biology</h2>
+            <p class="section-subtitle">Choose the plan that matches your optimization goals.</p>
+        </div>
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <div class="pricing-tier">Essential</div>
+                <div class="pricing-price">$12<span>/month</span></div>
+                <ul class="pricing-features">
+                    <li>Core chronotype mapping</li>
+                    <li>Basic recommendations</li>
+                    <li>Light exposure tracking</li>
+                    <li>Sleep pattern analysis</li>
+                    <li>Mobile app access</li>
+                </ul>
+                <a href="#waitlist" class="btn-primary" style="width: 100%; display: block;">Get Started</a>
+            </div>
+            <div class="pricing-card featured">
+                <div class="pricing-tier">Performance</div>
+                <div class="pricing-price">$29<span>/month</span></div>
+                <ul class="pricing-features">
+                    <li>Everything in Essential</li>
+                    <li>Full optimization suite</li>
+                    <li>Calendar integration</li>
+                    <li>Smart home automation</li>
+                    <li>Chrono-nutrition protocols</li>
+                    <li>Jet lag management</li>
+                </ul>
+                <a href="#waitlist" class="btn-primary" style="width: 100%; display: block;">Get Started</a>
+            </div>
+            <div class="pricing-card">
+                <div class="pricing-tier">Longevity</div>
+                <div class="pricing-price">$79<span>/month</span></div>
+                <ul class="pricing-features">
+                    <li>Everything in Performance</li>
+                    <li>Clinical-grade biomarkers</li>
+                    <li>Genetic analysis integration</li>
+                    <li>1:1 coaching sessions</li>
+                    <li>Chrono-pharmacology</li>
+                    <li>Priority support</li>
+                </ul>
+                <a href="#waitlist" class="btn-primary" style="width: 100%; display: block;">Get Started</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="market">
+        <div class="section-header">
+            <span class="section-label">Market Opportunity</span>
+            <h2 class="section-title">A $300B+ Market Ready for Disruption</h2>
+            <p class="section-subtitle">Chronobiology sits at the intersection of sleep tech, wellness, pharma, and enterprise productivity.</p>
+        </div>
+        <div class="market-stats">
+            <div class="market-stat">
+                <div class="market-stat-value">$100B+</div>
+                <div class="market-stat-label">Sleep Technology Market</div>
+            </div>
+            <div class="market-stat">
+                <div class="market-stat-value">$85B</div>
+                <div class="market-stat-label">Corporate Wellness Market</div>
+            </div>
+            <div class="market-stat">
+                <div class="market-stat-value">$15B+</div>
+                <div class="market-stat-label">Chronopharmacology Opportunity</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta" id="waitlist">
+        <h2>Ready to Optimize Your <span style="background: var(--gradient-main); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">24-Hour Cycle?</span></h2>
+        <p>Join the waitlist for early access and be among the first to experience the future of human biological optimization.</p>
+        <div class="cta-buttons">
+            <a href="mailto:pradhith@example.com?subject=CircadianOS%20Early%20Access" class="btn-primary">Request Early Access</a>
+            <a href="#" class="btn-secondary">Download Playbook</a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="logo">
+            <div class="logo-icon"></div>
+            CircadianOS
+        </div>
+        <p>The AI Operating System for Human Chronobiological Intelligence</p>
+        <p style="margin-top: 1rem; font-size: 0.8rem;">Concept by The Godfather 🎩 | April 19, 2026</p>
+    </footer>
+
+    <script>
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.stat, .problem-card, .feature-card, .step, .pricing-card').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'all 0.6s ease-out';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
