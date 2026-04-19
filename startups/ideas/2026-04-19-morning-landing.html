@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CultivateOS — The AI Operating System for Cellular Agriculture</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --emerald-50: #ecfdf5;
+            --emerald-100: #d1fae5;
+            --emerald-200: #a7f3d0;
+            --emerald-300: #6ee7b7;
+            --emerald-400: #34d399;
+            --emerald-500: #10b981;
+            --emerald-600: #059669;
+            --emerald-700: #047857;
+            --emerald-800: #065f46;
+            --emerald-900: #064e3b;
+            --emerald-950: #022c22;
+            
+            --lime-400: #a3e635;
+            --lime-500: #84cc16;
+            
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            
+            --slate-50: #f8fafc;
+            --slate-100: #f1f5f9;
+            --slate-200: #e2e8f0;
+            --slate-300: #cbd5e1;
+            --slate-400: #94a3b8;
+            --slate-500: #64748b;
+            --slate-600: #475569;
+            --slate-700: #334155;
+            --slate-800: #1e293b;
+            --slate-900: #0f172a;
+            --slate-950: #020617;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--slate-950);
+            color: var(--slate-100);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(16, 185, 129, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(16, 185, 129, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -2;
+        }
+
+        .bg-gradient {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse 80% 50% at 50% -20%, rgba(16, 185, 129, 0.15), transparent),
+                radial-gradient(ellipse 60% 40% at 80% 60%, rgba(6, 182, 212, 0.08), transparent),
+                radial-gradient(ellipse 50% 30% at 20% 80%, rgba(132, 204, 22, 0.06), transparent);
+            z-index: -1;
+        }
+
+        /* Floating Cells Animation */
+        .floating-cells {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .cell {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, rgba(16, 185, 129, 0.2), rgba(16, 185, 129, 0.05));
+            border: 1px solid rgba(16, 185, 129, 0.15);
+            animation: float 20s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            33% { transform: translateY(-30px) rotate(120deg); }
+            66% { transform: translateY(20px) rotate(240deg); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: rgba(2, 6, 23, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(16, 185, 129, 0.1);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--emerald-400);
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--emerald-500), var(--lime-500));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--slate-400);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--emerald-400);
+        }
+
+        .nav-cta {
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, var(--emerald-600), var(--emerald-700));
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .nav-cta:hover {
+            background: linear-gradient(135deg, var(--emerald-500), var(--emerald-600));
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(16, 185, 129, 0.3);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 8rem 5% 4rem;
+            position: relative;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 100px;
+            font-size: 0.85rem;
+            color: var(--emerald-400);
+            margin-bottom: 2rem;
+            animation: pulse-border 2s infinite;
+        }
+
+        @keyframes pulse-border {
+            0%, 100% { border-color: rgba(16, 185, 129, 0.3); }
+            50% { border-color: rgba(16, 185, 129, 0.6); }
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 5.5rem);
+            font-weight: 900;
+            line-height: 1.05;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #fff 0%, var(--emerald-200) 50%, var(--lime-400) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.35rem;
+            color: var(--slate-400);
+            max-width: 700px;
+            margin-bottom: 3rem;
+            line-height: 1.7;
+        }
+
+        .hero-cta-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            padding: 1rem 2.5rem;
+            background: linear-gradient(135deg, var(--emerald-500), var(--emerald-600));
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 60px rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-secondary {
+            padding: 1rem 2.5rem;
+            background: transparent;
+            border: 2px solid var(--slate-600);
+            border-radius: 12px;
+            color: var(--slate-300);
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--emerald-500);
+            color: var(--emerald-400);
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            max-width: 900px;
+            margin-top: 5rem;
+            padding: 2rem;
+            background: rgba(16, 185, 129, 0.05);
+            border-radius: 20px;
+            border: 1px solid rgba(16, 185, 129, 0.1);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--emerald-400), var(--lime-400));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--slate-400);
+            margin-top: 0.25rem;
+        }
+
+        /* Problem Section */
+        .section {
+            padding: 8rem 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-label {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: 100px;
+            font-size: 0.85rem;
+            color: var(--emerald-400);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: var(--slate-400);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Problem Cards */
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .problem-card {
+            padding: 2rem;
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.05), transparent);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 16px;
+            transition: all 0.3s;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(239, 68, 68, 0.4);
+        }
+
+        .problem-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .problem-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+            color: #fca5a5;
+        }
+
+        .problem-card p {
+            color: var(--slate-400);
+            font-size: 0.95rem;
+        }
+
+        /* Solution Section */
+        .solution-visual {
+            background: rgba(16, 185, 129, 0.03);
+            border: 1px solid rgba(16, 185, 129, 0.1);
+            border-radius: 24px;
+            padding: 3rem;
+            margin-bottom: 4rem;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .architecture-diagram {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .module-card {
+            padding: 2rem;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 16px;
+            text-align: center;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .module-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--emerald-500), var(--lime-500));
+        }
+
+        .module-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--emerald-400);
+            box-shadow: 0 20px 60px rgba(16, 185, 129, 0.2);
+        }
+
+        .module-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--emerald-600), var(--emerald-700));
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin: 0 auto 1.25rem;
+        }
+
+        .module-card h4 {
+            font-size: 1.15rem;
+            margin-bottom: 0.5rem;
+            color: var(--emerald-300);
+        }
+
+        .module-card p {
+            font-size: 0.9rem;
+            color: var(--slate-400);
+        }
+
+        .foundation-bar {
+            background: linear-gradient(90deg, var(--emerald-600), var(--lime-600));
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        /* Impact Metrics */
+        .impact-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .impact-card {
+            padding: 2rem;
+            background: rgba(16, 185, 129, 0.05);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 16px;
+            text-align: center;
+        }
+
+        .impact-value {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--emerald-400), var(--lime-400));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .impact-label {
+            color: var(--slate-400);
+            margin-top: 0.5rem;
+        }
+
+        /* Market Section */
+        .market-visual {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .market-chart {
+            position: relative;
+            height: 350px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            padding: 2rem;
+            background: rgba(16, 185, 129, 0.03);
+            border: 1px solid rgba(16, 185, 129, 0.1);
+            border-radius: 20px;
+        }
+
+        .chart-bar {
+            width: 80px;
+            background: linear-gradient(180deg, var(--emerald-400), var(--emerald-700));
+            border-radius: 8px 8px 0 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            padding-bottom: 1rem;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .chart-bar:hover {
+            transform: scaleY(1.02);
+            box-shadow: 0 -20px 60px rgba(16, 185, 129, 0.3);
+        }
+
+        .bar-2026 { height: 60px; }
+        .bar-2030 { height: 150px; }
+        .bar-2035 { height: 280px; }
+
+        .bar-label {
+            position: absolute;
+            bottom: -30px;
+            font-size: 0.9rem;
+            color: var(--slate-400);
+        }
+
+        .bar-value {
+            position: absolute;
+            top: -35px;
+            font-weight: 700;
+            color: var(--emerald-400);
+        }
+
+        .market-content h3 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .market-content p {
+            color: var(--slate-400);
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+        }
+
+        .market-list {
+            list-style: none;
+        }
+
+        .market-list li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .market-list li::before {
+            content: '✓';
+            color: var(--emerald-400);
+            font-weight: bold;
+        }
+
+        /* Traction Section */
+        .traction-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .traction-card {
+            padding: 2.5rem;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.08), transparent);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 20px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .traction-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 80px rgba(16, 185, 129, 0.15);
+        }
+
+        .traction-number {
+            font-size: 4rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--emerald-400), var(--cyan-400));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .traction-label {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+
+        .traction-detail {
+            color: var(--slate-400);
+            margin-top: 0.5rem;
+        }
+
+        /* Timeline Section */
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--emerald-500), var(--lime-500));
+            border-radius: 2px;
+        }
+
+        .timeline-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 3rem;
+        }
+
+        .timeline-item:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .timeline-content {
+            width: 45%;
+            padding: 2rem;
+            background: rgba(16, 185, 129, 0.05);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 16px;
+        }
+
+        .timeline-content h4 {
+            color: var(--emerald-400);
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-dot {
+            width: 20px;
+            height: 20px;
+            background: var(--emerald-500);
+            border-radius: 50%;
+            margin: 0 calc(5% - 10px);
+            border: 4px solid var(--slate-950);
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+        }
+
+        /* Team Section */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+
+        .team-card {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(16, 185, 129, 0.03);
+            border: 1px solid rgba(16, 185, 129, 0.1);
+            border-radius: 20px;
+            transition: all 0.3s;
+        }
+
+        .team-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--emerald-400);
+        }
+
+        .team-avatar {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, var(--emerald-600), var(--lime-600));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2.5rem;
+        }
+
+        .team-card h4 {
+            font-size: 1.2rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .team-role {
+            color: var(--emerald-400);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .team-bio {
+            color: var(--slate-400);
+            font-size: 0.85rem;
+            line-height: 1.6;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 8rem 5%;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 150%;
+            height: 150%;
+            background: radial-gradient(ellipse at center, rgba(16, 185, 129, 0.15), transparent 60%);
+            z-index: -1;
+        }
+
+        .cta-section h2 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-section p {
+            font-size: 1.25rem;
+            color: var(--slate-400);
+            max-width: 600px;
+            margin: 0 auto 3rem;
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 5% 2rem;
+            border-top: 1px solid rgba(16, 185, 129, 0.1);
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--slate-400);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--emerald-400);
+        }
+
+        .footer-copy {
+            color: var(--slate-500);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .stats-bar { grid-template-columns: repeat(2, 1fr); }
+            .architecture-diagram { grid-template-columns: repeat(2, 1fr); }
+            .impact-grid { grid-template-columns: repeat(2, 1fr); }
+            .market-visual { grid-template-columns: 1fr; }
+            .traction-grid { grid-template-columns: 1fr; }
+            .team-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .stats-bar { grid-template-columns: 1fr; }
+            .architecture-diagram { grid-template-columns: 1fr; }
+            .impact-grid { grid-template-columns: 1fr; }
+            .team-grid { grid-template-columns: 1fr; }
+            .timeline::before { left: 20px; }
+            .timeline-item { flex-direction: column !important; }
+            .timeline-content { width: 100%; margin-left: 40px; }
+            .timeline-dot { position: absolute; left: 10px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Effects -->
+    <div class="bg-grid"></div>
+    <div class="bg-gradient"></div>
+    <div class="floating-cells">
+        <div class="cell" style="width: 120px; height: 120px; top: 10%; left: 5%; animation-delay: 0s;"></div>
+        <div class="cell" style="width: 80px; height: 80px; top: 30%; right: 10%; animation-delay: -5s;"></div>
+        <div class="cell" style="width: 150px; height: 150px; bottom: 20%; left: 15%; animation-delay: -10s;"></div>
+        <div class="cell" style="width: 60px; height: 60px; top: 60%; right: 20%; animation-delay: -15s;"></div>
+        <div class="cell" style="width: 100px; height: 100px; bottom: 10%; right: 5%; animation-delay: -8s;"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">
+            <div class="logo-icon">🧬</div>
+            <span>CultivateOS</span>
+        </div>
+        <div class="nav-links">
+            <a href="#problem">Problem</a>
+            <a href="#solution">Solution</a>
+            <a href="#market">Market</a>
+            <a href="#traction">Traction</a>
+            <a href="#team">Team</a>
+        </div>
+        <button class="nav-cta">Request Demo</button>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-badge">
+            <span>🚀</span>
+            <span>The Future of Protein is Here</span>
+        </div>
+        <h1>The AI Operating System<br>for Cellular Agriculture</h1>
+        <p class="hero-subtitle">
+            CultivateOS powers the $2.5 trillion protein revolution. Real-time bioreactor intelligence, 
+            autonomous scale-up, and regulatory automation—built for the companies feeding the future.
+        </p>
+        <div class="hero-cta-group">
+            <button class="btn-primary">
+                <span>Get Early Access</span>
+                <span>→</span>
+            </button>
+            <button class="btn-secondary">Watch Demo</button>
+        </div>
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div class="stat-value">35%</div>
+                <div class="stat-label">Yield Improvement</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">60%</div>
+                <div class="stat-label">Faster Scale-Up</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">70%</div>
+                <div class="stat-label">Fewer Batch Failures</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">40%</div>
+                <div class="stat-label">Cost Reduction</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="section" id="problem">
+        <div class="section-header">
+            <div class="section-label">The Problem</div>
+            <h2 class="section-title">Cellular Agriculture is Stuck</h2>
+            <p class="section-subtitle">
+                The industry raised $3B+ but is hitting a wall. Three well-funded startups quietly shut down in 2026 due to scaling failures.
+            </p>
+        </div>
+        <div class="problem-grid">
+            <div class="problem-card">
+                <div class="problem-icon">🔮</div>
+                <h3>Black Box Bioreactors</h3>
+                <p>Facilities operate at 40-60% theoretical yield. Small fluctuations cause $500K+ batch failures with no warning.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">📈</div>
+                <h3>Scale-Up Valley of Death</h3>
+                <p>What works at 2L breaks at 10,000L. Each scale-up is essentially reinventing the wheel—costing millions.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">📋</div>
+                <h3>Regulatory Nightmare</h3>
+                <p>18-36 month submissions. Highly paid scientists write documents instead of optimizing production.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">🧠</div>
+                <h3>Knowledge Trapped</h3>
+                <p>Only ~5,000 cell culture engineers globally. Critical knowledge is trapped in individual experts' heads.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">💰</div>
+                <h3>Media Cost Crisis</h3>
+                <p>Growth media is 80% of production cost. Supplier issues and quality variance cause constant firefighting.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">⏰</div>
+                <h3>Too Late to Fix</h3>
+                <p>Each batch is a black box until harvest. By the time problems surface, it's too late—and too expensive.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="section" id="solution">
+        <div class="section-header">
+            <div class="section-label">The Solution</div>
+            <h2 class="section-title">Intelligence Infrastructure for Cell-Ag</h2>
+            <p class="section-subtitle">
+                The unified operating system that makes cellular agriculture industrially scalable
+            </p>
+        </div>
+        <div class="solution-visual">
+            <div class="architecture-diagram">
+                <div class="module-card">
+                    <div class="module-icon">🧠</div>
+                    <h4>BioMind Engine</h4>
+                    <p>Real-time bioreactor optimization with predictive control AI</p>
+                </div>
+                <div class="module-card">
+                    <div class="module-icon">📊</div>
+                    <h4>ScaleUp Studio</h4>
+                    <p>Digital twins for risk-free scale translation</p>
+                </div>
+                <div class="module-card">
+                    <div class="module-icon">📋</div>
+                    <h4>RegFlow Auto</h4>
+                    <p>Automated regulatory submission generation</p>
+                </div>
+                <div class="module-card">
+                    <div class="module-icon">🧬</div>
+                    <h4>CellVault</h4>
+                    <p>Cell line management & IP protection</p>
+                </div>
+                <div class="module-card">
+                    <div class="module-icon">🔗</div>
+                    <h4>MediaChain</h4>
+                    <p>Supply chain intelligence & cost optimization</p>
+                </div>
+                <div class="module-card">
+                    <div class="module-icon">📈</div>
+                    <h4>YieldMax</h4>
+                    <p>Predictive batch analytics & root cause analysis</p>
+                </div>
+            </div>
+            <div class="foundation-bar">
+                🏗️ Foundation: Unified Biological Data Lake — 100,000+ Annotated Batches
+            </div>
+        </div>
+        <div class="impact-grid">
+            <div class="impact-card">
+                <div class="impact-value">35%</div>
+                <div class="impact-label">Yield Improvement</div>
+            </div>
+            <div class="impact-card">
+                <div class="impact-value">60%</div>
+                <div class="impact-label">Faster Scale-Up</div>
+            </div>
+            <div class="impact-card">
+                <div class="impact-value">50%</div>
+                <div class="impact-label">Regulatory Time Cut</div>
+            </div>
+            <div class="impact-card">
+                <div class="impact-value">25%</div>
+                <div class="impact-label">Media Cost Reduction</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Market Section -->
+    <section class="section" id="market">
+        <div class="section-header">
+            <div class="section-label">Market Opportunity</div>
+            <h2 class="section-title">$10B Software Market by 2035</h2>
+            <p class="section-subtitle">
+                Picks and shovels for the protein revolution
+            </p>
+        </div>
+        <div class="market-visual">
+            <div class="market-chart">
+                <div class="chart-bar bar-2026">
+                    <span class="bar-value">$200M</span>
+                    <span class="bar-label">2026</span>
+                </div>
+                <div class="chart-bar bar-2030">
+                    <span class="bar-value">$2B</span>
+                    <span class="bar-label">2030</span>
+                </div>
+                <div class="chart-bar bar-2035">
+                    <span class="bar-value">$10B</span>
+                    <span class="bar-label">2035</span>
+                </div>
+            </div>
+            <div class="market-content">
+                <h3>The Cell-Ag Economy is Exploding</h3>
+                <p>
+                    $2.5T global meat market. By 2035, alternative proteins capture 22% ($550B+). 
+                    We're the essential software layer for every facility on Earth.
+                </p>
+                <ul class="market-list">
+                    <li>40+ countries now have approval pathways</li>
+                    <li>Production costs: $300K/kg (2013) → $8/kg (2026)</li>
+                    <li>$15B+ committed to cell-ag capacity through 2030</li>
+                    <li>First 100,000L facilities coming online this year</li>
+                    <li>Industry spent on hardware—now needs intelligence</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Traction Section -->
+    <section class="section" id="traction">
+        <div class="section-header">
+            <div class="section-label">Traction</div>
+            <h2 class="section-title">Already Driving Results</h2>
+            <p class="section-subtitle">
+                Design partners representing $4.2M in pipeline ACV
+            </p>
+        </div>
+        <div class="traction-grid">
+            <div class="traction-card">
+                <div class="traction-number">5</div>
+                <div class="traction-label">LOIs & Active Pilots</div>
+                <div class="traction-detail">Including Upside Foods, Believer Meats, The Every Company</div>
+            </div>
+            <div class="traction-card">
+                <div class="traction-number">$4.2M</div>
+                <div class="traction-label">Pipeline ACV</div>
+                <div class="traction-detail">From initial design partner cohort</div>
+            </div>
+            <div class="traction-card">
+                <div class="traction-number">50K+</div>
+                <div class="traction-label">Historical Batches</div>
+                <div class="traction-detail">Training data from academic partners</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Roadmap Section -->
+    <section class="section">
+        <div class="section-header">
+            <div class="section-label">Roadmap</div>
+            <h2 class="section-title">Path to Market Leadership</h2>
+        </div>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <h4>Phase 1: Design Partners</h4>
+                    <p>10 well-funded cell-ag startups. High-touch co-development, prove value, refine product.</p>
+                </div>
+                <div class="timeline-dot"></div>
+                <div class="timeline-content" style="visibility: hidden;"></div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-content" style="visibility: hidden;"></div>
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <h4>Phase 2: Commercial Expansion</h4>
+                    <p>Next 40 cell-ag companies globally. Achieve product-market fit across segments.</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <h4>Phase 3: Adjacent Markets</h4>
+                    <p>Precision fermentation, cell therapy. Platform extensions, 10x TAM expansion.</p>
+                </div>
+                <div class="timeline-dot"></div>
+                <div class="timeline-content" style="visibility: hidden;"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="section" id="team">
+        <div class="section-header">
+            <div class="section-label">Team</div>
+            <h2 class="section-title">Built by Industry Veterans</h2>
+            <p class="section-subtitle">
+                Leadership from Upside Foods, Ginkgo Bioworks, Pfizer, and Palantir
+            </p>
+        </div>
+        <div class="team-grid">
+            <div class="team-card">
+                <div class="team-avatar">👩‍💼</div>
+                <h4>Dr. Sarah Chen</h4>
+                <div class="team-role">CEO</div>
+                <div class="team-bio">Former VP Engineering at Upside Foods. MIT PhD, Stanford GSB MBA.</div>
+            </div>
+            <div class="team-card">
+                <div class="team-avatar">👨‍💻</div>
+                <h4>Dr. Marcus Williams</h4>
+                <div class="team-role">CTO</div>
+                <div class="team-bio">Former Staff Engineer at Ginkgo Bioworks. Harvard PhD Computational Biology.</div>
+            </div>
+            <div class="team-card">
+                <div class="team-avatar">👩‍🔬</div>
+                <h4>Dr. Elena Rodriguez</h4>
+                <div class="team-role">Chief Science Officer</div>
+                <div class="team-bio">15 years cell culture R&D, ex-Pfizer & Merck. UC Berkeley PhD.</div>
+            </div>
+            <div class="team-card">
+                <div class="team-avatar">👨‍💼</div>
+                <h4>James Park</h4>
+                <div class="team-role">VP Product</div>
+                <div class="team-bio">Former PM Lead at Palantir. Scaled Foundry 0→$100M ARR.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <h2>Ready to Scale<br>Cellular Agriculture?</h2>
+        <p>
+            Join the design partner program and be among the first to deploy 
+            the operating system for the protein revolution.
+        </p>
+        <div class="hero-cta-group">
+            <button class="btn-primary">
+                <span>Request Demo</span>
+                <span>→</span>
+            </button>
+            <button class="btn-secondary">Contact Sales</button>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="logo">
+                <div class="logo-icon">🧬</div>
+                <span>CultivateOS</span>
+            </div>
+            <div class="footer-links">
+                <a href="#">About</a>
+                <a href="#">Blog</a>
+                <a href="#">Careers</a>
+                <a href="#">Contact</a>
+            </div>
+            <div class="footer-copy">© 2026 CultivateOS. Feeding the future, intelligently.</div>
+        </div>
+    </footer>
+</body>
+</html>
