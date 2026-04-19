@@ -234,6 +234,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-04-18 | Afternoon | NeuroPilot AI — The Operating System for Human-AI Cognitive Partnership | [Playbook](2026-04-18-afternoon.md) • [Landing](2026-04-18-afternoon-landing.html) • [PDF](2026-04-18-afternoon.pdf) |
 | 2026-04-19 | Evening | CircadianOS — The AI Operating System for Human Chronobiological Intelligence | [Playbook](2026-04-19-evening.md) • [Landing](2026-04-19-evening-landing.html) • [PDF](2026-04-19-evening.pdf) |
 | 2026-04-19 | Morning | CultivateOS — The AI Operating System for Cellular Agriculture | [Playbook](2026-04-19-morning.md) • [Landing](2026-04-19-morning-landing.html) • [PDF](2026-04-19-morning.pdf) |
+| 2026-04-19 | Afternoon | StormShield AI — Extreme Weather Intelligence & Economic Protection | [Playbook](2026-04-19-afternoon.md) • [Landing](2026-04-19-afternoon-landing.html) • [PDF](2026-04-19-afternoon.pdf) |
 <!-- New entries will be added above this line -->
 
 ---
