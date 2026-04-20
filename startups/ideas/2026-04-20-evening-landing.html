@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RegenOS — The AI Operating System for Ecosystem Regeneration</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --forest: #1B4332;
+            --forest-light: #2D6A4F;
+            --emerald: #40916C;
+            --sage: #52B788;
+            --mint: #74C69D;
+            --seafoam: #95D5B2;
+            --pale: #B7E4C7;
+            --cream: #D8F3DC;
+            --earth: #8B5A2B;
+            --soil: #6B4423;
+            --gold: #DAA520;
+            --sky: #87CEEB;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--forest);
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* Animated Forest Background */
+        .forest-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .tree {
+            position: absolute;
+            bottom: 0;
+            width: 0;
+            height: 0;
+            border-left: 30px solid transparent;
+            border-right: 30px solid transparent;
+            border-bottom: 80px solid;
+            opacity: 0.15;
+        }
+
+        .tree::after {
+            content: '';
+            position: absolute;
+            top: 60px;
+            left: -8px;
+            width: 16px;
+            height: 30px;
+            background: var(--earth);
+            opacity: 0.3;
+        }
+
+        .tree:nth-child(1) { left: 5%; border-bottom-color: var(--emerald); animation: grow 20s ease-in-out infinite; }
+        .tree:nth-child(2) { left: 15%; border-bottom-color: var(--sage); animation: grow 18s ease-in-out infinite 2s; }
+        .tree:nth-child(3) { left: 25%; border-bottom-color: var(--mint); animation: grow 22s ease-in-out infinite 4s; }
+        .tree:nth-child(4) { left: 35%; border-bottom-color: var(--emerald); animation: grow 19s ease-in-out infinite 1s; }
+        .tree:nth-child(5) { left: 45%; border-bottom-color: var(--sage); animation: grow 21s ease-in-out infinite 3s; }
+        .tree:nth-child(6) { left: 55%; border-bottom-color: var(--mint); animation: grow 17s ease-in-out infinite 5s; }
+        .tree:nth-child(7) { left: 65%; border-bottom-color: var(--emerald); animation: grow 23s ease-in-out infinite 2s; }
+        .tree:nth-child(8) { left: 75%; border-bottom-color: var(--sage); animation: grow 20s ease-in-out infinite 4s; }
+        .tree:nth-child(9) { left: 85%; border-bottom-color: var(--mint); animation: grow 18s ease-in-out infinite 1s; }
+        .tree:nth-child(10) { left: 95%; border-bottom-color: var(--emerald); animation: grow 24s ease-in-out infinite 3s; }
+
+        @keyframes grow {
+            0%, 100% { transform: scaleY(1); }
+            50% { transform: scaleY(1.2); }
+        }
+
+        /* Floating particles (leaves/seeds) */
+        .particles {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .particle {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: var(--sage);
+            border-radius: 50% 0 50% 50%;
+            opacity: 0.4;
+            animation: float 15s infinite ease-in-out;
+        }
+
+        .particle:nth-child(odd) {
+            background: var(--mint);
+            animation-duration: 18s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.4;
+            }
+            90% {
+                opacity: 0.4;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 1;
+            background: linear-gradient(180deg, 
+                rgba(27, 67, 50, 0.9) 0%, 
+                rgba(45, 106, 79, 0.8) 50%,
+                rgba(27, 67, 50, 0.95) 100%
+            );
+        }
+
+        .logo-badge {
+            background: linear-gradient(135deg, var(--sage), var(--emerald));
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(64, 145, 108, 0.4);
+            animation: pulse 3s infinite ease-in-out;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 10px 40px rgba(64, 145, 108, 0.4); }
+            50% { transform: scale(1.02); box-shadow: 0 15px 50px rgba(64, 145, 108, 0.6); }
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 10vw, 7rem);
+            font-weight: 900;
+            letter-spacing: -3px;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #fff 0%, var(--cream) 50%, var(--mint) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero h2 {
+            font-size: clamp(1.2rem, 3vw, 2rem);
+            font-weight: 400;
+            color: var(--pale);
+            max-width: 700px;
+            line-height: 1.5;
+            margin-bottom: 30px;
+        }
+
+        .tagline {
+            font-size: 1.4rem;
+            color: var(--gold);
+            font-weight: 500;
+            font-style: italic;
+            margin-bottom: 50px;
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .cta-primary {
+            background: linear-gradient(135deg, var(--sage), var(--emerald));
+            color: white;
+            padding: 20px 50px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 60px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            box-shadow: 0 10px 40px rgba(64, 145, 108, 0.5);
+        }
+
+        .cta-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 60px rgba(64, 145, 108, 0.6);
+        }
+
+        .cta-secondary {
+            background: transparent;
+            color: var(--mint);
+            padding: 20px 50px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border: 2px solid var(--sage);
+            border-radius: 60px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .cta-secondary:hover {
+            background: rgba(82, 183, 136, 0.1);
+            border-color: var(--mint);
+        }
+
+        /* Stats Section */
+        .stats {
+            padding: 80px 20px;
+            background: linear-gradient(180deg, var(--forest) 0%, var(--forest-light) 100%);
+        }
+
+        .stats-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            text-align: center;
+        }
+
+        .stat-item {
+            padding: 30px;
+        }
+
+        .stat-number {
+            font-size: 4rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--mint), var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            color: var(--seafoam);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Problem Section */
+        .problem {
+            padding: 120px 20px;
+            background: linear-gradient(180deg, var(--forest-light) 0%, #0d261b 100%);
+        }
+
+        .section-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .section-tag {
+            color: var(--gold);
+            font-size: 0.9rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 30px;
+            line-height: 1.2;
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .problem-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px 30px;
+            transition: all 0.3s ease;
+        }
+
+        .problem-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-5px);
+            border-color: var(--sage);
+        }
+
+        .problem-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .problem-card h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--mint);
+        }
+
+        .problem-card p {
+            color: var(--seafoam);
+            line-height: 1.7;
+            font-size: 1rem;
+        }
+
+        /* Solution Section */
+        .solution {
+            padding: 120px 20px;
+            background: linear-gradient(180deg, #0d261b 0%, var(--forest) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .solution::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="1" fill="%2340916C" opacity="0.3"/></svg>');
+            background-size: 50px 50px;
+            opacity: 0.5;
+        }
+
+        .solution-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .capability-stack {
+            margin-top: 60px;
+        }
+
+        .capability-row {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            margin-bottom: 40px;
+            padding: 40px;
+            background: linear-gradient(135deg, rgba(64, 145, 108, 0.1), rgba(64, 145, 108, 0.05));
+            border-radius: 20px;
+            border: 1px solid rgba(64, 145, 108, 0.2);
+        }
+
+        .capability-row:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .capability-number {
+            font-size: 5rem;
+            font-weight: 900;
+            color: var(--sage);
+            opacity: 0.3;
+            min-width: 100px;
+        }
+
+        .capability-content h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--mint);
+            margin-bottom: 15px;
+        }
+
+        .capability-content p {
+            color: var(--seafoam);
+            line-height: 1.8;
+            font-size: 1.1rem;
+        }
+
+        /* Market Section */
+        .market {
+            padding: 120px 20px;
+            background: var(--forest);
+        }
+
+        .market-visual {
+            margin-top: 60px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .market-segment {
+            background: linear-gradient(135deg, rgba(82, 183, 136, 0.15), rgba(64, 145, 108, 0.08));
+            border-radius: 20px;
+            padding: 40px;
+            border: 1px solid rgba(82, 183, 136, 0.3);
+            text-align: center;
+        }
+
+        .market-value {
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--gold);
+            margin-bottom: 10px;
+        }
+
+        .market-year {
+            font-size: 0.9rem;
+            color: var(--sage);
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .market-name {
+            font-size: 1.1rem;
+            color: var(--pale);
+            font-weight: 500;
+        }
+
+        /* Tech Stack Section */
+        .tech-stack {
+            padding: 120px 20px;
+            background: linear-gradient(180deg, var(--forest) 0%, #0d261b 100%);
+        }
+
+        .stack-diagram {
+            margin-top: 60px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .stack-layer {
+            background: linear-gradient(135deg, rgba(64, 145, 108, 0.3), rgba(64, 145, 108, 0.1));
+            border: 2px solid var(--sage);
+            border-radius: 15px;
+            padding: 25px 40px;
+            margin-bottom: 15px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--cream);
+            transition: all 0.3s ease;
+        }
+
+        .stack-layer:hover {
+            background: linear-gradient(135deg, rgba(64, 145, 108, 0.5), rgba(64, 145, 108, 0.2));
+            transform: scale(1.02);
+        }
+
+        .stack-layer span {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 400;
+            color: var(--seafoam);
+            margin-top: 8px;
+        }
+
+        /* Vision Section */
+        .vision {
+            padding: 150px 20px;
+            background: linear-gradient(180deg, #0d261b 0%, var(--forest) 50%, var(--forest-light) 100%);
+            text-align: center;
+            position: relative;
+        }
+
+        .vision::before {
+            content: '🌍';
+            position: absolute;
+            font-size: 20rem;
+            opacity: 0.05;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .vision-content {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .vision h2 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 900;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, var(--cream), var(--mint), var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .vision p {
+            font-size: 1.4rem;
+            color: var(--seafoam);
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .vision .highlight {
+            color: var(--gold);
+            font-weight: 600;
+        }
+
+        /* Impact Section */
+        .impact {
+            padding: 120px 20px;
+            background: var(--forest-light);
+        }
+
+        .impact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 30px;
+            margin-top: 60px;
+        }
+
+        .impact-item {
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .impact-value {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--mint);
+            margin-bottom: 15px;
+        }
+
+        .impact-label {
+            color: var(--pale);
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        /* CTA Section */
+        .final-cta {
+            padding: 120px 20px;
+            background: linear-gradient(180deg, var(--forest-light) 0%, var(--forest) 100%);
+            text-align: center;
+        }
+
+        .final-cta h2 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 30px;
+        }
+
+        .final-cta p {
+            font-size: 1.3rem;
+            color: var(--seafoam);
+            max-width: 600px;
+            margin: 0 auto 50px;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .contact-item {
+            background: rgba(64, 145, 108, 0.2);
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid var(--sage);
+        }
+
+        .contact-item h4 {
+            color: var(--mint);
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .contact-item a {
+            color: var(--cream);
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        /* Footer */
+        footer {
+            padding: 40px 20px;
+            background: #0a1a12;
+            text-align: center;
+            color: var(--sage);
+            font-size: 0.9rem;
+        }
+
+        footer span {
+            color: var(--gold);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .capability-row {
+                flex-direction: column !important;
+                text-align: center;
+            }
+
+            .capability-number {
+                font-size: 3rem;
+            }
+
+            .stat-number {
+                font-size: 3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="forest-bg">
+        <div class="tree"></div>
+        <div class="tree"></div>
+        <div class="tree"></div>
+        <div class="tree"></div>
+        <div class="tree"></div>
+        <div class="tree"></div>
+        <div class="tree"></div>
+        <div class="tree"></div>
+        <div class="tree"></div>
+        <div class="tree"></div>
+    </div>
+
+    <div class="particles">
+        <div class="particle" style="left: 10%; animation-delay: 0s;"></div>
+        <div class="particle" style="left: 20%; animation-delay: 2s;"></div>
+        <div class="particle" style="left: 30%; animation-delay: 4s;"></div>
+        <div class="particle" style="left: 40%; animation-delay: 1s;"></div>
+        <div class="particle" style="left: 50%; animation-delay: 3s;"></div>
+        <div class="particle" style="left: 60%; animation-delay: 5s;"></div>
+        <div class="particle" style="left: 70%; animation-delay: 2s;"></div>
+        <div class="particle" style="left: 80%; animation-delay: 4s;"></div>
+        <div class="particle" style="left: 90%; animation-delay: 1s;"></div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="logo-badge">🌿 Restoring Earth with Intelligence</div>
+        <h1>RegenOS</h1>
+        <h2>The AI Operating System for Ecosystem Regeneration & Nature Restoration</h2>
+        <p class="tagline">"The planet's healing infrastructure."</p>
+        <div class="cta-group">
+            <a href="#contact" class="cta-primary">Join the Mission</a>
+            <a href="#solution" class="cta-secondary">Learn More</a>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-number">350M</div>
+                <div class="stat-label">Hectares to Restore</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">90%</div>
+                <div class="stat-label">Restoration Failure Rate</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">$1.5T</div>
+                <div class="stat-label">Market by 2035</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">1M+</div>
+                <div class="stat-label">Species at Risk</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="problem">
+        <div class="section-container">
+            <span class="section-tag">The Problem</span>
+            <h2 class="section-title">We've committed trillions to nature-based solutions. But we have no operating system to execute them.</h2>
+            
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="problem-icon">🌳</div>
+                    <h3>Restoration That Fails</h3>
+                    <p>90% of tree-planting initiatives fail within 5 years. We plant monocultures instead of biodiverse ecosystems.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">🛰️</div>
+                    <h3>Blind at Scale</h3>
+                    <p>We can't effectively monitor ecosystems at scale. Projects operate in isolation with no shared intelligence.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">📋</div>
+                    <h3>Manual Verification</h3>
+                    <p>Carbon credit verification is slow, expensive, and fraud-prone. The trust infrastructure doesn't exist.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">🧓</div>
+                    <h3>Ignored Wisdom</h3>
+                    <p>Indigenous knowledge is ignored while "experts" fail. The communities who know the land are sidelined.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="solution" id="solution">
+        <div class="section-container solution-content">
+            <span class="section-tag">The Solution</span>
+            <h2 class="section-title">Autonomous intelligence for ecosystem restoration at planetary scale.</h2>
+            
+            <div class="capability-stack">
+                <div class="capability-row">
+                    <div class="capability-number">01</div>
+                    <div class="capability-content">
+                        <h3>Intelligent Site Assessment</h3>
+                        <p>Before any restoration begins, RegenOS analyzes historical ecosystem state, current soil health, hydrology, connectivity, climate trajectory, and community needs to produce probabilistic restoration roadmaps.</p>
+                    </div>
+                </div>
+                <div class="capability-row">
+                    <div class="capability-number">02</div>
+                    <div class="capability-content">
+                        <h3>Species Selection Engine</h3>
+                        <p>AI selects optimal species mixes based on native templates, climate-resilient genetics, biodiversity value, carbon potential, and economic value for communities. No monocultures—ever.</p>
+                    </div>
+                </div>
+                <div class="capability-row">
+                    <div class="capability-number">03</div>
+                    <div class="capability-content">
+                        <h3>Multi-Sensor Monitoring Fusion</h3>
+                        <p>Satellite imagery, drone surveys, ground sensors, eDNA sampling, acoustic monitoring, and camera traps—all feeding digital twins that model ecosystem health trajectories in real-time.</p>
+                    </div>
+                </div>
+                <div class="capability-row">
+                    <div class="capability-number">04</div>
+                    <div class="capability-content">
+                        <h3>Automated MRV & Credits</h3>
+                        <p>Biomass estimation, soil carbon analysis, biodiversity indices, additionality proof, permanence risk scoring, and audit-ready reporting for Verra, Gold Standard, and ART.</p>
+                    </div>
+                </div>
+                <div class="capability-row">
+                    <div class="capability-number">05</div>
+                    <div class="capability-content">
+                        <h3>Indigenous Knowledge Integration</h3>
+                        <p>Built with indigenous communities, not around them. Traditional ecological knowledge databases, community protocols, revenue sharing, and local steward networks.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Market Section -->
+    <section class="market">
+        <div class="section-container">
+            <span class="section-tag">Market Opportunity</span>
+            <h2 class="section-title">$1.5 Trillion+ by 2035</h2>
+            
+            <div class="market-visual">
+                <div class="market-segment">
+                    <div class="market-value">$500B</div>
+                    <div class="market-year">2035</div>
+                    <div class="market-name">Nature-Based Carbon Credits</div>
+                </div>
+                <div class="market-segment">
+                    <div class="market-value">$400B</div>
+                    <div class="market-year">2035</div>
+                    <div class="market-name">Corporate Biodiversity</div>
+                </div>
+                <div class="market-segment">
+                    <div class="market-value">$350B</div>
+                    <div class="market-year">2035</div>
+                    <div class="market-name">Government Programs</div>
+                </div>
+                <div class="market-segment">
+                    <div class="market-value">$250B</div>
+                    <div class="market-year">2035</div>
+                    <div class="market-name">Ecosystem Services</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tech Stack Section -->
+    <section class="tech-stack">
+        <div class="section-container">
+            <span class="section-tag">Technology</span>
+            <h2 class="section-title">The Intelligence Stack</h2>
+            
+            <div class="stack-diagram">
+                <div class="stack-layer">
+                    🌍 Ecosystem Digital Twins
+                    <span>Real-time models of restoration sites & regions</span>
+                </div>
+                <div class="stack-layer">
+                    🤖 Restoration AI Agents
+                    <span>Species selection • Intervention timing • Risk management</span>
+                </div>
+                <div class="stack-layer">
+                    📡 Monitoring Fusion Layer
+                    <span>Satellite • Drone • IoT • eDNA • Acoustic • Camera trap</span>
+                </div>
+                <div class="stack-layer">
+                    ✅ Verification & Credit Engine
+                    <span>Automated MRV • Carbon accounting • Credit issuance</span>
+                </div>
+                <div class="stack-layer">
+                    🧓 Indigenous Knowledge Integration
+                    <span>Traditional ecological knowledge • Community protocols</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Vision Section -->
+    <section class="vision">
+        <div class="vision-content">
+            <h2>We are building Earth's immune system.</h2>
+            <p>As climate change accelerates, ecosystems are the planet's first line of defense. But restoration at the scale and speed required is impossible without artificial intelligence.</p>
+            <p><span class="highlight">Not with good intentions and volunteer labor.</span><br>
+            <span class="highlight">Not with one-off tree planting and greenwashing.</span></p>
+            <p>With intelligence. With indigenous wisdom. With technology that learns and adapts as fast as ecosystems change.</p>
+            <p style="font-size: 1.6rem; color: var(--gold); margin-top: 40px; font-weight: 600;">The planet is a patient. We're building its medical system.</p>
+        </div>
+    </section>
+
+    <!-- Impact Section -->
+    <section class="impact">
+        <div class="section-container">
+            <span class="section-tag">Impact by 2035</span>
+            <h2 class="section-title">Healing at Scale</h2>
+            
+            <div class="impact-grid">
+                <div class="impact-item">
+                    <div class="impact-value">150M</div>
+                    <div class="impact-label">Hectares under intelligent restoration</div>
+                </div>
+                <div class="impact-item">
+                    <div class="impact-value">2 Gt</div>
+                    <div class="impact-label">CO₂ verified and sequestered</div>
+                </div>
+                <div class="impact-item">
+                    <div class="impact-value">500K</div>
+                    <div class="impact-label">Species monitored across sites</div>
+                </div>
+                <div class="impact-item">
+                    <div class="impact-value">$10B</div>
+                    <div class="impact-label">Revenue to indigenous communities</div>
+                </div>
+                <div class="impact-item">
+                    <div class="impact-value">50</div>
+                    <div class="impact-label">Countries with platforms</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA Section -->
+    <section class="final-cta" id="contact">
+        <h2>Join the Restoration</h2>
+        <p>The planet can't wait. Neither can we.</p>
+        
+        <div class="contact-grid">
+            <div class="contact-item">
+                <h4>Build With Us</h4>
+                <a href="mailto:founders@regenos.earth">founders@regenos.earth</a>
+            </div>
+            <div class="contact-item">
+                <h4>Partner</h4>
+                <a href="mailto:pilots@regenos.earth">pilots@regenos.earth</a>
+            </div>
+            <div class="contact-item">
+                <h4>Invest</h4>
+                <a href="mailto:ir@regenos.earth">ir@regenos.earth</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>RegenOS — The Planet's Healing Infrastructure</p>
+        <p style="margin-top: 10px;">Generated by <span>The Godfather 🎩</span> • Evening Drop — April 20, 2026</p>
+    </footer>
+</body>
+</html>
