@@ -236,6 +236,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-04-19 | Morning | CultivateOS — The AI Operating System for Cellular Agriculture | [Playbook](2026-04-19-morning.md) • [Landing](2026-04-19-morning-landing.html) • [PDF](2026-04-19-morning.pdf) |
 | 2026-04-19 | Afternoon | StormShield AI — Extreme Weather Intelligence & Economic Protection | [Playbook](2026-04-19-afternoon.md) • [Landing](2026-04-19-afternoon-landing.html) • [PDF](2026-04-19-afternoon.pdf) |
 | 2026-04-20 | Evening | RegenOS — The AI Operating System for Ecosystem Regeneration & Nature Restoration | [Playbook](2026-04-20-evening.md) • [Landing](2026-04-20-evening-landing.html) • [PDF](2026-04-20-evening.pdf) |
+| 2026-04-20 | Morning | TimberOS — The AI Operating System for Forest Asset Intelligence & Sustainable Timber Markets | [Playbook](2026-04-20-morning.md) • [Landing](2026-04-20-morning-landing.html) • [PDF](2026-04-20-morning.pdf) |
 <!-- New entries will be added above this line -->
 
 ---

@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TimberOS — Forest Asset Intelligence</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --forest-dark: #0D2818;
+            --forest-main: #1A4D2E;
+            --forest-light: #2E7D4A;
+            --leaf-accent: #4ADE80;
+            --bark-brown: #8B4513;
+            --sky-blue: #87CEEB;
+            --gold: #FFD700;
+            --cream: #FFF8E7;
+            --white: #FFFFFF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--forest-dark);
+            color: var(--white);
+            overflow-x: hidden;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            padding: 2rem;
+            background: 
+                linear-gradient(180deg, 
+                    rgba(13, 40, 24, 0.9) 0%, 
+                    rgba(26, 77, 46, 0.85) 50%,
+                    rgba(13, 40, 24, 0.95) 100%
+                ),
+                url('https://images.unsplash.com/photo-1448375240586-882707db888b?w=1920') center/cover;
+        }
+
+        /* Animated Forest Floor */
+        .forest-floor {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 200px;
+            background: linear-gradient(0deg, var(--forest-dark) 0%, transparent 100%);
+        }
+
+        /* Floating Leaves Animation */
+        .leaves-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .leaf {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            opacity: 0.3;
+            animation: fall linear infinite;
+        }
+
+        .leaf svg {
+            width: 100%;
+            height: 100%;
+            fill: var(--leaf-accent);
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 10;
+            max-width: 1000px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(74, 222, 128, 0.15);
+            border: 1px solid var(--leaf-accent);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--leaf-accent);
+            margin-bottom: 2rem;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.4); }
+            50% { box-shadow: 0 0 20px 5px rgba(74, 222, 128, 0.2); }
+        }
+
+        .hero h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--white) 0%, var(--leaf-accent) 50%, var(--gold) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: clamp(1.1rem, 2vw, 1.4rem);
+            color: rgba(255, 255, 255, 0.85);
+            max-width: 700px;
+            margin: 0 auto 2.5rem;
+            line-height: 1.7;
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cta-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--forest-dark);
+            background: linear-gradient(135deg, var(--leaf-accent) 0%, #22c55e 100%);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .cta-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(74, 222, 128, 0.4);
+        }
+
+        .cta-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--white);
+            background: transparent;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .cta-secondary:hover {
+            border-color: var(--leaf-accent);
+            color: var(--leaf-accent);
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            position: absolute;
+            bottom: 3rem;
+            display: flex;
+            gap: 3rem;
+            z-index: 10;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--leaf-accent);
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 0.25rem;
+        }
+
+        /* Problem Section */
+        .problem-section {
+            padding: 8rem 2rem;
+            background: linear-gradient(180deg, var(--forest-dark) 0%, #0a1f12 100%);
+            position: relative;
+        }
+
+        .section-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-badge {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--leaf-accent);
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.7);
+            max-width: 600px;
+            margin-bottom: 4rem;
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .problem-card {
+            background: linear-gradient(145deg, rgba(46, 125, 74, 0.1) 0%, rgba(26, 77, 46, 0.15) 100%);
+            border: 1px solid rgba(74, 222, 128, 0.15);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(74, 222, 128, 0.4);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .problem-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--forest-light) 0%, var(--forest-main) 100%);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+        }
+
+        .problem-card h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.3rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .problem-card p {
+            color: rgba(255, 255, 255, 0.65);
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        /* Solution Section */
+        .solution-section {
+            padding: 8rem 2rem;
+            background: var(--forest-main);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .solution-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(74, 222, 128, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .solution-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        @media (max-width: 900px) {
+            .solution-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .solution-visual {
+            position: relative;
+        }
+
+        .forest-diagram {
+            background: linear-gradient(145deg, rgba(13, 40, 24, 0.8) 0%, rgba(26, 77, 46, 0.6) 100%);
+            border: 1px solid rgba(74, 222, 128, 0.2);
+            border-radius: 30px;
+            padding: 3rem;
+            position: relative;
+        }
+
+        .diagram-layer {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .diagram-layer:hover {
+            background: rgba(74, 222, 128, 0.1);
+            transform: translateX(10px);
+        }
+
+        .layer-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--leaf-accent);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .layer-info h4 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .layer-info p {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .solution-content .feature-list {
+            list-style: none;
+            margin-top: 2rem;
+        }
+
+        .solution-content .feature-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-check {
+            width: 24px;
+            height: 24px;
+            background: var(--leaf-accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 0.1rem;
+        }
+
+        .feature-check svg {
+            width: 14px;
+            height: 14px;
+            stroke: var(--forest-dark);
+        }
+
+        .feature-text {
+            color: rgba(255, 255, 255, 0.85);
+            line-height: 1.6;
+        }
+
+        .feature-text strong {
+            color: var(--white);
+        }
+
+        /* Products Section */
+        .products-section {
+            padding: 8rem 2rem;
+            background: linear-gradient(180deg, var(--forest-main) 0%, var(--forest-dark) 100%);
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+
+        .product-card {
+            background: linear-gradient(160deg, rgba(46, 125, 74, 0.15) 0%, rgba(13, 40, 24, 0.9) 100%);
+            border: 1px solid rgba(74, 222, 128, 0.15);
+            border-radius: 25px;
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--leaf-accent), var(--gold));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+
+        .product-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+        }
+
+        .product-number {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 4rem;
+            font-weight: 700;
+            color: rgba(74, 222, 128, 0.15);
+            position: absolute;
+            top: 1rem;
+            right: 1.5rem;
+        }
+
+        .product-card h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--leaf-accent);
+        }
+
+        .product-tagline {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 1.5rem;
+        }
+
+        .product-features {
+            list-style: none;
+        }
+
+        .product-features li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 0.75rem;
+            font-size: 0.95rem;
+        }
+
+        .product-features li::before {
+            content: '→';
+            color: var(--leaf-accent);
+            font-weight: bold;
+        }
+
+        /* Market Section */
+        .market-section {
+            padding: 8rem 2rem;
+            background: var(--forest-dark);
+            position: relative;
+        }
+
+        .market-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(ellipse at 20% 30%, rgba(74, 222, 128, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 70%, rgba(255, 215, 0, 0.05) 0%, transparent 50%);
+        }
+
+        .market-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .market-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+
+        .market-stat {
+            text-align: center;
+            padding: 2.5rem;
+            background: linear-gradient(145deg, rgba(46, 125, 74, 0.1) 0%, rgba(26, 77, 46, 0.05) 100%);
+            border: 1px solid rgba(74, 222, 128, 0.1);
+            border-radius: 20px;
+        }
+
+        .market-stat-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--leaf-accent) 0%, var(--gold) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .market-stat-label {
+            margin-top: 0.5rem;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.95rem;
+        }
+
+        /* Timeline Section */
+        .timeline-section {
+            padding: 8rem 2rem;
+            background: linear-gradient(180deg, var(--forest-dark) 0%, var(--forest-main) 100%);
+        }
+
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 4rem auto 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--leaf-accent) 0%, transparent 100%);
+        }
+
+        .timeline-item {
+            display: flex;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .timeline-item:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .timeline-content {
+            width: 45%;
+            padding: 2rem;
+            background: rgba(13, 40, 24, 0.6);
+            border: 1px solid rgba(74, 222, 128, 0.2);
+            border-radius: 20px;
+        }
+
+        .timeline-item:nth-child(odd) .timeline-content {
+            margin-right: 5%;
+            text-align: right;
+        }
+
+        .timeline-item:nth-child(even) .timeline-content {
+            margin-left: 5%;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 20px;
+            background: var(--leaf-accent);
+            border-radius: 50%;
+            border: 4px solid var(--forest-dark);
+        }
+
+        .timeline-year {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--leaf-accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-title {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-desc {
+            color: rgba(255, 255, 255, 0.65);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .timeline::before {
+                left: 20px;
+            }
+            .timeline-item,
+            .timeline-item:nth-child(even) {
+                flex-direction: column;
+            }
+            .timeline-content,
+            .timeline-item:nth-child(odd) .timeline-content,
+            .timeline-item:nth-child(even) .timeline-content {
+                width: calc(100% - 50px);
+                margin-left: 50px;
+                margin-right: 0;
+                text-align: left;
+            }
+            .timeline-dot {
+                left: 20px;
+            }
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 8rem 2rem;
+            background: 
+                linear-gradient(180deg, var(--forest-main) 0%, var(--forest-dark) 100%),
+                url('https://images.unsplash.com/photo-1511497584788-876760111969?w=1920') center/cover;
+            background-blend-mode: overlay;
+            text-align: center;
+            position: relative;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(ellipse at center, rgba(74, 222, 128, 0.1) 0%, transparent 60%);
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cta-section h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .cta-section p {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 3rem;
+        }
+
+        .email-form {
+            display: flex;
+            max-width: 500px;
+            margin: 0 auto;
+            gap: 1rem;
+        }
+
+        .email-input {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            font-size: 1rem;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--white);
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .email-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .email-input:focus {
+            border-color: var(--leaf-accent);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        @media (max-width: 600px) {
+            .email-form {
+                flex-direction: column;
+            }
+        }
+
+        /* Footer */
+        footer {
+            padding: 3rem 2rem;
+            background: #050f08;
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--leaf-accent);
+            margin-bottom: 1rem;
+        }
+
+        .footer-text {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+        }
+
+        .godfather-badge {
+            margin-top: 1.5rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 0.8rem;
+        }
+
+        /* Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Leaves -->
+    <div class="leaves-container">
+        <script>
+            for (let i = 0; i < 15; i++) {
+                const leaf = document.createElement('div');
+                leaf.className = 'leaf';
+                leaf.style.left = Math.random() * 100 + '%';
+                leaf.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                leaf.style.animationDelay = (Math.random() * 10) + 's';
+                leaf.innerHTML = '<svg viewBox="0 0 24 24"><path d="M17,8C8,10 5.9,16.17 3.82,21.34L5.71,22L6.66,19.7C7.14,19.87 7.64,20 8,20C19,20 22,3 22,3C21,5 14,5.25 9,6.25C4,7.25 2,11.5 2,13.5C2,15.5 3.75,17.25 3.75,17.25C7,8 17,8 17,8Z"/></svg>';
+                document.querySelector('.leaves-container')?.appendChild(leaf);
+            }
+        </script>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="badge">
+                <span>🌲</span>
+                <span>The Future of Forest Intelligence</span>
+            </div>
+            <h1>TimberOS</h1>
+            <p>The AI operating system that transforms forests into transparent, tradable, and verifiable assets. Real-time monitoring. Carbon verification. Market intelligence. All in one platform.</p>
+            <div class="cta-group">
+                <a href="#contact" class="cta-primary">
+                    Request Demo
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+                <a href="#solution" class="cta-secondary">
+                    Learn More
+                </a>
+            </div>
+        </div>
+        <div class="stats-bar">
+            <div class="stat">
+                <div class="stat-value">$600B</div>
+                <div class="stat-label">Global Timber Market</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">4B</div>
+                <div class="stat-label">Hectares of Forest</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">40%</div>
+                <div class="stat-label">Value Leakage Today</div>
+            </div>
+        </div>
+        <div class="forest-floor"></div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="problem-section">
+        <div class="section-container">
+            <span class="section-badge">The Problem</span>
+            <h2 class="section-title">Forests Are Earth's Most Opaque Asset Class</h2>
+            <p class="section-subtitle">Worth $150+ trillion, yet managed with spreadsheets and binoculars.</p>
+            
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="problem-icon">📊</div>
+                    <h3>No Real-Time Pricing</h3>
+                    <p>Markets operate on quarterly surveys and phone calls. No live pricing exists for standing timber.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">🔍</div>
+                    <h3>Invisible Forest Health</h3>
+                    <p>Disease, fire risk, and growth rates are tracked manually with expensive field crews.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">🌿</div>
+                    <h3>Carbon Verification Chaos</h3>
+                    <p>Verifying carbon credits costs $100K+ per project with months of consultant work.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">💰</div>
+                    <h3>Institutional Blindness</h3>
+                    <p>Pension funds want forest exposure but can't properly value or monitor assets.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">📦</div>
+                    <h3>Supply Chain Fragmentation</h3>
+                    <p>From tree to lumber, 40% of value leaks through inefficiency and opacity.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">📜</div>
+                    <h3>Regulatory Pressure</h3>
+                    <p>EU Deforestation Regulation requires proof of sustainable sourcing—with no easy solution.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section id="solution" class="solution-section">
+        <div class="section-container">
+            <div class="solution-grid">
+                <div class="solution-visual">
+                    <div class="forest-diagram floating">
+                        <div class="diagram-layer">
+                            <div class="layer-icon">🛰️</div>
+                            <div class="layer-info">
+                                <h4>Satellite Intelligence</h4>
+                                <p>Daily global forest coverage</p>
+                            </div>
+                        </div>
+                        <div class="diagram-layer">
+                            <div class="layer-icon">🤖</div>
+                            <div class="layer-info">
+                                <h4>AI Processing</h4>
+                                <p>Species, biomass, carbon estimation</p>
+                            </div>
+                        </div>
+                        <div class="diagram-layer">
+                            <div class="layer-icon">📈</div>
+                            <div class="layer-info">
+                                <h4>Market Engine</h4>
+                                <p>Real-time pricing & forecasting</p>
+                            </div>
+                        </div>
+                        <div class="diagram-layer">
+                            <div class="layer-icon">✅</div>
+                            <div class="layer-info">
+                                <h4>Verification Layer</h4>
+                                <p>Automated carbon & compliance</p>
+                            </div>
+                        </div>
+                        <div class="diagram-layer">
+                            <div class="layer-icon">🔗</div>
+                            <div class="layer-info">
+                                <h4>Chain-of-Custody</h4>
+                                <p>Tree-to-product traceability</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="solution-content">
+                    <span class="section-badge">The Solution</span>
+                    <h2 class="section-title">The Bloomberg Terminal for Forests</h2>
+                    <p class="section-subtitle">Every forest with a digital twin. Every tree with a value. Every carbon credit verified.</p>
+                    
+                    <ul class="feature-list">
+                        <li>
+                            <span class="feature-check">
+                                <svg fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+                            </span>
+                            <span class="feature-text"><strong>Continuous monitoring</strong> via satellite, LiDAR, and drone-based sensing across millions of hectares</span>
+                        </li>
+                        <li>
+                            <span class="feature-check">
+                                <svg fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+                            </span>
+                            <span class="feature-text"><strong>Live timber pricing</strong> by species and region—the first-ever standardized market</span>
+                        </li>
+                        <li>
+                            <span class="feature-check">
+                                <svg fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+                            </span>
+                            <span class="feature-text"><strong>Automated carbon verification</strong> that cuts costs by 90% and time by 95%</span>
+                        </li>
+                        <li>
+                            <span class="feature-check">
+                                <svg fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+                            </span>
+                            <span class="feature-text"><strong>Predictive risk intelligence</strong> for fire, pests, and climate impacts</span>
+                        </li>
+                        <li>
+                            <span class="feature-check">
+                                <svg fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+                            </span>
+                            <span class="feature-text"><strong>Full supply chain traceability</strong> for EUDR compliance and ESG reporting</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="products-section">
+        <div class="section-container">
+            <span class="section-badge">The Platform</span>
+            <h2 class="section-title">Five Engines. One Operating System.</h2>
+            <p class="section-subtitle">Complete forest intelligence, from monitoring to monetization.</p>
+            
+            <div class="products-grid">
+                <div class="product-card">
+                    <span class="product-number">01</span>
+                    <h3>ForestScan</h3>
+                    <p class="product-tagline">Autonomous Forest Monitoring</p>
+                    <ul class="product-features">
+                        <li>Multi-source satellite & LiDAR fusion</li>
+                        <li>500+ species identification</li>
+                        <li>Weekly change detection</li>
+                        <li>10-year growth projections</li>
+                    </ul>
+                </div>
+                <div class="product-card">
+                    <span class="product-number">02</span>
+                    <h3>PriceGrid</h3>
+                    <p class="product-tagline">Real-Time Market Intelligence</p>
+                    <ul class="product-features">
+                        <li>Live pricing by species & region</li>
+                        <li>Forward curve generation</li>
+                        <li>Arbitrage opportunity alerts</li>
+                        <li>12-month supply/demand forecasts</li>
+                    </ul>
+                </div>
+                <div class="product-card">
+                    <span class="product-number">03</span>
+                    <h3>CarbonProof</h3>
+                    <p class="product-tagline">Automated Carbon Verification</p>
+                    <ul class="product-features">
+                        <li>Automated MRV workflows</li>
+                        <li>AI-generated additionality proofs</li>
+                        <li>Continuous permanence monitoring</li>
+                        <li>Direct registry integration</li>
+                    </ul>
+                </div>
+                <div class="product-card">
+                    <span class="product-number">04</span>
+                    <h3>RiskShield</h3>
+                    <p class="product-tagline">Predictive Risk Intelligence</p>
+                    <ul class="product-features">
+                        <li>7-day fire probability scores</li>
+                        <li>Pest & disease early warning</li>
+                        <li>Climate scenario modeling</li>
+                        <li>Parametric insurance triggers</li>
+                    </ul>
+                </div>
+                <div class="product-card">
+                    <span class="product-number">05</span>
+                    <h3>ChainTrace</h3>
+                    <p class="product-tagline">Supply Chain Verification</p>
+                    <ul class="product-features">
+                        <li>DNA/isotope fingerprinting</li>
+                        <li>Deforestation-free proofs</li>
+                        <li>Immutable audit trails</li>
+                        <li>ESG sustainability scoring</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Market Section -->
+    <section class="market-section">
+        <div class="section-container market-content">
+            <span class="section-badge">The Opportunity</span>
+            <h2 class="section-title">A Trillion-Dollar Market Awaits</h2>
+            <p class="section-subtitle">Forests are finally getting the technology infrastructure they deserve.</p>
+            
+            <div class="market-stats">
+                <div class="market-stat">
+                    <div class="market-stat-value">$600B</div>
+                    <div class="market-stat-label">Annual Timber Industry</div>
+                </div>
+                <div class="market-stat">
+                    <div class="market-stat-value">$50B</div>
+                    <div class="market-stat-label">Carbon Market by 2030</div>
+                </div>
+                <div class="market-stat">
+                    <div class="market-stat-value">$200B</div>
+                    <div class="market-stat-label">EUDR-Affected Goods</div>
+                </div>
+                <div class="market-stat">
+                    <div class="market-stat-value">$500M</div>
+                    <div class="market-stat-label">Target ARR Year 5</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Timeline Section -->
+    <section class="timeline-section">
+        <div class="section-container">
+            <span class="section-badge">The Journey</span>
+            <h2 class="section-title">From Forest Floor to Global Platform</h2>
+            
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-year">Year 1</div>
+                        <div class="timeline-title">Pacific Northwest + Nordic Launch</div>
+                        <div class="timeline-desc">2M hectares under management. First standardized pricing benchmarks. $3M ARR.</div>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-year">Year 2</div>
+                        <div class="timeline-title">Carbon & Risk Products</div>
+                        <div class="timeline-desc">Launch CarbonProof. Partner with reinsurers. 20M hectares. $25M ARR.</div>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-year">Year 3</div>
+                        <div class="timeline-title">Global Marketplace</div>
+                        <div class="timeline-desc">Carbon credit marketplace live. 100M hectares. $100M ARR.</div>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-year">Year 5</div>
+                        <div class="timeline-title">NatureOS Evolution</div>
+                        <div class="timeline-desc">Expand to all nature-based assets. 500M hectares. $500M ARR. $10B+ valuation.</div>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="contact" class="cta-section">
+        <div class="cta-content">
+            <h2>The Future of Forests Starts Here</h2>
+            <p>Join the pioneers transforming how the world values, trades, and protects its greatest natural assets.</p>
+            <form class="email-form" onsubmit="event.preventDefault(); alert('Thanks! We\'ll be in touch.');">
+                <input type="email" class="email-input" placeholder="Enter your email" required>
+                <button type="submit" class="cta-primary">Get Early Access</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-logo">🌲 TimberOS</div>
+        <p class="footer-text">The AI Operating System for Forest Asset Intelligence</p>
+        <div class="godfather-badge">
+            <span>🎩</span>
+            <span>Crafted by The Godfather — April 2026</span>
+        </div>
+    </footer>
+</body>
+</html>
