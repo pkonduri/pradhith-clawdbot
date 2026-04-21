@@ -239,6 +239,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-04-20 | Morning | TimberOS — The AI Operating System for Forest Asset Intelligence & Sustainable Timber Markets | [Playbook](2026-04-20-morning.md) • [Landing](2026-04-20-morning-landing.html) • [PDF](2026-04-20-morning.pdf) |
 | 2026-04-20 | Afternoon | FoodNet AI — The Intelligence Layer for Global Food Security | [Playbook](2026-04-20-afternoon.md) • [Landing](2026-04-20-afternoon-landing.html) • [PDF](2026-04-20-afternoon.pdf) |
 | 2026-04-21 | Evening | PhysicalForce AI — The AWS for Humanoid Robot Labor | [Playbook](2026-04-21-evening.md) • [Landing](2026-04-21-evening-landing.html) • [PDF](2026-04-21-evening.pdf) |
+| 2026-04-21 | Morning | AirDNA — The Intelligence Layer for Environmental DNA | [Playbook](2026-04-21-morning.md) • [Landing](2026-04-21-morning-landing.html) • [PDF](2026-04-21-morning.pdf) |
 <!-- New entries will be added above this line -->
 
 ---
