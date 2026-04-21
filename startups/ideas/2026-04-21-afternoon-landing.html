@@ -1,0 +1,1612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDR.ai — The Autonomous B2B Sales Development Platform</title>
+    <meta name="description" content="10x Pipeline. Zero Burnout. Pure AI. The world's first fully autonomous sales development platform.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gradient-1: #667eea;
+            --gradient-2: #764ba2;
+            --gradient-3: #f093fb;
+            --accent: #00d4aa;
+            --accent-glow: rgba(0, 212, 170, 0.4);
+            --dark: #0a0a0f;
+            --darker: #050508;
+            --card: #12121a;
+            --card-border: #1e1e2e;
+            --text: #ffffff;
+            --text-secondary: #a0a0b0;
+            --success: #00ff88;
+            --warning: #ffaa00;
+            --danger: #ff4466;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--darker);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: 
+                radial-gradient(ellipse 80% 50% at 50% -20%, rgba(102, 126, 234, 0.15), transparent),
+                radial-gradient(ellipse 60% 40% at 100% 50%, rgba(118, 75, 162, 0.1), transparent),
+                radial-gradient(ellipse 50% 30% at 0% 80%, rgba(0, 212, 170, 0.08), transparent);
+        }
+
+        /* Floating Orbs */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.5;
+            animation: float 20s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        .orb-1 {
+            width: 600px;
+            height: 600px;
+            background: linear-gradient(135deg, var(--gradient-1), var(--gradient-2));
+            top: -200px;
+            right: -200px;
+            animation-delay: 0s;
+        }
+
+        .orb-2 {
+            width: 400px;
+            height: 400px;
+            background: linear-gradient(135deg, var(--accent), var(--gradient-1));
+            bottom: -100px;
+            left: -100px;
+            animation-delay: -10s;
+        }
+
+        .orb-3 {
+            width: 300px;
+            height: 300px;
+            background: linear-gradient(135deg, var(--gradient-3), var(--gradient-2));
+            top: 50%;
+            left: 50%;
+            animation-delay: -5s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(50px, -30px) scale(1.05); }
+            50% { transform: translate(-30px, 50px) scale(0.95); }
+            75% { transform: translate(-50px, -20px) scale(1.02); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent), var(--gradient-1));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo span {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+        }
+
+        .nav-cta {
+            padding: 0.8rem 2rem;
+            background: linear-gradient(135deg, var(--gradient-1), var(--gradient-2));
+            border: none;
+            border-radius: 50px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 8rem 5% 4rem;
+            position: relative;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1.2rem;
+            background: rgba(0, 212, 170, 0.1);
+            border: 1px solid rgba(0, 212, 170, 0.3);
+            border-radius: 50px;
+            font-size: 0.9rem;
+            color: var(--accent);
+            margin-bottom: 2rem;
+            animation: pulse-border 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-border {
+            0%, 100% { border-color: rgba(0, 212, 170, 0.3); }
+            50% { border-color: rgba(0, 212, 170, 0.6); }
+        }
+
+        .hero-badge::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #fff 0%, #a0a0b0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero h1 .highlight {
+            background: linear-gradient(135deg, var(--accent), var(--gradient-1));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin-bottom: 3rem;
+            font-weight: 300;
+        }
+
+        .hero-tagline {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 3rem;
+            letter-spacing: 0.1em;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 4rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent), var(--gradient-1));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .cta-primary {
+            padding: 1.2rem 3rem;
+            font-size: 1.1rem;
+            background: linear-gradient(135deg, var(--gradient-1), var(--gradient-2));
+            border: none;
+            border-radius: 60px;
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .cta-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 60px rgba(102, 126, 234, 0.5);
+        }
+
+        .cta-secondary {
+            padding: 1.2rem 3rem;
+            font-size: 1.1rem;
+            background: transparent;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 60px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .cta-secondary:hover {
+            border-color: var(--accent);
+            background: rgba(0, 212, 170, 0.1);
+        }
+
+        /* Problem Section */
+        .problem-section {
+            padding: 8rem 5%;
+            background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.3));
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 4rem;
+        }
+
+        .section-label {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--accent);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .section-desc {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .problem-card {
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .problem-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--danger), var(--warning));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--danger);
+        }
+
+        .problem-card:hover::before {
+            opacity: 1;
+        }
+
+        .problem-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .problem-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            color: var(--danger);
+        }
+
+        .problem-card p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        .problem-stat {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--card-border);
+        }
+
+        .problem-stat .number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--warning);
+        }
+
+        .problem-stat .label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* Solution Section */
+        .solution-section {
+            padding: 8rem 5%;
+            position: relative;
+        }
+
+        .solution-showcase {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .solution-hero {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .solution-hero h2 {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+        }
+
+        .solution-hero h2 .accent {
+            background: linear-gradient(135deg, var(--accent), var(--gradient-1));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .pipeline-visual {
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: 30px;
+            padding: 3rem;
+            margin-bottom: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pipeline-visual::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--gradient-1), var(--gradient-2));
+        }
+
+        .pipeline-stages {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            position: relative;
+        }
+
+        .pipeline-stages::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 10%;
+            right: 10%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent), var(--gradient-1), var(--gradient-2), var(--gradient-3));
+            z-index: 0;
+        }
+
+        .stage {
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            padding: 2rem 1rem;
+            background: var(--darker);
+            border-radius: 20px;
+            border: 1px solid var(--card-border);
+            transition: all 0.3s ease;
+        }
+
+        .stage:hover {
+            transform: scale(1.05);
+            border-color: var(--accent);
+        }
+
+        .stage-icon {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 1rem;
+            background: linear-gradient(135deg, var(--gradient-1), var(--gradient-2));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+
+        .stage h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stage p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 2.5rem;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--gradient-1));
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--accent);
+            box-shadow: 0 30px 80px rgba(0, 212, 170, 0.15);
+        }
+
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, rgba(0, 212, 170, 0.2), rgba(102, 126, 234, 0.2));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .feature-bullets {
+            margin-top: 1.5rem;
+            list-style: none;
+        }
+
+        .feature-bullets li {
+            padding: 0.5rem 0;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.95rem;
+        }
+
+        .feature-bullets li::before {
+            content: '→';
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        /* Comparison Section */
+        .comparison-section {
+            padding: 8rem 5%;
+            background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.4));
+        }
+
+        .comparison-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .comparison-table {
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            overflow: hidden;
+        }
+
+        .comparison-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .comparison-row:last-child {
+            border-bottom: none;
+        }
+
+        .comparison-header {
+            background: linear-gradient(135deg, var(--gradient-1), var(--gradient-2));
+            font-weight: 700;
+        }
+
+        .comparison-cell {
+            padding: 1.5rem 2rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .comparison-cell.metric {
+            font-weight: 600;
+        }
+
+        .comparison-cell.bad {
+            color: var(--danger);
+            background: rgba(255, 68, 102, 0.1);
+        }
+
+        .comparison-cell.good {
+            color: var(--success);
+            background: rgba(0, 255, 136, 0.1);
+        }
+
+        /* Pricing Section */
+        .pricing-section {
+            padding: 8rem 5%;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 3rem;
+            text-align: center;
+            transition: all 0.4s ease;
+            position: relative;
+        }
+
+        .pricing-card.featured {
+            border-color: var(--accent);
+            transform: scale(1.05);
+        }
+
+        .pricing-card.featured::before {
+            content: 'MOST POPULAR';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--accent), var(--gradient-1));
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 80px rgba(0, 212, 170, 0.2);
+        }
+
+        .pricing-card.featured:hover {
+            transform: scale(1.05) translateY(-10px);
+        }
+
+        .pricing-tier {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+
+        .pricing-price {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-price span {
+            font-size: 1rem;
+            font-weight: 400;
+            color: var(--text-secondary);
+        }
+
+        .pricing-desc {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .pricing-features {
+            list-style: none;
+            text-align: left;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-features li {
+            padding: 0.75rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .pricing-features li::before {
+            content: '✓';
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        .pricing-cta {
+            width: 100%;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: block;
+        }
+
+        .pricing-card:not(.featured) .pricing-cta {
+            background: transparent;
+            border: 2px solid var(--card-border);
+            color: white;
+        }
+
+        .pricing-card:not(.featured) .pricing-cta:hover {
+            border-color: var(--accent);
+            background: rgba(0, 212, 170, 0.1);
+        }
+
+        .pricing-card.featured .pricing-cta {
+            background: linear-gradient(135deg, var(--gradient-1), var(--gradient-2));
+            border: none;
+            color: white;
+        }
+
+        .pricing-card.featured .pricing-cta:hover {
+            box-shadow: 0 10px 40px rgba(102, 126, 234, 0.4);
+        }
+
+        /* ROI Calculator */
+        .roi-section {
+            padding: 8rem 5%;
+            background: var(--card);
+        }
+
+        .roi-container {
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .roi-calc {
+            background: var(--darker);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 3rem;
+            margin-top: 3rem;
+        }
+
+        .roi-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 2rem;
+            padding: 1.5rem 0;
+            border-bottom: 1px solid var(--card-border);
+            text-align: left;
+        }
+
+        .roi-row:last-child {
+            border-bottom: none;
+            padding-top: 2rem;
+        }
+
+        .roi-label {
+            color: var(--text-secondary);
+        }
+
+        .roi-human {
+            color: var(--danger);
+            font-weight: 600;
+            text-align: right;
+        }
+
+        .roi-ai {
+            color: var(--success);
+            font-weight: 600;
+            text-align: right;
+        }
+
+        .roi-total {
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        /* Testimonials */
+        .testimonial-section {
+            padding: 8rem 5%;
+        }
+
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .testimonial-card {
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 2.5rem;
+            position: relative;
+        }
+
+        .testimonial-card::before {
+            content: '"';
+            position: absolute;
+            top: 1.5rem;
+            left: 2rem;
+            font-size: 5rem;
+            color: var(--gradient-1);
+            opacity: 0.3;
+            font-family: Georgia, serif;
+            line-height: 1;
+        }
+
+        .testimonial-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--gradient-1), var(--gradient-2));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .author-info h4 {
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .author-info p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 8rem 5%;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.2), transparent 70%);
+            pointer-events: none;
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cta-content h2 {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-content p {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 5%;
+            border-top: 1px solid var(--card-border);
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--accent), var(--gradient-1));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .footer-tagline {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+
+        .copyright {
+            margin-top: 3rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-stats {
+                gap: 2rem;
+            }
+
+            .stat-value {
+                font-size: 2rem;
+            }
+
+            .pipeline-stages {
+                grid-template-columns: 1fr;
+            }
+
+            .pipeline-stages::before {
+                display: none;
+            }
+
+            .comparison-row {
+                grid-template-columns: 1fr;
+            }
+
+            .comparison-cell {
+                padding: 1rem;
+                justify-content: center;
+            }
+
+            .roi-row {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 0.5rem;
+            }
+
+            .roi-human, .roi-ai {
+                text-align: center;
+            }
+
+            .pricing-card.featured {
+                transform: none;
+            }
+
+            .pricing-card.featured:hover {
+                transform: translateY(-10px);
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-in {
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+
+    <nav>
+        <div class="logo">
+            <span>SDR.ai</span>
+        </div>
+        <a href="#pricing" class="nav-cta">Get Started</a>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-badge">
+            <span>Now in Private Beta</span>
+        </div>
+        <h1>
+            The <span class="highlight">Autonomous</span><br>
+            Sales Machine
+        </h1>
+        <p class="hero-tagline">10x PIPELINE. ZERO BURNOUT. PURE AI.</p>
+        <p class="hero-subtitle">
+            Replace your SDR team with AI that prospects, engages, qualifies, 
+            and books meetings — 24/7, without coffee breaks or turnover.
+        </p>
+
+        <div class="hero-stats">
+            <div class="stat">
+                <div class="stat-value">10x</div>
+                <div class="stat-label">More Pipeline</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">90%</div>
+                <div class="stat-label">Cost Reduction</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">0</div>
+                <div class="stat-label">SDR Turnover</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">24/7</div>
+                <div class="stat-label">Always On</div>
+            </div>
+        </div>
+
+        <div class="cta-group">
+            <a href="#pricing" class="cta-primary">
+                Start Free Trial →
+            </a>
+            <a href="#demo" class="cta-secondary">
+                Watch Demo
+            </a>
+        </div>
+    </section>
+
+    <section class="problem-section">
+        <div class="section-header">
+            <div class="section-label">The Problem</div>
+            <h2 class="section-title">SDRs Are Broken.<br>Everyone Knows It.</h2>
+            <p class="section-desc">
+                Companies spend billions on sales development reps who burn out, 
+                quit, and deliver inconsistent results. It's time for a better way.
+            </p>
+        </div>
+
+        <div class="problem-grid">
+            <div class="problem-card">
+                <div class="problem-icon">💸</div>
+                <h3>Crippling Costs</h3>
+                <p>Fully loaded SDR costs exceed $70K/year. For a team of 10, that's $700K+ before they book a single meeting.</p>
+                <div class="problem-stat">
+                    <div class="number">$70K+</div>
+                    <div class="label">Per SDR annually</div>
+                </div>
+            </div>
+
+            <div class="problem-card">
+                <div class="problem-icon">🚪</div>
+                <h3>Endless Turnover</h3>
+                <p>35% of SDRs leave every year. By the time they're productive, they're already interviewing elsewhere.</p>
+                <div class="problem-stat">
+                    <div class="number">1.4 yrs</div>
+                    <div class="label">Average SDR tenure</div>
+                </div>
+            </div>
+
+            <div class="problem-card">
+                <div class="problem-icon">🐌</div>
+                <h3>Painfully Slow Ramp</h3>
+                <p>New SDRs take 4-6 months to reach full productivity. Half your investment goes to training people who will leave.</p>
+                <div class="problem-stat">
+                    <div class="number">6 mo</div>
+                    <div class="label">To full productivity</div>
+                </div>
+            </div>
+
+            <div class="problem-card">
+                <div class="problem-icon">📉</div>
+                <h3>Wildly Inconsistent</h3>
+                <p>Top SDRs outperform bottom performers 5:1. You're paying the same salary for radically different results.</p>
+                <div class="problem-stat">
+                    <div class="number">5:1</div>
+                    <div class="label">Performance variance</div>
+                </div>
+            </div>
+
+            <div class="problem-card">
+                <div class="problem-icon">⏰</div>
+                <h3>Limited Hours</h3>
+                <p>SDRs work 8 hours a day. Prospects check email at midnight. The mismatch costs you deals.</p>
+                <div class="problem-stat">
+                    <div class="number">33%</div>
+                    <div class="label">Of day actually selling</div>
+                </div>
+            </div>
+
+            <div class="problem-card">
+                <div class="problem-icon">🔥</div>
+                <h3>Inevitable Burnout</h3>
+                <p>Cold calling and rejection 40 hours a week breaks people. No amount of pizza parties fixes this.</p>
+                <div class="problem-stat">
+                    <div class="number">35%</div>
+                    <div class="label">Annual turnover rate</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="solution-section" id="solution">
+        <div class="solution-showcase">
+            <div class="solution-hero">
+                <div class="section-label">The Solution</div>
+                <h2>Meet Your New <span class="accent">AI Sales Team</span></h2>
+                <p class="section-desc">
+                    SDR.ai handles the entire top-of-funnel autonomously — from finding 
+                    prospects to booking meetings on your AEs' calendars.
+                </p>
+            </div>
+
+            <div class="pipeline-visual">
+                <div class="pipeline-stages">
+                    <div class="stage">
+                        <div class="stage-icon">🎯</div>
+                        <h4>Prospect</h4>
+                        <p>AI identifies ICP matches with buying signals</p>
+                    </div>
+                    <div class="stage">
+                        <div class="stage-icon">✉️</div>
+                        <h4>Engage</h4>
+                        <p>Hyper-personalized multi-channel outreach</p>
+                    </div>
+                    <div class="stage">
+                        <div class="stage-icon">🎤</div>
+                        <h4>Qualify</h4>
+                        <p>Natural conversations that uncover needs</p>
+                    </div>
+                    <div class="stage">
+                        <div class="stage-icon">📅</div>
+                        <h4>Book</h4>
+                        <p>Meetings scheduled directly with AEs</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🧠</div>
+                    <h3>ProspectIQ Engine</h3>
+                    <p>Continuously scans for ideal customers with buying signals — job changes, funding rounds, tech stack updates, and more.</p>
+                    <ul class="feature-bullets">
+                        <li>40+ enrichment data points</li>
+                        <li>Real-time signal monitoring</li>
+                        <li>Learns from your closed deals</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">✍️</div>
+                    <h3>MessageForge</h3>
+                    <p>Every message is genuinely personalized — references recent posts, company news, mutual connections. No templates.</p>
+                    <ul class="feature-bullets">
+                        <li>Zero spam detection triggers</li>
+                        <li>Learns your brand voice</li>
+                        <li>Continuous A/B optimization</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">💬</div>
+                    <h3>ConversationAI</h3>
+                    <p>True multi-turn conversations that qualify prospects, handle objections, and move deals forward naturally.</p>
+                    <ul class="feature-bullets">
+                        <li>Not chatbots — real dialogue</li>
+                        <li>Cross-channel memory</li>
+                        <li>Intelligent escalation</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">📞</div>
+                    <h3>VoiceSDR</h3>
+                    <p>AI-powered phone conversations that sound completely human. Handles gatekeepers, qualifies, and books in real-time.</p>
+                    <ul class="feature-bullets">
+                        <li>Indistinguishable from humans</li>
+                        <li>Optimal calling windows</li>
+                        <li>Full call transcripts</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Intelligence Hub</h3>
+                    <p>Real-time dashboards showing pipeline generated, conversion rates, message performance, and AI learning progress.</p>
+                    <ul class="feature-bullets">
+                        <li>Meeting attribution</li>
+                        <li>Channel performance</li>
+                        <li>Continuous improvement metrics</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🔌</div>
+                    <h3>Deep Integrations</h3>
+                    <p>Native connections to your CRM, email, calendar, and LinkedIn. Everything syncs automatically.</p>
+                    <ul class="feature-bullets">
+                        <li>Salesforce, HubSpot, Pipedrive</li>
+                        <li>Gmail, Outlook, custom SMTP</li>
+                        <li>All major calendar systems</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="comparison-section">
+        <div class="section-header">
+            <div class="section-label">The Comparison</div>
+            <h2 class="section-title">Human SDRs vs. SDR.ai</h2>
+            <p class="section-desc">The numbers speak for themselves.</p>
+        </div>
+
+        <div class="comparison-container">
+            <div class="comparison-table">
+                <div class="comparison-row comparison-header">
+                    <div class="comparison-cell">Metric</div>
+                    <div class="comparison-cell">Human SDRs</div>
+                    <div class="comparison-cell">SDR.ai</div>
+                </div>
+                <div class="comparison-row">
+                    <div class="comparison-cell metric">Annual Cost (per "SDR")</div>
+                    <div class="comparison-cell bad">$70,000+</div>
+                    <div class="comparison-cell good">$5,000</div>
+                </div>
+                <div class="comparison-row">
+                    <div class="comparison-cell metric">Time to Productivity</div>
+                    <div class="comparison-cell bad">4-6 months</div>
+                    <div class="comparison-cell good">24 hours</div>
+                </div>
+                <div class="comparison-row">
+                    <div class="comparison-cell metric">Working Hours</div>
+                    <div class="comparison-cell bad">8 hrs/day</div>
+                    <div class="comparison-cell good">24/7/365</div>
+                </div>
+                <div class="comparison-row">
+                    <div class="comparison-cell metric">Annual Turnover</div>
+                    <div class="comparison-cell bad">35%</div>
+                    <div class="comparison-cell good">0%</div>
+                </div>
+                <div class="comparison-row">
+                    <div class="comparison-cell metric">Message Personalization</div>
+                    <div class="comparison-cell bad">Template-based</div>
+                    <div class="comparison-cell good">Genuinely unique</div>
+                </div>
+                <div class="comparison-row">
+                    <div class="comparison-cell metric">Consistency</div>
+                    <div class="comparison-cell bad">Highly variable</div>
+                    <div class="comparison-cell good">100% consistent</div>
+                </div>
+                <div class="comparison-row">
+                    <div class="comparison-cell metric">Sick Days</div>
+                    <div class="comparison-cell bad">8-12/year</div>
+                    <div class="comparison-cell good">0</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="roi-section">
+        <div class="roi-container">
+            <div class="section-label">The ROI</div>
+            <h2 class="section-title">Calculate Your Savings</h2>
+            <p class="section-desc">
+                A team of 5 SDRs costs you $350K+/year. SDR.ai delivers 10x the output for a fraction of the cost.
+            </p>
+
+            <div class="roi-calc">
+                <div class="roi-row">
+                    <div class="roi-label">Team of 5 SDRs</div>
+                    <div class="roi-human">Human SDRs</div>
+                    <div class="roi-ai">SDR.ai</div>
+                </div>
+                <div class="roi-row">
+                    <div class="roi-label">Annual Salaries + Benefits</div>
+                    <div class="roi-human">$350,000</div>
+                    <div class="roi-ai">$0</div>
+                </div>
+                <div class="roi-row">
+                    <div class="roi-label">Tools & Software</div>
+                    <div class="roi-human">$25,000</div>
+                    <div class="roi-ai">Included</div>
+                </div>
+                <div class="roi-row">
+                    <div class="roi-label">Training & Onboarding</div>
+                    <div class="roi-human">$40,000</div>
+                    <div class="roi-ai">$0</div>
+                </div>
+                <div class="roi-row">
+                    <div class="roi-label">Management Overhead</div>
+                    <div class="roi-human">$80,000</div>
+                    <div class="roi-ai">$0</div>
+                </div>
+                <div class="roi-row">
+                    <div class="roi-label">SDR.ai Platform</div>
+                    <div class="roi-human">-</div>
+                    <div class="roi-ai">$60,000</div>
+                </div>
+                <div class="roi-row roi-total">
+                    <div class="roi-label">Total Annual Cost</div>
+                    <div class="roi-human">$495,000</div>
+                    <div class="roi-ai">$60,000</div>
+                </div>
+            </div>
+
+            <p style="margin-top: 2rem; font-size: 1.5rem; font-weight: 700;">
+                <span style="color: var(--success);">Save $435,000/year</span> 
+                <span style="color: var(--text-secondary);">while generating 10x more pipeline</span>
+            </p>
+        </div>
+    </section>
+
+    <section class="pricing-section" id="pricing">
+        <div class="section-header">
+            <div class="section-label">Pricing</div>
+            <h2 class="section-title">Simple, Transparent Pricing</h2>
+            <p class="section-desc">Start free. Scale as you grow. No hidden fees.</p>
+        </div>
+
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <div class="pricing-tier">Starter</div>
+                <div class="pricing-price">$2,000<span>/month</span></div>
+                <p class="pricing-desc">Perfect for testing AI-powered sales development</p>
+                <ul class="pricing-features">
+                    <li>1,000 prospects/month</li>
+                    <li>Email + LinkedIn channels</li>
+                    <li>Basic personalization</li>
+                    <li>Standard CRM integrations</li>
+                    <li>Email support</li>
+                </ul>
+                <a href="#" class="pricing-cta">Start Free Trial</a>
+            </div>
+
+            <div class="pricing-card featured">
+                <div class="pricing-tier">Growth</div>
+                <div class="pricing-price">$5,000<span>/month</span></div>
+                <p class="pricing-desc">For teams ready to scale pipeline aggressively</p>
+                <ul class="pricing-features">
+                    <li>5,000 prospects/month</li>
+                    <li>All channels including voice</li>
+                    <li>Advanced personalization</li>
+                    <li>Custom qualification criteria</li>
+                    <li>Priority support</li>
+                    <li>Dedicated success manager</li>
+                </ul>
+                <a href="#" class="pricing-cta">Start Free Trial</a>
+            </div>
+
+            <div class="pricing-card">
+                <div class="pricing-tier">Enterprise</div>
+                <div class="pricing-price">Custom</div>
+                <p class="pricing-desc">Full autonomy with white-glove service</p>
+                <ul class="pricing-features">
+                    <li>Unlimited prospects</li>
+                    <li>Full channel suite</li>
+                    <li>Custom AI training</li>
+                    <li>Dedicated infrastructure</li>
+                    <li>Custom integrations</li>
+                    <li>White-glove onboarding</li>
+                </ul>
+                <a href="#" class="pricing-cta">Contact Sales</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonial-section">
+        <div class="section-header">
+            <div class="section-label">Early Results</div>
+            <h2 class="section-title">What Our Beta Users Say</h2>
+        </div>
+
+        <div class="testimonial-grid">
+            <div class="testimonial-card">
+                <p class="testimonial-text">
+                    "We replaced 4 SDRs with SDR.ai and immediately saw 3x more qualified meetings. 
+                    The personalization is insane — prospects think they're talking to a human."
+                </p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">MK</div>
+                    <div class="author-info">
+                        <h4>Michael K.</h4>
+                        <p>VP Sales, Series B SaaS</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="testimonial-card">
+                <p class="testimonial-text">
+                    "Our AEs were skeptical at first. Now they're fighting over who gets the SDR.ai 
+                    meetings because the qualification is so much better than our human SDRs."
+                </p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">SL</div>
+                    <div class="author-info">
+                        <h4>Sarah L.</h4>
+                        <p>CRO, Enterprise Software</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="testimonial-card">
+                <p class="testimonial-text">
+                    "The ROI was obvious within the first month. We're saving $400K/year and 
+                    generating more pipeline than ever. This is the future of sales."
+                </p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">JT</div>
+                    <div class="author-info">
+                        <h4>James T.</h4>
+                        <p>CEO, Growth-Stage Startup</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section" id="demo">
+        <div class="cta-content">
+            <h2>Ready to 10x Your Pipeline?</h2>
+            <p>
+                Join the companies replacing SDR burnout with AI precision.
+                Start your free trial today — no credit card required.
+            </p>
+            <div class="cta-group">
+                <a href="#" class="cta-primary">
+                    Start Free Trial →
+                </a>
+                <a href="#" class="cta-secondary">
+                    Book a Demo
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-logo">SDR.ai</div>
+        <p class="footer-tagline">10x Pipeline. Zero Burnout. Pure AI.</p>
+        <div class="footer-links">
+            <a href="#">Product</a>
+            <a href="#">Pricing</a>
+            <a href="#">Documentation</a>
+            <a href="#">Blog</a>
+            <a href="#">Careers</a>
+            <a href="#">Contact</a>
+        </div>
+        <p class="copyright">
+            © 2026 SDR.ai — Built with conviction by The Godfather 🎩
+        </p>
+    </footer>
+
+    <script>
+        // Smooth reveal on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.problem-card, .feature-card, .pricing-card, .testimonial-card').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'all 0.6s ease';
+            observer.observe(el);
+        });
+
+        // Navbar background on scroll
+        const nav = document.querySelector('nav');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 100) {
+                nav.style.background = 'rgba(5, 5, 8, 0.95)';
+            } else {
+                nav.style.background = 'rgba(10, 10, 15, 0.8)';
+            }
+        });
+
+        // Counter animation for stats
+        function animateCounter(element, target, duration = 2000) {
+            let start = 0;
+            const increment = target / (duration / 16);
+            
+            function update() {
+                start += increment;
+                if (start < target) {
+                    element.textContent = Math.floor(start) + (element.dataset.suffix || '');
+                    requestAnimationFrame(update);
+                } else {
+                    element.textContent = target + (element.dataset.suffix || '');
+                }
+            }
+            update();
+        }
+
+        // Trigger counter animation when stats are visible
+        const statsObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const statValues = entry.target.querySelectorAll('.stat-value');
+                    statValues.forEach(stat => {
+                        const text = stat.textContent;
+                        if (text.includes('x')) {
+                            stat.dataset.suffix = 'x';
+                        } else if (text.includes('%')) {
+                            stat.dataset.suffix = '%';
+                        }
+                    });
+                    statsObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        const heroStats = document.querySelector('.hero-stats');
+        if (heroStats) {
+            statsObserver.observe(heroStats);
+        }
+    </script>
+</body>
+</html>
