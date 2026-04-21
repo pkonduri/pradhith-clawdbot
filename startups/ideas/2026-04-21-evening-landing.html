@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PhysicalForce AI — The AWS for Humanoid Robot Labor</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #f59e0b;
+            --accent: #10b981;
+            --dark: #0f172a;
+            --darker: #020617;
+            --gray-900: #1e293b;
+            --gray-800: #334155;
+            --gray-700: #475569;
+            --gray-600: #64748b;
+            --gray-400: #94a3b8;
+            --gray-300: #cbd5e1;
+            --gray-100: #f1f5f9;
+            --white: #ffffff;
+            --gradient-1: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%);
+            --gradient-2: linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%);
+            --gradient-3: linear-gradient(180deg, rgba(99, 102, 241, 0.15) 0%, transparent 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--darker);
+            color: var(--gray-100);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(99, 102, 241, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .floating-orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .orb-1 {
+            width: 600px;
+            height: 600px;
+            background: var(--primary);
+            top: -200px;
+            right: -200px;
+            animation: float-1 20s ease-in-out infinite;
+        }
+
+        .orb-2 {
+            width: 500px;
+            height: 500px;
+            background: #8b5cf6;
+            bottom: -150px;
+            left: -150px;
+            animation: float-2 25s ease-in-out infinite;
+        }
+
+        .orb-3 {
+            width: 400px;
+            height: 400px;
+            background: #d946ef;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: float-3 30s ease-in-out infinite;
+        }
+
+        @keyframes float-1 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(-50px, 50px) scale(1.1); }
+            66% { transform: translate(30px, -30px) scale(0.9); }
+        }
+
+        @keyframes float-2 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(40px, -40px) scale(1.05); }
+            66% { transform: translate(-30px, 30px) scale(0.95); }
+        }
+
+        @keyframes float-3 {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.3; }
+            50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.5; }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 1rem 2rem;
+            background: rgba(2, 6, 23, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(99, 102, 241, 0.1);
+        }
+
+        nav .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 800;
+            font-size: 1.5rem;
+            color: var(--white);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: var(--gradient-1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--gray-400);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--white);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.875rem 1.75rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--gradient-1);
+            color: var(--white);
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 30px rgba(99, 102, 241, 0.6);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--white);
+            border: 2px solid rgba(99, 102, 241, 0.5);
+        }
+
+        .btn-outline:hover {
+            background: rgba(99, 102, 241, 0.1);
+            border-color: var(--primary);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 2rem 4rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            text-align: center;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(99, 102, 241, 0.15);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 100px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--primary);
+            margin-bottom: 2rem;
+            animation: pulse-badge 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-badge {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4); }
+            50% { box-shadow: 0 0 0 10px rgba(99, 102, 241, 0); }
+        }
+
+        .badge::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: blink 1.5s ease-in-out infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        h1 {
+            font-size: clamp(3rem, 8vw, 5.5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--white) 0%, var(--gray-300) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .gradient-text {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+            color: var(--gray-400);
+            max-width: 800px;
+            margin: 0 auto 3rem;
+            font-weight: 400;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 4rem;
+        }
+
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 24px;
+            backdrop-filter: blur(10px);
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 3rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 0.95rem;
+            color: var(--gray-400);
+            font-weight: 500;
+        }
+
+        /* Robot Animation */
+        .robot-showcase {
+            position: relative;
+            margin: 4rem auto;
+            max-width: 1000px;
+            height: 400px;
+        }
+
+        .robot-card {
+            position: absolute;
+            width: 200px;
+            height: 280px;
+            background: linear-gradient(180deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.9) 100%);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            transition: all 0.5s ease;
+        }
+
+        .robot-card:nth-child(1) { left: 50%; transform: translateX(-50%) translateY(0); z-index: 3; }
+        .robot-card:nth-child(2) { left: 20%; transform: translateY(30px) scale(0.9); z-index: 2; opacity: 0.8; }
+        .robot-card:nth-child(3) { right: 20%; transform: translateY(30px) scale(0.9); z-index: 2; opacity: 0.8; }
+        .robot-card:nth-child(4) { left: 5%; transform: translateY(60px) scale(0.8); z-index: 1; opacity: 0.6; }
+        .robot-card:nth-child(5) { right: 5%; transform: translateY(60px) scale(0.8); z-index: 1; opacity: 0.6; }
+
+        .robot-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .robot-name {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .robot-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--accent);
+        }
+
+        .robot-status::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.7; }
+        }
+
+        /* Section Styles */
+        section {
+            padding: 6rem 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 100px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+        }
+
+        h2 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--white) 0%, var(--gray-300) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-subtitle {
+            font-size: 1.25rem;
+            color: var(--gray-400);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Problem Section */
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+
+        .problem-card {
+            padding: 2.5rem;
+            background: linear-gradient(180deg, rgba(30, 41, 59, 0.6) 0%, rgba(15, 23, 42, 0.8) 100%);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(239, 68, 68, 0.4);
+        }
+
+        .problem-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .problem-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--white);
+        }
+
+        .problem-card p {
+            color: var(--gray-400);
+            line-height: 1.7;
+        }
+
+        .problem-stat {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.5rem 1rem;
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 8px;
+            font-weight: 700;
+            color: #f87171;
+            font-size: 0.9rem;
+        }
+
+        /* Solution Section */
+        .solution-section {
+            background: var(--gradient-3);
+        }
+
+        .solution-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .solution-card {
+            padding: 2.5rem;
+            background: linear-gradient(180deg, rgba(30, 41, 59, 0.6) 0%, rgba(15, 23, 42, 0.8) 100%);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .solution-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(99, 102, 241, 0.5);
+            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.1);
+        }
+
+        .solution-icon {
+            width: 70px;
+            height: 70px;
+            background: var(--gradient-1);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+        }
+
+        .solution-card h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            color: var(--white);
+        }
+
+        .solution-card p {
+            color: var(--gray-400);
+            line-height: 1.7;
+        }
+
+        /* How It Works */
+        .workflow {
+            display: flex;
+            flex-direction: column;
+            gap: 4rem;
+        }
+
+        .workflow-step {
+            display: grid;
+            grid-template-columns: 100px 1fr;
+            gap: 3rem;
+            align-items: start;
+        }
+
+        .step-number {
+            width: 100px;
+            height: 100px;
+            background: var(--gradient-1);
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--white);
+            box-shadow: 0 15px 40px rgba(99, 102, 241, 0.4);
+        }
+
+        .step-content h3 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--white);
+        }
+
+        .step-content p {
+            color: var(--gray-400);
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .step-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .step-feature {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: var(--gray-300);
+        }
+
+        .step-feature::before {
+            content: '✓';
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        /* Market Section */
+        .market-visual {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .market-card {
+            padding: 2rem;
+            background: linear-gradient(180deg, rgba(30, 41, 59, 0.6) 0%, rgba(15, 23, 42, 0.8) 100%);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .market-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+        }
+
+        .market-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .market-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .market-label {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--white);
+            margin-bottom: 0.5rem;
+        }
+
+        .market-desc {
+            font-size: 0.9rem;
+            color: var(--gray-400);
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 3rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, var(--primary) 0%, var(--accent) 100%);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            background: linear-gradient(180deg, rgba(30, 41, 59, 0.6) 0%, rgba(15, 23, 42, 0.8) 100%);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 20px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -3rem;
+            top: 2.5rem;
+            width: 16px;
+            height: 16px;
+            background: var(--gradient-1);
+            border-radius: 50%;
+            transform: translateX(-7px);
+            box-shadow: 0 0 20px var(--primary);
+        }
+
+        .timeline-year {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: var(--gradient-1);
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .timeline-item h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-item p {
+            color: var(--gray-400);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            text-align: center;
+            padding: 8rem 2rem;
+            background: radial-gradient(ellipse at center, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
+        }
+
+        .cta-box {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 4rem;
+            background: linear-gradient(180deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.9) 100%);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 32px;
+            backdrop-filter: blur(10px);
+        }
+
+        .cta-box h2 {
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-box p {
+            font-size: 1.25rem;
+            color: var(--gray-400);
+            margin-bottom: 2rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 2rem;
+            border-top: 1px solid rgba(99, 102, 241, 0.1);
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--gray-400);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--white);
+        }
+
+        .copyright {
+            color: var(--gray-600);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero-stats {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .workflow-step {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .step-number {
+                width: 70px;
+                height: 70px;
+                font-size: 2rem;
+            }
+
+            .robot-showcase {
+                display: none;
+            }
+
+            .timeline {
+                padding-left: 2rem;
+            }
+
+            .timeline::before {
+                left: 0;
+            }
+
+            .timeline-item::before {
+                left: -2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+    <div class="floating-orb orb-1"></div>
+    <div class="floating-orb orb-2"></div>
+    <div class="floating-orb orb-3"></div>
+
+    <nav>
+        <div class="container">
+            <a href="#" class="logo">
+                <div class="logo-icon">⚡</div>
+                PhysicalForce
+            </a>
+            <div class="nav-links">
+                <a href="#problem">Problem</a>
+                <a href="#solution">Solution</a>
+                <a href="#market">Market</a>
+                <a href="#roadmap">Roadmap</a>
+                <a href="#contact" class="btn btn-primary">Get Early Access</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <div class="badge">🤖 The Robot Labor Revolution Is Here</div>
+            <h1>The <span class="gradient-text">AWS</span> for<br>Humanoid Robot Labor</h1>
+            <p class="hero-subtitle">Just-in-time physical labor. On demand. Anywhere. Rent robot workers by the hour — no CapEx, no maintenance, no hassle.</p>
+            
+            <div class="hero-cta">
+                <a href="#contact" class="btn btn-primary">Request Enterprise Demo →</a>
+                <a href="#solution" class="btn btn-outline">See How It Works</a>
+            </div>
+
+            <div class="hero-stats">
+                <div class="stat">
+                    <div class="stat-value">$8.4T</div>
+                    <div class="stat-label">Global Physical Labor Market</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">12M+</div>
+                    <div class="stat-label">Unfilled Jobs in US Manufacturing</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">15-25%</div>
+                    <div class="stat-label">Platform Take Rate</div>
+                </div>
+            </div>
+
+            <div class="robot-showcase">
+                <div class="robot-card">
+                    <div class="robot-icon">🤖</div>
+                    <div class="robot-name">Figure 02</div>
+                    <div class="robot-status">Available Now</div>
+                </div>
+                <div class="robot-card">
+                    <div class="robot-icon">🦾</div>
+                    <div class="robot-name">Tesla Bot</div>
+                    <div class="robot-status">On Task</div>
+                </div>
+                <div class="robot-card">
+                    <div class="robot-icon">🤖</div>
+                    <div class="robot-name">1X NEO</div>
+                    <div class="robot-status">Available</div>
+                </div>
+                <div class="robot-card">
+                    <div class="robot-icon">🦿</div>
+                    <div class="robot-name">Agility Digit</div>
+                    <div class="robot-status">Charging</div>
+                </div>
+                <div class="robot-card">
+                    <div class="robot-icon">🤖</div>
+                    <div class="robot-name">Sanctuary AI</div>
+                    <div class="robot-status">Standby</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="problem">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-badge">The Problem</div>
+                <h2>Labor Is Broken.<br>Robot Ownership Doesn't Scale.</h2>
+                <p class="section-subtitle">The gap between labor demand and supply is only growing. And buying robots isn't the answer.</p>
+            </div>
+
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="problem-icon">👷</div>
+                    <h3>The Labor Shortage Is Structural</h3>
+                    <p>It's not a cycle — it's a demographic reality. Workers are aging out faster than they're being replaced. Manufacturing, logistics, and services are desperate for reliable labor.</p>
+                    <div class="problem-stat">25% of manufacturing workers retiring by 2030</div>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">💸</div>
+                    <h3>Robot Ownership Is a Nightmare</h3>
+                    <p>$50K-150K per humanoid robot. Maintenance. Upgrades. Insurance. Technology obsolescence. Most enterprises can't justify the CapEx — and shouldn't have to.</p>
+                    <div class="problem-stat">30% average utilization for owned robots</div>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">🔧</div>
+                    <h3>No Standard Way to Deploy</h3>
+                    <p>Every robot manufacturer has their own ecosystem. No standardized way to deploy, manage, or price robot labor across vendors. It's chaos.</p>
+                    <div class="problem-stat">Zero interoperability standards</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="solution" class="solution-section">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-badge">The Solution</div>
+                <h2>PhysicalForce AI<br><span class="gradient-text">Rent Work, Not Robots</span></h2>
+                <p class="section-subtitle">The platform layer that makes robot labor actually work. Multi-vendor. On-demand. Outcome-based.</p>
+            </div>
+
+            <div class="solution-grid">
+                <div class="solution-card">
+                    <div class="solution-icon">🏪</div>
+                    <h3>RoboMarketplace™</h3>
+                    <p>Real-time matching of work tasks to available robots. Dynamic pricing. SLA-backed performance. Works with Figure, Tesla, 1X, Agility, and more.</p>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon">🧠</div>
+                    <h3>TaskForge Engine™</h3>
+                    <p>AI-powered work decomposition. Complex jobs → robot-executable tasks. Automatic skill matching and scheduling optimization.</p>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon">🎛️</div>
+                    <h3>FleetOps Control Plane™</h3>
+                    <p>Real-time monitoring. Predictive maintenance. Remote diagnostics. Multi-site orchestration from a single dashboard.</p>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon">🛡️</div>
+                    <h3>TrustShield Insurance™</h3>
+                    <p>Built-in liability coverage. Incident response automation. Safety compliance and audit trails. Peace of mind included.</p>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon">💳</div>
+                    <h3>PhysicalPay Settlement™</h3>
+                    <p>Per-task, per-hour, or per-outcome billing. Automatic payment rails. Enterprise procurement integration.</p>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon">🔌</div>
+                    <h3>Universal Robot SDK</h3>
+                    <p>Standard API for robot manufacturers. Plug any humanoid into the PhysicalForce ecosystem. Expand capability instantly.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="how-it-works">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-badge">How It Works</div>
+                <h2>From Work Order to<br><span class="gradient-text">Work Done</span></h2>
+                <p class="section-subtitle">Three steps to on-demand physical labor. It's that simple.</p>
+            </div>
+
+            <div class="workflow">
+                <div class="workflow-step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Define Your Work</h3>
+                        <p>Tell us what you need. "50 robots for 8 hours of pick-and-pack tomorrow." "10 robots for 3 weeks at our new manufacturing line." Our TaskForge Engine breaks it down.</p>
+                        <div class="step-features">
+                            <span class="step-feature">Natural language input</span>
+                            <span class="step-feature">Automatic task decomposition</span>
+                            <span class="step-feature">Instant pricing</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="workflow-step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>We Match & Deploy</h3>
+                        <p>Our platform finds the optimal robots from the available fleet. Right capabilities, right location, right price. Robots arrive, authenticate, and begin work.</p>
+                        <div class="step-features">
+                            <span class="step-feature">Multi-vendor matching</span>
+                            <span class="step-feature">Geographic optimization</span>
+                            <span class="step-feature">SLA guarantees</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="workflow-step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Monitor & Pay</h3>
+                        <p>Real-time dashboards show work progress. Pay only for completed tasks. No CapEx, no maintenance, no hassle. Physical labor becomes as easy as spinning up cloud compute.</p>
+                        <div class="step-features">
+                            <span class="step-feature">Live progress tracking</span>
+                            <span class="step-feature">Outcome-based billing</span>
+                            <span class="step-feature">Automated invoicing</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="market">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-badge">Market Opportunity</div>
+                <h2>An <span class="gradient-text">$8.4 Trillion</span> Market<br>Ready for Disruption</h2>
+                <p class="section-subtitle">Physical labor is the largest market in the world. We're building the platform layer to capture it.</p>
+            </div>
+
+            <div class="market-visual">
+                <div class="market-card">
+                    <div class="market-icon">🏭</div>
+                    <div class="market-value">$2.5T</div>
+                    <div class="market-label">Manufacturing</div>
+                    <div class="market-desc">Assembly, quality control, material handling</div>
+                </div>
+                <div class="market-card">
+                    <div class="market-icon">📦</div>
+                    <div class="market-value">$1.8T</div>
+                    <div class="market-label">Logistics</div>
+                    <div class="market-desc">Warehousing, sorting, last-mile prep</div>
+                </div>
+                <div class="market-card">
+                    <div class="market-icon">🛒</div>
+                    <div class="market-value">$1.2T</div>
+                    <div class="market-label">Retail & Hospitality</div>
+                    <div class="market-desc">Stocking, cleaning, food prep</div>
+                </div>
+                <div class="market-card">
+                    <div class="market-icon">🏗️</div>
+                    <div class="market-value">$1.5T</div>
+                    <div class="market-label">Construction</div>
+                    <div class="market-desc">Material transport, site prep, finishing</div>
+                </div>
+                <div class="market-card">
+                    <div class="market-icon">🏥</div>
+                    <div class="market-value">$800B</div>
+                    <div class="market-label">Healthcare Support</div>
+                    <div class="market-desc">Logistics, sanitation, patient transport</div>
+                </div>
+                <div class="market-card">
+                    <div class="market-icon">🌾</div>
+                    <div class="market-value">$600B</div>
+                    <div class="market-label">Agriculture</div>
+                    <div class="market-desc">Harvesting, sorting, packing</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="roadmap">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-badge">Roadmap</div>
+                <h2>From Warehouses to<br><span class="gradient-text">Everywhere</span></h2>
+                <p class="section-subtitle">Our path to becoming the default infrastructure for physical AI labor.</p>
+            </div>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-year">2026</div>
+                    <h3>Warehouse Beachhead</h3>
+                    <p>Launch with major 3PLs. Focus on pick/pack/sort. 500 robots deployed. Prove the model works.</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">2027</div>
+                    <h3>Manufacturing Expansion</h3>
+                    <p>Add automotive, electronics, food manufacturing. 24/7 multi-shift operations. 5,000 robots, $300M GMV.</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">2028</div>
+                    <h3>Retail & Services</h3>
+                    <p>Consumer-facing robot interactions. International expansion. 25,000 robots, $1.5B GMV.</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">2029+</div>
+                    <h3>Universal Physical Labor</h3>
+                    <p>Construction, agriculture, home services. Physical work becomes an API call. 100,000+ robots, $5B+ GMV.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="cta-section">
+        <div class="cta-box">
+            <h2>Ready to <span class="gradient-text">Rent the Future</span>?</h2>
+            <p>Whether you need physical labor or you own robots ready to work — we're building the platform that connects you.</p>
+            <div class="cta-buttons">
+                <a href="mailto:founders@physicalforce.ai" class="btn btn-primary">Request Enterprise Demo →</a>
+                <a href="mailto:founders@physicalforce.ai" class="btn btn-outline">Partner With Us</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-links">
+            <a href="#">Documentation</a>
+            <a href="#">API</a>
+            <a href="#">Careers</a>
+            <a href="#">Blog</a>
+            <a href="mailto:founders@physicalforce.ai">Contact</a>
+        </div>
+        <p class="copyright">© 2026 PhysicalForce AI. The AWS for Humanoid Robot Labor.</p>
+    </footer>
+</body>
+</html>
