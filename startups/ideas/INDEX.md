@@ -242,6 +242,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-04-21 | Morning | AirDNA — The Intelligence Layer for Environmental DNA | [Playbook](2026-04-21-morning.md) • [Landing](2026-04-21-morning-landing.html) • [PDF](2026-04-21-morning.pdf) |
 | 2026-04-21 | Afternoon | SDR.ai — The Autonomous B2B Sales Development Platform | [Playbook](2026-04-21-afternoon.md) • [Landing](2026-04-21-afternoon-landing.html) • [PDF](2026-04-21-afternoon.pdf) |
 | 2026-04-22 | Evening | MicroForge AI — The Operating System for Distributed Neighborhood Manufacturing | [Playbook](2026-04-22-evening.md) • [Landing](2026-04-22-evening-landing.html) • [PDF](2026-04-22-evening.pdf) |
+| 2026-04-22 | Morning | DataWorker — The Labor Union for the AI Age | [Playbook](2026-04-22-morning.md) • [Landing](2026-04-22-morning-landing.html) • [PDF](2026-04-22-morning.pdf) |
 <!-- New entries will be added above this line -->
 
 ---
