@@ -1,0 +1,1379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SynthMatter AI — Engineering Matter at the Molecular Level</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #818cf8;
+            --accent: #22d3ee;
+            --accent-glow: rgba(34, 211, 238, 0.4);
+            --success: #10b981;
+            --warning: #f59e0b;
+            --bg-dark: #0a0a0f;
+            --bg-card: rgba(15, 15, 25, 0.8);
+            --bg-card-hover: rgba(25, 25, 40, 0.9);
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --border: rgba(99, 102, 241, 0.2);
+            --gradient-primary: linear-gradient(135deg, #6366f1 0%, #22d3ee 50%, #10b981 100%);
+            --gradient-bg: linear-gradient(180deg, #0a0a0f 0%, #0f0f1a 50%, #0a0a0f 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Molecular Background Animation */
+        .molecular-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .molecule {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.1;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .molecule::before,
+        .molecule::after {
+            content: '';
+            position: absolute;
+            background: var(--primary);
+            border-radius: 50%;
+        }
+
+        .molecule:nth-child(1) {
+            width: 200px;
+            height: 200px;
+            background: var(--primary);
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .molecule:nth-child(2) {
+            width: 150px;
+            height: 150px;
+            background: var(--accent);
+            top: 60%;
+            right: 10%;
+            animation-delay: -5s;
+        }
+
+        .molecule:nth-child(3) {
+            width: 100px;
+            height: 100px;
+            background: var(--success);
+            bottom: 20%;
+            left: 20%;
+            animation-delay: -10s;
+        }
+
+        .molecule:nth-child(4) {
+            width: 180px;
+            height: 180px;
+            background: var(--primary-light);
+            top: 30%;
+            right: 25%;
+            animation-delay: -7s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(30px, -30px) rotate(90deg); }
+            50% { transform: translate(-20px, 20px) rotate(180deg); }
+            75% { transform: translate(20px, 30px) rotate(270deg); }
+        }
+
+        /* Grid Pattern Overlay */
+        .grid-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(99, 102, 241, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -1;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1.5rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            -webkit-text-fill-color: white;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-cta {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 4rem 4rem;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            text-align: center;
+            z-index: 1;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid var(--border);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--primary-light);
+            margin-bottom: 2rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4); }
+            50% { box-shadow: 0 0 0 10px rgba(99, 102, 241, 0); }
+        }
+
+        .hero h1 {
+            font-size: 4.5rem;
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero h1 span {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.4rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto 2.5rem;
+            line-height: 1.7;
+        }
+
+        .hero-cta-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(99, 102, 241, 0.5);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            padding: 1rem 2.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--primary-light);
+        }
+
+        /* Stats Section */
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            margin-top: 5rem;
+            padding: 2rem;
+            background: var(--bg-card);
+            border-radius: 20px;
+            border: 1px solid var(--border);
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: 0.25rem;
+        }
+
+        /* Problem Section */
+        .problem {
+            padding: 8rem 4rem;
+            background: linear-gradient(180deg, transparent 0%, rgba(99, 102, 241, 0.03) 50%, transparent 100%);
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 4rem;
+        }
+
+        .section-tag {
+            display: inline-block;
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .section-header h2 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .problem-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(239, 68, 68, 0.3);
+            box-shadow: 0 20px 40px rgba(239, 68, 68, 0.1);
+        }
+
+        .problem-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .problem-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+        }
+
+        .problem-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .problem-stat {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #ef4444;
+        }
+
+        /* Solution Section */
+        .solution {
+            padding: 8rem 4rem;
+            position: relative;
+        }
+
+        .solution .section-tag {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+        .platform-visual {
+            max-width: 1200px;
+            margin: 0 auto 4rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .platform-visual::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+        }
+
+        .platform-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .platform-header h3 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .platform-layers {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .layer {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .layer:hover {
+            background: rgba(99, 102, 241, 0.05);
+            border-color: var(--primary);
+            transform: translateY(-5px);
+        }
+
+        .layer-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--gradient-primary);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto 1.5rem;
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+        }
+
+        .layer h4 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .layer-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+
+        .layer p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Capabilities */
+        .capabilities {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .capability {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .capability:hover {
+            border-color: var(--success);
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.1);
+        }
+
+        .capability-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .capability h4 {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .capability p {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        /* Market Section */
+        .market {
+            padding: 8rem 4rem;
+            background: linear-gradient(180deg, transparent 0%, rgba(34, 211, 238, 0.03) 50%, transparent 100%);
+        }
+
+        .market .section-tag {
+            background: rgba(34, 211, 238, 0.1);
+            color: var(--accent);
+        }
+
+        .market-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .market-visual {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 2rem;
+        }
+
+        .market-chart {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .market-bar {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .market-bar-label {
+            width: 140px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .market-bar-fill {
+            flex: 1;
+            height: 40px;
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .market-bar-inner {
+            height: 100%;
+            background: var(--gradient-primary);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 1rem;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .market-details h3 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .market-details h3 span {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .market-list {
+            list-style: none;
+        }
+
+        .market-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .market-list-icon {
+            width: 24px;
+            height: 24px;
+            background: rgba(34, 211, 238, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent);
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .market-list-content h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .market-list-content p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Business Model */
+        .business {
+            padding: 8rem 4rem;
+        }
+
+        .business .section-tag {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+        }
+
+        .revenue-streams {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto 4rem;
+        }
+
+        .revenue-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .revenue-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-primary);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .revenue-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .revenue-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.15);
+        }
+
+        .revenue-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(245, 158, 11, 0.1);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin: 0 auto 1.5rem;
+        }
+
+        .revenue-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .revenue-card p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .revenue-highlight {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--warning);
+        }
+
+        /* Metrics Grid */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .metric-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .metric-label {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            margin-top: 0.25rem;
+        }
+
+        /* Team Section */
+        .team {
+            padding: 8rem 4rem;
+            background: linear-gradient(180deg, transparent 0%, rgba(99, 102, 241, 0.03) 50%, transparent 100%);
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .team-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .team-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+        }
+
+        .team-avatar {
+            width: 100px;
+            height: 100px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin: 0 auto 1.5rem;
+        }
+
+        .team-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .team-role {
+            color: var(--primary-light);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .team-bio {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 8rem 4rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .cta-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 30px;
+            padding: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+        }
+
+        .cta-glow {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.2) 0%, transparent 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta h2 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .cta h2 span {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .cta p {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .cta-amount {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 2rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem;
+            text-align: center;
+            border-top: 1px solid var(--border);
+        }
+
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .footer-tagline {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .footer-copy {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .hero h1 { font-size: 3.5rem; }
+            .hero-stats { grid-template-columns: repeat(2, 1fr); }
+            .problem-grid { grid-template-columns: repeat(2, 1fr); }
+            .platform-layers { grid-template-columns: 1fr; }
+            .capabilities { grid-template-columns: repeat(2, 1fr); }
+            .revenue-streams { grid-template-columns: repeat(2, 1fr); }
+            .team-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 768px) {
+            nav { padding: 1rem 2rem; }
+            .nav-links { display: none; }
+            .hero { padding: 6rem 2rem 4rem; }
+            .hero h1 { font-size: 2.5rem; }
+            .hero-subtitle { font-size: 1.1rem; }
+            .hero-stats { grid-template-columns: 1fr 1fr; gap: 1rem; }
+            .stat-value { font-size: 1.8rem; }
+            .section-header h2 { font-size: 2rem; }
+            .problem-grid, .capabilities, .revenue-streams, .metrics-grid, .team-grid { grid-template-columns: 1fr; }
+            .market-content { grid-template-columns: 1fr; }
+            .cta h2 { font-size: 2rem; }
+            .cta-amount { font-size: 2.5rem; }
+            .cta-buttons { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Elements -->
+    <div class="molecular-bg">
+        <div class="molecule"></div>
+        <div class="molecule"></div>
+        <div class="molecule"></div>
+        <div class="molecule"></div>
+    </div>
+    <div class="grid-overlay"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">
+            <div class="logo-icon">⚛️</div>
+            SynthMatter AI
+        </div>
+        <ul class="nav-links">
+            <li><a href="#problem">Problem</a></li>
+            <li><a href="#solution">Solution</a></li>
+            <li><a href="#market">Market</a></li>
+            <li><a href="#business">Business</a></li>
+            <li><a href="#team">Team</a></li>
+        </ul>
+        <a href="#cta" class="nav-cta">Get Deck →</a>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                ⚡ Series A — Building the Future of Materials
+            </div>
+            <h1>Engineering <span>Matter</span> at the Molecular Level</h1>
+            <p class="hero-subtitle">
+                The AI platform that designs, simulates, and manufactures novel materials with programmable properties—from self-healing infrastructure to on-demand biodegradable plastics.
+            </p>
+            <div class="hero-cta-group">
+                <a href="#cta" class="btn-primary">Request Demo ⚛️</a>
+                <a href="#solution" class="btn-secondary">See How It Works →</a>
+            </div>
+            <div class="hero-stats">
+                <div class="stat">
+                    <div class="stat-value">$6T</div>
+                    <div class="stat-label">Materials Market</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">100x</div>
+                    <div class="stat-label">Faster Discovery</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">50M+</div>
+                    <div class="stat-label">Materials Trained</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">3</div>
+                    <div class="stat-label">Fortune 500 LOIs</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="problem" id="problem">
+        <div class="section-header">
+            <span class="section-tag">⚠️ THE CRISIS</span>
+            <h2>Materials Innovation is Broken</h2>
+            <p>The foundation of everything we build is stuck in the past century</p>
+        </div>
+        <div class="problem-grid">
+            <div class="problem-card">
+                <div class="problem-icon">⏳</div>
+                <h3>Painfully Slow</h3>
+                <p>New materials take 15-20 years from lab discovery to production. That's longer than most companies' lifespans.</p>
+                <div class="problem-stat">15-20 years</div>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">💸</div>
+                <h3>Astronomical Costs</h3>
+                <p>R&D budgets run into hundreds of millions per material—and most candidates fail anyway.</p>
+                <div class="problem-stat">$500M+ per material</div>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">🔬</div>
+                <h3>Limited Exploration</h3>
+                <p>Humans can only explore a tiny fraction of the infinite possible material combinations.</p>
+                <div class="problem-stat">0.001% explored</div>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">🏭</div>
+                <h3>Carbon Crisis</h3>
+                <p>Materials production accounts for nearly a quarter of global CO2 emissions. We're building with poison.</p>
+                <div class="problem-stat">23% of emissions</div>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">⛓️</div>
+                <h3>Fragile Supply Chains</h3>
+                <p>Dependency on rare earths concentrated in geopolitically risky regions. One disruption = chaos.</p>
+                <div class="problem-stat">80% China-controlled</div>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">🌊</div>
+                <h3>Plastic Apocalypse</h3>
+                <p>400 million tons of plastic waste annually. No viable alternatives at scale. Oceans are choking.</p>
+                <div class="problem-stat">400M tons/year</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="solution" id="solution">
+        <div class="section-header">
+            <span class="section-tag">✨ THE SOLUTION</span>
+            <h2>Programmable Materials, On Demand</h2>
+            <p>AI-designed, virtually tested, bio-manufactured—all in one platform</p>
+        </div>
+        
+        <div class="platform-visual">
+            <div class="platform-header">
+                <h3>The SynthMatter AI Platform</h3>
+                <p style="color: var(--text-secondary);">Three integrated layers working in harmony</p>
+            </div>
+            <div class="platform-layers">
+                <div class="layer">
+                    <div class="layer-icon">🧠</div>
+                    <h4>MatterMind™</h4>
+                    <div class="layer-tag">AI Design Engine</div>
+                    <p>Foundation model trained on 50M+ materials. Generates novel molecular architectures for any specified properties. Tell it what you want—it designs the material.</p>
+                </div>
+                <div class="layer">
+                    <div class="layer-icon">⚡</div>
+                    <h4>SimuForge™</h4>
+                    <div class="layer-tag">Virtual Testing Lab</div>
+                    <p>Quantum-classical hybrid simulation. Stress testing, thermal analysis, failure prediction—all in silico. 10,000x faster than physical testing.</p>
+                </div>
+                <div class="layer">
+                    <div class="layer-icon">🧬</div>
+                    <h4>BioSynth™</h4>
+                    <div class="layer-tag">Manufacturing Platform</div>
+                    <p>Synthetic biology production pathways. Engineered microorganisms produce materials like brewing beer. Carbon-negative, infinitely scalable.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="capabilities">
+            <div class="capability">
+                <div class="capability-icon">🎛️</div>
+                <h4>Property Programming</h4>
+                <p>Precise control over mechanical, thermal, electrical properties</p>
+            </div>
+            <div class="capability">
+                <div class="capability-icon">♻️</div>
+                <h4>Smart Degradation</h4>
+                <p>30-day, 1-year, or permanent—you choose</p>
+            </div>
+            <div class="capability">
+                <div class="capability-icon">🔧</div>
+                <h4>Self-Healing</h4>
+                <p>Materials that repair their own damage</p>
+            </div>
+            <div class="capability">
+                <div class="capability-icon">🌱</div>
+                <h4>Carbon-Negative</h4>
+                <p>Bio-based manufacturing from agricultural waste</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Market Section -->
+    <section class="market" id="market">
+        <div class="section-header">
+            <span class="section-tag">📊 THE OPPORTUNITY</span>
+            <h2>A Trillion-Dollar Transformation</h2>
+            <p>The largest industry ready for AI disruption</p>
+        </div>
+        <div class="market-content">
+            <div class="market-visual">
+                <div class="market-chart">
+                    <div class="market-bar">
+                        <div class="market-bar-label">Construction</div>
+                        <div class="market-bar-fill">
+                            <div class="market-bar-inner" style="width: 100%;">$1.4T</div>
+                        </div>
+                    </div>
+                    <div class="market-bar">
+                        <div class="market-bar-label">Automotive</div>
+                        <div class="market-bar-fill">
+                            <div class="market-bar-inner" style="width: 23%;">$320B</div>
+                        </div>
+                    </div>
+                    <div class="market-bar">
+                        <div class="market-bar-label">Packaging</div>
+                        <div class="market-bar-fill">
+                            <div class="market-bar-inner" style="width: 20%;">$280B</div>
+                        </div>
+                    </div>
+                    <div class="market-bar">
+                        <div class="market-bar-label">Electronics</div>
+                        <div class="market-bar-fill">
+                            <div class="market-bar-inner" style="width: 13%;">$180B</div>
+                        </div>
+                    </div>
+                    <div class="market-bar">
+                        <div class="market-bar-label">Advanced</div>
+                        <div class="market-bar-fill">
+                            <div class="market-bar-inner" style="width: 7%;">$95B</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="market-details">
+                <h3>TAM: <span>$2.3 Trillion</span></h3>
+                <ul class="market-list">
+                    <li>
+                        <span class="market-list-icon">✓</span>
+                        <div class="market-list-content">
+                            <h4>Regulatory Tailwinds</h4>
+                            <p>EU plastic bans, corporate sustainability pledges, ESG requirements driving urgent demand</p>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="market-list-icon">✓</span>
+                        <div class="market-list-content">
+                            <h4>Supply Chain Crisis</h4>
+                            <p>Companies desperately seeking alternatives to concentrated rare earth sources</p>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="market-list-icon">✓</span>
+                        <div class="market-list-content">
+                            <h4>Infrastructure Investment</h4>
+                            <p>$1T+ infrastructure bills globally creating demand for advanced materials</p>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="market-list-icon">✓</span>
+                        <div class="market-list-content">
+                            <h4>EV Revolution</h4>
+                            <p>Massive demand for next-gen battery materials without rare earth dependencies</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Business Model Section -->
+    <section class="business" id="business">
+        <div class="section-header">
+            <span class="section-tag">💰 THE MODEL</span>
+            <h2>Multiple Revenue Streams</h2>
+            <p>Platform + Royalties + Manufacturing = Compounding Growth</p>
+        </div>
+        <div class="revenue-streams">
+            <div class="revenue-card">
+                <div class="revenue-icon">💻</div>
+                <h3>Platform Licensing</h3>
+                <p>SaaS access to design, simulate, and optimize materials</p>
+                <div class="revenue-highlight">$50K-$1M+/mo</div>
+            </div>
+            <div class="revenue-card">
+                <div class="revenue-icon">📈</div>
+                <h3>Success Royalties</h3>
+                <p>Revenue share on materials brought to production</p>
+                <div class="revenue-highlight">2-5% Royalty</div>
+            </div>
+            <div class="revenue-card">
+                <div class="revenue-icon">🏭</div>
+                <h3>Manufacturing</h3>
+                <p>End-to-end bio-production for validated materials</p>
+                <div class="revenue-highlight">55% Gross Margin</div>
+            </div>
+            <div class="revenue-card">
+                <div class="revenue-icon">📜</div>
+                <h3>IP Licensing</h3>
+                <p>Patent portfolio from co-developed materials</p>
+                <div class="revenue-highlight">Strategic Asset</div>
+            </div>
+        </div>
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-value">$3.6M</div>
+                <div class="metric-label">Platform LTV</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">24:1</div>
+                <div class="metric-label">LTV:CAC Ratio</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">85%</div>
+                <div class="metric-label">Gross Margin</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">4 mo</div>
+                <div class="metric-label">Payback Period</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="team" id="team">
+        <div class="section-header">
+            <span class="section-tag">👥 THE TEAM</span>
+            <h2>World-Class Founders</h2>
+            <p>80+ years combined experience in materials science, AI, and synthetic biology</p>
+        </div>
+        <div class="team-grid">
+            <div class="team-card">
+                <div class="team-avatar">👩‍🔬</div>
+                <h3>Dr. Sarah Chen</h3>
+                <div class="team-role">CEO</div>
+                <p class="team-bio">PhD MIT • 15 years at BASF, VP Innovation • 12 commercial materials • 35 patents</p>
+            </div>
+            <div class="team-card">
+                <div class="team-avatar">👨‍💻</div>
+                <h3>Marcus Williams</h3>
+                <div class="team-role">CTO</div>
+                <p class="team-bio">PhD Stanford AI/ML • Ex-Google DeepMind • Led AlphaFold materials adaptation</p>
+            </div>
+            <div class="team-card">
+                <div class="team-avatar">👩‍🔬</div>
+                <h3>Dr. Elena Rodriguez</h3>
+                <div class="team-role">Chief Science Officer</div>
+                <p class="team-bio">PhD Caltech • Ex-Ginkgo Bioworks Director • Pioneer in bio-based materials</p>
+            </div>
+            <div class="team-card">
+                <div class="team-avatar">👨‍💼</div>
+                <h3>James Park</h3>
+                <div class="team-role">Chief Commercial Officer</div>
+                <p class="team-bio">MBA Harvard • Ex-Veeva VP Sales • Scaled $50M to $500M ARR</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta" id="cta">
+        <div class="cta-container">
+            <div class="cta-glow"></div>
+            <div class="cta-content">
+                <h2>Join the <span>Materials Revolution</span></h2>
+                <p>We're raising our Series A to scale the platform that will define how humanity creates matter.</p>
+                <div class="cta-amount">$40M Series A</div>
+                <div class="cta-buttons">
+                    <a href="mailto:founders@synthmatter.ai" class="btn-primary">Request Pitch Deck ⚛️</a>
+                    <a href="mailto:founders@synthmatter.ai" class="btn-secondary">Schedule Demo →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-logo">⚛️ SynthMatter AI</div>
+        <p class="footer-tagline">Engineering Tomorrow's Materials Today</p>
+        <div class="footer-links">
+            <a href="#">Platform</a>
+            <a href="#">Research</a>
+            <a href="#">Careers</a>
+            <a href="#">Press</a>
+            <a href="mailto:founders@synthmatter.ai">Contact</a>
+        </div>
+        <p class="footer-copy">© 2026 SynthMatter AI. All rights reserved.</p>
+    </footer>
+</body>
+</html>
