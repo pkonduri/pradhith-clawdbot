@@ -1,0 +1,1444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealthProxy AI — Your Tireless Healthcare Advocate</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0ea5e9;
+            --primary-dark: #0284c7;
+            --secondary: #06b6d4;
+            --accent: #10b981;
+            --dark: #0f172a;
+            --darker: #020617;
+            --light: #f8fafc;
+            --muted: #94a3b8;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --success: #22c55e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--darker);
+            color: var(--light);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(ellipse at 30% 20%, rgba(14, 165, 233, 0.15) 0%, transparent 50%),
+                        radial-gradient(ellipse at 70% 80%, rgba(6, 182, 212, 0.1) 0%, transparent 50%),
+                        radial-gradient(ellipse at 50% 50%, rgba(16, 185, 129, 0.08) 0%, transparent 60%);
+            animation: bgPulse 20s ease-in-out infinite;
+        }
+
+        @keyframes bgPulse {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(-5%, -5%) scale(1.1); }
+        }
+
+        /* DNA Helix Animation */
+        .dna-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0.3;
+        }
+
+        .dna-strand {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: dnaFloat 15s linear infinite;
+        }
+
+        @keyframes dnaFloat {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: linear-gradient(to bottom, rgba(2, 6, 23, 0.9), transparent);
+            backdrop-filter: blur(10px);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--light);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--muted);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--light);
+        }
+
+        .nav-cta {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 0.75rem 1.75rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+            box-shadow: 0 4px 20px rgba(14, 165, 233, 0.4);
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 30px rgba(14, 165, 233, 0.5);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 5% 4rem;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(14, 165, 233, 0.15);
+            border: 1px solid rgba(14, 165, 233, 0.3);
+            padding: 0.5rem 1.25rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--primary);
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .badge-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.8s ease 0.1s both;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.35rem;
+            color: var(--muted);
+            margin-bottom: 3rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            animation: fadeInUp 0.8s ease 0.2s both;
+        }
+
+        .hero-ctas {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.8s ease 0.3s both;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            box-shadow: 0 4px 25px rgba(14, 165, 233, 0.4);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 40px rgba(14, 165, 233, 0.5);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--light);
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            margin-top: 5rem;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            animation: fadeInUp 0.8s ease 0.4s both;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--muted);
+            margin-top: 0.25rem;
+        }
+
+        /* Problem Section */
+        .problem-section {
+            padding: 8rem 5%;
+            background: linear-gradient(180deg, transparent, rgba(239, 68, 68, 0.03), transparent);
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 4rem;
+        }
+
+        .section-tag {
+            display: inline-block;
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--danger);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-tag.success {
+            background: rgba(16, 185, 129, 0.15);
+            border-color: rgba(16, 185, 129, 0.3);
+            color: var(--accent);
+        }
+
+        .section-tag.primary {
+            background: rgba(14, 165, 233, 0.15);
+            border-color: rgba(14, 165, 233, 0.3);
+            color: var(--primary);
+        }
+
+        .section-header h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            font-size: 1.15rem;
+            color: var(--muted);
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .problem-card {
+            background: rgba(239, 68, 68, 0.05);
+            border: 1px solid rgba(239, 68, 68, 0.15);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(239, 68, 68, 0.3);
+            box-shadow: 0 20px 60px rgba(239, 68, 68, 0.1);
+        }
+
+        .problem-icon {
+            width: 56px;
+            height: 56px;
+            background: rgba(239, 68, 68, 0.15);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .problem-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            color: var(--light);
+        }
+
+        .problem-card p {
+            color: var(--muted);
+            font-size: 0.95rem;
+        }
+
+        .problem-stat {
+            display: inline-block;
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--danger);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-top: 1rem;
+        }
+
+        /* Solution Section */
+        .solution-section {
+            padding: 8rem 5%;
+            position: relative;
+        }
+
+        .solution-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .solution-visual {
+            position: relative;
+        }
+
+        .agent-showcase {
+            background: linear-gradient(135deg, rgba(14, 165, 233, 0.1), rgba(16, 185, 129, 0.1));
+            border: 1px solid rgba(14, 165, 233, 0.2);
+            border-radius: 24px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .agent-showcase::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 0%, rgba(14, 165, 233, 0.15), transparent 60%);
+            pointer-events: none;
+        }
+
+        .agent-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .agent-card:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: var(--primary);
+            transform: translateX(10px);
+        }
+
+        .agent-card:last-child {
+            margin-bottom: 0;
+        }
+
+        .agent-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .agent-avatar.billing { background: linear-gradient(135deg, #22c55e, #10b981); }
+        .agent-avatar.claims { background: linear-gradient(135deg, #0ea5e9, #06b6d4); }
+        .agent-avatar.auth { background: linear-gradient(135deg, #f59e0b, #eab308); }
+        .agent-avatar.coord { background: linear-gradient(135deg, #8b5cf6, #a855f7); }
+        .agent-avatar.pharmacy { background: linear-gradient(135deg, #ec4899, #f43f5e); }
+
+        .agent-info h4 {
+            font-weight: 700;
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .agent-info p {
+            color: var(--muted);
+            font-size: 0.85rem;
+        }
+
+        .agent-status {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.75rem;
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .agent-status::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .solution-text h2 {
+            font-size: clamp(2rem, 4vw, 2.75rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+        }
+
+        .solution-text h2 span {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .solution-text > p {
+            color: var(--muted);
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+
+        .solution-features {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .feature-item {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .feature-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(14, 165, 233, 0.15);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .feature-text h4 {
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .feature-text p {
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        /* How It Works */
+        .how-section {
+            padding: 8rem 5%;
+            background: linear-gradient(180deg, transparent, rgba(14, 165, 233, 0.03), transparent);
+        }
+
+        .steps-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .steps-container::before {
+            content: '';
+            position: absolute;
+            left: 40px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--primary), var(--accent));
+            opacity: 0.3;
+        }
+
+        .step {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .step:last-child {
+            margin-bottom: 0;
+        }
+
+        .step-number {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 900;
+            flex-shrink: 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .step-content {
+            flex: 1;
+            padding-top: 0.5rem;
+        }
+
+        .step-content h3 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 0.75rem;
+        }
+
+        .step-content p {
+            color: var(--muted);
+            font-size: 1.05rem;
+            margin-bottom: 1rem;
+        }
+
+        .step-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .step-tag {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: var(--muted);
+        }
+
+        /* Pricing Section */
+        .pricing-section {
+            padding: 8rem 5%;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            padding: 2.5rem;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .pricing-card.featured {
+            background: linear-gradient(135deg, rgba(14, 165, 233, 0.1), rgba(16, 185, 129, 0.1));
+            border-color: var(--primary);
+        }
+
+        .pricing-card.featured::before {
+            content: 'MOST POPULAR';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            padding: 0.4rem 1.25rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+        }
+
+        .pricing-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-price {
+            display: flex;
+            align-items: baseline;
+            gap: 0.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-price .amount {
+            font-size: 3rem;
+            font-weight: 900;
+        }
+
+        .pricing-price .period {
+            color: var(--muted);
+            font-size: 1rem;
+        }
+
+        .pricing-desc {
+            color: var(--muted);
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-features li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 0.95rem;
+        }
+
+        .pricing-features li:last-child {
+            border-bottom: none;
+        }
+
+        .pricing-features .check {
+            color: var(--accent);
+            font-size: 1.1rem;
+        }
+
+        .pricing-btn {
+            display: block;
+            width: 100%;
+            padding: 1rem;
+            border-radius: 12px;
+            text-align: center;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+
+        .pricing-btn.primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .pricing-btn.secondary {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--light);
+        }
+
+        .pricing-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Testimonials */
+        .testimonials-section {
+            padding: 8rem 5%;
+            background: linear-gradient(180deg, transparent, rgba(16, 185, 129, 0.03), transparent);
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .testimonial-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .testimonial-card::before {
+            content: '"';
+            position: absolute;
+            top: 1rem;
+            right: 2rem;
+            font-size: 5rem;
+            color: var(--primary);
+            opacity: 0.2;
+            font-family: Georgia, serif;
+            line-height: 1;
+        }
+
+        .testimonial-content {
+            font-size: 1.05rem;
+            color: var(--muted);
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .author-info h4 {
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .author-info p {
+            color: var(--muted);
+            font-size: 0.85rem;
+        }
+
+        .savings-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            padding: 0.4rem 0.9rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-top: 1rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 8rem 5%;
+            text-align: center;
+            position: relative;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(14, 165, 233, 0.2), transparent 70%);
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+        }
+
+        .cta-content {
+            max-width: 700px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-content h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-content p {
+            font-size: 1.2rem;
+            color: var(--muted);
+            margin-bottom: 2.5rem;
+        }
+
+        .cta-form {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cta-input {
+            flex: 1;
+            min-width: 280px;
+            padding: 1rem 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--light);
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .cta-input:focus {
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .cta-input::placeholder {
+            color: var(--muted);
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 5% 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--light);
+        }
+
+        .footer-copy {
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .stats-bar {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .solution-content {
+                grid-template-columns: 1fr;
+            }
+
+            .solution-visual {
+                order: 2;
+            }
+
+            .steps-container::before {
+                display: none;
+            }
+
+            .step {
+                flex-direction: column;
+            }
+
+            .step-number {
+                width: 60px;
+                height: 60px;
+                font-size: 1.5rem;
+            }
+
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Animation -->
+    <div class="bg-animation"></div>
+    <div class="dna-container" id="dna"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <a href="#" class="logo">
+            <div class="logo-icon">🛡️</div>
+            HealthProxy
+        </a>
+        <ul class="nav-links">
+            <li><a href="#problem">The Problem</a></li>
+            <li><a href="#solution">Solution</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+            <li><a href="#stories">Stories</a></li>
+        </ul>
+        <a href="#cta" class="nav-cta">Get Early Access</a>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span class="badge-dot"></span>
+                AI Agents That Fight For You
+            </div>
+            <h1>Stop Fighting <span>Healthcare Bureaucracy</span></h1>
+            <p class="hero-subtitle">HealthProxy AI handles insurance calls, fights claim denials, disputes billing errors, and navigates prior authorizations — so you never have to.</p>
+            <div class="hero-ctas">
+                <a href="#cta" class="btn-primary">
+                    Start Saving Today →
+                </a>
+                <a href="#solution" class="btn-secondary">
+                    ▶ See How It Works
+                </a>
+            </div>
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <div class="stat-value">2.4B</div>
+                    <div class="stat-label">Hours Americans Lose/Year</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">30%</div>
+                    <div class="stat-label">Claims Initially Denied</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">65%</div>
+                    <div class="stat-label">Bills Contain Errors</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">$125B</div>
+                    <div class="stat-label">Lost to Billing Errors/Year</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="problem-section" id="problem">
+        <div class="section-header">
+            <span class="section-tag">The Broken System</span>
+            <h2>Healthcare Complexity Is By Design</h2>
+            <p>Insurance companies profit when you give up. The system is built to exhaust you into compliance.</p>
+        </div>
+        <div class="problem-grid">
+            <div class="problem-card">
+                <div class="problem-icon">📞</div>
+                <h3>Endless Hold Times</h3>
+                <p>Average wait: 23 minutes. Multiple transfers. Repeating your story over and over.</p>
+                <span class="problem-stat">47 min avg per issue</span>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">❌</div>
+                <h3>Wrongful Denials</h3>
+                <p>30% of claims are initially denied. Most people never appeal — insurers count on that.</p>
+                <span class="problem-stat">70% overturn on appeal</span>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">💸</div>
+                <h3>Billing Errors</h3>
+                <p>65% of bills contain errors. Duplicate charges, wrong codes, inflated prices.</p>
+                <span class="problem-stat">$1,200 avg overcharge</span>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">📋</div>
+                <h3>Prior Auth Hell</h3>
+                <p>Physicians spend 35 hours/week on prior authorizations. Care gets delayed. Patients suffer.</p>
+                <span class="problem-stat">2-4 weeks delay</span>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">🔀</div>
+                <h3>Coordination Chaos</h3>
+                <p>Multiple providers, pharmacies, insurers — none talking to each other. You're the messenger.</p>
+                <span class="problem-stat">8 parties avg</span>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">💊</div>
+                <h3>Pharmacy Roulette</h3>
+                <p>Coverage gaps, surprise costs, refill denials. Your medication shouldn't be a gamble.</p>
+                <span class="problem-stat">15% skip meds (cost)</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="solution-section" id="solution">
+        <div class="solution-content">
+            <div class="solution-text">
+                <span class="section-tag success">The Solution</span>
+                <h2>Meet Your <span>AI Healthcare Army</span></h2>
+                <p>HealthProxy deploys specialized AI agents that handle every aspect of healthcare bureaucracy. They never get frustrated, never forget, and never give up.</p>
+                <div class="solution-features">
+                    <div class="feature-item">
+                        <div class="feature-icon">🎯</div>
+                        <div class="feature-text">
+                            <h4>Voice Agents That Call For You</h4>
+                            <p>Our AI actually makes phone calls, navigates IVR menus, waits on hold, and talks to representatives.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">🔍</div>
+                        <div class="feature-text">
+                            <h4>Document Intelligence</h4>
+                            <p>Parses EOBs, bills, and medical records instantly. Catches errors humans miss.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">⚡</div>
+                        <div class="feature-text">
+                            <h4>Proactive Protection</h4>
+                            <p>Monitors for issues before they become problems. Handles prior auth before appointments.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">📊</div>
+                        <div class="feature-text">
+                            <h4>Results Dashboard</h4>
+                            <p>See exactly what your agents accomplished, money saved, and issues resolved.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="solution-visual">
+                <div class="agent-showcase">
+                    <div class="agent-card">
+                        <div class="agent-avatar billing">💰</div>
+                        <div class="agent-info">
+                            <h4>BillingBot</h4>
+                            <p>Audits & negotiates every bill</p>
+                        </div>
+                        <div class="agent-status">Active</div>
+                    </div>
+                    <div class="agent-card">
+                        <div class="agent-avatar claims">⚔️</div>
+                        <div class="agent-info">
+                            <h4>ClaimBot</h4>
+                            <p>Fights denials with evidence</p>
+                        </div>
+                        <div class="agent-status">Active</div>
+                    </div>
+                    <div class="agent-card">
+                        <div class="agent-avatar auth">📝</div>
+                        <div class="agent-info">
+                            <h4>AuthBot</h4>
+                            <p>Handles prior authorizations</p>
+                        </div>
+                        <div class="agent-status">Active</div>
+                    </div>
+                    <div class="agent-card">
+                        <div class="agent-avatar coord">🔗</div>
+                        <div class="agent-info">
+                            <h4>CoordinatorBot</h4>
+                            <p>Manages provider communication</p>
+                        </div>
+                        <div class="agent-status">Active</div>
+                    </div>
+                    <div class="agent-card">
+                        <div class="agent-avatar pharmacy">💊</div>
+                        <div class="agent-info">
+                            <h4>PharmacyBot</h4>
+                            <p>Optimizes medication costs</p>
+                        </div>
+                        <div class="agent-status">Active</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-section">
+        <div class="section-header">
+            <span class="section-tag primary">How It Works</span>
+            <h2>Set Up in 5 Minutes, Save All Year</h2>
+            <p>Connect your accounts once. Our AI agents work continuously to protect you.</p>
+        </div>
+        <div class="steps-container">
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h3>Connect Your Health Stack</h3>
+                    <p>Link your insurance portal, pharmacy accounts, and provider portals. We import your bills, EOBs, and claims automatically.</p>
+                    <div class="step-tags">
+                        <span class="step-tag">Insurance Portals</span>
+                        <span class="step-tag">Pharmacy Accounts</span>
+                        <span class="step-tag">Provider Portals</span>
+                        <span class="step-tag">Calendar Sync</span>
+                    </div>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h3>AI Agents Activate</h3>
+                    <p>Your fleet of specialized agents immediately starts scanning for errors, monitoring claims, and identifying opportunities to save.</p>
+                    <div class="step-tags">
+                        <span class="step-tag">Bill Auditing</span>
+                        <span class="step-tag">Claim Tracking</span>
+                        <span class="step-tag">Error Detection</span>
+                        <span class="step-tag">Price Monitoring</span>
+                    </div>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h3>Autonomous Action</h3>
+                    <p>Agents handle issues autonomously — making calls, filing appeals, negotiating rates. You get notified only when approval is needed.</p>
+                    <div class="step-tags">
+                        <span class="step-tag">Voice Calls</span>
+                        <span class="step-tag">Appeal Filing</span>
+                        <span class="step-tag">Negotiations</span>
+                        <span class="step-tag">Prior Auth</span>
+                    </div>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <h3>Results & Savings</h3>
+                    <p>Watch your dashboard fill with resolved issues, overturned denials, corrected bills, and dollars saved. Average user saves $1,200+/year.</p>
+                    <div class="step-tags">
+                        <span class="step-tag">Savings Reports</span>
+                        <span class="step-tag">Issue Timeline</span>
+                        <span class="step-tag">Win Rate Stats</span>
+                        <span class="step-tag">Time Saved</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="pricing-section" id="pricing">
+        <div class="section-header">
+            <span class="section-tag primary">Simple Pricing</span>
+            <h2>Pays For Itself (Guaranteed)</h2>
+            <p>If we don't save you more than your subscription cost, we refund the difference.</p>
+        </div>
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <div class="pricing-name">Free</div>
+                <div class="pricing-price">
+                    <span class="amount">$0</span>
+                    <span class="period">/month</span>
+                </div>
+                <p class="pricing-desc">See what you're missing</p>
+                <ul class="pricing-features">
+                    <li><span class="check">✓</span> Bill scanning & error alerts</li>
+                    <li><span class="check">✓</span> Claim status tracking</li>
+                    <li><span class="check">✓</span> Basic price comparisons</li>
+                    <li><span class="check">✓</span> Monthly savings report</li>
+                </ul>
+                <a href="#cta" class="pricing-btn secondary">Get Started</a>
+            </div>
+            <div class="pricing-card featured">
+                <div class="pricing-name">Plus</div>
+                <div class="pricing-price">
+                    <span class="amount">$19</span>
+                    <span class="period">/month</span>
+                </div>
+                <p class="pricing-desc">Full bill protection</p>
+                <ul class="pricing-features">
+                    <li><span class="check">✓</span> Everything in Free</li>
+                    <li><span class="check">✓</span> Unlimited bill negotiations</li>
+                    <li><span class="check">✓</span> AI phone calls on your behalf</li>
+                    <li><span class="check">✓</span> Payment plan automation</li>
+                    <li><span class="check">✓</span> Priority support</li>
+                </ul>
+                <a href="#cta" class="pricing-btn primary">Most Popular</a>
+            </div>
+            <div class="pricing-card">
+                <div class="pricing-name">Pro</div>
+                <div class="pricing-price">
+                    <span class="amount">$49</span>
+                    <span class="period">/month</span>
+                </div>
+                <p class="pricing-desc">Complete healthcare automation</p>
+                <ul class="pricing-features">
+                    <li><span class="check">✓</span> Everything in Plus</li>
+                    <li><span class="check">✓</span> Claim denial appeals</li>
+                    <li><span class="check">✓</span> Prior authorization handling</li>
+                    <li><span class="check">✓</span> Provider coordination</li>
+                    <li><span class="check">✓</span> Pharmacy optimization</li>
+                    <li><span class="check">✓</span> Dedicated success manager</li>
+                </ul>
+                <a href="#cta" class="pricing-btn secondary">Go Pro</a>
+            </div>
+            <div class="pricing-card">
+                <div class="pricing-name">Family</div>
+                <div class="pricing-price">
+                    <span class="amount">$99</span>
+                    <span class="period">/month</span>
+                </div>
+                <p class="pricing-desc">Protect your whole household</p>
+                <ul class="pricing-features">
+                    <li><span class="check">✓</span> Everything in Pro</li>
+                    <li><span class="check">✓</span> Up to 5 family members</li>
+                    <li><span class="check">✓</span> Family dashboard</li>
+                    <li><span class="check">✓</span> Dependent management</li>
+                    <li><span class="check">✓</span> Care coordination</li>
+                    <li><span class="check">✓</span> Concierge support</li>
+                </ul>
+                <a href="#cta" class="pricing-btn secondary">Family Plan</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials-section" id="stories">
+        <div class="section-header">
+            <span class="section-tag success">Real Results</span>
+            <h2>Our Agents Are Fighting Back</h2>
+            <p>Join thousands of Americans who've stopped losing money to healthcare complexity.</p>
+        </div>
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <p class="testimonial-content">I had a $4,200 surgery bill with three errors — duplicate charges and wrong codes. HealthProxy caught all of them and negotiated it down to $1,800. I never made a single phone call.</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">MK</div>
+                    <div class="author-info">
+                        <h4>Maria K.</h4>
+                        <p>Teacher, Texas</p>
+                    </div>
+                </div>
+                <div class="savings-badge">💰 Saved $2,400</div>
+            </div>
+            <div class="testimonial-card">
+                <p class="testimonial-content">My insulin prior auth was denied three times. I was rationing doses. HealthProxy's agent filed an appeal with clinical evidence I didn't know existed. Approved in 48 hours.</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">JT</div>
+                    <div class="author-info">
+                        <h4>James T.</h4>
+                        <p>Software Engineer, California</p>
+                    </div>
+                </div>
+                <div class="savings-badge">⏱️ Life-saving care</div>
+            </div>
+            <div class="testimonial-card">
+                <p class="testimonial-content">As a caregiver for my elderly parents, I was drowning in their healthcare paperwork. HealthProxy manages all three of our accounts. It's like having a full-time employee for $99/month.</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">SL</div>
+                    <div class="author-info">
+                        <h4>Sarah L.</h4>
+                        <p>Marketing Director, Florida</p>
+                    </div>
+                </div>
+                <div class="savings-badge">🕐 15+ hours/month saved</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section" id="cta">
+        <div class="cta-content">
+            <h2>Stop Losing to Healthcare Bureaucracy</h2>
+            <p>Join the waitlist for early access. Be among the first to get AI agents fighting for your healthcare rights.</p>
+            <div class="cta-form">
+                <input type="email" class="cta-input" placeholder="Enter your email">
+                <a href="#" class="btn-primary">Join Waitlist →</a>
+            </div>
+            <p style="margin-top: 1.5rem; font-size: 0.9rem; color: var(--muted);">No spam. We'll notify you when early access opens.</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <a href="#" class="logo">
+                <div class="logo-icon">🛡️</div>
+                HealthProxy AI
+            </a>
+            <div class="footer-links">
+                <a href="#">Privacy</a>
+                <a href="#">Terms</a>
+                <a href="#">HIPAA Compliance</a>
+                <a href="#">Contact</a>
+            </div>
+            <p class="footer-copy">© 2026 HealthProxy AI. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- DNA Animation Script -->
+    <script>
+        const dnaContainer = document.getElementById('dna');
+        for (let i = 0; i < 30; i++) {
+            const strand = document.createElement('div');
+            strand.className = 'dna-strand';
+            strand.style.left = Math.random() * 100 + '%';
+            strand.style.animationDelay = Math.random() * 15 + 's';
+            strand.style.opacity = Math.random() * 0.5 + 0.1;
+            dnaContainer.appendChild(strand);
+        }
+    </script>
+</body>
+</html>

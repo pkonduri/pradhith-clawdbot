@@ -248,6 +248,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-04-23 | Morning | ClimateShield AI — Enterprise Climate Litigation Intelligence | [Playbook](2026-04-23-morning.md) • [Landing](2026-04-23-morning-landing.html) • [PDF](2026-04-23-morning.pdf) |
 | 2026-04-23 | Afternoon | SynthMatter AI — The Platform for AI-Designed Programmable Materials | [Playbook](2026-04-23-afternoon.md) • [Landing](2026-04-23-afternoon-landing.html) • [PDF](2026-04-23-afternoon.pdf) |
 | 2026-04-24 | Evening | AdaptOS — Climate Adaptation & Resilience Intelligence | [Playbook](2026-04-24-evening.md) • [Landing](2026-04-24-evening-landing.html) • [PDF](2026-04-24-evening.pdf) |
+| 2026-04-24 | Morning | HealthProxy AI — AI Agents That Fight Healthcare Bureaucracy | [Playbook](2026-04-24-morning.md) • [Landing](2026-04-24-morning-landing.html) • [PDF](2026-04-24-morning.pdf) |
 <!-- New entries will be added above this line -->
 
 ---
