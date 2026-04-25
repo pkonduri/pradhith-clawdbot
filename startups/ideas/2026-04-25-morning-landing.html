@@ -1,0 +1,1439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ExitOS — The AI Operating System for Business Exit Intelligence</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0f172a;
+            --secondary: #1e293b;
+            --accent: #10b981;
+            --accent-light: #34d399;
+            --accent-dark: #059669;
+            --gold: #f59e0b;
+            --gold-light: #fbbf24;
+            --text: #f8fafc;
+            --text-muted: #94a3b8;
+            --surface: #1e293b;
+            --surface-elevated: #334155;
+            --gradient-1: linear-gradient(135deg, #10b981 0%, #059669 50%, #047857 100%);
+            --gradient-2: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--primary);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(16, 185, 129, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 80% 80%, rgba(245, 158, 11, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.05) 0%, transparent 60%);
+            animation: bgPulse 15s ease-in-out infinite;
+        }
+
+        @keyframes bgPulse {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(-5%, -5%) scale(1.1); }
+        }
+
+        /* Grid Pattern Overlay */
+        .grid-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 60px 60px;
+            z-index: -1;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 1.5rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 800;
+            font-size: 1.5rem;
+            color: var(--text);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: var(--gradient-1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-light);
+        }
+
+        .cta-btn {
+            background: var(--gradient-1);
+            color: white;
+            padding: 14px 32px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(16, 185, 129, 0.4);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 140px 4rem 80px;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 900px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            padding: 10px 20px;
+            border-radius: 50px;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            color: var(--accent-light);
+        }
+
+        .hero-badge span {
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        .hero h1 {
+            font-size: 4.5rem;
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero h1 .highlight {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.4rem;
+            color: var(--text-muted);
+            max-width: 700px;
+            margin-bottom: 2.5rem;
+            line-height: 1.7;
+        }
+
+        .hero-ctas {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 4rem;
+        }
+
+        .secondary-btn {
+            background: transparent;
+            border: 2px solid rgba(255,255,255,0.2);
+            color: var(--text);
+            padding: 14px 32px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+        }
+
+        .secondary-btn:hover {
+            border-color: var(--accent);
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        /* Stats Row */
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 3rem;
+            padding-top: 3rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .stat-item {
+            text-align: left;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--accent-light);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        /* Floating Elements */
+        .floating-card {
+            position: absolute;
+            right: 4rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--surface);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 24px;
+            padding: 2rem;
+            width: 380px;
+            box-shadow: 0 25px 80px rgba(0,0,0,0.4);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(-50%) translateX(0); }
+            50% { transform: translateY(-50%) translateX(10px); }
+        }
+
+        .floating-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .floating-card-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .score-badge {
+            background: var(--gradient-1);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .metric-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .metric-row:last-child {
+            border-bottom: none;
+        }
+
+        .metric-label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .metric-value {
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .metric-up {
+            color: var(--accent-light);
+        }
+
+        .metric-warning {
+            color: var(--gold);
+        }
+
+        /* Problem Section */
+        .section {
+            padding: 120px 4rem;
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 5rem;
+        }
+
+        .section-label {
+            color: var(--accent);
+            font-weight: 600;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: 3.2rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            line-height: 1.7;
+        }
+
+        /* Problem Cards */
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .problem-card {
+            background: var(--surface);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            transition: all 0.4s;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(245, 158, 11, 0.3);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .problem-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(245, 158, 11, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin: 0 auto 1.5rem;
+        }
+
+        .problem-stat {
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--gold);
+            margin-bottom: 0.5rem;
+        }
+
+        .problem-text {
+            color: var(--text-muted);
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        /* Solution Section */
+        .solution-section {
+            background: linear-gradient(180deg, rgba(16, 185, 129, 0.03) 0%, transparent 100%);
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2.5rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: var(--surface);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 24px;
+            padding: 3rem;
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-1);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s;
+        }
+
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 80px rgba(16, 185, 129, 0.15);
+        }
+
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .feature-desc {
+            color: var(--text-muted);
+            font-size: 1rem;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-list {
+            list-style: none;
+        }
+
+        .feature-list li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .feature-list li::before {
+            content: '✓';
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        /* How It Works */
+        .steps-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 3rem;
+            position: relative;
+        }
+
+        .steps-container::before {
+            content: '';
+            position: absolute;
+            top: 60px;
+            left: 12.5%;
+            right: 12.5%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent), var(--gold));
+        }
+
+        .step {
+            text-align: center;
+            position: relative;
+        }
+
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin: 0 auto 2rem;
+            position: relative;
+            z-index: 2;
+            box-shadow: 0 8px 30px rgba(16, 185, 129, 0.3);
+        }
+
+        .step-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .step-desc {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Market Section */
+        .market-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            align-items: center;
+        }
+
+        .market-stats {
+            display: grid;
+            gap: 2rem;
+        }
+
+        .market-stat {
+            background: var(--surface);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 2rem 2.5rem;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .market-stat-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            flex-shrink: 0;
+        }
+
+        .market-stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--accent-light);
+        }
+
+        .market-stat-label {
+            color: var(--text-muted);
+            font-size: 1rem;
+            margin-top: 0.3rem;
+        }
+
+        .market-chart {
+            background: var(--surface);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 24px;
+            padding: 2.5rem;
+        }
+
+        .chart-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+        }
+
+        .chart-bars {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .chart-bar-row {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .chart-label {
+            width: 80px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .chart-bar-bg {
+            flex: 1;
+            height: 40px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .chart-bar-fill {
+            height: 100%;
+            background: var(--gradient-1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 15px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            transition: width 1s ease-out;
+        }
+
+        /* Testimonial */
+        .testimonial-section {
+            background: var(--gradient-1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .testimonial-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, rgba(255,255,255,0.1) 0%, transparent 50%);
+        }
+
+        .testimonial-content {
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .quote-icon {
+            font-size: 5rem;
+            opacity: 0.3;
+            margin-bottom: 2rem;
+        }
+
+        .testimonial-text {
+            font-size: 2rem;
+            font-weight: 500;
+            line-height: 1.6;
+            margin-bottom: 2.5rem;
+        }
+
+        .testimonial-author {
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .testimonial-role {
+            opacity: 0.8;
+            font-size: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Pricing */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            background: var(--surface);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 24px;
+            padding: 3rem;
+            position: relative;
+            transition: all 0.4s;
+        }
+
+        .pricing-card.featured {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(16, 185, 129, 0.05) 100%);
+            border-color: rgba(16, 185, 129, 0.3);
+            transform: scale(1.05);
+        }
+
+        .pricing-card:hover {
+            border-color: var(--accent);
+        }
+
+        .popular-badge {
+            position: absolute;
+            top: -15px;
+            right: 30px;
+            background: var(--gradient-gold);
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        .pricing-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-desc {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-price {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-price span {
+            font-size: 1.2rem;
+            font-weight: 400;
+            color: var(--text-muted);
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin: 2rem 0;
+        }
+
+        .pricing-features li {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .pricing-features li::before {
+            content: '✓';
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        .pricing-cta {
+            width: 100%;
+            padding: 16px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+        }
+
+        .pricing-cta.primary {
+            background: var(--gradient-1);
+            border: none;
+            color: white;
+        }
+
+        .pricing-cta.secondary {
+            background: transparent;
+            border: 2px solid rgba(255,255,255,0.2);
+            color: var(--text);
+        }
+
+        .pricing-cta:hover {
+            transform: translateY(-2px);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            text-align: center;
+            padding: 150px 4rem;
+            background: radial-gradient(ellipse at center, rgba(16, 185, 129, 0.1) 0%, transparent 70%);
+        }
+
+        .cta-section h2 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-section p {
+            font-size: 1.3rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto 3rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+        }
+
+        /* Footer */
+        footer {
+            padding: 80px 4rem 40px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+            gap: 4rem;
+            max-width: 1400px;
+            margin: 0 auto 4rem;
+        }
+
+        .footer-brand h3 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .footer-brand p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.7;
+            max-width: 300px;
+        }
+
+        .footer-col h4 {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-col a {
+            display: block;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.95rem;
+            padding: 8px 0;
+            transition: color 0.3s;
+        }
+
+        .footer-col a:hover {
+            color: var(--accent-light);
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 3rem;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .footer-bottom p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .social-links a {
+            color: var(--text-muted);
+            font-size: 1.3rem;
+            transition: color 0.3s;
+        }
+
+        .social-links a:hover {
+            color: var(--accent-light);
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .floating-card {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 3.5rem;
+            }
+
+            .problem-grid,
+            .feature-grid,
+            .pricing-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .steps-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .steps-container::before {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem 2rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero {
+                padding: 120px 2rem 60px;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.1rem;
+            }
+
+            .hero-stats {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 2rem;
+            }
+
+            .section {
+                padding: 80px 2rem;
+            }
+
+            .section-title {
+                font-size: 2.2rem;
+            }
+
+            .problem-grid,
+            .feature-grid,
+            .pricing-grid,
+            .steps-container {
+                grid-template-columns: 1fr;
+            }
+
+            .pricing-card.featured {
+                transform: none;
+            }
+
+            .market-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .cta-section h2 {
+                font-size: 2.5rem;
+            }
+
+            .hero-ctas,
+            .cta-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    <div class="grid-overlay"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <a href="#" class="logo">
+            <div class="logo-icon">🚀</div>
+            ExitOS
+        </a>
+        <div class="nav-links">
+            <a href="#problem">The Problem</a>
+            <a href="#solution">Solution</a>
+            <a href="#how-it-works">How It Works</a>
+            <a href="#pricing">Pricing</a>
+            <a href="#" class="cta-btn">Get Your Score</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span></span>
+                The $10 Trillion Opportunity
+            </div>
+            <h1>Your Exit.<br>Your <span class="highlight">Intelligence</span>.</h1>
+            <p class="hero-subtitle">12 million business owners will exit this decade. 70% will fail to achieve their goals. ExitOS is the AI operating system that ensures you capture maximum value.</p>
+            <div class="hero-ctas">
+                <a href="#" class="cta-btn">Get Your ReadyScore™ Free →</a>
+                <a href="#" class="secondary-btn">Watch Demo</a>
+            </div>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <div class="stat-value">70%</div>
+                    <div class="stat-label">of businesses listed never sell</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">$1M+</div>
+                    <div class="stat-label">left on table per exit</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">12M</div>
+                    <div class="stat-label">owners exiting this decade</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">75%</div>
+                    <div class="stat-label">regret their exit</div>
+                </div>
+            </div>
+        </div>
+        <div class="floating-card">
+            <div class="floating-card-header">
+                <span class="floating-card-title">Your Exit Dashboard</span>
+                <span class="score-badge">ReadyScore: 78</span>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">Estimated Value</span>
+                <span class="metric-value metric-up">$4.2M ↑</span>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">Industry Multiple</span>
+                <span class="metric-value">4.8x EBITDA</span>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">Owner Dependency</span>
+                <span class="metric-value metric-warning">⚠️ High</span>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">Customer Conc.</span>
+                <span class="metric-value metric-up">18% ✓</span>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">Active Buyers</span>
+                <span class="metric-value">147 matches</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="section" id="problem">
+        <div class="section-header">
+            <div class="section-label">The Problem</div>
+            <h2 class="section-title">Exit Is Broken</h2>
+            <p class="section-subtitle">Millions of entrepreneurs will see their life's work diminished because no one taught them how to exit. The system is designed for buyers, not owners.</p>
+        </div>
+        <div class="problem-grid">
+            <div class="problem-card">
+                <div class="problem-icon">📉</div>
+                <div class="problem-stat">70%</div>
+                <div class="problem-text">of businesses listed for sale never actually sell</div>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">😔</div>
+                <div class="problem-stat">75%</div>
+                <div class="problem-text">of owners regret their exit within 12 months</div>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">📋</div>
+                <div class="problem-stat">48%</div>
+                <div class="problem-text">of owners have zero exit plan in place</div>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">💸</div>
+                <div class="problem-stat">$1M+</div>
+                <div class="problem-text">left on the table due to poor preparation</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="section solution-section" id="solution">
+        <div class="section-header">
+            <div class="section-label">The Solution</div>
+            <h2 class="section-title">Your AI Chief Exit Officer</h2>
+            <p class="section-subtitle">ExitOS combines deep financial modeling with emotional intelligence to guide you through every phase of your exit journey.</p>
+        </div>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3 class="feature-title">ExitPulse™</h3>
+                <p class="feature-desc">Real-time business valuation that reflects reality, not guesswork.</p>
+                <ul class="feature-list">
+                    <li>Live financial integration</li>
+                    <li>Industry multiple tracking</li>
+                    <li>Value driver analysis</li>
+                    <li>Scenario modeling</li>
+                </ul>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <h3 class="feature-title">ReadyScore™</h3>
+                <p class="feature-desc">Comprehensive assessment across 12 exit dimensions.</p>
+                <ul class="feature-list">
+                    <li>Owner dependency analysis</li>
+                    <li>Customer concentration</li>
+                    <li>Team depth evaluation</li>
+                    <li>Personalized action plans</li>
+                </ul>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🗺️</div>
+                <h3 class="feature-title">ExitPath™</h3>
+                <p class="feature-desc">AI-guided strategy that adapts to your unique goals.</p>
+                <ul class="feature-list">
+                    <li>8 exit path modeling</li>
+                    <li>Tax optimization</li>
+                    <li>Timeline planning</li>
+                    <li>Success probability</li>
+                </ul>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🤝</div>
+                <h3 class="feature-title">DealRoom AI™</h3>
+                <p class="feature-desc">Intelligent transaction management when you're ready.</p>
+                <ul class="feature-list">
+                    <li>50,000+ buyer database</li>
+                    <li>Document automation</li>
+                    <li>Negotiation coaching</li>
+                    <li>Due diligence prep</li>
+                </ul>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🌅</div>
+                <h3 class="feature-title">PostExit™</h3>
+                <p class="feature-desc">Life after the deal — because exit is just the beginning.</p>
+                <ul class="feature-list">
+                    <li>Wealth integration</li>
+                    <li>Purpose planning</li>
+                    <li>Founder community</li>
+                    <li>Mental health support</li>
+                </ul>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔒</div>
+                <h3 class="feature-title">Owner-Aligned</h3>
+                <p class="feature-desc">Unlike brokers, we only win when you win.</p>
+                <ul class="feature-list">
+                    <li>No hidden commissions</li>
+                    <li>Transparent pricing</li>
+                    <li>Your data stays yours</li>
+                    <li>Long-term partnership</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="section" id="how-it-works">
+        <div class="section-header">
+            <div class="section-label">How It Works</div>
+            <h2 class="section-title">From First Assessment to Final Close</h2>
+            <p class="section-subtitle">ExitOS guides you through every step of your exit journey with AI-powered intelligence.</p>
+        </div>
+        <div class="steps-container">
+            <div class="step">
+                <div class="step-number">1</div>
+                <h3 class="step-title">Connect</h3>
+                <p class="step-desc">Link your financials and get your ReadyScore in minutes. No commitment required.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <h3 class="step-title">Understand</h3>
+                <p class="step-desc">See your true value, gaps, and opportunities. Explore different exit paths.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <h3 class="step-title">Prepare</h3>
+                <p class="step-desc">Execute your personalized value acceleration plan. Track progress in real-time.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">4</div>
+                <h3 class="step-title">Exit</h3>
+                <p class="step-desc">When ready, launch your process with confidence. We're with you to close.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Market Section -->
+    <section class="section">
+        <div class="section-header">
+            <div class="section-label">Market Opportunity</div>
+            <h2 class="section-title">The Great Transfer Is Here</h2>
+            <p class="section-subtitle">The largest wealth transfer event in human history is underway.</p>
+        </div>
+        <div class="market-grid">
+            <div class="market-stats">
+                <div class="market-stat">
+                    <div class="market-stat-icon">🏢</div>
+                    <div>
+                        <div class="market-stat-value">12M</div>
+                        <div class="market-stat-label">Businesses changing hands this decade</div>
+                    </div>
+                </div>
+                <div class="market-stat">
+                    <div class="market-stat-icon">💰</div>
+                    <div>
+                        <div class="market-stat-value">$10T+</div>
+                        <div class="market-stat-label">In business value to transfer</div>
+                    </div>
+                </div>
+                <div class="market-stat">
+                    <div class="market-stat-icon">👴</div>
+                    <div>
+                        <div class="market-stat-value">10,000</div>
+                        <div class="market-stat-label">Boomers turning 65 daily</div>
+                    </div>
+                </div>
+            </div>
+            <div class="market-chart">
+                <h3 class="chart-title">Projected Revenue Growth</h3>
+                <div class="chart-bars">
+                    <div class="chart-bar-row">
+                        <span class="chart-label">Year 1</span>
+                        <div class="chart-bar-bg">
+                            <div class="chart-bar-fill" style="width: 5%;">$3.5M</div>
+                        </div>
+                    </div>
+                    <div class="chart-bar-row">
+                        <span class="chart-label">Year 2</span>
+                        <div class="chart-bar-bg">
+                            <div class="chart-bar-fill" style="width: 15%;">$25M</div>
+                        </div>
+                    </div>
+                    <div class="chart-bar-row">
+                        <span class="chart-label">Year 3</span>
+                        <div class="chart-bar-bg">
+                            <div class="chart-bar-fill" style="width: 40%;">$150M</div>
+                        </div>
+                    </div>
+                    <div class="chart-bar-row">
+                        <span class="chart-label">Year 4</span>
+                        <div class="chart-bar-bg">
+                            <div class="chart-bar-fill" style="width: 70%;">$450M</div>
+                        </div>
+                    </div>
+                    <div class="chart-bar-row">
+                        <span class="chart-label">Year 5</span>
+                        <div class="chart-bar-bg">
+                            <div class="chart-bar-fill" style="width: 100%;">$1.05B</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonial -->
+    <section class="section testimonial-section">
+        <div class="testimonial-content">
+            <div class="quote-icon">"</div>
+            <p class="testimonial-text">I spent 20 years building my company. ExitOS showed me I was about to leave $2 million on the table. The ReadyScore helped me fix the gaps, and I closed 18 months later at 5.2x instead of 3.8x.</p>
+            <p class="testimonial-author">Sarah Chen</p>
+            <p class="testimonial-role">Founder & Former CEO, DataStack Solutions</p>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section class="section" id="pricing">
+        <div class="section-header">
+            <div class="section-label">Pricing</div>
+            <h2 class="section-title">Invest in Your Exit</h2>
+            <p class="section-subtitle">Choose the plan that matches where you are in your journey.</p>
+        </div>
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <h3 class="pricing-name">Monitor</h3>
+                <p class="pricing-desc">Track your value and readiness</p>
+                <p class="pricing-price">$199<span>/month</span></p>
+                <ul class="pricing-features">
+                    <li>Real-time valuation tracking</li>
+                    <li>ReadyScore assessment</li>
+                    <li>Basic exit planning</li>
+                    <li>Monthly insights</li>
+                    <li>Email support</li>
+                </ul>
+                <a href="#" class="pricing-cta secondary">Start Monitoring</a>
+            </div>
+            <div class="pricing-card featured">
+                <span class="popular-badge">Most Popular</span>
+                <h3 class="pricing-name">Accelerate</h3>
+                <p class="pricing-desc">Full platform access</p>
+                <p class="pricing-price">$799<span>/month</span></p>
+                <ul class="pricing-features">
+                    <li>Everything in Monitor</li>
+                    <li>AI Exit Advisor</li>
+                    <li>Buyer matching & intelligence</li>
+                    <li>Document automation</li>
+                    <li>Negotiation coaching</li>
+                    <li>Priority support</li>
+                </ul>
+                <a href="#" class="pricing-cta primary">Start Accelerating →</a>
+            </div>
+            <div class="pricing-card">
+                <h3 class="pricing-name">Enterprise</h3>
+                <p class="pricing-desc">For family offices & multi-entity</p>
+                <p class="pricing-price">Custom</p>
+                <ul class="pricing-features">
+                    <li>Everything in Accelerate</li>
+                    <li>Multi-business dashboard</li>
+                    <li>Family office integration</li>
+                    <li>White-label options</li>
+                    <li>Dedicated success manager</li>
+                    <li>Custom integrations</li>
+                </ul>
+                <a href="#" class="pricing-cta secondary">Contact Sales</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <h2>Ready to Plan<br>Your Perfect Exit?</h2>
+        <p>Get your free ReadyScore and see where you stand. No credit card required.</p>
+        <div class="cta-buttons">
+            <a href="#" class="cta-btn">Get Your Free ReadyScore →</a>
+            <a href="#" class="secondary-btn">Schedule a Demo</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <h3>
+                    <div class="logo-icon" style="width: 35px; height: 35px; font-size: 1.2rem;">🚀</div>
+                    ExitOS
+                </h3>
+                <p>The AI operating system for business exit intelligence. We help owners capture maximum value and find purpose beyond their company.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Product</h4>
+                <a href="#">ExitPulse™</a>
+                <a href="#">ReadyScore™</a>
+                <a href="#">ExitPath™</a>
+                <a href="#">DealRoom AI™</a>
+            </div>
+            <div class="footer-col">
+                <h4>Company</h4>
+                <a href="#">About</a>
+                <a href="#">Careers</a>
+                <a href="#">Blog</a>
+                <a href="#">Press</a>
+            </div>
+            <div class="footer-col">
+                <h4>Resources</h4>
+                <a href="#">Documentation</a>
+                <a href="#">Exit Guides</a>
+                <a href="#">Webinars</a>
+                <a href="#">Partners</a>
+            </div>
+            <div class="footer-col">
+                <h4>Legal</h4>
+                <a href="#">Privacy</a>
+                <a href="#">Terms</a>
+                <a href="#">Security</a>
+                <a href="#">Compliance</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 ExitOS. All rights reserved.</p>
+            <div class="social-links">
+                <a href="#">𝕏</a>
+                <a href="#">in</a>
+                <a href="#">▶</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

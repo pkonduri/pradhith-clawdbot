@@ -250,6 +250,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-04-24 | Evening | AdaptOS — Climate Adaptation & Resilience Intelligence | [Playbook](2026-04-24-evening.md) • [Landing](2026-04-24-evening-landing.html) • [PDF](2026-04-24-evening.pdf) |
 | 2026-04-24 | Morning | HealthProxy AI — AI Agents That Fight Healthcare Bureaucracy | [Playbook](2026-04-24-morning.md) • [Landing](2026-04-24-morning-landing.html) • [PDF](2026-04-24-morning.pdf) |
 | 2026-04-25 | Evening | UnderGrid AI — The AI Operating System for Underground Infrastructure Intelligence | [Playbook](2026-04-25-evening.md) • [Landing](2026-04-25-evening-landing.html) • [PDF](2026-04-25-evening.pdf) |
+| 2026-04-25 | Morning | ExitOS — The AI Operating System for Business Exit Intelligence | [Playbook](2026-04-25-morning.md) • [Landing](2026-04-25-morning-landing.html) • [PDF](2026-04-25-morning.pdf) |
 <!-- New entries will be added above this line -->
 
 ---
