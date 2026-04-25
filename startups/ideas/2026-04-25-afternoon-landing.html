@@ -1,0 +1,1367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RepairOS — The AI Operating System for Right-to-Repair</title>
+    <meta name="description" content="AI-powered device diagnosis, repair guidance, and parts sourcing. Making repair accessible to everyone.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #10b981;
+            --primary-dark: #059669;
+            --primary-light: #34d399;
+            --secondary: #6366f1;
+            --accent: #f59e0b;
+            --dark: #0f172a;
+            --darker: #020617;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --gray-dark: #334155;
+            --success: #22c55e;
+            --warning: #eab308;
+            --danger: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--darker);
+            color: var(--light);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(16, 185, 129, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(16, 185, 129, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .floating-parts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .part {
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0.1;
+            animation: floatPart 20s infinite linear;
+        }
+
+        @keyframes floatPart {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.1; }
+            90% { opacity: 0.1; }
+            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1rem 2rem;
+            background: rgba(2, 6, 23, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(16, 185, 129, 0.1);
+        }
+
+        nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--light);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.4);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--gray);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(16, 185, 129, 0.5);
+        }
+
+        .btn-secondary {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--primary);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(16, 185, 129, 0.2);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 2rem 4rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 50px;
+            font-size: 0.9rem;
+            color: var(--primary);
+            margin-bottom: 2rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+            50% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 5.5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--light) 0%, var(--primary-light) 50%, var(--primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto 3rem;
+            line-height: 1.7;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 4rem;
+        }
+
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: rgba(16, 185, 129, 0.05);
+            border-radius: 20px;
+            border: 1px solid rgba(16, 185, 129, 0.1);
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--gray);
+            margin-top: 0.5rem;
+        }
+
+        /* Problem Section */
+        .problem-section {
+            padding: 8rem 2rem;
+            position: relative;
+            z-index: 1;
+            background: linear-gradient(180deg, transparent, rgba(239, 68, 68, 0.03));
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 4rem;
+        }
+
+        .section-label {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 50px;
+            color: var(--danger);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-label.green {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--primary);
+        }
+
+        .section-label.purple {
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--secondary);
+        }
+
+        .section-label.orange {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--accent);
+        }
+
+        .section-title {
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .section-subtitle {
+            font-size: 1.25rem;
+            color: var(--gray);
+            line-height: 1.7;
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .problem-card {
+            background: rgba(239, 68, 68, 0.05);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(239, 68, 68, 0.4);
+        }
+
+        .problem-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .problem-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--danger);
+        }
+
+        .problem-card p {
+            color: var(--gray);
+            line-height: 1.7;
+        }
+
+        /* Solution Section */
+        .solution-section {
+            padding: 8rem 2rem;
+            position: relative;
+            z-index: 1;
+            background: linear-gradient(180deg, transparent, rgba(16, 185, 129, 0.05));
+        }
+
+        .feature-showcase {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .feature-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            margin-bottom: 6rem;
+        }
+
+        .feature-row:nth-child(even) {
+            direction: rtl;
+        }
+
+        .feature-row:nth-child(even) > * {
+            direction: ltr;
+        }
+
+        .feature-content h3 {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .feature-content p {
+            font-size: 1.1rem;
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+        }
+
+        .feature-list {
+            list-style: none;
+        }
+
+        .feature-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            color: var(--light);
+        }
+
+        .feature-list li::before {
+            content: "✓";
+            color: var(--primary);
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .feature-visual {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(99, 102, 241, 0.1));
+            border-radius: 30px;
+            padding: 3rem;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-visual::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(16, 185, 129, 0.1), transparent 30%);
+            animation: rotate 10s linear infinite;
+        }
+
+        @keyframes rotate {
+            100% { transform: rotate(360deg); }
+        }
+
+        .phone-mockup {
+            width: 280px;
+            height: 560px;
+            background: var(--dark);
+            border-radius: 40px;
+            border: 4px solid var(--gray-dark);
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5);
+        }
+
+        .phone-screen {
+            padding: 1.5rem;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .phone-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .phone-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .scan-area {
+            flex: 1;
+            background: rgba(16, 185, 129, 0.1);
+            border: 2px dashed var(--primary);
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            animation: scanPulse 2s infinite;
+        }
+
+        @keyframes scanPulse {
+            0%, 100% { border-color: var(--primary); }
+            50% { border-color: var(--primary-light); }
+        }
+
+        .scan-icon {
+            font-size: 3rem;
+        }
+
+        .scan-text {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .diagnosis-result {
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: 15px;
+            padding: 1rem;
+        }
+
+        .diagnosis-label {
+            font-size: 0.75rem;
+            color: var(--gray);
+            margin-bottom: 0.5rem;
+        }
+
+        .diagnosis-value {
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        /* Platform Section */
+        .platform-section {
+            padding: 8rem 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .platform-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .platform-card {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.05), rgba(99, 102, 241, 0.05));
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 24px;
+            padding: 2.5rem;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .platform-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .platform-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary);
+            box-shadow: 0 20px 60px rgba(16, 185, 129, 0.2);
+        }
+
+        .platform-card:hover::before {
+            opacity: 1;
+        }
+
+        .platform-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+        }
+
+        .platform-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .platform-card p {
+            color: var(--gray);
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .platform-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .platform-tag {
+            padding: 0.35rem 0.75rem;
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: 50px;
+            font-size: 0.8rem;
+            color: var(--primary);
+        }
+
+        /* Market Section */
+        .market-section {
+            padding: 8rem 2rem;
+            position: relative;
+            z-index: 1;
+            background: linear-gradient(180deg, transparent, rgba(99, 102, 241, 0.05));
+        }
+
+        .market-numbers {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 3rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .market-item {
+            text-align: center;
+            padding: 3rem;
+            background: rgba(99, 102, 241, 0.05);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .market-item:hover {
+            transform: scale(1.05);
+            border-color: var(--secondary);
+        }
+
+        .market-value {
+            font-size: 4rem;
+            font-weight: 900;
+            font-family: 'JetBrains Mono', monospace;
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .market-label {
+            font-size: 1.1rem;
+            color: var(--gray);
+        }
+
+        /* How It Works */
+        .how-section {
+            padding: 8rem 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .steps-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .steps-line {
+            position: absolute;
+            top: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+            border-radius: 4px;
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            position: relative;
+        }
+
+        .step {
+            text-align: center;
+        }
+
+        .step-number {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 800;
+            margin: 0 auto 1.5rem;
+            border: 4px solid var(--darker);
+            box-shadow: 0 10px 40px rgba(16, 185, 129, 0.4);
+            position: relative;
+            z-index: 1;
+        }
+
+        .step h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .step p {
+            color: var(--gray);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Testimonials */
+        .testimonials-section {
+            padding: 8rem 2rem;
+            position: relative;
+            z-index: 1;
+            background: rgba(16, 185, 129, 0.02);
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .testimonial {
+            background: rgba(16, 185, 129, 0.05);
+            border: 1px solid rgba(16, 185, 129, 0.1);
+            border-radius: 24px;
+            padding: 2.5rem;
+        }
+
+        .testimonial-quote {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            color: var(--light);
+            font-style: italic;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .author-info h4 {
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .author-info p {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 8rem 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-container {
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+            padding: 4rem;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(99, 102, 241, 0.1));
+            border-radius: 40px;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-container::before {
+            content: "";
+            position: absolute;
+            top: -100%;
+            left: -100%;
+            width: 300%;
+            height: 300%;
+            background: conic-gradient(from 0deg, transparent, rgba(16, 185, 129, 0.05), transparent 20%);
+            animation: rotate 15s linear infinite;
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-title {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-subtitle {
+            font-size: 1.25rem;
+            color: var(--gray);
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-large {
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 2rem 2rem;
+            border-top: 1px solid rgba(16, 185, 129, 0.1);
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 3rem;
+        }
+
+        .footer-brand p {
+            color: var(--gray);
+            margin-top: 1rem;
+            line-height: 1.7;
+        }
+
+        .footer-column h4 {
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+
+        .footer-column a {
+            display: block;
+            color: var(--gray);
+            text-decoration: none;
+            margin-bottom: 0.75rem;
+            transition: color 0.3s;
+        }
+
+        .footer-column a:hover {
+            color: var(--primary);
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 3rem auto 0;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .feature-row {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .feature-row:nth-child(even) {
+                direction: ltr;
+            }
+
+            .market-numbers {
+                grid-template-columns: 1fr;
+            }
+
+            .steps-line {
+                display: none;
+            }
+
+            .steps-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .steps-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+    <div class="floating-parts">
+        <div class="part" style="left: 10%; animation-delay: 0s;">🔧</div>
+        <div class="part" style="left: 20%; animation-delay: 3s;">⚙️</div>
+        <div class="part" style="left: 30%; animation-delay: 6s;">🔌</div>
+        <div class="part" style="left: 40%; animation-delay: 9s;">🔋</div>
+        <div class="part" style="left: 50%; animation-delay: 12s;">📱</div>
+        <div class="part" style="left: 60%; animation-delay: 2s;">💻</div>
+        <div class="part" style="left: 70%; animation-delay: 5s;">🖥️</div>
+        <div class="part" style="left: 80%; animation-delay: 8s;">🔩</div>
+        <div class="part" style="left: 90%; animation-delay: 11s;">🛠️</div>
+    </div>
+
+    <header>
+        <nav>
+            <a href="#" class="logo">
+                <div class="logo-icon">🔧</div>
+                RepairOS
+            </a>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#platform">Platform</a>
+                <a href="#market">Market</a>
+                <a href="#how">How It Works</a>
+                <a href="#" class="btn btn-primary">Get Early Access</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    🌱 Right-to-Repair Era Has Arrived
+                </div>
+                <h1>The AI Operating System for Right-to-Repair</h1>
+                <p class="hero-subtitle">
+                    AI-powered device diagnosis, repair guidance, and parts sourcing. 
+                    Making repair accessible to everyone — consumers, technicians, and enterprises.
+                </p>
+                <div class="hero-cta">
+                    <a href="#" class="btn btn-primary btn-large">Download the App →</a>
+                    <a href="#" class="btn btn-secondary btn-large">Watch Demo</a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <div class="stat-value">62M</div>
+                        <div class="stat-label">Tons of E-Waste/Year</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">94%</div>
+                        <div class="stat-label">Diagnosis Accuracy</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">50K+</div>
+                        <div class="stat-label">Device Models</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">$200B</div>
+                        <div class="stat-label">Materials Wasted/Year</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="problem-section">
+            <div class="section-header">
+                <span class="section-label">The Problem</span>
+                <h2 class="section-title">Repair Is Fundamentally Broken</h2>
+                <p class="section-subtitle">
+                    78% of consumers want to repair rather than replace. But the infrastructure doesn't exist to help them.
+                </p>
+            </div>
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="problem-icon">🔍</div>
+                    <h3>No Diagnosis</h3>
+                    <p>Is it the battery? The screen? The motherboard? Without expert knowledge, consumers are flying blind. Average troubleshooting takes 15+ minutes with no guarantee.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">🔒</div>
+                    <h3>Locked Out</h3>
+                    <p>Proprietary screws, glued components, serialized parts. OEMs design devices to be unrepairable, turning $20 fixes into $500 replacements.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">📚</div>
+                    <h3>No Guidance</h3>
+                    <p>YouTube videos are hit-or-miss, often outdated. Official documentation is hoarded. One wrong step can brick a device permanently.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">🎰</div>
+                    <h3>Parts Roulette</h3>
+                    <p>Thousands of SKUs, quality varies wildly, counterfeit parts abound. Finding the right part at a fair price feels like gambling.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">🏪</div>
+                    <h3>Fragmented Shops</h3>
+                    <p>Independent repair shops operate without modern tools. No AI diagnosis, no parts network, no training infrastructure.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">⚖️</div>
+                    <h3>Compliance Chaos</h3>
+                    <p>Right-to-repair laws passed in 30+ states. OEMs scrambling to comply with no infrastructure to support it.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="solution-section" id="features">
+            <div class="section-header">
+                <span class="section-label green">The Solution</span>
+                <h2 class="section-title">AI-Powered Repair Intelligence</h2>
+                <p class="section-subtitle">
+                    RepairOS brings together diagnosis, guidance, parts, and training in one unified platform.
+                </p>
+            </div>
+            <div class="feature-showcase">
+                <div class="feature-row">
+                    <div class="feature-content">
+                        <h3>DiagnoseAI — Instant Device Diagnosis</h3>
+                        <p>
+                            Point your camera at any device. Our AI identifies the make, model, and year automatically, 
+                            then analyzes symptoms to return ranked probable causes with 94% accuracy.
+                        </p>
+                        <ul class="feature-list">
+                            <li>Visual AI diagnosis from photos and videos</li>
+                            <li>Conversational troubleshooting like a master tech</li>
+                            <li>Sound-based analysis for mechanical failures</li>
+                            <li>Sensor integration for deep diagnostics</li>
+                        </ul>
+                    </div>
+                    <div class="feature-visual">
+                        <div class="phone-mockup">
+                            <div class="phone-screen">
+                                <div class="phone-header">
+                                    <span class="phone-title">DiagnoseAI</span>
+                                    <span>📷</span>
+                                </div>
+                                <div class="scan-area">
+                                    <span class="scan-icon">📱</span>
+                                    <span class="scan-text">Scanning device...</span>
+                                </div>
+                                <div class="diagnosis-result">
+                                    <div class="diagnosis-label">DIAGNOSIS</div>
+                                    <div class="diagnosis-value">Battery degradation (94% confidence)</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="feature-row">
+                    <div class="feature-content">
+                        <h3>RepairGuide AI — Interactive Instructions</h3>
+                        <p>
+                            Dynamic, AI-generated repair guides that adapt in real-time based on your progress. 
+                            With AR overlay mode, see exactly where to pry, which screws to remove, and hazards to avoid.
+                        </p>
+                        <ul class="feature-list">
+                            <li>50,000+ device models supported</li>
+                            <li>AR overlay with step-by-step highlights</li>
+                            <li>Video companion that watches and corrects</li>
+                            <li>Tool identification and shopping lists</li>
+                        </ul>
+                    </div>
+                    <div class="feature-visual">
+                        <div class="phone-mockup">
+                            <div class="phone-screen">
+                                <div class="phone-header">
+                                    <span class="phone-title">Step 3 of 12</span>
+                                    <span>AR</span>
+                                </div>
+                                <div class="scan-area" style="border-style: solid; background: rgba(99, 102, 241, 0.1);">
+                                    <span class="scan-icon">🔧</span>
+                                    <span class="scan-text">Remove 4 pentalobe screws</span>
+                                </div>
+                                <div class="diagnosis-result" style="background: rgba(245, 158, 11, 0.1);">
+                                    <div class="diagnosis-label">⚠️ WARNING</div>
+                                    <div class="diagnosis-value" style="color: var(--accent);">Battery puncture zone nearby</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="platform-section" id="platform">
+            <div class="section-header">
+                <span class="section-label purple">The Platform</span>
+                <h2 class="section-title">Built for Every Stakeholder</h2>
+                <p class="section-subtitle">
+                    From DIY consumers to enterprise manufacturers, RepairOS serves the entire repair ecosystem.
+                </p>
+            </div>
+            <div class="platform-grid">
+                <div class="platform-card">
+                    <div class="platform-icon">👤</div>
+                    <h3>For Consumers</h3>
+                    <p>Free diagnosis, guided repairs, quality parts. Fix your own devices with confidence, or find trusted local repair shops.</p>
+                    <div class="platform-features">
+                        <span class="platform-tag">Free Diagnosis</span>
+                        <span class="platform-tag">AR Guidance</span>
+                        <span class="platform-tag">Parts Matching</span>
+                    </div>
+                </div>
+                <div class="platform-card">
+                    <div class="platform-icon">🔧</div>
+                    <h3>For Repair Shops</h3>
+                    <p>Professional tools that supercharge your business. AI triage, parts network, training, and shop management in one platform.</p>
+                    <div class="platform-features">
+                        <span class="platform-tag">AI Diagnosis</span>
+                        <span class="platform-tag">Parts Network</span>
+                        <span class="platform-tag">POS Integration</span>
+                    </div>
+                </div>
+                <div class="platform-card">
+                    <div class="platform-icon">🏭</div>
+                    <h3>For OEMs</h3>
+                    <p>Right-to-repair compliance made easy. Generate documentation, manage authorized networks, and track sustainability metrics.</p>
+                    <div class="platform-features">
+                        <span class="platform-tag">Compliance</span>
+                        <span class="platform-tag">ESG Reporting</span>
+                        <span class="platform-tag">Network Management</span>
+                    </div>
+                </div>
+                <div class="platform-card">
+                    <div class="platform-icon">🏢</div>
+                    <h3>For Enterprises</h3>
+                    <p>Fleet device management with predictive maintenance. Reduce TCO, extend device life, and hit sustainability targets.</p>
+                    <div class="platform-features">
+                        <span class="platform-tag">Predictive Maintenance</span>
+                        <span class="platform-tag">TCO Analytics</span>
+                        <span class="platform-tag">Sustainability</span>
+                    </div>
+                </div>
+                <div class="platform-card">
+                    <div class="platform-icon">🛡️</div>
+                    <h3>For Insurers</h3>
+                    <p>AI-powered claims intelligence. Validate repair costs, detect fraud, and optimize repair vs. replace decisions.</p>
+                    <div class="platform-features">
+                        <span class="platform-tag">Claims Validation</span>
+                        <span class="platform-tag">Fraud Detection</span>
+                        <span class="platform-tag">Network Routing</span>
+                    </div>
+                </div>
+                <div class="platform-card">
+                    <div class="platform-icon">🎓</div>
+                    <h3>TechSkill AI</h3>
+                    <p>The repair workforce training platform. Certifications, VR simulations, and on-the-job AI coaching for technicians.</p>
+                    <div class="platform-features">
+                        <span class="platform-tag">Certifications</span>
+                        <span class="platform-tag">VR Training</span>
+                        <span class="platform-tag">AI Coaching</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="market-section" id="market">
+            <div class="section-header">
+                <span class="section-label orange">The Opportunity</span>
+                <h2 class="section-title">A $295 Billion Market</h2>
+                <p class="section-subtitle">
+                    The right-to-repair movement won the legislative battle. Now we need the infrastructure.
+                </p>
+            </div>
+            <div class="market-numbers">
+                <div class="market-item">
+                    <div class="market-value">$150B</div>
+                    <div class="market-label">Electronics Repair Services</div>
+                </div>
+                <div class="market-item">
+                    <div class="market-value">$80B</div>
+                    <div class="market-label">E-Waste & Circular Economy</div>
+                </div>
+                <div class="market-item">
+                    <div class="market-value">$50B</div>
+                    <div class="market-label">Repair Parts Aftermarket</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="how-section" id="how">
+            <div class="section-header">
+                <span class="section-label green">How It Works</span>
+                <h2 class="section-title">Repair Made Simple</h2>
+                <p class="section-subtitle">
+                    Four steps from broken device to fixed and working.
+                </p>
+            </div>
+            <div class="steps-container">
+                <div class="steps-line"></div>
+                <div class="steps-grid">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <h3>Scan</h3>
+                        <p>Point your camera at the device. AI identifies make, model, and symptoms instantly.</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <h3>Diagnose</h3>
+                        <p>Get ranked probable causes with confidence scores. Know exactly what's wrong.</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <h3>Source</h3>
+                        <p>Find quality parts instantly. AI verifies suppliers and compares prices across 200+ vendors.</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <h3>Fix</h3>
+                        <p>Follow AR-guided instructions step by step. AI watches and corrects in real-time.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="testimonials-section">
+            <div class="section-header">
+                <span class="section-label green">Early Feedback</span>
+                <h2 class="section-title">What People Are Saying</h2>
+            </div>
+            <div class="testimonials-grid">
+                <div class="testimonial">
+                    <p class="testimonial-quote">
+                        "I fixed my own iPhone screen for the first time. The AR overlay showed me exactly where to pry without damaging the cables. Game changer."
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">👨</div>
+                        <div class="author-info">
+                            <h4>Marcus T.</h4>
+                            <p>DIY Enthusiast</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial">
+                    <p class="testimonial-quote">
+                        "Our shop went from 12 repairs per day to 20 after integrating RepairOS. The AI diagnosis alone saves us 15 minutes per device."
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">👩</div>
+                        <div class="author-info">
+                            <h4>Sarah K.</h4>
+                            <p>Repair Shop Owner</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial">
+                    <p class="testimonial-quote">
+                        "Finally, a compliance solution that actually works. We generated all required documentation in a week, not months."
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">👨‍💼</div>
+                        <div class="author-info">
+                            <h4>David L.</h4>
+                            <p>OEM Sustainability Director</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta-section">
+            <div class="cta-container">
+                <div class="cta-content">
+                    <h2 class="cta-title">Join the Repair Revolution</h2>
+                    <p class="cta-subtitle">
+                        Be part of the movement to extend device life, reduce e-waste, and build the infrastructure for a circular economy.
+                    </p>
+                    <div class="cta-buttons">
+                        <a href="#" class="btn btn-primary btn-large">Get Early Access →</a>
+                        <a href="#" class="btn btn-secondary btn-large">Contact Sales</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <a href="#" class="logo">
+                    <div class="logo-icon">🔧</div>
+                    RepairOS
+                </a>
+                <p>The AI operating system for right-to-repair. Making device repair accessible to everyone.</p>
+            </div>
+            <div class="footer-column">
+                <h4>Platform</h4>
+                <a href="#">DiagnoseAI</a>
+                <a href="#">RepairGuide</a>
+                <a href="#">PartSource</a>
+                <a href="#">TechSkill</a>
+            </div>
+            <div class="footer-column">
+                <h4>Solutions</h4>
+                <a href="#">For Consumers</a>
+                <a href="#">For Repair Shops</a>
+                <a href="#">For OEMs</a>
+                <a href="#">For Enterprise</a>
+            </div>
+            <div class="footer-column">
+                <h4>Company</h4>
+                <a href="#">About</a>
+                <a href="#">Careers</a>
+                <a href="#">Blog</a>
+                <a href="#">Contact</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 RepairOS. All rights reserved.</p>
+            <p>Fix Everything. 🔧</p>
+        </div>
+    </footer>
+</body>
+</html>
