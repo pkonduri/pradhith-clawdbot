@@ -252,6 +252,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-04-25 | Evening | UnderGrid AI — The AI Operating System for Underground Infrastructure Intelligence | [Playbook](2026-04-25-evening.md) • [Landing](2026-04-25-evening-landing.html) • [PDF](2026-04-25-evening.pdf) |
 | 2026-04-25 | Morning | ExitOS — The AI Operating System for Business Exit Intelligence | [Playbook](2026-04-25-morning.md) • [Landing](2026-04-25-morning-landing.html) • [PDF](2026-04-25-morning.pdf) |
 | 2026-04-25 | Afternoon | RepairOS — The AI Operating System for Right-to-Repair | [Playbook](2026-04-25-afternoon.md) • [Landing](2026-04-25-afternoon-landing.html) • [PDF](2026-04-25-afternoon.pdf) |
+| 2026-04-26 | Evening | SoilBank — The Carbon & Nutrient Exchange for Regenerative Agriculture | [Playbook](2026-04-26-evening.md) • [Landing](2026-04-26-evening-landing.html) • [PDF](2026-04-26-evening.pdf) |
 <!-- New entries will be added above this line -->
 
 ---
