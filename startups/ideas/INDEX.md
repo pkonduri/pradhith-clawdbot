@@ -254,6 +254,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-04-25 | Afternoon | RepairOS — The AI Operating System for Right-to-Repair | [Playbook](2026-04-25-afternoon.md) • [Landing](2026-04-25-afternoon-landing.html) • [PDF](2026-04-25-afternoon.pdf) |
 | 2026-04-26 | Evening | SoilBank — The Carbon & Nutrient Exchange for Regenerative Agriculture | [Playbook](2026-04-26-evening.md) • [Landing](2026-04-26-evening-landing.html) • [PDF](2026-04-26-evening.pdf) |
 | 2026-04-26 | Morning | BlindSpot AI — The Intelligence Platform for Strategic Surprise Detection | [Playbook](2026-04-26-morning.md) • [Landing](2026-04-26-morning-landing.html) • [PDF](2026-04-26-morning.pdf) |
+| 2026-04-26 | Afternoon | ReputationOS — The AI Shield for Identity in the Age of Synthetic Chaos | [Playbook](2026-04-26-afternoon.md) • [Landing](2026-04-26-afternoon-landing.html) • [PDF](2026-04-26-afternoon.pdf) |
 <!-- New entries will be added above this line -->
 
 ---

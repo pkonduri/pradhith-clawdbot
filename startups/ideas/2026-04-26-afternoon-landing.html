@@ -1,0 +1,1467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReputationOS — AI-Powered Reputation Defense</title>
+    <meta name="description" content="Your reputation. AI-defended. The autonomous platform protecting identities in the age of deepfakes and synthetic media.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #10b981;
+            --accent: #f59e0b;
+            --danger: #ef4444;
+            --dark: #0f172a;
+            --dark-lighter: #1e293b;
+            --text: #e2e8f0;
+            --text-muted: #94a3b8;
+            --surface: rgba(30, 41, 59, 0.8);
+            --glow: rgba(99, 102, 241, 0.4);
+            --shield-glow: rgba(16, 185, 129, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--dark);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                linear-gradient(rgba(99, 102, 241, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: 0;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        .bg-gradient {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(ellipse 80% 50% at 50% -20%, rgba(99, 102, 241, 0.15), transparent),
+                radial-gradient(ellipse 60% 40% at 80% 60%, rgba(16, 185, 129, 0.1), transparent),
+                radial-gradient(ellipse 50% 30% at 20% 80%, rgba(239, 68, 68, 0.08), transparent);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Scanning Lines Effect */
+        .scan-lines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(99, 102, 241, 0.01) 2px,
+                rgba(99, 102, 241, 0.01) 4px
+            );
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(99, 102, 241, 0.1);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--text);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            box-shadow: 0 0 20px var(--glow);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-cta {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 0.75rem 1.75rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px var(--glow);
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px var(--glow);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 120px 5% 80px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--surface);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--secondary);
+            margin-bottom: 2rem;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .badge-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--secondary);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 5.5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #fff 0%, var(--primary) 50%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+            color: var(--text-muted);
+            margin-bottom: 2.5rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-ctas {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 4rem;
+        }
+
+        .btn {
+            padding: 1rem 2.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            box-shadow: 0 4px 20px var(--glow);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px var(--glow);
+        }
+
+        .btn-secondary {
+            background: var(--surface);
+            color: var(--text);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        /* Shield Animation */
+        .shield-container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            margin: 0 auto;
+        }
+
+        .shield {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .shield-core {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120px;
+            height: 140px;
+            background: linear-gradient(180deg, var(--primary), var(--primary-dark));
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            box-shadow: 0 0 40px var(--glow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .shield-core::before {
+            content: '🛡️';
+            font-size: 3rem;
+        }
+
+        .shield-ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 2px solid;
+            border-radius: 50%;
+            animation: ringPulse 3s ease-in-out infinite;
+        }
+
+        .ring-1 {
+            width: 180px;
+            height: 180px;
+            border-color: rgba(99, 102, 241, 0.5);
+            animation-delay: 0s;
+        }
+
+        .ring-2 {
+            width: 220px;
+            height: 220px;
+            border-color: rgba(99, 102, 241, 0.3);
+            animation-delay: 0.5s;
+        }
+
+        .ring-3 {
+            width: 260px;
+            height: 260px;
+            border-color: rgba(99, 102, 241, 0.15);
+            animation-delay: 1s;
+        }
+
+        @keyframes ringPulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            50% { transform: translate(-50%, -50%) scale(1.05); opacity: 0.7; }
+        }
+
+        /* Threat Indicators */
+        .threat {
+            position: absolute;
+            font-size: 1.5rem;
+            animation: threatFloat 4s ease-in-out infinite;
+        }
+
+        .threat-1 { top: 10%; left: 20%; animation-delay: 0s; }
+        .threat-2 { top: 20%; right: 15%; animation-delay: 1s; }
+        .threat-3 { bottom: 30%; left: 10%; animation-delay: 2s; }
+        .threat-4 { bottom: 15%; right: 20%; animation-delay: 1.5s; }
+
+        @keyframes threatFloat {
+            0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.6; }
+            50% { transform: translate(5px, -5px) scale(1.1); opacity: 1; }
+        }
+
+        /* Stats Section */
+        .stats {
+            padding: 80px 5%;
+            position: relative;
+            z-index: 2;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 2rem;
+            background: var(--surface);
+            border-radius: 16px;
+            border: 1px solid rgba(99, 102, 241, 0.1);
+        }
+
+        .stat-value {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--danger), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+        }
+
+        /* Problem Section */
+        .problem {
+            padding: 100px 5%;
+            position: relative;
+            z-index: 2;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 4rem;
+        }
+
+        .section-tag {
+            display: inline-block;
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .section-tag.green {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--secondary);
+            border-color: rgba(16, 185, 129, 0.3);
+        }
+
+        .section-tag.purple {
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--primary);
+            border-color: rgba(99, 102, 241, 0.3);
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .problem-card {
+            background: var(--surface);
+            padding: 2rem;
+            border-radius: 16px;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            transition: all 0.3s;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--danger);
+            box-shadow: 0 10px 40px rgba(239, 68, 68, 0.1);
+        }
+
+        .problem-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .problem-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.75rem;
+            color: var(--text);
+        }
+
+        .problem-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* Solution Section */
+        .solution {
+            padding: 100px 5%;
+            position: relative;
+            z-index: 2;
+            background: linear-gradient(180deg, transparent, rgba(99, 102, 241, 0.03), transparent);
+        }
+
+        .solution-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .solution-card {
+            background: var(--surface);
+            padding: 2.5rem;
+            border-radius: 20px;
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .solution-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .solution-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: 0 15px 50px var(--glow);
+        }
+
+        .solution-card:hover::before {
+            opacity: 1;
+        }
+
+        .solution-number {
+            position: absolute;
+            top: 1rem;
+            right: 1.5rem;
+            font-size: 4rem;
+            font-weight: 900;
+            color: rgba(99, 102, 241, 0.1);
+        }
+
+        .solution-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 15px var(--glow);
+        }
+
+        .solution-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        .solution-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .solution-features {
+            margin-top: 1.5rem;
+            list-style: none;
+        }
+
+        .solution-features li {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .solution-features li::before {
+            content: '✓';
+            color: var(--secondary);
+            font-weight: bold;
+        }
+
+        /* Detection Demo */
+        .demo {
+            padding: 100px 5%;
+            position: relative;
+            z-index: 2;
+        }
+
+        .demo-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: var(--surface);
+            border-radius: 24px;
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            padding: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .demo-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .demo-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .demo-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--secondary);
+            font-weight: 600;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            background: var(--secondary);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .demo-timeline {
+            position: relative;
+        }
+
+        .timeline-item {
+            display: flex;
+            gap: 1.5rem;
+            padding: 1.5rem 0;
+            border-left: 2px solid rgba(99, 102, 241, 0.3);
+            padding-left: 2rem;
+            position: relative;
+            opacity: 0;
+            animation: fadeInUp 0.5s ease forwards;
+        }
+
+        .timeline-item:nth-child(1) { animation-delay: 0.2s; }
+        .timeline-item:nth-child(2) { animation-delay: 0.6s; }
+        .timeline-item:nth-child(3) { animation-delay: 1s; }
+        .timeline-item:nth-child(4) { animation-delay: 1.4s; }
+        .timeline-item:nth-child(5) { animation-delay: 1.8s; }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: -8px;
+            top: 1.5rem;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--primary);
+            border: 3px solid var(--dark);
+        }
+
+        .timeline-dot.success { background: var(--secondary); }
+        .timeline-dot.warning { background: var(--accent); }
+        .timeline-dot.danger { background: var(--danger); }
+
+        .timeline-time {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            min-width: 80px;
+        }
+
+        .timeline-content h4 {
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .timeline-content p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Pricing Section */
+        .pricing {
+            padding: 100px 5%;
+            position: relative;
+            z-index: 2;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .price-card {
+            background: var(--surface);
+            border-radius: 20px;
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            padding: 2.5rem;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .price-card.featured {
+            border-color: var(--primary);
+            transform: scale(1.05);
+            box-shadow: 0 20px 60px var(--glow);
+        }
+
+        .price-card.featured::before {
+            content: 'MOST POPULAR';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .price-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+        }
+
+        .price-card.featured:hover {
+            transform: scale(1.05) translateY(-5px);
+        }
+
+        .price-tier {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .price-desc {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .price-amount {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .price-amount span {
+            font-size: 1rem;
+            font-weight: 400;
+            color: var(--text-muted);
+        }
+
+        .price-features {
+            list-style: none;
+            margin: 2rem 0;
+        }
+
+        .price-features li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(99, 102, 241, 0.1);
+            font-size: 0.95rem;
+        }
+
+        .price-features li::before {
+            content: '✓';
+            color: var(--secondary);
+            font-weight: bold;
+        }
+
+        .price-cta {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1rem;
+            text-align: center;
+            display: block;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .price-cta.primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+        }
+
+        .price-cta.secondary {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .price-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px var(--glow);
+        }
+
+        /* Use Cases */
+        .usecases {
+            padding: 100px 5%;
+            position: relative;
+            z-index: 2;
+            background: linear-gradient(180deg, transparent, rgba(16, 185, 129, 0.03), transparent);
+        }
+
+        .usecase-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .usecase-card {
+            background: var(--surface);
+            padding: 2rem;
+            border-radius: 16px;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            transition: all 0.3s;
+        }
+
+        .usecase-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--secondary);
+            box-shadow: 0 10px 40px var(--shield-glow);
+        }
+
+        .usecase-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .usecase-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .usecase-card p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 120px 5%;
+            position: relative;
+            z-index: 2;
+        }
+
+        .cta-container {
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(16, 185, 129, 0.1));
+            border-radius: 30px;
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            padding: 5rem 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, transparent 50%);
+            animation: rotateBg 20s linear infinite;
+        }
+
+        @keyframes rotateBg {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta h2 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .cta p {
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            margin-bottom: 2.5rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Footer */
+        footer {
+            padding: 60px 5%;
+            border-top: 1px solid rgba(99, 102, 241, 0.1);
+            position: relative;
+            z-index: 2;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        .footer-copy {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .shield-container {
+                width: 250px;
+                height: 250px;
+            }
+
+            .price-card.featured {
+                transform: scale(1);
+            }
+
+            .price-card.featured:hover {
+                transform: translateY(-5px);
+            }
+
+            .cta-container {
+                padding: 3rem 1.5rem;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        /* Floating particles */
+        .particle {
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: float 15s infinite;
+            z-index: 0;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.3; }
+            90% { opacity: 0.3; }
+            100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+    <div class="bg-gradient"></div>
+    <div class="scan-lines"></div>
+
+    <!-- Floating Particles -->
+    <div class="particle" style="left: 10%; animation-delay: 0s;"></div>
+    <div class="particle" style="left: 20%; animation-delay: 2s;"></div>
+    <div class="particle" style="left: 30%; animation-delay: 4s;"></div>
+    <div class="particle" style="left: 50%; animation-delay: 1s;"></div>
+    <div class="particle" style="left: 70%; animation-delay: 3s;"></div>
+    <div class="particle" style="left: 80%; animation-delay: 5s;"></div>
+    <div class="particle" style="left: 90%; animation-delay: 2.5s;"></div>
+
+    <nav>
+        <a href="#" class="logo">
+            <div class="logo-icon">🛡️</div>
+            ReputationOS
+        </a>
+        <ul class="nav-links">
+            <li><a href="#problem">The Crisis</a></li>
+            <li><a href="#solution">Platform</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+            <li><a href="#usecases">Use Cases</a></li>
+        </ul>
+        <a href="#cta" class="nav-cta">Get Protected</a>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span class="badge-dot"></span>
+                AI-Powered Reputation Defense
+            </div>
+            <h1>Your Reputation.<br>AI-Defended.</h1>
+            <p class="hero-subtitle">
+                In the age of deepfakes and synthetic media, anyone can destroy a reputation in minutes. 
+                ReputationOS defends you 24/7 at machine speed.
+            </p>
+            <div class="hero-ctas">
+                <a href="#cta" class="btn btn-primary">
+                    Request Demo
+                    <span>→</span>
+                </a>
+                <a href="#solution" class="btn btn-secondary">
+                    How It Works
+                </a>
+            </div>
+
+            <div class="shield-container">
+                <div class="shield">
+                    <div class="shield-ring ring-1"></div>
+                    <div class="shield-ring ring-2"></div>
+                    <div class="shield-ring ring-3"></div>
+                    <div class="shield-core"></div>
+                    <div class="threat threat-1">🎭</div>
+                    <div class="threat threat-2">⚠️</div>
+                    <div class="threat threat-3">🔴</div>
+                    <div class="threat threat-4">📢</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="stats">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">3,400%</div>
+                <div class="stat-label">Increase in deepfakes since 2022</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">72hrs</div>
+                <div class="stat-label">Average detection time</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">$4.2T</div>
+                <div class="stat-label">Brand value at risk annually</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">6x</div>
+                <div class="stat-label">Faster spread of false info</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="problem" id="problem">
+        <div class="section-header">
+            <span class="section-tag">THE CRISIS</span>
+            <h2 class="section-title">The Reputation Apocalypse</h2>
+            <p class="section-subtitle">
+                AI-generated attacks can destroy decades of brand equity in a single viral moment. 
+                Traditional PR moves at human speed. Attacks move at machine speed.
+            </p>
+        </div>
+
+        <div class="problem-grid">
+            <div class="problem-card">
+                <div class="problem-icon">🎭</div>
+                <h3>Deepfake Explosion</h3>
+                <p>Anyone can create convincing fake videos of you saying or doing things you never did. Detection takes days. Damage is instant.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">🤖</div>
+                <h3>Synthetic Slander at Scale</h3>
+                <p>One person with AI can generate thousands of fake reviews, comments, and social posts in hours. Coordinated attacks are trivial.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">📈</div>
+                <h3>Stock Manipulation</h3>
+                <p>AI-generated "insider leaks" and fake executive statements tank stock prices within hours. Short sellers weaponize synthetic media.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">⏱️</div>
+                <h3>Instant Virality</h3>
+                <p>False information spreads 6x faster than corrections. By the time traditional PR responds, the narrative is cemented.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">❓</div>
+                <h3>No Verification System</h3>
+                <p>No standardized way exists to prove content authenticity. "Was that really me?" has no authoritative answer.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">💀</div>
+                <h3>Career Destruction</h3>
+                <p>Executives, celebrities, professionals—anyone with visibility is a target. One viral fake can end careers.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="solution" id="solution">
+        <div class="section-header">
+            <span class="section-tag green">THE PLATFORM</span>
+            <h2 class="section-title">Autonomous Reputation Defense</h2>
+            <p class="section-subtitle">
+                Five integrated capabilities working 24/7 to detect, verify, and neutralize threats at machine speed.
+            </p>
+        </div>
+
+        <div class="solution-grid">
+            <div class="solution-card">
+                <span class="solution-number">01</span>
+                <div class="solution-icon">🏰</div>
+                <h3>Identity Fortress</h3>
+                <p>Create a cryptographically-secured authenticity anchor for your identity. Prove what's real. Expose what's fake.</p>
+                <ul class="solution-features">
+                    <li>Biometric voice & likeness registration</li>
+                    <li>Content signing infrastructure</li>
+                    <li>Personal deepfake detection model</li>
+                    <li>Authenticity API for platforms</li>
+                </ul>
+            </div>
+            <div class="solution-card">
+                <span class="solution-number">02</span>
+                <div class="solution-icon">📡</div>
+                <h3>Sentinel Network</h3>
+                <p>24/7 AI monitoring across 100+ platforms including dark web, catching threats before they go viral.</p>
+                <ul class="solution-features">
+                    <li>Real-time threat scoring</li>
+                    <li>Virality trajectory prediction</li>
+                    <li>Attribution intelligence</li>
+                    <li>Early warning alerts</li>
+                </ul>
+            </div>
+            <div class="solution-card">
+                <span class="solution-number">03</span>
+                <div class="solution-icon">🔬</div>
+                <h3>Truth Engine</h3>
+                <p>Automated forensic analysis proving whether content is authentic or synthetic. Court-admissible reports.</p>
+                <ul class="solution-features">
+                    <li>Deepfake detection (video/audio/image)</li>
+                    <li>Synthetic text fingerprinting</li>
+                    <li>Provenance tracking</li>
+                    <li>Legal documentation</li>
+                </ul>
+            </div>
+            <div class="solution-card">
+                <span class="solution-number">04</span>
+                <div class="solution-icon">⚡</div>
+                <h3>Rapid Response</h3>
+                <p>AI-orchestrated counter-operations activating within minutes, not days. Automated platform reporting at scale.</p>
+                <ul class="solution-features">
+                    <li>Counter-narrative generation</li>
+                    <li>Mass platform reporting</li>
+                    <li>Stakeholder communications</li>
+                    <li>Search result remediation</li>
+                </ul>
+            </div>
+            <div class="solution-card">
+                <span class="solution-number">05</span>
+                <div class="solution-icon">📊</div>
+                <h3>Reputation Intelligence</h3>
+                <p>Continuous strategic awareness with sentiment analysis, competitive benchmarking, and crisis simulation.</p>
+                <ul class="solution-features">
+                    <li>Anomaly detection</li>
+                    <li>Media relationship mapping</li>
+                    <li>Vulnerability assessments</li>
+                    <li>Wargaming simulations</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="demo">
+        <div class="section-header">
+            <span class="section-tag purple">LIVE PROTECTION</span>
+            <h2 class="section-title">Response Timeline</h2>
+            <p class="section-subtitle">
+                When a deepfake targeting a Fortune 500 CEO was uploaded, here's how ReputationOS responded.
+            </p>
+        </div>
+
+        <div class="demo-container">
+            <div class="demo-header">
+                <h3 class="demo-title">🎯 Threat Neutralization</h3>
+                <div class="demo-status">
+                    <span class="status-dot"></span>
+                    Protected
+                </div>
+            </div>
+
+            <div class="demo-timeline">
+                <div class="timeline-item">
+                    <div class="timeline-dot danger"></div>
+                    <div class="timeline-time">00:00:00</div>
+                    <div class="timeline-content">
+                        <h4>🔴 Deepfake Uploaded</h4>
+                        <p>Synthetic video posted to Twitter/X showing CEO making racist remarks</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot warning"></div>
+                    <div class="timeline-time">00:00:23</div>
+                    <div class="timeline-content">
+                        <h4>⚡ Detection</h4>
+                        <p>Sentinel Network identifies content, matches against protected identity</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-time">00:02:14</div>
+                    <div class="timeline-content">
+                        <h4>🔬 Forensic Analysis Complete</h4>
+                        <p>Truth Engine confirms synthetic generation, produces evidence report</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-time">00:04:47</div>
+                    <div class="timeline-content">
+                        <h4>📤 Platform Notification Sent</h4>
+                        <p>Automated report submitted to X Trust & Safety with forensic evidence</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot success"></div>
+                    <div class="timeline-time">00:18:32</div>
+                    <div class="timeline-content">
+                        <h4>✅ Threat Neutralized</h4>
+                        <p>Content removed, counter-narrative deployed, stakeholders notified</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="pricing" id="pricing">
+        <div class="section-header">
+            <span class="section-tag purple">PRICING</span>
+            <h2 class="section-title">Protection Plans</h2>
+            <p class="section-subtitle">
+                Comprehensive defense scaled to your needs. All plans include 24/7 monitoring and response.
+            </p>
+        </div>
+
+        <div class="pricing-grid">
+            <div class="price-card">
+                <div class="price-tier">Individual Shield</div>
+                <div class="price-desc">For executives and public figures</div>
+                <div class="price-amount">$499<span>/month</span></div>
+                <ul class="price-features">
+                    <li>Single person protection</li>
+                    <li>20 platform monitoring</li>
+                    <li>Basic deepfake detection</li>
+                    <li>Monthly intelligence reports</li>
+                    <li>Email alerts</li>
+                </ul>
+                <a href="#cta" class="price-cta secondary">Get Started</a>
+            </div>
+
+            <div class="price-card featured">
+                <div class="price-tier">Executive Armor</div>
+                <div class="price-desc">For high-profile individuals & families</div>
+                <div class="price-amount">$2,499<span>/month</span></div>
+                <ul class="price-features">
+                    <li>Individual + family coverage</li>
+                    <li>100+ platform monitoring</li>
+                    <li>Advanced authenticity services</li>
+                    <li>24/7 alert escalation</li>
+                    <li>Quarterly wargaming sessions</li>
+                    <li>Dark web monitoring</li>
+                </ul>
+                <a href="#cta" class="price-cta primary">Get Protected</a>
+            </div>
+
+            <div class="price-card">
+                <div class="price-tier">Enterprise Fortress</div>
+                <div class="price-desc">For organizations and brands</div>
+                <div class="price-amount">$15K<span>/month base</span></div>
+                <ul class="price-features">
+                    <li>Unlimited entity protection</li>
+                    <li>Full platform + dark web</li>
+                    <li>API access for internal systems</li>
+                    <li>Custom threat model training</li>
+                    <li>Dedicated response team</li>
+                    <li>Real-time command center</li>
+                </ul>
+                <a href="#cta" class="price-cta secondary">Contact Sales</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="usecases" id="usecases">
+        <div class="section-header">
+            <span class="section-tag green">USE CASES</span>
+            <h2 class="section-title">Who We Protect</h2>
+            <p class="section-subtitle">
+                From celebrities to corporations, anyone with a reputation worth protecting.
+            </p>
+        </div>
+
+        <div class="usecase-grid">
+            <div class="usecase-card">
+                <div class="usecase-icon">🎬</div>
+                <h3>Celebrities & Entertainers</h3>
+                <p>Protect against deepfake scandals, synthetic compromat, and coordinated harassment campaigns.</p>
+            </div>
+            <div class="usecase-card">
+                <div class="usecase-icon">👔</div>
+                <h3>C-Suite Executives</h3>
+                <p>Defend against stock manipulation, fake statements, and targeted reputation attacks.</p>
+            </div>
+            <div class="usecase-card">
+                <div class="usecase-icon">🏛️</div>
+                <h3>Political Figures</h3>
+                <p>Combat synthetic election interference, fake endorsements, and AI-generated scandals.</p>
+            </div>
+            <div class="usecase-card">
+                <div class="usecase-icon">⚽</div>
+                <h3>Professional Athletes</h3>
+                <p>Protect sponsorships and careers from fake controversy and synthetic media attacks.</p>
+            </div>
+            <div class="usecase-card">
+                <div class="usecase-icon">🏢</div>
+                <h3>Enterprise Brands</h3>
+                <p>Defend brand equity against coordinated synthetic review campaigns and AI-generated crises.</p>
+            </div>
+            <div class="usecase-card">
+                <div class="usecase-icon">👨‍⚕️</div>
+                <h3>Professionals</h3>
+                <p>Doctors, lawyers, financial advisors—protect your practice from fake malpractice evidence.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta" id="cta">
+        <div class="cta-container">
+            <div class="cta-content">
+                <h2>Your Reputation Deserves<br>AI-Grade Protection</h2>
+                <p>
+                    In a world where anyone can fake anything, being verifiably real is the ultimate competitive advantage.
+                </p>
+                <div class="cta-buttons">
+                    <a href="mailto:hello@reputationos.ai" class="btn btn-primary">
+                        Request Demo
+                        <span>→</span>
+                    </a>
+                    <a href="#solution" class="btn btn-secondary">
+                        Learn More
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <div class="logo-icon" style="width: 32px; height: 32px; font-size: 1rem;">🛡️</div>
+                <span style="font-weight: 700;">ReputationOS</span>
+            </div>
+            <ul class="footer-links">
+                <li><a href="#solution">Platform</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+                <li><a href="#usecases">Use Cases</a></li>
+                <li><a href="mailto:hello@reputationos.ai">Contact</a></li>
+            </ul>
+            <div class="footer-copy">
+                © 2026 ReputationOS. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.problem-card, .solution-card, .price-card, .usecase-card, .stat-card').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'all 0.6s ease';
+            observer.observe(el);
+        });
+
+        // Smooth scroll for nav links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Dynamic particle colors
+        document.querySelectorAll('.particle').forEach((particle, i) => {
+            const colors = ['#6366f1', '#10b981', '#f59e0b'];
+            particle.style.background = colors[i % colors.length];
+        });
+    </script>
+</body>
+</html>
