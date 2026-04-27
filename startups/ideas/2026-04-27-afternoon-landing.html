@@ -1,0 +1,1300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resolve AI — Justice at Scale</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0052FF;
+            --primary-dark: #0043CC;
+            --primary-light: #E6EFFF;
+            --accent: #00D9A5;
+            --accent-dark: #00B88A;
+            --dark: #0A0F1E;
+            --dark-800: #141B2D;
+            --dark-700: #1E2942;
+            --gray-100: #F7F8FA;
+            --gray-200: #E8EBF0;
+            --gray-400: #9CA3AF;
+            --gray-600: #6B7280;
+            --white: #FFFFFF;
+            --gradient-primary: linear-gradient(135deg, #0052FF 0%, #00D9A5 100%);
+            --gradient-dark: linear-gradient(180deg, #0A0F1E 0%, #141B2D 100%);
+            --shadow-glow: 0 0 80px rgba(0, 82, 255, 0.3);
+            --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.12);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--dark);
+            color: var(--white);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                linear-gradient(rgba(0, 82, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 82, 255, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .bg-glow {
+            position: fixed;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            filter: blur(150px);
+            opacity: 0.15;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .bg-glow-1 {
+            top: -200px;
+            left: -200px;
+            background: var(--primary);
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .bg-glow-2 {
+            bottom: -200px;
+            right: -200px;
+            background: var(--accent);
+            animation: float 25s ease-in-out infinite reverse;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(50px, 50px) rotate(5deg); }
+            50% { transform: translate(0, 100px) rotate(0deg); }
+            75% { transform: translate(-50px, 50px) rotate(-5deg); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1.5rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10, 15, 30, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .logo {
+            font-size: 1.75rem;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo svg {
+            width: 32px;
+            height: 32px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--gray-400);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--white);
+        }
+
+        .nav-cta {
+            background: var(--gradient-primary);
+            color: var(--white) !important;
+            padding: 0.75rem 1.75rem;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 82, 255, 0.4);
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 8rem 2rem 6rem;
+            z-index: 1;
+        }
+
+        .hero-content {
+            max-width: 900px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(0, 217, 165, 0.1);
+            border: 1px solid rgba(0, 217, 165, 0.3);
+            color: var(--accent);
+            padding: 0.5rem 1.25rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(0, 217, 165, 0.4); }
+            50% { box-shadow: 0 0 20px 5px rgba(0, 217, 165, 0.2); }
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 5.5rem);
+            font-weight: 900;
+            line-height: 1.05;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.03em;
+        }
+
+        .hero h1 .gradient {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.35rem;
+            color: var(--gray-400);
+            max-width: 700px;
+            margin: 0 auto 3rem;
+            line-height: 1.7;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 4rem;
+        }
+
+        .btn {
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: var(--white);
+            box-shadow: 0 4px 20px rgba(0, 82, 255, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 40px rgba(0, 82, 255, 0.5);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--white);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Stats */
+        .hero-stats {
+            display: flex;
+            gap: 3rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            color: var(--gray-400);
+            font-size: 0.9rem;
+            margin-top: 0.25rem;
+        }
+
+        /* Problem Section */
+        .section {
+            position: relative;
+            padding: 8rem 2rem;
+            z-index: 1;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-badge {
+            display: inline-block;
+            background: rgba(0, 82, 255, 0.1);
+            color: var(--primary);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(0, 82, 255, 0.2);
+        }
+
+        .section-title {
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: var(--gray-400);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Problem Cards */
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .problem-card {
+            background: var(--dark-800);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s;
+        }
+
+        .problem-card:hover {
+            border-color: rgba(255, 82, 82, 0.3);
+            transform: translateY(-5px);
+        }
+
+        .problem-icon {
+            width: 56px;
+            height: 56px;
+            background: rgba(255, 82, 82, 0.1);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .problem-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .problem-card p {
+            color: var(--gray-400);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .problem-stat {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 2rem;
+            font-weight: 800;
+            color: #FF5252;
+        }
+
+        /* Solution Section */
+        .solution-section {
+            background: linear-gradient(180deg, transparent 0%, rgba(0, 82, 255, 0.03) 50%, transparent 100%);
+        }
+
+        .solution-visual {
+            background: var(--dark-800);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 3rem;
+            margin-bottom: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .solution-visual::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-primary);
+        }
+
+        .flow-diagram {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .flow-step {
+            flex: 1;
+            min-width: 200px;
+            text-align: center;
+            padding: 2rem 1rem;
+        }
+
+        .flow-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2rem;
+            box-shadow: 0 10px 40px rgba(0, 82, 255, 0.3);
+        }
+
+        .flow-step h4 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .flow-step p {
+            color: var(--gray-400);
+            font-size: 0.9rem;
+        }
+
+        .flow-arrow {
+            font-size: 2rem;
+            color: var(--primary);
+            opacity: 0.5;
+        }
+
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .feature-card {
+            background: var(--dark-800);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--gradient-primary);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .feature-card:hover {
+            border-color: rgba(0, 82, 255, 0.3);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-icon {
+            width: 56px;
+            height: 56px;
+            background: var(--gradient-primary);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .feature-card p {
+            color: var(--gray-400);
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        /* Use Case Section */
+        .usecase-section {
+            background: var(--dark-800);
+        }
+
+        .usecase-demo {
+            background: var(--dark);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: var(--shadow-glow);
+        }
+
+        .demo-header {
+            background: rgba(0, 82, 255, 0.1);
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .demo-dots {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .demo-dots span {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .demo-dots span:nth-child(1) { background: #FF5F56; }
+        .demo-dots span:nth-child(2) { background: #FFBD2E; }
+        .demo-dots span:nth-child(3) { background: #27C93F; }
+
+        .demo-title {
+            font-size: 0.9rem;
+            color: var(--gray-400);
+        }
+
+        .demo-content {
+            padding: 2rem;
+        }
+
+        .demo-timeline {
+            position: relative;
+            padding-left: 3rem;
+        }
+
+        .demo-timeline::before {
+            content: '';
+            position: absolute;
+            left: 12px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--primary), var(--accent));
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: var(--dark-800);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -2.4rem;
+            top: 1.75rem;
+            width: 12px;
+            height: 12px;
+            background: var(--primary);
+            border-radius: 50%;
+            border: 3px solid var(--dark);
+        }
+
+        .timeline-day {
+            display: inline-block;
+            background: var(--primary);
+            color: var(--white);
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .timeline-item h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-item p {
+            color: var(--gray-400);
+            font-size: 0.95rem;
+        }
+
+        .timeline-result {
+            background: rgba(0, 217, 165, 0.1);
+            border-color: rgba(0, 217, 165, 0.3);
+        }
+
+        .timeline-result::before {
+            background: var(--accent);
+        }
+
+        .timeline-result .timeline-day {
+            background: var(--accent);
+        }
+
+        /* Pricing Section */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .pricing-card {
+            background: var(--dark-800);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            padding: 2.5rem;
+            text-align: center;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .pricing-card.featured {
+            border-color: var(--primary);
+            transform: scale(1.05);
+            box-shadow: 0 20px 60px rgba(0, 82, 255, 0.2);
+        }
+
+        .pricing-card.featured::before {
+            content: 'MOST POPULAR';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--gradient-primary);
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .pricing-card.featured:hover {
+            transform: scale(1.05) translateY(-5px);
+        }
+
+        .pricing-tier {
+            font-size: 0.9rem;
+            color: var(--gray-400);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1rem;
+        }
+
+        .pricing-price {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-price span {
+            font-size: 1rem;
+            font-weight: 400;
+            color: var(--gray-400);
+        }
+
+        .pricing-desc {
+            color: var(--gray-400);
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+        }
+
+        .pricing-features {
+            text-align: left;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-features li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            color: var(--gray-400);
+            font-size: 0.95rem;
+        }
+
+        .pricing-features li:last-child {
+            border-bottom: none;
+        }
+
+        .pricing-features .check {
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        /* Market Section */
+        .market-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .market-stat {
+            text-align: center;
+            padding: 2rem;
+            background: var(--dark-800);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .market-stat-value {
+            font-size: 3rem;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .market-stat-label {
+            color: var(--gray-400);
+            font-size: 1rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            text-align: center;
+            padding: 10rem 2rem;
+            position: relative;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(0, 82, 255, 0.15) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .cta-section h2 {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .cta-section p {
+            font-size: 1.25rem;
+            color: var(--gray-400);
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            position: relative;
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 4rem 2rem;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .footer-text {
+            color: var(--gray-400);
+            font-size: 0.9rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--gray-400);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--white);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem 1.5rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero {
+                padding: 7rem 1.5rem 4rem;
+            }
+
+            .hero-stats {
+                gap: 2rem;
+            }
+
+            .stat-value {
+                font-size: 2rem;
+            }
+
+            .section {
+                padding: 5rem 1.5rem;
+            }
+
+            .flow-diagram {
+                flex-direction: column;
+            }
+
+            .flow-arrow {
+                transform: rotate(90deg);
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pricing-card.featured {
+                transform: none;
+            }
+
+            .pricing-card.featured:hover {
+                transform: translateY(-5px);
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-in {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-2"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">
+            <svg viewBox="0 0 32 32" fill="none">
+                <circle cx="16" cy="16" r="14" stroke="url(#grad)" stroke-width="3"/>
+                <path d="M10 16L14 20L22 12" stroke="url(#grad)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                <defs>
+                    <linearGradient id="grad" x1="0" y1="0" x2="32" y2="32">
+                        <stop stop-color="#0052FF"/>
+                        <stop offset="1" stop-color="#00D9A5"/>
+                    </linearGradient>
+                </defs>
+            </svg>
+            Resolve AI
+        </div>
+        <div class="nav-links">
+            <a href="#problem">Problem</a>
+            <a href="#solution">Solution</a>
+            <a href="#pricing">Pricing</a>
+            <a href="#market">Market</a>
+            <a href="#contact" class="nav-cta">Get Started</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge animate-in">
+                ⚡ Backed by AI • Trusted by Thousands
+            </div>
+            <h1 class="animate-in delay-1">
+                Resolve Disputes<br><span class="gradient">In Hours, Not Years</span>
+            </h1>
+            <p class="hero-subtitle animate-in delay-2">
+                AI-powered mediation that settles conflicts 100x faster at 1/100th the cost. 
+                From $50 refund fights to $50K contract disputes — justice at scale.
+            </p>
+            <div class="hero-cta animate-in delay-3">
+                <a href="#contact" class="btn btn-primary">
+                    Start Your Case →
+                </a>
+                <a href="#solution" class="btn btn-secondary">
+                    See How It Works
+                </a>
+            </div>
+            <div class="hero-stats animate-in delay-4">
+                <div class="stat">
+                    <div class="stat-value">72h</div>
+                    <div class="stat-label">Average Resolution</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">$49</div>
+                    <div class="stat-label">Starting Price</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">85%</div>
+                    <div class="stat-label">AI Resolution Rate</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">50+</div>
+                    <div class="stat-label">NPS Score</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="section" id="problem">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-badge">The Problem</div>
+                <h2 class="section-title">The Justice System Is Broken</h2>
+                <p class="section-subtitle">
+                    95% of disputes never get resolved. People just give up.
+                </p>
+            </div>
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="problem-icon">⏰</div>
+                    <h3>Courts Take Forever</h3>
+                    <p>Average civil case takes 2-5 years. By then, the relationship is destroyed and costs exceed the dispute value.</p>
+                    <div class="problem-stat">3-5 Years</div>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">💸</div>
+                    <h3>Lawyers Are Expensive</h3>
+                    <p>Legal fees start at $5,000 for simple matters. Most disputes aren't worth pursuing professionally.</p>
+                    <div class="problem-stat">$5K-$100K+</div>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">🤷</div>
+                    <h3>People Give Up</h3>
+                    <p>$200B in consumer losses go unrecovered annually. Small businesses write off disputes they can't afford to fight.</p>
+                    <div class="problem-stat">$200B Lost</div>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">😰</div>
+                    <h3>Relationships Destroyed</h3>
+                    <p>40% of partnerships dissolve over unresolved conflicts. The mental health toll is immense.</p>
+                    <div class="problem-stat">40% Fail</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="section solution-section" id="solution">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-badge">The Solution</div>
+                <h2 class="section-title">AI Mediation That Actually Works</h2>
+                <p class="section-subtitle">
+                    Submit your case, let AI analyze and mediate, get resolution in days
+                </p>
+            </div>
+
+            <div class="solution-visual">
+                <div class="flow-diagram">
+                    <div class="flow-step">
+                        <div class="flow-icon">📝</div>
+                        <h4>Submit Dispute</h4>
+                        <p>Both parties share their story, upload evidence</p>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step">
+                        <div class="flow-icon">🔍</div>
+                        <h4>AI Analysis</h4>
+                        <p>Contracts, precedents, fair outcomes assessed</p>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step">
+                        <div class="flow-icon">🤝</div>
+                        <h4>AI Mediation</h4>
+                        <p>Intelligent negotiation between parties</p>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step">
+                        <div class="flow-icon">✅</div>
+                        <h4>Resolution</h4>
+                        <p>Agreement signed, payment released</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🧠</div>
+                    <h3>Intelligent Analysis</h3>
+                    <p>AI parses contracts, analyzes communications, researches precedents, and predicts fair outcomes based on millions of similar cases.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💬</div>
+                    <h3>Shuttle Diplomacy AI</h3>
+                    <p>Private caucuses with each party. The AI identifies interests vs. positions and generates creative solutions neither party considered.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">👨‍⚖️</div>
+                    <h3>Human Escalation</h3>
+                    <p>10,000+ certified mediators on standby. When AI can't resolve, humans step in — with AI-prepared briefings for faster sessions.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>Enforcement Built-In</h3>
+                    <p>Payment escrow, e-signatures, platform enforcement, and court judgment conversion. Resolutions that actually stick.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🌍</div>
+                    <h3>40+ Languages</h3>
+                    <p>Real-time translation for cross-border disputes. No language barrier should prevent fair resolution.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h3>Mobile First</h3>
+                    <p>File disputes from your phone. No legal knowledge required. The AI guides you through every step.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Use Case Section -->
+    <section class="section usecase-section">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-badge">Real Example</div>
+                <h2 class="section-title">See It In Action</h2>
+                <p class="section-subtitle">
+                    A $5,000 freelancer dispute resolved in 72 hours
+                </p>
+            </div>
+
+            <div class="usecase-demo">
+                <div class="demo-header">
+                    <div class="demo-dots">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <div class="demo-title">Case #27492 — Freelancer vs. Client</div>
+                </div>
+                <div class="demo-content">
+                    <div class="demo-timeline">
+                        <div class="timeline-item">
+                            <span class="timeline-day">Day 1 — Intake</span>
+                            <h4>Both Parties Submit Claims</h4>
+                            <p><strong>Sarah (Designer):</strong> "I delivered the logos, client won't pay the $5,000 owed."<br>
+                            <strong>Mike (Client):</strong> "The designs weren't what we agreed on."<br>
+                            <em>Both upload: contract, emails, design files, revision history</em></p>
+                        </div>
+                        <div class="timeline-item">
+                            <span class="timeline-day">Day 1-2 — Analysis</span>
+                            <h4>AI Analyzes Evidence</h4>
+                            <p>Contract: 3 concepts + 2 revision rounds. Sarah delivered 3 concepts + 4 revisions.<br>
+                            Mike requested scope changes not in contract. Email shows Mike approved final on 3/15.<br>
+                            <strong>Similar cases: 78% favor designer when approval documented.</strong></p>
+                        </div>
+                        <div class="timeline-item">
+                            <span class="timeline-day">Day 2-3 — Mediation</span>
+                            <h4>AI Mediates Settlement</h4>
+                            <p><strong>To Sarah:</strong> "Mike feels designs diverged from brief. What would you need?"<br>
+                            <strong>To Mike:</strong> "Approval email creates challenge for non-payment. What's driving hesitation?"<br>
+                            <strong>AI Proposal:</strong> "$4,250 payment + source files and style guide"</p>
+                        </div>
+                        <div class="timeline-item timeline-result">
+                            <span class="timeline-day">Day 3 — Resolved</span>
+                            <h4>Agreement Reached ✓</h4>
+                            <p>Both parties accept $4,250 + source files. Agreement signed electronically.<br>
+                            Payment released from escrow. <strong>Total cost: $149. Total time: 72 hours.</strong></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="section" id="pricing">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-badge">Pricing</div>
+                <h2 class="section-title">Justice Shouldn't Be A Luxury</h2>
+                <p class="section-subtitle">
+                    1/100th the cost of traditional legal resolution
+                </p>
+            </div>
+
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <div class="pricing-tier">Consumer Basic</div>
+                    <div class="pricing-price">$49 <span>per case</span></div>
+                    <div class="pricing-desc">Disputes under $1,000</div>
+                    <ul class="pricing-features">
+                        <li><span class="check">✓</span> AI analysis & mediation</li>
+                        <li><span class="check">✓</span> Evidence upload</li>
+                        <li><span class="check">✓</span> Settlement agreement</li>
+                        <li><span class="check">✓</span> 7-day resolution target</li>
+                    </ul>
+                    <a href="#contact" class="btn btn-secondary" style="width: 100%; justify-content: center;">Start Case</a>
+                </div>
+                <div class="pricing-card featured">
+                    <div class="pricing-tier">Consumer Plus</div>
+                    <div class="pricing-price">$149 <span>per case</span></div>
+                    <div class="pricing-desc">Disputes $1K - $10K</div>
+                    <ul class="pricing-features">
+                        <li><span class="check">✓</span> Everything in Basic</li>
+                        <li><span class="check">✓</span> Priority AI processing</li>
+                        <li><span class="check">✓</span> Human mediator access</li>
+                        <li><span class="check">✓</span> Payment escrow</li>
+                        <li><span class="check">✓</span> 72-hour resolution target</li>
+                    </ul>
+                    <a href="#contact" class="btn btn-primary" style="width: 100%; justify-content: center;">Start Case</a>
+                </div>
+                <div class="pricing-card">
+                    <div class="pricing-tier">Business</div>
+                    <div class="pricing-price">$499 <span>per case</span></div>
+                    <div class="pricing-desc">Disputes $10K - $100K</div>
+                    <ul class="pricing-features">
+                        <li><span class="check">✓</span> Everything in Plus</li>
+                        <li><span class="check">✓</span> Dedicated case manager</li>
+                        <li><span class="check">✓</span> Multi-party disputes</li>
+                        <li><span class="check">✓</span> Binding arbitration option</li>
+                        <li><span class="check">✓</span> Legal documentation</li>
+                    </ul>
+                    <a href="#contact" class="btn btn-secondary" style="width: 100%; justify-content: center;">Contact Sales</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Market Section -->
+    <section class="section" id="market">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-badge">Market Opportunity</div>
+                <h2 class="section-title">A $50B+ Market Waiting</h2>
+                <p class="section-subtitle">
+                    Dispute resolution is broken everywhere — we're fixing it
+                </p>
+            </div>
+
+            <div class="market-stats">
+                <div class="market-stat">
+                    <div class="market-stat-value">$50B</div>
+                    <div class="market-stat-label">TAM by 2028</div>
+                </div>
+                <div class="market-stat">
+                    <div class="market-stat-value">58%</div>
+                    <div class="market-stat-label">Annual Growth</div>
+                </div>
+                <div class="market-stat">
+                    <div class="market-stat-value">85%</div>
+                    <div class="market-stat-label">Gross Margin</div>
+                </div>
+                <div class="market-stat">
+                    <div class="market-stat-value">8:1</div>
+                    <div class="market-stat-label">LTV:CAC</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section" id="contact">
+        <h2>Ready to Resolve?</h2>
+        <p>
+            Don't let disputes drain your time, money, and sanity. 
+            Start your case in 5 minutes.
+        </p>
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; position: relative; z-index: 1;">
+            <a href="mailto:founders@resolve-ai.com" class="btn btn-primary">
+                Start Your Case →
+            </a>
+            <a href="mailto:founders@resolve-ai.com" class="btn btn-secondary">
+                Partner With Us
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-logo">Resolve AI</div>
+        <p class="footer-text">Justice at Scale. Powered by AI.</p>
+        <div class="footer-links">
+            <a href="#">Terms</a>
+            <a href="#">Privacy</a>
+            <a href="#">Contact</a>
+            <a href="#">Press</a>
+        </div>
+        <p class="footer-text" style="margin-top: 2rem; opacity: 0.5;">
+            © 2026 Resolve AI. All rights reserved.<br>
+            Generated by The Godfather 🎩 — Afternoon Drop, April 27, 2026
+        </p>
+    </footer>
+
+    <script>
+        // Smooth scroll for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Animate elements on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.problem-card, .feature-card, .pricing-card, .market-stat, .timeline-item').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
