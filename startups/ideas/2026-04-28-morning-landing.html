@@ -1,0 +1,1243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MemoryForge — Your Company's Brain Never Forgets</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #7C3AED;
+            --primary-dark: #5B21B6;
+            --primary-light: #A78BFA;
+            --secondary: #10B981;
+            --accent: #F59E0B;
+            --dark: #0F172A;
+            --darker: #020617;
+            --light: #F8FAFC;
+            --gray: #64748B;
+            --gray-light: #CBD5E1;
+            --gradient-1: linear-gradient(135deg, #7C3AED 0%, #2563EB 50%, #10B981 100%);
+            --gradient-2: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+            --gradient-glow: radial-gradient(ellipse at center, rgba(124, 58, 237, 0.15) 0%, transparent 70%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--darker);
+            color: var(--light);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(124, 58, 237, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(124, 58, 237, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -2;
+        }
+
+        .bg-glow {
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: var(--gradient-glow);
+            animation: float 20s ease-in-out infinite;
+            z-index: -1;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(5%, 5%) rotate(5deg); }
+            50% { transform: translate(0, 10%) rotate(0deg); }
+            75% { transform: translate(-5%, 5%) rotate(-5deg); }
+        }
+
+        /* Neural Network Animation */
+        .neural-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.4;
+        }
+
+        .neural-node {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--primary-light);
+            border-radius: 50%;
+            animation: pulse-node 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse-node {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.5); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(124, 58, 237, 0.1);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 800;
+            font-size: 1.5rem;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            color: white;
+            -webkit-text-fill-color: white;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--gray-light);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-light);
+        }
+
+        .btn {
+            padding: 0.75rem 1.75rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--gradient-1);
+            color: white;
+            box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(124, 58, 237, 0.5);
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--light);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-ghost:hover {
+            border-color: var(--primary-light);
+            background: rgba(124, 58, 237, 0.1);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 120px 5% 80px;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(124, 58, 237, 0.15);
+            border: 1px solid rgba(124, 58, 237, 0.3);
+            border-radius: 100px;
+            font-size: 0.875rem;
+            color: var(--primary-light);
+            margin-bottom: 2rem;
+            animation: badge-glow 2s ease-in-out infinite;
+        }
+
+        @keyframes badge-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(124, 58, 237, 0.2); }
+            50% { box-shadow: 0 0 30px rgba(124, 58, 237, 0.4); }
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.03em;
+        }
+
+        .hero h1 span {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.35rem;
+            color: var(--gray-light);
+            margin-bottom: 2.5rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-ctas {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 3rem;
+            justify-content: center;
+            margin-top: 4rem;
+            padding-top: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--gray);
+            margin-top: 0.25rem;
+        }
+
+        /* Problem Section */
+        .problem {
+            padding: 120px 5%;
+            background: var(--gradient-2);
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 4rem;
+        }
+
+        .section-label {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--primary-light);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1rem;
+        }
+
+        .section-header h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            color: var(--gray-light);
+            font-size: 1.1rem;
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .problem-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .problem-card:hover {
+            border-color: rgba(239, 68, 68, 0.3);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .problem-icon {
+            width: 56px;
+            height: 56px;
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .problem-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .problem-card p {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        .problem-stat {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #EF4444;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Solution Demo */
+        .solution {
+            padding: 120px 5%;
+            position: relative;
+        }
+
+        .demo-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.4);
+        }
+
+        .demo-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 1.5rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .demo-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .demo-dot.red { background: #EF4444; }
+        .demo-dot.yellow { background: #F59E0B; }
+        .demo-dot.green { background: #10B981; }
+
+        .demo-content {
+            padding: 2rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .demo-query {
+            background: rgba(124, 58, 237, 0.1);
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .demo-query-label {
+            font-size: 0.75rem;
+            color: var(--primary-light);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .demo-query-text {
+            color: var(--light);
+            font-size: 0.95rem;
+        }
+
+        .demo-response {
+            background: rgba(16, 185, 129, 0.05);
+            border: 1px solid rgba(16, 185, 129, 0.15);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .demo-response-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--secondary);
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .demo-section {
+            margin-bottom: 1.25rem;
+        }
+
+        .demo-section-title {
+            font-size: 0.75rem;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        .demo-section-content {
+            color: var(--gray-light);
+            font-size: 0.875rem;
+            line-height: 1.7;
+        }
+
+        .demo-person {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            background: rgba(124, 58, 237, 0.15);
+            padding: 0.125rem 0.5rem;
+            border-radius: 4px;
+            color: var(--primary-light);
+            font-size: 0.8rem;
+        }
+
+        /* Features */
+        .features {
+            padding: 120px 5%;
+            background: var(--gradient-2);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-1);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .feature-card:hover {
+            border-color: rgba(124, 58, 237, 0.3);
+            transform: translateY(-5px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-icon {
+            width: 64px;
+            height: 64px;
+            background: var(--gradient-1);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 10px 30px rgba(124, 58, 237, 0.3);
+        }
+
+        .feature-card h3 {
+            font-size: 1.35rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .feature-card p {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        /* Use Cases */
+        .use-cases {
+            padding: 120px 5%;
+        }
+
+        .use-case-tabs {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 3rem;
+        }
+
+        .use-case-tab {
+            padding: 0.75rem 1.5rem;
+            background: rgba(124, 58, 237, 0.1);
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            border-radius: 100px;
+            color: var(--gray-light);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .use-case-tab:hover, .use-case-tab.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        .use-case-content {
+            max-width: 900px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .use-case-text h3 {
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .use-case-text p {
+            color: var(--gray-light);
+            margin-bottom: 1.5rem;
+        }
+
+        .use-case-benefit {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .use-case-benefit-icon {
+            width: 24px;
+            height: 24px;
+            background: rgba(16, 185, 129, 0.15);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--secondary);
+            font-size: 0.75rem;
+        }
+
+        .use-case-visual {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .use-case-stat {
+            font-size: 4rem;
+            font-weight: 900;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .use-case-stat-label {
+            color: var(--gray);
+            font-size: 1.1rem;
+        }
+
+        /* Pricing */
+        .pricing {
+            padding: 120px 5%;
+            background: var(--gradient-2);
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            padding: 2.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .pricing-card.featured {
+            border-color: var(--primary);
+            transform: scale(1.05);
+            box-shadow: 0 30px 60px rgba(124, 58, 237, 0.3);
+        }
+
+        .pricing-badge {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--gradient-1);
+            padding: 0.375rem 1rem;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .pricing-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-desc {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .pricing-amount {
+            display: flex;
+            align-items: baseline;
+            gap: 0.25rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .pricing-currency {
+            font-size: 1.25rem;
+            color: var(--gray);
+        }
+
+        .pricing-value {
+            font-size: 3rem;
+            font-weight: 800;
+        }
+
+        .pricing-period {
+            color: var(--gray);
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-features li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 0;
+            color: var(--gray-light);
+            font-size: 0.9rem;
+        }
+
+        .pricing-features li::before {
+            content: '✓';
+            color: var(--secondary);
+            font-weight: bold;
+        }
+
+        /* Testimonial */
+        .testimonial {
+            padding: 120px 5%;
+            text-align: center;
+        }
+
+        .testimonial-quote {
+            max-width: 800px;
+            margin: 0 auto;
+            font-size: 1.75rem;
+            font-weight: 500;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+
+        .testimonial-quote span {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .testimonial-avatar {
+            width: 56px;
+            height: 56px;
+            background: var(--gradient-1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .testimonial-info h4 {
+            font-size: 1rem;
+        }
+
+        .testimonial-info p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* CTA */
+        .cta {
+            padding: 120px 5%;
+            background: var(--gradient-2);
+            text-align: center;
+        }
+
+        .cta-content {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .cta h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .cta p {
+            color: var(--gray-light);
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 5% 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--gray);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-light);
+        }
+
+        .footer-copy {
+            color: var(--gray);
+            font-size: 0.875rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero-stats {
+                flex-direction: column;
+                gap: 2rem;
+            }
+
+            .use-case-content {
+                grid-template-columns: 1fr;
+            }
+
+            .pricing-card.featured {
+                transform: none;
+            }
+        }
+
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeIn 0.8s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .delay-1 { animation-delay: 0.2s; }
+        .delay-2 { animation-delay: 0.4s; }
+        .delay-3 { animation-delay: 0.6s; }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+    <div class="bg-glow"></div>
+
+    <!-- Neural Network Background -->
+    <div class="neural-bg">
+        <script>
+            const neuralBg = document.querySelector('.neural-bg');
+            for (let i = 0; i < 30; i++) {
+                const node = document.createElement('div');
+                node.className = 'neural-node';
+                node.style.left = Math.random() * 100 + '%';
+                node.style.top = Math.random() * 100 + '%';
+                node.style.animationDelay = Math.random() * 3 + 's';
+                neuralBg.appendChild(node);
+            }
+        </script>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">
+            <div class="logo-icon">🧠</div>
+            MemoryForge
+        </div>
+        <div class="nav-links">
+            <a href="#problem">Problem</a>
+            <a href="#solution">Solution</a>
+            <a href="#features">Features</a>
+            <a href="#pricing">Pricing</a>
+            <a href="#" class="btn btn-primary">Get Early Access</a>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge fade-in">
+                <span>🚀</span> Launching Q3 2026
+            </div>
+            <h1 class="fade-in delay-1">
+                Your Company's Brain<br><span>Never Forgets</span>
+            </h1>
+            <p class="hero-subtitle fade-in delay-2">
+                MemoryForge captures, connects, and surfaces institutional knowledge automatically—so critical context never walks out the door.
+            </p>
+            <div class="hero-ctas fade-in delay-3">
+                <a href="#" class="btn btn-primary">
+                    Request Demo
+                    <span>→</span>
+                </a>
+                <a href="#solution" class="btn btn-ghost">
+                    See How It Works
+                </a>
+            </div>
+            <div class="hero-stats">
+                <div class="stat">
+                    <div class="stat-value">$31.5B</div>
+                    <div class="stat-label">Lost annually to knowledge walkout</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">70%</div>
+                    <div class="stat-label">Of knowledge is undocumented</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">5.3 hrs</div>
+                    <div class="stat-label">Per week searching for info</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem -->
+    <section class="problem" id="problem">
+        <div class="section-header">
+            <div class="section-label">The Problem</div>
+            <h2>Knowledge Is Walking Out Your Door Every Day</h2>
+            <p>When employees leave, their institutional knowledge—the "why" behind decisions, relationship context, and tribal wisdom—disappears forever.</p>
+        </div>
+        <div class="problem-grid">
+            <div class="problem-card">
+                <div class="problem-icon">🚪</div>
+                <div class="problem-stat">2.8 years</div>
+                <h3>Average Employee Tenure</h3>
+                <p>Workers change jobs faster than ever. Every departure is a knowledge hemorrhage.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">📚</div>
+                <div class="problem-stat">73%</div>
+                <h3>Wiki Pages Never Updated</h3>
+                <p>Documentation becomes stale instantly. Nobody has time to maintain it.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">🔍</div>
+                <div class="problem-stat">44%</div>
+                <h3>Can't Find What They Need</h3>
+                <p>Critical documents exist—somewhere. Nobody knows where.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">👴</div>
+                <div class="problem-stat">10,000/day</div>
+                <h3>Boomers Retiring</h3>
+                <p>Decades of institutional memory vanishing as the workforce turns over.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Demo -->
+    <section class="solution" id="solution">
+        <div class="section-header">
+            <div class="section-label">The Solution</div>
+            <h2>Ask Anything. Get Instant Context.</h2>
+            <p>MemoryForge captures knowledge passively from all your tools, then surfaces exactly what you need, when you need it.</p>
+        </div>
+        <div class="demo-container">
+            <div class="demo-header">
+                <div class="demo-dot red"></div>
+                <div class="demo-dot yellow"></div>
+                <div class="demo-dot green"></div>
+            </div>
+            <div class="demo-content">
+                <div class="demo-query">
+                    <div class="demo-query-label">Your Question</div>
+                    <div class="demo-query-text">"Why did we switch from PostgreSQL to MongoDB for the user service in 2024?"</div>
+                </div>
+                <div class="demo-response">
+                    <div class="demo-response-header">
+                        <span>✨</span> MemoryForge Response
+                    </div>
+                    <div class="demo-section">
+                        <div class="demo-section-title">Decision Context</div>
+                        <div class="demo-section-content">
+                            Decided in Architecture Review meeting on March 15, 2024
+                        </div>
+                    </div>
+                    <div class="demo-section">
+                        <div class="demo-section-title">Key Drivers</div>
+                        <div class="demo-section-content">
+                            • Write throughput exceeded PostgreSQL capacity at 2025 scale projections<br>
+                            • Schema flexibility needed for rapid product iteration<br>
+                            • Team had MongoDB expertise from Q4 2023 hiring wave
+                        </div>
+                    </div>
+                    <div class="demo-section">
+                        <div class="demo-section-title">People With Context</div>
+                        <div class="demo-section-content">
+                            <span class="demo-person">👤 Sarah Chen</span> led migration — still at company<br>
+                            <span class="demo-person">👤 Mike Torres</span> opposed decision — left April 2025
+                        </div>
+                    </div>
+                    <div class="demo-section">
+                        <div class="demo-section-title">Related Resources</div>
+                        <div class="demo-section-content">
+                            📄 Architecture decision doc • 📝 Q1 2025 scaling incident post-mortem • 🔧 MongoDB tuning guide
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features" id="features">
+        <div class="section-header">
+            <div class="section-label">Features</div>
+            <h2>The Complete Organizational Memory Platform</h2>
+            <p>Everything you need to capture, preserve, and surface institutional knowledge.</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🔄</div>
+                <h3>Passive Capture</h3>
+                <p>Automatically extracts knowledge from meetings, Slack, email, documents, and code. No behavior change required.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🕸️</div>
+                <h3>Knowledge Graph</h3>
+                <p>Connects concepts, people, decisions, and context across your entire organization into a queryable graph.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔍</div>
+                <h3>Semantic Search</h3>
+                <p>Ask questions in natural language. Get precise answers with sources and full context—not 10,000 search results.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">👥</div>
+                <h3>Expertise Mapping</h3>
+                <p>Know who actually knows what. Find the right expert instantly based on real interactions, not org charts.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🚨</div>
+                <h3>Knowledge Risk Alerts</h3>
+                <p>Get warned when critical knowledge is concentrated in single individuals or at risk of being lost.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🤖</div>
+                <h3>AI Agent Context</h3>
+                <p>Give your AI assistants organizational context so they can work effectively with institutional awareness.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Use Cases -->
+    <section class="use-cases">
+        <div class="section-header">
+            <div class="section-label">Use Cases</div>
+            <h2>Knowledge That Works For You</h2>
+        </div>
+        <div class="use-case-tabs">
+            <div class="use-case-tab active">Onboarding</div>
+            <div class="use-case-tab">Knowledge Transfer</div>
+            <div class="use-case-tab">Decision Support</div>
+            <div class="use-case-tab">Compliance</div>
+        </div>
+        <div class="use-case-content">
+            <div class="use-case-text">
+                <h3>Slash Onboarding Time by 75%</h3>
+                <p>New hires get instant access to everything they need to know—history, context, who to ask, and why things work the way they do.</p>
+                <div class="use-case-benefit">
+                    <div class="use-case-benefit-icon">✓</div>
+                    <span>No more "who do I ask about X?" questions</span>
+                </div>
+                <div class="use-case-benefit">
+                    <div class="use-case-benefit-icon">✓</div>
+                    <span>Self-service access to institutional knowledge</span>
+                </div>
+                <div class="use-case-benefit">
+                    <div class="use-case-benefit-icon">✓</div>
+                    <span>Context on every project and decision</span>
+                </div>
+                <a href="#" class="btn btn-primary" style="margin-top: 1.5rem;">See How It Works →</a>
+            </div>
+            <div class="use-case-visual">
+                <div class="use-case-stat">6→6</div>
+                <div class="use-case-stat-label">Months to weeks for full productivity</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section class="pricing" id="pricing">
+        <div class="section-header">
+            <div class="section-label">Pricing</div>
+            <h2>Simple, Transparent Pricing</h2>
+            <p>Start with your team, scale to your enterprise.</p>
+        </div>
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <h3>Team</h3>
+                <p class="pricing-desc">For growing teams</p>
+                <div class="pricing-amount">
+                    <span class="pricing-currency">$</span>
+                    <span class="pricing-value">15</span>
+                    <span class="pricing-period">/user/month</span>
+                </div>
+                <ul class="pricing-features">
+                    <li>Up to 100 users</li>
+                    <li>Core integrations</li>
+                    <li>Basic knowledge capture</li>
+                    <li>90-day retention</li>
+                    <li>Email support</li>
+                </ul>
+                <a href="#" class="btn btn-ghost" style="width: 100%; justify-content: center;">Start Free Trial</a>
+            </div>
+            <div class="pricing-card featured">
+                <div class="pricing-badge">Most Popular</div>
+                <h3>Business</h3>
+                <p class="pricing-desc">For scaling organizations</p>
+                <div class="pricing-amount">
+                    <span class="pricing-currency">$</span>
+                    <span class="pricing-value">35</span>
+                    <span class="pricing-period">/user/month</span>
+                </div>
+                <ul class="pricing-features">
+                    <li>Unlimited users</li>
+                    <li>Full integration suite</li>
+                    <li>Advanced AI features</li>
+                    <li>Unlimited retention</li>
+                    <li>Expertise mapping</li>
+                    <li>API access</li>
+                    <li>Priority support</li>
+                </ul>
+                <a href="#" class="btn btn-primary" style="width: 100%; justify-content: center;">Start Free Trial</a>
+            </div>
+            <div class="pricing-card">
+                <h3>Enterprise</h3>
+                <p class="pricing-desc">For large organizations</p>
+                <div class="pricing-amount">
+                    <span class="pricing-currency">$</span>
+                    <span class="pricing-value">50</span>
+                    <span class="pricing-period">/user/month</span>
+                </div>
+                <ul class="pricing-features">
+                    <li>Everything in Business</li>
+                    <li>On-premises deployment</li>
+                    <li>Custom integrations</li>
+                    <li>Advanced compliance</li>
+                    <li>Dedicated success team</li>
+                    <li>SLA guarantees</li>
+                </ul>
+                <a href="#" class="btn btn-ghost" style="width: 100%; justify-content: center;">Contact Sales</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonial -->
+    <section class="testimonial">
+        <div class="testimonial-quote">
+            "When our principal engineer gave notice, I panicked. With MemoryForge, we'd already captured <span>15 years of institutional knowledge</span> without even trying. The transition was seamless."
+        </div>
+        <div class="testimonial-author">
+            <div class="testimonial-avatar">JC</div>
+            <div class="testimonial-info">
+                <h4>Jennifer Chen</h4>
+                <p>VP of Engineering, TechCorp</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta">
+        <div class="cta-content">
+            <h2>Stop Losing What Your Company Knows</h2>
+            <p>Join the enterprises building organizational memory that lasts forever. Start your pilot today.</p>
+            <div class="cta-buttons">
+                <a href="#" class="btn btn-primary">
+                    Request Demo
+                    <span>→</span>
+                </a>
+                <a href="#" class="btn btn-ghost">
+                    Read the Docs
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="logo">
+                <div class="logo-icon">🧠</div>
+                MemoryForge
+            </div>
+            <div class="footer-links">
+                <a href="#">Product</a>
+                <a href="#">Pricing</a>
+                <a href="#">Docs</a>
+                <a href="#">Blog</a>
+                <a href="#">Careers</a>
+            </div>
+            <div class="footer-copy">
+                © 2026 MemoryForge. Your company's brain, preserved forever.
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
