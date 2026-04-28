@@ -260,6 +260,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-04-27 | Afternoon | Resolve AI — Autonomous Dispute Resolution & Mediation | [Playbook](2026-04-27-afternoon.md) • [Landing](2026-04-27-afternoon-landing.html) • [PDF](2026-04-27-afternoon.pdf) |
 | 2026-04-28 | Evening | HeritageOS — The AI Operating System for Cultural Heritage Intelligence | [Playbook](2026-04-28-evening.md) • [Landing](2026-04-28-evening-landing.html) • [PDF](2026-04-28-evening.pdf) |
 | 2026-04-28 | Morning | MemoryForge — The AI Operating System for Organizational Memory | [Playbook](2026-04-28-morning.md) • [Landing](2026-04-28-morning-landing.html) • [PDF](2026-04-28-morning.pdf) |
+| 2026-04-28 | Afternoon | LastMile AI — The Autonomous Operating System for Last-Mile Delivery Robotics | [Playbook](2026-04-28-afternoon.md) • [Landing](2026-04-28-afternoon-landing.html) • [PDF](2026-04-28-afternoon.pdf) |
 <!-- New entries will be added above this line -->
 
 ---

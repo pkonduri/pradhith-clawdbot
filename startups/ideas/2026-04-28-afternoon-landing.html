@@ -1,0 +1,1438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LastMile AI — The Autonomous Operating System for Last-Mile Delivery Robotics</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00D4AA;
+            --primary-dark: #00B894;
+            --secondary: #6C5CE7;
+            --accent: #FD79A8;
+            --dark: #0A0A0F;
+            --darker: #050508;
+            --card: #12121A;
+            --card-hover: #1A1A25;
+            --text: #FFFFFF;
+            --text-muted: #8892B0;
+            --gradient: linear-gradient(135deg, #00D4AA 0%, #6C5CE7 50%, #FD79A8 100%);
+            --gradient-text: linear-gradient(135deg, #00D4AA 0%, #6C5CE7 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--dark);
+            color: var(--text);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .grid-pattern {
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background-image: 
+                linear-gradient(rgba(0, 212, 170, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 212, 170, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 30s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(-25px, -25px); }
+            100% { transform: translate(25px, 25px); }
+        }
+
+        .floating-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+            animation: floatOrb 20s ease-in-out infinite;
+        }
+
+        .orb1 {
+            width: 600px;
+            height: 600px;
+            background: var(--primary);
+            top: -200px;
+            right: -200px;
+            animation-delay: 0s;
+        }
+
+        .orb2 {
+            width: 500px;
+            height: 500px;
+            background: var(--secondary);
+            bottom: -150px;
+            left: -150px;
+            animation-delay: -7s;
+        }
+
+        .orb3 {
+            width: 400px;
+            height: 400px;
+            background: var(--accent);
+            top: 50%;
+            left: 50%;
+            animation-delay: -14s;
+        }
+
+        @keyframes floatOrb {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(50px, -30px) scale(1.1); }
+            50% { transform: translate(-30px, 50px) scale(0.9); }
+            75% { transform: translate(-50px, -20px) scale(1.05); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 1rem 2rem;
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: var(--gradient-text);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            -webkit-text-fill-color: white;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .btn {
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: var(--gradient);
+            color: white;
+            box-shadow: 0 4px 30px rgba(0, 212, 170, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 40px rgba(0, 212, 170, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 2rem 4rem;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1.5rem;
+            background: rgba(0, 212, 170, 0.1);
+            border: 1px solid rgba(0, 212, 170, 0.3);
+            border-radius: 50px;
+            font-size: 0.9rem;
+            color: var(--primary);
+            margin-bottom: 2rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(0, 212, 170, 0.4); }
+            50% { box-shadow: 0 0 0 10px rgba(0, 212, 170, 0); }
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 5.5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.03em;
+        }
+
+        .hero h1 span {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            max-width: 700px;
+            margin: 0 auto 3rem;
+            font-weight: 400;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 4rem;
+        }
+
+        /* Robot Animation */
+        .robot-visual {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            height: 300px;
+        }
+
+        .delivery-path {
+            position: absolute;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, var(--primary), var(--secondary), transparent);
+            top: 50%;
+            border-radius: 2px;
+        }
+
+        .robot-icon {
+            position: absolute;
+            font-size: 4rem;
+            top: 50%;
+            transform: translateY(-50%);
+            animation: driveRobot 8s ease-in-out infinite;
+            filter: drop-shadow(0 0 20px var(--primary));
+        }
+
+        @keyframes driveRobot {
+            0% { left: 5%; }
+            45% { left: 85%; }
+            55% { left: 85%; }
+            100% { left: 5%; }
+        }
+
+        .package-icon {
+            position: absolute;
+            font-size: 2rem;
+            top: 20%;
+            animation: deliverPackage 8s ease-in-out infinite;
+        }
+
+        @keyframes deliverPackage {
+            0%, 45% { opacity: 1; left: 12%; transform: translateY(0); }
+            46%, 54% { opacity: 0; left: 85%; transform: translateY(20px); }
+            55%, 100% { opacity: 1; left: 12%; transform: translateY(0); }
+        }
+
+        .destination-icon {
+            position: absolute;
+            right: 5%;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 3rem;
+            animation: pulseHouse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulseHouse {
+            0%, 100% { filter: drop-shadow(0 0 10px rgba(108, 92, 231, 0.3)); }
+            50% { filter: drop-shadow(0 0 30px rgba(108, 92, 231, 0.6)); }
+        }
+
+        /* Stats Section */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 3rem;
+            font-weight: 800;
+            background: var(--gradient-text);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Problem Section */
+        .problem {
+            padding: 8rem 2rem;
+            background: linear-gradient(180deg, transparent, rgba(108, 92, 231, 0.05), transparent);
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 4rem;
+        }
+
+        .section-tag {
+            color: var(--primary);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .section-header h2 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .section-header p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .problem-card {
+            background: var(--card);
+            border-radius: 20px;
+            padding: 2.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .problem-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient);
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+
+        .problem-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .problem-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(0, 212, 170, 0.3);
+        }
+
+        .problem-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .problem-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .problem-card p {
+            color: var(--text-muted);
+        }
+
+        .problem-stat {
+            display: inline-block;
+            background: rgba(253, 121, 168, 0.1);
+            color: var(--accent);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+        }
+
+        /* Solution Section */
+        .solution {
+            padding: 8rem 2rem;
+        }
+
+        .solution-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .platform-visual {
+            background: var(--card);
+            border-radius: 24px;
+            padding: 3rem;
+            margin-top: 3rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .platform-visual::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(0, 212, 170, 0.1), transparent);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            100% { transform: rotate(360deg); }
+        }
+
+        .platform-layers {
+            position: relative;
+            z-index: 1;
+        }
+
+        .layer {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 16px;
+            padding: 1.5rem 2rem;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s;
+        }
+
+        .layer:hover {
+            background: rgba(0, 212, 170, 0.05);
+            border-color: rgba(0, 212, 170, 0.3);
+        }
+
+        .layer-title {
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .layer-icon {
+            width: 36px;
+            height: 36px;
+            background: var(--gradient);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+
+        .layer-modules {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .module {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 8rem 2rem;
+            background: linear-gradient(180deg, transparent, rgba(0, 212, 170, 0.03), transparent);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: var(--card);
+            border-radius: 20px;
+            padding: 2.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 60px rgba(0, 212, 170, 0.1);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .feature-card p {
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-list {
+            list-style: none;
+        }
+
+        .feature-list li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .feature-list li::before {
+            content: '✓';
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        /* Market Section */
+        .market {
+            padding: 8rem 2rem;
+        }
+
+        .market-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .market-chart {
+            background: var(--card);
+            border-radius: 24px;
+            padding: 3rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .chart-bars {
+            display: flex;
+            gap: 2rem;
+            align-items: flex-end;
+            height: 250px;
+            margin-top: 2rem;
+        }
+
+        .chart-bar {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .bar {
+            width: 100%;
+            background: var(--gradient);
+            border-radius: 8px 8px 0 0;
+            animation: growBar 1.5s ease-out forwards;
+            transform-origin: bottom;
+        }
+
+        @keyframes growBar {
+            from { transform: scaleY(0); }
+            to { transform: scaleY(1); }
+        }
+
+        .bar-label {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .bar-value {
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: var(--primary);
+        }
+
+        .market-text h3 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+        }
+
+        .market-text p {
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+
+        .market-highlights {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .highlight {
+            background: rgba(0, 212, 170, 0.1);
+            padding: 1.5rem;
+            border-radius: 16px;
+            border: 1px solid rgba(0, 212, 170, 0.2);
+        }
+
+        .highlight-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .highlight-label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 0.25rem;
+        }
+
+        /* Roadmap Section */
+        .roadmap {
+            padding: 8rem 2rem;
+            background: linear-gradient(180deg, transparent, rgba(108, 92, 231, 0.05), transparent);
+        }
+
+        .roadmap-timeline {
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .timeline-line {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: var(--gradient);
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+
+        .timeline-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 4rem;
+        }
+
+        .timeline-item:nth-child(odd) {
+            flex-direction: row-reverse;
+        }
+
+        .timeline-content {
+            width: 45%;
+            background: var(--card);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s;
+        }
+
+        .timeline-content:hover {
+            transform: translateY(-5px);
+            border-color: rgba(0, 212, 170, 0.3);
+        }
+
+        .timeline-dot {
+            width: 24px;
+            height: 24px;
+            background: var(--gradient);
+            border-radius: 50%;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 0 20px var(--primary);
+        }
+
+        .timeline-year {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-content h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .timeline-content p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* Team Section */
+        .team {
+            padding: 8rem 2rem;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .team-card {
+            background: var(--card);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s;
+        }
+
+        .team-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(0, 212, 170, 0.3);
+        }
+
+        .team-avatar {
+            width: 100px;
+            height: 100px;
+            background: var(--gradient);
+            border-radius: 50%;
+            margin: 0 auto 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+        }
+
+        .team-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .team-role {
+            color: var(--primary);
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+
+        .team-bio {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 8rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(0, 212, 170, 0.15), transparent 70%);
+            transform: translate(-50%, -50%);
+            animation: pulseCta 4s ease-in-out infinite;
+        }
+
+        @keyframes pulseCta {
+            0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
+            50% { opacity: 0.8; transform: translate(-50%, -50%) scale(1.1); }
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cta h2 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta p {
+            font-size: 1.3rem;
+            color: var(--text-muted);
+            margin-bottom: 2.5rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        .footer-copy {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .market-content {
+                grid-template-columns: 1fr;
+            }
+
+            .timeline-line {
+                left: 20px;
+            }
+
+            .timeline-item {
+                flex-direction: row !important;
+                padding-left: 50px;
+            }
+
+            .timeline-content {
+                width: 100%;
+            }
+
+            .timeline-dot {
+                left: 20px;
+            }
+
+            .market-highlights {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Animation -->
+    <div class="bg-animation">
+        <div class="grid-pattern"></div>
+        <div class="floating-orb orb1"></div>
+        <div class="floating-orb orb2"></div>
+        <div class="floating-orb orb3"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-content">
+            <div class="logo">
+                <span class="logo-icon">🤖</span>
+                LastMile AI
+            </div>
+            <ul class="nav-links">
+                <li><a href="#problem">Problem</a></li>
+                <li><a href="#solution">Solution</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#market">Market</a></li>
+                <li><a href="#roadmap">Roadmap</a></li>
+            </ul>
+            <a href="#contact" class="btn btn-primary">Get Early Access</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="badge">
+                <span>🚀</span>
+                Now Raising $5M Seed Round
+            </div>
+            <h1>
+                The <span>Android</span> for<br>Delivery Robots
+            </h1>
+            <p class="hero-subtitle">
+                LastMile AI is the autonomous operating system powering the next generation of last-mile delivery robotics. One platform. Any robot. Infinite scale.
+            </p>
+            <div class="hero-cta">
+                <a href="#contact" class="btn btn-primary">Request Demo</a>
+                <a href="#solution" class="btn btn-secondary">See How It Works</a>
+            </div>
+            
+            <!-- Robot Animation -->
+            <div class="robot-visual">
+                <div class="delivery-path"></div>
+                <div class="robot-icon">🤖</div>
+                <div class="package-icon">📦</div>
+                <div class="destination-icon">🏠</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats -->
+    <div class="stats">
+        <div class="stat">
+            <div class="stat-value">$150B+</div>
+            <div class="stat-label">Last-Mile Market</div>
+        </div>
+        <div class="stat">
+            <div class="stat-value">53%</div>
+            <div class="stat-label">Of Shipping Costs</div>
+        </div>
+        <div class="stat">
+            <div class="stat-value">80%</div>
+            <div class="stat-label">Cost Reduction</div>
+        </div>
+        <div class="stat">
+            <div class="stat-value">99.5%</div>
+            <div class="stat-label">Delivery Success</div>
+        </div>
+    </div>
+
+    <!-- Problem Section -->
+    <section class="problem" id="problem">
+        <div class="section-header">
+            <div class="section-tag">The Problem</div>
+            <h2>The Last Mile Is Broken</h2>
+            <p>The most expensive, least efficient part of logistics is stuck in the past while the future waits.</p>
+        </div>
+        <div class="problem-grid">
+            <div class="problem-card">
+                <div class="problem-icon">💰</div>
+                <h3>Cost Catastrophe</h3>
+                <p>Last-mile delivery accounts for over half of total shipping costs—unsustainable for modern commerce.</p>
+                <span class="problem-stat">53% of shipping costs</span>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">👷</div>
+                <h3>Labor Crisis</h3>
+                <p>Driver shortages have reached critical levels with no solution in sight. Wages spiral while service declines.</p>
+                <span class="problem-stat">80,000+ unfilled positions</span>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">🔧</div>
+                <h3>Fragmented Tech</h3>
+                <p>Every robot company builds from scratch. No interoperability. No shared learning. Painfully slow scaling.</p>
+                <span class="problem-stat">100+ incompatible systems</span>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">⏱️</div>
+                <h3>Consumer Demands</h3>
+                <p>Same-day and instant delivery are table stakes. Current models can't scale to meet expectations.</p>
+                <span class="problem-stat">78% expect same-day</span>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">🌍</div>
+                <h3>Environmental Impact</h3>
+                <p>Failed deliveries and inefficient routes generate millions of tons of CO2 annually.</p>
+                <span class="problem-stat">2.4M metric tons CO2/year</span>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">🔒</div>
+                <h3>Vendor Lock-In</h3>
+                <p>Retailers are trapped with single-vendor solutions. No flexibility. No competition. No innovation.</p>
+                <span class="problem-stat">5-year contracts typical</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="solution" id="solution">
+        <div class="solution-content">
+            <div class="section-header">
+                <div class="section-tag">The Solution</div>
+                <h2>One Platform. Any Robot. Infinite Scale.</h2>
+                <p>LastMile AI provides the complete software stack that powers autonomous last-mile delivery—hardware agnostic, infinitely scalable.</p>
+            </div>
+            
+            <div class="platform-visual">
+                <div class="platform-layers">
+                    <div class="layer">
+                        <div class="layer-title">
+                            <span class="layer-icon">🧠</span>
+                            Intelligence Layer
+                        </div>
+                        <div class="layer-modules">
+                            <span class="module">predictive_routing</span>
+                            <span class="module">dynamic_pricing</span>
+                            <span class="module">customer_communication</span>
+                            <span class="module">demand_forecasting</span>
+                        </div>
+                    </div>
+                    <div class="layer">
+                        <div class="layer-title">
+                            <span class="layer-icon">⚙️</span>
+                            Orchestration Layer
+                        </div>
+                        <div class="layer-modules">
+                            <span class="module">fleet_management</span>
+                            <span class="module">mission_planning</span>
+                            <span class="module">multi_modal_coord</span>
+                            <span class="module">load_balancing</span>
+                        </div>
+                    </div>
+                    <div class="layer">
+                        <div class="layer-title">
+                            <span class="layer-icon">🎯</span>
+                            Autonomy Layer
+                        </div>
+                        <div class="layer-modules">
+                            <span class="module">perception_stack</span>
+                            <span class="module">navigation_control</span>
+                            <span class="module">safety_compliance</span>
+                            <span class="module">sensor_fusion</span>
+                        </div>
+                    </div>
+                    <div class="layer">
+                        <div class="layer-title">
+                            <span class="layer-icon">🔌</span>
+                            Hardware Abstraction
+                        </div>
+                        <div class="layer-modules">
+                            <span class="module">ground_robots</span>
+                            <span class="module">aerial_drones</span>
+                            <span class="module">autonomous_vehicles</span>
+                            <span class="module">indoor_bots</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="section-header">
+            <div class="section-tag">Core Capabilities</div>
+            <h2>Built for the Future of Delivery</h2>
+            <p>Every feature designed to make autonomous delivery faster, safer, and more profitable.</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🗺️</div>
+                <h3>Universal Autonomy Stack</h3>
+                <p>Hardware-agnostic autonomy that works across all delivery form factors—ground, air, and hybrid.</p>
+                <ul class="feature-list">
+                    <li>Unified perception framework</li>
+                    <li>Adaptive navigation</li>
+                    <li>Predictive safety systems</li>
+                    <li>Plug-and-play sensors</li>
+                </ul>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🚀</div>
+                <h3>Fleet Orchestration</h3>
+                <p>Manage thousands of robots with ML-powered deployment, rebalancing, and maintenance prediction.</p>
+                <ul class="feature-list">
+                    <li>Predictive deployment</li>
+                    <li>Dynamic rebalancing</li>
+                    <li>Multi-modal coordination</li>
+                    <li>Failure anticipation</li>
+                </ul>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>Delivery Intelligence</h3>
+                <p>Transform raw data into actionable intelligence with real-time optimization and customer AI.</p>
+                <ul class="feature-list">
+                    <li>Sub-minute ETA accuracy</li>
+                    <li>Dynamic pricing optimization</li>
+                    <li>Customer experience AI</li>
+                    <li>Route optimization</li>
+                </ul>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🛡️</div>
+                <h3>Safety & Compliance</h3>
+                <p>Pre-certified safety modules and automated compliance across all regulatory frameworks.</p>
+                <ul class="feature-list">
+                    <li>Regulatory compliance engine</li>
+                    <li>Safety certification toolkit</li>
+                    <li>Incident management</li>
+                    <li>Complete audit trails</li>
+                </ul>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔗</div>
+                <h3>Developer Platform</h3>
+                <p>Comprehensive SDK, APIs, and simulation environment for the entire ecosystem to build on.</p>
+                <ul class="feature-list">
+                    <li>Robot manufacturer SDK</li>
+                    <li>Retailer integration APIs</li>
+                    <li>High-fidelity simulation</li>
+                    <li>App marketplace</li>
+                </ul>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🌐</div>
+                <h3>Collective Intelligence</h3>
+                <p>Every robot learns from every other robot—shared maps, behaviors, and continuous improvement.</p>
+                <ul class="feature-list">
+                    <li>Real-time map updates</li>
+                    <li>Behavioral learning</li>
+                    <li>Fleet-wide anomaly detection</li>
+                    <li>Daily performance gains</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Market Section -->
+    <section class="market" id="market">
+        <div class="market-content">
+            <div class="market-chart">
+                <h3 style="margin-bottom: 0.5rem; font-size: 1.5rem;">Last-Mile Delivery Market</h3>
+                <p style="color: var(--text-muted);">Explosive growth trajectory</p>
+                <div class="chart-bars">
+                    <div class="chart-bar">
+                        <div class="bar" style="height: 80px;"></div>
+                        <span class="bar-label">2024</span>
+                        <span class="bar-value">$120B</span>
+                    </div>
+                    <div class="chart-bar">
+                        <div class="bar" style="height: 120px;"></div>
+                        <span class="bar-label">2026</span>
+                        <span class="bar-value">$167B</span>
+                    </div>
+                    <div class="chart-bar">
+                        <div class="bar" style="height: 180px;"></div>
+                        <span class="bar-label">2028</span>
+                        <span class="bar-value">$240B</span>
+                    </div>
+                    <div class="chart-bar">
+                        <div class="bar" style="height: 250px;"></div>
+                        <span class="bar-label">2030</span>
+                        <span class="bar-value">$330B</span>
+                    </div>
+                </div>
+            </div>
+            <div class="market-text">
+                <h3>The Trillion-Dollar Opportunity</h3>
+                <p>The last-mile delivery market is exploding while autonomous technology reaches commercial viability. The company that captures the operating system layer will define the industry.</p>
+                <p>Labor economics have crossed over. Regulatory clarity is emerging. Consumer acceptance is at all-time highs. The window to claim this market is now.</p>
+                <div class="market-highlights">
+                    <div class="highlight">
+                        <div class="highlight-value">18%</div>
+                        <div class="highlight-label">Annual Market Growth</div>
+                    </div>
+                    <div class="highlight">
+                        <div class="highlight-value">$45B</div>
+                        <div class="highlight-label">Autonomous Segment by 2030</div>
+                    </div>
+                    <div class="highlight">
+                        <div class="highlight-value">35</div>
+                        <div class="highlight-label">States with AV Legislation</div>
+                    </div>
+                    <div class="highlight">
+                        <div class="highlight-value">78%</div>
+                        <div class="highlight-label">Consumer Acceptance</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Roadmap Section -->
+    <section class="roadmap" id="roadmap">
+        <div class="section-header">
+            <div class="section-tag">The Journey</div>
+            <h2>Path to Market Dominance</h2>
+            <p>A clear, executable roadmap to becoming the industry standard.</p>
+        </div>
+        <div class="roadmap-timeline">
+            <div class="timeline-line"></div>
+            
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="timeline-year">2026-2027</div>
+                    <h3>Foundation</h3>
+                    <p>Partner with 3-5 robot manufacturers. Deploy on 20+ university campuses. Establish safety certification framework. 5,000 robots, 3M deliveries.</p>
+                </div>
+                <div class="timeline-dot"></div>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="timeline-year">2027-2028</div>
+                    <h3>Scale</h3>
+                    <p>White-label for major retailers. Integration with delivery platforms. Expand to 50+ US markets. Launch international. 100,000 robots, $500M ARR.</p>
+                </div>
+                <div class="timeline-dot" style="top: 200px;"></div>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="timeline-year">2028-2030</div>
+                    <h3>Dominance</h3>
+                    <p>Industry standard operating system. Hardware certification program. Global infrastructure. LastMile AI Marketplace. 500,000+ robots, $2B+ ARR.</p>
+                </div>
+                <div class="timeline-dot" style="top: 400px;"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="team" id="team">
+        <div class="section-header">
+            <div class="section-tag">The Team</div>
+            <h2>Built by Industry Veterans</h2>
+            <p>World-class expertise in autonomy, logistics, and platform building.</p>
+        </div>
+        <div class="team-grid">
+            <div class="team-card">
+                <div class="team-avatar">👔</div>
+                <h3>CEO</h3>
+                <div class="team-role">Logistics & Vision</div>
+                <p class="team-bio">Former VP at leading logistics company. Deep operational expertise with technology vision.</p>
+            </div>
+            <div class="team-card">
+                <div class="team-avatar">🔬</div>
+                <h3>CTO</h3>
+                <div class="team-role">Autonomy & AI</div>
+                <p class="team-bio">Engineering leader from top autonomous vehicle company. Platform architecture expert.</p>
+            </div>
+            <div class="team-card">
+                <div class="team-avatar">⚙️</div>
+                <h3>VP Engineering</h3>
+                <div class="team-role">Distributed Systems</div>
+                <p class="team-bio">Built mission-critical systems at hyperscale. Infrastructure excellence at global scale.</p>
+            </div>
+            <div class="team-card">
+                <div class="team-avatar">🤝</div>
+                <h3>VP Business Dev</h3>
+                <div class="team-role">Strategic Partnerships</div>
+                <p class="team-bio">BD executive with deep retailer and manufacturer relationships across the industry.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta" id="contact">
+        <div class="cta-content">
+            <h2>Join the Delivery Revolution</h2>
+            <p>We're raising our $5M seed round to build the operating system for autonomous delivery. Partner with us to shape the future.</p>
+            <div class="cta-buttons">
+                <a href="mailto:invest@lastmile.ai" class="btn btn-primary">Request Deck</a>
+                <a href="mailto:partners@lastmile.ai" class="btn btn-secondary">Partner With Us</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="logo">
+                <span class="logo-icon">🤖</span>
+                LastMile AI
+            </div>
+            <ul class="footer-links">
+                <li><a href="#problem">Problem</a></li>
+                <li><a href="#solution">Solution</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#market">Market</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <p class="footer-copy">© 2026 LastMile AI. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.problem-card, .feature-card, .timeline-content, .team-card').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+
+        // Smooth scroll for nav links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Nav background on scroll
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 100) {
+                nav.style.background = 'rgba(10, 10, 15, 0.95)';
+            } else {
+                nav.style.background = 'rgba(10, 10, 15, 0.8)';
+            }
+        });
+    </script>
+</body>
+</html>
