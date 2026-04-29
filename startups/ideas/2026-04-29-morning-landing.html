@@ -1,0 +1,1082 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitSovereign — Code Infrastructure for the Post-GitHub Era</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #818cf8;
+            --accent: #22c55e;
+            --accent-glow: rgba(34, 197, 94, 0.4);
+            --bg-dark: #0a0a0f;
+            --bg-card: #12121a;
+            --bg-card-hover: #1a1a25;
+            --text: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: rgba(255,255,255,0.08);
+            --gradient-1: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%);
+            --gradient-2: linear-gradient(135deg, #22c55e 0%, #10b981 100%);
+            --gradient-hero: radial-gradient(ellipse at 50% -20%, rgba(99, 102, 241, 0.15) 0%, transparent 60%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated background */
+        .bg-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            background: 
+                var(--gradient-hero),
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 50px,
+                    rgba(99, 102, 241, 0.02) 50px,
+                    rgba(99, 102, 241, 0.02) 51px
+                ),
+                repeating-linear-gradient(
+                    90deg,
+                    transparent,
+                    transparent 50px,
+                    rgba(99, 102, 241, 0.02) 50px,
+                    rgba(99, 102, 241, 0.02) 51px
+                );
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 20px 0;
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 800;
+            font-size: 1.5rem;
+            text-decoration: none;
+            color: var(--text);
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--text);
+        }
+
+        .nav-cta {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-decoration: none;
+            transition: all 0.2s;
+            cursor: pointer;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--gradient-1);
+            color: white;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.05);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .btn-large {
+            padding: 16px 32px;
+            font-size: 1.1rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 120px 0 80px;
+            position: relative;
+        }
+
+        .hero-content {
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            border-radius: 100px;
+            font-size: 0.9rem;
+            color: var(--accent);
+            margin-bottom: 32px;
+            animation: pulse-glow 2s infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px var(--accent-glow); }
+            50% { box-shadow: 0 0 40px var(--accent-glow); }
+        }
+
+        .hero-badge::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero h1 span {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.4rem;
+            color: var(--text-muted);
+            margin-bottom: 48px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 64px;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 64px;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Breaking News Banner */
+        .breaking-news {
+            background: linear-gradient(90deg, rgba(239, 68, 68, 0.1) 0%, rgba(239, 68, 68, 0.05) 100%);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 12px;
+            padding: 20px 24px;
+            margin-bottom: 80px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .breaking-news-icon {
+            font-size: 2rem;
+        }
+
+        .breaking-news-content h3 {
+            color: #f87171;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+
+        .breaking-news-content p {
+            color: var(--text);
+            font-size: 1rem;
+        }
+
+        /* Problem Section */
+        .section {
+            padding: 100px 0;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 64px;
+        }
+
+        .section-label {
+            display: inline-block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--primary-light);
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 20px;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+        }
+
+        /* Problem Cards */
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .problem-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px;
+            transition: all 0.3s;
+        }
+
+        .problem-card:hover {
+            background: var(--bg-card-hover);
+            border-color: rgba(99, 102, 241, 0.3);
+            transform: translateY(-4px);
+        }
+
+        .problem-icon {
+            width: 56px;
+            height: 56px;
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        .problem-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 12px;
+        }
+
+        .problem-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* Solution Section */
+        .solution-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        @media (max-width: 768px) {
+            .solution-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .solution-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 40px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .solution-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-1);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .solution-card:hover::before {
+            opacity: 1;
+        }
+
+        .solution-card:hover {
+            border-color: rgba(99, 102, 241, 0.3);
+            transform: translateY(-4px);
+        }
+
+        .solution-card.featured {
+            grid-column: span 2;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.05) 100%);
+            border-color: rgba(99, 102, 241, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .solution-card.featured {
+                grid-column: span 1;
+            }
+        }
+
+        .solution-icon {
+            width: 64px;
+            height: 64px;
+            background: var(--gradient-1);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 24px;
+        }
+
+        .solution-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 16px;
+        }
+
+        .solution-card p {
+            color: var(--text-muted);
+            margin-bottom: 24px;
+        }
+
+        .feature-list {
+            list-style: none;
+        }
+
+        .feature-list li {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 0;
+            color: var(--text-muted);
+        }
+
+        .feature-list li::before {
+            content: '✓';
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        /* Architecture Section */
+        .architecture {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 48px;
+            margin-top: 48px;
+        }
+
+        .arch-diagram {
+            background: var(--bg-dark);
+            border-radius: 16px;
+            padding: 32px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            overflow-x: auto;
+            color: var(--text-muted);
+        }
+
+        .arch-diagram pre {
+            margin: 0;
+            white-space: pre;
+        }
+
+        /* Market Section */
+        .market-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+        }
+
+        @media (max-width: 900px) {
+            .market-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .market-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .market-card:hover {
+            transform: scale(1.05);
+            border-color: var(--primary);
+        }
+
+        .market-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+
+        .market-label {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* Comparison Table */
+        .comparison {
+            margin-top: 64px;
+            overflow-x: auto;
+        }
+
+        .comparison table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--bg-card);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .comparison th,
+        .comparison td {
+            padding: 20px 24px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .comparison th {
+            background: rgba(99, 102, 241, 0.1);
+            font-weight: 600;
+            color: var(--primary-light);
+        }
+
+        .comparison tr:last-child td {
+            border-bottom: none;
+        }
+
+        .comparison td:first-child {
+            font-weight: 600;
+        }
+
+        .check {
+            color: var(--accent);
+        }
+
+        .cross {
+            color: #ef4444;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            text-align: center;
+            padding: 120px 0;
+            position: relative;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-section h2 {
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 24px;
+        }
+
+        .cta-section p {
+            font-size: 1.3rem;
+            color: var(--text-muted);
+            margin-bottom: 48px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 48px 0;
+            text-align: center;
+            color: var(--text-muted);
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            margin-bottom: 24px;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: var(--text);
+        }
+
+        /* Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .float {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        /* Code snippet styling */
+        .code-block {
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            margin: 24px 0;
+            overflow-x: auto;
+        }
+
+        .code-block pre {
+            margin: 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .code-block .comment { color: #6b7280; }
+        .code-block .keyword { color: var(--primary-light); }
+        .code-block .string { color: var(--accent); }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero-stats {
+                gap: 32px;
+            }
+
+            .breaking-news {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-pattern"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="container nav-content">
+            <a href="#" class="logo">
+                <div class="logo-icon">👑</div>
+                GitSovereign
+            </a>
+            <ul class="nav-links">
+                <li><a href="#problem">Problem</a></li>
+                <li><a href="#solution">Solution</a></li>
+                <li><a href="#market">Market</a></li>
+                <li><a href="#comparison">Compare</a></li>
+            </ul>
+            <div class="nav-cta">
+                <a href="#cta" class="btn btn-primary">Get Early Access</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    🔴 LIVE — GitHub Exodus Underway
+                </div>
+                <h1>
+                    Code Infrastructure for the<br>
+                    <span>Post-GitHub Era</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Enterprise-grade sovereignty. GitHub-compatible workflows. 
+                    AI-native intelligence. Own your code infrastructure.
+                </p>
+                <div class="hero-cta">
+                    <a href="#cta" class="btn btn-primary btn-large">
+                        🚀 Join the Waitlist
+                    </a>
+                    <a href="#solution" class="btn btn-secondary btn-large">
+                        Learn More →
+                    </a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <div class="stat-value">$47B</div>
+                        <div class="stat-label">Total Market</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">100M+</div>
+                        <div class="stat-label">GitHub Developers</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">2026</div>
+                        <div class="stat-label">The Exodus Year</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Breaking News -->
+    <section class="container">
+        <div class="breaking-news">
+            <div class="breaking-news-icon">⚠️</div>
+            <div class="breaking-news-content">
+                <h3>Breaking: GitHub Trust Crisis</h3>
+                <p><strong>Today:</strong> HashiCorp co-founder Mitchell Hashimoto declares GitHub "no longer a place for serious work." Ghostty migrating off. CVE-2026-3854 RCE vulnerability disclosed. HardenedBSD moves to Radicle.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section id="problem" class="section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">The Problem</span>
+                <h2 class="section-title">The World's Code on One Company's Terms</h2>
+                <p class="section-subtitle">
+                    Microsoft owns GitHub. The world's source code lives under one company's policies, one security posture, one jurisdiction.
+                </p>
+            </div>
+
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="problem-icon">🔓</div>
+                    <h3>Security Vulnerabilities</h3>
+                    <p>CVE-2026-3854 is just the latest. Centralized infrastructure = single point of failure for the entire software supply chain.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">🏛️</div>
+                    <h3>Jurisdiction Risk</h3>
+                    <p>OFAC sanctions, CLOUD Act access, government requests — your code is subject to US law whether you like it or not.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">📋</div>
+                    <h3>Policy Whiplash</h3>
+                    <p>Copilot training controversies. Terms of service changes. Pricing increases. You have no control over the platform you depend on.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">🔒</div>
+                    <h3>Compliance Nightmares</h3>
+                    <p>FedRAMP, ITAR, data residency requirements — GitHub's multi-tenant model doesn't work for regulated industries.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section id="solution" class="section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">The Solution</span>
+                <h2 class="section-title">Sovereign Code Infrastructure</h2>
+                <p class="section-subtitle">
+                    GitHub's developer experience. Your infrastructure. Your rules.
+                </p>
+            </div>
+
+            <div class="solution-grid">
+                <div class="solution-card featured">
+                    <div class="solution-icon">👑</div>
+                    <h3>True Sovereignty</h3>
+                    <p>Deploy anywhere — your cloud, on-premise, air-gapped. Your code never leaves infrastructure you control. Full data residency compliance.</p>
+                    <ul class="feature-list">
+                        <li>One-click AWS/GCP/Azure deployment</li>
+                        <li>Air-gapped installations for defense & finance</li>
+                        <li>Hybrid federation across jurisdictions</li>
+                        <li>Edge nodes for global teams</li>
+                    </ul>
+                </div>
+
+                <div class="solution-card">
+                    <div class="solution-icon">🔄</div>
+                    <h3>GitHub Compatible</h3>
+                    <p>Migrate in minutes. Keep your workflows. No retraining needed.</p>
+                    <ul class="feature-list">
+                        <li>Full Git compatibility</li>
+                        <li>GitHub Actions compatible</li>
+                        <li>API compatibility layer</li>
+                        <li>Bidirectional sync</li>
+                    </ul>
+                </div>
+
+                <div class="solution-card">
+                    <div class="solution-icon">🤖</div>
+                    <h3>AI-Native</h3>
+                    <p>Private AI that never leaves your infrastructure. Any LLM, your choice.</p>
+                    <ul class="feature-list">
+                        <li>Private code intelligence</li>
+                        <li>Model-agnostic (any LLM)</li>
+                        <li>AI security scanning</li>
+                        <li>Autonomous code review</li>
+                    </ul>
+                </div>
+
+                <div class="solution-card">
+                    <div class="solution-icon">🛡️</div>
+                    <h3>Zero-Trust Security</h3>
+                    <p>Built for the modern threat landscape. Every commit verified.</p>
+                    <ul class="feature-list">
+                        <li>Hardware-backed signing</li>
+                        <li>Cryptographic audit trails</li>
+                        <li>Automatic SBOM generation</li>
+                        <li>Real-time vulnerability detection</li>
+                    </ul>
+                </div>
+
+                <div class="solution-card">
+                    <div class="solution-icon">🌐</div>
+                    <h3>Decentralized Resilience</h3>
+                    <p>P2P sync. No single point of failure. Works offline.</p>
+                    <ul class="feature-list">
+                        <li>Radicle-inspired P2P</li>
+                        <li>Federation between instances</li>
+                        <li>Offline-first architecture</li>
+                        <li>Built for disruption</li>
+                    </ul>
+                </div>
+
+                <div class="solution-card">
+                    <div class="solution-icon">✅</div>
+                    <h3>Compliance Built-In</h3>
+                    <p>SOC2, HIPAA, FedRAMP, GDPR automation. Audit-ready always.</p>
+                    <ul class="feature-list">
+                        <li>Pre-built compliance frameworks</li>
+                        <li>Continuous audit logging</li>
+                        <li>Policy-as-code enforcement</li>
+                        <li>Export controls support</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Architecture Diagram -->
+            <div class="architecture">
+                <h3 style="margin-bottom: 24px;">Technical Architecture</h3>
+                <div class="arch-diagram">
+<pre>
+┌─────────────────────────────────────────────────────────────────┐
+│                      GitSovereign Platform                       │
+├─────────────────────────────────────────────────────────────────┤
+│  Web UI (React) │ REST API (GitHub-compatible) │ GraphQL API    │
+├─────────────────────────────────────────────────────────────────┤
+│  Auth (OIDC/SAML) │ Repos Service │ Actions Engine │ AI Engine  │
+│  Security Scanner │ Audit Logger  │ Compliance Engine            │
+├─────────────────────────────────────────────────────────────────┤
+│           Distributed Storage (Git Objects + LFS + P2P)          │
+├─────────────────────────────────────────────────────────────────┤
+│        Federation Layer: Instance A ←→ Instance B ←→ Instance C  │
+└─────────────────────────────────────────────────────────────────┘
+</pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Market Section -->
+    <section id="market" class="section" style="background: var(--bg-card);">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">The Market</span>
+                <h2 class="section-title">$47 Billion Opportunity</h2>
+                <p class="section-subtitle">
+                    Code hosting is just the wedge. The real opportunity spans the entire developer infrastructure stack.
+                </p>
+            </div>
+
+            <div class="market-grid">
+                <div class="market-card">
+                    <div class="market-value">$8B</div>
+                    <div class="market-label">Code Hosting</div>
+                </div>
+                <div class="market-card">
+                    <div class="market-value">$15B</div>
+                    <div class="market-label">CI/CD & DevOps</div>
+                </div>
+                <div class="market-card">
+                    <div class="market-value">$12B</div>
+                    <div class="market-label">App Security</div>
+                </div>
+                <div class="market-card">
+                    <div class="market-value">$12B</div>
+                    <div class="market-label">Dev Tools</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Comparison Section -->
+    <section id="comparison" class="section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">Why Us</span>
+                <h2 class="section-title">GitSovereign vs. The Competition</h2>
+            </div>
+
+            <div class="comparison">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th>GitHub</th>
+                            <th>GitLab</th>
+                            <th>Gitea</th>
+                            <th>Radicle</th>
+                            <th style="color: var(--accent);">GitSovereign</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>True Sovereignty</td>
+                            <td class="cross">✗</td>
+                            <td>Partial</td>
+                            <td class="check">✓</td>
+                            <td class="check">✓</td>
+                            <td class="check">✓</td>
+                        </tr>
+                        <tr>
+                            <td>Enterprise UX</td>
+                            <td class="check">✓</td>
+                            <td class="check">✓</td>
+                            <td class="cross">✗</td>
+                            <td class="cross">✗</td>
+                            <td class="check">✓</td>
+                        </tr>
+                        <tr>
+                            <td>Decentralized/P2P</td>
+                            <td class="cross">✗</td>
+                            <td class="cross">✗</td>
+                            <td class="cross">✗</td>
+                            <td class="check">✓</td>
+                            <td class="check">✓</td>
+                        </tr>
+                        <tr>
+                            <td>AI-Native</td>
+                            <td>Microsoft-only</td>
+                            <td>Basic</td>
+                            <td class="cross">✗</td>
+                            <td class="cross">✗</td>
+                            <td class="check">✓</td>
+                        </tr>
+                        <tr>
+                            <td>GitHub Compatible</td>
+                            <td>N/A</td>
+                            <td>Partial</td>
+                            <td>Partial</td>
+                            <td class="cross">✗</td>
+                            <td class="check">✓</td>
+                        </tr>
+                        <tr>
+                            <td>Air-Gapped Ready</td>
+                            <td class="cross">✗</td>
+                            <td class="check">✓</td>
+                            <td class="check">✓</td>
+                            <td class="check">✓</td>
+                            <td class="check">✓</td>
+                        </tr>
+                        <tr>
+                            <td>FedRAMP/Compliance</td>
+                            <td>Limited</td>
+                            <td>Expensive</td>
+                            <td class="cross">✗</td>
+                            <td class="cross">✗</td>
+                            <td class="check">✓</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="cta" class="cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2>The Post-GitHub Era is Here</h2>
+                <p>
+                    Join the developers and enterprises building the future of code infrastructure. Own your sovereignty.
+                </p>
+                <div class="hero-cta">
+                    <a href="mailto:founders@gitsovereign.com" class="btn btn-primary btn-large">
+                        🚀 Request Early Access
+                    </a>
+                    <a href="https://github.com/gitsovereign/gitsovereign" class="btn btn-secondary btn-large">
+                        ⭐ Star on Radicle
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-links">
+                <a href="#">Documentation</a>
+                <a href="#">GitHub (for now)</a>
+                <a href="#">Discord</a>
+                <a href="#">Twitter</a>
+                <a href="#">Blog</a>
+            </div>
+            <p>© 2026 GitSovereign. Code sovereignty for everyone.</p>
+            <p style="margin-top: 16px; font-size: 0.85rem;">
+                Generated by The Godfather 🎩 — Morning Drop, April 29, 2026
+            </p>
+        </div>
+    </footer>
+</body>
+</html>
