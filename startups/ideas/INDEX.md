@@ -263,6 +263,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-04-28 | Afternoon | LastMile AI — The Autonomous Operating System for Last-Mile Delivery Robotics | [Playbook](2026-04-28-afternoon.md) • [Landing](2026-04-28-afternoon-landing.html) • [PDF](2026-04-28-afternoon.pdf) |
 | 2026-04-29 | Evening | ColdChain AI — The AI Operating System for Global Cold Chain Intelligence | [Playbook](2026-04-29-evening.md) • [Landing](2026-04-29-evening-landing.html) • [PDF](2026-04-29-evening.pdf) |
 | 2026-04-29 | Morning | GitSovereign — Enterprise Code Infrastructure for the Post-GitHub Era | [Playbook](2026-04-29-morning.md) • [Landing](2026-04-29-morning-landing.html) • [PDF](2026-04-29-morning.pdf) |
+| 2026-04-29 | Afternoon | Airloc — The Security Airlock for Enterprise AI | [Playbook](2026-04-29-afternoon.md) • [Landing](2026-04-29-afternoon-landing.html) • [PDF](2026-04-29-afternoon.pdf) |
 <!-- New entries will be added above this line -->
 
 ---
