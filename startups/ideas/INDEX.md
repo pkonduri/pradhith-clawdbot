@@ -265,6 +265,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-04-29 | Morning | GitSovereign — Enterprise Code Infrastructure for the Post-GitHub Era | [Playbook](2026-04-29-morning.md) • [Landing](2026-04-29-morning-landing.html) • [PDF](2026-04-29-morning.pdf) |
 | 2026-04-29 | Afternoon | Airloc — The Security Airlock for Enterprise AI | [Playbook](2026-04-29-afternoon.md) • [Landing](2026-04-29-afternoon-landing.html) • [PDF](2026-04-29-afternoon.pdf) |
 | 2026-04-30 | Evening | AntibioticOS — The AI Operating System for Antimicrobial Resistance Intelligence | [Playbook](2026-04-30-evening.md) • [Landing](2026-04-30-evening-landing.html) • [PDF](2026-04-30-evening.pdf) |
+| 2026-04-30 | Morning | AuthentiCore — The Trust Infrastructure for the Synthetic Content Era | [Playbook](2026-04-30-morning.md) • [Landing](2026-04-30-morning-landing.html) • [PDF](2026-04-30-morning.pdf) |
 <!-- New entries will be added above this line -->
 
 ---
