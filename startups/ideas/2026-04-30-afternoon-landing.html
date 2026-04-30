@@ -1,0 +1,1538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WorldModel AI — The Shared Reality Infrastructure for Physical AI</title>
+    <meta name="description" content="The foundational infrastructure layer enabling robots, drones, and autonomous systems to share a unified understanding of physical reality.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00D4FF;
+            --primary-dark: #00A8CC;
+            --secondary: #7C3AED;
+            --accent: #FF6B35;
+            --dark: #0A0A0F;
+            --dark-light: #12121A;
+            --dark-medium: #1A1A25;
+            --gray: #6B7280;
+            --light: #F8FAFC;
+            --success: #10B981;
+            --gradient-primary: linear-gradient(135deg, #00D4FF 0%, #7C3AED 50%, #FF6B35 100%);
+            --gradient-dark: linear-gradient(180deg, #0A0A0F 0%, #12121A 100%);
+            --gradient-glow: radial-gradient(ellipse at center, rgba(0, 212, 255, 0.15) 0%, transparent 70%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--dark);
+            color: var(--light);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated Grid Background */
+        .grid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 212, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: 0;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        /* Floating Orbs */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(100px);
+            z-index: 0;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .orb-1 {
+            width: 600px;
+            height: 600px;
+            background: rgba(0, 212, 255, 0.12);
+            top: -200px;
+            right: -200px;
+            animation-delay: 0s;
+        }
+
+        .orb-2 {
+            width: 500px;
+            height: 500px;
+            background: rgba(124, 58, 237, 0.1);
+            bottom: -150px;
+            left: -150px;
+            animation-delay: -7s;
+        }
+
+        .orb-3 {
+            width: 400px;
+            height: 400px;
+            background: rgba(255, 107, 53, 0.08);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation-delay: -14s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(30px, -30px) scale(1.05); }
+            50% { transform: translate(-20px, 20px) scale(0.95); }
+            75% { transform: translate(20px, 30px) scale(1.02); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1.5rem 2rem;
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 800;
+            font-size: 1.5rem;
+            text-decoration: none;
+            color: var(--light);
+        }
+
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: var(--gradient-primary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--gray);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .btn {
+            padding: 0.875rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+            box-shadow: 0 4px 20px rgba(0, 212, 255, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0, 212, 255, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--light);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 2rem 4rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1.25rem;
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 100px;
+            font-size: 0.875rem;
+            color: var(--primary);
+            margin-bottom: 2rem;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(0, 212, 255, 0.2); }
+            50% { box-shadow: 0 0 20px 5px rgba(0, 212, 255, 0.1); }
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 5.5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.03em;
+        }
+
+        .hero h1 .gradient {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--gray);
+            max-width: 800px;
+            margin: 0 auto 3rem;
+            line-height: 1.6;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 4rem;
+        }
+
+        /* World Visualization */
+        .world-viz {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            aspect-ratio: 16/9;
+            background: var(--dark-light);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            box-shadow: 
+                0 50px 100px -20px rgba(0, 0, 0, 0.5),
+                0 0 0 1px rgba(255, 255, 255, 0.05);
+        }
+
+        .world-viz-inner {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: 
+                radial-gradient(circle at 30% 40%, rgba(0, 212, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 70% 60%, rgba(124, 58, 237, 0.1) 0%, transparent 50%);
+        }
+
+        .world-grid {
+            position: absolute;
+            inset: 0;
+            background-image: 
+                linear-gradient(rgba(0, 212, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 212, 255, 0.1) 1px, transparent 1px);
+            background-size: 40px 40px;
+            transform: perspective(500px) rotateX(60deg);
+            transform-origin: center center;
+            animation: gridPulse 4s ease-in-out infinite;
+        }
+
+        @keyframes gridPulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        /* Floating Elements in Viz */
+        .viz-element {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .viz-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--dark-medium);
+            border: 2px solid var(--primary);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+        }
+
+        .viz-label {
+            font-size: 0.75rem;
+            color: var(--primary);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .viz-robot { top: 20%; left: 15%; animation-delay: 0s; }
+        .viz-drone { top: 15%; right: 20%; animation-delay: -2s; }
+        .viz-av { bottom: 25%; left: 25%; animation-delay: -4s; }
+        .viz-agent { bottom: 20%; right: 15%; animation-delay: -1s; }
+        .viz-core { top: 50%; left: 50%; transform: translate(-50%, -50%); animation: corePulse 3s ease-in-out infinite; }
+
+        @keyframes corePulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); box-shadow: 0 0 30px rgba(0, 212, 255, 0.3); }
+            50% { transform: translate(-50%, -50%) scale(1.1); box-shadow: 0 0 60px rgba(0, 212, 255, 0.5); }
+        }
+
+        .viz-core .viz-icon {
+            width: 100px;
+            height: 100px;
+            font-size: 2.5rem;
+            background: var(--gradient-primary);
+            border: none;
+        }
+
+        /* Connection Lines */
+        .connection-lines {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+        }
+
+        .connection-lines svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .connection-line {
+            stroke: var(--primary);
+            stroke-width: 2;
+            stroke-dasharray: 10, 10;
+            animation: dash 20s linear infinite;
+            opacity: 0.3;
+        }
+
+        @keyframes dash {
+            to { stroke-dashoffset: -1000; }
+        }
+
+        /* Stats Section */
+        .stats {
+            padding: 6rem 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .stats-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateY(-5px);
+            border-color: rgba(0, 212, 255, 0.2);
+        }
+
+        .stat-value {
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--gray);
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        /* Problem Section */
+        .problem {
+            padding: 8rem 2rem;
+            position: relative;
+            z-index: 1;
+            background: var(--dark-light);
+        }
+
+        .section-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(255, 107, 53, 0.1);
+            border: 1px solid rgba(255, 107, 53, 0.2);
+            border-radius: 100px;
+            font-size: 0.875rem;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .section-subtitle {
+            font-size: 1.25rem;
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .problem-card {
+            padding: 2.5rem;
+            background: var(--dark);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .problem-card:hover {
+            border-color: rgba(255, 107, 53, 0.3);
+            transform: translateY(-5px);
+        }
+
+        .problem-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 107, 53, 0.1);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .problem-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .problem-card p {
+            color: var(--gray);
+            line-height: 1.7;
+        }
+
+        .problem-cost {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.5rem 1rem;
+            background: rgba(255, 107, 53, 0.1);
+            border-radius: 8px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        /* Solution Section */
+        .solution {
+            padding: 8rem 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .solution-badge {
+            background: rgba(0, 212, 255, 0.1);
+            border-color: rgba(0, 212, 255, 0.2);
+            color: var(--primary);
+        }
+
+        .pillars {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+
+        .pillar {
+            padding: 2.5rem;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pillar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .pillar:hover::before {
+            transform: scaleX(1);
+        }
+
+        .pillar:hover {
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateY(-5px);
+        }
+
+        .pillar-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--gradient-primary);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto 1.5rem;
+            box-shadow: 0 10px 40px rgba(0, 212, 255, 0.2);
+        }
+
+        .pillar h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .pillar p {
+            color: var(--gray);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        /* Architecture Section */
+        .architecture {
+            padding: 8rem 2rem;
+            background: var(--dark-light);
+            position: relative;
+            z-index: 1;
+        }
+
+        .arch-diagram {
+            background: var(--dark);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 3rem;
+            margin-top: 3rem;
+        }
+
+        .arch-tiers {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .arch-tier {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            padding: 1.5rem 2rem;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .arch-tier:hover {
+            background: rgba(0, 212, 255, 0.05);
+            border-color: rgba(0, 212, 255, 0.2);
+        }
+
+        .tier-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-primary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .tier-content {
+            flex: 1;
+        }
+
+        .tier-name {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .tier-desc {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .tier-latency {
+            padding: 0.5rem 1rem;
+            background: rgba(0, 212, 255, 0.1);
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--primary);
+            white-space: nowrap;
+        }
+
+        /* Code Preview */
+        .code-section {
+            padding: 8rem 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .code-preview {
+            background: var(--dark-light);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.5);
+        }
+
+        .code-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 1.5rem;
+            background: rgba(255, 255, 255, 0.02);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .code-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .code-dot.red { background: #FF5F56; }
+        .code-dot.yellow { background: #FFBD2E; }
+        .code-dot.green { background: #27CA40; }
+
+        .code-title {
+            margin-left: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
+            color: var(--gray);
+        }
+
+        .code-body {
+            padding: 2rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
+            line-height: 1.8;
+            overflow-x: auto;
+        }
+
+        .code-body pre {
+            margin: 0;
+        }
+
+        .code-keyword { color: #7C3AED; }
+        .code-string { color: #10B981; }
+        .code-comment { color: #6B7280; }
+        .code-function { color: #00D4FF; }
+        .code-number { color: #FF6B35; }
+
+        /* Market Section */
+        .market {
+            padding: 8rem 2rem;
+            background: var(--dark-light);
+            position: relative;
+            z-index: 1;
+        }
+
+        .market-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .market-visual {
+            position: relative;
+        }
+
+        .market-chart {
+            background: var(--dark);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 2rem;
+        }
+
+        .chart-bars {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            height: 250px;
+            padding-top: 2rem;
+        }
+
+        .chart-bar-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .chart-bar {
+            width: 60px;
+            background: var(--gradient-primary);
+            border-radius: 8px 8px 0 0;
+            transition: all 0.3s ease;
+        }
+
+        .chart-bar:hover {
+            filter: brightness(1.2);
+        }
+
+        .chart-label {
+            font-size: 0.875rem;
+            color: var(--gray);
+            font-weight: 500;
+        }
+
+        .chart-value {
+            font-size: 0.75rem;
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .market-content h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+        }
+
+        .market-content p {
+            color: var(--gray);
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .market-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        .market-stat {
+            padding: 1.5rem;
+            background: var(--dark);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+        }
+
+        .market-stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .market-stat-label {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* Use Cases */
+        .use-cases {
+            padding: 8rem 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .use-case-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 4rem;
+            flex-wrap: wrap;
+        }
+
+        .use-case-tab {
+            padding: 1rem 2rem;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .use-case-tab:hover, .use-case-tab.active {
+            background: rgba(0, 212, 255, 0.1);
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .use-case-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .use-case-visual {
+            background: var(--dark-light);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            aspect-ratio: 4/3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 6rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .use-case-visual::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at center, rgba(0, 212, 255, 0.1) 0%, transparent 70%);
+        }
+
+        .use-case-details h3 {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .use-case-details p {
+            color: var(--gray);
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .use-case-benefits {
+            list-style: none;
+        }
+
+        .use-case-benefits li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+
+        .use-case-benefits li::before {
+            content: '✓';
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+            border-radius: 50%;
+            font-size: 0.875rem;
+            font-weight: 700;
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 8rem 2rem;
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            background: var(--gradient-dark);
+        }
+
+        .cta-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cta h2 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .cta p {
+            font-size: 1.25rem;
+            color: var(--gray);
+            margin-bottom: 3rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--gray);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .stats-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .pillars {
+                grid-template-columns: 1fr;
+            }
+
+            .market-grid,
+            .use-case-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero {
+                padding: 6rem 1rem 3rem;
+            }
+
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+
+            .problem-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .arch-tier {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .footer-container {
+                flex-direction: column;
+                gap: 2rem;
+                text-align: center;
+            }
+
+            .footer-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="grid-bg"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <div class="logo-icon">🌐</div>
+                WorldModel AI
+            </a>
+            <div class="nav-links">
+                <a href="#problem">Problem</a>
+                <a href="#solution">Solution</a>
+                <a href="#architecture">Architecture</a>
+                <a href="#market">Market</a>
+                <a href="#" class="btn btn-primary">Get Early Access</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span>🚀</span>
+                Foundational Infrastructure for Physical AI
+            </div>
+            <h1>
+                The <span class="gradient">Shared Reality</span><br>
+                Infrastructure for Physical AI
+            </h1>
+            <p class="hero-subtitle">
+                Robots, drones, and autonomous systems can finally share a unified understanding of the physical world. One fabric. Billions of AI agents. Perfect coordination.
+            </p>
+            <div class="hero-cta">
+                <a href="#" class="btn btn-primary">
+                    Request Demo
+                    <span>→</span>
+                </a>
+                <a href="#" class="btn btn-secondary">
+                    Read Documentation
+                </a>
+            </div>
+
+            <!-- World Visualization -->
+            <div class="world-viz">
+                <div class="world-viz-inner">
+                    <div class="world-grid"></div>
+                    
+                    <!-- Connection Lines SVG -->
+                    <svg class="connection-lines" viewBox="0 0 900 506">
+                        <line class="connection-line" x1="135" y1="120" x2="450" y2="253"/>
+                        <line class="connection-line" x1="720" y1="100" x2="450" y2="253"/>
+                        <line class="connection-line" x1="225" y1="380" x2="450" y2="253"/>
+                        <line class="connection-line" x1="765" y1="400" x2="450" y2="253"/>
+                    </svg>
+
+                    <div class="viz-element viz-robot">
+                        <div class="viz-icon">🤖</div>
+                        <span class="viz-label">Robot</span>
+                    </div>
+                    <div class="viz-element viz-drone">
+                        <div class="viz-icon">🚁</div>
+                        <span class="viz-label">Drone</span>
+                    </div>
+                    <div class="viz-element viz-av">
+                        <div class="viz-icon">🚗</div>
+                        <span class="viz-label">AV</span>
+                    </div>
+                    <div class="viz-element viz-agent">
+                        <div class="viz-icon">🤖</div>
+                        <span class="viz-label">Agent</span>
+                    </div>
+                    <div class="viz-element viz-core">
+                        <div class="viz-icon">🌐</div>
+                        <span class="viz-label">WorldModel Fabric</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="stats-container">
+            <div class="stat-card">
+                <div class="stat-value">2.3M</div>
+                <div class="stat-label">Humanoid robots by 2028</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">$340B</div>
+                <div class="stat-label">Wasted on duplicate world models</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">89M</div>
+                <div class="stat-label">Autonomous devices projected</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value"><10ms</div>
+                <div class="stat-label">Latency for safety-critical ops</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="problem" id="problem">
+        <div class="section-container">
+            <div class="section-header">
+                <span class="section-badge">⚠️ THE PROBLEM</span>
+                <h2 class="section-title">Physical AI Is Flying Blind</h2>
+                <p class="section-subtitle">
+                    Every robot builds its own understanding of the world. Separately. Redundantly. Dangerously.
+                </p>
+            </div>
+
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="problem-icon">🔄</div>
+                    <h3>Redundant Computation</h3>
+                    <p>Each robot rebuilds what others already know. 50 warehouse robots means 50 separate understandings of the same space.</p>
+                    <span class="problem-cost">$89B/year wasted</span>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">💥</div>
+                    <h3>No Coordination</h3>
+                    <p>When Robot A discovers a spill in Aisle 7, Robots B-Z learn only by nearly crashing into it themselves.</p>
+                    <span class="problem-cost">$72B in failures</span>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">🌫️</div>
+                    <h3>Incomplete Models</h3>
+                    <p>Each system has blind spots. Without shared perception, critical information gaps lead to accidents and inefficiency.</p>
+                    <span class="problem-cost">$112B in losses</span>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">🔀</div>
+                    <h3>Inconsistent Reality</h3>
+                    <p>Different systems see different realities. Conflicts arise when their world models don't align.</p>
+                    <span class="problem-cost">$67B in conflicts</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="solution" id="solution">
+        <div class="section-container">
+            <div class="section-header">
+                <span class="section-badge solution-badge">💡 THE SOLUTION</span>
+                <h2 class="section-title">WorldModel AI</h2>
+                <p class="section-subtitle">
+                    The Google Maps of physical reality — dynamic, real-time, physics-accurate world models that AI systems can read from and write to.
+                </p>
+            </div>
+
+            <div class="pillars">
+                <div class="pillar">
+                    <div class="pillar-icon">🌍</div>
+                    <h3>Persistent World State</h3>
+                    <p>Real-time, physics-accurate representation of physical spaces. Sub-centimeter accuracy. Always current.</p>
+                </div>
+                <div class="pillar">
+                    <div class="pillar-icon">👁️</div>
+                    <h3>Collaborative Perception</h3>
+                    <p>Every device contributes to and benefits from collective perception. Sensor fusion at planetary scale.</p>
+                </div>
+                <div class="pillar">
+                    <div class="pillar-icon">⚡</div>
+                    <h3>Predictive Physics</h3>
+                    <p>1000Hz physics simulation for planning. Multi-body dynamics. Human behavior prediction.</p>
+                </div>
+                <div class="pillar">
+                    <div class="pillar-icon">🤝</div>
+                    <h3>Multi-Agent Coordination</h3>
+                    <p>Spatial reservation protocols. Intention broadcasting. Deadlock prevention. Safe interaction.</p>
+                </div>
+                <div class="pillar">
+                    <div class="pillar-icon">🧠</div>
+                    <h3>Semantic Understanding</h3>
+                    <p>Know what things are, not just where. Activity recognition. Context-aware intelligence.</p>
+                </div>
+                <div class="pillar">
+                    <div class="pillar-icon">🔒</div>
+                    <h3>Privacy-First Design</h3>
+                    <p>On-prem options. Privacy-preserving protocols. You control your data.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Architecture Section -->
+    <section class="architecture" id="architecture">
+        <div class="section-container">
+            <div class="section-header">
+                <span class="section-badge solution-badge">🏗️ ARCHITECTURE</span>
+                <h2 class="section-title">From Global to Edge</h2>
+                <p class="section-subtitle">
+                    Multi-tier architecture delivers the right data at the right latency for every use case.
+                </p>
+            </div>
+
+            <div class="arch-diagram">
+                <div class="arch-tiers">
+                    <div class="arch-tier">
+                        <div class="tier-icon">🌐</div>
+                        <div class="tier-content">
+                            <div class="tier-name">Global Tier</div>
+                            <div class="tier-desc">Planetary-scale base maps, satellite imagery, public infrastructure, weather data</div>
+                        </div>
+                        <div class="tier-latency">~1s latency</div>
+                    </div>
+                    <div class="arch-tier">
+                        <div class="tier-icon">🏙️</div>
+                        <div class="tier-content">
+                            <div class="tier-name">Regional Tier</div>
+                            <div class="tier-desc">City-scale models, traffic patterns, local infrastructure, regional events</div>
+                        </div>
+                        <div class="tier-latency">~100ms latency</div>
+                    </div>
+                    <div class="arch-tier">
+                        <div class="tier-icon">🏭</div>
+                        <div class="tier-content">
+                            <div class="tier-name">Local Tier</div>
+                            <div class="tier-desc">Facility-specific models, real-time dynamic objects, private/secure spaces</div>
+                        </div>
+                        <div class="tier-latency">~10ms latency</div>
+                    </div>
+                    <div class="arch-tier">
+                        <div class="tier-icon">📱</div>
+                        <div class="tier-content">
+                            <div class="tier-name">Edge Tier</div>
+                            <div class="tier-desc">On-device caching, safety-critical inference, offline operation capability</div>
+                        </div>
+                        <div class="tier-latency"><1ms latency</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Code Section -->
+    <section class="code-section">
+        <div class="section-container">
+            <div class="section-header">
+                <span class="section-badge solution-badge">💻 DEVELOPER EXPERIENCE</span>
+                <h2 class="section-title">Integration in Minutes</h2>
+                <p class="section-subtitle">
+                    Universal SDK for ROS2, Python, C++, and every major robotics platform.
+                </p>
+            </div>
+
+            <div class="code-preview">
+                <div class="code-header">
+                    <div class="code-dot red"></div>
+                    <div class="code-dot yellow"></div>
+                    <div class="code-dot green"></div>
+                    <span class="code-title">worldmodel_example.py</span>
+                </div>
+                <div class="code-body">
+<pre><span class="code-keyword">from</span> worldmodel <span class="code-keyword">import</span> WorldModelClient, SpatialQuery
+
+<span class="code-comment"># Connect to WorldModel Fabric</span>
+wm = WorldModelClient(
+    api_key=<span class="code-string">"wm_live_..."</span>,
+    space_id=<span class="code-string">"warehouse-sf-01"</span>
+)
+
+<span class="code-comment"># Query current world state with predictions</span>
+nearby = wm.<span class="code-function">query</span>(
+    SpatialQuery.<span class="code-function">within_radius</span>(robot.position, <span class="code-number">10.0</span>),
+    include_dynamics=<span class="code-keyword">True</span>,
+    predict_forward=<span class="code-number">2.0</span>  <span class="code-comment"># seconds</span>
+)
+
+<span class="code-comment"># Contribute observations to collective perception</span>
+wm.<span class="code-function">contribute</span>(
+    sensor_type=<span class="code-string">"lidar"</span>,
+    observation=current_scan,
+    confidence=<span class="code-number">0.95</span>
+)
+
+<span class="code-comment"># Reserve safe path through spacetime</span>
+reservation = wm.coordinate.<span class="code-function">reserve_path</span>(
+    path=planned_trajectory,
+    time_window=(now(), now() + timedelta(seconds=<span class="code-number">30</span>))
+)</pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Market Section -->
+    <section class="market" id="market">
+        <div class="section-container">
+            <div class="market-grid">
+                <div class="market-visual">
+                    <div class="market-chart">
+                        <div class="chart-bars">
+                            <div class="chart-bar-group">
+                                <div class="chart-value">$4M</div>
+                                <div class="chart-bar" style="height: 20px;"></div>
+                                <div class="chart-label">Y1</div>
+                            </div>
+                            <div class="chart-bar-group">
+                                <div class="chart-value">$23M</div>
+                                <div class="chart-bar" style="height: 50px;"></div>
+                                <div class="chart-label">Y2</div>
+                            </div>
+                            <div class="chart-bar-group">
+                                <div class="chart-value">$89M</div>
+                                <div class="chart-bar" style="height: 100px;"></div>
+                                <div class="chart-label">Y3</div>
+                            </div>
+                            <div class="chart-bar-group">
+                                <div class="chart-value">$290M</div>
+                                <div class="chart-bar" style="height: 160px;"></div>
+                                <div class="chart-label">Y4</div>
+                            </div>
+                            <div class="chart-bar-group">
+                                <div class="chart-value">$780M</div>
+                                <div class="chart-bar" style="height: 220px;"></div>
+                                <div class="chart-label">Y5</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="market-content">
+                    <h2>$147B Total<br>Addressable Market</h2>
+                    <p>
+                        The convergence of spatial computing, autonomous systems, robotics infrastructure, and digital twins creates an unprecedented market opportunity. WorldModel AI sits at the center of this convergence.
+                    </p>
+                    <div class="market-stats">
+                        <div class="market-stat">
+                            <div class="market-stat-value">82%</div>
+                            <div class="market-stat-label">Gross Margin</div>
+                        </div>
+                        <div class="market-stat">
+                            <div class="market-stat-value">8.2x</div>
+                            <div class="market-stat-label">LTV:CAC Ratio</div>
+                        </div>
+                        <div class="market-stat">
+                            <div class="market-stat-value">145%</div>
+                            <div class="market-stat-label">Net Revenue Retention</div>
+                        </div>
+                        <div class="market-stat">
+                            <div class="market-stat-value">$4.2M</div>
+                            <div class="market-stat-label">Avg. Customer Savings</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Use Cases Section -->
+    <section class="use-cases">
+        <div class="section-container">
+            <div class="section-header">
+                <span class="section-badge solution-badge">🎯 USE CASES</span>
+                <h2 class="section-title">Built for Every Physical AI</h2>
+            </div>
+
+            <div class="use-case-tabs">
+                <div class="use-case-tab active">🏭 Warehouses</div>
+                <div class="use-case-tab">🚗 Autonomous Vehicles</div>
+                <div class="use-case-tab">🏗️ Construction</div>
+                <div class="use-case-tab">🏙️ Smart Cities</div>
+            </div>
+
+            <div class="use-case-content">
+                <div class="use-case-visual">🏭</div>
+                <div class="use-case-details">
+                    <h3>Warehouse & Logistics</h3>
+                    <p>
+                        Transform chaos into coordination. When 50 AMRs share a single understanding of your warehouse, efficiency skyrockets and collisions disappear.
+                    </p>
+                    <ul class="use-case-benefits">
+                        <li>40% improvement in pick rates</li>
+                        <li>Zero robot collisions</li>
+                        <li>$4.2M average annual savings</li>
+                        <li>30-day ROI guarantee</li>
+                        <li>Plug-and-play with major AMR platforms</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="cta-content">
+            <h2>The Robots Are Coming.<br>They Need to Understand the World.</h2>
+            <p>
+                Join the infrastructure revolution. Be among the first to build on WorldModel AI.
+            </p>
+            <div class="cta-buttons">
+                <a href="#" class="btn btn-primary">
+                    Request Early Access
+                    <span>→</span>
+                </a>
+                <a href="#" class="btn btn-secondary">
+                    Talk to Founders
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-logo">
+                <div class="logo-icon" style="width: 35px; height: 35px; font-size: 1.1rem;">🌐</div>
+                WorldModel AI
+            </div>
+            <div class="footer-links">
+                <a href="#">Documentation</a>
+                <a href="#">API Reference</a>
+                <a href="#">Blog</a>
+                <a href="#">Careers</a>
+                <a href="#">Contact</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Tab switching functionality
+        document.querySelectorAll('.use-case-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.use-case-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Smooth scroll for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.stat-card, .problem-card, .pillar, .arch-tier').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
