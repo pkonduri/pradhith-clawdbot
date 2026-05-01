@@ -268,6 +268,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-04-30 | Morning | AuthentiCore — The Trust Infrastructure for the Synthetic Content Era | [Playbook](2026-04-30-morning.md) • [Landing](2026-04-30-morning-landing.html) • [PDF](2026-04-30-morning.pdf) |
 | 2026-04-30 | Afternoon | WorldModel AI — The Shared Reality Infrastructure for Physical AI | [Playbook](2026-04-30-afternoon.md) • [Landing](2026-04-30-afternoon-landing.html) • [PDF](2026-04-30-afternoon.pdf) |
 | 2026-05-01 | Evening | TwinEarth AI — The Living Digital Twin of Planet Earth | [Playbook](2026-05-01-evening.md) • [Landing](2026-05-01-evening-landing.html) • [PDF](2026-05-01-evening.pdf) |
+| 2026-05-01 | Afternoon | LegacyLift AI — The Operating System for Autonomous Legacy System Modernization | [Playbook](2026-05-01-afternoon.md) • [Landing](2026-05-01-afternoon-landing.html) • [PDF](2026-05-01-afternoon.pdf) |
 <!-- New entries will be added above this line -->
 
 ---
