@@ -270,6 +270,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-05-01 | Evening | TwinEarth AI — The Living Digital Twin of Planet Earth | [Playbook](2026-05-01-evening.md) • [Landing](2026-05-01-evening-landing.html) • [PDF](2026-05-01-evening.pdf) |
 | 2026-05-01 | Afternoon | LegacyLift AI — The Operating System for Autonomous Legacy System Modernization | [Playbook](2026-05-01-afternoon.md) • [Landing](2026-05-01-afternoon-landing.html) • [PDF](2026-05-01-afternoon.pdf) |
 | 2026-05-02 | Evening | AgentLaw — The Legal Infrastructure for the Agentic Economy | [Playbook](2026-05-02-evening.md) • [Landing](2026-05-02-evening-landing.html) • [PDF](2026-05-02-evening.pdf) |
+| 2026-05-02 | Morning | DreamForge AI — The Operating System for Sleep-Based Learning & Skill Acquisition | [Playbook](2026-05-02-morning.md) • [Landing](2026-05-02-morning-landing.html) • [PDF](2026-05-02-morning.pdf) |
 <!-- New entries will be added above this line -->
 
 ---
