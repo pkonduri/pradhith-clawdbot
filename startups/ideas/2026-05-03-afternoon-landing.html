@@ -1,0 +1,1358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MeshNet AI — Autonomous Communication Infrastructure</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00ff88;
+            --primary-dim: #00cc6a;
+            --secondary: #00d4ff;
+            --accent: #ff6b35;
+            --dark: #0a0a0f;
+            --darker: #050508;
+            --card: #12121a;
+            --card-hover: #1a1a25;
+            --text: #ffffff;
+            --text-dim: #8a8a9a;
+            --border: #2a2a3a;
+            --glow: rgba(0, 255, 136, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--dark);
+            color: var(--text);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* Animated mesh background */
+        .mesh-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .mesh-bg svg {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0.08;
+        }
+
+        .mesh-line {
+            stroke: var(--primary);
+            stroke-width: 1;
+            fill: none;
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        .mesh-line:nth-child(2n) {
+            stroke: var(--secondary);
+            animation-delay: 1s;
+        }
+
+        .mesh-line:nth-child(3n) {
+            animation-delay: 2s;
+        }
+
+        .mesh-node {
+            fill: var(--primary);
+            animation: nodePulse 3s ease-in-out infinite;
+        }
+
+        .mesh-node:nth-child(2n) {
+            fill: var(--secondary);
+            animation-delay: 0.5s;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.8; }
+        }
+
+        @keyframes nodePulse {
+            0%, 100% { r: 3; opacity: 0.5; }
+            50% { r: 5; opacity: 1; }
+        }
+
+        /* Data streams */
+        .data-stream {
+            position: fixed;
+            width: 2px;
+            height: 100px;
+            background: linear-gradient(180deg, transparent, var(--primary), transparent);
+            opacity: 0.3;
+            animation: streamDown 3s linear infinite;
+        }
+
+        @keyframes streamDown {
+            0% { transform: translateY(-100px); }
+            100% { transform: translateY(100vh); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 1.5rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: linear-gradient(180deg, var(--darker) 0%, transparent 100%);
+            backdrop-filter: blur(10px);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logo-icon::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.3) 50%, transparent 60%);
+            animation: logoShine 3s ease-in-out infinite;
+        }
+
+        @keyframes logoShine {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .cta-nav {
+            background: var(--primary);
+            color: var(--dark);
+            padding: 0.75rem 1.75rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px var(--glow);
+        }
+
+        .cta-nav:hover {
+            background: var(--text);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px var(--glow);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 8rem 3rem 5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid var(--primary);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--primary);
+            margin-bottom: 2rem;
+            animation: badgePulse 2s ease-in-out infinite;
+        }
+
+        @keyframes badgePulse {
+            0%, 100% { box-shadow: 0 0 10px var(--glow); }
+            50% { box-shadow: 0 0 25px var(--glow); }
+        }
+
+        .hero-badge .dot {
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: blink 1.5s ease-in-out infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        h1 {
+            font-size: 4.5rem;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.03em;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 50%, var(--primary) 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 4s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% center; }
+            50% { background-position: 100% center; }
+            100% { background-position: 0% center; }
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--text-dim);
+            margin-bottom: 3rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-ctas {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            margin-bottom: 4rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--dark);
+            padding: 1.1rem 2.5rem;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.05rem;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            box-shadow: 0 0 30px var(--glow);
+        }
+
+        .btn-primary:hover {
+            background: var(--text);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px var(--glow);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text);
+            padding: 1.1rem 2.5rem;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.05rem;
+            border: 2px solid var(--border);
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        /* Stats ribbon */
+        .stats-ribbon {
+            display: flex;
+            justify-content: center;
+            gap: 5rem;
+            padding: 2rem 0;
+            margin-top: 2rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.75rem;
+            font-weight: 700;
+            color: var(--primary);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            margin-top: 0.25rem;
+        }
+
+        /* Network visualization */
+        .network-viz {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 800px;
+            height: 800px;
+            opacity: 0.1;
+            z-index: 1;
+        }
+
+        /* Problem Section */
+        .section {
+            padding: 8rem 3rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 5rem;
+        }
+
+        .section-label {
+            font-size: 0.9rem;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        h2 {
+            font-size: 3.25rem;
+            font-weight: 700;
+            margin-bottom: 1.25rem;
+            letter-spacing: -0.02em;
+        }
+
+        .section-desc {
+            font-size: 1.25rem;
+            color: var(--text-dim);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Problem cards */
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .problem-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2.5rem;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .problem-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), #ff3366);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--accent);
+            box-shadow: 0 20px 50px rgba(255, 107, 53, 0.1);
+        }
+
+        .problem-card:hover::before {
+            opacity: 1;
+        }
+
+        .problem-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--accent), #ff3366);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .problem-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .problem-card p {
+            color: var(--text-dim);
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        /* Solution Section */
+        .solution-section {
+            background: linear-gradient(180deg, var(--darker) 0%, var(--dark) 100%);
+        }
+
+        .solution-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .solution-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 3rem;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .solution-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background: linear-gradient(180deg, transparent 0%, rgba(0, 255, 136, 0.03) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .solution-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--primary);
+            box-shadow: 0 25px 60px var(--glow);
+        }
+
+        .solution-card:hover::after {
+            opacity: 1;
+        }
+
+        .solution-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .solution-card h3 {
+            font-size: 1.6rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            position: relative;
+            z-index: 1;
+        }
+
+        .solution-card p {
+            color: var(--text-dim);
+            font-size: 1.05rem;
+            line-height: 1.8;
+            position: relative;
+            z-index: 1;
+        }
+
+        .solution-features {
+            margin-top: 1.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .solution-feature {
+            background: rgba(0, 255, 136, 0.1);
+            color: var(--primary);
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        /* Why Now Section */
+        .timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 3rem;
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 30px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, var(--primary), var(--secondary), var(--primary));
+        }
+
+        .timeline-item {
+            display: flex;
+            gap: 3rem;
+            align-items: flex-start;
+        }
+
+        .timeline-marker {
+            width: 60px;
+            height: 60px;
+            background: var(--card);
+            border: 3px solid var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 0 30px var(--glow);
+        }
+
+        .timeline-content {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            flex: 1;
+            transition: all 0.3s ease;
+        }
+
+        .timeline-content:hover {
+            border-color: var(--primary);
+            transform: translateX(10px);
+        }
+
+        .timeline-content h3 {
+            font-size: 1.4rem;
+            margin-bottom: 0.75rem;
+            color: var(--primary);
+        }
+
+        .timeline-content p {
+            color: var(--text-dim);
+            font-size: 1rem;
+        }
+
+        /* Market Section */
+        .market-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .market-visual {
+            position: relative;
+        }
+
+        .market-circle {
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            position: relative;
+            margin: 0 auto;
+        }
+
+        .market-ring {
+            position: absolute;
+            border-radius: 50%;
+            border: 3px solid;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            transition: all 0.3s ease;
+        }
+
+        .market-ring.tam {
+            width: 100%;
+            height: 100%;
+            border-color: var(--primary);
+            opacity: 0.3;
+        }
+
+        .market-ring.sam {
+            width: 70%;
+            height: 70%;
+            top: 15%;
+            left: 15%;
+            border-color: var(--secondary);
+            opacity: 0.5;
+        }
+
+        .market-ring.som {
+            width: 40%;
+            height: 40%;
+            top: 30%;
+            left: 30%;
+            border-color: var(--primary);
+            background: rgba(0, 255, 136, 0.1);
+        }
+
+        .market-ring:hover {
+            transform: scale(1.05);
+        }
+
+        .market-ring span {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+        }
+
+        .market-ring .value {
+            font-size: 1.75rem;
+            color: var(--primary);
+        }
+
+        .market-ring .label {
+            font-size: 0.9rem;
+            color: var(--text-dim);
+        }
+
+        .market-content h3 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .market-list {
+            list-style: none;
+        }
+
+        .market-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding: 1.25rem;
+            background: var(--card);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+
+        .market-list li:hover {
+            border-color: var(--primary);
+            transform: translateX(8px);
+        }
+
+        .market-list .icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .market-list .text strong {
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        .market-list .text span {
+            color: var(--text-dim);
+            font-size: 0.95rem;
+        }
+
+        /* Traction Section */
+        .traction-section {
+            background: linear-gradient(180deg, var(--dark) 0%, var(--darker) 50%, var(--dark) 100%);
+        }
+
+        .traction-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+
+        .traction-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .traction-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, var(--primary), transparent 30%);
+            opacity: 0;
+            animation: rotate 4s linear infinite;
+            transition: opacity 0.3s ease;
+        }
+
+        .traction-card:hover::before {
+            opacity: 0.1;
+        }
+
+        @keyframes rotate {
+            100% { transform: rotate(360deg); }
+        }
+
+        .traction-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary);
+        }
+
+        .traction-value {
+            font-size: 3.5rem;
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .traction-label {
+            color: var(--text-dim);
+            font-size: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Final CTA */
+        .final-cta {
+            text-align: center;
+            padding: 10rem 3rem;
+            background: radial-gradient(ellipse at center, rgba(0, 255, 136, 0.05) 0%, transparent 70%);
+            position: relative;
+        }
+
+        .final-cta h2 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .final-cta p {
+            font-size: 1.35rem;
+            color: var(--text-dim);
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .final-cta .btn-primary {
+            font-size: 1.2rem;
+            padding: 1.25rem 3rem;
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 3rem;
+            border-top: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+        }
+
+        .footer-tagline {
+            color: var(--text-dim);
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--text-dim);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        .copyright {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            h1 { font-size: 3.5rem; }
+            h2 { font-size: 2.75rem; }
+            .solution-grid { grid-template-columns: 1fr; }
+            .market-grid { grid-template-columns: 1fr; }
+            .traction-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 768px) {
+            nav { padding: 1rem 1.5rem; }
+            .nav-links { display: none; }
+            .hero { padding: 6rem 1.5rem 4rem; }
+            h1 { font-size: 2.5rem; }
+            h2 { font-size: 2rem; }
+            .hero-subtitle { font-size: 1.15rem; }
+            .hero-ctas { flex-direction: column; gap: 1rem; }
+            .stats-ribbon { flex-direction: column; gap: 2rem; }
+            .problem-grid { grid-template-columns: 1fr; }
+            .section { padding: 5rem 1.5rem; }
+            .timeline-item { flex-direction: column; gap: 1.5rem; }
+            .timeline::before { left: 0; }
+            .timeline-marker { margin-left: 0; }
+            .traction-grid { grid-template-columns: 1fr; }
+            .final-cta h2 { font-size: 2.25rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Mesh background -->
+    <div class="mesh-bg">
+        <svg viewBox="0 0 1000 1000">
+            <!-- Mesh lines -->
+            <line class="mesh-line" x1="100" y1="100" x2="300" y2="200"/>
+            <line class="mesh-line" x1="300" y1="200" x2="500" y2="150"/>
+            <line class="mesh-line" x1="500" y1="150" x2="700" y2="250"/>
+            <line class="mesh-line" x1="700" y1="250" x2="900" y2="180"/>
+            <line class="mesh-line" x1="100" y1="100" x2="200" y2="350"/>
+            <line class="mesh-line" x1="200" y1="350" x2="400" y2="400"/>
+            <line class="mesh-line" x1="400" y1="400" x2="600" y2="350"/>
+            <line class="mesh-line" x1="600" y1="350" x2="800" y2="450"/>
+            <line class="mesh-line" x1="300" y1="200" x2="400" y2="400"/>
+            <line class="mesh-line" x1="500" y1="150" x2="600" y2="350"/>
+            <line class="mesh-line" x1="700" y1="250" x2="800" y2="450"/>
+            <line class="mesh-line" x1="150" y1="500" x2="350" y2="550"/>
+            <line class="mesh-line" x1="350" y1="550" x2="550" y2="500"/>
+            <line class="mesh-line" x1="550" y1="500" x2="750" y2="600"/>
+            <line class="mesh-line" x1="750" y1="600" x2="950" y2="550"/>
+            <line class="mesh-line" x1="200" y1="350" x2="350" y2="550"/>
+            <line class="mesh-line" x1="400" y1="400" x2="550" y2="500"/>
+            <line class="mesh-line" x1="600" y1="350" x2="750" y2="600"/>
+            <line class="mesh-line" x1="100" y1="700" x2="300" y2="750"/>
+            <line class="mesh-line" x1="300" y1="750" x2="500" y2="700"/>
+            <line class="mesh-line" x1="500" y1="700" x2="700" y2="800"/>
+            <line class="mesh-line" x1="700" y1="800" x2="900" y2="750"/>
+            <line class="mesh-line" x1="150" y1="500" x2="100" y2="700"/>
+            <line class="mesh-line" x1="350" y1="550" x2="300" y2="750"/>
+            <line class="mesh-line" x1="550" y1="500" x2="500" y2="700"/>
+            <line class="mesh-line" x1="750" y1="600" x2="700" y2="800"/>
+            <!-- Mesh nodes -->
+            <circle class="mesh-node" cx="100" cy="100" r="4"/>
+            <circle class="mesh-node" cx="300" cy="200" r="4"/>
+            <circle class="mesh-node" cx="500" cy="150" r="4"/>
+            <circle class="mesh-node" cx="700" cy="250" r="4"/>
+            <circle class="mesh-node" cx="900" cy="180" r="4"/>
+            <circle class="mesh-node" cx="200" cy="350" r="4"/>
+            <circle class="mesh-node" cx="400" cy="400" r="4"/>
+            <circle class="mesh-node" cx="600" cy="350" r="4"/>
+            <circle class="mesh-node" cx="800" cy="450" r="4"/>
+            <circle class="mesh-node" cx="150" cy="500" r="4"/>
+            <circle class="mesh-node" cx="350" cy="550" r="4"/>
+            <circle class="mesh-node" cx="550" cy="500" r="4"/>
+            <circle class="mesh-node" cx="750" cy="600" r="4"/>
+            <circle class="mesh-node" cx="950" cy="550" r="4"/>
+            <circle class="mesh-node" cx="100" cy="700" r="4"/>
+            <circle class="mesh-node" cx="300" cy="750" r="4"/>
+            <circle class="mesh-node" cx="500" cy="700" r="4"/>
+            <circle class="mesh-node" cx="700" cy="800" r="4"/>
+            <circle class="mesh-node" cx="900" cy="750" r="4"/>
+        </svg>
+    </div>
+
+    <!-- Data streams decoration -->
+    <div class="data-stream" style="left: 10%; animation-delay: 0s;"></div>
+    <div class="data-stream" style="left: 25%; animation-delay: 1s;"></div>
+    <div class="data-stream" style="left: 75%; animation-delay: 2s;"></div>
+    <div class="data-stream" style="left: 90%; animation-delay: 0.5s;"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <a href="#" class="logo">
+            <div class="logo-icon">📡</div>
+            MeshNet AI
+        </a>
+        <ul class="nav-links">
+            <li><a href="#problem">Problem</a></li>
+            <li><a href="#solution">Solution</a></li>
+            <li><a href="#why-now">Why Now</a></li>
+            <li><a href="#market">Market</a></li>
+        </ul>
+        <a href="#cta" class="cta-nav">Get Early Access</a>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span class="dot"></span>
+                Autonomous Communication Infrastructure
+            </div>
+            <h1>When Everything Else<br><span class="gradient-text">Goes Dark</span></h1>
+            <p class="hero-subtitle">The AI intelligence layer that transforms mesh hardware into self-healing, self-optimizing communication networks. No towers. No ISPs. No single point of failure.</p>
+            <div class="hero-ctas">
+                <a href="#cta" class="btn-primary">
+                    Request Demo
+                    <span>→</span>
+                </a>
+                <a href="#solution" class="btn-secondary">
+                    How It Works
+                    <span>↓</span>
+                </a>
+            </div>
+            <div class="stats-ribbon">
+                <div class="stat">
+                    <div class="stat-value">100×</div>
+                    <div class="stat-label">Bandwidth Breakthrough</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">$75B</div>
+                    <div class="stat-label">TAM by 2030</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">&lt;50ms</div>
+                    <div class="stat-label">Self-Healing Latency</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">0</div>
+                    <div class="stat-label">Single Points of Failure</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="section" id="problem">
+        <div class="section-header">
+            <p class="section-label">The Problem</p>
+            <h2>Centralized Infrastructure Is<br>a <span class="gradient-text">Single Point of Failure</span></h2>
+            <p class="section-desc">One disaster, one attack, one grid outage — and millions go dark. Today's communication infrastructure wasn't built for a fragmented world.</p>
+        </div>
+        <div class="problem-grid">
+            <div class="problem-card">
+                <div class="problem-icon">🗼</div>
+                <h3>Tower Dependency</h3>
+                <p>4G/5G infrastructure costs billions and creates critical vulnerabilities. One tower down = thousands disconnected. The AT&T outage affected 70,000+ in hours.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">👁️</div>
+                <h3>Surveillance Exposure</h3>
+                <p>Citizen Lab's latest report exposes systematic telecom exploitation. Traditional carriers are compromised. End-to-end encryption doesn't help when the carrier is hostile.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">⚡</div>
+                <h3>Grid Dependency</h3>
+                <p>Traditional infrastructure requires constant grid power. When the power goes out, so does communication — exactly when it's needed most.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">🌍</div>
+                <h3>Geopolitical Risk</h3>
+                <p>The Iran conflict severed communication channels across entire regions. Global operations need networks that survive political disruption.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">🌀</div>
+                <h3>Climate Vulnerability</h3>
+                <p>Hurricanes, wildfires, earthquakes — every disaster reveals the same pattern: traditional infrastructure fails first, mesh networks are last standing.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">🔒</div>
+                <h3>Vendor Lock-in</h3>
+                <p>Starlink is one company with one point of control. Enterprises and governments need communication independence, not new dependencies.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="section solution-section" id="solution">
+        <div class="section-header">
+            <p class="section-label">The Solution</p>
+            <h2>AI That Makes Mesh Networks<br><span class="gradient-text">Self-Aware</span></h2>
+            <p class="section-desc">We don't build radios. We build the intelligence that transforms any mesh hardware into an autonomous, self-healing network organism.</p>
+        </div>
+        <div class="solution-grid">
+            <div class="solution-card">
+                <div class="solution-icon">🧠</div>
+                <h3>MeshBrain — Core Intelligence</h3>
+                <p>ML models that continuously optimize routing based on signal strength, battery levels, traffic patterns, and predicted failures. Self-healing within milliseconds when nodes fail.</p>
+                <div class="solution-features">
+                    <span class="solution-feature">Topology Optimization</span>
+                    <span class="solution-feature">Predictive Maintenance</span>
+                    <span class="solution-feature">Load Balancing</span>
+                </div>
+            </div>
+            <div class="solution-card">
+                <div class="solution-icon">🛡️</div>
+                <h3>MeshShield — Security Layer</h3>
+                <p>Zero-trust architecture with quantum-resistant encryption. Every packet authenticated, every node verified. ML-based intrusion detection for hostile nodes.</p>
+                <div class="solution-features">
+                    <span class="solution-feature">Post-Quantum Crypto</span>
+                    <span class="solution-feature">Zero Trust</span>
+                    <span class="solution-feature">Anomaly Detection</span>
+                </div>
+            </div>
+            <div class="solution-card">
+                <div class="solution-icon">📊</div>
+                <h3>MeshView — Operations Dashboard</h3>
+                <p>Real-time topology visualization, performance analytics, and AI-driven capacity planning. Unified dashboard for distributed deployments across the globe.</p>
+                <div class="solution-features">
+                    <span class="solution-feature">Real-Time Monitoring</span>
+                    <span class="solution-feature">Compliance Reports</span>
+                    <span class="solution-feature">Capacity Planning</span>
+                </div>
+            </div>
+            <div class="solution-card">
+                <div class="solution-icon">🔌</div>
+                <h3>MeshAPI — Developer Platform</h3>
+                <p>SDKs for iOS, Android, Linux, embedded. REST APIs, webhooks, and pre-built connectors for SCADA, building management, and emergency response systems.</p>
+                <div class="solution-features">
+                    <span class="solution-feature">Multi-Platform SDK</span>
+                    <span class="solution-feature">REST APIs</span>
+                    <span class="solution-feature">Integration Hub</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Now Section -->
+    <section class="section" id="why-now">
+        <div class="section-header">
+            <p class="section-label">Why Now</p>
+            <h2>The <span class="gradient-text">Perfect Storm</span></h2>
+            <p class="section-desc">Five converging forces are creating a once-in-a-decade opportunity for autonomous mesh communication.</p>
+        </div>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-marker">📶</div>
+                <div class="timeline-content">
+                    <h3>100× Bandwidth Breakthrough</h3>
+                    <p>BYOMesh just announced 100× bandwidth improvements for LoRa mesh. This isn't incremental — mesh can now handle real-time video, high-throughput IoT, and mission-critical applications.</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-marker">🔐</div>
+                <div class="timeline-content">
+                    <h3>Telecom Trust Crisis</h3>
+                    <p>Citizen Lab exposes systematic telecom exploitation by surveillance actors. Enterprises realize traditional carriers are compromised. True security requires infrastructure independence.</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-marker">🌐</div>
+                <div class="timeline-content">
+                    <h3>Geopolitical Fragmentation</h3>
+                    <p>The Iran conflict demonstrated how quickly communication infrastructure becomes a weapon. Global enterprises need networks that survive disruption.</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-marker">🌪️</div>
+                <div class="timeline-content">
+                    <h3>Climate Resilience Imperative</h3>
+                    <p>Natural disasters are increasing in frequency. Traditional infrastructure fails first. Mesh networks are consistently the last networks standing.</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-marker">⚡</div>
+                <div class="timeline-content">
+                    <h3>Edge Computing Explosion</h3>
+                    <p>$61B market by 2028. Edge deployments need reliable, low-latency connectivity that doesn't depend on cloud backhaul. Mesh is the natural connectivity layer.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Market Section -->
+    <section class="section" id="market">
+        <div class="section-header">
+            <p class="section-label">Market Opportunity</p>
+            <h2>A <span class="gradient-text">$75 Billion</span> Market</h2>
+            <p class="section-desc">From critical infrastructure to community connectivity, the demand for resilient, decentralized communication is exploding.</p>
+        </div>
+        <div class="market-grid">
+            <div class="market-visual">
+                <div class="market-circle">
+                    <div class="market-ring tam">
+                        <span class="value">$75B</span>
+                        <span class="label">TAM</span>
+                    </div>
+                    <div class="market-ring sam">
+                        <span class="value">$8B</span>
+                        <span class="label">SAM</span>
+                    </div>
+                    <div class="market-ring som">
+                        <span class="value">$400M</span>
+                        <span class="label">SOM Y5</span>
+                    </div>
+                </div>
+            </div>
+            <div class="market-content">
+                <h3>Target Verticals</h3>
+                <ul class="market-list">
+                    <li>
+                        <div class="icon">🏥</div>
+                        <div class="text">
+                            <strong>Critical Infrastructure — $15B</strong>
+                            <span>Hospitals, utilities, emergency services requiring always-on, regulation-compliant communication</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="icon">🏢</div>
+                        <div class="text">
+                            <strong>Enterprise Networks — $45B</strong>
+                            <span>Campus networks, industrial facilities, global operations seeking cellular independence</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="icon">🏘️</div>
+                        <div class="text">
+                            <strong>Community Connectivity — $10B</strong>
+                            <span>Rural areas, developing regions, community-owned cooperatives leapfrogging wired infrastructure</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="icon">🏠</div>
+                        <div class="text">
+                            <strong>Consumer Resilience — $5B</strong>
+                            <span>Homeowners, off-grid communities, privacy-conscious individuals wanting disaster-proof communication</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Traction Section -->
+    <section class="section traction-section">
+        <div class="section-header">
+            <p class="section-label">The Opportunity</p>
+            <h2>Building the <span class="gradient-text">Network OS</span></h2>
+            <p class="section-desc">We're creating the Android for mesh networks — hardware-agnostic intelligence that creates ecosystem effects competitors can't match.</p>
+        </div>
+        <div class="traction-grid">
+            <div class="traction-card">
+                <div class="traction-value">$200M</div>
+                <div class="traction-label">ARR Target Year 5</div>
+            </div>
+            <div class="traction-card">
+                <div class="traction-value">15K</div>
+                <div class="traction-label">Enterprise Customers</div>
+            </div>
+            <div class="traction-card">
+                <div class="traction-value">145%</div>
+                <div class="traction-label">Net Revenue Retention</div>
+            </div>
+            <div class="traction-card">
+                <div class="traction-value">85%</div>
+                <div class="traction-label">Gross Margin</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="final-cta" id="cta">
+        <h2>Ready to Build<br><span class="gradient-text">Resilient Infrastructure?</span></h2>
+        <p>Join the enterprises and governments building communication networks that survive anything. No single points of failure. No vendor lock-in. Just intelligence.</p>
+        <a href="mailto:founders@meshnet.ai" class="btn-primary">
+            Contact Founders
+            <span>→</span>
+        </a>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-logo">
+            <div class="logo-icon" style="width: 35px; height: 35px; font-size: 1rem;">📡</div>
+            MeshNet AI
+        </div>
+        <p class="footer-tagline">"When everything else goes dark, MeshNet stays lit."</p>
+        <div class="footer-links">
+            <a href="mailto:founders@meshnet.ai">founders@meshnet.ai</a>
+            <a href="#">meshnet.ai</a>
+            <a href="#">San Francisco, CA</a>
+        </div>
+        <p class="copyright">© 2026 MeshNet AI. Autonomous Communication Infrastructure.</p>
+    </footer>
+
+    <script>
+        // Smooth scroll for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Animate elements on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.problem-card, .solution-card, .timeline-item, .traction-card, .market-list li').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'all 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
+            observer.observe(el);
+        });
+
+        // Counter animation for stats
+        function animateValue(element, start, end, duration) {
+            const range = end - start;
+            const increment = end > start ? 1 : -1;
+            const stepTime = Math.abs(Math.floor(duration / range));
+            let current = start;
+            
+            const timer = setInterval(() => {
+                current += increment;
+                element.textContent = current;
+                if (current === end) {
+                    clearInterval(timer);
+                }
+            }, stepTime);
+        }
+
+        // Nav background on scroll
+        const nav = document.querySelector('nav');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 100) {
+                nav.style.background = 'rgba(5, 5, 8, 0.95)';
+            } else {
+                nav.style.background = 'linear-gradient(180deg, var(--darker) 0%, transparent 100%)';
+            }
+        });
+    </script>
+</body>
+</html>
