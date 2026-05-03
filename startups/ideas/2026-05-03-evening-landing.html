@@ -1,0 +1,1300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChildGuard AI — The Trust & Safety Operating System for AI-Native Children</title>
+    <meta name="description" content="Protect your children in the AI age. Identity fortress, AI companion guardian, deepfake detection, and learning integrity — all in one platform.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #22d3ee;
+            --accent: #f472b6;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #0f172a;
+            --darker: #020617;
+            --light: #f8fafc;
+            --gray: #64748b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--darker);
+            color: var(--light);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(99, 102, 241, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -2;
+        }
+
+        .bg-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .glow-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.4;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .glow-1 {
+            width: 600px;
+            height: 600px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            top: -200px;
+            left: -200px;
+            animation-delay: 0s;
+        }
+
+        .glow-2 {
+            width: 500px;
+            height: 500px;
+            background: linear-gradient(135deg, var(--accent), var(--primary));
+            bottom: -150px;
+            right: -150px;
+            animation-delay: -7s;
+        }
+
+        .glow-3 {
+            width: 400px;
+            height: 400px;
+            background: linear-gradient(135deg, var(--secondary), var(--success));
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation-delay: -14s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(50px, -50px) scale(1.1); }
+            50% { transform: translate(-30px, 30px) scale(0.9); }
+            75% { transform: translate(30px, 50px) scale(1.05); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: rgba(2, 6, 23, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 800;
+            font-size: 1.5rem;
+        }
+
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 0 30px rgba(99, 102, 241, 0.3);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--gray);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--light);
+        }
+
+        .nav-cta {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            padding: 0.75rem 1.75rem;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            box-shadow: 0 0 30px rgba(99, 102, 241, 0.3);
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 50px rgba(99, 102, 241, 0.5);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 2rem 4rem;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            padding: 0.5rem 1.25rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            color: var(--secondary);
+            margin-bottom: 2rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(34, 211, 238, 0.4); }
+            50% { box-shadow: 0 0 0 10px rgba(34, 211, 238, 0); }
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #fff 0%, var(--secondary) 50%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.35rem;
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto 3rem;
+            line-height: 1.7;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            box-shadow: 0 0 40px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 60px rgba(99, 102, 241, 0.6);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--light);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-3px);
+        }
+
+        /* Shield Animation */
+        .hero-visual {
+            margin-top: 4rem;
+            position: relative;
+        }
+
+        .shield-container {
+            position: relative;
+            width: 300px;
+            height: 350px;
+            margin: 0 auto;
+        }
+
+        .shield {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .shield-body {
+            position: absolute;
+            width: 200px;
+            height: 240px;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(180deg, rgba(99, 102, 241, 0.2) 0%, rgba(244, 114, 182, 0.2) 100%);
+            border: 3px solid var(--primary);
+            border-radius: 100px 100px 150px 150px / 80px 80px 200px 200px;
+            box-shadow: 
+                0 0 60px rgba(99, 102, 241, 0.3),
+                inset 0 0 60px rgba(99, 102, 241, 0.1);
+            animation: shieldPulse 3s infinite ease-in-out;
+        }
+
+        @keyframes shieldPulse {
+            0%, 100% { box-shadow: 0 0 60px rgba(99, 102, 241, 0.3), inset 0 0 60px rgba(99, 102, 241, 0.1); }
+            50% { box-shadow: 0 0 100px rgba(99, 102, 241, 0.5), inset 0 0 80px rgba(99, 102, 241, 0.2); }
+        }
+
+        .shield-icon {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 5rem;
+            filter: drop-shadow(0 0 20px rgba(34, 211, 238, 0.5));
+        }
+
+        .orbit-ring {
+            position: absolute;
+            border: 2px dashed rgba(99, 102, 241, 0.2);
+            border-radius: 50%;
+            animation: rotate 20s linear infinite;
+        }
+
+        .orbit-1 {
+            width: 280px;
+            height: 280px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .orbit-2 {
+            width: 350px;
+            height: 350px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation-direction: reverse;
+            animation-duration: 30s;
+        }
+
+        @keyframes rotate {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .orbit-dot {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            box-shadow: 0 0 30px rgba(34, 211, 238, 0.5);
+        }
+
+        /* Stats Section */
+        .stats {
+            padding: 4rem 2rem;
+            background: rgba(15, 23, 42, 0.5);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .stats-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--secondary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            color: var(--gray);
+            font-size: 0.95rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Crisis Section */
+        .crisis {
+            padding: 8rem 2rem;
+            background: linear-gradient(180deg, transparent 0%, rgba(239, 68, 68, 0.05) 100%);
+        }
+
+        .crisis-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .section-tag {
+            color: var(--danger);
+            font-weight: 600;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .crisis h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 3rem;
+        }
+
+        .threat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .threat-card {
+            background: rgba(239, 68, 68, 0.05);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: left;
+            transition: all 0.3s;
+        }
+
+        .threat-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(239, 68, 68, 0.4);
+            box-shadow: 0 20px 40px rgba(239, 68, 68, 0.1);
+        }
+
+        .threat-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .threat-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.75rem;
+            color: var(--danger);
+        }
+
+        .threat-card p {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        .threat-stat {
+            display: inline-block;
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 8rem 2rem;
+        }
+
+        .features-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .features-header {
+            text-align: center;
+            margin-bottom: 5rem;
+        }
+
+        .features-header .section-tag {
+            color: var(--secondary);
+        }
+
+        .features-header h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .features-header p {
+            color: var(--gray);
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .feature-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            margin-bottom: 8rem;
+        }
+
+        .feature-row:nth-child(even) {
+            direction: rtl;
+        }
+
+        .feature-row:nth-child(even) > * {
+            direction: ltr;
+        }
+
+        .feature-text h3 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .feature-text h3 span {
+            font-size: 1.5rem;
+        }
+
+        .feature-text p {
+            color: var(--gray);
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-list {
+            list-style: none;
+        }
+
+        .feature-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            color: var(--gray);
+        }
+
+        .feature-list li::before {
+            content: "✓";
+            color: var(--success);
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .feature-visual {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(244, 114, 182, 0.1));
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 24px;
+            padding: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-visual::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 40%, rgba(99, 102, 241, 0.1) 50%, transparent 60%);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .visual-icon {
+            font-size: 8rem;
+            text-align: center;
+            filter: drop-shadow(0 0 40px rgba(99, 102, 241, 0.5));
+        }
+
+        /* Platform Flow */
+        .platform {
+            padding: 8rem 2rem;
+            background: rgba(15, 23, 42, 0.5);
+        }
+
+        .platform-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .platform-header {
+            text-align: center;
+            margin-bottom: 5rem;
+        }
+
+        .platform-header .section-tag {
+            color: var(--primary);
+        }
+
+        .platform-header h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+        }
+
+        .platform-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .platform-card {
+            background: rgba(99, 102, 241, 0.05);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 24px;
+            padding: 2.5rem;
+            text-align: center;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .platform-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary);
+            box-shadow: 0 30px 60px rgba(99, 102, 241, 0.2);
+        }
+
+        .platform-card::after {
+            content: "→";
+            position: absolute;
+            right: -1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2rem;
+            color: var(--primary);
+            opacity: 0.5;
+        }
+
+        .platform-card:last-child::after {
+            display: none;
+        }
+
+        .platform-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            box-shadow: 0 0 40px rgba(99, 102, 241, 0.3);
+        }
+
+        .platform-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+        }
+
+        .platform-card p {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        /* Pricing Section */
+        .pricing {
+            padding: 8rem 2rem;
+        }
+
+        .pricing-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .pricing-header {
+            text-align: center;
+            margin-bottom: 5rem;
+        }
+
+        .pricing-header .section-tag {
+            color: var(--success);
+        }
+
+        .pricing-header h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .pricing-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 3rem 2rem;
+            text-align: center;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .pricing-card.featured {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(244, 114, 182, 0.1));
+            border-color: var(--primary);
+            transform: scale(1.05);
+        }
+
+        .pricing-card.featured::before {
+            content: "MOST POPULAR";
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary);
+        }
+
+        .pricing-card.featured:hover {
+            transform: scale(1.05) translateY(-10px);
+        }
+
+        .pricing-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-price {
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--light), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .pricing-price span {
+            font-size: 1rem;
+            font-weight: 400;
+            color: var(--gray);
+            -webkit-text-fill-color: var(--gray);
+        }
+
+        .pricing-desc {
+            color: var(--gray);
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+        }
+
+        .pricing-features {
+            list-style: none;
+            text-align: left;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-features li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--gray);
+        }
+
+        .pricing-features li::before {
+            content: "✓";
+            color: var(--success);
+            font-weight: 700;
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 8rem 2rem;
+            text-align: center;
+            background: linear-gradient(180deg, transparent 0%, rgba(99, 102, 241, 0.1) 100%);
+            position: relative;
+        }
+
+        .cta-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta h2 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #fff, var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .cta p {
+            font-size: 1.3rem;
+            color: var(--gray);
+            margin-bottom: 3rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--gray);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--light);
+        }
+
+        .footer-copy {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* Market Badge */
+        .market-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            padding: 1rem 2rem;
+            border-radius: 100px;
+            margin-top: 3rem;
+        }
+
+        .market-badge span {
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        .market-badge strong {
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, var(--success), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .feature-row {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .feature-row:nth-child(even) {
+                direction: ltr;
+            }
+
+            .platform-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .platform-card::after {
+                display: none;
+            }
+
+            .pricing-grid {
+                grid-template-columns: 1fr;
+                max-width: 400px;
+                margin: 0 auto;
+            }
+
+            .pricing-card.featured {
+                transform: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .shield-container {
+                transform: scale(0.8);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+    <div class="bg-glow">
+        <div class="glow-orb glow-1"></div>
+        <div class="glow-orb glow-2"></div>
+        <div class="glow-orb glow-3"></div>
+    </div>
+
+    <nav>
+        <div class="logo">
+            <div class="logo-icon">🛡️</div>
+            <span>ChildGuard AI</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#threats">The Crisis</a></li>
+            <li><a href="#features">Protection</a></li>
+            <li><a href="#platform">Platform</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+        </ul>
+        <a href="#cta" class="nav-cta">Protect Your Family</a>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span>🚨</span>
+                <span>The First AI-Native Generation Needs Protection</span>
+            </div>
+            <h1>The Trust & Safety Operating System for AI-Native Children</h1>
+            <p>Deepfakes. Manipulative AI companions. Identity theft. Data harvesting. Your children face threats that didn't exist 2 years ago. ChildGuard AI is the complete protection layer for the AI age.</p>
+            <div class="hero-buttons">
+                <a href="#cta" class="btn btn-primary">Start Free Trial <span>→</span></a>
+                <a href="#features" class="btn btn-secondary">See How It Works</a>
+            </div>
+            
+            <div class="hero-visual">
+                <div class="shield-container">
+                    <div class="orbit-ring orbit-1">
+                        <div class="orbit-dot" style="top: 0; left: 50%; transform: translate(-50%, -50%);">👤</div>
+                    </div>
+                    <div class="orbit-ring orbit-2">
+                        <div class="orbit-dot" style="bottom: 0; left: 50%; transform: translate(-50%, 50%);">🤖</div>
+                        <div class="orbit-dot" style="top: 50%; right: 0; transform: translate(50%, -50%);">📱</div>
+                    </div>
+                    <div class="shield">
+                        <div class="shield-body"></div>
+                        <div class="shield-icon">👶</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="market-badge">
+                <span>Total Addressable Market</span>
+                <strong>$847B</strong>
+            </div>
+        </div>
+    </section>
+
+    <section class="stats">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-number">67%</div>
+                <div class="stat-label">of children under 12 interact with AI daily</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">1 in 4</div>
+                <div class="stat-label">teens affected by deepfake harassment</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">71%</div>
+                <div class="stat-label">of students use AI for homework</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">0</div>
+                <div class="stat-label">platforms built to protect them</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="crisis" id="threats">
+        <div class="crisis-content">
+            <div class="section-tag">⚠️ The Reality</div>
+            <h2>Your Children Face Threats You Never Imagined</h2>
+            <p style="color: var(--gray); font-size: 1.1rem; margin-bottom: 2rem;">The tools that were supposed to enrich childhood are being weaponized. Every day your children are online, they're exposed to dangers invisible to traditional parental controls.</p>
+            
+            <div class="threat-grid">
+                <div class="threat-card">
+                    <div class="threat-icon">🎭</div>
+                    <h3>Deepfake Bullying</h3>
+                    <p>Classmates can create convincing fake videos of your child in 30 seconds. The psychological damage is permanent; the content lives forever.</p>
+                    <span class="threat-stat">23% of middle schoolers affected</span>
+                </div>
+                <div class="threat-card">
+                    <div class="threat-icon">🤖</div>
+                    <h3>Manipulative AI Companions</h3>
+                    <p>AI assistants are becoming children's primary confidants — optimizing for engagement, not healthy development. No guardrails exist.</p>
+                    <span class="threat-stat">Zero regulation</span>
+                </div>
+                <div class="threat-card">
+                    <div class="threat-icon">🎯</div>
+                    <h3>AI-Assisted Grooming</h3>
+                    <p>Predators now use AI to industrialize manipulation tactics, generate targeted content, and evade detection at scale.</p>
+                    <span class="threat-stat">Industrialized threat</span>
+                </div>
+                <div class="threat-card">
+                    <div class="threat-icon">📊</div>
+                    <h3>Data Harvesting</h3>
+                    <p>Every app your child uses feeds their conversations, drawings, and homework into AI training datasets. No consent. No compensation.</p>
+                    <span class="threat-stat">Childhood commoditized</span>
+                </div>
+                <div class="threat-card">
+                    <div class="threat-icon">📝</div>
+                    <h3>Learning Integrity Collapse</h3>
+                    <p>71% of students use AI for assignments. A generation is entering the workforce without core skills, unable to prove genuine competency.</p>
+                    <span class="threat-stat">Educational crisis</span>
+                </div>
+                <div class="threat-card">
+                    <div class="threat-icon">👤</div>
+                    <h3>Identity Theft 2.0</h3>
+                    <p>AI-generated voice clones and deepfakes enable new forms of identity theft. Children's digital identities are being stolen before adulthood.</p>
+                    <span class="threat-stat">Lifetime impact</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features" id="features">
+        <div class="features-content">
+            <div class="features-header">
+                <div class="section-tag">🛡️ Complete Protection</div>
+                <h2>Six Layers of Defense</h2>
+                <p>ChildGuard AI wraps around your child's entire digital life — not just filtering content, but building their immune system for the AI age.</p>
+            </div>
+
+            <div class="feature-row">
+                <div class="feature-text">
+                    <h3><span>🏰</span> Identity Fortress™</h3>
+                    <p>Proactive protection against deepfakes, voice clones, and digital impersonation. We monitor the entire internet for threats to your child's identity.</p>
+                    <ul class="feature-list">
+                        <li>Real-time deepfake detection using protected biometric signature</li>
+                        <li>Voice clone monitoring and instant takedown automation</li>
+                        <li>Digital birth certificate for legal proof of authentic media</li>
+                        <li>Reputation shield across all platforms</li>
+                    </ul>
+                </div>
+                <div class="feature-visual">
+                    <div class="visual-icon">🏰</div>
+                </div>
+            </div>
+
+            <div class="feature-row">
+                <div class="feature-text">
+                    <h3><span>🤖</span> AI Companion Guardian™</h3>
+                    <p>Ensure healthy AI relationships. We audit AI interactions, detect manipulation, and enforce developmentally appropriate guardrails.</p>
+                    <ul class="feature-list">
+                        <li>Interaction auditing with child-appropriate summaries</li>
+                        <li>ML-powered manipulation and dependency detection</li>
+                        <li>Developmental guardrails aligned with child psychology</li>
+                        <li>Parental insight without surveillance overreach</li>
+                    </ul>
+                </div>
+                <div class="feature-visual">
+                    <div class="visual-icon">🤖</div>
+                </div>
+            </div>
+
+            <div class="feature-row">
+                <div class="feature-text">
+                    <h3><span>🔍</span> Content Authenticity Layer™</h3>
+                    <p>Help your children distinguish real from AI-generated. Labels synthetic content in real-time and builds critical thinking skills.</p>
+                    <ul class="feature-list">
+                        <li>Browser extension labels AI content across all platforms</li>
+                        <li>C2PA provenance verification integration</li>
+                        <li>Age-appropriate media literacy nudges</li>
+                        <li>Family truth network for verified content sharing</li>
+                    </ul>
+                </div>
+                <div class="feature-visual">
+                    <div class="visual-icon">🔍</div>
+                </div>
+            </div>
+
+            <div class="feature-row">
+                <div class="feature-text">
+                    <h3><span>📚</span> Learning Integrity System™</h3>
+                    <p>Prove genuine skill development. Distinguish AI-assisted learning from AI-replacement and build an authentic academic portfolio.</p>
+                    <ul class="feature-list">
+                        <li>Writing DNA establishes authentic baseline from early age</li>
+                        <li>Track genuine growth over time with cryptographic proof</li>
+                        <li>Guided frameworks for age-appropriate AI tool use</li>
+                        <li>College-ready portfolio of verified authentic work</li>
+                    </ul>
+                </div>
+                <div class="feature-visual">
+                    <div class="visual-icon">📚</div>
+                </div>
+            </div>
+
+            <div class="feature-row">
+                <div class="feature-text">
+                    <h3><span>🔐</span> Data Sovereignty Engine™</h3>
+                    <p>Take control of your child's digital footprint. Know who has their data, what they're doing with it, and revoke access with one click.</p>
+                    <ul class="feature-list">
+                        <li>Comprehensive data mapping across all platforms</li>
+                        <li>Automated AI training opt-out requests</li>
+                        <li>Data dividend tracking if platforms monetize</li>
+                        <li>Verified deletion enforcement with legal escalation</li>
+                    </ul>
+                </div>
+                <div class="feature-visual">
+                    <div class="visual-icon">🔐</div>
+                </div>
+            </div>
+
+            <div class="feature-row">
+                <div class="feature-text">
+                    <h3><span>🌐</span> Threat Intelligence Network™</h3>
+                    <p>Community protection at scale. Real-time threat feeds, school integration, anonymous reporting, and expert response when you need it.</p>
+                    <ul class="feature-list">
+                        <li>Emerging grooming tactics and manipulation techniques</li>
+                        <li>School-wide aggregate threat detection</li>
+                        <li>Anonymous reporting without fear of retaliation</li>
+                        <li>Predictive risk scoring to prevent harm before it occurs</li>
+                    </ul>
+                </div>
+                <div class="feature-visual">
+                    <div class="visual-icon">🌐</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="platform" id="platform">
+        <div class="platform-content">
+            <div class="platform-header">
+                <div class="section-tag">⚡ How It Works</div>
+                <h2>Protection in Three Steps</h2>
+            </div>
+
+            <div class="platform-grid">
+                <div class="platform-card">
+                    <div class="platform-icon">📱</div>
+                    <h3>1. Connect</h3>
+                    <p>Install ChildGuard on your family's devices. Browser extensions, mobile apps, and school integrations — all protected from day one.</p>
+                </div>
+                <div class="platform-card">
+                    <div class="platform-icon">🔒</div>
+                    <h3>2. Protect</h3>
+                    <p>Six layers of defense activate automatically. Identity fortress, AI guardian, content authenticity — working together 24/7.</p>
+                </div>
+                <div class="platform-card">
+                    <div class="platform-icon">📊</div>
+                    <h3>3. Empower</h3>
+                    <p>Your dashboard shows insights, not surveillance. Understand your child's digital life and guide healthy AI relationships.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="pricing" id="pricing">
+        <div class="pricing-content">
+            <div class="pricing-header">
+                <div class="section-tag">💰 Pricing</div>
+                <h2>Protection for Every Family</h2>
+            </div>
+
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <div class="pricing-name">Essential</div>
+                    <div class="pricing-price">$15<span>/mo</span></div>
+                    <div class="pricing-desc">Core protection for one child</div>
+                    <ul class="pricing-features">
+                        <li>Identity Fortress protection</li>
+                        <li>Content authenticity labels</li>
+                        <li>Basic AI companion monitoring</li>
+                        <li>Browser extension</li>
+                        <li>Mobile app</li>
+                    </ul>
+                    <a href="#" class="btn btn-secondary" style="width: 100%; justify-content: center;">Start Free Trial</a>
+                </div>
+
+                <div class="pricing-card featured">
+                    <div class="pricing-name">Premium</div>
+                    <div class="pricing-price">$30<span>/mo</span></div>
+                    <div class="pricing-desc">Complete protection for up to 3 children</div>
+                    <ul class="pricing-features">
+                        <li>Everything in Essential</li>
+                        <li>Full AI Companion Guardian</li>
+                        <li>Learning Integrity System</li>
+                        <li>Data Sovereignty Engine</li>
+                        <li>Threat Intelligence Network</li>
+                        <li>3 children included</li>
+                    </ul>
+                    <a href="#" class="btn btn-primary" style="width: 100%; justify-content: center;">Start Free Trial</a>
+                </div>
+
+                <div class="pricing-card">
+                    <div class="pricing-name">Family Shield</div>
+                    <div class="pricing-price">$50<span>/mo</span></div>
+                    <div class="pricing-desc">Maximum protection, unlimited children</div>
+                    <ul class="pricing-features">
+                        <li>Everything in Premium</li>
+                        <li>Unlimited children</li>
+                        <li>Priority threat response</li>
+                        <li>Expert consultations</li>
+                        <li>Legal support package</li>
+                        <li>White-glove onboarding</li>
+                    </ul>
+                    <a href="#" class="btn btn-secondary" style="width: 100%; justify-content: center;">Contact Sales</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta" id="cta">
+        <div class="cta-content">
+            <h2>The Time to Protect Your Children Is Now</h2>
+            <p>Every day without protection is another day of exposure. ChildGuard AI is the immune system your children need for the AI age.</p>
+            <div class="cta-buttons">
+                <a href="mailto:founders@childguard.ai" class="btn btn-primary">Start Your Free Trial <span>→</span></a>
+                <a href="mailto:founders@childguard.ai" class="btn btn-secondary">Talk to an Expert</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">
+                <div class="logo-icon" style="width: 35px; height: 35px; font-size: 1.2rem;">🛡️</div>
+                <span style="font-weight: 700; font-size: 1.2rem;">ChildGuard AI</span>
+            </div>
+            <div class="footer-links">
+                <a href="#">Privacy</a>
+                <a href="#">Terms</a>
+                <a href="#">Security</a>
+                <a href="#">About</a>
+                <a href="#">Blog</a>
+                <a href="mailto:founders@childguard.ai">Contact</a>
+            </div>
+            <p class="footer-copy">© 2026 ChildGuard AI. Protecting the first AI-native generation.</p>
+        </div>
+    </footer>
+</body>
+</html>

@@ -271,6 +271,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-05-01 | Afternoon | LegacyLift AI — The Operating System for Autonomous Legacy System Modernization | [Playbook](2026-05-01-afternoon.md) • [Landing](2026-05-01-afternoon-landing.html) • [PDF](2026-05-01-afternoon.pdf) |
 | 2026-05-02 | Evening | AgentLaw — The Legal Infrastructure for the Agentic Economy | [Playbook](2026-05-02-evening.md) • [Landing](2026-05-02-evening-landing.html) • [PDF](2026-05-02-evening.pdf) |
 | 2026-05-02 | Morning | DreamForge AI — The Operating System for Sleep-Based Learning & Skill Acquisition | [Playbook](2026-05-02-morning.md) • [Landing](2026-05-02-morning-landing.html) • [PDF](2026-05-02-morning.pdf) |
+| 2026-05-03 | Evening | ChildGuard AI — The Trust & Safety Operating System for AI-Native Children | [Playbook](2026-05-03-evening.md) • [Landing](2026-05-03-evening-landing.html) • [PDF](2026-05-03-evening.pdf) |
 <!-- New entries will be added above this line -->
 
 ---
