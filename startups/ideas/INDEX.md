@@ -277,6 +277,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-05-04 | Evening | SpecMind AI — The Intelligence Layer for Global Industrial Standards | [Playbook](2026-05-04-evening.md) • [Landing](2026-05-04-evening-landing.html) • [PDF](2026-05-04-evening.pdf) |
 | 2026-05-04 | Morning | NeuroCompute — The Operating System for Neuromorphic AI Hardware | [Playbook](2026-05-04-morning.md) • [Landing](2026-05-04-morning-landing.html) • [PDF](2026-05-04-morning.pdf) |
 | 2026-05-04 | Afternoon | GridForce AI — The Operating System for Electrical Grid Resilience | [Playbook](2026-05-04-afternoon.md) • [Landing](2026-05-04-afternoon-landing.html) • [PDF](2026-05-04-afternoon.pdf) |
+| 2026-05-05 | Evening | MicroFactoryOS — The AI Operating System for Distributed Manufacturing Networks | [Playbook](2026-05-05-evening.md) • [Landing](2026-05-05-evening-landing.html) • [PDF](2026-05-05-evening.pdf) |
 <!-- New entries will be added above this line -->
 
 ---
