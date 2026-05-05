@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phantom AI — Counter-Intelligence for AI Agent Attacks</title>
+    <meta name="description" content="The firewall for the agentic economy. Detect, analyze, and neutralize adversarial AI agents before they compromise your systems.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --phantom-black: #0a0a0b;
+            --phantom-dark: #111113;
+            --phantom-surface: #18181b;
+            --phantom-border: #27272a;
+            --phantom-muted: #71717a;
+            --phantom-text: #e4e4e7;
+            --phantom-white: #fafafa;
+            --phantom-red: #ef4444;
+            --phantom-red-glow: rgba(239, 68, 68, 0.3);
+            --phantom-cyan: #22d3ee;
+            --phantom-cyan-glow: rgba(34, 211, 238, 0.3);
+            --phantom-purple: #a855f7;
+            --phantom-purple-glow: rgba(168, 85, 247, 0.3);
+            --phantom-green: #10b981;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--phantom-black);
+            color: var(--phantom-text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        /* Animated Background */
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(239, 68, 68, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(239, 68, 68, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .floating-orbs {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            animation: float 20s infinite ease-in-out;
+        }
+        
+        .orb-1 {
+            width: 600px;
+            height: 600px;
+            background: var(--phantom-red-glow);
+            top: -200px;
+            right: -200px;
+            animation-delay: 0s;
+        }
+        
+        .orb-2 {
+            width: 500px;
+            height: 500px;
+            background: var(--phantom-purple-glow);
+            bottom: -150px;
+            left: -150px;
+            animation-delay: -7s;
+        }
+        
+        .orb-3 {
+            width: 400px;
+            height: 400px;
+            background: var(--phantom-cyan-glow);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation-delay: -14s;
+            opacity: 0.5;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(50px, -50px) scale(1.1); }
+            50% { transform: translate(-30px, 30px) scale(0.95); }
+            75% { transform: translate(-50px, -30px) scale(1.05); }
+        }
+        
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10, 10, 11, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--phantom-border);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 800;
+            font-size: 1.5rem;
+            color: var(--phantom-white);
+        }
+        
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--phantom-red), var(--phantom-purple));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            color: var(--phantom-muted);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--phantom-white);
+        }
+        
+        .nav-cta {
+            background: linear-gradient(135deg, var(--phantom-red), var(--phantom-purple));
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px var(--phantom-red-glow);
+        }
+        
+        /* Hero Section */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 8rem 2rem 4rem;
+            z-index: 1;
+        }
+        
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--phantom-surface);
+            border: 1px solid var(--phantom-border);
+            padding: 0.5rem 1rem;
+            border-radius: 100px;
+            font-size: 0.875rem;
+            color: var(--phantom-cyan);
+            margin-bottom: 2rem;
+            animation: pulse-glow 2s infinite;
+        }
+        
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px transparent; }
+            50% { box-shadow: 0 0 20px var(--phantom-cyan-glow); }
+        }
+        
+        .hero-badge::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--phantom-cyan);
+            border-radius: 50%;
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--phantom-white) 0%, var(--phantom-red) 50%, var(--phantom-purple) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--phantom-muted);
+            max-width: 700px;
+            margin-bottom: 3rem;
+            line-height: 1.7;
+        }
+        
+        .hero-cta-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, var(--phantom-red), var(--phantom-purple));
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.125rem;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 60px var(--phantom-red-glow);
+        }
+        
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--phantom-surface);
+            border: 1px solid var(--phantom-border);
+            color: var(--phantom-text);
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.125rem;
+            transition: all 0.3s;
+        }
+        
+        .btn-secondary:hover {
+            border-color: var(--phantom-cyan);
+            background: rgba(34, 211, 238, 0.1);
+        }
+        
+        /* Threat Visualization */
+        .threat-viz {
+            margin-top: 4rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            max-width: 900px;
+            width: 100%;
+        }
+        
+        .threat-card {
+            background: var(--phantom-surface);
+            border: 1px solid var(--phantom-border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: left;
+            transition: all 0.3s;
+        }
+        
+        .threat-card:hover {
+            border-color: var(--phantom-red);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .threat-icon {
+            font-size: 2rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .threat-name {
+            font-weight: 700;
+            color: var(--phantom-white);
+            margin-bottom: 0.25rem;
+        }
+        
+        .threat-desc {
+            font-size: 0.875rem;
+            color: var(--phantom-muted);
+        }
+        
+        /* Stats Section */
+        .stats {
+            position: relative;
+            z-index: 1;
+            padding: 6rem 2rem;
+            background: var(--phantom-dark);
+            border-top: 1px solid var(--phantom-border);
+            border-bottom: 1px solid var(--phantom-border);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .stat-card {
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .stat-number {
+            font-size: 4rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--phantom-cyan), var(--phantom-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            font-size: 1.125rem;
+            color: var(--phantom-muted);
+            font-weight: 500;
+        }
+        
+        /* How It Works */
+        .how-it-works {
+            position: relative;
+            z-index: 1;
+            padding: 8rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        
+        .section-tag {
+            color: var(--phantom-cyan);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+        
+        .section-title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            color: var(--phantom-white);
+            margin-bottom: 1rem;
+        }
+        
+        .section-subtitle {
+            font-size: 1.25rem;
+            color: var(--phantom-muted);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .process-flow {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .process-step {
+            position: relative;
+            background: var(--phantom-surface);
+            border: 1px solid var(--phantom-border);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s;
+        }
+        
+        .process-step:hover {
+            border-color: var(--phantom-purple);
+            transform: translateY(-5px);
+        }
+        
+        .step-number {
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            background: linear-gradient(135deg, var(--phantom-red), var(--phantom-purple));
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.875rem;
+        }
+        
+        .step-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .step-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--phantom-white);
+            margin-bottom: 0.75rem;
+        }
+        
+        .step-desc {
+            color: var(--phantom-muted);
+            line-height: 1.7;
+        }
+        
+        /* Features Grid */
+        .features {
+            position: relative;
+            z-index: 1;
+            padding: 8rem 2rem;
+            background: var(--phantom-dark);
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .feature-card {
+            background: var(--phantom-surface);
+            border: 1px solid var(--phantom-border);
+            border-radius: 16px;
+            padding: 2.5rem;
+            transition: all 0.3s;
+        }
+        
+        .feature-card:hover {
+            border-color: var(--phantom-cyan);
+            box-shadow: 0 0 60px var(--phantom-cyan-glow);
+        }
+        
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(168, 85, 247, 0.2));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .feature-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--phantom-white);
+            margin-bottom: 1rem;
+        }
+        
+        .feature-desc {
+            color: var(--phantom-muted);
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+        
+        .feature-list {
+            list-style: none;
+        }
+        
+        .feature-list li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--phantom-text);
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .feature-list li::before {
+            content: '✓';
+            color: var(--phantom-green);
+            font-weight: 700;
+        }
+        
+        /* Code Demo */
+        .code-demo {
+            position: relative;
+            z-index: 1;
+            padding: 8rem 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .code-window {
+            background: var(--phantom-surface);
+            border: 1px solid var(--phantom-border);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.5);
+        }
+        
+        .code-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 1.5rem;
+            background: var(--phantom-dark);
+            border-bottom: 1px solid var(--phantom-border);
+        }
+        
+        .code-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        
+        .code-dot.red { background: #ff5f57; }
+        .code-dot.yellow { background: #ffbd2e; }
+        .code-dot.green { background: #28c840; }
+        
+        .code-title {
+            margin-left: 1rem;
+            color: var(--phantom-muted);
+            font-size: 0.875rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .code-content {
+            padding: 2rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
+            line-height: 1.8;
+            overflow-x: auto;
+        }
+        
+        .code-line {
+            display: flex;
+        }
+        
+        .line-number {
+            color: var(--phantom-muted);
+            min-width: 40px;
+            user-select: none;
+        }
+        
+        .code-keyword { color: var(--phantom-purple); }
+        .code-function { color: var(--phantom-cyan); }
+        .code-string { color: var(--phantom-green); }
+        .code-comment { color: var(--phantom-muted); font-style: italic; }
+        .code-variable { color: var(--phantom-red); }
+        
+        /* Pricing */
+        .pricing {
+            position: relative;
+            z-index: 1;
+            padding: 8rem 2rem;
+            background: var(--phantom-dark);
+        }
+        
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        
+        .pricing-card {
+            background: var(--phantom-surface);
+            border: 1px solid var(--phantom-border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            position: relative;
+            transition: all 0.3s;
+        }
+        
+        .pricing-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .pricing-card.featured {
+            border-color: var(--phantom-cyan);
+            box-shadow: 0 0 60px var(--phantom-cyan-glow);
+        }
+        
+        .pricing-card.featured::before {
+            content: 'MOST POPULAR';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--phantom-cyan), var(--phantom-purple));
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        
+        .pricing-tier {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--phantom-muted);
+            margin-bottom: 0.5rem;
+        }
+        
+        .pricing-amount {
+            display: flex;
+            align-items: baseline;
+            gap: 0.25rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .pricing-currency {
+            font-size: 1.5rem;
+            color: var(--phantom-muted);
+        }
+        
+        .pricing-value {
+            font-size: 4rem;
+            font-weight: 800;
+            color: var(--phantom-white);
+        }
+        
+        .pricing-period {
+            color: var(--phantom-muted);
+        }
+        
+        .pricing-desc {
+            color: var(--phantom-muted);
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--phantom-border);
+        }
+        
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+        
+        .pricing-features li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            color: var(--phantom-text);
+        }
+        
+        .pricing-features li::before {
+            content: '✓';
+            color: var(--phantom-green);
+            font-weight: 700;
+        }
+        
+        .pricing-cta {
+            width: 100%;
+            text-align: center;
+        }
+        
+        /* CTA Section */
+        .cta-section {
+            position: relative;
+            z-index: 1;
+            padding: 8rem 2rem;
+            text-align: center;
+        }
+        
+        .cta-box {
+            max-width: 800px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(168, 85, 247, 0.1));
+            border: 1px solid var(--phantom-border);
+            border-radius: 24px;
+            padding: 4rem;
+        }
+        
+        .cta-box h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            color: var(--phantom-white);
+            margin-bottom: 1rem;
+        }
+        
+        .cta-box p {
+            font-size: 1.25rem;
+            color: var(--phantom-muted);
+            margin-bottom: 2rem;
+        }
+        
+        /* Footer */
+        footer {
+            position: relative;
+            z-index: 1;
+            padding: 4rem 2rem;
+            border-top: 1px solid var(--phantom-border);
+            text-align: center;
+        }
+        
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            font-weight: 800;
+            font-size: 1.5rem;
+            color: var(--phantom-white);
+            margin-bottom: 1.5rem;
+        }
+        
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-links a {
+            color: var(--phantom-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        
+        .footer-links a:hover {
+            color: var(--phantom-white);
+        }
+        
+        .footer-copy {
+            color: var(--phantom-muted);
+            font-size: 0.875rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .hero {
+                padding: 6rem 1.5rem 3rem;
+            }
+            
+            .threat-viz {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .cta-box {
+                padding: 2rem;
+            }
+        }
+        
+        /* Animation on scroll */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease-out;
+        }
+        
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Effects -->
+    <div class="bg-grid"></div>
+    <div class="floating-orbs">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+    
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">
+            <div class="logo-icon">👻</div>
+            Phantom AI
+        </div>
+        <ul class="nav-links">
+            <li><a href="#how-it-works">How It Works</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+        <a href="#contact" class="nav-cta">Request Demo</a>
+    </nav>
+    
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-badge">
+            <span>Now in Private Beta</span>
+        </div>
+        
+        <h1>Counter-Intelligence<br>for AI Agents</h1>
+        
+        <p class="hero-subtitle">
+            Adversarial AI agents are attacking your systems. Phantom AI detects, analyzes, 
+            and neutralizes these threats before they can compromise your operations.
+        </p>
+        
+        <div class="hero-cta-group">
+            <a href="#contact" class="btn-primary">
+                🛡️ Request Early Access
+            </a>
+            <a href="#how-it-works" class="btn-secondary">
+                See How It Works →
+            </a>
+        </div>
+        
+        <div class="threat-viz">
+            <div class="threat-card">
+                <div class="threat-icon">🎭</div>
+                <div class="threat-name">Social Engineering</div>
+                <div class="threat-desc">Manipulation through crafted conversations</div>
+            </div>
+            <div class="threat-card">
+                <div class="threat-icon">💉</div>
+                <div class="threat-name">Prompt Injection</div>
+                <div class="threat-desc">Hidden instructions in business content</div>
+            </div>
+            <div class="threat-card">
+                <div class="threat-icon">👤</div>
+                <div class="threat-name">Identity Spoofing</div>
+                <div class="threat-desc">Impersonating legitimate agents</div>
+            </div>
+            <div class="threat-card">
+                <div class="threat-icon">🐝</div>
+                <div class="threat-name">Swarm Attacks</div>
+                <div class="threat-desc">Coordinated multi-agent manipulation</div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="stats-grid">
+            <div class="stat-card fade-in">
+                <div class="stat-number">$47B</div>
+                <div class="stat-label">AI-related fraud in 2025</div>
+            </div>
+            <div class="stat-card fade-in">
+                <div class="stat-number">73%</div>
+                <div class="stat-label">of enterprises attacked</div>
+            </div>
+            <div class="stat-card fade-in">
+                <div class="stat-number">$4.2M</div>
+                <div class="stat-label">average breach cost</div>
+            </div>
+            <div class="stat-card fade-in">
+                <div class="stat-number">0</div>
+                <div class="stat-label">specialized solutions until now</div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- How It Works -->
+    <section class="how-it-works" id="how-it-works">
+        <div class="section-header">
+            <div class="section-tag">How It Works</div>
+            <h2 class="section-title">Three Layers of Defense</h2>
+            <p class="section-subtitle">
+                Every AI agent interaction flows through our intelligent proxy layer
+            </p>
+        </div>
+        
+        <div class="process-flow">
+            <div class="process-step fade-in">
+                <div class="step-number">1</div>
+                <div class="step-icon">🔍</div>
+                <h3 class="step-title">Intercept</h3>
+                <p class="step-desc">
+                    All agent-to-agent communication flows through Phantom's proxy layer. 
+                    We analyze every message in real-time without impacting performance.
+                </p>
+            </div>
+            
+            <div class="process-step fade-in">
+                <div class="step-number">2</div>
+                <div class="step-icon">🧠</div>
+                <h3 class="step-title">Analyze</h3>
+                <p class="step-desc">
+                    Our ML models detect manipulation attempts, hidden prompts, identity spoofing, 
+                    and anomalous behavior patterns with 99.7% accuracy.
+                </p>
+            </div>
+            
+            <div class="process-step fade-in">
+                <div class="step-number">3</div>
+                <div class="step-icon">⚡</div>
+                <h3 class="step-title">Neutralize</h3>
+                <p class="step-desc">
+                    Threats are automatically quarantined, agents are isolated, and your team 
+                    is alerted with full forensic details for investigation.
+                </p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Features Grid -->
+    <section class="features" id="features">
+        <div class="section-header">
+            <div class="section-tag">Platform Capabilities</div>
+            <h2 class="section-title">Enterprise-Grade Protection</h2>
+            <p class="section-subtitle">
+                Purpose-built for the unique challenges of AI agent security
+            </p>
+        </div>
+        
+        <div class="features-grid">
+            <div class="feature-card fade-in">
+                <div class="feature-icon">📊</div>
+                <h3 class="feature-title">Agent Traffic Analysis</h3>
+                <p class="feature-desc">
+                    Real-time monitoring of all AI agent communications with deep behavioral analysis.
+                </p>
+                <ul class="feature-list">
+                    <li>Manipulation detection</li>
+                    <li>Anomaly identification</li>
+                    <li>Attack pattern correlation</li>
+                </ul>
+            </div>
+            
+            <div class="feature-card fade-in">
+                <div class="feature-icon">🔐</div>
+                <h3 class="feature-title">Agent Identity PKI</h3>
+                <p class="feature-desc">
+                    Cryptographic verification that every agent is exactly who they claim to be.
+                </p>
+                <ul class="feature-list">
+                    <li>Certificate-based identity</li>
+                    <li>Continuous authentication</li>
+                    <li>Spoofing detection</li>
+                </ul>
+            </div>
+            
+            <div class="feature-card fade-in">
+                <div class="feature-icon">🍯</div>
+                <h3 class="feature-title">Deception Technology</h3>
+                <p class="feature-desc">
+                    Deploy honeypot agents that attract attackers and generate threat intelligence.
+                </p>
+                <ul class="feature-list">
+                    <li>Phantom decoy agents</li>
+                    <li>TTP discovery</li>
+                    <li>Zero production risk</li>
+                </ul>
+            </div>
+            
+            <div class="feature-card fade-in">
+                <div class="feature-icon">🌐</div>
+                <h3 class="feature-title">Global Threat Intel</h3>
+                <p class="feature-desc">
+                    The world's largest database of adversarial AI agent signatures and attack patterns.
+                </p>
+                <ul class="feature-list">
+                    <li>500K+ agent fingerprints</li>
+                    <li>Real-time updates</li>
+                    <li>Zero-day detection</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Code Demo -->
+    <section class="code-demo">
+        <div class="section-header">
+            <div class="section-tag">Integration</div>
+            <h2 class="section-title">Deploy in Minutes</h2>
+            <p class="section-subtitle">
+                Simple SDK integration with any agent framework
+            </p>
+        </div>
+        
+        <div class="code-window fade-in">
+            <div class="code-header">
+                <span class="code-dot red"></span>
+                <span class="code-dot yellow"></span>
+                <span class="code-dot green"></span>
+                <span class="code-title">phantom_integration.py</span>
+            </div>
+            <div class="code-content">
+                <div class="code-line">
+                    <span class="line-number">1</span>
+                    <span><span class="code-keyword">from</span> phantom <span class="code-keyword">import</span> PhantomGuard</span>
+                </div>
+                <div class="code-line">
+                    <span class="line-number">2</span>
+                    <span></span>
+                </div>
+                <div class="code-line">
+                    <span class="line-number">3</span>
+                    <span class="code-comment"># Initialize Phantom protection</span>
+                </div>
+                <div class="code-line">
+                    <span class="line-number">4</span>
+                    <span><span class="code-variable">guard</span> = <span class="code-function">PhantomGuard</span>(api_key=<span class="code-string">"pk_live_..."</span>)</span>
+                </div>
+                <div class="code-line">
+                    <span class="line-number">5</span>
+                    <span></span>
+                </div>
+                <div class="code-line">
+                    <span class="line-number">6</span>
+                    <span class="code-comment"># Wrap your agent with protection</span>
+                </div>
+                <div class="code-line">
+                    <span class="line-number">7</span>
+                    <span><span class="code-variable">protected_agent</span> = guard.<span class="code-function">protect</span>(my_agent)</span>
+                </div>
+                <div class="code-line">
+                    <span class="line-number">8</span>
+                    <span></span>
+                </div>
+                <div class="code-line">
+                    <span class="line-number">9</span>
+                    <span class="code-comment"># All agent interactions now flow through Phantom</span>
+                </div>
+                <div class="code-line">
+                    <span class="line-number">10</span>
+                    <span><span class="code-variable">response</span> = <span class="code-keyword">await</span> protected_agent.<span class="code-function">run</span>(user_input)</span>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Pricing -->
+    <section class="pricing" id="pricing">
+        <div class="section-header">
+            <div class="section-tag">Pricing</div>
+            <h2 class="section-title">Scale with Confidence</h2>
+            <p class="section-subtitle">
+                From startups to enterprise, protection that grows with you
+            </p>
+        </div>
+        
+        <div class="pricing-grid">
+            <div class="pricing-card fade-in">
+                <div class="pricing-tier">Starter</div>
+                <div class="pricing-amount">
+                    <span class="pricing-currency">$</span>
+                    <span class="pricing-value">2,500</span>
+                    <span class="pricing-period">/month</span>
+                </div>
+                <p class="pricing-desc">For teams beginning their AI agent security journey</p>
+                <ul class="pricing-features">
+                    <li>Up to 10 agents monitored</li>
+                    <li>Core threat detection</li>
+                    <li>Email alerts</li>
+                    <li>Community threat intel</li>
+                    <li>Standard support</li>
+                </ul>
+                <a href="#contact" class="btn-secondary pricing-cta">Get Started</a>
+            </div>
+            
+            <div class="pricing-card featured fade-in">
+                <div class="pricing-tier">Professional</div>
+                <div class="pricing-amount">
+                    <span class="pricing-currency">$</span>
+                    <span class="pricing-value">15K</span>
+                    <span class="pricing-period">/month</span>
+                </div>
+                <p class="pricing-desc">For growing organizations with critical AI workloads</p>
+                <ul class="pricing-features">
+                    <li>Up to 100 agents</li>
+                    <li>Advanced behavioral analysis</li>
+                    <li>API integration</li>
+                    <li>Custom detection rules</li>
+                    <li>24/7 priority support</li>
+                    <li>Quarterly security review</li>
+                </ul>
+                <a href="#contact" class="btn-primary pricing-cta">Request Demo</a>
+            </div>
+            
+            <div class="pricing-card fade-in">
+                <div class="pricing-tier">Enterprise</div>
+                <div class="pricing-amount">
+                    <span class="pricing-value">Custom</span>
+                </div>
+                <p class="pricing-desc">For organizations requiring maximum security and control</p>
+                <ul class="pricing-features">
+                    <li>Unlimited agents</li>
+                    <li>On-premise deployment</li>
+                    <li>Custom ML models</li>
+                    <li>Dedicated threat intel team</li>
+                    <li>SLA guarantees</li>
+                    <li>Red team exercises</li>
+                </ul>
+                <a href="#contact" class="btn-secondary pricing-cta">Contact Sales</a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- CTA Section -->
+    <section class="cta-section" id="contact">
+        <div class="cta-box fade-in">
+            <h2>The War Between AI Agents Has Begun</h2>
+            <p>Don't let adversarial agents compromise your operations. Join the private beta and protect your AI infrastructure today.</p>
+            <div class="hero-cta-group">
+                <a href="mailto:founders@phantom.ai" class="btn-primary">
+                    🛡️ Request Early Access
+                </a>
+                <a href="mailto:founders@phantom.ai" class="btn-secondary">
+                    Schedule a Call →
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="footer-logo">
+            <div class="logo-icon">👻</div>
+            Phantom AI
+        </div>
+        <ul class="footer-links">
+            <li><a href="#">Documentation</a></li>
+            <li><a href="#">Blog</a></li>
+            <li><a href="#">Security</a></li>
+            <li><a href="#">Privacy</a></li>
+            <li><a href="#">Terms</a></li>
+        </ul>
+        <p class="footer-copy">© 2026 Phantom AI. The Firewall for the Agentic Economy.</p>
+    </footer>
+    
+    <!-- Scroll Animation -->
+    <script>
+        const fadeElements = document.querySelectorAll('.fade-in');
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        fadeElements.forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
