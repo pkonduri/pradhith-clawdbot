@@ -1,0 +1,1358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DentalOS — The AI Operating System for Dental Care Intelligence</title>
+    <meta name="description" content="Transform your dental practice with AI-powered diagnostics, treatment planning, and practice intelligence. The future of oral healthcare starts here.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #00D4AA;
+            --primary-dark: #00B894;
+            --secondary: #6C5CE7;
+            --accent: #00CEC9;
+            --dark: #0A1628;
+            --darker: #060D18;
+            --light: #DFE6E9;
+            --white: #FFFFFF;
+            --gradient-1: linear-gradient(135deg, #00D4AA 0%, #00CEC9 50%, #6C5CE7 100%);
+            --gradient-2: linear-gradient(180deg, #0A1628 0%, #1A2744 100%);
+            --gradient-glow: radial-gradient(ellipse at center, rgba(0, 212, 170, 0.15) 0%, transparent 70%);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--darker);
+            color: var(--white);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: var(--darker);
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(0, 212, 170, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(108, 92, 231, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(0, 206, 201, 0.05) 0%, transparent 50%);
+            animation: bgFloat 20s ease-in-out infinite;
+        }
+
+        @keyframes bgFloat {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(2%, 2%) rotate(1deg); }
+            66% { transform: translate(-1%, 1%) rotate(-1deg); }
+        }
+
+        /* Floating Teeth/Dental Elements */
+        .floating-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .tooth {
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0.06;
+            animation: floatTooth 25s ease-in-out infinite;
+        }
+
+        .tooth:nth-child(1) { top: 10%; left: 5%; animation-delay: 0s; }
+        .tooth:nth-child(2) { top: 20%; right: 10%; animation-delay: -5s; }
+        .tooth:nth-child(3) { top: 60%; left: 8%; animation-delay: -10s; }
+        .tooth:nth-child(4) { top: 75%; right: 5%; animation-delay: -15s; }
+        .tooth:nth-child(5) { top: 40%; left: 3%; animation-delay: -20s; }
+
+        @keyframes floatTooth {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(10deg); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(20px);
+            background: rgba(10, 22, 40, 0.8);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--white);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: var(--gradient-1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0, 212, 170, 0.3);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-cta {
+            padding: 0.75rem 1.75rem;
+            background: var(--gradient-1);
+            border: none;
+            border-radius: 50px;
+            color: var(--dark);
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 20px rgba(0, 212, 170, 0.3);
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0, 212, 170, 0.4);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 120px 5% 80px;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 1400px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+
+        .hero-text {
+            z-index: 1;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(0, 212, 170, 0.1);
+            border: 1px solid rgba(0, 212, 170, 0.3);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-badge::before {
+            content: '🦷';
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--white) 0%, var(--light) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero h1 span {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-description {
+            font-size: 1.25rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 2.5rem;
+            max-width: 540px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .btn-primary {
+            padding: 1rem 2rem;
+            background: var(--gradient-1);
+            border: none;
+            border-radius: 50px;
+            color: var(--dark);
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            box-shadow: 0 4px 25px rgba(0, 212, 170, 0.35);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 40px rgba(0, 212, 170, 0.45);
+        }
+
+        .btn-secondary {
+            padding: 1rem 2rem;
+            background: transparent;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            color: var(--white);
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 3rem;
+        }
+
+        .stat {
+            text-align: left;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.5);
+            font-weight: 500;
+        }
+
+        /* Hero Visual */
+        .hero-visual {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .dashboard-preview {
+            width: 100%;
+            max-width: 650px;
+            background: rgba(26, 39, 68, 0.6);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 1.5rem;
+            backdrop-filter: blur(20px);
+            box-shadow: 
+                0 25px 80px rgba(0, 0, 0, 0.5),
+                0 0 100px rgba(0, 212, 170, 0.1);
+            transform: perspective(1000px) rotateY(-5deg) rotateX(2deg);
+            transition: transform 0.5s;
+        }
+
+        .dashboard-preview:hover {
+            transform: perspective(1000px) rotateY(0deg) rotateX(0deg);
+        }
+
+        .dashboard-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .window-controls {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .window-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .window-dot:nth-child(1) { background: #FF6B6B; }
+        .window-dot:nth-child(2) { background: #FFE66D; }
+        .window-dot:nth-child(3) { background: #4ECB71; }
+
+        .dashboard-title {
+            flex: 1;
+            text-align: center;
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .dashboard-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .dash-card {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 16px;
+            padding: 1.25rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .dash-card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .dash-card-icon {
+            width: 28px;
+            height: 28px;
+            background: var(--gradient-1);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+        }
+
+        .scan-preview {
+            width: 100%;
+            height: 120px;
+            background: linear-gradient(135deg, #1a2744 0%, #0f1a2e 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .scan-preview::before {
+            content: '🦷';
+            font-size: 3rem;
+            opacity: 0.3;
+        }
+
+        .scan-overlay {
+            position: absolute;
+            top: 10%;
+            left: 15%;
+            width: 25px;
+            height: 25px;
+            border: 2px solid var(--primary);
+            border-radius: 50%;
+            animation: scanPulse 2s ease-in-out infinite;
+        }
+
+        .scan-overlay::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+        }
+
+        @keyframes scanPulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.7; }
+        }
+
+        .detection-badge {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            background: rgba(0, 212, 170, 0.9);
+            color: var(--dark);
+            padding: 0.3rem 0.6rem;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 700;
+        }
+
+        .confidence-bar {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 0.75rem;
+        }
+
+        .confidence-fill {
+            height: 100%;
+            background: var(--gradient-1);
+            border-radius: 3px;
+            width: 95%;
+        }
+
+        .confidence-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            margin-top: 0.5rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .metric-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+        }
+
+        .metric-item {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+            padding: 0.75rem;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .metric-label {
+            font-size: 0.65rem;
+            color: rgba(255, 255, 255, 0.4);
+            margin-top: 0.25rem;
+        }
+
+        /* Problem Section */
+        .problem {
+            padding: 120px 5%;
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 4rem;
+        }
+
+        .section-label {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(0, 212, 170, 0.1);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .section-header h2 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            font-size: 1.15rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .problem-card {
+            background: linear-gradient(135deg, rgba(26, 39, 68, 0.6) 0%, rgba(15, 26, 46, 0.6) 100%);
+            border-radius: 24px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .problem-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #FF6B6B, #FF8E53);
+        }
+
+        .problem-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(255, 107, 107, 0.3);
+            box-shadow: 0 20px 60px rgba(255, 107, 107, 0.1);
+        }
+
+        .problem-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 107, 107, 0.1);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .problem-stat {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #FF6B6B, #FF8E53);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .problem-card h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .problem-card p {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.5);
+            line-height: 1.6;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 120px 5%;
+            position: relative;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, rgba(26, 39, 68, 0.6) 0%, rgba(15, 26, 46, 0.6) 100%);
+            border-radius: 24px;
+            padding: 2.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(0, 212, 170, 0.3);
+            box-shadow: 0 25px 80px rgba(0, 212, 170, 0.1);
+        }
+
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background: var(--gradient-1);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 212, 170, 0.2);
+        }
+
+        .feature-card h3 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card p {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-highlights {
+            list-style: none;
+        }
+
+        .feature-highlights li {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-highlights li::before {
+            content: '✓';
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        /* Market Section */
+        .market {
+            padding: 120px 5%;
+            background: linear-gradient(180deg, transparent 0%, rgba(0, 212, 170, 0.03) 50%, transparent 100%);
+        }
+
+        .market-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+
+        .market-visual {
+            position: relative;
+        }
+
+        .market-chart {
+            background: rgba(26, 39, 68, 0.6);
+            border-radius: 24px;
+            padding: 2.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .chart-bar {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .chart-label {
+            width: 80px;
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .chart-track {
+            flex: 1;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .chart-fill {
+            height: 100%;
+            background: var(--gradient-1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 1rem;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--dark);
+            transition: width 1.5s ease-out;
+        }
+
+        .tam .chart-fill { width: 100%; }
+        .sam .chart-fill { width: 40%; }
+        .som .chart-fill { width: 10%; }
+
+        .market-text h2 {
+            font-size: 2.75rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+        }
+
+        .market-text p {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 2rem;
+            line-height: 1.8;
+        }
+
+        .market-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .market-stat {
+            text-align: center;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .market-stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .market-stat-label {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.5);
+            margin-top: 0.5rem;
+        }
+
+        /* Traction Section */
+        .traction {
+            padding: 120px 5%;
+        }
+
+        .traction-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .traction-card {
+            text-align: center;
+            padding: 2.5rem 2rem;
+            background: linear-gradient(135deg, rgba(26, 39, 68, 0.6) 0%, rgba(15, 26, 46, 0.6) 100%);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.4s;
+        }
+
+        .traction-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(0, 212, 170, 0.2);
+        }
+
+        .traction-value {
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .traction-label {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 120px 5%;
+            text-align: center;
+            position: relative;
+        }
+
+        .cta::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(0, 212, 170, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .cta-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta h2 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta h2 span {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .cta p {
+            font-size: 1.25rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 2.5rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        /* Footer */
+        footer {
+            padding: 60px 5% 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--white);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.5);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .footer-social a {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 1.1rem;
+            transition: all 0.3s;
+        }
+
+        .footer-social a:hover {
+            background: var(--primary);
+            color: var(--dark);
+        }
+
+        .footer-bottom {
+            max-width: 1400px;
+            margin: 40px auto 0;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center;
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-text {
+                order: 1;
+            }
+
+            .hero-visual {
+                order: 2;
+            }
+
+            .hero-description {
+                margin: 0 auto 2.5rem;
+            }
+
+            .hero-buttons {
+                justify-content: center;
+            }
+
+            .hero-stats {
+                justify-content: center;
+            }
+
+            .problem-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .market-content {
+                grid-template-columns: 1fr;
+            }
+
+            .traction-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem 5%;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .problem-grid,
+            .features-grid,
+            .traction-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cta h2 {
+                font-size: 2.5rem;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                gap: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    <div class="floating-elements">
+        <div class="tooth">🦷</div>
+        <div class="tooth">🦷</div>
+        <div class="tooth">🦷</div>
+        <div class="tooth">🦷</div>
+        <div class="tooth">🦷</div>
+    </div>
+
+    <nav>
+        <a href="#" class="logo">
+            <div class="logo-icon">🦷</div>
+            DentalOS
+        </a>
+        <ul class="nav-links">
+            <li><a href="#features">Features</a></li>
+            <li><a href="#market">Market</a></li>
+            <li><a href="#traction">Traction</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+        <button class="nav-cta">Request Demo</button>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <div class="hero-badge">AI-Powered Dental Intelligence</div>
+                <h1>The Operating System for <span>Dental Care</span></h1>
+                <p class="hero-description">Transform your practice with AI-powered diagnostics, treatment planning, and intelligent automation. Detect what others miss. Optimize every workflow.</p>
+                <div class="hero-buttons">
+                    <a href="#contact" class="btn-primary">Request Demo →</a>
+                    <a href="#features" class="btn-secondary">See Features</a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <div class="stat-value">95%</div>
+                        <div class="stat-label">Detection Accuracy</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">43%</div>
+                        <div class="stat-label">More Cavities Found</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">60%</div>
+                        <div class="stat-label">Fewer Denials</div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="dashboard-preview">
+                    <div class="dashboard-header">
+                        <div class="window-controls">
+                            <div class="window-dot"></div>
+                            <div class="window-dot"></div>
+                            <div class="window-dot"></div>
+                        </div>
+                        <div class="dashboard-title">DentalOS — Patient Analysis</div>
+                    </div>
+                    <div class="dashboard-content">
+                        <div class="dash-card">
+                            <div class="dash-card-header">
+                                <div class="dash-card-icon">🔬</div>
+                                X-Ray Analysis
+                            </div>
+                            <div class="scan-preview">
+                                <div class="scan-overlay"></div>
+                                <div class="detection-badge">Cavity Detected</div>
+                            </div>
+                            <div class="confidence-bar">
+                                <div class="confidence-fill"></div>
+                            </div>
+                            <div class="confidence-label">
+                                <span>AI Confidence</span>
+                                <span style="color: var(--primary); font-weight: 600;">95.2%</span>
+                            </div>
+                        </div>
+                        <div class="dash-card">
+                            <div class="dash-card-header">
+                                <div class="dash-card-icon">📊</div>
+                                Practice Metrics
+                            </div>
+                            <div class="metric-grid">
+                                <div class="metric-item">
+                                    <div class="metric-value">127</div>
+                                    <div class="metric-label">Scans Today</div>
+                                </div>
+                                <div class="metric-item">
+                                    <div class="metric-value">23</div>
+                                    <div class="metric-label">Detections</div>
+                                </div>
+                                <div class="metric-item">
+                                    <div class="metric-value">96%</div>
+                                    <div class="metric-label">Claim Rate</div>
+                                </div>
+                                <div class="metric-item">
+                                    <div class="metric-value">+$12K</div>
+                                    <div class="metric-label">Revenue Lift</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="problem" id="problem">
+        <div class="section-header">
+            <div class="section-label">The Problem</div>
+            <h2>Dental Care is Broken</h2>
+            <p>The $550B dental industry runs on intuition, paper, and 30-year-old software. The result? Missed diagnoses, rejected claims, and frustrated patients.</p>
+        </div>
+        <div class="problem-grid">
+            <div class="problem-card">
+                <div class="problem-icon">👁️</div>
+                <div class="problem-stat">43%</div>
+                <h3>Cavities Missed</h3>
+                <p>Human visual inspection misses nearly half of early-stage decay. AI sees what eyes can't.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">💸</div>
+                <div class="problem-stat">$50B</div>
+                <h3>Lost to Denials</h3>
+                <p>Insurance claim denials drain billions annually. Proper documentation could prevent 60%.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">🔧</div>
+                <div class="problem-stat">7+</div>
+                <h3>Disconnected Systems</h3>
+                <p>Average practice juggles 7+ software tools that don't talk to each other.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">😰</div>
+                <div class="problem-stat">70%</div>
+                <h3>Avoid the Dentist</h3>
+                <p>Fear, cost uncertainty, and poor experiences keep patients away from care they need.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="features" id="features">
+        <div class="section-header">
+            <div class="section-label">Platform</div>
+            <h2>One Platform. Total Intelligence.</h2>
+            <p>Every tool your practice needs, unified by AI that learns and improves with every patient.</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🔬</div>
+                <h3>DiagnosticAI Engine</h3>
+                <p>Real-time analysis of X-rays, CBCT scans, and intraoral photos with 95%+ accuracy.</p>
+                <ul class="feature-highlights">
+                    <li>Cavity detection</li>
+                    <li>Periodontal disease staging</li>
+                    <li>Oral cancer screening</li>
+                    <li>Bone loss measurement</li>
+                </ul>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📋</div>
+                <h3>TreatmentMind</h3>
+                <p>AI-generated treatment plans optimized for outcomes, patient preferences, and insurance coverage.</p>
+                <ul class="feature-highlights">
+                    <li>Multi-scenario modeling</li>
+                    <li>Cost estimation</li>
+                    <li>Phased sequencing</li>
+                    <li>Outcome prediction</li>
+                </ul>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💳</div>
+                <h3>InsuranceAI</h3>
+                <p>Automatic pre-authorization, denial prevention, and appeal automation with 85%+ success.</p>
+                <ul class="feature-highlights">
+                    <li>Pre-auth optimization</li>
+                    <li>Denial prediction</li>
+                    <li>Auto-appeals</li>
+                    <li>Fee schedule analysis</li>
+                </ul>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💬</div>
+                <h3>PatientBridge</h3>
+                <p>Conversational AI that increases treatment acceptance through personalized engagement.</p>
+                <ul class="feature-highlights">
+                    <li>Smart scheduling</li>
+                    <li>Anxiety detection</li>
+                    <li>Financial planning</li>
+                    <li>Follow-up automation</li>
+                </ul>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>PracticeOS</h3>
+                <p>Unified dashboard that connects all your systems and optimizes every workflow.</p>
+                <ul class="feature-highlights">
+                    <li>Staff scheduling</li>
+                    <li>Supply prediction</li>
+                    <li>Revenue analytics</li>
+                    <li>Performance insights</li>
+                </ul>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🧬</div>
+                <h3>OralGenome</h3>
+                <p>Genetic and microbiome integration for truly personalized preventive care.</p>
+                <ul class="feature-highlights">
+                    <li>Genetic risk factors</li>
+                    <li>Microbiome analysis</li>
+                    <li>Biomarker monitoring</li>
+                    <li>Systemic health links</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="market" id="market">
+        <div class="market-content">
+            <div class="market-visual">
+                <div class="market-chart">
+                    <div class="chart-bar tam">
+                        <div class="chart-label">TAM</div>
+                        <div class="chart-track">
+                            <div class="chart-fill">$45B</div>
+                        </div>
+                    </div>
+                    <div class="chart-bar sam">
+                        <div class="chart-label">SAM</div>
+                        <div class="chart-track">
+                            <div class="chart-fill">$18B</div>
+                        </div>
+                    </div>
+                    <div class="chart-bar som">
+                        <div class="chart-label">SOM</div>
+                        <div class="chart-track">
+                            <div class="chart-fill">$1.8B</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="market-text">
+                <div class="section-label">Market Opportunity</div>
+                <h2>$550B Industry. Zero Intelligence.</h2>
+                <p>The global dental market is massive, fragmented, and running on technology from the last century. We're building the unified AI layer that transforms every practice into a precision medicine powerhouse.</p>
+                <div class="market-stats">
+                    <div class="market-stat">
+                        <div class="market-stat-value">350K</div>
+                        <div class="market-stat-label">Practices in NA/EU</div>
+                    </div>
+                    <div class="market-stat">
+                        <div class="market-stat-value">$50K</div>
+                        <div class="market-stat-label">Avg Annual Value</div>
+                    </div>
+                    <div class="market-stat">
+                        <div class="market-stat-value">10%</div>
+                        <div class="market-stat-label">Year 5 Target</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="traction" id="traction">
+        <div class="section-header">
+            <div class="section-label">Financial Model</div>
+            <h2>Path to $750M ARR</h2>
+            <p>Proven unit economics with strong LTV:CAC ratios and expanding margins.</p>
+        </div>
+        <div class="traction-grid">
+            <div class="traction-card">
+                <div class="traction-value">50K</div>
+                <div class="traction-label">Practices (Year 5)</div>
+            </div>
+            <div class="traction-card">
+                <div class="traction-value">$750M</div>
+                <div class="traction-label">ARR Target</div>
+            </div>
+            <div class="traction-card">
+                <div class="traction-value">34x</div>
+                <div class="traction-label">LTV:CAC</div>
+            </div>
+            <div class="traction-card">
+                <div class="traction-value">82%</div>
+                <div class="traction-label">Gross Margin</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta" id="contact">
+        <div class="cta-content">
+            <h2>Ready to <span>Transform</span> Your Practice?</h2>
+            <p>Join the waitlist for early access and be among the first practices to experience AI-powered dental intelligence.</p>
+            <div class="cta-buttons">
+                <a href="mailto:founders@dentalos.ai" class="btn-primary">Request Demo →</a>
+                <a href="#" class="btn-secondary">Download Playbook</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">
+                <div class="logo-icon" style="width: 35px; height: 35px; font-size: 1.1rem;">🦷</div>
+                DentalOS
+            </div>
+            <div class="footer-links">
+                <a href="#">Privacy</a>
+                <a href="#">Terms</a>
+                <a href="#">HIPAA</a>
+                <a href="#">Contact</a>
+            </div>
+            <div class="footer-social">
+                <a href="#">𝕏</a>
+                <a href="#">in</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            © 2026 DentalOS, Inc. All rights reserved. | Transforming Dental Care Through Intelligence
+        </div>
+    </footer>
+</body>
+</html>
