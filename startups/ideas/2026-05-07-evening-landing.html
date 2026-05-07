@@ -1,0 +1,1285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PlanetMind AI — The Operating System for Earth System Intelligence</title>
+    <meta name="description" content="The unified intelligence layer for decisions at planetary scale. Real-time synthesis of satellite, sensor, and climate data for enterprise and government.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0ea5e9;
+            --primary-dark: #0284c7;
+            --secondary: #10b981;
+            --accent: #8b5cf6;
+            --earth-blue: #1e3a5f;
+            --earth-green: #064e3b;
+            --earth-gold: #d97706;
+            --surface: #0f172a;
+            --surface-light: #1e293b;
+            --text: #f1f5f9;
+            --text-muted: #94a3b8;
+            --gradient-earth: linear-gradient(135deg, #0f4c81 0%, #1e6f5c 50%, #2d8b6f 100%);
+            --gradient-aurora: linear-gradient(135deg, #8b5cf6 0%, #06b6d4 50%, #10b981 100%);
+            --glow: 0 0 60px rgba(14, 165, 233, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--surface);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+        }
+
+        /* Hero Section with Earth Globe */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            background: radial-gradient(ellipse at 50% 120%, #0f4c81 0%, #0f172a 50%, #000 100%);
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 800px;
+            height: 800px;
+            transform: translate(-50%, -50%);
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.15) 0%, transparent 60%);
+            animation: pulse-earth 8s ease-in-out infinite;
+        }
+
+        @keyframes pulse-earth {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.8; }
+        }
+
+        /* Animated Earth visualization */
+        .earth-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+        }
+
+        .earth {
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            background: 
+                radial-gradient(circle at 30% 30%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, #1e6f5c 0%, #0f4c81 40%, #0a2540 100%);
+            box-shadow: 
+                inset -60px -60px 120px rgba(0,0,0,0.5),
+                inset 20px 20px 60px rgba(255,255,255,0.1),
+                0 0 100px rgba(14, 165, 233, 0.3),
+                0 0 200px rgba(16, 185, 129, 0.2);
+            animation: rotate-earth 60s linear infinite;
+            opacity: 0.3;
+        }
+
+        @keyframes rotate-earth {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Grid overlay on Earth */
+        .earth::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 50%;
+            background: 
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 30px,
+                    rgba(14, 165, 233, 0.1) 30px,
+                    rgba(14, 165, 233, 0.1) 31px
+                ),
+                repeating-linear-gradient(
+                    90deg,
+                    transparent,
+                    transparent 30px,
+                    rgba(14, 165, 233, 0.1) 30px,
+                    rgba(14, 165, 233, 0.1) 31px
+                );
+        }
+
+        /* Orbiting satellites */
+        .orbit {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            border-radius: 50%;
+            border: 1px dashed rgba(14, 165, 233, 0.3);
+        }
+
+        .orbit-1 {
+            width: 700px;
+            height: 700px;
+            margin: -350px 0 0 -350px;
+            animation: orbit 30s linear infinite;
+        }
+
+        .orbit-2 {
+            width: 850px;
+            height: 850px;
+            margin: -425px 0 0 -425px;
+            animation: orbit 45s linear infinite reverse;
+        }
+
+        .orbit-3 {
+            width: 1000px;
+            height: 1000px;
+            margin: -500px 0 0 -500px;
+            animation: orbit 60s linear infinite;
+        }
+
+        @keyframes orbit {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .satellite {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            box-shadow: 0 0 20px var(--primary), 0 0 40px var(--primary);
+        }
+
+        .orbit-1 .satellite { top: -4px; left: 50%; }
+        .orbit-2 .satellite { top: 50%; right: -4px; }
+        .orbit-3 .satellite { bottom: -4px; left: 30%; }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            max-width: 900px;
+            padding: 2rem;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 20px;
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.4);
+            border-radius: 100px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--secondary);
+            margin-bottom: 2rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero h1 span {
+            background: var(--gradient-aurora);
+            -webkit-background-clip: text;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.4rem;
+            color: var(--text-muted);
+            max-width: 700px;
+            margin: 0 auto 3rem;
+            line-height: 1.7;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 16px 36px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--gradient-aurora);
+            color: white;
+            box-shadow: 0 4px 20px rgba(14, 165, 233, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(14, 165, 233, 0.5);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Stats Section */
+        .stats {
+            padding: 4rem 2rem;
+            background: var(--surface-light);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            background: var(--gradient-aurora);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+        }
+
+        /* Problem Section */
+        .problem {
+            padding: 8rem 2rem;
+            background: var(--surface);
+            position: relative;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-label {
+            display: inline-block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            margin-bottom: 1.5rem;
+            max-width: 700px;
+        }
+
+        .section-desc {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin-bottom: 3rem;
+        }
+
+        .problem-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .problem-card {
+            background: linear-gradient(135deg, rgba(220, 38, 38, 0.1) 0%, rgba(239, 68, 68, 0.05) 100%);
+            border: 1px solid rgba(220, 38, 38, 0.2);
+            border-radius: 16px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .problem-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(220, 38, 38, 0.1) 0%, transparent 70%);
+        }
+
+        .problem-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .problem-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+            color: #fca5a5;
+        }
+
+        .problem-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* Solution Section */
+        .solution {
+            padding: 8rem 2rem;
+            background: linear-gradient(180deg, var(--surface) 0%, var(--surface-light) 100%);
+        }
+
+        .solution-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .solution-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 2.5rem;
+            position: relative;
+            transition: all 0.4s ease;
+        }
+
+        .solution-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: var(--glow);
+        }
+
+        .solution-icon {
+            width: 64px;
+            height: 64px;
+            background: var(--gradient-aurora);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .solution-card h3 {
+            font-size: 1.35rem;
+            margin-bottom: 1rem;
+        }
+
+        .solution-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .solution-card ul {
+            list-style: none;
+            margin-top: 1rem;
+        }
+
+        .solution-card li {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            padding: 0.4rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .solution-card li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--secondary);
+        }
+
+        /* Platform Visual */
+        .platform {
+            padding: 8rem 2rem;
+            background: var(--surface);
+            text-align: center;
+        }
+
+        .platform-visual {
+            margin-top: 4rem;
+            background: linear-gradient(135deg, rgba(14, 165, 233, 0.1) 0%, rgba(16, 185, 129, 0.1) 100%);
+            border: 1px solid rgba(14, 165, 233, 0.2);
+            border-radius: 24px;
+            padding: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .platform-layers {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .layer {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: left;
+        }
+
+        .layer-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .layer-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .layer-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* Use Cases */
+        .use-cases {
+            padding: 8rem 2rem;
+            background: linear-gradient(180deg, var(--surface) 0%, #0a1628 100%);
+        }
+
+        .use-case-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .use-case-tab {
+            padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 100px;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .use-case-tab:hover, .use-case-tab.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        .use-case-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .use-case-visual {
+            background: linear-gradient(135deg, rgba(14, 165, 233, 0.2) 0%, rgba(139, 92, 246, 0.2) 100%);
+            border-radius: 24px;
+            padding: 3rem;
+            position: relative;
+            min-height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .globe-widget {
+            font-size: 10rem;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .use-case-details h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .use-case-details p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+
+        .use-case-features {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .use-case-feature {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+        }
+
+        .feature-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-aurora);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .feature-text h4 {
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .feature-text p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        /* Customers */
+        .customers {
+            padding: 6rem 2rem;
+            background: var(--surface-light);
+            text-align: center;
+        }
+
+        .customer-logos {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 4rem;
+            flex-wrap: wrap;
+            margin-top: 3rem;
+            opacity: 0.6;
+        }
+
+        .customer-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        /* Pricing */
+        .pricing {
+            padding: 8rem 2rem;
+            background: var(--surface);
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 3rem auto 0;
+        }
+
+        .pricing-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            padding: 2.5rem;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .pricing-card.featured {
+            background: linear-gradient(135deg, rgba(14, 165, 233, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+            border-color: var(--primary);
+            transform: scale(1.05);
+        }
+
+        .pricing-card.featured::before {
+            content: 'Most Popular';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--gradient-aurora);
+            padding: 6px 20px;
+            border-radius: 100px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .pricing-tier {
+            font-size: 0.9rem;
+            color: var(--primary);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .pricing-price {
+            font-size: 3rem;
+            font-weight: 700;
+            margin: 1rem 0;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .pricing-price span {
+            font-size: 1rem;
+            font-weight: 400;
+            color: var(--text-muted);
+        }
+
+        .pricing-desc {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-features li {
+            padding: 0.6rem 0;
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .pricing-features li::before {
+            content: '✓';
+            color: var(--secondary);
+            font-weight: bold;
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 8rem 2rem;
+            background: var(--gradient-earth);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta h2 {
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            margin-bottom: 1.5rem;
+        }
+
+        .cta p {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto 2.5rem;
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 2rem;
+            background: #000;
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .footer-logo span {
+            background: var(--gradient-aurora);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        .footer-copy {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            opacity: 0.6;
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .earth {
+                width: 400px;
+                height: 400px;
+            }
+
+            .orbit-1 { width: 500px; height: 500px; margin: -250px 0 0 -250px; }
+            .orbit-2 { width: 600px; height: 600px; margin: -300px 0 0 -300px; }
+            .orbit-3 { width: 700px; height: 700px; margin: -350px 0 0 -350px; }
+
+            .use-case-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .platform-layers {
+                grid-template-columns: 1fr;
+            }
+
+            .pricing-card.featured {
+                transform: none;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.1rem;
+            }
+
+            .earth {
+                width: 300px;
+                height: 300px;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate {
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+
+        /* Data Flow Animation */
+        .data-pulse {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: var(--secondary);
+            border-radius: 50%;
+            animation: data-flow 3s ease-in-out infinite;
+        }
+
+        @keyframes data-flow {
+            0% { transform: translate(0, 0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translate(100px, -100px); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="earth-container">
+            <div class="earth"></div>
+            <div class="orbit orbit-1"><div class="satellite"></div></div>
+            <div class="orbit orbit-2"><div class="satellite"></div></div>
+            <div class="orbit orbit-3"><div class="satellite"></div></div>
+        </div>
+        
+        <div class="hero-content">
+            <div class="badge">
+                <span>🌍</span> Earth System Intelligence Platform
+            </div>
+            <h1>
+                The Operating System for<br>
+                <span>Planetary Intelligence</span>
+            </h1>
+            <p class="hero-subtitle">
+                Real-time synthesis of satellite, sensor, and climate data into decision-grade intelligence. 
+                From catastrophe modeling to carbon verification — one unified platform.
+            </p>
+            <div class="hero-cta">
+                <a href="#demo" class="btn btn-primary">
+                    Request Early Access
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                    </svg>
+                </a>
+                <a href="#platform" class="btn btn-secondary">
+                    See How It Works
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-value">$3.2T</div>
+                <div class="stat-label">Annual climate risk decisions made with incomplete data</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">200+</div>
+                <div class="stat-label">Satellite constellations integrated</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">50M+</div>
+                <div class="stat-label">IoT sensors in our network</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">&lt;1hr</div>
+                <div class="stat-label">Global event detection latency</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="problem">
+        <div class="container">
+            <span class="section-label">The Challenge</span>
+            <h2 class="section-title">Earth's data is everywhere. Intelligence is nowhere.</h2>
+            <p class="section-desc">
+                Satellites capture petabytes. Sensors stream terabytes. Climate models project centuries. 
+                But no one synthesizes it all into actionable truth.
+            </p>
+            
+            <div class="problem-cards">
+                <div class="problem-card">
+                    <div class="problem-icon">🛰️</div>
+                    <h3>Fragmented Data Sources</h3>
+                    <p>200+ satellite operators, millions of sensors, dozens of climate models — all siloed, incompatible, and impossible to synthesize manually.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">⏰</div>
+                    <h3>Decisions Made Blind</h3>
+                    <p>Insurance pricing, infrastructure planning, agricultural timing — trillion-dollar decisions made with outdated data and incomplete models.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">🔥</div>
+                    <h3>Climate Reality Accelerating</h3>
+                    <p>Extreme weather intensifying. Regulatory pressure mounting. Every organization now needs planetary intelligence — yesterday.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="solution" id="platform">
+        <div class="container">
+            <span class="section-label">The Solution</span>
+            <h2 class="section-title">One platform. All Earth systems. Real-time intelligence.</h2>
+            <p class="section-desc">
+                PlanetMind AI synthesizes satellite imagery, ground sensors, climate models, and economic data 
+                into a unified intelligence layer for planetary-scale decisions.
+            </p>
+            
+            <div class="solution-grid">
+                <div class="solution-card">
+                    <div class="solution-icon">🛰️</div>
+                    <h3>Satellite Intelligence</h3>
+                    <p>Real-time integration of 200+ satellite constellations with AI-powered analysis.</p>
+                    <ul>
+                        <li>Sub-meter resolution globally</li>
+                        <li>Hourly refresh cycles</li>
+                        <li>Multispectral & SAR fusion</li>
+                        <li>Automated change detection</li>
+                    </ul>
+                </div>
+                
+                <div class="solution-card">
+                    <div class="solution-icon">📡</div>
+                    <h3>Ground Truth Network</h3>
+                    <p>50M+ IoT sensors providing continuous ground-level verification.</p>
+                    <ul>
+                        <li>Weather & atmospheric stations</li>
+                        <li>Soil & water monitors</li>
+                        <li>Ocean buoy networks</li>
+                        <li>Seismic & volcanic sensors</li>
+                    </ul>
+                </div>
+                
+                <div class="solution-card">
+                    <div class="solution-icon">🌡️</div>
+                    <h3>Climate Intelligence</h3>
+                    <p>Integration with world's leading climate models for actionable forecasts.</p>
+                    <ul>
+                        <li>1-day to 30-year projections</li>
+                        <li>Scenario modeling (1.5°C, 2°C, 3°C)</li>
+                        <li>Ensemble uncertainty quantification</li>
+                        <li>Carbon flux verification</li>
+                    </ul>
+                </div>
+                
+                <div class="solution-card">
+                    <div class="solution-icon">🧬</div>
+                    <h3>Ecosystem Monitoring</h3>
+                    <p>Biodiversity and ecosystem health tracking at unprecedented scale.</p>
+                    <ul>
+                        <li>Environmental DNA integration</li>
+                        <li>Wildlife migration patterns</li>
+                        <li>Vegetation health indices</li>
+                        <li>Marine ecosystem monitoring</li>
+                    </ul>
+                </div>
+                
+                <div class="solution-card">
+                    <div class="solution-icon">🏭</div>
+                    <h3>Economic Activity Layer</h3>
+                    <p>Human activity and economic indicators for complete context.</p>
+                    <ul>
+                        <li>Shipping & logistics tracking</li>
+                        <li>Energy production monitoring</li>
+                        <li>Construction & land use change</li>
+                        <li>Agricultural practice classification</li>
+                    </ul>
+                </div>
+                
+                <div class="solution-card">
+                    <div class="solution-icon">🤖</div>
+                    <h3>AI Synthesis Engine</h3>
+                    <p>Foundation models that transform raw data into decision-grade intelligence.</p>
+                    <ul>
+                        <li>Multi-modal data fusion</li>
+                        <li>Physics-informed predictions</li>
+                        <li>Calibrated uncertainty</li>
+                        <li>Automated insight generation</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Platform Architecture -->
+    <section class="platform">
+        <div class="container">
+            <span class="section-label">Architecture</span>
+            <h2 class="section-title">Built for planetary scale</h2>
+            
+            <div class="platform-visual">
+                <div class="platform-layers">
+                    <div class="layer">
+                        <div class="layer-title">📥 Data Layer</div>
+                        <div class="layer-items">
+                            <span class="layer-item">Satellite Ingest</span>
+                            <span class="layer-item">IoT Sensors</span>
+                            <span class="layer-item">Climate Models</span>
+                            <span class="layer-item">Economic Data</span>
+                            <span class="layer-item">eDNA Networks</span>
+                        </div>
+                    </div>
+                    <div class="layer">
+                        <div class="layer-title">🧠 Intelligence Layer</div>
+                        <div class="layer-items">
+                            <span class="layer-item">Fusion Engine</span>
+                            <span class="layer-item">Prediction Models</span>
+                            <span class="layer-item">Agent Swarm</span>
+                            <span class="layer-item">Verification</span>
+                            <span class="layer-item">Anomaly Detection</span>
+                        </div>
+                    </div>
+                    <div class="layer">
+                        <div class="layer-title">📤 Delivery Layer</div>
+                        <div class="layer-items">
+                            <span class="layer-item">Dashboard</span>
+                            <span class="layer-item">API Gateway</span>
+                            <span class="layer-item">Alerts</span>
+                            <span class="layer-item">Reports</span>
+                            <span class="layer-item">Data Products</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Use Cases -->
+    <section class="use-cases">
+        <div class="container">
+            <span class="section-label">Use Cases</span>
+            <h2 class="section-title" style="text-align: center;">Intelligence for every decision-maker</h2>
+            
+            <div class="use-case-tabs">
+                <div class="use-case-tab active">Insurance</div>
+                <div class="use-case-tab">Asset Management</div>
+                <div class="use-case-tab">Agriculture</div>
+                <div class="use-case-tab">Government</div>
+            </div>
+            
+            <div class="use-case-content">
+                <div class="use-case-visual">
+                    <div class="globe-widget">🌐</div>
+                </div>
+                <div class="use-case-details">
+                    <h3>Insurance & Reinsurance</h3>
+                    <p>Transform catastrophe modeling with real-time planetary intelligence. Price risk accurately, manage portfolios dynamically, and respond to events in minutes, not weeks.</p>
+                    
+                    <div class="use-case-features">
+                        <div class="use-case-feature">
+                            <div class="feature-icon">📊</div>
+                            <div class="feature-text">
+                                <h4>Real-Time Risk Scoring</h4>
+                                <p>Asset-level physical risk scores updated continuously</p>
+                            </div>
+                        </div>
+                        <div class="use-case-feature">
+                            <div class="feature-icon">🌀</div>
+                            <div class="feature-text">
+                                <h4>Event Tracking</h4>
+                                <p>Hurricane, flood, wildfire monitoring with impact prediction</p>
+                            </div>
+                        </div>
+                        <div class="use-case-feature">
+                            <div class="feature-icon">💼</div>
+                            <div class="feature-text">
+                                <h4>Portfolio Analytics</h4>
+                                <p>Exposure analysis across scenarios and time horizons</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Customers -->
+    <section class="customers">
+        <div class="container">
+            <span class="section-label">Trusted By</span>
+            <h2 class="section-title" style="text-align: center;">Built for the world's most demanding organizations</h2>
+            
+            <div class="customer-logos">
+                <div class="customer-logo">MUNICH RE</div>
+                <div class="customer-logo">SWISS RE</div>
+                <div class="customer-logo">BLACKROCK</div>
+                <div class="customer-logo">CARGILL</div>
+                <div class="customer-logo">WORLD BANK</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section class="pricing" id="pricing">
+        <div class="container">
+            <span class="section-label" style="text-align: center; display: block;">Pricing</span>
+            <h2 class="section-title" style="text-align: center;">Start with what you need. Scale infinitely.</h2>
+            
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <div class="pricing-tier">Explorer</div>
+                    <div class="pricing-price">$50K<span>/year</span></div>
+                    <p class="pricing-desc">Regional focus for growing teams</p>
+                    <ul class="pricing-features">
+                        <li>1 continent coverage</li>
+                        <li>Standard resolution</li>
+                        <li>5 user seats</li>
+                        <li>100K API calls/month</li>
+                        <li>Community support</li>
+                    </ul>
+                    <a href="#demo" class="btn btn-secondary" style="width: 100%; justify-content: center;">Get Started</a>
+                </div>
+                
+                <div class="pricing-card featured">
+                    <div class="pricing-tier">Professional</div>
+                    <div class="pricing-price">$200K<span>/year</span></div>
+                    <p class="pricing-desc">Global coverage for enterprise teams</p>
+                    <ul class="pricing-features">
+                        <li>Global coverage</li>
+                        <li>Enhanced resolution</li>
+                        <li>25 user seats</li>
+                        <li>1M API calls/month</li>
+                        <li>Custom dashboards</li>
+                        <li>Dedicated CSM</li>
+                    </ul>
+                    <a href="#demo" class="btn btn-primary" style="width: 100%; justify-content: center;">Request Demo</a>
+                </div>
+                
+                <div class="pricing-card">
+                    <div class="pricing-tier">Enterprise</div>
+                    <div class="pricing-price">Custom</div>
+                    <p class="pricing-desc">Unlimited scale for large organizations</p>
+                    <ul class="pricing-features">
+                        <li>Full resolution all layers</li>
+                        <li>Unlimited seats</li>
+                        <li>Custom model integration</li>
+                        <li>On-premise option</li>
+                        <li>SLA guarantees</li>
+                        <li>Dedicated engineering</li>
+                    </ul>
+                    <a href="#demo" class="btn btn-secondary" style="width: 100%; justify-content: center;">Contact Sales</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta" id="demo">
+        <div class="cta-content">
+            <h2>The future is planetary intelligence.</h2>
+            <p>Join the organizations building decisions on the most comprehensive Earth system intelligence ever assembled.</p>
+            <a href="mailto:founders@planetmind.ai" class="btn btn-primary" style="background: white; color: var(--earth-blue);">
+                Request Early Access
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                </svg>
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-logo">Planet<span>Mind</span> AI</div>
+        <div class="footer-links">
+            <a href="#platform">Platform</a>
+            <a href="#pricing">Pricing</a>
+            <a href="#">Documentation</a>
+            <a href="#">Blog</a>
+            <a href="#">Careers</a>
+            <a href="mailto:founders@planetmind.ai">Contact</a>
+        </div>
+        <p class="footer-copy">© 2026 PlanetMind AI. All rights reserved. The Operating System for Earth System Intelligence.</p>
+    </footer>
+
+    <script>
+        // Tab switching
+        document.querySelectorAll('.use-case-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.use-case-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+            });
+        });
+
+        // Scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.solution-card, .problem-card, .pricing-card').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>

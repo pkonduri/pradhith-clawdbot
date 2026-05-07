@@ -283,6 +283,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-05-06 | Evening | DentalOS — The AI Operating System for Dental Care Intelligence | [Playbook](2026-05-06-evening.md) • [Landing](2026-05-06-evening-landing.html) • [PDF](2026-05-06-evening.pdf) |
 | 2026-05-06 | Morning | ModelLedger — The Enterprise System of Record for AI Assets | [Playbook](2026-05-06-morning.md) • [Landing](2026-05-06-morning-landing.html) • [PDF](2026-05-06-morning.pdf) |
 | 2026-05-06 | Afternoon | BeautyOS — The AI Operating System for Personalized Beauty & Skincare Intelligence | [Playbook](2026-05-06-afternoon.md) • [Landing](2026-05-06-afternoon-landing.html) • [PDF](2026-05-06-afternoon.pdf) |
+| 2026-05-07 | Evening | PlanetMind AI — The Operating System for Earth System Intelligence | [Playbook](2026-05-07-evening.md) • [Landing](2026-05-07-evening-landing.html) • [PDF](2026-05-07-evening.pdf) |
 <!-- New entries will be added above this line -->
 
 ---
