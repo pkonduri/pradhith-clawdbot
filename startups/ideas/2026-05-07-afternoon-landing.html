@@ -1,0 +1,1329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpatialForge — Build Worlds. No Code Required.</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #8B5CF6;
+            --primary-dark: #7C3AED;
+            --primary-light: #A78BFA;
+            --accent: #06B6D4;
+            --accent-glow: rgba(6, 182, 212, 0.3);
+            --surface: #0F0F1A;
+            --surface-elevated: #1A1A2E;
+            --surface-hover: #252540;
+            --text: #FFFFFF;
+            --text-secondary: #A1A1B5;
+            --text-muted: #6B6B80;
+            --gradient-1: linear-gradient(135deg, #8B5CF6 0%, #06B6D4 50%, #10B981 100%);
+            --gradient-2: linear-gradient(135deg, #06B6D4 0%, #8B5CF6 100%);
+            --gradient-radial: radial-gradient(ellipse at center, rgba(139, 92, 246, 0.15) 0%, transparent 70%);
+            --border: rgba(255, 255, 255, 0.08);
+            --shadow: 0 25px 80px -20px rgba(139, 92, 246, 0.25);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--surface);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* 3D Space Background */
+        .space-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(139, 92, 246, 0.12) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(6, 182, 212, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(16, 185, 129, 0.05) 0%, transparent 60%),
+                var(--surface);
+        }
+
+        /* Animated Grid */
+        .grid-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-image: 
+                linear-gradient(rgba(139, 92, 246, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(139, 92, 246, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            transform: perspective(500px) rotateX(60deg);
+            transform-origin: center top;
+            animation: gridPulse 8s ease-in-out infinite;
+        }
+
+        @keyframes gridPulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 0.8; }
+        }
+
+        /* Floating 3D Objects */
+        .floating-object {
+            position: fixed;
+            z-index: -1;
+            opacity: 0.15;
+            animation: float3D 20s ease-in-out infinite;
+        }
+
+        .object-1 {
+            top: 15%;
+            left: 10%;
+            width: 120px;
+            height: 120px;
+            background: var(--gradient-1);
+            clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+            animation-delay: 0s;
+        }
+
+        .object-2 {
+            top: 60%;
+            right: 8%;
+            width: 80px;
+            height: 80px;
+            background: var(--gradient-2);
+            border-radius: 20%;
+            transform: rotate(45deg);
+            animation-delay: -5s;
+        }
+
+        .object-3 {
+            top: 30%;
+            right: 15%;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #10B981, #06B6D4);
+            border-radius: 50%;
+            animation-delay: -10s;
+        }
+
+        .object-4 {
+            bottom: 20%;
+            left: 5%;
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #F59E0B, #EF4444);
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+            animation-delay: -15s;
+        }
+
+        @keyframes float3D {
+            0%, 100% { 
+                transform: translateY(0) rotateX(0deg) rotateY(0deg) rotateZ(0deg); 
+            }
+            25% { 
+                transform: translateY(-30px) rotateX(10deg) rotateY(90deg) rotateZ(5deg); 
+            }
+            50% { 
+                transform: translateY(-15px) rotateX(-5deg) rotateY(180deg) rotateZ(-5deg); 
+            }
+            75% { 
+                transform: translateY(-40px) rotateX(5deg) rotateY(270deg) rotateZ(3deg); 
+            }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 1.5rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(15, 15, 26, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 800;
+            font-size: 1.5rem;
+            text-decoration: none;
+            color: var(--text);
+        }
+
+        .logo-icon {
+            width: 42px;
+            height: 42px;
+            background: var(--gradient-1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            box-shadow: 0 0 30px rgba(139, 92, 246, 0.4);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-light);
+        }
+
+        .nav-cta {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.75rem;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-ghost {
+            color: var(--text);
+            background: transparent;
+            border: 1px solid var(--border);
+        }
+
+        .btn-ghost:hover {
+            background: var(--surface-hover);
+            border-color: var(--primary);
+        }
+
+        .btn-primary {
+            background: var(--gradient-1);
+            color: white;
+            box-shadow: 0 4px 20px rgba(139, 92, 246, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(139, 92, 246, 0.4);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 2rem 4rem;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 1000px;
+            text-align: center;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--surface-elevated);
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .badge-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 5.5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.03em;
+        }
+
+        .hero h1 span {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.35rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto 3rem;
+            line-height: 1.7;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 4rem;
+        }
+
+        .btn-large {
+            padding: 1.1rem 2.5rem;
+            font-size: 1.1rem;
+        }
+
+        /* 3D Demo Preview */
+        .hero-visual {
+            position: relative;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .demo-frame {
+            background: var(--surface-elevated);
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .demo-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 1.25rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .demo-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .demo-dot:nth-child(1) { background: #FF5F56; }
+        .demo-dot:nth-child(2) { background: #FFBD2E; }
+        .demo-dot:nth-child(3) { background: #27CA40; }
+
+        .demo-content {
+            padding: 2rem;
+            min-height: 350px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .demo-3d-space {
+            perspective: 1000px;
+            width: 100%;
+            height: 300px;
+            position: relative;
+        }
+
+        .demo-cube-container {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform-style: preserve-3d;
+            animation: rotateCube 15s linear infinite;
+        }
+
+        .demo-cube {
+            width: 100px;
+            height: 100px;
+            position: relative;
+            transform-style: preserve-3d;
+        }
+
+        .demo-cube-face {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 700;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(5px);
+        }
+
+        .demo-cube-face:nth-child(1) { 
+            background: rgba(139, 92, 246, 0.3);
+            transform: rotateY(0deg) translateZ(50px); 
+        }
+        .demo-cube-face:nth-child(2) { 
+            background: rgba(6, 182, 212, 0.3);
+            transform: rotateY(90deg) translateZ(50px); 
+        }
+        .demo-cube-face:nth-child(3) { 
+            background: rgba(16, 185, 129, 0.3);
+            transform: rotateY(180deg) translateZ(50px); 
+        }
+        .demo-cube-face:nth-child(4) { 
+            background: rgba(245, 158, 11, 0.3);
+            transform: rotateY(-90deg) translateZ(50px); 
+        }
+        .demo-cube-face:nth-child(5) { 
+            background: rgba(236, 72, 153, 0.3);
+            transform: rotateX(90deg) translateZ(50px); 
+        }
+        .demo-cube-face:nth-child(6) { 
+            background: rgba(239, 68, 68, 0.3);
+            transform: rotateX(-90deg) translateZ(50px); 
+        }
+
+        @keyframes rotateCube {
+            from { transform: translate(-50%, -50%) rotateX(-20deg) rotateY(0deg); }
+            to { transform: translate(-50%, -50%) rotateX(-20deg) rotateY(360deg); }
+        }
+
+        .demo-prompt {
+            position: absolute;
+            bottom: 1rem;
+            left: 1rem;
+            right: 1rem;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .demo-prompt::before {
+            content: '✨ ';
+        }
+
+        .typing-cursor {
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 4rem;
+            padding: 4rem 2rem;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 3rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Problem Section */
+        .section {
+            padding: 6rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-title {
+            font-size: 2.75rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Problem Cards */
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .problem-card {
+            background: var(--surface-elevated);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s;
+        }
+
+        .problem-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 50px -15px rgba(139, 92, 246, 0.2);
+        }
+
+        .problem-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .problem-icon.red { background: rgba(239, 68, 68, 0.15); }
+        .problem-icon.orange { background: rgba(245, 158, 11, 0.15); }
+        .problem-icon.blue { background: rgba(59, 130, 246, 0.15); }
+        .problem-icon.purple { background: rgba(139, 92, 246, 0.15); }
+
+        .problem-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .problem-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Solution Section */
+        .solution-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            margin-bottom: 4rem;
+        }
+
+        .solution-text h3 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .solution-text p {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+
+        .feature-list {
+            list-style: none;
+        }
+
+        .feature-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
+        }
+
+        .feature-check {
+            width: 22px;
+            height: 22px;
+            background: var(--gradient-1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 0.7rem;
+            margin-top: 2px;
+        }
+
+        .solution-visual {
+            background: var(--surface-elevated);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .workflow-step {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            margin-bottom: 1rem;
+        }
+
+        .workflow-step:last-child {
+            margin-bottom: 0;
+        }
+
+        .step-number {
+            width: 36px;
+            height: 36px;
+            background: var(--gradient-1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .step-text {
+            font-size: 0.95rem;
+        }
+
+        .step-text strong {
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        .step-text span {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        /* Platforms Section */
+        .platforms-section {
+            background: var(--surface-elevated);
+            border-radius: 24px;
+            padding: 4rem;
+            margin: 4rem 0;
+            border: 1px solid var(--border);
+        }
+
+        .platform-grid {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .platform-item {
+            text-align: center;
+            opacity: 0.7;
+            transition: all 0.3s;
+        }
+
+        .platform-item:hover {
+            opacity: 1;
+            transform: translateY(-5px);
+        }
+
+        .platform-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid var(--border);
+        }
+
+        .platform-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        /* Use Cases */
+        .usecase-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .usecase-tab {
+            padding: 0.75rem 1.5rem;
+            background: var(--surface-elevated);
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .usecase-tab:hover, .usecase-tab.active {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .usecase-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .usecase-image {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(6, 182, 212, 0.1));
+            border-radius: 20px;
+            padding: 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 8rem;
+            min-height: 350px;
+        }
+
+        .usecase-details h3 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .usecase-details p {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            line-height: 1.7;
+        }
+
+        .usecase-stats {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .usecase-stat {
+            text-align: center;
+        }
+
+        .usecase-stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--accent);
+        }
+
+        .usecase-stat-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* Pricing Section */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .price-card {
+            background: var(--surface-elevated);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .price-card:hover {
+            border-color: var(--primary);
+        }
+
+        .price-card.featured {
+            border: 2px solid var(--primary);
+            box-shadow: 0 0 60px rgba(139, 92, 246, 0.2);
+        }
+
+        .price-badge {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--gradient-1);
+            padding: 0.4rem 1rem;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .price-header {
+            text-align: center;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 2rem;
+        }
+
+        .price-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .price-value {
+            font-size: 3rem;
+            font-weight: 800;
+        }
+
+        .price-value span {
+            font-size: 1rem;
+            font-weight: 400;
+            color: var(--text-secondary);
+        }
+
+        .price-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .price-features li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 0;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .price-features li::before {
+            content: '✓';
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            text-align: center;
+            padding: 8rem 2rem;
+            position: relative;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(ellipse, rgba(139, 92, 246, 0.15), transparent 70%);
+            z-index: -1;
+        }
+
+        .cta-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 4rem 2rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-light);
+        }
+
+        .footer-copy {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem 1.5rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.1rem;
+            }
+
+            .stats-bar {
+                gap: 2rem;
+            }
+
+            .stat-value {
+                font-size: 2.25rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .solution-grid,
+            .usecase-content {
+                grid-template-columns: 1fr;
+            }
+
+            .platforms-section {
+                padding: 2rem;
+            }
+
+            .platform-grid {
+                gap: 1.5rem;
+            }
+
+            .cta-title {
+                font-size: 2.25rem;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="space-bg"></div>
+    <div class="grid-overlay"></div>
+    
+    <div class="floating-object object-1"></div>
+    <div class="floating-object object-2"></div>
+    <div class="floating-object object-3"></div>
+    <div class="floating-object object-4"></div>
+
+    <nav>
+        <a href="#" class="logo">
+            <div class="logo-icon">🌐</div>
+            SpatialForge
+        </a>
+        <ul class="nav-links">
+            <li><a href="#features">Features</a></li>
+            <li><a href="#usecases">Use Cases</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+            <li><a href="#docs">Docs</a></li>
+        </ul>
+        <div class="nav-cta">
+            <a href="#" class="btn btn-ghost">Sign In</a>
+            <a href="#" class="btn btn-primary">Start Building →</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <div class="badge">
+                <span class="badge-dot"></span>
+                Now in Public Beta — Create Your First World Free
+            </div>
+            <h1>Build <span>Spatial Worlds</span><br>No Code Required</h1>
+            <p class="hero-subtitle">
+                The AI-powered platform for creating immersive spatial computing experiences. 
+                Design once, deploy everywhere — Vision Pro, Quest, HoloLens, WebXR.
+            </p>
+            <div class="hero-cta">
+                <a href="#" class="btn btn-primary btn-large">Start Creating Free</a>
+                <a href="#" class="btn btn-ghost btn-large">Watch Demo ▶</a>
+            </div>
+            
+            <div class="hero-visual">
+                <div class="demo-frame">
+                    <div class="demo-header">
+                        <div class="demo-dot"></div>
+                        <div class="demo-dot"></div>
+                        <div class="demo-dot"></div>
+                    </div>
+                    <div class="demo-content">
+                        <div class="demo-3d-space">
+                            <div class="demo-cube-container">
+                                <div class="demo-cube">
+                                    <div class="demo-cube-face">🏠</div>
+                                    <div class="demo-cube-face">🚗</div>
+                                    <div class="demo-cube-face">🎮</div>
+                                    <div class="demo-cube-face">🏢</div>
+                                    <div class="demo-cube-face">🌍</div>
+                                    <div class="demo-cube-face">✨</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="demo-prompt">
+                            "Create a virtual product showroom with dramatic lighting and interactive hotspots..."<span class="typing-cursor">|</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="stats-bar">
+        <div class="stat">
+            <div class="stat-value">10x</div>
+            <div class="stat-label">Faster Creation</div>
+        </div>
+        <div class="stat">
+            <div class="stat-value">$500B</div>
+            <div class="stat-label">Spatial Computing Market by 2030</div>
+        </div>
+        <div class="stat">
+            <div class="stat-value">6</div>
+            <div class="stat-label">Platforms Supported</div>
+        </div>
+        <div class="stat">
+            <div class="stat-value">0</div>
+            <div class="stat-label">Lines of Code Needed</div>
+        </div>
+    </section>
+
+    <section class="section" id="problem">
+        <div class="section-header">
+            <h2 class="section-title">The Spatial Computing Bottleneck</h2>
+            <p class="section-subtitle">
+                The hardware is ready. The software exists. But creating content is impossibly hard.
+            </p>
+        </div>
+        <div class="problem-grid">
+            <div class="problem-card">
+                <div class="problem-icon red">⏱️</div>
+                <h3>Years to Learn</h3>
+                <p>3D modeling and spatial development require 2-4 years of training. Most creators never start.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon orange">💰</div>
+                <h3>Prohibitive Costs</h3>
+                <p>A single interactive 3D environment costs $50K-$500K. Only enterprises can afford spatial content.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon blue">🔄</div>
+                <h3>Fragmented Platforms</h3>
+                <p>Vision Pro, Quest, HoloLens all require different toolchains. Build once, deploy once.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon purple">🐢</div>
+                <h3>Glacial Iteration</h3>
+                <p>Changes take weeks, not hours. A/B testing is nearly impossible. Innovation stalls.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="features">
+        <div class="section-header">
+            <h2 class="section-title">The SpatialForge Approach</h2>
+            <p class="section-subtitle">
+                AI-powered creation that makes spatial computing accessible to everyone.
+            </p>
+        </div>
+        
+        <div class="solution-grid">
+            <div class="solution-text">
+                <h3>✨ Text-to-Space Generation</h3>
+                <p>
+                    Describe your vision in natural language. Our AI generates complete spatial experiences 
+                    with 3D assets, interactions, lighting, and audio — ready to deploy.
+                </p>
+                <ul class="feature-list">
+                    <li>
+                        <span class="feature-check">✓</span>
+                        Generate photorealistic 3D models on demand
+                    </li>
+                    <li>
+                        <span class="feature-check">✓</span>
+                        AI-powered spatial layout and UX design
+                    </li>
+                    <li>
+                        <span class="feature-check">✓</span>
+                        Automatic interaction and behavior logic
+                    </li>
+                    <li>
+                        <span class="feature-check">✓</span>
+                        Intelligent lighting and atmosphere
+                    </li>
+                </ul>
+            </div>
+            <div class="solution-visual">
+                <div class="workflow-step">
+                    <div class="step-number">1</div>
+                    <div class="step-text">
+                        <strong>Describe</strong>
+                        <span>Tell AI what you want to build</span>
+                    </div>
+                </div>
+                <div class="workflow-step">
+                    <div class="step-number">2</div>
+                    <div class="step-text">
+                        <strong>Generate</strong>
+                        <span>AI creates your spatial experience</span>
+                    </div>
+                </div>
+                <div class="workflow-step">
+                    <div class="step-number">3</div>
+                    <div class="step-text">
+                        <strong>Refine</strong>
+                        <span>Visual editing with AI assistance</span>
+                    </div>
+                </div>
+                <div class="workflow-step">
+                    <div class="step-number">4</div>
+                    <div class="step-text">
+                        <strong>Deploy</strong>
+                        <span>One-click publish to all platforms</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="platforms-section">
+            <div class="section-header">
+                <h2 class="section-title">Deploy Everywhere</h2>
+                <p class="section-subtitle">One creation. Every platform. Zero friction.</p>
+            </div>
+            <div class="platform-grid">
+                <div class="platform-item">
+                    <div class="platform-icon">🍎</div>
+                    <div class="platform-name">Vision Pro</div>
+                </div>
+                <div class="platform-item">
+                    <div class="platform-icon">🥽</div>
+                    <div class="platform-name">Meta Quest</div>
+                </div>
+                <div class="platform-item">
+                    <div class="platform-icon">📐</div>
+                    <div class="platform-name">HoloLens</div>
+                </div>
+                <div class="platform-item">
+                    <div class="platform-icon">🌐</div>
+                    <div class="platform-name">WebXR</div>
+                </div>
+                <div class="platform-item">
+                    <div class="platform-icon">📱</div>
+                    <div class="platform-name">Mobile AR</div>
+                </div>
+                <div class="platform-item">
+                    <div class="platform-icon">🖥️</div>
+                    <div class="platform-name">Desktop VR</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="usecases">
+        <div class="section-header">
+            <h2 class="section-title">Built for Every Industry</h2>
+            <p class="section-subtitle">
+                From enterprise training to creator experiences — SpatialForge powers them all.
+            </p>
+        </div>
+        <div class="usecase-tabs">
+            <button class="usecase-tab active">🎓 Training</button>
+            <button class="usecase-tab">🛋️ Commerce</button>
+            <button class="usecase-tab">🏗️ Architecture</button>
+            <button class="usecase-tab">🎨 Creators</button>
+        </div>
+        <div class="usecase-content">
+            <div class="usecase-image">🎓</div>
+            <div class="usecase-details">
+                <h3>Enterprise Training & Simulation</h3>
+                <p>
+                    Create immersive training simulations without writing code. 
+                    Procedurally generate scenario variations, track learner progress, 
+                    and integrate with existing LMS platforms. Retention jumps from 5% to 75%.
+                </p>
+                <div class="usecase-stats">
+                    <div class="usecase-stat">
+                        <div class="usecase-stat-value">75%</div>
+                        <div class="usecase-stat-label">Retention Rate</div>
+                    </div>
+                    <div class="usecase-stat">
+                        <div class="usecase-stat-value">340%</div>
+                        <div class="usecase-stat-label">Completion Increase</div>
+                    </div>
+                    <div class="usecase-stat">
+                        <div class="usecase-stat-value">10x</div>
+                        <div class="usecase-stat-label">Faster Development</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="pricing">
+        <div class="section-header">
+            <h2 class="section-title">Simple, Transparent Pricing</h2>
+            <p class="section-subtitle">Start free. Scale as you grow.</p>
+        </div>
+        <div class="pricing-grid">
+            <div class="price-card">
+                <div class="price-header">
+                    <div class="price-name">Creator</div>
+                    <div class="price-value">$0 <span>/month</span></div>
+                </div>
+                <ul class="price-features">
+                    <li>3 published experiences</li>
+                    <li>Community templates</li>
+                    <li>WebXR export</li>
+                    <li>Basic analytics</li>
+                    <li>Community support</li>
+                </ul>
+                <a href="#" class="btn btn-ghost" style="width: 100%;">Get Started</a>
+            </div>
+            <div class="price-card featured">
+                <div class="price-badge">Most Popular</div>
+                <div class="price-header">
+                    <div class="price-name">Pro</div>
+                    <div class="price-value">$49 <span>/month</span></div>
+                </div>
+                <ul class="price-features">
+                    <li>Unlimited experiences</li>
+                    <li>All platform exports</li>
+                    <li>Advanced analytics</li>
+                    <li>Custom branding</li>
+                    <li>Priority support</li>
+                    <li>Commercial use</li>
+                </ul>
+                <a href="#" class="btn btn-primary" style="width: 100%;">Start Pro Trial</a>
+            </div>
+            <div class="price-card">
+                <div class="price-header">
+                    <div class="price-name">Team</div>
+                    <div class="price-value">$199 <span>/seat/month</span></div>
+                </div>
+                <ul class="price-features">
+                    <li>Everything in Pro</li>
+                    <li>Real-time collaboration</li>
+                    <li>Version control</li>
+                    <li>Team management</li>
+                    <li>SSO integration</li>
+                    <li>Dedicated support</li>
+                </ul>
+                <a href="#" class="btn btn-ghost" style="width: 100%;">Contact Sales</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <h2 class="cta-title">Ready to Build Worlds?</h2>
+        <p class="cta-subtitle">
+            Join thousands of creators building the future of spatial computing. 
+            Start free — no credit card required.
+        </p>
+        <div class="cta-buttons">
+            <a href="#" class="btn btn-primary btn-large">Start Creating Free →</a>
+            <a href="#" class="btn btn-ghost btn-large">Talk to Sales</a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <a href="#" class="logo">
+                <div class="logo-icon">🌐</div>
+                SpatialForge
+            </a>
+            <div class="footer-links">
+                <a href="#">Documentation</a>
+                <a href="#">Community</a>
+                <a href="#">Blog</a>
+                <a href="#">Careers</a>
+                <a href="#">Privacy</a>
+                <a href="#">Terms</a>
+            </div>
+            <div class="footer-copy">
+                © 2026 SpatialForge. Build Worlds. No Code Required.
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
