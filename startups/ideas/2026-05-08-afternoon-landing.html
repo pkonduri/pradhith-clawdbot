@@ -1,0 +1,1660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PermitOS — The AI Operating System for Government Permitting</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #0ea5e9;
+            --accent: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #0f172a;
+            --darker: #020617;
+            --light: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-300: #cbd5e1;
+            --gray-400: #94a3b8;
+            --gray-500: #64748b;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1e293b;
+            --gradient-1: linear-gradient(135deg, #2563eb 0%, #0ea5e9 50%, #10b981 100%);
+            --gradient-2: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            --gradient-glow: linear-gradient(135deg, rgba(37, 99, 235, 0.15) 0%, rgba(14, 165, 233, 0.15) 50%, rgba(16, 185, 129, 0.15) 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--darker);
+            color: var(--light);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(37, 99, 235, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(37, 99, 235, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .floating-element {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .float-1 {
+            width: 600px;
+            height: 600px;
+            background: var(--primary);
+            top: -200px;
+            right: -200px;
+            animation: float1 25s ease-in-out infinite;
+        }
+
+        .float-2 {
+            width: 500px;
+            height: 500px;
+            background: var(--secondary);
+            bottom: -150px;
+            left: -150px;
+            animation: float2 30s ease-in-out infinite;
+        }
+
+        .float-3 {
+            width: 400px;
+            height: 400px;
+            background: var(--accent);
+            top: 50%;
+            left: 50%;
+            animation: float3 20s ease-in-out infinite;
+        }
+
+        @keyframes float1 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(-100px, 100px) scale(1.1); }
+            66% { transform: translate(50px, -50px) scale(0.9); }
+        }
+
+        @keyframes float2 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(80px, -80px) scale(1.1); }
+            66% { transform: translate(-40px, 40px) scale(0.9); }
+        }
+
+        @keyframes float3 {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.2; }
+            50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.4; }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1rem 2rem;
+            background: rgba(2, 6, 23, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--light);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: var(--gradient-1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--gray-300);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--light);
+        }
+
+        .nav-cta {
+            background: var(--gradient-1);
+            color: white;
+            padding: 0.75rem 1.75rem;
+            border-radius: 10px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(37, 99, 235, 0.3);
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(37, 99, 235, 0.4);
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 8rem 2rem 4rem;
+            z-index: 1;
+        }
+
+        .hero-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(37, 99, 235, 0.1);
+            border: 1px solid rgba(37, 99, 235, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-badge::before {
+            content: "";
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.5); }
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero h1 span {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.35rem;
+            color: var(--gray-400);
+            margin-bottom: 2.5rem;
+            line-height: 1.7;
+        }
+
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .hero-stat {
+            text-align: center;
+            padding: 1.25rem;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+        }
+
+        .hero-stat-value {
+            font-size: 2.25rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-stat-label {
+            font-size: 0.85rem;
+            color: var(--gray-500);
+            margin-top: 0.25rem;
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--gradient-1);
+            color: white;
+            box-shadow: 0 4px 25px rgba(37, 99, 235, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 35px rgba(37, 99, 235, 0.5);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--light);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Hero Visual */
+        .hero-visual {
+            position: relative;
+        }
+
+        .permit-mockup {
+            background: var(--gradient-2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 2rem;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5);
+        }
+
+        .mockup-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .mockup-title {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .mockup-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .mockup-title h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .mockup-title span {
+            font-size: 0.8rem;
+            color: var(--gray-500);
+        }
+
+        .status-badge {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--accent);
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .status-badge::before {
+            content: "";
+            width: 6px;
+            height: 6px;
+            background: var(--accent);
+            border-radius: 50%;
+        }
+
+        .permit-timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .timeline-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .timeline-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .timeline-icon.completed {
+            background: rgba(16, 185, 129, 0.15);
+        }
+
+        .timeline-icon.processing {
+            background: rgba(37, 99, 235, 0.15);
+            animation: pulseIcon 2s ease-in-out infinite;
+        }
+
+        @keyframes pulseIcon {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.4); }
+            50% { box-shadow: 0 0 0 10px rgba(37, 99, 235, 0); }
+        }
+
+        .timeline-icon.pending {
+            background: rgba(100, 116, 139, 0.15);
+        }
+
+        .timeline-content {
+            flex: 1;
+        }
+
+        .timeline-content h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+        }
+
+        .timeline-content p {
+            font-size: 0.8rem;
+            color: var(--gray-500);
+        }
+
+        .timeline-time {
+            font-size: 0.8rem;
+            color: var(--gray-500);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .time-saved {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(16, 185, 129, 0.05) 100%);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-top: 1rem;
+            text-align: center;
+        }
+
+        .time-saved-label {
+            font-size: 0.8rem;
+            color: var(--gray-400);
+            margin-bottom: 0.25rem;
+        }
+
+        .time-saved-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--accent);
+        }
+
+        /* Problem Section */
+        .section {
+            position: relative;
+            padding: 6rem 2rem;
+            z-index: 1;
+        }
+
+        .section-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-label {
+            display: inline-block;
+            background: rgba(37, 99, 235, 0.1);
+            border: 1px solid rgba(37, 99, 235, 0.2);
+            color: var(--secondary);
+            padding: 0.5rem 1.25rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: var(--gray-400);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Crisis Stats */
+        .crisis-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .crisis-card {
+            background: rgba(239, 68, 68, 0.05);
+            border: 1px solid rgba(239, 68, 68, 0.15);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .crisis-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+
+        .crisis-value {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: var(--danger);
+            margin-bottom: 0.5rem;
+        }
+
+        .crisis-label {
+            font-size: 1rem;
+            color: var(--gray-300);
+            font-weight: 500;
+        }
+
+        .crisis-detail {
+            font-size: 0.85rem;
+            color: var(--gray-500);
+            margin-top: 0.5rem;
+        }
+
+        /* Comparison Table */
+        .comparison-wrapper {
+            background: var(--gradient-2);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            overflow: hidden;
+        }
+
+        .comparison-header {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1.5rem 2rem;
+            font-weight: 700;
+        }
+
+        .comparison-header div:nth-child(2) {
+            text-align: center;
+            color: var(--gray-400);
+        }
+
+        .comparison-header div:nth-child(3) {
+            text-align: center;
+            color: var(--accent);
+        }
+
+        .comparison-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            padding: 1.25rem 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            align-items: center;
+        }
+
+        .comparison-row:last-child {
+            border-bottom: none;
+        }
+
+        .comparison-row div:nth-child(2),
+        .comparison-row div:nth-child(3) {
+            text-align: center;
+        }
+
+        .comparison-row div:nth-child(2) {
+            color: var(--danger);
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+        }
+
+        .comparison-row div:nth-child(3) {
+            color: var(--accent);
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+        }
+
+        .permit-type {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .permit-type-icon {
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Features Section */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: var(--gradient-2);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            padding: 2.5rem;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-1);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(37, 99, 235, 0.2);
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-icon {
+            width: 64px;
+            height: 64px;
+            background: var(--gradient-glow);
+            border: 1px solid rgba(37, 99, 235, 0.2);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card p {
+            color: var(--gray-400);
+            line-height: 1.7;
+        }
+
+        .feature-list {
+            list-style: none;
+            margin-top: 1.25rem;
+        }
+
+        .feature-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 0.5rem 0;
+            color: var(--gray-300);
+            font-size: 0.95rem;
+        }
+
+        .feature-list li::before {
+            content: "✓";
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        /* How It Works */
+        .process-flow {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            position: relative;
+        }
+
+        .process-flow::before {
+            content: "";
+            position: absolute;
+            top: 60px;
+            left: 10%;
+            right: 10%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary), var(--secondary), var(--accent), transparent);
+        }
+
+        .process-step {
+            text-align: center;
+            position: relative;
+        }
+
+        .process-number {
+            width: 80px;
+            height: 80px;
+            background: var(--gradient-1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 900;
+            margin: 0 auto 1.5rem;
+            box-shadow: 0 10px 40px rgba(37, 99, 235, 0.4);
+            position: relative;
+            z-index: 1;
+        }
+
+        .process-step h4 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .process-step p {
+            color: var(--gray-400);
+            font-size: 0.95rem;
+        }
+
+        /* Metrics Section */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+
+        .metric-card {
+            background: var(--gradient-2);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(37, 99, 235, 0.2);
+        }
+
+        .metric-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .metric-value {
+            font-size: 3rem;
+            font-weight: 900;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .metric-label {
+            color: var(--gray-400);
+            font-size: 0.95rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Market Opportunity */
+        .market-visual {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .market-chart {
+            background: var(--gradient-2);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            padding: 2.5rem;
+        }
+
+        .market-chart h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .market-bars {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .market-bar-item {
+            display: grid;
+            grid-template-columns: 140px 1fr 80px;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .market-bar-label {
+            font-size: 0.9rem;
+            color: var(--gray-300);
+        }
+
+        .market-bar-track {
+            height: 24px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .market-bar-fill {
+            height: 100%;
+            border-radius: 12px;
+            background: var(--gradient-1);
+            transition: width 1s ease;
+        }
+
+        .market-bar-value {
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--secondary);
+        }
+
+        .market-content h3 {
+            font-size: 2.25rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+        }
+
+        .market-content p {
+            color: var(--gray-400);
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .market-highlights {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .market-highlight {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 12px;
+        }
+
+        .highlight-icon {
+            width: 44px;
+            height: 44px;
+            background: var(--gradient-glow);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .highlight-text {
+            flex: 1;
+        }
+
+        .highlight-text strong {
+            display: block;
+            font-weight: 700;
+        }
+
+        .highlight-text span {
+            color: var(--gray-500);
+            font-size: 0.9rem;
+        }
+
+        /* Testimonials */
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .testimonial-card {
+            background: var(--gradient-2);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(37, 99, 235, 0.2);
+        }
+
+        .testimonial-quote {
+            font-size: 1.05rem;
+            color: var(--gray-300);
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .testimonial-quote::before {
+            content: '"';
+            font-size: 4rem;
+            color: var(--primary);
+            opacity: 0.3;
+            position: absolute;
+            top: -20px;
+            left: -10px;
+            font-family: Georgia, serif;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .author-info strong {
+            display: block;
+            font-weight: 600;
+        }
+
+        .author-info span {
+            color: var(--gray-500);
+            font-size: 0.9rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: var(--gradient-glow);
+            border-top: 1px solid rgba(37, 99, 235, 0.1);
+            border-bottom: 1px solid rgba(37, 99, 235, 0.1);
+        }
+
+        .cta-content {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cta-content h2 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-content p {
+            font-size: 1.2rem;
+            color: var(--gray-400);
+            margin-bottom: 2.5rem;
+        }
+
+        /* Footer */
+        footer {
+            position: relative;
+            padding: 4rem 2rem 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            z-index: 1;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 4rem;
+        }
+
+        .footer-brand p {
+            color: var(--gray-500);
+            margin-top: 1rem;
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .footer-col h4 {
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--gray-300);
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col ul li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-col a {
+            color: var(--gray-500);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-col a:hover {
+            color: var(--light);
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 3rem auto 0;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--gray-600);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero h1 {
+                font-size: 3rem;
+            }
+
+            .hero-visual {
+                order: -1;
+            }
+
+            .cta-group {
+                justify-content: center;
+            }
+
+            .features-grid,
+            .market-visual {
+                grid-template-columns: 1fr;
+            }
+
+            .process-flow {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .process-flow::before {
+                display: none;
+            }
+
+            .metrics-grid,
+            .testimonials-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .crisis-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 640px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2.25rem;
+            }
+
+            .hero-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .process-flow,
+            .metrics-grid,
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .comparison-header,
+            .comparison-row {
+                grid-template-columns: 1fr;
+                text-align: left !important;
+            }
+
+            .comparison-header div,
+            .comparison-row div {
+                padding: 0.5rem 0;
+            }
+
+            .footer-container {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .cta-content h2 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+    <div class="floating-element float-1"></div>
+    <div class="floating-element float-2"></div>
+    <div class="floating-element float-3"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <div class="logo-icon">🏛️</div>
+                PermitOS
+            </a>
+            <ul class="nav-links">
+                <li><a href="#problem">Problem</a></li>
+                <li><a href="#solution">Solution</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#market">Market</a></li>
+            </ul>
+            <a href="#contact" class="nav-cta">Request Demo</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <div class="hero-badge">Now Processing Permits 85% Faster</div>
+                <h1>The <span>AI Operating System</span> for Government Permitting</h1>
+                <p class="hero-subtitle">Every permit delay costs America $2 billion per day. PermitOS transforms months of bureaucratic waiting into minutes of intelligent automation — unlocking housing, infrastructure, and economic growth.</p>
+                <div class="cta-group">
+                    <a href="#contact" class="btn btn-primary">
+                        Schedule Demo
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </a>
+                    <a href="#solution" class="btn btn-secondary">See How It Works</a>
+                </div>
+                <div class="hero-stats">
+                    <div class="hero-stat">
+                        <div class="hero-stat-value">$150B+</div>
+                        <div class="hero-stat-label">Annual delay costs</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="hero-stat-value">85%</div>
+                        <div class="hero-stat-label">Time reduction</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="hero-stat-value">$50B</div>
+                        <div class="hero-stat-label">Market opportunity</div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="permit-mockup">
+                    <div class="mockup-header">
+                        <div class="mockup-title">
+                            <div class="mockup-icon">📋</div>
+                            <div>
+                                <h3>Building Permit #2026-0508</h3>
+                                <span>Mixed-Use Development • 245 Main Street</span>
+                            </div>
+                        </div>
+                        <div class="status-badge">AI Processing</div>
+                    </div>
+                    <div class="permit-timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-icon completed">✓</div>
+                            <div class="timeline-content">
+                                <h4>Document Ingestion</h4>
+                                <p>127 files analyzed • 3,400 pages processed</p>
+                            </div>
+                            <div class="timeline-time">12 sec</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-icon completed">✓</div>
+                            <div class="timeline-content">
+                                <h4>Code Compliance Check</h4>
+                                <p>4,200 code sections verified • 3 annotations</p>
+                            </div>
+                            <div class="timeline-time">4 min</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-icon processing">⚡</div>
+                            <div class="timeline-content">
+                                <h4>Multi-Agency Review</h4>
+                                <p>Planning + Fire + Public Works coordinated</p>
+                            </div>
+                            <div class="timeline-time">~2 hrs</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-icon pending">⏳</div>
+                            <div class="timeline-content">
+                                <h4>Human Verification</h4>
+                                <p>Senior reviewer final approval pending</p>
+                            </div>
+                            <div class="timeline-time">Est. 1 day</div>
+                        </div>
+                    </div>
+                    <div class="time-saved">
+                        <div class="time-saved-label">Estimated Time Saved</div>
+                        <div class="time-saved-value">147 Days → 3 Days</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="section" id="problem">
+        <div class="section-container">
+            <div class="section-header">
+                <div class="section-label">The Crisis</div>
+                <h2 class="section-title">America's $150 Billion Bottleneck</h2>
+                <p class="section-subtitle">Permitting delays are strangling economic growth, blocking housing, and stalling critical infrastructure.</p>
+            </div>
+            
+            <div class="crisis-grid">
+                <div class="crisis-card">
+                    <div class="crisis-value">6.5M</div>
+                    <div class="crisis-label">Housing Unit Shortage</div>
+                    <div class="crisis-detail">Projects stuck in 18-36 month queues</div>
+                </div>
+                <div class="crisis-card">
+                    <div class="crisis-value">8,100 GW</div>
+                    <div class="crisis-label">Clean Energy Backlog</div>
+                    <div class="crisis-detail">Solar/wind projects in 5+ year queues</div>
+                </div>
+                <div class="crisis-card">
+                    <div class="crisis-value">7-10 Years</div>
+                    <div class="crisis-label">Federal Infrastructure</div>
+                    <div class="crisis-detail">Average approval timeline</div>
+                </div>
+            </div>
+
+            <div class="comparison-wrapper">
+                <div class="comparison-header">
+                    <div>Permit Type</div>
+                    <div>Traditional</div>
+                    <div>With PermitOS</div>
+                </div>
+                <div class="comparison-row">
+                    <div class="permit-type">
+                        <div class="permit-type-icon">🏠</div>
+                        <span>Residential Building Permit</span>
+                    </div>
+                    <div>6-18 months</div>
+                    <div>7-21 days</div>
+                </div>
+                <div class="comparison-row">
+                    <div class="permit-type">
+                        <div class="permit-type-icon">🏢</div>
+                        <span>Commercial Development</span>
+                    </div>
+                    <div>12-36 months</div>
+                    <div>30-90 days</div>
+                </div>
+                <div class="comparison-row">
+                    <div class="permit-type">
+                        <div class="permit-type-icon">⚡</div>
+                        <span>Utility Interconnection</span>
+                    </div>
+                    <div>5+ years</div>
+                    <div>6-12 months</div>
+                </div>
+                <div class="comparison-row">
+                    <div class="permit-type">
+                        <div class="permit-type-icon">🌿</div>
+                        <span>Environmental Review (NEPA)</span>
+                    </div>
+                    <div>4.5 years avg</div>
+                    <div>12-18 months</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="section" id="solution" style="background: rgba(0,0,0,0.2);">
+        <div class="section-container">
+            <div class="section-header">
+                <div class="section-label">How It Works</div>
+                <h2 class="section-title">From 18 Months to 18 Minutes</h2>
+                <p class="section-subtitle">AI that understands building codes, analyzes plans, and coordinates agencies — automatically.</p>
+            </div>
+
+            <div class="process-flow">
+                <div class="process-step">
+                    <div class="process-number">1</div>
+                    <h4>Upload Documents</h4>
+                    <p>PDFs, CAD files, BIM models — any format, instantly ingested</p>
+                </div>
+                <div class="process-step">
+                    <div class="process-number">2</div>
+                    <h4>AI Analyzes</h4>
+                    <p>Checks 5,000+ code sections in minutes, flags issues with citations</p>
+                </div>
+                <div class="process-step">
+                    <div class="process-number">3</div>
+                    <h4>Coordinate Agencies</h4>
+                    <p>Planning, Fire, Public Works — parallel review, unified tracking</p>
+                </div>
+                <div class="process-step">
+                    <div class="process-number">4</div>
+                    <h4>Approve & Issue</h4>
+                    <p>Human reviewer validates AI findings, permit issues same-day</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="section" id="features">
+        <div class="section-container">
+            <div class="section-header">
+                <div class="section-label">Platform</div>
+                <h2 class="section-title">AI-Native Permitting Infrastructure</h2>
+                <p class="section-subtitle">Purpose-built to handle the complexity of modern regulatory compliance.</p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🧠</div>
+                    <h3>OmniCode AI Engine</h3>
+                    <p>The first AI that truly understands building codes, zoning laws, and regulatory requirements across 15,000+ jurisdictions.</p>
+                    <ul class="feature-list">
+                        <li>Multi-modal document understanding</li>
+                        <li>Real-time code amendment tracking</li>
+                        <li>Natural language explanations</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>PlanCheck Autopilot</h3>
+                    <p>Autonomous plan review that catches compliance issues before human reviewers — reducing cycles by 75%.</p>
+                    <ul class="feature-list">
+                        <li>30-second completeness check</li>
+                        <li>Automated redline generation</li>
+                        <li>Intelligent diff highlighting</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🗺️</div>
+                    <h3>PermitPath Navigator</h3>
+                    <p>AI assistant that guides applicants through the entire process — what permits, what documents, what order.</p>
+                    <ul class="feature-list">
+                        <li>Project-specific checklists</li>
+                        <li>Pre-submission validation</li>
+                        <li>Real-time status tracking</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔗</div>
+                    <h3>CoordinationHub</h3>
+                    <p>Unified platform orchestrating review across planning, building, fire, and public works departments.</p>
+                    <ul class="feature-list">
+                        <li>Single application portal</li>
+                        <li>Parallel review tracking</li>
+                        <li>Cross-agency communication</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Metrics Section -->
+    <section class="section" style="background: rgba(0,0,0,0.2);">
+        <div class="section-container">
+            <div class="section-header">
+                <div class="section-label">Impact</div>
+                <h2 class="section-title">Measurable Results</h2>
+            </div>
+
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-icon">⏱️</div>
+                    <div class="metric-value">85%</div>
+                    <div class="metric-label">Faster Processing</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon">🔄</div>
+                    <div class="metric-value">75%</div>
+                    <div class="metric-label">Fewer Review Cycles</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon">📊</div>
+                    <div class="metric-value">65%</div>
+                    <div class="metric-label">Less Incomplete Apps</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon">💰</div>
+                    <div class="metric-value">40%</div>
+                    <div class="metric-label">Cost Reduction</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Market Section -->
+    <section class="section" id="market">
+        <div class="section-container">
+            <div class="section-header">
+                <div class="section-label">Opportunity</div>
+                <h2 class="section-title">$50B Market Ready for Disruption</h2>
+            </div>
+
+            <div class="market-visual">
+                <div class="market-chart">
+                    <h3>Total Addressable Market</h3>
+                    <div class="market-bars">
+                        <div class="market-bar-item">
+                            <div class="market-bar-label">Permitting Software</div>
+                            <div class="market-bar-track">
+                                <div class="market-bar-fill" style="width: 50%;"></div>
+                            </div>
+                            <div class="market-bar-value">$25B</div>
+                        </div>
+                        <div class="market-bar-item">
+                            <div class="market-bar-label">Code Compliance</div>
+                            <div class="market-bar-track">
+                                <div class="market-bar-fill" style="width: 16%;"></div>
+                            </div>
+                            <div class="market-bar-value">$4B</div>
+                        </div>
+                        <div class="market-bar-item">
+                            <div class="market-bar-label">Utility Interconnect</div>
+                            <div class="market-bar-track">
+                                <div class="market-bar-fill" style="width: 12%;"></div>
+                            </div>
+                            <div class="market-bar-value">$3B</div>
+                        </div>
+                        <div class="market-bar-item">
+                            <div class="market-bar-label">Pro Services</div>
+                            <div class="market-bar-track">
+                                <div class="market-bar-fill" style="width: 36%;"></div>
+                            </div>
+                            <div class="market-bar-value">$18B</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="market-content">
+                    <h3>Legacy Systems Are Failing</h3>
+                    <p>90% of municipalities run 15+ year-old permitting software. Tyler Technologies and Accela dominate — but neither has AI capabilities. The replacement cycle is accelerating.</p>
+                    <div class="market-highlights">
+                        <div class="market-highlight">
+                            <div class="highlight-icon">🏛️</div>
+                            <div class="highlight-text">
+                                <strong>$1.2T Infrastructure Act</strong>
+                                <span>Federal mandates driving modernization</span>
+                            </div>
+                        </div>
+                        <div class="market-highlight">
+                            <div class="highlight-icon">🏠</div>
+                            <div class="highlight-text">
+                                <strong>State Housing Mandates</strong>
+                                <span>CA, WA, CO requiring digital permits by 2027</span>
+                            </div>
+                        </div>
+                        <div class="market-highlight">
+                            <div class="highlight-icon">⚡</div>
+                            <div class="highlight-text">
+                                <strong>Clean Energy Transition</strong>
+                                <span>IRA permitting reform driving adoption</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="section" style="background: rgba(0,0,0,0.2);">
+        <div class="section-container">
+            <div class="section-header">
+                <div class="section-label">Voices</div>
+                <h2 class="section-title">What Leaders Are Saying</h2>
+            </div>
+
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-quote">PermitOS could finally solve the problem that's been blocking housing production for decades. This is exactly what cities need.</div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">MK</div>
+                        <div class="author-info">
+                            <strong>Maya Krishnan</strong>
+                            <span>Former City Planning Director</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-quote">We lose $2M per month in holding costs waiting for permits. An AI solution that cuts this by 80% is a game-changer for our industry.</div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">RC</div>
+                        <div class="author-info">
+                            <strong>Robert Chen</strong>
+                            <span>Real Estate Developer</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-quote">The permitting bottleneck is the single biggest barrier to deploying clean energy at scale. Technology like this is essential.</div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">SE</div>
+                        <div class="author-info">
+                            <strong>Sarah Evans</strong>
+                            <span>Clean Energy Executive</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="section cta-section" id="contact">
+        <div class="section-container">
+            <div class="cta-content">
+                <h2>Ready to Transform Permitting?</h2>
+                <p>Join forward-thinking municipalities building the future of government services. Schedule a demo to see PermitOS in action.</p>
+                <div class="cta-group" style="justify-content: center;">
+                    <a href="mailto:hello@permitos.ai" class="btn btn-primary">
+                        Request Demo
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </a>
+                    <a href="#" class="btn btn-secondary">Download Whitepaper</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-brand">
+                <a href="#" class="logo">
+                    <div class="logo-icon">🏛️</div>
+                    PermitOS
+                </a>
+                <p>The AI operating system for government permitting. Unblocking America, one permit at a time.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Platform</h4>
+                <ul>
+                    <li><a href="#">OmniCode AI</a></li>
+                    <li><a href="#">PlanCheck</a></li>
+                    <li><a href="#">CoordinationHub</a></li>
+                    <li><a href="#">Analytics</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Solutions</h4>
+                <ul>
+                    <li><a href="#">Municipalities</a></li>
+                    <li><a href="#">Developers</a></li>
+                    <li><a href="#">Utilities</a></li>
+                    <li><a href="#">Federal</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div>&copy; 2026 PermitOS. All rights reserved.</div>
+            <div>Building the future of government services.</div>
+        </div>
+    </footer>
+</body>
+</html>
