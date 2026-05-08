@@ -287,6 +287,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-05-07 | Morning | PharmGen AI — The Platform for AI-Designed Personalized Pharmaceuticals | [Playbook](2026-05-07-morning.md) • [Landing](2026-05-07-morning-landing.html) • [PDF](2026-05-07-morning.pdf) |
 | 2026-05-07 | Afternoon | SpatialForge — The AI Operating System for Spatial Computing Creation | [Playbook](2026-05-07-afternoon.md) • [Landing](2026-05-07-afternoon-landing.html) • [PDF](2026-05-07-afternoon.pdf) |
 | 2026-05-08 | Evening | RewindOS — The AI Operating System for Biological Age Reversal | [Playbook](2026-05-08-evening.md) • [Landing](2026-05-08-evening-landing.html) • [PDF](2026-05-08-evening.pdf) |
+| 2026-05-08 | Morning | BuildMind AI — The Autonomous Operating System for Modular Construction | [Playbook](2026-05-08-morning.md) • [Landing](2026-05-08-morning-landing.html) • [PDF](2026-05-08-morning.pdf) |
 <!-- New entries will be added above this line -->
 
 ---

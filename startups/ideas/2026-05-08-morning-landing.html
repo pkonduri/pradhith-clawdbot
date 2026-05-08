@@ -1,0 +1,1343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BuildMind AI — The Autonomous Operating System for Modular Construction</title>
+    <meta name="description" content="Buildings should be designed once, manufactured infinitely, and assembled autonomously. BuildMind AI is transforming the $13T construction industry.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #FF6B35;
+            --primary-dark: #E55A2B;
+            --primary-light: #FF8F66;
+            --secondary: #004E64;
+            --secondary-dark: #003847;
+            --accent: #00A5CF;
+            --accent-light: #25B8E0;
+            --dark: #0D1B2A;
+            --dark-light: #1B2838;
+            --dark-medium: #243447;
+            --light: #F7F9FC;
+            --light-gray: #E8ECF1;
+            --gray: #8B9AAB;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --gradient-hero: linear-gradient(135deg, #0D1B2A 0%, #1B2838 50%, #004E64 100%);
+            --gradient-accent: linear-gradient(135deg, #FF6B35 0%, #FF8F66 100%);
+            --gradient-card: linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%);
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.08);
+            --shadow-md: 0 8px 32px rgba(0,0,0,0.12);
+            --shadow-lg: 0 24px 64px rgba(0,0,0,0.2);
+            --shadow-glow: 0 0 60px rgba(255,107,53,0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--dark);
+            color: var(--light);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                linear-gradient(rgba(255,107,53,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,107,53,0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .bg-gradient {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100vh;
+            background: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(255,107,53,0.15) 0%, transparent 50%),
+                        radial-gradient(ellipse 60% 40% at 80% 60%, rgba(0,165,207,0.1) 0%, transparent 40%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1rem 2rem;
+            background: rgba(13,27,42,0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: var(--gradient-accent);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-accent);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-icon svg {
+            width: 24px;
+            height: 24px;
+            fill: white;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--gray);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .cta-button {
+            padding: 0.75rem 1.5rem;
+            background: var(--gradient-accent);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            font-size: 0.95rem;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 8rem 2rem 4rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(255,107,53,0.1);
+            border: 1px solid rgba(255,107,53,0.3);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--primary-light);
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .hero-badge::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 5.5rem);
+            font-weight: 900;
+            text-align: center;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.8s ease-out 0.2s backwards;
+        }
+
+        .hero h1 span {
+            background: var(--gradient-accent);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-tagline {
+            font-size: 1.5rem;
+            color: var(--gray);
+            text-align: center;
+            max-width: 700px;
+            margin-bottom: 1rem;
+            animation: fadeInUp 0.8s ease-out 0.4s backwards;
+        }
+
+        .hero-quote {
+            font-size: 1.25rem;
+            color: var(--accent-light);
+            text-align: center;
+            max-width: 700px;
+            margin-bottom: 3rem;
+            font-style: italic;
+            animation: fadeInUp 0.8s ease-out 0.5s backwards;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            animation: fadeInUp 0.8s ease-out 0.6s backwards;
+        }
+
+        .hero-cta .cta-button {
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+        }
+
+        .cta-secondary {
+            padding: 1rem 2rem;
+            background: transparent;
+            color: var(--light);
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .cta-secondary:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 3rem;
+            margin-top: 5rem;
+            padding-top: 3rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            animation: fadeInUp 0.8s ease-out 0.8s backwards;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--primary);
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--gray);
+            margin-top: 0.5rem;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Section Styles */
+        section {
+            position: relative;
+            z-index: 1;
+            padding: 6rem 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(255,107,53,0.1);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Problem Section */
+        .problem-section {
+            background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.3) 100%);
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .problem-card {
+            background: var(--gradient-card);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.4s;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255,107,53,0.3);
+            background: rgba(255,107,53,0.05);
+        }
+
+        .problem-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(255,107,53,0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .problem-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .problem-card p {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        .problem-stat {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .problem-stat-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .problem-stat-label {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        /* Solution Section */
+        .solution-section {
+            background: linear-gradient(180deg, rgba(0,0,0,0.3) 0%, transparent 100%);
+        }
+
+        .solution-visual {
+            background: var(--dark-light);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 4rem;
+            overflow: hidden;
+        }
+
+        .architecture-diagram {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .arch-module {
+            background: rgba(255,107,53,0.05);
+            border: 1px solid rgba(255,107,53,0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .arch-module h4 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--primary-light);
+            margin-bottom: 0.75rem;
+        }
+
+        .arch-module ul {
+            list-style: none;
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+
+        .arch-module li {
+            padding: 0.25rem 0;
+        }
+
+        .arch-center {
+            grid-column: 1 / -1;
+            background: rgba(0,165,207,0.1);
+            border-color: rgba(0,165,207,0.3);
+        }
+
+        .arch-center h4 {
+            color: var(--accent-light);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: var(--gradient-card);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px;
+            padding: 2.5rem;
+            transition: all 0.4s;
+        }
+
+        .feature-card:hover {
+            border-color: var(--accent);
+            box-shadow: 0 0 40px rgba(0,165,207,0.1);
+        }
+
+        .feature-number {
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--primary);
+            opacity: 0.3;
+            line-height: 1;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card p {
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-metrics {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .feature-metric {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .feature-metric-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--success);
+        }
+
+        .feature-metric-label {
+            font-size: 0.75rem;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Market Section */
+        .market-section {
+            background: var(--dark-medium);
+        }
+
+        .market-opportunity {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .market-visual {
+            position: relative;
+        }
+
+        .market-circle {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: conic-gradient(
+                var(--primary) 0% 30%,
+                var(--accent) 30% 55%,
+                var(--secondary) 55% 100%
+            );
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .market-circle-inner {
+            width: 200px;
+            height: 200px;
+            background: var(--dark-medium);
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .market-total {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--primary);
+        }
+
+        .market-label {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .market-legend {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .legend-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .legend-dot.tam { background: var(--primary); }
+        .legend-dot.sam { background: var(--accent); }
+        .legend-dot.som { background: var(--secondary); }
+
+        .market-content h3 {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+        }
+
+        .market-points {
+            list-style: none;
+        }
+
+        .market-points li {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-left: 0;
+        }
+
+        .market-points li::before {
+            content: '→';
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        .market-points strong {
+            color: var(--primary);
+        }
+
+        /* Business Model Section */
+        .business-section {
+            background: linear-gradient(180deg, var(--dark-medium) 0%, var(--dark) 100%);
+        }
+
+        .business-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .business-card {
+            background: var(--gradient-card);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .business-percentage {
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: var(--gradient-accent);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .business-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin: 1rem 0 0.5rem;
+        }
+
+        .business-card p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* Traction Section */
+        .traction-section {
+            position: relative;
+        }
+
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, var(--primary) 0%, var(--accent) 100%);
+            transform: translateX(-50%);
+        }
+
+        .timeline-item {
+            display: flex;
+            justify-content: flex-end;
+            padding-right: 50%;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .timeline-item:nth-child(even) {
+            justify-content: flex-start;
+            padding-right: 0;
+            padding-left: 50%;
+        }
+
+        .timeline-content {
+            background: var(--gradient-card);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 12px;
+            padding: 1.5rem;
+            max-width: 350px;
+            position: relative;
+        }
+
+        .timeline-content::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 20px;
+            height: 20px;
+            background: var(--primary);
+            border-radius: 50%;
+            transform: translateY(-50%);
+        }
+
+        .timeline-item:nth-child(odd) .timeline-content::before {
+            right: -60px;
+        }
+
+        .timeline-item:nth-child(even) .timeline-content::before {
+            left: -60px;
+        }
+
+        .timeline-year {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-content h4 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-content p {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, var(--secondary-dark) 0%, var(--dark) 100%);
+            text-align: center;
+            padding: 8rem 2rem;
+        }
+
+        .cta-section h2 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-section h2 span {
+            background: var(--gradient-accent);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .cta-section p {
+            font-size: 1.25rem;
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+
+        .cta-section .cta-button {
+            padding: 1.25rem 3rem;
+            font-size: 1.1rem;
+        }
+
+        .cta-contact {
+            margin-top: 3rem;
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .cta-contact a {
+            color: var(--gray);
+            text-decoration: none;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .cta-contact a:hover {
+            color: var(--primary);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding: 3rem 2rem;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        footer p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .problem-grid,
+            .features-grid,
+            .business-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .market-opportunity {
+                grid-template-columns: 1fr;
+            }
+            
+            .architecture-diagram {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero-stats {
+                grid-template-columns: 1fr 1fr;
+                gap: 2rem;
+            }
+            
+            .hero-cta {
+                flex-direction: column;
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .timeline::before {
+                left: 20px;
+            }
+            
+            .timeline-item,
+            .timeline-item:nth-child(even) {
+                padding-left: 50px;
+                padding-right: 0;
+                justify-content: flex-start;
+            }
+            
+            .timeline-content::before,
+            .timeline-item:nth-child(odd) .timeline-content::before,
+            .timeline-item:nth-child(even) .timeline-content::before {
+                left: -40px;
+            }
+        }
+
+        /* Floating elements */
+        .floating-element {
+            position: absolute;
+            opacity: 0.1;
+            pointer-events: none;
+        }
+
+        .float-1 {
+            top: 20%;
+            left: 5%;
+            width: 300px;
+            height: 300px;
+            background: var(--primary);
+            border-radius: 50%;
+            filter: blur(100px);
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .float-2 {
+            bottom: 20%;
+            right: 5%;
+            width: 400px;
+            height: 400px;
+            background: var(--accent);
+            border-radius: 50%;
+            filter: blur(120px);
+            animation: float 25s infinite ease-in-out reverse;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            25% { transform: translate(30px, -30px); }
+            50% { transform: translate(-20px, 20px); }
+            75% { transform: translate(20px, 30px); }
+        }
+
+        /* Construction icons animation */
+        .construction-icons {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            opacity: 0.1;
+            pointer-events: none;
+        }
+
+        .construct-icon {
+            position: absolute;
+            font-size: 2rem;
+            animation: orbit 30s linear infinite;
+        }
+
+        .construct-icon:nth-child(1) { animation-delay: 0s; }
+        .construct-icon:nth-child(2) { animation-delay: -5s; }
+        .construct-icon:nth-child(3) { animation-delay: -10s; }
+        .construct-icon:nth-child(4) { animation-delay: -15s; }
+        .construct-icon:nth-child(5) { animation-delay: -20s; }
+        .construct-icon:nth-child(6) { animation-delay: -25s; }
+
+        @keyframes orbit {
+            from { transform: rotate(0deg) translateX(250px) rotate(0deg); }
+            to { transform: rotate(360deg) translateX(250px) rotate(-360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+    <div class="bg-gradient"></div>
+    
+    <nav>
+        <div class="nav-content">
+            <div class="logo">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2L2 7v10l10 5 10-5V7L12 2zm0 2.5L18.5 7 12 9.5 5.5 7 12 4.5zM4 8.5l7 3.5v7L4 15.5v-7zm9 10.5v-7l7-3.5v7l-7 3.5z"/>
+                    </svg>
+                </div>
+                BuildMind AI
+            </div>
+            <ul class="nav-links">
+                <li><a href="#problem">Problem</a></li>
+                <li><a href="#solution">Solution</a></li>
+                <li><a href="#market">Market</a></li>
+                <li><a href="#model">Business Model</a></li>
+                <li><a href="#roadmap">Roadmap</a></li>
+            </ul>
+            <a href="#contact" class="cta-button">Get Started</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="floating-element float-1"></div>
+        <div class="floating-element float-2"></div>
+        <div class="construction-icons">
+            <span class="construct-icon">🏗️</span>
+            <span class="construct-icon">🏠</span>
+            <span class="construct-icon">🏢</span>
+            <span class="construct-icon">🔧</span>
+            <span class="construct-icon">📐</span>
+            <span class="construct-icon">🚛</span>
+        </div>
+        
+        <span class="hero-badge">Transforming the $13T Construction Industry</span>
+        <h1>The Autonomous OS for<br><span>Modular Construction</span></h1>
+        <p class="hero-tagline">AI-powered intelligence that transforms how buildings are designed, manufactured, and assembled</p>
+        <p class="hero-quote">"Buildings should be designed once, manufactured infinitely, and assembled autonomously."</p>
+        
+        <div class="hero-cta">
+            <a href="#contact" class="cta-button">Request Demo</a>
+            <a href="#solution" class="cta-secondary">Learn More →</a>
+        </div>
+
+        <div class="hero-stats">
+            <div class="stat">
+                <div class="stat-value">50%</div>
+                <div class="stat-label">Faster Construction</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">30%</div>
+                <div class="stat-label">Cost Reduction</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">90%</div>
+                <div class="stat-label">Less Waste</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">85%</div>
+                <div class="stat-label">Factory Utilization</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="problem-section" id="problem">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">The Problem</span>
+                <h2 class="section-title">Construction Is Catastrophically Broken</h2>
+                <p class="section-subtitle">The $13T global construction industry is facing a perfect storm of crises</p>
+            </div>
+
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="problem-icon">🏚️</div>
+                    <h3>Global Housing Deficit</h3>
+                    <p>3 billion people need adequate housing by 2030. Traditional construction cannot scale to meet demand.</p>
+                    <div class="problem-stat">
+                        <span class="problem-stat-value">3B</span>
+                        <span class="problem-stat-label">people underhoused</span>
+                    </div>
+                </div>
+
+                <div class="problem-card">
+                    <div class="problem-icon">👷</div>
+                    <h3>Labor Crisis</h3>
+                    <p>41% of construction workforce retiring in 10 years. 650,000+ jobs unfilled in the US alone.</p>
+                    <div class="problem-stat">
+                        <span class="problem-stat-value">41%</span>
+                        <span class="problem-stat-label">workforce retiring</span>
+                    </div>
+                </div>
+
+                <div class="problem-card">
+                    <div class="problem-icon">📈</div>
+                    <h3>Cost Explosion</h3>
+                    <p>Construction costs up 40% since 2020. 30% average cost overruns on projects.</p>
+                    <div class="problem-stat">
+                        <span class="problem-stat-value">40%</span>
+                        <span class="problem-stat-label">cost increase since 2020</span>
+                    </div>
+                </div>
+
+                <div class="problem-card">
+                    <div class="problem-icon">🐌</div>
+                    <h3>Productivity Stagnation</h3>
+                    <p>Only 1% annual productivity growth vs 3.6% for manufacturing. Industry stuck in the past.</p>
+                    <div class="problem-stat">
+                        <span class="problem-stat-value">1%</span>
+                        <span class="problem-stat-label">productivity growth</span>
+                    </div>
+                </div>
+
+                <div class="problem-card">
+                    <div class="problem-icon">🗑️</div>
+                    <h3>Massive Waste</h3>
+                    <p>30% waste rate on materials. $200B+ wasted annually in the US alone.</p>
+                    <div class="problem-stat">
+                        <span class="problem-stat-value">$200B</span>
+                        <span class="problem-stat-label">wasted annually</span>
+                    </div>
+                </div>
+
+                <div class="problem-card">
+                    <div class="problem-icon">🌍</div>
+                    <h3>Climate Pressure</h3>
+                    <p>Buildings account for 40% of global carbon emissions. Regulations demanding change.</p>
+                    <div class="problem-stat">
+                        <span class="problem-stat-value">40%</span>
+                        <span class="problem-stat-label">of global emissions</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="solution-section" id="solution">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">The Solution</span>
+                <h2 class="section-title">BuildMind AI Platform</h2>
+                <p class="section-subtitle">End-to-end intelligence that transforms modular construction into a precision manufacturing ecosystem</p>
+            </div>
+
+            <div class="solution-visual">
+                <div class="architecture-diagram">
+                    <div class="arch-module">
+                        <h4>🎨 Design Intelligence</h4>
+                        <ul>
+                            <li>DfMA AI (Design for Modular Assembly)</li>
+                            <li>Parametric Module Library</li>
+                            <li>Real-Time Cost Prediction</li>
+                            <li>Automated Fabrication Drawings</li>
+                        </ul>
+                    </div>
+                    <div class="arch-module">
+                        <h4>🏭 Factory Intelligence</h4>
+                        <ul>
+                            <li>AI Production Scheduling</li>
+                            <li>Computer Vision QC</li>
+                            <li>Predictive Maintenance</li>
+                            <li>Digital Twin Factory</li>
+                        </ul>
+                    </div>
+                    <div class="arch-module">
+                        <h4>🚚 Logistics Intelligence</h4>
+                        <ul>
+                            <li>AI Route Planning</li>
+                            <li>Fleet Optimization</li>
+                            <li>JIT Delivery Coordination</li>
+                            <li>Permit Automation</li>
+                        </ul>
+                    </div>
+                    <div class="arch-module arch-center">
+                        <h4>🔗 Capacity Marketplace</h4>
+                        <ul>
+                            <li>Connect Developers ↔ Factories ↔ Logistics Providers</li>
+                            <li>AI-Powered Matching • Verified Ratings • Escrow Payments</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-number">01</div>
+                    <h3>Design Intelligence</h3>
+                    <p>Real-time manufacturability feedback as architects design. AI suggests optimal module configurations and flags issues before they reach production.</p>
+                    <div class="feature-metrics">
+                        <div class="feature-metric">
+                            <span class="feature-metric-value">90%</span>
+                            <span class="feature-metric-label">Fewer Design Iterations</span>
+                        </div>
+                        <div class="feature-metric">
+                            <span class="feature-metric-value">99.7%</span>
+                            <span class="feature-metric-label">First-Pass Acceptance</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-number">02</div>
+                    <h3>Factory Intelligence</h3>
+                    <p>AI orchestrates production scheduling, computer vision inspects quality, and predictive maintenance prevents downtime.</p>
+                    <div class="feature-metrics">
+                        <div class="feature-metric">
+                            <span class="feature-metric-value">85%</span>
+                            <span class="feature-metric-label">Equipment Utilization</span>
+                        </div>
+                        <div class="feature-metric">
+                            <span class="feature-metric-value">73%</span>
+                            <span class="feature-metric-label">Fewer Defects</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-number">03</div>
+                    <h3>Logistics Intelligence</h3>
+                    <p>AI plans routes for oversized modules, automates permits, and coordinates just-in-time delivery with crane schedules.</p>
+                    <div class="feature-metrics">
+                        <div class="feature-metric">
+                            <span class="feature-metric-value">40%</span>
+                            <span class="feature-metric-label">Lower Transport Cost</span>
+                        </div>
+                        <div class="feature-metric">
+                            <span class="feature-metric-value">95%</span>
+                            <span class="feature-metric-label">On-Time Delivery</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-number">04</div>
+                    <h3>Assembly Intelligence</h3>
+                    <p>AR-guided crane operations, computer vision for precise module alignment, and automated MEP connection verification.</p>
+                    <div class="feature-metrics">
+                        <div class="feature-metric">
+                            <span class="feature-metric-value">60%</span>
+                            <span class="feature-metric-label">Faster Crane Time</span>
+                        </div>
+                        <div class="feature-metric">
+                            <span class="feature-metric-value">99.5%</span>
+                            <span class="feature-metric-label">First-Attempt Success</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="market-section" id="market">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Market Opportunity</span>
+                <h2 class="section-title">Massive Market, Perfect Timing</h2>
+            </div>
+
+            <div class="market-opportunity">
+                <div class="market-visual">
+                    <div class="market-circle">
+                        <div class="market-circle-inner">
+                            <span class="market-total">$80B</span>
+                            <span class="market-label">TAM</span>
+                        </div>
+                    </div>
+                    <div class="market-legend">
+                        <div class="legend-item">
+                            <span class="legend-dot tam"></span>
+                            <span>TAM $48-80B</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-dot sam"></span>
+                            <span>SAM $6-10B</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-dot som"></span>
+                            <span>SOM $200M (Y5)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="market-content">
+                    <h3>Why Now?</h3>
+                    <ul class="market-points">
+                        <li><strong>Technology convergence:</strong> Computer vision, LLMs, and IoT have reached maturity for industrial applications</li>
+                        <li><strong>Housing crisis:</strong> Global demand requires 10x faster construction methods</li>
+                        <li><strong>Labor shortage:</strong> No traditional solution exists for 650K+ unfilled jobs</li>
+                        <li><strong>Climate mandates:</strong> ESG requirements push efficient construction</li>
+                        <li><strong>COVID acceleration:</strong> Modular awareness and investment surged post-pandemic</li>
+                        <li><strong>Regulatory tailwinds:</strong> States creating modular-friendly building codes</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="business-section" id="model">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Business Model</span>
+                <h2 class="section-title">Multi-Stream Revenue Engine</h2>
+            </div>
+
+            <div class="business-grid">
+                <div class="business-card">
+                    <div class="business-percentage">60%</div>
+                    <h3>Platform SaaS</h3>
+                    <p>Factory subscriptions from $5K-$30K+/month. Developer portal at $2K/month.</p>
+                </div>
+
+                <div class="business-card">
+                    <div class="business-percentage">25%</div>
+                    <h3>Transaction Fees</h3>
+                    <p>2-4% on marketplace transactions. $500-2K per project logistics coordination.</p>
+                </div>
+
+                <div class="business-card">
+                    <div class="business-percentage">15%</div>
+                    <h3>Data & Analytics</h3>
+                    <p>Industry benchmarks, market intelligence, and custom analytics products.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="traction-section" id="roadmap">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Roadmap</span>
+                <h2 class="section-title">Path to Market Leadership</h2>
+            </div>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <span class="timeline-year">Year 1</span>
+                        <h4>Factory Foundation</h4>
+                        <p>25 factory deployments, 3 ROI case studies, Series A closed. Focus: prove value with early adopters.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <span class="timeline-year">Year 2</span>
+                        <h4>Developer Pull</h4>
+                        <p>200 factories, 100 developers, marketplace beta with 500 projects facilitated. $15M ARR.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <span class="timeline-year">Year 3</span>
+                        <h4>Marketplace Acceleration</h4>
+                        <p>500 factories, 2,000 developers, $2B construction value. $50M ARR, path to profitability.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <span class="timeline-year">Year 5</span>
+                        <h4>Industry Standard</h4>
+                        <p>1,500 customers, international expansion, $200M ARR, 25% EBITDA margin. Market leadership established.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section" id="contact">
+        <div class="container">
+            <h2>Ready to Transform <span>Construction</span>?</h2>
+            <p>Join the factories and developers building the future of modular construction with AI-powered intelligence.</p>
+            <a href="mailto:founders@buildmind.ai" class="cta-button">Schedule a Demo</a>
+            
+            <div class="cta-contact">
+                <a href="mailto:founders@buildmind.ai">📧 founders@buildmind.ai</a>
+                <a href="#">🌐 buildmind.ai</a>
+                <a href="#">📍 Austin, TX</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2026 BuildMind AI. All rights reserved. | The Autonomous Operating System for Modular Construction</p>
+    </footer>
+</body>
+</html>
