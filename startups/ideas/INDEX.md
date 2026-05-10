@@ -294,6 +294,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-05-09 | Afternoon | RarePath AI — The Operating System for Rare Disease Intelligence | [Playbook](2026-05-09-afternoon.md) • [Landing](2026-05-09-afternoon-landing.html) • [PDF](2026-05-09-afternoon.pdf) |
 | 2026-05-10 | Evening | TissueForge AI — The Operating System for Tissue Engineering & Regenerative Medicine | [Playbook](2026-05-10-evening.md) • [Landing](2026-05-10-evening-landing.html) • [PDF](2026-05-10-evening.pdf) |
 | 2026-05-10 | Morning | Witness — The Verification Layer for AI Work Delegation | [Playbook](2026-05-10-morning.md) • [Landing](2026-05-10-morning-landing.html) • [PDF](2026-05-10-morning.pdf) |
+| 2026-05-10 | Afternoon | HeatShield AI — The Operating System for Extreme Heat Intelligence | [Playbook](2026-05-10-afternoon.md) • [Landing](2026-05-10-afternoon-landing.html) • [PDF](2026-05-10-afternoon.pdf) |
 <!-- New entries will be added above this line -->
 
 ---
