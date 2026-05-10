@@ -1,0 +1,1397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TissueForge AI — The Operating System for Tissue Engineering & Regenerative Medicine</title>
+    <meta name="description" content="AI-powered platform accelerating tissue engineering and regenerative medicine. Lab-grown organs, bioprinted tissues, and personalized therapies at scale.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #E63946;
+            --primary-dark: #C1121F;
+            --secondary: #1D3557;
+            --accent: #457B9D;
+            --light: #A8DADC;
+            --surface: #F1FAEE;
+            --text: #1D3557;
+            --text-light: #457B9D;
+            --gradient-1: linear-gradient(135deg, #E63946 0%, #C1121F 50%, #780000 100%);
+            --gradient-2: linear-gradient(135deg, #1D3557 0%, #457B9D 100%);
+            --gradient-hero: linear-gradient(180deg, #1D3557 0%, #2A4A6B 50%, #457B9D 100%);
+            --glow: 0 0 60px rgba(230, 57, 70, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #0a0a0f;
+            color: #ffffff;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, h5 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            line-height: 1.2;
+        }
+
+        /* Animated DNA Background */
+        .dna-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .dna-strand {
+            position: absolute;
+            width: 4px;
+            background: linear-gradient(180deg, transparent, rgba(230, 57, 70, 0.3), transparent);
+            animation: dnaFloat 8s ease-in-out infinite;
+        }
+
+        .dna-strand::before, .dna-strand::after {
+            content: '';
+            position: absolute;
+            width: 30px;
+            height: 4px;
+            background: rgba(230, 57, 70, 0.2);
+            border-radius: 2px;
+        }
+
+        .dna-strand::before {
+            left: -13px;
+            animation: dnaRotate 4s linear infinite;
+        }
+
+        .dna-strand::after {
+            left: -13px;
+            animation: dnaRotate 4s linear infinite reverse;
+        }
+
+        @keyframes dnaFloat {
+            0%, 100% { transform: translateY(-10%); }
+            50% { transform: translateY(10%); }
+        }
+
+        @keyframes dnaRotate {
+            0% { transform: rotateX(0deg); opacity: 0.3; }
+            50% { transform: rotateX(90deg); opacity: 1; }
+            100% { transform: rotateX(180deg); opacity: 0.3; }
+        }
+
+        /* Cell animation */
+        .floating-cell {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, rgba(230, 57, 70, 0.3), rgba(230, 57, 70, 0.1));
+            animation: cellFloat 15s ease-in-out infinite;
+            filter: blur(1px);
+        }
+
+        @keyframes cellFloat {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(50px, -30px) scale(1.1); }
+            50% { transform: translate(20px, 50px) scale(0.9); }
+            75% { transform: translate(-40px, 20px) scale(1.05); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(230, 57, 70, 0.1);
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .logo span {
+            color: rgba(255, 255, 255, 0.7);
+            -webkit-text-fill-color: rgba(255, 255, 255, 0.7);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .cta-nav {
+            padding: 0.75rem 1.5rem;
+            background: var(--gradient-1);
+            border: none;
+            border-radius: 30px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .cta-nav:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--glow);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 8rem 5% 4rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(ellipse at center top, rgba(230, 57, 70, 0.15) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(230, 57, 70, 0.1);
+            border: 1px solid rgba(230, 57, 70, 0.3);
+            border-radius: 50px;
+            color: var(--primary);
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 2rem;
+            animation: pulseGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 20px rgba(230, 57, 70, 0.2); }
+            50% { box-shadow: 0 0 40px rgba(230, 57, 70, 0.4); }
+        }
+
+        .hero-badge .dot {
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 7vw, 5rem);
+            margin-bottom: 1.5rem;
+            max-width: 1000px;
+            background: linear-gradient(135deg, #ffffff 0%, #E63946 50%, #ffffff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmer 3s ease-in-out infinite;
+            background-size: 200% auto;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: 0% center; }
+            50% { background-position: 100% center; }
+            100% { background-position: 0% center; }
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+            color: rgba(255, 255, 255, 0.7);
+            max-width: 700px;
+            margin-bottom: 2.5rem;
+            line-height: 1.7;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 3rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 3rem;
+        }
+
+        .hero-stat {
+            text-align: center;
+        }
+
+        .hero-stat-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: block;
+        }
+
+        .hero-stat-label {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .hero-ctas {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            padding: 1rem 2.5rem;
+            background: var(--gradient-1);
+            border: none;
+            border-radius: 50px;
+            color: white;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--glow);
+        }
+
+        .btn-secondary {
+            padding: 1rem 2.5rem;
+            background: transparent;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50px;
+            color: white;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary);
+            background: rgba(230, 57, 70, 0.1);
+        }
+
+        /* Crisis Section */
+        .crisis {
+            padding: 6rem 5%;
+            background: linear-gradient(180deg, transparent 0%, rgba(230, 57, 70, 0.05) 50%, transparent 100%);
+        }
+
+        .crisis-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-label {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(230, 57, 70, 0.1);
+            border-radius: 50px;
+            color: var(--primary);
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 1.5rem;
+        }
+
+        .crisis h2 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            margin-bottom: 3rem;
+            max-width: 800px;
+        }
+
+        .crisis-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .crisis-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(230, 57, 70, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .crisis-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-1);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .crisis-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .crisis-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .crisis-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .crisis-number {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .crisis-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .crisis-card p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.95rem;
+        }
+
+        /* Solution Section */
+        .solution {
+            padding: 6rem 5%;
+        }
+
+        .solution-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .solution h2 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .solution-subtitle {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+            max-width: 700px;
+            margin: 0 auto 4rem;
+            font-size: 1.1rem;
+        }
+
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .module-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 2.5rem;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .module-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 50%;
+            background: linear-gradient(transparent, rgba(230, 57, 70, 0.05));
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .module-card:hover::after {
+            opacity: 1;
+        }
+
+        .module-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(230, 57, 70, 0.3);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .module-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-1);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .module-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .module-tagline {
+            color: var(--primary);
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .module-card p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .module-features {
+            list-style: none;
+        }
+
+        .module-features li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .module-features li::before {
+            content: '✓';
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        /* Impact Section */
+        .impact {
+            padding: 6rem 5%;
+            background: linear-gradient(180deg, transparent 0%, rgba(29, 53, 87, 0.3) 50%, transparent 100%);
+        }
+
+        .impact-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .impact h2 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            margin-bottom: 3rem;
+        }
+
+        .impact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+
+        .impact-item {
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .impact-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .impact-label {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+        }
+
+        /* Traction Section */
+        .traction {
+            padding: 6rem 5%;
+        }
+
+        .traction-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .traction h2 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+
+        .traction-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .traction-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .traction-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .traction-label {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        .logos-section {
+            text-align: center;
+        }
+
+        .logos-label {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 2rem;
+        }
+
+        .logos-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 3rem;
+            opacity: 0.6;
+        }
+
+        .logo-item {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Market Section */
+        .market {
+            padding: 6rem 5%;
+            background: linear-gradient(180deg, transparent 0%, rgba(230, 57, 70, 0.05) 50%, transparent 100%);
+        }
+
+        .market-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .market h2 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            margin-bottom: 1rem;
+        }
+
+        .market-subtitle {
+            color: rgba(255, 255, 255, 0.6);
+            max-width: 600px;
+            margin: 0 auto 3rem;
+        }
+
+        .market-visual {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin-bottom: 3rem;
+        }
+
+        .market-circle {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .market-circle.large {
+            width: 280px;
+            height: 280px;
+            background: linear-gradient(135deg, rgba(230, 57, 70, 0.3) 0%, rgba(230, 57, 70, 0.1) 100%);
+            border: 2px solid rgba(230, 57, 70, 0.5);
+        }
+
+        .market-circle.medium {
+            background: rgba(69, 123, 157, 0.3);
+            border: 2px solid rgba(69, 123, 157, 0.5);
+        }
+
+        .market-circle.small {
+            width: 160px;
+            height: 160px;
+            background: rgba(29, 53, 87, 0.3);
+            border: 2px solid rgba(29, 53, 87, 0.5);
+        }
+
+        .market-circle-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+
+        .market-circle.large .market-circle-value {
+            color: var(--primary);
+        }
+
+        .market-circle-label {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.6);
+            text-align: center;
+            max-width: 120px;
+        }
+
+        /* Team Section */
+        .team {
+            padding: 6rem 5%;
+        }
+
+        .team-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .team h2 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            margin-bottom: 3rem;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .team-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .team-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(230, 57, 70, 0.3);
+        }
+
+        .team-avatar {
+            width: 80px;
+            height: 80px;
+            background: var(--gradient-1);
+            border-radius: 50%;
+            margin: 0 auto 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+
+        .team-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .team-role {
+            color: var(--primary);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .team-bio {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.85rem;
+        }
+
+        /* Investment Section */
+        .investment {
+            padding: 6rem 5%;
+            background: linear-gradient(180deg, transparent 0%, rgba(29, 53, 87, 0.4) 50%, transparent 100%);
+        }
+
+        .investment-container {
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .investment h2 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            margin-bottom: 3rem;
+        }
+
+        .investment-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(230, 57, 70, 0.3);
+            border-radius: 24px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .investment-amount {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 4rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .investment-type {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 2rem;
+        }
+
+        .investment-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 2rem;
+        }
+
+        .investment-detail-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .investment-detail-label {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .use-of-funds {
+            text-align: left;
+        }
+
+        .use-of-funds h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .fund-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .fund-bar {
+            flex: 1;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .fund-fill {
+            height: 100%;
+            background: var(--gradient-1);
+            border-radius: 4px;
+        }
+
+        .fund-label {
+            width: 140px;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .fund-amount {
+            width: 60px;
+            text-align: right;
+            font-weight: 600;
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 8rem 5%;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(230, 57, 70, 0.2) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .cta h2 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            margin-bottom: 1.5rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            position: relative;
+        }
+
+        .cta p {
+            color: rgba(255, 255, 255, 0.6);
+            max-width: 600px;
+            margin: 0 auto 2.5rem;
+            font-size: 1.1rem;
+            position: relative;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            position: relative;
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 5% 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .footer-logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.5);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        .footer-copy {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.85rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero-stats {
+                gap: 1.5rem;
+            }
+
+            .hero-stat-value {
+                font-size: 2rem;
+            }
+
+            .modules-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .market-visual {
+                flex-direction: column;
+            }
+
+            .footer-container {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- DNA Background -->
+    <div class="dna-bg">
+        <div class="dna-strand" style="left: 10%; height: 150%; top: -25%;"></div>
+        <div class="dna-strand" style="left: 30%; height: 180%; top: -40%; animation-delay: -2s;"></div>
+        <div class="dna-strand" style="left: 70%; height: 160%; top: -30%; animation-delay: -4s;"></div>
+        <div class="dna-strand" style="left: 90%; height: 170%; top: -35%; animation-delay: -6s;"></div>
+        <div class="floating-cell" style="width: 100px; height: 100px; top: 20%; left: 5%;"></div>
+        <div class="floating-cell" style="width: 60px; height: 60px; top: 60%; left: 15%; animation-delay: -3s;"></div>
+        <div class="floating-cell" style="width: 80px; height: 80px; top: 30%; right: 10%; animation-delay: -5s;"></div>
+        <div class="floating-cell" style="width: 50px; height: 50px; top: 70%; right: 20%; animation-delay: -7s;"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">TissueForge<span> AI</span></div>
+        <ul class="nav-links">
+            <li><a href="#solution">Platform</a></li>
+            <li><a href="#traction">Traction</a></li>
+            <li><a href="#market">Market</a></li>
+            <li><a href="#team">Team</a></li>
+            <li><a href="#investment">Investment</a></li>
+        </ul>
+        <a href="#contact" class="cta-nav">Request Access</a>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-badge">
+            <span class="dot"></span>
+            Pioneering the Future of Regenerative Medicine
+        </div>
+        <h1>The Operating System for Lab-Grown Organs</h1>
+        <p class="hero-subtitle">
+            TissueForge AI transforms tissue engineering from artisanal science to predictable manufacturing — enabling bioprinted organs, regenerative therapies, and personalized medicine at scale.
+        </p>
+        <div class="hero-stats">
+            <div class="hero-stat">
+                <span class="hero-stat-value">17</span>
+                <span class="hero-stat-label">Deaths Daily (Organ Shortage)</span>
+            </div>
+            <div class="hero-stat">
+                <span class="hero-stat-value">$150B+</span>
+                <span class="hero-stat-label">Market Opportunity</span>
+            </div>
+            <div class="hero-stat">
+                <span class="hero-stat-value">48</span>
+                <span class="hero-stat-label">Biotech Partners</span>
+            </div>
+        </div>
+        <div class="hero-ctas">
+            <a href="#contact" class="btn-primary">Request Demo →</a>
+            <a href="#solution" class="btn-secondary">Explore Platform</a>
+        </div>
+    </section>
+
+    <!-- Crisis Section -->
+    <section class="crisis">
+        <div class="crisis-container">
+            <span class="section-label">The Crisis</span>
+            <h2>Medicine's Greatest Challenge: The Organ Shortage</h2>
+            <div class="crisis-grid">
+                <div class="crisis-card">
+                    <div class="crisis-icon">💔</div>
+                    <span class="crisis-number">106,000+</span>
+                    <h3>Americans Waiting</h3>
+                    <p>For organ transplants that may never come. The list grows faster than donors.</p>
+                </div>
+                <div class="crisis-card">
+                    <div class="crisis-icon">⏱️</div>
+                    <span class="crisis-number">5-7 Years</span>
+                    <h3>Average Wait Time</h3>
+                    <p>For a kidney transplant. Hearts: 4+ years. Many die before their turn.</p>
+                </div>
+                <div class="crisis-card">
+                    <div class="crisis-icon">🔬</div>
+                    <span class="crisis-number">10+ Years</span>
+                    <h3>Development Time</h3>
+                    <p>To engineer a single tissue type. Too slow. Too expensive. Too unreliable.</p>
+                </div>
+                <div class="crisis-card">
+                    <div class="crisis-icon">📉</div>
+                    <span class="crisis-number">5-10%</span>
+                    <h3>Success Rate</h3>
+                    <p>Of tissue engineering attempts produce viable tissue. Massive waste of resources.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="solution" id="solution">
+        <div class="solution-container">
+            <span class="section-label">The Platform</span>
+            <h2>The Complete Intelligence Stack for Regenerative Medicine</h2>
+            <p class="solution-subtitle">Five integrated modules that transform tissue engineering from craft to science</p>
+            
+            <div class="modules-grid">
+                <div class="module-card">
+                    <div class="module-icon">🧬</div>
+                    <h3>TissueDesigner AI</h3>
+                    <div class="module-tagline">Generative Scaffold Intelligence</div>
+                    <p>AI-powered tissue architecture design from molecular to organ level</p>
+                    <ul class="module-features">
+                        <li>Multi-scale scaffold generation</li>
+                        <li>AI-optimized vascularization</li>
+                        <li>Patient-specific customization</li>
+                        <li>Direct-to-bioprinter output</li>
+                    </ul>
+                </div>
+                <div class="module-card">
+                    <div class="module-icon">🔄</div>
+                    <h3>BioreactorMind</h3>
+                    <div class="module-tagline">Real-Time Cultivation Intelligence</div>
+                    <p>Autonomous bioreactor optimization with 40% fewer batch failures</p>
+                    <ul class="module-features">
+                        <li>50+ sensor fusion</li>
+                        <li>Predictive failure detection</li>
+                        <li>Autonomous control</li>
+                        <li>Digital twin simulation</li>
+                    </ul>
+                </div>
+                <div class="module-card">
+                    <div class="module-icon">🔍</div>
+                    <h3>QualityLens</h3>
+                    <div class="module-tagline">Intelligent Quality Assurance</div>
+                    <p>Non-destructive, real-time quality prediction throughout cultivation</p>
+                    <ul class="module-features">
+                        <li>Continuous monitoring</li>
+                        <li>Viability prediction</li>
+                        <li>Automated documentation</li>
+                        <li>Release criteria automation</li>
+                    </ul>
+                </div>
+                <div class="module-card">
+                    <div class="module-icon">📋</div>
+                    <h3>RegulatoryPilot</h3>
+                    <div class="module-tagline">Compliance & Documentation Intelligence</div>
+                    <p>70% faster regulatory preparation with AI-generated submissions</p>
+                    <ul class="module-features">
+                        <li>IND/BLA auto-generation</li>
+                        <li>Complete audit trails</li>
+                        <li>FDA/EMA/PMDA support</li>
+                        <li>Real-time compliance</li>
+                    </ul>
+                </div>
+                <div class="module-card">
+                    <div class="module-icon">🌐</div>
+                    <h3>TissueGraph</h3>
+                    <div class="module-tagline">The Industry Knowledge Layer</div>
+                    <p>50,000+ validated protocols and learnings from 200,000+ experiments</p>
+                    <ul class="module-features">
+                        <li>Protocol database</li>
+                        <li>Failure analysis library</li>
+                        <li>Material intelligence</li>
+                        <li>Real-time research synthesis</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Impact Section -->
+    <section class="impact">
+        <div class="impact-container">
+            <span class="section-label">The Impact</span>
+            <h2>Transforming Tissue Engineering Outcomes</h2>
+            <div class="impact-grid">
+                <div class="impact-item">
+                    <span class="impact-value">40%</span>
+                    <span class="impact-label">Reduction in Batch Failures</span>
+                </div>
+                <div class="impact-item">
+                    <span class="impact-value">3x</span>
+                    <span class="impact-label">Faster Development Cycles</span>
+                </div>
+                <div class="impact-item">
+                    <span class="impact-value">60%</span>
+                    <span class="impact-label">Improvement in Tissue Viability</span>
+                </div>
+                <div class="impact-item">
+                    <span class="impact-value">70%</span>
+                    <span class="impact-label">Faster Regulatory Preparation</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Traction Section -->
+    <section class="traction" id="traction">
+        <div class="traction-container">
+            <span class="section-label">Traction</span>
+            <h2>Proven at Scale</h2>
+            <div class="traction-grid">
+                <div class="traction-card">
+                    <div class="traction-value">$8.4M</div>
+                    <div class="traction-label">Annual Recurring Revenue</div>
+                </div>
+                <div class="traction-card">
+                    <div class="traction-value">280%</div>
+                    <div class="traction-label">YoY Growth</div>
+                </div>
+                <div class="traction-card">
+                    <div class="traction-value">48</div>
+                    <div class="traction-label">Biotech Partners</div>
+                </div>
+                <div class="traction-card">
+                    <div class="traction-value">23</div>
+                    <div class="traction-label">Tissues in Pipeline</div>
+                </div>
+                <div class="traction-card">
+                    <div class="traction-value">2.4M</div>
+                    <div class="traction-label">Bioreactor Hours Monitored</div>
+                </div>
+                <div class="traction-card">
+                    <div class="traction-value">12</div>
+                    <div class="traction-label">Peer-Reviewed Publications</div>
+                </div>
+            </div>
+            <div class="logos-section">
+                <p class="logos-label">Trusted by Industry Leaders</p>
+                <div class="logos-grid">
+                    <span class="logo-item">Organovo</span>
+                    <span class="logo-item">United Therapeutics</span>
+                    <span class="logo-item">Mayo Clinic</span>
+                    <span class="logo-item">Aspect Biosystems</span>
+                    <span class="logo-item">NIH</span>
+                    <span class="logo-item">DARPA</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Market Section -->
+    <section class="market" id="market">
+        <div class="market-container">
+            <span class="section-label">Market Opportunity</span>
+            <h2>The Regenerative Medicine Explosion</h2>
+            <p class="market-subtitle">$150B+ market growing at 20% CAGR, driven by organ shortage crisis and technology maturation</p>
+            <div class="market-visual">
+                <div class="market-circle large">
+                    <span class="market-circle-value">$150B+</span>
+                    <span class="market-circle-label">Total Addressable Market by 2030</span>
+                </div>
+                <div class="market-circle medium">
+                    <span class="market-circle-value">$45B</span>
+                    <span class="market-circle-label">Tissue Engineering Segment</span>
+                </div>
+                <div class="market-circle small">
+                    <span class="market-circle-value">$8B</span>
+                    <span class="market-circle-label">Bioprinting Market</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="team" id="team">
+        <div class="team-container">
+            <span class="section-label">Team</span>
+            <h2>World-Class Leadership</h2>
+            <div class="team-grid">
+                <div class="team-card">
+                    <div class="team-avatar">👩‍🔬</div>
+                    <h3>Dr. Sarah Chen</h3>
+                    <div class="team-role">CEO & Co-Founder</div>
+                    <p class="team-bio">PhD Biomedical Engineering, MIT. Former VP R&D at Organovo. 15 years tissue engineering.</p>
+                </div>
+                <div class="team-card">
+                    <div class="team-avatar">👨‍💻</div>
+                    <h3>Dr. Marcus Williams</h3>
+                    <div class="team-role">CTO & Co-Founder</div>
+                    <p class="team-bio">PhD Computer Science, Stanford. Former Staff Scientist at DeepMind. AI for biology pioneer.</p>
+                </div>
+                <div class="team-card">
+                    <div class="team-avatar">👩‍⚕️</div>
+                    <h3>Dr. Jennifer Park</h3>
+                    <div class="team-role">Chief Science Officer</div>
+                    <p class="team-bio">MD/PhD Johns Hopkins. Former Director of Regenerative Medicine at NIH.</p>
+                </div>
+                <div class="team-card">
+                    <div class="team-avatar">👨‍⚖️</div>
+                    <h3>Dr. Michael Chang</h3>
+                    <div class="team-role">Chief Regulatory Officer</div>
+                    <p class="team-bio">12 years at FDA, CBER division. Led review of multiple tissue engineering products.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Investment Section -->
+    <section class="investment" id="investment">
+        <div class="investment-container">
+            <span class="section-label">Investment Opportunity</span>
+            <h2>Join the Regenerative Revolution</h2>
+            <div class="investment-card">
+                <div class="investment-amount">$25M</div>
+                <div class="investment-type">Series A at $125M Pre-Money Valuation</div>
+                <div class="investment-details">
+                    <div>
+                        <div class="investment-detail-value">82%</div>
+                        <div class="investment-detail-label">Gross Margin</div>
+                    </div>
+                    <div>
+                        <div class="investment-detail-value">145%</div>
+                        <div class="investment-detail-label">Net Revenue Retention</div>
+                    </div>
+                    <div>
+                        <div class="investment-detail-value">12:1</div>
+                        <div class="investment-detail-label">LTV:CAC Ratio</div>
+                    </div>
+                    <div>
+                        <div class="investment-detail-value">Q4 2027</div>
+                        <div class="investment-detail-label">Path to Profitability</div>
+                    </div>
+                </div>
+            </div>
+            <div class="use-of-funds">
+                <h3>Use of Funds</h3>
+                <div class="fund-item">
+                    <span class="fund-label">R&D</span>
+                    <div class="fund-bar"><div class="fund-fill" style="width: 48%"></div></div>
+                    <span class="fund-amount">$12M</span>
+                </div>
+                <div class="fund-item">
+                    <span class="fund-label">Sales & Marketing</span>
+                    <div class="fund-bar"><div class="fund-fill" style="width: 28%"></div></div>
+                    <span class="fund-amount">$7M</span>
+                </div>
+                <div class="fund-item">
+                    <span class="fund-label">Operations</span>
+                    <div class="fund-bar"><div class="fund-fill" style="width: 16%"></div></div>
+                    <span class="fund-amount">$4M</span>
+                </div>
+                <div class="fund-item">
+                    <span class="fund-label">G&A</span>
+                    <div class="fund-bar"><div class="fund-fill" style="width: 8%"></div></div>
+                    <span class="fund-amount">$2M</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta" id="contact">
+        <h2>The Future of Medicine Is Being Built Today</h2>
+        <p>Join the platform powering the next generation of regenerative therapies. No one should die waiting for an organ.</p>
+        <div class="cta-buttons">
+            <a href="mailto:invest@tissueforge.ai" class="btn-primary">Schedule Investor Call →</a>
+            <a href="mailto:demo@tissueforge.ai" class="btn-secondary">Request Platform Demo</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-logo">TissueForge AI</div>
+            <ul class="footer-links">
+                <li><a href="#solution">Platform</a></li>
+                <li><a href="#traction">Traction</a></li>
+                <li><a href="#team">Team</a></li>
+                <li><a href="mailto:hello@tissueforge.ai">Contact</a></li>
+            </ul>
+            <p class="footer-copy">© 2026 TissueForge AI. Regenerating the future.</p>
+        </div>
+    </footer>
+</body>
+</html>
