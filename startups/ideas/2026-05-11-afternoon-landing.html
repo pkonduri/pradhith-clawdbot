@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BeeOS — The AI Operating System for Pollinator Intelligence</title>
+    <meta name="description" content="Real-time pollinator monitoring, predictive colony health, and autonomous intervention systems. Protecting the $577B agricultural ecosystem.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --honey-gold: #F5A623;
+            --amber-dark: #D4820A;
+            --honey-light: #FFD93D;
+            --cream: #FFF9E6;
+            --forest-green: #2D5016;
+            --sage: #6B8E23;
+            --charcoal: #1A1A1A;
+            --warm-white: #FFFEF7;
+            --earth-brown: #8B4513;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--warm-white);
+            color: var(--charcoal);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Animated honeycomb background */
+        .honeycomb-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='100'%3E%3Cpath d='M28 66L0 50V16L28 0l28 16v34L28 66zm0-60L8 18v28l20 12 20-12V18L28 6z' fill='%23F5A623' fill-opacity='1'/%3E%3C/svg%3E");
+        }
+
+        /* Floating bees */
+        .bee {
+            position: fixed;
+            font-size: 24px;
+            animation: float 8s ease-in-out infinite;
+            opacity: 0.6;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .bee:nth-child(1) { left: 10%; top: 20%; animation-delay: 0s; }
+        .bee:nth-child(2) { left: 80%; top: 30%; animation-delay: 2s; }
+        .bee:nth-child(3) { left: 50%; top: 70%; animation-delay: 4s; }
+        .bee:nth-child(4) { left: 25%; top: 85%; animation-delay: 1s; }
+        .bee:nth-child(5) { left: 70%; top: 60%; animation-delay: 3s; }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(30px, -20px) rotate(5deg); }
+            50% { transform: translate(60px, 10px) rotate(-5deg); }
+            75% { transform: translate(30px, 30px) rotate(3deg); }
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+            background: linear-gradient(180deg, var(--cream) 0%, var(--warm-white) 100%);
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--honey-gold), var(--amber-dark), var(--honey-light));
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, rgba(245, 166, 35, 0.15), rgba(212, 130, 10, 0.1));
+            border: 1px solid rgba(245, 166, 35, 0.3);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--amber-dark);
+            margin-bottom: 2rem;
+            animation: pulse-glow 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(245, 166, 35, 0.2); }
+            50% { box-shadow: 0 0 40px rgba(245, 166, 35, 0.4); }
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--honey-gold) 0%, var(--amber-dark) 50%, var(--earth-brown) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-icon {
+            font-size: 4rem;
+            -webkit-text-fill-color: var(--honey-gold);
+            animation: wiggle 2s ease-in-out infinite;
+        }
+
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(-5deg); }
+            50% { transform: rotate(5deg); }
+        }
+
+        .tagline {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 500;
+            color: var(--forest-green);
+            max-width: 700px;
+            margin-bottom: 1.5rem;
+        }
+
+        .sub-tagline {
+            font-size: 1.15rem;
+            color: #666;
+            max-width: 600px;
+            margin-bottom: 3rem;
+        }
+
+        /* Stats Bar */
+        .crisis-stats {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 3rem;
+            padding: 1.5rem 2rem;
+            background: rgba(45, 80, 22, 0.05);
+            border-radius: 16px;
+            border: 1px solid rgba(45, 80, 22, 0.1);
+        }
+
+        .crisis-stat {
+            text-align: center;
+        }
+
+        .crisis-stat .number {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--amber-dark);
+        }
+
+        .crisis-stat .label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--forest-green);
+            font-weight: 600;
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .cta {
+            padding: 18px 40px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .cta-primary {
+            background: linear-gradient(135deg, var(--honey-gold), var(--amber-dark));
+            color: white;
+            border: none;
+            box-shadow: 0 8px 30px rgba(245, 166, 35, 0.4);
+        }
+
+        .cta-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(245, 166, 35, 0.5);
+        }
+
+        .cta-secondary {
+            background: transparent;
+            color: var(--forest-green);
+            border: 2px solid var(--forest-green);
+        }
+
+        .cta-secondary:hover {
+            background: var(--forest-green);
+            color: white;
+        }
+
+        /* Problem Section */
+        .section {
+            padding: 6rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--honey-gold);
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--charcoal);
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Problem Cards */
+        .problem-section {
+            background: linear-gradient(180deg, var(--warm-white) 0%, var(--cream) 100%);
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .problem-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            border: 1px solid rgba(245, 166, 35, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .problem-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--honey-gold), var(--amber-dark));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 60px rgba(139, 69, 19, 0.15);
+        }
+
+        .problem-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .problem-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .problem-card h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--charcoal);
+            margin-bottom: 1rem;
+        }
+
+        .problem-card p {
+            color: #666;
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        /* Platform Section */
+        .platform-section {
+            background: var(--forest-green);
+            color: white;
+            padding: 6rem 2rem;
+        }
+
+        .platform-section .section-label {
+            color: var(--honey-light);
+        }
+
+        .platform-section .section-title {
+            color: white;
+        }
+
+        .platform-section .section-subtitle {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .platform-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .platform-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            transition: all 0.3s ease;
+        }
+
+        .platform-card:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-5px);
+        }
+
+        .platform-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--honey-gold), var(--amber-dark));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .platform-card h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .platform-card .subtitle {
+            color: var(--honey-light);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .platform-card ul {
+            list-style: none;
+        }
+
+        .platform-card li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 0.95rem;
+        }
+
+        .platform-card li::before {
+            content: '🍯';
+            position: absolute;
+            left: 0;
+            font-size: 0.8rem;
+        }
+
+        /* Market Section */
+        .market-section {
+            background: var(--cream);
+        }
+
+        .market-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        @media (max-width: 900px) {
+            .market-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .market-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            border: 1px solid rgba(245, 166, 35, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .market-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 50px rgba(139, 69, 19, 0.2);
+        }
+
+        .market-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--honey-gold), var(--amber-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .market-label {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 0.5rem;
+        }
+
+        .market-growth {
+            display: inline-block;
+            background: rgba(107, 142, 35, 0.15);
+            color: var(--sage);
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+
+        /* Features Grid */
+        .features-section {
+            background: white;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .feature-card {
+            display: flex;
+            gap: 1.5rem;
+            padding: 2rem;
+            background: var(--cream);
+            border-radius: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            background: white;
+            box-shadow: 0 15px 50px rgba(139, 69, 19, 0.1);
+        }
+
+        .feature-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, var(--honey-gold), var(--amber-dark));
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .feature-content h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--charcoal);
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-content p {
+            color: #666;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Metrics Section */
+        .metrics-section {
+            background: linear-gradient(135deg, var(--charcoal) 0%, #2d2d2d 100%);
+            color: white;
+            padding: 5rem 2rem;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .metric {
+            text-align: center;
+        }
+
+        .metric-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 4rem;
+            font-weight: 700;
+            color: var(--honey-gold);
+            line-height: 1;
+        }
+
+        .metric-label {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 0.5rem;
+        }
+
+        /* Testimonial */
+        .testimonial-section {
+            background: var(--cream);
+            padding: 5rem 2rem;
+        }
+
+        .testimonial-card {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 24px;
+            padding: 3rem;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(139, 69, 19, 0.1);
+        }
+
+        .testimonial-card::before {
+            content: '"';
+            position: absolute;
+            top: 1rem;
+            left: 2rem;
+            font-size: 8rem;
+            font-family: Georgia, serif;
+            color: var(--honey-gold);
+            opacity: 0.2;
+            line-height: 1;
+        }
+
+        .testimonial-text {
+            font-size: 1.4rem;
+            font-style: italic;
+            color: var(--charcoal);
+            margin-bottom: 2rem;
+            line-height: 1.8;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .author-avatar {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--honey-gold), var(--amber-dark));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .author-info {
+            text-align: left;
+        }
+
+        .author-name {
+            font-weight: 600;
+            color: var(--charcoal);
+        }
+
+        .author-title {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, var(--forest-green) 0%, #1a3d0a 100%);
+            color: white;
+            padding: 6rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '🐝';
+            position: absolute;
+            font-size: 20rem;
+            opacity: 0.05;
+            right: -5%;
+            top: -20%;
+        }
+
+        .cta-section .section-title {
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        .cta-section p {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.85);
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--charcoal);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .footer-brand {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--honey-gold);
+            margin-bottom: 1rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--honey-gold);
+        }
+
+        .footer-copy {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 3rem;
+            }
+
+            .logo-icon {
+                font-size: 2.5rem;
+            }
+
+            .tagline {
+                font-size: 1.3rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .crisis-stats {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .metric-value {
+                font-size: 3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="honeycomb-bg"></div>
+    
+    <!-- Floating bees -->
+    <div class="bee">🐝</div>
+    <div class="bee">🐝</div>
+    <div class="bee">🐝</div>
+    <div class="bee">🐝</div>
+    <div class="bee">🐝</div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="badge">
+            <span>🌻</span>
+            <span>Protecting the $577B Agricultural Ecosystem</span>
+        </div>
+        
+        <h1 class="logo">
+            <span class="logo-icon">🐝</span>
+            BeeOS
+        </h1>
+        
+        <p class="tagline">The AI Operating System for Pollinator Intelligence & Agricultural Resilience</p>
+        
+        <p class="sub-tagline">Real-time monitoring, predictive health analytics, and autonomous intervention systems for the bees that power our food supply.</p>
+        
+        <div class="crisis-stats">
+            <div class="crisis-stat">
+                <div class="number">40%</div>
+                <div class="label">Colony Loss Per Decade</div>
+            </div>
+            <div class="crisis-stat">
+                <div class="number">75%</div>
+                <div class="label">Crops Need Pollinators</div>
+            </div>
+            <div class="crisis-stat">
+                <div class="number">$577B</div>
+                <div class="label">Pollination Services</div>
+            </div>
+            <div class="crisis-stat">
+                <div class="number">14 Days</div>
+                <div class="label">Early Warning</div>
+            </div>
+        </div>
+        
+        <div class="cta-group">
+            <a href="#contact" class="cta cta-primary">
+                <span>🍯</span>
+                Request Demo
+            </a>
+            <a href="#platform" class="cta cta-secondary">
+                Explore Platform →
+            </a>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="section problem-section">
+        <div class="section-header">
+            <div class="section-label">The Crisis</div>
+            <h2 class="section-title">The Silent Emergency Threatening Our Food Supply</h2>
+            <p class="section-subtitle">Colony Collapse Disorder has wiped out billions of bees. The agricultural industry is flying blind.</p>
+        </div>
+        
+        <div class="problem-grid">
+            <div class="problem-card">
+                <div class="problem-icon">🚨</div>
+                <h3>No Early Warning</h3>
+                <p>Beekeepers discover colony collapse only after it's too late. Current monitoring is manual, infrequent, and reactive—missing the 2-week window when intervention is possible.</p>
+            </div>
+            
+            <div class="problem-card">
+                <div class="problem-icon">📊</div>
+                <h3>Zero Real-Time Data</h3>
+                <p>The $50B commercial beekeeping industry relies on visual inspections and intuition. No continuous monitoring. No predictive analytics. No data-driven decisions.</p>
+            </div>
+            
+            <div class="problem-card">
+                <div class="problem-icon">🌍</div>
+                <h3>Ecosystem Blindness</h3>
+                <p>Wild pollinators have declined 70% in some regions. Farmers have no visibility into pollinator populations, pesticide impacts, or biodiversity across their landscapes.</p>
+            </div>
+            
+            <div class="problem-card">
+                <div class="problem-icon">💰</div>
+                <h3>$8B Annual Losses</h3>
+                <p>Colony losses cost the US agriculture industry $8 billion annually. Food companies face supply chain disruption with no tools to assess or mitigate pollinator risk.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Platform Section -->
+    <section class="platform-section" id="platform">
+        <div class="section-header">
+            <div class="section-label">The Platform</div>
+            <h2 class="section-title">Intelligence Infrastructure for Pollinators</h2>
+            <p class="section-subtitle">Multi-modal AI that sees what humans can't—14 days before colony failure.</p>
+        </div>
+        
+        <div class="platform-grid">
+            <div class="platform-card">
+                <div class="platform-icon">📡</div>
+                <h3>HiveNet</h3>
+                <div class="subtitle">Distributed Sensor Intelligence</div>
+                <ul>
+                    <li>Acoustic signature analysis for queen health</li>
+                    <li>Thermal mapping of cluster behavior</li>
+                    <li>VOC sensing for early disease detection</li>
+                    <li>Computer vision for forager tracking</li>
+                </ul>
+            </div>
+            
+            <div class="platform-card">
+                <div class="platform-icon">🧠</div>
+                <h3>ColonyMind</h3>
+                <div class="subtitle">Predictive Intelligence Engine</div>
+                <ul>
+                    <li>Real-time health scores across 47 parameters</li>
+                    <li>14-day advance collapse prediction (89% accuracy)</li>
+                    <li>Disease detection before visible symptoms</li>
+                    <li>72-hour swarm forecasting</li>
+                </ul>
+            </div>
+            
+            <div class="platform-card">
+                <div class="platform-icon">🗺️</div>
+                <h3>PollinatorGraph</h3>
+                <div class="subtitle">Ecosystem Intelligence</div>
+                <ul>
+                    <li>Wild pollinator population tracking</li>
+                    <li>Forage and nutrition gap analysis</li>
+                    <li>Pesticide exposure risk modeling</li>
+                    <li>Biodiversity scoring for ESG</li>
+                </ul>
+            </div>
+            
+            <div class="platform-card">
+                <div class="platform-icon">⚡</div>
+                <h3>InterventionOS</h3>
+                <div class="subtitle">Autonomous Response</div>
+                <ul>
+                    <li>Instant alerts with action recommendations</li>
+                    <li>AI-guided treatment protocols</li>
+                    <li>Resource dispatch coordination</li>
+                    <li>Genetic optimization for resilience</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Market Section -->
+    <section class="section market-section">
+        <div class="section-header">
+            <div class="section-label">The Opportunity</div>
+            <h2 class="section-title">Massive Markets, Zero Solutions</h2>
+            <p class="section-subtitle">We're building the intelligence layer for a $100B+ addressable market.</p>
+        </div>
+        
+        <div class="market-grid">
+            <div class="market-card">
+                <div class="market-value">$50B</div>
+                <div class="market-label">Commercial Beekeeping</div>
+                <div class="market-growth">↑ 8.2% CAGR</div>
+            </div>
+            
+            <div class="market-card">
+                <div class="market-value">$12.8B</div>
+                <div class="market-label">Precision Agriculture</div>
+                <div class="market-growth">↑ 12.7% CAGR</div>
+            </div>
+            
+            <div class="market-card">
+                <div class="market-value">$36B</div>
+                <div class="market-label">Ag Insurance</div>
+                <div class="market-growth">↑ 9.4% CAGR</div>
+            </div>
+            
+            <div class="market-card">
+                <div class="market-value">$8.5B</div>
+                <div class="market-label">Biodiversity Credits</div>
+                <div class="market-growth">↑ 35% CAGR</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="section features-section">
+        <div class="section-header">
+            <div class="section-label">Capabilities</div>
+            <h2 class="section-title">Predictions That Save Colonies</h2>
+            <p class="section-subtitle">Proprietary AI models trained on billions of sensor readings.</p>
+        </div>
+        
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">👑</div>
+                <div class="feature-content">
+                    <h3>QueenVoice™</h3>
+                    <p>Acoustic signature analysis identifying queen health states with 96% accuracy. Detects queenlessness, supersedure signals, and mating status.</p>
+                </div>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">🌪️</div>
+                <div class="feature-content">
+                    <h3>SwarmPredict™</h3>
+                    <p>Behavioral pattern recognition for 72-hour advance swarm forecasting. Prevents 30% revenue loss from uncontrolled swarming events.</p>
+                </div>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">🦠</div>
+                <div class="feature-content">
+                    <h3>DiseaseNet™</h3>
+                    <p>Multi-modal disease detection for Varroa, American foulbrood, and Nosema—14 days before visible symptoms when treatment is most effective.</p>
+                </div>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">📈</div>
+                <div class="feature-content">
+                    <h3>YieldForecast™</h3>
+                    <p>Production prediction accurate to ±8%. Optimize harvest timing, pollination contracts, and resource allocation with confidence.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Metrics Section -->
+    <section class="metrics-section">
+        <div class="metrics-grid">
+            <div class="metric">
+                <div class="metric-value">89%</div>
+                <div class="metric-label">Collapse Prediction Accuracy</div>
+            </div>
+            <div class="metric">
+                <div class="metric-value">14</div>
+                <div class="metric-label">Days Early Warning</div>
+            </div>
+            <div class="metric">
+                <div class="metric-value">47</div>
+                <div class="metric-label">Health Parameters Tracked</div>
+            </div>
+            <div class="metric">
+                <div class="metric-value">2.1B</div>
+                <div class="metric-label">Sensor Readings Processed</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonial Section -->
+    <section class="testimonial-section">
+        <div class="testimonial-card">
+            <p class="testimonial-text">"If the bee disappeared off the face of the Earth, man would only have four years left to live. BeeOS is building the intelligence layer to make sure that never happens."</p>
+            <div class="testimonial-author">
+                <div class="author-avatar">🐝</div>
+                <div class="author-info">
+                    <div class="author-name">BeeOS Mission</div>
+                    <div class="author-title">Protecting Agricultural Resilience</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section" id="contact">
+        <h2 class="section-title">Join the Hive</h2>
+        <p>Whether you manage 50 hives or 50,000 acres, BeeOS delivers the pollinator intelligence you need to protect your operations.</p>
+        <div class="cta-group">
+            <a href="mailto:founders@beeos.ai" class="cta cta-primary">
+                <span>📧</span>
+                founders@beeos.ai
+            </a>
+            <a href="#" class="cta cta-secondary" style="border-color: white; color: white;">
+                Download Playbook
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-brand">🐝 BeeOS</div>
+        <div class="footer-links">
+            <a href="#">Platform</a>
+            <a href="#">Solutions</a>
+            <a href="#">Research</a>
+            <a href="#">About</a>
+            <a href="#">Contact</a>
+        </div>
+        <p class="footer-copy">© 2026 BeeOS, Inc. All rights reserved. Protecting pollinators, powering agriculture.</p>
+    </footer>
+</body>
+</html>
