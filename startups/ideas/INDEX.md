@@ -296,6 +296,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-05-10 | Morning | Witness — The Verification Layer for AI Work Delegation | [Playbook](2026-05-10-morning.md) • [Landing](2026-05-10-morning-landing.html) • [PDF](2026-05-10-morning.pdf) |
 | 2026-05-10 | Afternoon | HeatShield AI — The Operating System for Extreme Heat Intelligence | [Playbook](2026-05-10-afternoon.md) • [Landing](2026-05-10-afternoon-landing.html) • [PDF](2026-05-10-afternoon.pdf) |
 | 2026-05-11 | Evening | DeepFreeze AI — The AI Operating System for Cold Chain & Cryogenic Logistics Intelligence | [Playbook](2026-05-11-evening.md) • [Landing](2026-05-11-evening-landing.html) • [PDF](2026-05-11-evening.pdf) |
+| 2026-05-11 | Morning | ScamShield AI — The AI Operating System for Real-Time Fraud & Scam Prevention | [Playbook](2026-05-11-morning.md) • [Landing](2026-05-11-morning-landing.html) • [PDF](2026-05-11-morning.pdf) |
 <!-- New entries will be added above this line -->
 
 ---
