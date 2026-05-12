@@ -1,0 +1,1162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NatureBank AI — The Intelligence Layer for Biodiversity Credits</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --emerald-50: #ecfdf5;
+            --emerald-100: #d1fae5;
+            --emerald-200: #a7f3d0;
+            --emerald-300: #6ee7b7;
+            --emerald-400: #34d399;
+            --emerald-500: #10b981;
+            --emerald-600: #059669;
+            --emerald-700: #047857;
+            --emerald-800: #065f46;
+            --emerald-900: #064e3b;
+            --forest-900: #052e16;
+            --amber-400: #fbbf24;
+            --amber-500: #f59e0b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--forest-900);
+            color: #fff;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Animated nature particles */
+        .nature-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .leaf {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(135deg, var(--emerald-400), var(--emerald-600));
+            border-radius: 0 50% 50% 50%;
+            opacity: 0.15;
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.15;
+            }
+            90% {
+                opacity: 0.15;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+            background: 
+                radial-gradient(ellipse 80% 50% at 50% -20%, rgba(16, 185, 129, 0.3), transparent),
+                radial-gradient(ellipse 60% 40% at 80% 80%, rgba(5, 150, 105, 0.2), transparent),
+                linear-gradient(180deg, var(--forest-900) 0%, #041f0f 100%);
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2310b981' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            pointer-events: none;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 100px;
+            font-size: 0.875rem;
+            color: var(--emerald-300);
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .hero-badge::before {
+            content: '🌿';
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(135deg, var(--emerald-300), var(--emerald-500), var(--amber-400));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.125rem, 2.5vw, 1.5rem);
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 700px;
+            margin-bottom: 3rem;
+            animation: fadeInUp 0.8s ease-out 0.4s both;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            animation: fadeInUp 0.8s ease-out 0.6s both;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--emerald-500), var(--emerald-600));
+            color: white;
+            box-shadow: 0 4px 30px rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 40px rgba(16, 185, 129, 0.5);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Scroll indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+        }
+
+        .scroll-indicator svg {
+            width: 32px;
+            height: 32px;
+            color: var(--emerald-400);
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            40% {
+                transform: translateX(-50%) translateY(-10px);
+            }
+            60% {
+                transform: translateX(-50%) translateY(-5px);
+            }
+        }
+
+        /* Stats Section */
+        .stats {
+            padding: 6rem 2rem;
+            background: linear-gradient(180deg, #041f0f 0%, var(--emerald-900) 100%);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-value {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--emerald-300), var(--emerald-500));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        /* Problem Section */
+        .problem {
+            padding: 8rem 2rem;
+            background: var(--emerald-900);
+            position: relative;
+        }
+
+        .section-label {
+            display: inline-block;
+            color: var(--emerald-400);
+            font-weight: 600;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .section-subtitle {
+            font-size: 1.25rem;
+            color: rgba(255, 255, 255, 0.7);
+            max-width: 600px;
+            margin-bottom: 4rem;
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .problem-card {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .problem-card:hover {
+            border-color: var(--emerald-500);
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .problem-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(239, 68, 68, 0.1));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .problem-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .problem-card p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.95rem;
+        }
+
+        /* Solution Section */
+        .solution {
+            padding: 8rem 2rem;
+            background: linear-gradient(180deg, var(--emerald-900) 0%, var(--forest-900) 100%);
+        }
+
+        .solution-header {
+            text-align: center;
+            margin-bottom: 5rem;
+        }
+
+        .solution-header .section-subtitle {
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .platform-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+
+        .platform-card {
+            background: linear-gradient(145deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.05));
+            border-radius: 24px;
+            padding: 2.5rem;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .platform-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--emerald-400);
+            box-shadow: 0 20px 60px rgba(16, 185, 129, 0.2);
+        }
+
+        .platform-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--emerald-400), var(--amber-400));
+        }
+
+        .platform-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--emerald-600), var(--emerald-700));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+        }
+
+        .platform-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--emerald-300);
+        }
+
+        .platform-card .subtitle {
+            font-size: 1rem;
+            color: var(--amber-400);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .platform-card p {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-list {
+            list-style: none;
+        }
+
+        .feature-list li {
+            padding: 0.5rem 0;
+            padding-left: 1.75rem;
+            position: relative;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+
+        .feature-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--emerald-400);
+            font-weight: bold;
+        }
+
+        /* Market Section */
+        .market {
+            padding: 8rem 2rem;
+            background: var(--forest-900);
+        }
+
+        .market-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+
+        @media (max-width: 768px) {
+            .market-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .market-card {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(16, 185, 129, 0.05));
+            border-radius: 24px;
+            padding: 3rem;
+            text-align: center;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .market-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.1) 0%, transparent 50%);
+            animation: pulse 4s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 0.5;
+            }
+            50% {
+                transform: scale(1.1);
+                opacity: 0.3;
+            }
+        }
+
+        .market-label {
+            font-size: 0.875rem;
+            color: var(--emerald-400);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .market-value {
+            font-size: 4rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #fff, var(--emerald-200));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+            z-index: 1;
+            margin: 1rem 0;
+        }
+
+        .market-desc {
+            color: rgba(255, 255, 255, 0.7);
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Why Now Section */
+        .why-now {
+            padding: 8rem 2rem;
+            background: linear-gradient(180deg, var(--forest-900) 0%, var(--emerald-900) 100%);
+        }
+
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 4rem auto 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(180deg, var(--emerald-500), var(--amber-400));
+            border-radius: 2px;
+        }
+
+        @media (max-width: 768px) {
+            .timeline::before {
+                left: 20px;
+            }
+        }
+
+        .timeline-item {
+            display: flex;
+            justify-content: flex-end;
+            padding-right: calc(50% + 30px);
+            position: relative;
+            margin-bottom: 3rem;
+        }
+
+        .timeline-item:nth-child(even) {
+            justify-content: flex-start;
+            padding-right: 0;
+            padding-left: calc(50% + 30px);
+        }
+
+        @media (max-width: 768px) {
+            .timeline-item,
+            .timeline-item:nth-child(even) {
+                padding-left: 60px;
+                padding-right: 0;
+                justify-content: flex-start;
+            }
+        }
+
+        .timeline-content {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            max-width: 350px;
+        }
+
+        .timeline-year {
+            font-size: 0.875rem;
+            color: var(--emerald-400);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-content h4 {
+            font-size: 1.125rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-content p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 20px;
+            background: var(--emerald-500);
+            border-radius: 50%;
+            border: 4px solid var(--forest-900);
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+        }
+
+        @media (max-width: 768px) {
+            .timeline-dot {
+                left: 20px;
+            }
+        }
+
+        /* Business Model */
+        .business {
+            padding: 8rem 2rem;
+            background: var(--emerald-900);
+        }
+
+        .revenue-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1.5rem;
+            margin-top: 4rem;
+        }
+
+        .revenue-card {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .revenue-card:hover {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: var(--emerald-400);
+        }
+
+        .revenue-amount {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--emerald-300);
+            margin-bottom: 0.5rem;
+        }
+
+        .revenue-source {
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .total-revenue {
+            text-align: center;
+            margin-top: 4rem;
+            padding: 3rem;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(251, 191, 36, 0.1));
+            border-radius: 24px;
+            border: 2px solid var(--emerald-500);
+        }
+
+        .total-label {
+            font-size: 1rem;
+            color: var(--emerald-400);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .total-value {
+            font-size: 4rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--emerald-300), var(--amber-400));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 1rem 0;
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 10rem 2rem;
+            background: 
+                radial-gradient(ellipse 80% 50% at 50% 100%, rgba(16, 185, 129, 0.3), transparent),
+                linear-gradient(180deg, var(--emerald-900) 0%, var(--forest-900) 100%);
+            text-align: center;
+        }
+
+        .cta h2 {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .cta h2 span {
+            background: linear-gradient(135deg, var(--emerald-300), var(--amber-400));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .cta p {
+            font-size: 1.25rem;
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 600px;
+            margin: 0 auto 3rem;
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 2rem;
+            background: #020c06;
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .footer-logo span {
+            color: var(--emerald-400);
+        }
+
+        .footer-tagline {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--emerald-400);
+        }
+
+        .copyright {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.875rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .hero-cta {
+                flex-direction: column;
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* Animations on scroll */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Nature particles -->
+    <div class="nature-particles">
+        <div class="leaf" style="left: 5%; animation-delay: 0s; animation-duration: 15s;"></div>
+        <div class="leaf" style="left: 15%; animation-delay: 2s; animation-duration: 18s;"></div>
+        <div class="leaf" style="left: 25%; animation-delay: 4s; animation-duration: 20s;"></div>
+        <div class="leaf" style="left: 35%; animation-delay: 1s; animation-duration: 16s;"></div>
+        <div class="leaf" style="left: 45%; animation-delay: 3s; animation-duration: 22s;"></div>
+        <div class="leaf" style="left: 55%; animation-delay: 5s; animation-duration: 19s;"></div>
+        <div class="leaf" style="left: 65%; animation-delay: 2.5s; animation-duration: 17s;"></div>
+        <div class="leaf" style="left: 75%; animation-delay: 4.5s; animation-duration: 21s;"></div>
+        <div class="leaf" style="left: 85%; animation-delay: 1.5s; animation-duration: 18s;"></div>
+        <div class="leaf" style="left: 95%; animation-delay: 3.5s; animation-duration: 20s;"></div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-badge">The Intelligence Layer for Natural Capital</div>
+        <h1><span>NatureBank</span> AI</h1>
+        <p class="hero-subtitle">The full-stack platform for the $200B biodiversity credit economy. Measure, verify, trade, and govern natural capital at planetary scale.</p>
+        <div class="hero-cta">
+            <a href="#contact" class="btn btn-primary">
+                <span>Join the Waitlist</span>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <a href="#solution" class="btn btn-secondary">
+                <span>See the Platform</span>
+            </a>
+        </div>
+        <div class="scroll-indicator">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 5v14M19 12l-7 7-7-7"/>
+            </svg>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-card fade-in">
+                    <div class="stat-value">$44T</div>
+                    <div class="stat-label">Economic value depends on nature</div>
+                </div>
+                <div class="stat-card fade-in">
+                    <div class="stat-value">1M</div>
+                    <div class="stat-label">Species face extinction</div>
+                </div>
+                <div class="stat-card fade-in">
+                    <div class="stat-value">50K+</div>
+                    <div class="stat-label">Companies need CSRD compliance</div>
+                </div>
+                <div class="stat-card fade-in">
+                    <div class="stat-value">100:1</div>
+                    <div class="stat-label">Demand exceeds supply for credits</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="problem">
+        <div class="container">
+            <span class="section-label">The Crisis</span>
+            <h2 class="section-title">Nature Has No Balance Sheet</h2>
+            <p class="section-subtitle">The biodiversity market is stuck in 2008-era carbon. No standards, no verification, no liquidity. Meanwhile, companies face mandatory disclosure with no tools to comply.</p>
+            
+            <div class="problem-grid">
+                <div class="problem-card fade-in">
+                    <div class="problem-icon">📊</div>
+                    <h3>Measurement Chaos</h3>
+                    <p>50+ competing standards with inconsistent methodologies. No way to compare or value biodiversity assets across projects.</p>
+                </div>
+                <div class="problem-card fade-in">
+                    <div class="problem-icon">🔍</div>
+                    <h3>Verification Bottleneck</h3>
+                    <p>Manual field audits take 6-18 months. Projects stall, fraud goes undetected, capital can't flow.</p>
+                </div>
+                <div class="problem-card fade-in">
+                    <div class="problem-icon">💱</div>
+                    <h3>Market Fragmentation</h3>
+                    <p>Bilateral deals with no price discovery. Illiquid, inefficient, and low trust between parties.</p>
+                </div>
+                <div class="problem-card fade-in">
+                    <div class="problem-icon">🏢</div>
+                    <h3>Corporate Confusion</h3>
+                    <p>CFOs can't quantify nature-related risks. TNFD compliance requires data that doesn't exist.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="solution" id="solution">
+        <div class="container">
+            <div class="solution-header">
+                <span class="section-label">The Platform</span>
+                <h2 class="section-title">Full-Stack Nature Intelligence</h2>
+                <p class="section-subtitle">Everything needed to create, verify, trade, and govern biodiversity credits — built AI-native from the ground up.</p>
+            </div>
+            
+            <div class="platform-grid">
+                <div class="platform-card fade-in">
+                    <div class="platform-icon">🛰️</div>
+                    <h3>BiomeOS™</h3>
+                    <div class="subtitle">Multi-Modal Ecosystem Intelligence</div>
+                    <p>Continuous monitoring combining satellite, acoustic, eDNA, and camera data for real-time Biodiversity Health Scores.</p>
+                    <ul class="feature-list">
+                        <li>Global coverage, 3m resolution</li>
+                        <li>Species detection AI (95%+ accuracy)</li>
+                        <li>Change detection & alerts</li>
+                        <li>Historical baseline generation</li>
+                    </ul>
+                </div>
+                
+                <div class="platform-card fade-in">
+                    <div class="platform-icon">🔧</div>
+                    <h3>CreditForge™</h3>
+                    <div class="subtitle">Automated Credit Origination</div>
+                    <p>End-to-end biodiversity credit creation — from baseline to issuance in 90 days, not 18 months.</p>
+                    <ul class="feature-list">
+                        <li>AI-generated baselines</li>
+                        <li>Additionality modeling</li>
+                        <li>Auto-documentation</li>
+                        <li>Methodology matching</li>
+                    </ul>
+                </div>
+                
+                <div class="platform-card fade-in">
+                    <div class="platform-icon">✅</div>
+                    <h3>VerifyNet™</h3>
+                    <div class="subtitle">AI-Powered Verification</div>
+                    <p>Continuous monitoring replaces point-in-time audits. 80% cost reduction, 10x integrity improvement.</p>
+                    <ul class="feature-list">
+                        <li>Real-time anomaly detection</li>
+                        <li>90% remote verification</li>
+                        <li>Blockchain registry</li>
+                        <li>Fraud prevention AI</li>
+                    </ul>
+                </div>
+                
+                <div class="platform-card fade-in">
+                    <div class="platform-icon">📈</div>
+                    <h3>NatureExchange™</h3>
+                    <div class="subtitle">The Trading Platform</div>
+                    <p>Liquid marketplace for biodiversity credits with price discovery, derivatives, and institutional-grade infrastructure.</p>
+                    <ul class="feature-list">
+                        <li>Standardized Biodiversity Units</li>
+                        <li>Transparent bid/ask pricing</li>
+                        <li>Corporate bulk procurement</li>
+                        <li>Impact tokens & derivatives</li>
+                    </ul>
+                </div>
+                
+                <div class="platform-card fade-in">
+                    <div class="platform-icon">🏛️</div>
+                    <h3>ComplianceOS™</h3>
+                    <div class="subtitle">Corporate Nature Intelligence</div>
+                    <p>TNFD and CSRD compliance automation. Map dependencies, quantify risks, generate audit-ready reports.</p>
+                    <ul class="feature-list">
+                        <li>Supply chain nature mapping</li>
+                        <li>Financial risk quantification</li>
+                        <li>Science-based target setting</li>
+                        <li>Automated TNFD disclosures</li>
+                    </ul>
+                </div>
+                
+                <div class="platform-card fade-in">
+                    <div class="platform-icon">🌍</div>
+                    <h3>Global Registry</h3>
+                    <div class="subtitle">Immutable Credit Ledger</div>
+                    <p>Carbon-neutral blockchain registry with full provenance, preventing double-counting and enabling transparent tracking.</p>
+                    <ul class="feature-list">
+                        <li>Full audit trail</li>
+                        <li>Cross-registry interoperability</li>
+                        <li>Retirement certificates</li>
+                        <li>Impact verification</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Market Section -->
+    <section class="market">
+        <div class="container">
+            <span class="section-label">The Opportunity</span>
+            <h2 class="section-title">A Market Ready to Explode</h2>
+            <p class="section-subtitle">Biodiversity is where carbon was in 2008. We're building the infrastructure before the flood.</p>
+            
+            <div class="market-grid">
+                <div class="market-card fade-in">
+                    <div class="market-label">Total Addressable Market</div>
+                    <div class="market-value">$200B</div>
+                    <div class="market-desc">Natural capital markets by 2030</div>
+                </div>
+                <div class="market-card fade-in">
+                    <div class="market-label">Annual Compliance Spend</div>
+                    <div class="market-value">$50B</div>
+                    <div class="market-desc">TNFD/CSRD requirements by 2028</div>
+                </div>
+                <div class="market-card fade-in">
+                    <div class="market-label">Credit Trading Volume</div>
+                    <div class="market-value">$25B</div>
+                    <div class="market-desc">Biodiversity credits by 2030</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Now Section -->
+    <section class="why-now">
+        <div class="container">
+            <div class="solution-header">
+                <span class="section-label">Why Now</span>
+                <h2 class="section-title">The Perfect Storm</h2>
+                <p class="section-subtitle">Regulatory pressure, technology readiness, and market momentum converging.</p>
+            </div>
+            
+            <div class="timeline">
+                <div class="timeline-item fade-in">
+                    <div class="timeline-content">
+                        <div class="timeline-year">2025</div>
+                        <h4>EU CSRD Goes Live</h4>
+                        <p>50,000 European companies must report nature impacts. Compliance creates urgent demand.</p>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+                
+                <div class="timeline-item fade-in">
+                    <div class="timeline-content">
+                        <div class="timeline-year">2026</div>
+                        <h4>TNFD Mainstream Adoption</h4>
+                        <p>Task Force on Nature-related Financial Disclosures becomes standard for large enterprises.</p>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+                
+                <div class="timeline-item fade-in">
+                    <div class="timeline-content">
+                        <div class="timeline-year">2027</div>
+                        <h4>First Scaled Markets</h4>
+                        <p>Biodiversity credit trading reaches critical mass. Price discovery enables institutional participation.</p>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+                
+                <div class="timeline-item fade-in">
+                    <div class="timeline-content">
+                        <div class="timeline-year">2028+</div>
+                        <h4>Insurance Integration</h4>
+                        <p>Nature risk becomes standard in underwriting. Financial sector fully engaged.</p>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Business Model -->
+    <section class="business">
+        <div class="container">
+            <div class="solution-header">
+                <span class="section-label">Business Model</span>
+                <h2 class="section-title">Multiple Revenue Engines</h2>
+                <p class="section-subtitle">Platform SaaS + transaction fees + data services = compound growth.</p>
+            </div>
+            
+            <div class="revenue-grid">
+                <div class="revenue-card fade-in">
+                    <div class="revenue-amount">$80M</div>
+                    <div class="revenue-source">Platform SaaS</div>
+                </div>
+                <div class="revenue-card fade-in">
+                    <div class="revenue-amount">$120M</div>
+                    <div class="revenue-source">Transaction Fees</div>
+                </div>
+                <div class="revenue-card fade-in">
+                    <div class="revenue-amount">$40M</div>
+                    <div class="revenue-source">Verification</div>
+                </div>
+                <div class="revenue-card fade-in">
+                    <div class="revenue-amount">$30M</div>
+                    <div class="revenue-source">Data & Analytics</div>
+                </div>
+                <div class="revenue-card fade-in">
+                    <div class="revenue-amount">$20M</div>
+                    <div class="revenue-source">Insurance Products</div>
+                </div>
+                <div class="revenue-card fade-in">
+                    <div class="revenue-amount">$10M</div>
+                    <div class="revenue-source">White-Label</div>
+                </div>
+            </div>
+            
+            <div class="total-revenue fade-in">
+                <div class="total-label">Year 5 ARR Target</div>
+                <div class="total-value">$300M+</div>
+                <div style="color: rgba(255,255,255,0.7);">75%+ Gross Margin • 20:1 LTV:CAC</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta" id="contact">
+        <div class="container">
+            <h2>Build the <span>Financial Infrastructure</span><br>to Save Nature at Scale</h2>
+            <p>We're raising our seed round to build the intelligence layer for the $200B natural capital economy. Join us.</p>
+            <div class="hero-cta">
+                <a href="mailto:founders@naturebank.ai" class="btn btn-primary">
+                    <span>Contact Founders</span>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+                <a href="#" class="btn btn-secondary">
+                    <span>Download Deck</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-logo">🌿 Nature<span>Bank</span> AI</div>
+            <p class="footer-tagline">"What gets measured gets managed. What gets traded gets conserved."</p>
+            <div class="footer-links">
+                <a href="#">Platform</a>
+                <a href="#">About</a>
+                <a href="#">Research</a>
+                <a href="#">Careers</a>
+                <a href="#">Contact</a>
+            </div>
+            <p class="copyright">© 2026 NatureBank AI. The Intelligence Layer for Natural Capital.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Fade in on scroll
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
