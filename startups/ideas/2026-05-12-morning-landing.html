@@ -1,0 +1,1338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VenueOS — The AI Operating System for Live Experience Venues</title>
+    <meta name="description" content="Transform stadiums, arenas, and concert halls into intelligent environments. Maximize revenue, safety, and fan experience with autonomous AI operations.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #818cf8;
+            --accent: #f97316;
+            --accent-light: #fb923c;
+            --dark: #0f172a;
+            --darker: #020617;
+            --gray-900: #1e293b;
+            --gray-800: #334155;
+            --gray-700: #475569;
+            --gray-600: #64748b;
+            --gray-400: #94a3b8;
+            --gray-200: #e2e8f0;
+            --gray-100: #f1f5f9;
+            --white: #ffffff;
+            --success: #10b981;
+            --gradient-primary: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
+            --gradient-dark: linear-gradient(180deg, #0f172a 0%, #020617 100%);
+            --gradient-accent: linear-gradient(135deg, #f97316 0%, #fb923c 100%);
+            --gradient-mesh: radial-gradient(at 40% 20%, hsla(252, 94%, 67%, 0.15) 0px, transparent 50%),
+                            radial-gradient(at 80% 0%, hsla(270, 91%, 65%, 0.1) 0px, transparent 50%),
+                            radial-gradient(at 0% 50%, hsla(339, 100%, 55%, 0.08) 0px, transparent 50%),
+                            radial-gradient(at 80% 50%, hsla(240, 100%, 70%, 0.1) 0px, transparent 50%),
+                            radial-gradient(at 0% 100%, hsla(22, 100%, 77%, 0.08) 0px, transparent 50%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--darker);
+            color: var(--gray-200);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .space-grotesk {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        /* Animated background */
+        .bg-mesh {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-mesh);
+            z-index: -1;
+            animation: meshMove 30s ease-in-out infinite;
+        }
+
+        @keyframes meshMove {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(2%, 2%) scale(1.02); }
+            50% { transform: translate(-1%, 3%) scale(1.01); }
+            75% { transform: translate(3%, -1%) scale(1.03); }
+        }
+
+        /* Stadium grid pattern */
+        .stadium-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(99, 102, 241, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -1;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.25rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(2, 6, 23, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(99, 102, 241, 0.1);
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.75rem;
+            font-weight: 700;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--gray-400);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--white);
+        }
+
+        .nav-cta {
+            background: var(--gradient-primary);
+            color: var(--white);
+            padding: 0.75rem 1.75rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(99, 102, 241, 0.4);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 8rem 2rem 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--primary-light);
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-badge span {
+            background: var(--gradient-accent);
+            color: var(--white);
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .hero h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 4rem;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            color: var(--white);
+        }
+
+        .hero h1 .highlight {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-description {
+            font-size: 1.25rem;
+            color: var(--gray-400);
+            margin-bottom: 2.5rem;
+            max-width: 540px;
+        }
+
+        .hero-ctas {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: var(--white);
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 25px rgba(99, 102, 241, 0.4);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 40px rgba(99, 102, 241, 0.5);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--white);
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            border: 2px solid var(--gray-700);
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 3rem;
+        }
+
+        .stat-item {
+            text-align: left;
+        }
+
+        .stat-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--white);
+            line-height: 1;
+        }
+
+        .stat-value .accent {
+            color: var(--accent);
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--gray-500);
+            margin-top: 0.5rem;
+        }
+
+        /* Hero Visual */
+        .hero-visual {
+            position: relative;
+        }
+
+        .stadium-mockup {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 4/3;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.05) 100%);
+            border-radius: 24px;
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            overflow: hidden;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5);
+        }
+
+        .stadium-inner {
+            position: absolute;
+            inset: 20px;
+            background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .stadium-header {
+            padding: 1rem 1.5rem;
+            background: rgba(0, 0, 0, 0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(99, 102, 241, 0.2);
+        }
+
+        .stadium-title {
+            font-weight: 600;
+            color: var(--white);
+            font-size: 0.9rem;
+        }
+
+        .stadium-live {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--success);
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--success);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .stadium-body {
+            flex: 1;
+            padding: 1.5rem;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+
+        .metric-card {
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 12px;
+            padding: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--primary);
+        }
+
+        .metric-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--gradient-primary);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 0.75rem;
+            font-size: 1rem;
+        }
+
+        .metric-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--white);
+        }
+
+        .metric-label {
+            font-size: 0.75rem;
+            color: var(--gray-500);
+            margin-top: 0.25rem;
+        }
+
+        .metric-change {
+            font-size: 0.75rem;
+            color: var(--success);
+            margin-top: 0.5rem;
+        }
+
+        /* Floating elements */
+        .float-element {
+            position: absolute;
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 12px;
+            padding: 0.75rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.85rem;
+            color: var(--white);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .float-element.top-right {
+            top: -20px;
+            right: -30px;
+            animation-delay: -2s;
+        }
+
+        .float-element.bottom-left {
+            bottom: 40px;
+            left: -40px;
+            animation-delay: -4s;
+        }
+
+        .float-element.mid-right {
+            top: 50%;
+            right: -50px;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .float-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+        }
+
+        .float-icon.green {
+            background: rgba(16, 185, 129, 0.2);
+        }
+
+        .float-icon.orange {
+            background: rgba(249, 115, 22, 0.2);
+        }
+
+        .float-icon.purple {
+            background: rgba(139, 92, 246, 0.2);
+        }
+
+        /* Problem Section */
+        .problem-section {
+            padding: 8rem 2rem;
+            background: var(--dark);
+            position: relative;
+        }
+
+        .section-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(249, 115, 22, 0.1);
+            border: 1px solid rgba(249, 115, 22, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: var(--gray-400);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .problem-card {
+            background: rgba(249, 115, 22, 0.05);
+            border: 1px solid rgba(249, 115, 22, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+            box-shadow: 0 20px 50px rgba(249, 115, 22, 0.1);
+        }
+
+        .problem-icon {
+            width: 56px;
+            height: 56px;
+            background: var(--gradient-accent);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .problem-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--white);
+            margin-bottom: 0.75rem;
+        }
+
+        .problem-desc {
+            color: var(--gray-400);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .problem-stat {
+            display: inline-block;
+            background: rgba(249, 115, 22, 0.15);
+            color: var(--accent);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+
+        /* Solution Section */
+        .solution-section {
+            padding: 8rem 2rem;
+            position: relative;
+        }
+
+        .solution-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .solution-card {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.05) 100%);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 24px;
+            padding: 2.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .solution-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-primary);
+        }
+
+        .solution-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: 0 25px 60px rgba(99, 102, 241, 0.15);
+        }
+
+        .solution-icon {
+            width: 64px;
+            height: 64px;
+            background: var(--gradient-primary);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+        }
+
+        .solution-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--white);
+            margin-bottom: 1rem;
+        }
+
+        .solution-desc {
+            color: var(--gray-400);
+            font-size: 1rem;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .solution-features {
+            list-style: none;
+        }
+
+        .solution-features li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+            color: var(--gray-300);
+            font-size: 0.95rem;
+        }
+
+        .solution-features li::before {
+            content: '✓';
+            color: var(--primary-light);
+            font-weight: 600;
+        }
+
+        /* Market Section */
+        .market-section {
+            padding: 8rem 2rem;
+            background: var(--dark);
+        }
+
+        .market-visual {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .market-content h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 1.5rem;
+        }
+
+        .market-content p {
+            color: var(--gray-400);
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .market-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        .market-stat {
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 16px;
+            padding: 1.5rem;
+        }
+
+        .market-stat-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .market-stat-label {
+            color: var(--gray-400);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        .market-chart {
+            position: relative;
+        }
+
+        .chart-container {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.05) 100%);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 24px;
+            padding: 2rem;
+            height: 400px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+        }
+
+        .chart-title {
+            font-weight: 600;
+            color: var(--white);
+        }
+
+        .chart-bars {
+            flex: 1;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            gap: 1rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid rgba(99, 102, 241, 0.2);
+        }
+
+        .chart-bar-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .chart-bar {
+            width: 48px;
+            background: var(--gradient-primary);
+            border-radius: 8px 8px 0 0;
+            transition: all 0.3s ease;
+        }
+
+        .chart-bar:hover {
+            transform: scaleY(1.05);
+            box-shadow: 0 -10px 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .chart-label {
+            color: var(--gray-500);
+            font-size: 0.85rem;
+        }
+
+        .chart-value {
+            color: var(--white);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        /* Results Section */
+        .results-section {
+            padding: 8rem 2rem;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+
+        .result-card {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(16, 185, 129, 0.02) 100%);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .result-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--success);
+            box-shadow: 0 20px 50px rgba(16, 185, 129, 0.1);
+        }
+
+        .result-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--success);
+            margin-bottom: 0.5rem;
+        }
+
+        .result-label {
+            color: var(--gray-400);
+            font-size: 1rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 8rem 2rem;
+            background: var(--dark);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-subtitle {
+            font-size: 1.3rem;
+            color: var(--gray-400);
+            max-width: 600px;
+            margin: 0 auto 3rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 2rem;
+            border-top: 1px solid rgba(99, 102, 241, 0.1);
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .footer-tagline {
+            color: var(--gray-500);
+            font-size: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--gray-400);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--white);
+        }
+
+        .footer-copy {
+            color: var(--gray-600);
+            font-size: 0.85rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero h1 {
+                font-size: 3rem;
+            }
+
+            .hero-description {
+                margin: 0 auto 2rem;
+            }
+
+            .hero-ctas {
+                justify-content: center;
+            }
+
+            .hero-stats {
+                justify-content: center;
+            }
+
+            .hero-visual {
+                display: none;
+            }
+
+            .problem-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .solution-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .market-visual {
+                grid-template-columns: 1fr;
+            }
+
+            .results-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero {
+                padding: 6rem 1rem 3rem;
+            }
+
+            .hero h1 {
+                font-size: 2.25rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .cta-title {
+                font-size: 2.25rem;
+            }
+
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-mesh"></div>
+    <div class="stadium-grid"></div>
+
+    <nav>
+        <div class="logo">
+            <div class="logo-icon">🏟️</div>
+            VenueOS
+        </div>
+        <ul class="nav-links">
+            <li><a href="#platform">Platform</a></li>
+            <li><a href="#solutions">Solutions</a></li>
+            <li><a href="#market">Market</a></li>
+            <li><a href="#results">Results</a></li>
+        </ul>
+        <a href="#contact" class="nav-cta">Get Demo</a>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <span>NEW</span>
+                    The Future of Live Entertainment
+                </div>
+                <h1>The AI Operating System for <span class="highlight">Live Experience Venues</span></h1>
+                <p class="hero-description">Transform stadiums, arenas, and concert halls into intelligent, adaptive environments. Maximize revenue, safety, and fan experience with autonomous AI operations.</p>
+                <div class="hero-ctas">
+                    <a href="#demo" class="btn-primary">Request Demo →</a>
+                    <a href="#platform" class="btn-secondary">▶ See How It Works</a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">$250B<span class="accent">+</span></div>
+                        <div class="stat-label">Market Opportunity</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">25<span class="accent">%</span></div>
+                        <div class="stat-label">Revenue Uplift</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">50<span class="accent">ms</span></div>
+                        <div class="stat-label">Decision Latency</div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="stadium-mockup">
+                    <div class="stadium-inner">
+                        <div class="stadium-header">
+                            <span class="stadium-title">🏟️ MetLife Stadium — Live Operations</span>
+                            <span class="stadium-live"><span class="live-dot"></span> 67,524 fans</span>
+                        </div>
+                        <div class="stadium-body">
+                            <div class="metric-card">
+                                <div class="metric-icon">👥</div>
+                                <div class="metric-value">94%</div>
+                                <div class="metric-label">Capacity</div>
+                                <div class="metric-change">↑ 2.3% vs avg</div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-icon">🍺</div>
+                                <div class="metric-value">$68</div>
+                                <div class="metric-label">Per-Cap Spend</div>
+                                <div class="metric-change">↑ 18% uplift</div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-icon">⏱️</div>
+                                <div class="metric-value">4.2m</div>
+                                <div class="metric-label">Avg Wait Time</div>
+                                <div class="metric-change">↓ 67% reduction</div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-icon">🛡️</div>
+                                <div class="metric-value">0</div>
+                                <div class="metric-label">Active Incidents</div>
+                                <div class="metric-change">All clear</div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-icon">⚡</div>
+                                <div class="metric-value">-28%</div>
+                                <div class="metric-label">Energy Usage</div>
+                                <div class="metric-change">vs baseline</div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-icon">😊</div>
+                                <div class="metric-value">89</div>
+                                <div class="metric-label">Fan NPS Score</div>
+                                <div class="metric-change">↑ 34 points</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="float-element top-right">
+                    <div class="float-icon green">💰</div>
+                    <div>
+                        <strong>+$2.4M</strong>
+                        <div style="font-size: 0.75rem; color: var(--gray-500);">Tonight's revenue lift</div>
+                    </div>
+                </div>
+                <div class="float-element bottom-left">
+                    <div class="float-icon orange">🎯</div>
+                    <div>
+                        <strong>Section 142</strong>
+                        <div style="font-size: 0.75rem; color: var(--gray-500);">Staff redeployed to hot zone</div>
+                    </div>
+                </div>
+                <div class="float-element mid-right">
+                    <div class="float-icon purple">🤖</div>
+                    <div>
+                        <strong>AI Optimizing</strong>
+                        <div style="font-size: 0.75rem; color: var(--gray-500);">Dynamic pricing active</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="problem-section" id="problem">
+        <div class="section-container">
+            <div class="section-header">
+                <div class="section-tag">⚠️ THE PROBLEM</div>
+                <h2 class="section-title">Venues Are Flying Blind</h2>
+                <p class="section-subtitle">The live experience industry is stuck in the stone age — siloed systems, reactive operations, and millions in lost revenue every event.</p>
+            </div>
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="problem-icon">🔀</div>
+                    <h3 class="problem-title">15-30 Siloed Systems</h3>
+                    <p class="problem-desc">Ticketing, POS, security, HVAC, parking — none of them talk to each other. Operations teams coordinate via radio and gut feel.</p>
+                    <span class="problem-stat">0% unified visibility</span>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">💸</div>
+                    <h3 class="problem-title">Massive Revenue Leakage</h3>
+                    <p class="problem-desc">20-40% of potential per-cap spending never captured. Static pricing, long lines, and missed upsell opportunities cost millions per event.</p>
+                    <span class="problem-stat">$3-5M lost per game day</span>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">😤</div>
+                    <h3 class="problem-title">Fan Frustration Soars</h3>
+                    <p class="problem-desc">Average fan spends 22 minutes waiting in lines per event. NPS scores are plummeting while ticket prices keep climbing.</p>
+                    <span class="problem-stat">22 min avg wait time</span>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">👷</div>
+                    <h3 class="problem-title">Labor Cost Crisis</h3>
+                    <p class="problem-desc">2,000+ staff per major event with $500K+ labor costs. Manual coordination means inconsistent service and high turnover.</p>
+                    <span class="problem-stat">$500K+ per event</span>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">🔥</div>
+                    <h3 class="problem-title">Reactive Operations</h3>
+                    <p class="problem-desc">Problems are detected after they escalate — security incidents, equipment failures, and crowd bottlenecks happen before anyone notices.</p>
+                    <span class="problem-stat">Always playing catch-up</span>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">📉</div>
+                    <h3 class="problem-title">Zero Intelligence</h3>
+                    <p class="problem-desc">No predictive insights, no optimization, no learning from event to event. Every game day starts from scratch.</p>
+                    <span class="problem-stat">No compound improvement</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="solution-section" id="solutions">
+        <div class="section-container">
+            <div class="section-header">
+                <div class="section-tag" style="background: rgba(99, 102, 241, 0.1); border-color: rgba(99, 102, 241, 0.3); color: var(--primary-light);">✨ THE SOLUTION</div>
+                <h2 class="section-title">VenueOS: One Brain, Every System</h2>
+                <p class="section-subtitle">The unified AI layer that sits on top of your existing systems, sees everything, predicts what's coming, and autonomously optimizes operations in real-time.</p>
+            </div>
+            <div class="solution-grid">
+                <div class="solution-card">
+                    <div class="solution-icon">👁️</div>
+                    <h3 class="solution-title">CrowdMind™</h3>
+                    <p class="solution-desc">Real-time crowd intelligence using computer vision and sensor fusion — complete venue awareness without privacy concerns.</p>
+                    <ul class="solution-features">
+                        <li>Real-time occupancy by zone, section, concourse</li>
+                        <li>Queue length monitoring at every concession</li>
+                        <li>Anomaly detection for safety incidents</li>
+                        <li>Dynamic signage directing fans to shorter lines</li>
+                    </ul>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon">💰</div>
+                    <h3 class="solution-title">RevEngine™</h3>
+                    <p class="solution-desc">AI-powered dynamic pricing and inventory optimization across all revenue streams — concessions, merchandise, and premium experiences.</p>
+                    <ul class="solution-features">
+                        <li>Dynamic pricing based on game situation</li>
+                        <li>Predictive inventory management</li>
+                        <li>Real-time premium experience upselling</li>
+                        <li>15-25% per-cap spending increase</li>
+                    </ul>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon">🧠</div>
+                    <h3 class="solution-title">OpsCommand™</h3>
+                    <p class="solution-desc">The autonomous operations center that runs your venue — predictive maintenance, staff orchestration, and intelligent incident response.</p>
+                    <ul class="solution-features">
+                        <li>AI-generated staffing and redeployment</li>
+                        <li>Predictive maintenance for all systems</li>
+                        <li>20-30% energy cost reduction</li>
+                        <li>Unified incident command dashboard</li>
+                    </ul>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon">❤️</div>
+                    <h3 class="solution-title">FanPulse™</h3>
+                    <p class="solution-desc">Understanding and enhancing every fan touchpoint — from parking to seat to exit, personalized and optimized in real-time.</p>
+                    <ul class="solution-features">
+                        <li>Complete fan journey mapping</li>
+                        <li>Friction point identification</li>
+                        <li>Location-based engagement</li>
+                        <li>Accessibility optimization</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="market-section" id="market">
+        <div class="section-container">
+            <div class="market-visual">
+                <div class="market-content">
+                    <div class="section-tag" style="background: rgba(99, 102, 241, 0.1); border-color: rgba(99, 102, 241, 0.3); color: var(--primary-light);">📈 MARKET OPPORTUNITY</div>
+                    <h2>The $250B Live Experience Renaissance</h2>
+                    <p>Post-pandemic demand for live experiences is insatiable. Taylor Swift's Eras Tour generated $5.7B in economic impact. Sports gambling legalization is creating new in-venue engagement opportunities. Fans crave experiences — and venues need the technology to deliver.</p>
+                    <div class="market-stats">
+                        <div class="market-stat">
+                            <div class="market-stat-value">$25B</div>
+                            <div class="market-stat-label">Total Addressable Market</div>
+                        </div>
+                        <div class="market-stat">
+                            <div class="market-stat-value">$8B</div>
+                            <div class="market-stat-label">Serviceable Market</div>
+                        </div>
+                        <div class="market-stat">
+                            <div class="market-stat-value">500+</div>
+                            <div class="market-stat-label">Major Stadiums Globally</div>
+                        </div>
+                        <div class="market-stat">
+                            <div class="market-stat-value">8%</div>
+                            <div class="market-stat-label">Annual Market Growth</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="market-chart">
+                    <div class="chart-container">
+                        <div class="chart-header">
+                            <span class="chart-title">ARR Projection ($M)</span>
+                        </div>
+                        <div class="chart-bars">
+                            <div class="chart-bar-group">
+                                <div class="chart-value">$12M</div>
+                                <div class="chart-bar" style="height: 30px;"></div>
+                                <div class="chart-label">Y1</div>
+                            </div>
+                            <div class="chart-bar-group">
+                                <div class="chart-value">$45M</div>
+                                <div class="chart-bar" style="height: 80px;"></div>
+                                <div class="chart-label">Y2</div>
+                            </div>
+                            <div class="chart-bar-group">
+                                <div class="chart-value">$110M</div>
+                                <div class="chart-bar" style="height: 140px;"></div>
+                                <div class="chart-label">Y3</div>
+                            </div>
+                            <div class="chart-bar-group">
+                                <div class="chart-value">$220M</div>
+                                <div class="chart-bar" style="height: 200px;"></div>
+                                <div class="chart-label">Y4</div>
+                            </div>
+                            <div class="chart-bar-group">
+                                <div class="chart-value">$400M</div>
+                                <div class="chart-bar" style="height: 280px;"></div>
+                                <div class="chart-label">Y5</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="results-section" id="results">
+        <div class="section-container">
+            <div class="section-header">
+                <div class="section-tag" style="background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.3); color: var(--success);">🎯 PROVEN RESULTS</div>
+                <h2 class="section-title">The VenueOS Impact</h2>
+                <p class="section-subtitle">Real outcomes that transform venue economics and fan experience.</p>
+            </div>
+            <div class="results-grid">
+                <div class="result-card">
+                    <div class="result-value">+25%</div>
+                    <div class="result-label">Per-Cap Revenue Increase</div>
+                </div>
+                <div class="result-card">
+                    <div class="result-value">-67%</div>
+                    <div class="result-label">Average Wait Time Reduction</div>
+                </div>
+                <div class="result-card">
+                    <div class="result-value">-20%</div>
+                    <div class="result-label">Labor Cost Savings</div>
+                </div>
+                <div class="result-card">
+                    <div class="result-value">+34</div>
+                    <div class="result-label">NPS Score Improvement</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section" id="contact">
+        <div class="section-container">
+            <div class="cta-content">
+                <h2 class="cta-title">Ready to Transform Your Venue?</h2>
+                <p class="cta-subtitle">Join the venues that are leading the AI revolution in live entertainment. See VenueOS in action with a personalized demo.</p>
+                <div class="cta-buttons">
+                    <a href="mailto:founders@venueos.ai" class="btn-primary">Schedule Demo →</a>
+                    <a href="#" class="btn-secondary">Download Playbook</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-logo">🏟️ VenueOS</div>
+        <p class="footer-tagline">Where Every Seat Tells a Story, Every Visit Creates Value</p>
+        <div class="footer-links">
+            <a href="#">Platform</a>
+            <a href="#">Solutions</a>
+            <a href="#">Resources</a>
+            <a href="#">Company</a>
+            <a href="#">Contact</a>
+        </div>
+        <p class="footer-copy">© 2026 VenueOS. Concept by Pradhith's Startup Lab.</p>
+    </footer>
+</body>
+</html>

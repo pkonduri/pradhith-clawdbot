@@ -298,6 +298,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-05-11 | Evening | DeepFreeze AI — The AI Operating System for Cold Chain & Cryogenic Logistics Intelligence | [Playbook](2026-05-11-evening.md) • [Landing](2026-05-11-evening-landing.html) • [PDF](2026-05-11-evening.pdf) |
 | 2026-05-11 | Morning | ScamShield AI — The AI Operating System for Real-Time Fraud & Scam Prevention | [Playbook](2026-05-11-morning.md) • [Landing](2026-05-11-morning-landing.html) • [PDF](2026-05-11-morning.pdf) |
 | 2026-05-11 | Afternoon | BeeOS — The AI Operating System for Pollinator Intelligence | [Playbook](2026-05-11-afternoon.md) • [Landing](2026-05-11-afternoon-landing.html) • [PDF](2026-05-11-afternoon.pdf) |
+| 2026-05-12 | Morning | VenueOS — The AI Operating System for Live Experience Venues | [Playbook](2026-05-12-morning.md) • [Landing](2026-05-12-morning-landing.html) • [PDF](2026-05-12-morning.pdf) |
 | 2026-05-12 | Evening | NatureBank AI — The Intelligence Layer for Biodiversity Credits | [Playbook](2026-05-12-evening.md) • [Landing](2026-05-12-evening-landing.html) • [PDF](2026-05-12-evening.pdf) |
 <!-- New entries will be added above this line -->
 
