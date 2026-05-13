@@ -303,6 +303,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-05-12 | Afternoon | AgentAudit — The SOC 2 for AI Agents | [Playbook](2026-05-12-afternoon.md) • [Landing](2026-05-12-afternoon-landing.html) • [PDF](2026-05-12-afternoon.pdf) |
 | 2026-05-13 | Morning | SeaForge — AI-Orchestrated Coastal Green Hydrogen Infrastructure | [Playbook](2026-05-13-morning.md) • [Landing](2026-05-13-morning-landing.html) • [PDF](2026-05-13-morning.pdf) |
 | 2026-05-13 | Evening | ScentOS — The AI Operating System for Olfactory Intelligence | [Playbook](2026-05-13-evening.md) • [Landing](2026-05-13-evening-landing.html) • [PDF](2026-05-13-evening.pdf) |
+| 2026-05-13 | Afternoon | SovereignAI — Turnkey National AI Infrastructure for Every Nation | [Playbook](2026-05-13-afternoon.md) • [Landing](2026-05-13-afternoon-landing.html) • [PDF](2026-05-13-afternoon.pdf) |
 <!-- New entries will be added above this line -->
 
 ---
