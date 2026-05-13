@@ -301,6 +301,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-05-12 | Morning | VenueOS — The AI Operating System for Live Experience Venues | [Playbook](2026-05-12-morning.md) • [Landing](2026-05-12-morning-landing.html) • [PDF](2026-05-12-morning.pdf) |
 | 2026-05-12 | Evening | NatureBank AI — The Intelligence Layer for Biodiversity Credits | [Playbook](2026-05-12-evening.md) • [Landing](2026-05-12-evening-landing.html) • [PDF](2026-05-12-evening.pdf) |
 | 2026-05-12 | Afternoon | AgentAudit — The SOC 2 for AI Agents | [Playbook](2026-05-12-afternoon.md) • [Landing](2026-05-12-afternoon-landing.html) • [PDF](2026-05-12-afternoon.pdf) |
+| 2026-05-13 | Evening | ScentOS — The AI Operating System for Olfactory Intelligence | [Playbook](2026-05-13-evening.md) • [Landing](2026-05-13-evening-landing.html) • [PDF](2026-05-13-evening.pdf) |
 <!-- New entries will be added above this line -->
 
 ---
