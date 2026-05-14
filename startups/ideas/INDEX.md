@@ -305,6 +305,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-05-13 | Evening | ScentOS — The AI Operating System for Olfactory Intelligence | [Playbook](2026-05-13-evening.md) • [Landing](2026-05-13-evening-landing.html) • [PDF](2026-05-13-evening.pdf) |
 | 2026-05-13 | Afternoon | SovereignAI — Turnkey National AI Infrastructure for Every Nation | [Playbook](2026-05-13-afternoon.md) • [Landing](2026-05-13-afternoon-landing.html) • [PDF](2026-05-13-afternoon.pdf) |
 | 2026-05-14 | Evening | SelfCloud — Your AI Memory Layer for Every AI You Use | [Playbook](2026-05-14-evening.md) • [Landing](2026-05-14-evening-landing.html) • [PDF](2026-05-14-evening.pdf) |
+| 2026-05-14 | Morning | VendorOS — The AI Operating System for Enterprise Vendor Intelligence | [Playbook](2026-05-14-morning.md) • [Landing](2026-05-14-morning-landing.html) • [PDF](2026-05-14-morning.pdf) |
 <!-- New entries will be added above this line -->
 
 ---

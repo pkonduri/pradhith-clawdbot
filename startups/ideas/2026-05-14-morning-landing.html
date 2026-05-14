@@ -1,0 +1,1606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VendorOS — The AI Operating System for Enterprise Vendor Intelligence</title>
+    <meta name="description" content="Your AI Procurement Officer. Smarter contracts, zero vendor surprises. The intelligence layer for enterprise procurement.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #059669;
+            --primary-dark: #047857;
+            --primary-light: #10b981;
+            --secondary: #0ea5e9;
+            --accent: #f59e0b;
+            --dark: #0f172a;
+            --darker: #020617;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --success: #22c55e;
+            --warning: #eab308;
+            --danger: #ef4444;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--darker);
+            color: var(--light);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+        
+        /* Animated gradient background */
+        .gradient-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(5, 150, 105, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(14, 165, 233, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(245, 158, 11, 0.05) 0%, transparent 50%),
+                var(--darker);
+        }
+        
+        /* Floating orbs animation */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+            animation: float 20s ease-in-out infinite;
+            z-index: -1;
+        }
+        
+        .orb-1 {
+            width: 600px;
+            height: 600px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            top: -200px;
+            left: -200px;
+            animation-delay: 0s;
+        }
+        
+        .orb-2 {
+            width: 500px;
+            height: 500px;
+            background: linear-gradient(135deg, var(--secondary), var(--accent));
+            bottom: -150px;
+            right: -150px;
+            animation-delay: -7s;
+        }
+        
+        .orb-3 {
+            width: 400px;
+            height: 400px;
+            background: linear-gradient(135deg, var(--accent), var(--primary));
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation-delay: -14s;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(30px, -30px) scale(1.05); }
+            50% { transform: translate(-20px, 20px) scale(0.95); }
+            75% { transform: translate(20px, 30px) scale(1.02); }
+        }
+        
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            backdrop-filter: blur(20px);
+            background: rgba(2, 6, 23, 0.8);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 800;
+            text-decoration: none;
+            color: var(--light);
+        }
+        
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            color: var(--gray);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--light);
+        }
+        
+        .nav-cta {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(5, 150, 105, 0.3);
+        }
+        
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 8rem 2rem 4rem;
+            position: relative;
+        }
+        
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(5, 150, 105, 0.1);
+            border: 1px solid rgba(5, 150, 105, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            color: var(--primary-light);
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.6s ease-out;
+        }
+        
+        .hero-badge::before {
+            content: '📊';
+        }
+        
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.6s ease-out 0.1s both;
+        }
+        
+        .hero h1 span {
+            background: linear-gradient(135deg, var(--primary-light), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.35rem;
+            color: var(--gray);
+            max-width: 700px;
+            margin-bottom: 2.5rem;
+            animation: fadeInUp 0.6s ease-out 0.2s both;
+        }
+        
+        .hero-cta-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 50px rgba(5, 150, 105, 0.4);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--light);
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Stats Section */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .stat-card {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            transition: all 0.3s;
+        }
+        
+        .stat-card:hover {
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateY(-5px);
+        }
+        
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-light), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .stat-label {
+            color: var(--gray);
+            font-size: 0.95rem;
+            margin-top: 0.5rem;
+        }
+        
+        /* Problem Section */
+        .problem {
+            padding: 6rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        
+        .section-badge {
+            display: inline-block;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #f87171;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .section-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+        
+        .section-subtitle {
+            color: var(--gray);
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .problem-card {
+            background: rgba(239, 68, 68, 0.05);
+            border: 1px solid rgba(239, 68, 68, 0.15);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s;
+        }
+        
+        .problem-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+        
+        .problem-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .problem-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+            color: #fca5a5;
+        }
+        
+        .problem-card p {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+        
+        /* Solution Section */
+        .solution {
+            padding: 6rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .solution .section-badge {
+            background: rgba(5, 150, 105, 0.1);
+            border-color: rgba(5, 150, 105, 0.3);
+            color: var(--primary-light);
+        }
+        
+        .solution-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+        
+        .solution-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .solution-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+        
+        .solution-card:hover {
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        
+        .solution-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+        
+        .solution-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+        }
+        
+        .solution-card p {
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+        }
+        
+        .solution-features {
+            list-style: none;
+        }
+        
+        .solution-features li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .solution-features li::before {
+            content: '✓';
+            color: var(--primary-light);
+            font-weight: 700;
+        }
+        
+        /* Risk Radar Section */
+        .risk-section {
+            padding: 6rem 2rem;
+            background: rgba(255, 255, 255, 0.01);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .risk-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .risk-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+        
+        .risk-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: all 0.3s;
+        }
+        
+        .risk-card:hover {
+            transform: translateY(-3px);
+            background: rgba(255, 255, 255, 0.04);
+        }
+        
+        .risk-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+        
+        .risk-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+        
+        .risk-icon.financial {
+            background: rgba(34, 197, 94, 0.15);
+        }
+        
+        .risk-icon.operational {
+            background: rgba(14, 165, 233, 0.15);
+        }
+        
+        .risk-icon.compliance {
+            background: rgba(168, 85, 247, 0.15);
+        }
+        
+        .risk-icon.supply {
+            background: rgba(245, 158, 11, 0.15);
+        }
+        
+        .risk-card h4 {
+            font-size: 1.1rem;
+        }
+        
+        .risk-signals {
+            list-style: none;
+        }
+        
+        .risk-signals li {
+            color: var(--gray);
+            font-size: 0.9rem;
+            padding: 0.4rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+        }
+        
+        .risk-signals li:last-child {
+            border-bottom: none;
+        }
+        
+        /* Results Section */
+        .results {
+            padding: 6rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .results .section-badge {
+            background: rgba(34, 197, 94, 0.1);
+            border-color: rgba(34, 197, 94, 0.3);
+            color: var(--success);
+        }
+        
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .result-card {
+            background: linear-gradient(135deg, rgba(5, 150, 105, 0.1), rgba(14, 165, 233, 0.05));
+            border: 1px solid rgba(5, 150, 105, 0.2);
+            border-radius: 20px;
+            padding: 2.5rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        
+        .result-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 60px rgba(5, 150, 105, 0.2);
+        }
+        
+        .result-metric {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-light), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .result-label {
+            font-size: 1.1rem;
+            margin-top: 0.5rem;
+            color: var(--light);
+        }
+        
+        .result-desc {
+            color: var(--gray);
+            font-size: 0.95rem;
+            margin-top: 0.75rem;
+        }
+        
+        /* How It Works */
+        .how-it-works {
+            padding: 6rem 2rem;
+            background: rgba(255, 255, 255, 0.01);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .how-content {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .steps {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .step {
+            display: flex;
+            gap: 2rem;
+            align-items: flex-start;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            transition: all 0.3s;
+        }
+        
+        .step:hover {
+            background: rgba(255, 255, 255, 0.04);
+            transform: translateX(10px);
+        }
+        
+        .step-number {
+            flex-shrink: 0;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 800;
+        }
+        
+        .step-content h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .step-content p {
+            color: var(--gray);
+        }
+        
+        /* Market Section */
+        .market {
+            padding: 6rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .market-visual {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+        
+        @media (max-width: 768px) {
+            .market-visual {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .market-chart {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 2rem;
+        }
+        
+        .market-chart h3 {
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+        }
+        
+        .chart-bar {
+            margin-bottom: 1.5rem;
+        }
+        
+        .chart-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .chart-label span:last-child {
+            color: var(--primary-light);
+            font-weight: 600;
+        }
+        
+        .bar-bg {
+            height: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        
+        .bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 6px;
+            transition: width 1s ease-out;
+        }
+        
+        .why-now {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 2rem;
+        }
+        
+        .why-now h3 {
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+        }
+        
+        .why-list {
+            list-style: none;
+        }
+        
+        .why-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1.25rem;
+            padding-bottom: 1.25rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .why-list li:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .why-icon {
+            flex-shrink: 0;
+            width: 36px;
+            height: 36px;
+            background: rgba(5, 150, 105, 0.15);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .why-text strong {
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+        
+        .why-text span {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        /* Pricing Section */
+        .pricing {
+            padding: 6rem 2rem;
+            background: rgba(255, 255, 255, 0.01);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .pricing-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .pricing-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .pricing-card.featured {
+            border-color: var(--primary);
+            background: rgba(5, 150, 105, 0.05);
+        }
+        
+        .pricing-card.featured::before {
+            content: 'Most Popular';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .pricing-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        
+        .pricing-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .pricing-desc {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .pricing-price {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.25rem;
+        }
+        
+        .pricing-price span {
+            font-size: 1rem;
+            font-weight: 400;
+            color: var(--gray);
+        }
+        
+        .pricing-features {
+            list-style: none;
+            margin: 1.5rem 0;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .pricing-features li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+            font-size: 0.95rem;
+        }
+        
+        .pricing-features li::before {
+            content: '✓';
+            color: var(--primary-light);
+            font-weight: 700;
+        }
+        
+        .pricing-cta {
+            display: block;
+            width: 100%;
+            padding: 1rem;
+            text-align: center;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin-top: 1.5rem;
+        }
+        
+        .pricing-card.featured .pricing-cta {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+        }
+        
+        .pricing-card:not(.featured) .pricing-cta {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--light);
+        }
+        
+        .pricing-cta:hover {
+            transform: translateY(-2px);
+        }
+        
+        /* Vision Section */
+        .vision {
+            padding: 6rem 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .vision-timeline {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 3rem;
+            position: relative;
+        }
+        
+        .vision-timeline::before {
+            content: '';
+            position: absolute;
+            top: 30px;
+            left: 10%;
+            right: 10%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+        }
+        
+        @media (max-width: 768px) {
+            .vision-timeline {
+                flex-direction: column;
+                gap: 2rem;
+            }
+            
+            .vision-timeline::before {
+                display: none;
+            }
+        }
+        
+        .vision-step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+        
+        .vision-year {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            margin: 0 auto 1rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .vision-step h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .vision-step p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        /* CTA Section */
+        .cta {
+            padding: 6rem 2rem;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(5, 150, 105, 0.1), rgba(14, 165, 233, 0.05));
+            border-top: 1px solid rgba(5, 150, 105, 0.2);
+        }
+        
+        .cta-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .cta h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+        
+        .cta p {
+            color: var(--gray);
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        /* Footer */
+        footer {
+            padding: 4rem 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+        
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+        
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        
+        .footer-links a {
+            color: var(--gray);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: var(--light);
+        }
+        
+        .footer-copy {
+            color: var(--gray);
+            font-size: 0.875rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .hero {
+                padding: 6rem 1rem 3rem;
+            }
+            
+            .step {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .step:hover {
+                transform: translateY(-5px);
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="gradient-bg"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    
+    <nav>
+        <a href="#" class="logo">
+            <div class="logo-icon">📊</div>
+            VendorOS
+        </a>
+        <ul class="nav-links">
+            <li><a href="#problem">Problem</a></li>
+            <li><a href="#solution">Solution</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+        <a href="#contact" class="nav-cta">Get Early Access</a>
+    </nav>
+    
+    <section class="hero">
+        <div class="hero-badge">The AI Procurement Revolution</div>
+        <h1>Your AI <span>Procurement Officer</span></h1>
+        <p class="hero-subtitle">
+            Smarter contracts. Zero vendor surprises. VendorOS is the autonomous intelligence layer that makes every vendor relationship 10x better.
+        </p>
+        <div class="hero-cta-group">
+            <a href="#contact" class="btn-primary">
+                Request Demo
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+            </a>
+            <a href="#solution" class="btn-secondary">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <polygon points="10 8 16 12 10 16 10 8"/>
+                </svg>
+                See How It Works
+            </a>
+        </div>
+    </section>
+    
+    <section class="stats">
+        <div class="stat-card">
+            <div class="stat-number">5,000+</div>
+            <div class="stat-label">Vendors per Fortune 500 company</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">73%</div>
+            <div class="stat-label">Don't know true vendor spend</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">$2.3T</div>
+            <div class="stat-label">Annual enterprise vendor spend</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">68%</div>
+            <div class="stat-label">Contract renewals on autopilot</div>
+        </div>
+    </section>
+    
+    <section class="problem" id="problem">
+        <div class="section-header">
+            <span class="section-badge">The Problem</span>
+            <h2 class="section-title">Enterprise Procurement is Broken</h2>
+            <p class="section-subtitle">Every company is drowning in vendor chaos. The old tools can't keep up.</p>
+        </div>
+        <div class="problem-grid">
+            <div class="problem-card">
+                <div class="problem-icon">📋</div>
+                <h3>Spreadsheet Hell</h3>
+                <p>Vendor tracking lives in scattered spreadsheets and email threads. Nobody has the full picture.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">💸</div>
+                <h3>Hidden Costs</h3>
+                <p>Duplicate contracts, shadow procurement, and auto-renewals silently drain millions.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">🎯</div>
+                <h3>Gut-Feel Negotiations</h3>
+                <p>Teams negotiate without market data, leaving 15-30% savings on the table.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">⚠️</div>
+                <h3>Blind Risk</h3>
+                <p>Zero visibility into vendor health until disruptions hit. Always reactive, never proactive.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">🔄</div>
+                <h3>Vendor Sprawl</h3>
+                <p>AI/SaaS explosion means hundreds of new vendors. The old tools weren't built for this.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">📜</div>
+                <h3>Compliance Chaos</h3>
+                <p>Regulatory requirements (AI Act, ESG, SOC 2) demand vendor visibility you don't have.</p>
+            </div>
+        </div>
+    </section>
+    
+    <section class="solution" id="solution">
+        <div class="section-header">
+            <span class="section-badge">The Solution</span>
+            <h2 class="section-title">VendorOS: Autonomous Procurement Intelligence</h2>
+            <p class="section-subtitle">We don't replace your tools. We make them 10x smarter.</p>
+        </div>
+        <div class="solution-grid">
+            <div class="solution-card">
+                <div class="solution-number">1</div>
+                <h3>Vendor Intelligence Graph</h3>
+                <p>Complete visibility into every vendor relationship in 72 hours.</p>
+                <ul class="solution-features">
+                    <li>Auto-ingest from contracts, ERP, expenses</li>
+                    <li>True total cost of ownership calculated</li>
+                    <li>Hidden dependencies identified</li>
+                    <li>Real-time risk scores</li>
+                </ul>
+            </div>
+            <div class="solution-card">
+                <div class="solution-number">2</div>
+                <h3>Contract Intelligence Engine</h3>
+                <p>Never miss a renewal. Never leave money on the table.</p>
+                <ul class="solution-features">
+                    <li>Auto-extract terms from any format</li>
+                    <li>Benchmark against 50,000+ deals</li>
+                    <li>Flag unfavorable clauses automatically</li>
+                    <li>90/60/30 day renewal alerts</li>
+                </ul>
+            </div>
+            <div class="solution-card">
+                <div class="solution-number">3</div>
+                <h3>AI Negotiation Co-Pilot</h3>
+                <p>Data-driven negotiation playbooks for every vendor conversation.</p>
+                <ul class="solution-features">
+                    <li>Vendor discount pattern analysis</li>
+                    <li>Market rate benchmarks</li>
+                    <li>Specific counter-offer suggestions</li>
+                    <li>Real-time negotiation assist</li>
+                </ul>
+            </div>
+            <div class="solution-card">
+                <div class="solution-number">4</div>
+                <h3>Vendor Consolidation Engine</h3>
+                <p>Eliminate redundancy. Maximize leverage.</p>
+                <ul class="solution-features">
+                    <li>Duplicate vendor detection</li>
+                    <li>Capability overlap analysis</li>
+                    <li>Volume discount opportunities</li>
+                    <li>Migration complexity scoring</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+    
+    <section class="risk-section">
+        <div class="risk-content">
+            <div class="section-header">
+                <span class="section-badge" style="background: rgba(245, 158, 11, 0.1); border-color: rgba(245, 158, 11, 0.3); color: #fbbf24;">Vendor Risk Radar</span>
+                <h2 class="section-title">Know Problems Before Your Vendors Do</h2>
+                <p class="section-subtitle">VendorOS monitors 147 risk signals continuously so you're never surprised.</p>
+            </div>
+            <div class="risk-grid">
+                <div class="risk-card">
+                    <div class="risk-header">
+                        <div class="risk-icon financial">💰</div>
+                        <h4>Financial Health</h4>
+                    </div>
+                    <ul class="risk-signals">
+                        <li>Credit rating changes</li>
+                        <li>Revenue/funding trends</li>
+                        <li>Payment pattern anomalies</li>
+                        <li>Bankruptcy probability</li>
+                    </ul>
+                </div>
+                <div class="risk-card">
+                    <div class="risk-header">
+                        <div class="risk-icon operational">⚙️</div>
+                        <h4>Operational Risk</h4>
+                    </div>
+                    <ul class="risk-signals">
+                        <li>Service outage history</li>
+                        <li>Customer complaint patterns</li>
+                        <li>Employee turnover signals</li>
+                        <li>Technology debt indicators</li>
+                    </ul>
+                </div>
+                <div class="risk-card">
+                    <div class="risk-header">
+                        <div class="risk-icon compliance">🛡️</div>
+                        <h4>Compliance & Security</h4>
+                    </div>
+                    <ul class="risk-signals">
+                        <li>SOC 2 / ISO status</li>
+                        <li>Data breach history</li>
+                        <li>Regulatory action alerts</li>
+                        <li>GDPR/CCPA gaps</li>
+                    </ul>
+                </div>
+                <div class="risk-card">
+                    <div class="risk-header">
+                        <div class="risk-icon supply">🌍</div>
+                        <h4>Geopolitical & Supply</h4>
+                    </div>
+                    <ul class="risk-signals">
+                        <li>Geographic concentration</li>
+                        <li>Sanctions exposure</li>
+                        <li>Tariff impact modeling</li>
+                        <li>Force majeure vulnerability</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="results">
+        <div class="section-header">
+            <span class="section-badge">Real Results</span>
+            <h2 class="section-title">What Customers Achieve</h2>
+            <p class="section-subtitle">VendorOS delivers measurable ROI from day one.</p>
+        </div>
+        <div class="results-grid">
+            <div class="result-card">
+                <div class="result-metric">23%</div>
+                <div class="result-label">Average Cost Reduction</div>
+                <div class="result-desc">On renegotiated contracts using our AI playbooks</div>
+            </div>
+            <div class="result-card">
+                <div class="result-metric">72hr</div>
+                <div class="result-label">Time to Full Visibility</div>
+                <div class="result-desc">Complete vendor intelligence graph built automatically</div>
+            </div>
+            <div class="result-card">
+                <div class="result-metric">94%</div>
+                <div class="result-label">Risk Prediction Accuracy</div>
+                <div class="result-desc">At 6-month horizon for vendor disruptions</div>
+            </div>
+            <div class="result-card">
+                <div class="result-metric">40%</div>
+                <div class="result-label">Vendor Consolidation</div>
+                <div class="result-desc">Typical reduction in redundant vendor relationships</div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="how-it-works">
+        <div class="how-content">
+            <div class="section-header">
+                <span class="section-badge" style="background: rgba(14, 165, 233, 0.1); border-color: rgba(14, 165, 233, 0.3); color: #38bdf8;">How It Works</span>
+                <h2 class="section-title">From Chaos to Control in 4 Steps</h2>
+            </div>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Connect Your Systems</h3>
+                        <p>VendorOS integrates with your contract repositories, ERP, expense systems, and email. Zero manual data entry required.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Build Your Intelligence Graph</h3>
+                        <p>Our AI maps every vendor relationship, calculates true costs, identifies dependencies, and assigns risk scores automatically.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Get Proactive Recommendations</h3>
+                        <p>Receive negotiation playbooks, consolidation opportunities, and risk alerts before problems become crises.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>Optimize Continuously</h3>
+                        <p>VendorOS learns from every interaction, constantly improving recommendations and catching opportunities.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="market">
+        <div class="section-header">
+            <span class="section-badge" style="background: rgba(168, 85, 247, 0.1); border-color: rgba(168, 85, 247, 0.3); color: #c084fc;">Market Opportunity</span>
+            <h2 class="section-title">$11B+ Addressable Market</h2>
+            <p class="section-subtitle">The procurement intelligence revolution is just beginning.</p>
+        </div>
+        <div class="market-visual">
+            <div class="market-chart">
+                <h3>Market Segments (2026)</h3>
+                <div class="chart-bar">
+                    <div class="chart-label">
+                        <span>Procurement Software</span>
+                        <span>$12.8B</span>
+                    </div>
+                    <div class="bar-bg">
+                        <div class="bar-fill" style="width: 100%;"></div>
+                    </div>
+                </div>
+                <div class="chart-bar">
+                    <div class="chart-label">
+                        <span>Spend Analytics</span>
+                        <span>$4.5B</span>
+                    </div>
+                    <div class="bar-bg">
+                        <div class="bar-fill" style="width: 35%;"></div>
+                    </div>
+                </div>
+                <div class="chart-bar">
+                    <div class="chart-label">
+                        <span>Contract Management</span>
+                        <span>$3.2B</span>
+                    </div>
+                    <div class="bar-bg">
+                        <div class="bar-fill" style="width: 25%;"></div>
+                    </div>
+                </div>
+                <div class="chart-bar">
+                    <div class="chart-label">
+                        <span>Supplier Risk</span>
+                        <span>$2.1B</span>
+                    </div>
+                    <div class="bar-bg">
+                        <div class="bar-fill" style="width: 16%;"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="why-now">
+                <h3>Why Now?</h3>
+                <ul class="why-list">
+                    <li>
+                        <div class="why-icon">🧠</div>
+                        <div class="why-text">
+                            <strong>AI Maturity</strong>
+                            <span>LLMs finally understand complex contracts</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="why-icon">🔌</div>
+                        <div class="why-text">
+                            <strong>Data Availability</strong>
+                            <span>APIs everywhere make integration tractable</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="why-icon">📉</div>
+                        <div class="why-text">
+                            <strong>Economic Pressure</strong>
+                            <span>CFOs demanding procurement efficiency</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="why-icon">🚀</div>
+                        <div class="why-text">
+                            <strong>Vendor Explosion</strong>
+                            <span>AI/SaaS proliferation creating urgent need</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="why-icon">📋</div>
+                        <div class="why-text">
+                            <strong>Compliance Burden</strong>
+                            <span>AI Act, ESG requiring vendor visibility</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+    
+    <section class="pricing" id="pricing">
+        <div class="pricing-content">
+            <div class="section-header">
+                <span class="section-badge" style="background: rgba(5, 150, 105, 0.1); border-color: rgba(5, 150, 105, 0.3); color: var(--primary-light);">Pricing</span>
+                <h2 class="section-title">Plans That Scale With You</h2>
+                <p class="section-subtitle">Start small, grow with confidence. ROI from day one.</p>
+            </div>
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <div class="pricing-name">Starter</div>
+                    <div class="pricing-desc">For growing companies</div>
+                    <div class="pricing-price">$2,500<span>/month</span></div>
+                    <ul class="pricing-features">
+                        <li>Up to 500 vendors</li>
+                        <li>Contract intelligence</li>
+                        <li>Basic risk monitoring</li>
+                        <li>Email support</li>
+                    </ul>
+                    <a href="#contact" class="pricing-cta">Get Started</a>
+                </div>
+                <div class="pricing-card featured">
+                    <div class="pricing-name">Professional</div>
+                    <div class="pricing-desc">For scaling enterprises</div>
+                    <div class="pricing-price">$8,000<span>/month</span></div>
+                    <ul class="pricing-features">
+                        <li>Up to 2,500 vendors</li>
+                        <li>Full negotiation co-pilot</li>
+                        <li>Advanced risk radar</li>
+                        <li>Consolidation engine</li>
+                        <li>Dedicated success manager</li>
+                    </ul>
+                    <a href="#contact" class="pricing-cta">Get Started</a>
+                </div>
+                <div class="pricing-card">
+                    <div class="pricing-name">Enterprise</div>
+                    <div class="pricing-desc">For Fortune 500</div>
+                    <div class="pricing-price">Custom</div>
+                    <ul class="pricing-features">
+                        <li>Unlimited vendors</li>
+                        <li>On-premise deployment</li>
+                        <li>Custom integrations</li>
+                        <li>AI agent API access</li>
+                        <li>White-glove onboarding</li>
+                        <li>24/7 support</li>
+                    </ul>
+                    <a href="#contact" class="pricing-cta">Contact Sales</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="vision">
+        <div class="section-header">
+            <span class="section-badge" style="background: rgba(245, 158, 11, 0.1); border-color: rgba(245, 158, 11, 0.3); color: #fbbf24;">The Vision</span>
+            <h2 class="section-title">Toward Autonomous Procurement</h2>
+            <p class="section-subtitle">The end state: Every enterprise has an AI Chief Procurement Officer.</p>
+        </div>
+        <div class="vision-timeline">
+            <div class="vision-step">
+                <div class="vision-year">Y1</div>
+                <h4>AI-Assisted</h4>
+                <p>Intelligence and recommendations</p>
+            </div>
+            <div class="vision-step">
+                <div class="vision-year">Y3</div>
+                <h4>AI-Led</h4>
+                <p>Negotiations with human approval</p>
+            </div>
+            <div class="vision-step">
+                <div class="vision-year">Y5</div>
+                <h4>Autonomous</h4>
+                <p>Full vendor management</p>
+            </div>
+        </div>
+    </section>
+    
+    <section class="cta" id="contact">
+        <div class="cta-content">
+            <h2>Ready to Transform Procurement?</h2>
+            <p>Join the companies already using VendorOS to save millions and eliminate vendor surprises.</p>
+            <div class="cta-buttons">
+                <a href="mailto:founders@vendoros.ai" class="btn-primary">
+                    Request Demo
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
+                <a href="mailto:founders@vendoros.ai" class="btn-secondary">
+                    Become a Design Partner
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">
+                <div class="logo-icon" style="width: 32px; height: 32px; font-size: 1rem;">📊</div>
+                VendorOS
+            </div>
+            <ul class="footer-links">
+                <li><a href="#problem">Problem</a></li>
+                <li><a href="#solution">Solution</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+                <li><a href="mailto:founders@vendoros.ai">Contact</a></li>
+            </ul>
+            <div class="footer-copy">
+                © 2026 VendorOS. Your AI Procurement Officer.
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // Animate stats on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        document.querySelectorAll('.stat-card, .problem-card, .solution-card, .result-card, .step').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'all 0.6s ease-out';
+            observer.observe(el);
+        });
+        
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
