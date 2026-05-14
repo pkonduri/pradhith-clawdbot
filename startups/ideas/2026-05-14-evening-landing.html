@@ -1,0 +1,1377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SelfCloud — Your AI Memory Layer for Every AI You Use</title>
+    <meta name="description" content="One context, every AI. The universal memory layer that makes every AI system actually know you.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #818cf8;
+            --secondary: #06b6d4;
+            --accent: #f472b6;
+            --dark: #0f172a;
+            --darker: #020617;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --success: #10b981;
+            --warning: #f59e0b;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--darker);
+            color: var(--light);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+        
+        /* Animated gradient background */
+        .gradient-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(6, 182, 212, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(244, 114, 182, 0.05) 0%, transparent 50%),
+                var(--darker);
+        }
+        
+        /* Floating orbs animation */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+            animation: float 20s ease-in-out infinite;
+            z-index: -1;
+        }
+        
+        .orb-1 {
+            width: 600px;
+            height: 600px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            top: -200px;
+            left: -200px;
+            animation-delay: 0s;
+        }
+        
+        .orb-2 {
+            width: 500px;
+            height: 500px;
+            background: linear-gradient(135deg, var(--secondary), var(--accent));
+            bottom: -150px;
+            right: -150px;
+            animation-delay: -7s;
+        }
+        
+        .orb-3 {
+            width: 400px;
+            height: 400px;
+            background: linear-gradient(135deg, var(--accent), var(--primary));
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation-delay: -14s;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(30px, -30px) scale(1.05); }
+            50% { transform: translate(-20px, 20px) scale(0.95); }
+            75% { transform: translate(20px, 30px) scale(1.02); }
+        }
+        
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            backdrop-filter: blur(20px);
+            background: rgba(2, 6, 23, 0.8);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 800;
+            text-decoration: none;
+            color: var(--light);
+        }
+        
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            color: var(--gray);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--light);
+        }
+        
+        .nav-cta {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: none;
+            font-size: 0.95rem;
+        }
+        
+        .btn-ghost {
+            background: transparent;
+            color: var(--light);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .btn-ghost:hover {
+            border-color: var(--primary-light);
+            background: rgba(99, 102, 241, 0.1);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 30px rgba(99, 102, 241, 0.5);
+        }
+        
+        .btn-large {
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+        }
+        
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 2rem 4rem;
+            position: relative;
+        }
+        
+        .hero-content {
+            max-width: 900px;
+            text-align: center;
+        }
+        
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(99, 102, 241, 0.15);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 100px;
+            font-size: 0.875rem;
+            color: var(--primary-light);
+            margin-bottom: 2rem;
+        }
+        
+        .badge-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--success);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+        
+        h1 {
+            font-size: clamp(3rem, 7vw, 5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #fff 30%, var(--primary-light) 70%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--gray);
+            margin-bottom: 3rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 4rem;
+        }
+        
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 4rem;
+            flex-wrap: wrap;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-light), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .stat-label {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-top: 0.25rem;
+        }
+        
+        /* Problem Section */
+        .problem {
+            padding: 8rem 2rem;
+            background: linear-gradient(180deg, transparent, rgba(15, 23, 42, 0.8));
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .section-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 100px;
+            font-size: 0.875rem;
+            color: #f87171;
+            margin-bottom: 1.5rem;
+        }
+        
+        h2 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+        }
+        
+        .section-subtitle {
+            font-size: 1.25rem;
+            color: var(--gray);
+            max-width: 700px;
+            margin-bottom: 4rem;
+        }
+        
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .problem-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s;
+        }
+        
+        .problem-card:hover {
+            border-color: rgba(239, 68, 68, 0.3);
+            transform: translateY(-5px);
+        }
+        
+        .problem-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(239, 68, 68, 0.15);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .problem-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+        
+        .problem-card p {
+            color: var(--gray);
+            line-height: 1.7;
+        }
+        
+        .problem-stat {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .problem-stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #f87171;
+        }
+        
+        .problem-stat-label {
+            color: var(--gray);
+            font-size: 0.875rem;
+        }
+        
+        /* Solution Section */
+        .solution {
+            padding: 8rem 2rem;
+            position: relative;
+        }
+        
+        .solution-badge {
+            background: rgba(16, 185, 129, 0.15);
+            border-color: rgba(16, 185, 129, 0.3);
+            color: var(--success);
+        }
+        
+        .solution-visual {
+            margin: 4rem 0;
+            position: relative;
+        }
+        
+        .context-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            padding: 3rem;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 30px;
+        }
+        
+        .context-center {
+            width: 180px;
+            height: 180px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 60px rgba(99, 102, 241, 0.4);
+            position: relative;
+            z-index: 10;
+        }
+        
+        .context-center-icon {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .context-center-label {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+        
+        .ai-providers {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .ai-provider {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.5rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 15px;
+            transition: all 0.3s;
+        }
+        
+        .ai-provider:hover {
+            background: rgba(99, 102, 241, 0.1);
+            border-color: rgba(99, 102, 241, 0.3);
+        }
+        
+        .ai-provider-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+        
+        .ai-provider-name {
+            font-weight: 600;
+        }
+        
+        .connection-line {
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            position: relative;
+        }
+        
+        .connection-line::after {
+            content: '→';
+            position: absolute;
+            right: -15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5rem;
+            color: var(--secondary);
+        }
+        
+        /* Features Section */
+        .features {
+            padding: 8rem 2rem;
+            background: linear-gradient(180deg, transparent, rgba(99, 102, 241, 0.05));
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+        
+        .feature-card {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            padding: 2.5rem;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(99, 102, 241, 0.3);
+        }
+        
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(6, 182, 212, 0.2));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .feature-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .feature-card p {
+            color: var(--gray);
+            line-height: 1.8;
+        }
+        
+        .feature-list {
+            margin-top: 1.5rem;
+            list-style: none;
+        }
+        
+        .feature-list li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 0;
+            color: var(--gray);
+        }
+        
+        .feature-list li::before {
+            content: '✓';
+            color: var(--success);
+            font-weight: bold;
+        }
+        
+        /* How It Works */
+        .how-it-works {
+            padding: 8rem 2rem;
+        }
+        
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 3rem;
+            margin-top: 4rem;
+        }
+        
+        .step {
+            text-align: center;
+            position: relative;
+        }
+        
+        .step-number {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 800;
+            margin: 0 auto 1.5rem;
+            box-shadow: 0 10px 40px rgba(99, 102, 241, 0.3);
+        }
+        
+        .step h3 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .step p {
+            color: var(--gray);
+            line-height: 1.7;
+        }
+        
+        /* Pricing */
+        .pricing {
+            padding: 8rem 2rem;
+            background: linear-gradient(180deg, transparent, rgba(15, 23, 42, 0.8));
+        }
+        
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-top: 4rem;
+            max-width: 1100px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .pricing-card {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            padding: 2.5rem;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .pricing-card.featured {
+            border-color: var(--primary);
+            background: linear-gradient(180deg, rgba(99, 102, 241, 0.1), rgba(15, 23, 42, 0.9));
+            transform: scale(1.05);
+        }
+        
+        .pricing-card.featured::before {
+            content: 'MOST POPULAR';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            padding: 0.4rem 1rem;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+        }
+        
+        .pricing-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .pricing-card.featured:hover {
+            transform: scale(1.05) translateY(-10px);
+        }
+        
+        .pricing-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .pricing-desc {
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+        }
+        
+        .pricing-price {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 0.25rem;
+        }
+        
+        .pricing-price span {
+            font-size: 1rem;
+            font-weight: 400;
+            color: var(--gray);
+        }
+        
+        .pricing-features {
+            list-style: none;
+            margin: 2rem 0;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .pricing-features li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.6rem 0;
+            color: var(--gray);
+        }
+        
+        .pricing-features li::before {
+            content: '✓';
+            color: var(--success);
+            font-weight: bold;
+        }
+        
+        .pricing-cta {
+            width: 100%;
+        }
+        
+        /* Enterprise Section */
+        .enterprise {
+            padding: 8rem 2rem;
+        }
+        
+        .enterprise-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+        
+        @media (max-width: 900px) {
+            .enterprise-content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .enterprise-features {
+            list-style: none;
+        }
+        
+        .enterprise-features li {
+            display: flex;
+            gap: 1.5rem;
+            padding: 1.5rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .enterprise-features li:last-child {
+            border-bottom: none;
+        }
+        
+        .enterprise-feature-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(6, 182, 212, 0.2));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+        
+        .enterprise-feature-content h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .enterprise-feature-content p {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+        
+        .enterprise-visual {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            padding: 3rem;
+            text-align: center;
+        }
+        
+        .enterprise-logo-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .enterprise-logo {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 1.5rem;
+            font-weight: 600;
+            color: var(--gray);
+        }
+        
+        /* CTA Section */
+        .cta {
+            padding: 8rem 2rem;
+            text-align: center;
+            position: relative;
+        }
+        
+        .cta-content {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .cta h2 {
+            margin-bottom: 1.5rem;
+        }
+        
+        .cta p {
+            color: var(--gray);
+            font-size: 1.25rem;
+            margin-bottom: 3rem;
+        }
+        
+        .cta-form {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            max-width: 500px;
+            margin: 0 auto 2rem;
+        }
+        
+        .cta-input {
+            flex: 1;
+            min-width: 250px;
+            padding: 1rem 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: var(--light);
+            font-size: 1rem;
+        }
+        
+        .cta-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .cta-note {
+            color: var(--gray);
+            font-size: 0.875rem;
+        }
+        
+        /* Footer */
+        footer {
+            padding: 4rem 2rem 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+        
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .footer-links a {
+            color: var(--gray);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: var(--light);
+        }
+        
+        .footer-copy {
+            color: var(--gray);
+            font-size: 0.875rem;
+        }
+        
+        /* Code Block */
+        .code-block {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            overflow-x: auto;
+            text-align: left;
+        }
+        
+        .code-comment {
+            color: var(--gray);
+        }
+        
+        .code-keyword {
+            color: var(--primary-light);
+        }
+        
+        .code-string {
+            color: var(--success);
+        }
+        
+        .code-function {
+            color: var(--secondary);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .hero {
+                padding: 6rem 1rem 3rem;
+            }
+            
+            .hero-stats {
+                gap: 2rem;
+            }
+            
+            .context-flow {
+                flex-direction: column;
+            }
+            
+            .connection-line {
+                width: 3px;
+                height: 50px;
+            }
+            
+            .connection-line::after {
+                right: 50%;
+                top: auto;
+                bottom: -15px;
+                transform: translateX(50%) rotate(90deg);
+            }
+            
+            .pricing-card.featured {
+                transform: none;
+            }
+            
+            .pricing-card.featured:hover {
+                transform: translateY(-10px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="gradient-bg"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    
+    <nav>
+        <a href="#" class="logo">
+            <div class="logo-icon">☁️</div>
+            SelfCloud
+        </a>
+        <ul class="nav-links">
+            <li><a href="#problem">Problem</a></li>
+            <li><a href="#solution">Solution</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+            <li><a href="#enterprise">Enterprise</a></li>
+        </ul>
+        <div class="nav-cta">
+            <a href="#" class="btn btn-ghost">Log In</a>
+            <a href="#cta" class="btn btn-primary">Get Early Access</a>
+        </div>
+    </nav>
+    
+    <section class="hero">
+        <div class="hero-content">
+            <div class="badge">
+                <span class="badge-dot"></span>
+                Launching Q3 2026
+            </div>
+            <h1>Your AI Memory Layer<br>for Every AI You Use</h1>
+            <p class="hero-subtitle">One context. Every AI. The universal memory layer that makes every AI system actually know you — without starting from scratch.</p>
+            <div class="hero-cta">
+                <a href="#cta" class="btn btn-primary btn-large">Join the Waitlist →</a>
+                <a href="#solution" class="btn btn-ghost btn-large">See How It Works</a>
+            </div>
+            <div class="hero-stats">
+                <div class="stat">
+                    <div class="stat-value">47min</div>
+                    <div class="stat-label">Daily time wasted re-explaining context</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">5-10</div>
+                    <div class="stat-label">AI tools used by knowledge workers</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">$47B</div>
+                    <div class="stat-label">Market opportunity by 2030</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="problem" id="problem">
+        <div class="container">
+            <span class="section-badge">⚠️ The Problem</span>
+            <h2>AI Context Fragmentation Is Killing Productivity</h2>
+            <p class="section-subtitle">You use ChatGPT, Claude, Copilot, Gemini, and a dozen other AI tools. None of them know anything about you—or each other.</p>
+            
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="problem-icon">🔄</div>
+                    <h3>Endless Repetition</h3>
+                    <p>Every conversation starts from zero. You explain your role, your projects, your preferences—again and again and again.</p>
+                    <div class="problem-stat">
+                        <div class="problem-stat-value">195 hrs</div>
+                        <div class="problem-stat-label">wasted per year re-establishing context</div>
+                    </div>
+                </div>
+                
+                <div class="problem-card">
+                    <div class="problem-icon">🧠</div>
+                    <h3>Lost Institutional Memory</h3>
+                    <p>Every insight, decision, and learning from your AI conversations vanishes. Your AI never gets smarter about you.</p>
+                    <div class="problem-stat">
+                        <div class="problem-stat-value">87%</div>
+                        <div class="problem-stat-label">of AI conversations never referenced again</div>
+                    </div>
+                </div>
+                
+                <div class="problem-card">
+                    <div class="problem-icon">🔒</div>
+                    <h3>Provider Lock-In</h3>
+                    <p>Switch from ChatGPT to Claude? Start over. Your AI relationship is held hostage by the platform you use.</p>
+                    <div class="problem-stat">
+                        <div class="problem-stat-value">100%</div>
+                        <div class="problem-stat-label">context loss when switching providers</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="solution" id="solution">
+        <div class="container">
+            <span class="section-badge solution-badge">✨ The Solution</span>
+            <h2>One Memory Layer. Every AI.</h2>
+            <p class="section-subtitle">SelfCloud creates a universal context layer that makes every AI you use actually know you—your preferences, projects, expertise, and history.</p>
+            
+            <div class="solution-visual">
+                <div class="context-flow">
+                    <div class="ai-providers">
+                        <div class="ai-provider">
+                            <div class="ai-provider-icon">🤖</div>
+                            <span class="ai-provider-name">ChatGPT</span>
+                        </div>
+                        <div class="ai-provider">
+                            <div class="ai-provider-icon">🟣</div>
+                            <span class="ai-provider-name">Claude</span>
+                        </div>
+                        <div class="ai-provider">
+                            <div class="ai-provider-icon">💎</div>
+                            <span class="ai-provider-name">Gemini</span>
+                        </div>
+                    </div>
+                    
+                    <div class="connection-line"></div>
+                    
+                    <div class="context-center">
+                        <span class="context-center-icon">☁️</span>
+                        <span class="context-center-label">SelfCloud</span>
+                    </div>
+                    
+                    <div class="connection-line"></div>
+                    
+                    <div class="ai-providers">
+                        <div class="ai-provider">
+                            <div class="ai-provider-icon">💻</div>
+                            <span class="ai-provider-name">Copilot</span>
+                        </div>
+                        <div class="ai-provider">
+                            <div class="ai-provider-icon">🔍</div>
+                            <span class="ai-provider-name">Perplexity</span>
+                        </div>
+                        <div class="ai-provider">
+                            <div class="ai-provider-icon">⚙️</div>
+                            <span class="ai-provider-name">Custom Agents</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="code-block">
+                <span class="code-comment"># Before: Every AI starts from scratch</span><br>
+                <span class="code-keyword">user:</span> <span class="code-string">"Help me write a product brief"</span><br>
+                <span class="code-keyword">ai:</span> <span class="code-string">"Sure! What's the product? Who's the audience? What tone?"</span><br><br>
+                <span class="code-comment"># After: SelfCloud injects your context</span><br>
+                <span class="code-keyword">user:</span> <span class="code-string">"Help me write a product brief"</span><br>
+                <span class="code-keyword">selfcloud:</span> <span class="code-function">→ Injecting: company tone guide, last 3 briefs, product positioning, team context</span><br>
+                <span class="code-keyword">ai:</span> <span class="code-string">"Here's a draft following your team's format for the Q2 launch..."</span>
+            </div>
+        </div>
+    </section>
+    
+    <section class="features" id="features">
+        <div class="container">
+            <span class="section-badge solution-badge">🚀 Features</span>
+            <h2>AI That Finally Remembers</h2>
+            <p class="section-subtitle">Everything you need to make every AI interaction dramatically better.</p>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🧠</div>
+                    <h3>Universal Context Graph</h3>
+                    <p>Your preferences, projects, expertise, and relationships—all organized in a semantic knowledge graph that any AI can tap into.</p>
+                    <ul class="feature-list">
+                        <li>Auto-learns from every AI interaction</li>
+                        <li>Temporal context (relevant now vs. history)</li>
+                        <li>Relationship mapping</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>Privacy-First Architecture</h3>
+                    <p>Your data never leaves your device unless you want it to. On-device processing, user-owned encryption keys, and granular consent.</p>
+                    <ul class="feature-list">
+                        <li>Local-first by default</li>
+                        <li>End-to-end encryption</li>
+                        <li>You control what's shared</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🔌</div>
+                    <h3>Works With Everything</h3>
+                    <p>ChatGPT, Claude, Gemini, Copilot, Perplexity, custom enterprise agents—if it's an AI, SelfCloud makes it smarter about you.</p>
+                    <ul class="feature-list">
+                        <li>Browser extension for any web AI</li>
+                        <li>API for enterprise integrations</li>
+                        <li>Native apps coming soon</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">📤</div>
+                    <h3>True Portability</h3>
+                    <p>Your AI memory is yours. Export it anytime, move between providers, never lose your accumulated AI relationship.</p>
+                    <ul class="feature-list">
+                        <li>Full data export</li>
+                        <li>Open format</li>
+                        <li>No lock-in, ever</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="how-it-works">
+        <div class="container">
+            <span class="section-badge solution-badge">⚡ How It Works</span>
+            <h2>Get Started in 60 Seconds</h2>
+            
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Install SelfCloud</h3>
+                    <p>Add our browser extension or connect via API. Takes less than a minute to set up.</p>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Use AI Normally</h3>
+                    <p>Keep using your favorite AI tools. SelfCloud quietly learns your context and preferences in the background.</p>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Experience Magic</h3>
+                    <p>Every AI conversation now starts with relevant context. No more repetition. No more starting over.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="pricing" id="pricing">
+        <div class="container">
+            <span class="section-badge solution-badge">💎 Pricing</span>
+            <h2>Simple, Transparent Pricing</h2>
+            <p class="section-subtitle">Start free. Upgrade when you need more power.</p>
+            
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <h3 class="pricing-name">Free</h3>
+                    <p class="pricing-desc">Perfect for getting started</p>
+                    <p class="pricing-price">$0 <span>/month</span></p>
+                    <ul class="pricing-features">
+                        <li>3 AI integrations</li>
+                        <li>1GB context storage</li>
+                        <li>Basic memory features</li>
+                        <li>Browser extension</li>
+                    </ul>
+                    <a href="#cta" class="btn btn-ghost pricing-cta">Get Started Free</a>
+                </div>
+                
+                <div class="pricing-card featured">
+                    <h3 class="pricing-name">Pro</h3>
+                    <p class="pricing-desc">For power users</p>
+                    <p class="pricing-price">$12 <span>/month</span></p>
+                    <ul class="pricing-features">
+                        <li>Unlimited AI integrations</li>
+                        <li>50GB context storage</li>
+                        <li>Advanced memory & learning</li>
+                        <li>Full export capabilities</li>
+                        <li>Priority support</li>
+                    </ul>
+                    <a href="#cta" class="btn btn-primary pricing-cta">Join Waitlist</a>
+                </div>
+                
+                <div class="pricing-card">
+                    <h3 class="pricing-name">Team</h3>
+                    <p class="pricing-desc">For small teams</p>
+                    <p class="pricing-price">$15 <span>/user/month</span></p>
+                    <ul class="pricing-features">
+                        <li>Everything in Pro</li>
+                        <li>Shared team workspaces</li>
+                        <li>Basic governance</li>
+                        <li>Admin controls</li>
+                        <li>SSO integration</li>
+                    </ul>
+                    <a href="#enterprise" class="btn btn-ghost pricing-cta">Contact Sales</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="enterprise" id="enterprise">
+        <div class="container">
+            <div class="enterprise-content">
+                <div>
+                    <span class="section-badge solution-badge">🏢 Enterprise</span>
+                    <h2>Built for Enterprise Scale</h2>
+                    <p class="section-subtitle">Institutional memory, compliance, and governance for your entire organization's AI usage.</p>
+                    
+                    <ul class="enterprise-features">
+                        <li>
+                            <div class="enterprise-feature-icon">🔐</div>
+                            <div class="enterprise-feature-content">
+                                <h4>Context Governance</h4>
+                                <p>Control what context flows to which AI systems. Enforce data classification and prevent sensitive info leakage.</p>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="enterprise-feature-icon">📊</div>
+                            <div class="enterprise-feature-content">
+                                <h4>AI Asset Management</h4>
+                                <p>Unified dashboard for all enterprise AI usage. Cost optimization and ROI analytics.</p>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="enterprise-feature-icon">📋</div>
+                            <div class="enterprise-feature-content">
+                                <h4>Compliance & Audit</h4>
+                                <p>Complete audit trails, SOC 2 Type II, GDPR compliance. On-prem deployment available.</p>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="enterprise-feature-icon">🧠</div>
+                            <div class="enterprise-feature-content">
+                                <h4>Institutional Memory</h4>
+                                <p>Capture collective knowledge from all AI interactions. Prevent knowledge loss from turnover.</p>
+                            </div>
+                        </li>
+                    </ul>
+                    
+                    <a href="#cta" class="btn btn-primary btn-large" style="margin-top: 2rem;">Request Enterprise Demo</a>
+                </div>
+                
+                <div class="enterprise-visual">
+                    <div class="enterprise-logo-grid">
+                        <div class="enterprise-logo">Fortune 500</div>
+                        <div class="enterprise-logo">Tech Giants</div>
+                        <div class="enterprise-logo">Consulting</div>
+                        <div class="enterprise-logo">Finance</div>
+                        <div class="enterprise-logo">Healthcare</div>
+                        <div class="enterprise-logo">Legal</div>
+                    </div>
+                    <p style="color: var(--gray);">Trusted by innovation teams at leading enterprises</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="cta" id="cta">
+        <div class="cta-content">
+            <h2>Ready to Make Every AI<br>Actually Know You?</h2>
+            <p>Join the waitlist for early access. Be among the first to experience AI that remembers.</p>
+            
+            <form class="cta-form">
+                <input type="email" class="cta-input" placeholder="Enter your email" required>
+                <button type="submit" class="btn btn-primary btn-large">Join Waitlist →</button>
+            </form>
+            
+            <p class="cta-note">✨ Early access launching Q3 2026 • No credit card required</p>
+        </div>
+    </section>
+    
+    <footer>
+        <div class="footer-content">
+            <a href="#" class="logo">
+                <div class="logo-icon">☁️</div>
+                SelfCloud
+            </a>
+            <div class="footer-links">
+                <a href="#">Privacy</a>
+                <a href="#">Terms</a>
+                <a href="#">Security</a>
+                <a href="#">Blog</a>
+                <a href="#">Contact</a>
+            </div>
+            <p class="footer-copy">© 2026 SelfCloud. All rights reserved.</p>
+        </div>
+    </footer>
+    
+    <script>
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+        
+        // Animate elements on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        document.querySelectorAll('.problem-card, .feature-card, .pricing-card, .step').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+        
+        // Form submission
+        document.querySelector('.cta-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = this.querySelector('input').value;
+            alert('Thanks for joining the waitlist! We\'ll be in touch at ' + email);
+            this.reset();
+        });
+    </script>
+</body>
+</html>
