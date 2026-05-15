@@ -1,0 +1,1368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoundationGuard AI — The Trust Layer for AI Model Supply Chains</title>
+    <meta name="description" content="End-to-end model provenance verification, real-time integrity monitoring, and automated compliance for every AI model in your enterprise.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #818cf8;
+            --secondary: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #0f0f1a;
+            --darker: #07070d;
+            --card: #1a1a2e;
+            --card-hover: #252540;
+            --text: #e2e8f0;
+            --text-muted: #94a3b8;
+            --border: #2d2d4a;
+            --glow: rgba(99, 102, 241, 0.4);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--darker);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        /* Animated Background */
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(99, 102, 241, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .bg-gradient {
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 30%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 70%, rgba(16, 185, 129, 0.1) 0%, transparent 50%);
+            animation: float 20s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(-2%, -2%) rotate(1deg); }
+        }
+        
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1rem 2rem;
+            background: rgba(7, 7, 13, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 800;
+            font-size: 1.4rem;
+            color: var(--text);
+            text-decoration: none;
+        }
+        
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary-light);
+        }
+        
+        .nav-cta {
+            background: var(--primary);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .nav-cta:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px var(--glow);
+        }
+        
+        /* Hero Section */
+        .hero {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 8rem 2rem 4rem;
+        }
+        
+        .hero-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+        
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 100px;
+            font-size: 0.85rem;
+            color: var(--primary-light);
+            margin-bottom: 1.5rem;
+            animation: pulse 3s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4); }
+            50% { box-shadow: 0 0 0 10px rgba(99, 102, 241, 0); }
+        }
+        
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--text) 0%, var(--primary-light) 50%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero-tagline {
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            font-weight: 300;
+        }
+        
+        .hero-tagline em {
+            color: var(--primary-light);
+            font-style: normal;
+            font-weight: 500;
+        }
+        
+        .hero-stats {
+            display: flex;
+            gap: 2.5rem;
+            margin-bottom: 2.5rem;
+        }
+        
+        .stat {
+            text-align: left;
+        }
+        
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--danger);
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px var(--glow);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: var(--text);
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            border: 2px solid var(--border);
+            transition: all 0.3s;
+        }
+        
+        .btn-secondary:hover {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.1);
+        }
+        
+        /* Hero Visual */
+        .hero-visual {
+            position: relative;
+        }
+        
+        .hero-visual-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-visual-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--warning));
+        }
+        
+        .scan-animation {
+            background: var(--darker);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .scan-line {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            animation: scan 2s ease-in-out infinite;
+        }
+        
+        @keyframes scan {
+            0% { top: 0; opacity: 0; }
+            50% { opacity: 1; }
+            100% { top: 100%; opacity: 0; }
+        }
+        
+        .scan-text {
+            color: var(--text-muted);
+        }
+        
+        .scan-text .success {
+            color: var(--secondary);
+        }
+        
+        .scan-text .warning {
+            color: var(--warning);
+        }
+        
+        .scan-text .danger {
+            color: var(--danger);
+        }
+        
+        .verification-badges {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .v-badge {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            color: var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .v-badge.warning {
+            background: rgba(245, 158, 11, 0.1);
+            border-color: rgba(245, 158, 11, 0.3);
+            color: var(--warning);
+        }
+        
+        /* Problem Section */
+        .section {
+            position: relative;
+            z-index: 1;
+            padding: 6rem 2rem;
+        }
+        
+        .section-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        
+        .section-label {
+            display: inline-block;
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+            padding: 0.5rem 1rem;
+            border-radius: 100px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .section-label.green {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--secondary);
+        }
+        
+        .section-label.purple {
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--primary-light);
+        }
+        
+        .section-title {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+        
+        .section-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        /* Threat Grid */
+        .threat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .threat-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .threat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--danger);
+        }
+        
+        .threat-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--danger);
+            box-shadow: 0 20px 40px rgba(239, 68, 68, 0.1);
+        }
+        
+        .threat-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .threat-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .threat-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+        }
+        
+        .threat-stat {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+            padding: 0.5rem 1rem;
+            border-radius: 100px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        
+        /* Solution Section */
+        .solution-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+        
+        .solution-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .solution-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--primary);
+            box-shadow: 0 30px 60px var(--glow);
+        }
+        
+        .solution-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .solution-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+        }
+        
+        .solution-card p {
+            color: var(--text-muted);
+        }
+        
+        .solution-card .feature-list {
+            margin-top: 1.5rem;
+            list-style: none;
+        }
+        
+        .solution-card .feature-list li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .solution-card .feature-list li::before {
+            content: '✓';
+            color: var(--secondary);
+            font-weight: bold;
+        }
+        
+        /* Fingerprint Demo */
+        .fingerprint-demo {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 3rem;
+            margin-top: 4rem;
+        }
+        
+        .fingerprint-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .fingerprint-header h3 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .fingerprint-comparison {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 2rem;
+            align-items: center;
+        }
+        
+        .comparison-column {
+            text-align: center;
+        }
+        
+        .comparison-column h4 {
+            font-size: 1rem;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .transformation-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .transformation-list li {
+            background: var(--darker);
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .transformation-list .status {
+            font-weight: 600;
+        }
+        
+        .transformation-list .status.fail {
+            color: var(--danger);
+        }
+        
+        .transformation-list .status.pass {
+            color: var(--secondary);
+        }
+        
+        .vs-divider {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .vs-circle {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.2rem;
+        }
+        
+        .vs-line {
+            width: 2px;
+            height: 100px;
+            background: linear-gradient(180deg, var(--primary), var(--secondary));
+        }
+        
+        /* Market Section */
+        .market-visual {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 3rem;
+            text-align: center;
+        }
+        
+        .market-number {
+            font-size: 6rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+        
+        .market-label {
+            font-size: 1.5rem;
+            color: var(--text-muted);
+        }
+        
+        .market-breakdown {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .market-segment {
+            text-align: center;
+        }
+        
+        .market-segment-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-light);
+        }
+        
+        .market-segment-label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        
+        /* Pricing Section */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+        }
+        
+        .pricing-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .pricing-card.featured {
+            border-color: var(--primary);
+            transform: scale(1.05);
+        }
+        
+        .pricing-card.featured::before {
+            content: 'MOST POPULAR';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            padding: 0.5rem 1rem;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        
+        .pricing-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+        }
+        
+        .pricing-card.featured:hover {
+            transform: scale(1.05) translateY(-5px);
+        }
+        
+        .pricing-tier {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .pricing-models {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .pricing-price {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.25rem;
+        }
+        
+        .pricing-period {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+        
+        .pricing-features li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+        
+        .pricing-features li::before {
+            content: '✓';
+            color: var(--secondary);
+            font-weight: bold;
+        }
+        
+        .pricing-cta {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 10px;
+            font-weight: 600;
+            text-align: center;
+            display: block;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .pricing-card .pricing-cta {
+            background: var(--darker);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+        
+        .pricing-card .pricing-cta:hover {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.1);
+        }
+        
+        .pricing-card.featured .pricing-cta {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            border: none;
+        }
+        
+        .pricing-card.featured .pricing-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px var(--glow);
+        }
+        
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, var(--card) 0%, var(--dark) 100%);
+            border: 1px solid var(--border);
+            border-radius: 32px;
+            padding: 5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, rgba(99, 102, 241, 0.1) 0%, transparent 50%);
+            animation: rotate 20s linear infinite;
+        }
+        
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .cta-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .cta-title {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+        
+        .cta-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            margin-bottom: 2.5rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+        
+        /* Footer */
+        footer {
+            position: relative;
+            z-index: 1;
+            padding: 4rem 2rem 2rem;
+            border-top: 1px solid var(--border);
+        }
+        
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: var(--primary-light);
+        }
+        
+        .footer-copy {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .hero-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            
+            .hero-stats {
+                justify-content: center;
+            }
+            
+            .hero-buttons {
+                justify-content: center;
+            }
+            
+            .hero-visual {
+                max-width: 600px;
+                margin: 0 auto;
+            }
+            
+            .solution-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .pricing-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .pricing-card.featured {
+                transform: none;
+            }
+            
+            .pricing-card.featured:hover {
+                transform: translateY(-5px);
+            }
+            
+            .fingerprint-comparison {
+                grid-template-columns: 1fr;
+            }
+            
+            .vs-divider {
+                flex-direction: row;
+            }
+            
+            .vs-line {
+                width: 100px;
+                height: 2px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .market-number {
+                font-size: 4rem;
+            }
+            
+            .market-breakdown {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .cta-section {
+                padding: 3rem 2rem;
+            }
+            
+            .cta-title {
+                font-size: 2rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+    <div class="bg-gradient"></div>
+    
+    <nav>
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <div class="logo-icon">🛡️</div>
+                FoundationGuard
+            </a>
+            <ul class="nav-links">
+                <li><a href="#problem">Problem</a></li>
+                <li><a href="#solution">Solution</a></li>
+                <li><a href="#technology">Technology</a></li>
+                <li><a href="#market">Market</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+            </ul>
+            <a href="#contact" class="nav-cta">Get Early Access</a>
+        </div>
+    </nav>
+    
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <span>🚨</span>
+                    Model Poisoning Attacks Up 340% YoY
+                </div>
+                <h1>The Trust Layer for AI Model Supply Chains</h1>
+                <p class="hero-tagline">
+                    Every model has a lineage. <em>We verify it.</em>
+                </p>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <div class="stat-value">340%</div>
+                        <div class="stat-label">↑ Model Poisoning YoY</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">287</div>
+                        <div class="stat-label">Avg Models per Enterprise</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">67%</div>
+                        <div class="stat-label">No Provenance Tracking</div>
+                    </div>
+                </div>
+                <div class="hero-buttons">
+                    <a href="#contact" class="btn-primary">Request Demo →</a>
+                    <a href="#solution" class="btn-secondary">See How It Works</a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="hero-visual-card">
+                    <div class="scan-animation">
+                        <div class="scan-line"></div>
+                        <div class="scan-text">
+                            <div style="margin-bottom: 0.5rem;">$ foundationguard scan llama-3.1-70b-instruct</div>
+                            <div style="margin-bottom: 0.5rem;"><span class="success">✓</span> Model DNA fingerprint verified</div>
+                            <div style="margin-bottom: 0.5rem;"><span class="success">✓</span> Provenance chain: Meta → HuggingFace → Internal</div>
+                            <div style="margin-bottom: 0.5rem;"><span class="success">✓</span> No backdoor signatures detected</div>
+                            <div style="margin-bottom: 0.5rem;"><span class="warning">⚠</span> 2 dependencies require attestation</div>
+                            <div><span class="success">✓</span> EU AI Act compliance: READY</div>
+                        </div>
+                    </div>
+                    <div class="verification-badges">
+                        <div class="v-badge">🔐 Cryptographically Verified</div>
+                        <div class="v-badge">📋 SBOM Generated</div>
+                        <div class="v-badge warning">⚠ 2 Warnings</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="problem" class="section">
+        <div class="section-container">
+            <div class="section-header">
+                <div class="section-label">The Crisis</div>
+                <h2 class="section-title">Your AI Models Are a Hidden Attack Surface</h2>
+                <p class="section-subtitle">
+                    The next SolarWinds is hiding in your AI model supply chain. Most enterprises have no idea what's actually running in their models.
+                </p>
+            </div>
+            
+            <div class="threat-grid">
+                <div class="threat-card">
+                    <div class="threat-icon">🧪</div>
+                    <h3>Model Poisoning</h3>
+                    <p>Malicious actors inject harmful behaviors during training that persist through deployment.</p>
+                    <div class="threat-stat">↑ 340% YoY</div>
+                </div>
+                <div class="threat-card">
+                    <div class="threat-icon">🚪</div>
+                    <h3>Backdoor Injection</h3>
+                    <p>Hidden triggers that activate specific behaviors only when certain inputs are received.</p>
+                    <div class="threat-stat">↑ 520% YoY</div>
+                </div>
+                <div class="threat-card">
+                    <div class="threat-icon">⚖️</div>
+                    <h3>Weight Tampering</h3>
+                    <p>Subtle modifications to model weights that inject bias or degrade performance undetectably.</p>
+                    <div class="threat-stat">↑ 280% YoY</div>
+                </div>
+                <div class="threat-card">
+                    <div class="threat-icon">🔗</div>
+                    <h3>Dependency Hijacking</h3>
+                    <p>Malicious model substitution through compromised registries and package managers.</p>
+                    <div class="threat-stat">↑ 420% YoY</div>
+                </div>
+                <div class="threat-card">
+                    <div class="threat-icon">📄</div>
+                    <h3>Provenance Fraud</h3>
+                    <p>Fake model origins, falsified training data claims, and license violations.</p>
+                    <div class="threat-stat">↑ 380% YoY</div>
+                </div>
+                <div class="threat-card">
+                    <div class="threat-icon">📋</div>
+                    <h3>Compliance Gaps</h3>
+                    <p>EU AI Act, NIST RMF, and SEC rules mandate supply chain documentation you don't have.</p>
+                    <div class="threat-stat">Mandates 2026</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="solution" class="section">
+        <div class="section-container">
+            <div class="section-header">
+                <div class="section-label green">The Solution</div>
+                <h2 class="section-title">Complete Model Supply Chain Security</h2>
+                <p class="section-subtitle">
+                    End-to-end provenance verification, real-time integrity monitoring, and automated compliance for every AI model in your enterprise.
+                </p>
+            </div>
+            
+            <div class="solution-grid">
+                <div class="solution-card">
+                    <div class="solution-icon">🧬</div>
+                    <h3>Model DNA Fingerprinting™</h3>
+                    <p>Cryptographic proof of model identity that persists through any transformation.</p>
+                    <ul class="feature-list">
+                        <li>Survives quantization & pruning</li>
+                        <li>Tracks fine-tuning lineage</li>
+                        <li>Format-agnostic verification</li>
+                        <li>Instant authentication</li>
+                    </ul>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon">🔗</div>
+                    <h3>Provenance Chain Verification</h3>
+                    <p>Complete audit trail from base model to production deployment.</p>
+                    <ul class="feature-list">
+                        <li>Training data attestations</li>
+                        <li>Transfer learning history</li>
+                        <li>Cryptographic signatures</li>
+                        <li>Immutable audit logs</li>
+                    </ul>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon">👁️</div>
+                    <h3>Real-Time Integrity Monitoring</h3>
+                    <p>Continuous verification that deployed models haven't been compromised.</p>
+                    <ul class="feature-list">
+                        <li>Runtime tampering detection</li>
+                        <li>Inference-time verification</li>
+                        <li>Anomaly alerting</li>
+                        <li>Automated remediation</li>
+                    </ul>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon">📋</div>
+                    <h3>Automated Compliance Engine</h3>
+                    <p>One-click documentation for every major AI regulation.</p>
+                    <ul class="feature-list">
+                        <li>EU AI Act ready</li>
+                        <li>NIST AI RMF mapping</li>
+                        <li>SOC 2 AI addendum</li>
+                        <li>Audit-ready reports</li>
+                    </ul>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon">📦</div>
+                    <h3>Model SBOM Generation</h3>
+                    <p>Complete dependency mapping for every AI model in your organization.</p>
+                    <ul class="feature-list">
+                        <li>Base model identification</li>
+                        <li>Training dataset provenance</li>
+                        <li>Library dependencies</li>
+                        <li>Embedded components</li>
+                    </ul>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon">🌐</div>
+                    <h3>Threat Intelligence Network</h3>
+                    <p>Collective defense from the entire FoundationGuard ecosystem.</p>
+                    <ul class="feature-list">
+                        <li>Known-bad signatures</li>
+                        <li>Attack pattern database</li>
+                        <li>Community reports</li>
+                        <li>Proactive alerts</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div id="technology" class="fingerprint-demo">
+                <div class="fingerprint-header">
+                    <h3>Model DNA Fingerprinting™ Technology</h3>
+                    <p style="color: var(--text-muted);">Our fingerprints survive what traditional hashes cannot</p>
+                </div>
+                <div class="fingerprint-comparison">
+                    <div class="comparison-column">
+                        <h4>Traditional Hash</h4>
+                        <ul class="transformation-list">
+                            <li>Quantization <span class="status fail">❌ BREAKS</span></li>
+                            <li>Fine-tuning <span class="status fail">❌ BREAKS</span></li>
+                            <li>Format Conversion <span class="status fail">❌ BREAKS</span></li>
+                            <li>Pruning <span class="status fail">❌ BREAKS</span></li>
+                            <li>LoRA Merge <span class="status fail">❌ BREAKS</span></li>
+                        </ul>
+                    </div>
+                    <div class="vs-divider">
+                        <div class="vs-line"></div>
+                        <div class="vs-circle">VS</div>
+                        <div class="vs-line"></div>
+                    </div>
+                    <div class="comparison-column">
+                        <h4>FoundationGuard DNA</h4>
+                        <ul class="transformation-list">
+                            <li>Quantization <span class="status pass">✓ PERSISTENT</span></li>
+                            <li>Fine-tuning <span class="status pass">✓ TRACKS LINEAGE</span></li>
+                            <li>Format Conversion <span class="status pass">✓ PERSISTENT</span></li>
+                            <li>Pruning <span class="status pass">✓ DETECTABLE</span></li>
+                            <li>LoRA Merge <span class="status pass">✓ FULL HISTORY</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="market" class="section">
+        <div class="section-container">
+            <div class="section-header">
+                <div class="section-label purple">Market Opportunity</div>
+                <h2 class="section-title">Massive and Growing</h2>
+                <p class="section-subtitle">
+                    AI security is the fastest-growing segment in cybersecurity, and model supply chain is the largest unaddressed gap.
+                </p>
+            </div>
+            
+            <div class="market-visual">
+                <div class="market-number">$52B</div>
+                <div class="market-label">Total Addressable Market by 2030</div>
+                
+                <div class="market-breakdown">
+                    <div class="market-segment">
+                        <div class="market-segment-value">$18B</div>
+                        <div class="market-segment-label">Model Supply Chain Security</div>
+                    </div>
+                    <div class="market-segment">
+                        <div class="market-segment-value">$14B</div>
+                        <div class="market-segment-label">AI Compliance & Governance</div>
+                    </div>
+                    <div class="market-segment">
+                        <div class="market-segment-value">$12B</div>
+                        <div class="market-segment-label">AI Integrity Monitoring</div>
+                    </div>
+                    <div class="market-segment">
+                        <div class="market-segment-value">$8B</div>
+                        <div class="market-segment-label">AI Threat Intelligence</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="pricing" class="section">
+        <div class="section-container">
+            <div class="section-header">
+                <div class="section-label purple">Pricing</div>
+                <h2 class="section-title">Simple, Predictable Pricing</h2>
+                <p class="section-subtitle">
+                    Scale your model security as your AI adoption grows.
+                </p>
+            </div>
+            
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <div class="pricing-tier">Starter</div>
+                    <div class="pricing-models">Up to 50 models/month</div>
+                    <div class="pricing-price">$2,500</div>
+                    <div class="pricing-period">per month</div>
+                    <ul class="pricing-features">
+                        <li>Core scanning</li>
+                        <li>Basic provenance</li>
+                        <li>SBOM generation</li>
+                        <li>Email support</li>
+                    </ul>
+                    <a href="#contact" class="pricing-cta">Get Started</a>
+                </div>
+                
+                <div class="pricing-card featured">
+                    <div class="pricing-tier">Professional</div>
+                    <div class="pricing-models">Up to 250 models/month</div>
+                    <div class="pricing-price">$12,000</div>
+                    <div class="pricing-period">per month</div>
+                    <ul class="pricing-features">
+                        <li>Full platform access</li>
+                        <li>Compliance automation</li>
+                        <li>Runtime monitoring</li>
+                        <li>Priority support</li>
+                        <li>Custom integrations</li>
+                    </ul>
+                    <a href="#contact" class="pricing-cta">Get Started</a>
+                </div>
+                
+                <div class="pricing-card">
+                    <div class="pricing-tier">Enterprise</div>
+                    <div class="pricing-models">Unlimited models</div>
+                    <div class="pricing-price">Custom</div>
+                    <div class="pricing-period">contact sales</div>
+                    <ul class="pricing-features">
+                        <li>Everything in Pro</li>
+                        <li>Custom policies</li>
+                        <li>Dedicated support</li>
+                        <li>SLA guarantees</li>
+                        <li>On-premise option</li>
+                    </ul>
+                    <a href="#contact" class="pricing-cta">Contact Sales</a>
+                </div>
+                
+                <div class="pricing-card">
+                    <div class="pricing-tier">Government</div>
+                    <div class="pricing-models">Unlimited models</div>
+                    <div class="pricing-price">Custom</div>
+                    <div class="pricing-period">contact sales</div>
+                    <ul class="pricing-features">
+                        <li>Air-gapped deployment</li>
+                        <li>FedRAMP ready</li>
+                        <li>Clearance support</li>
+                        <li>Dedicated team</li>
+                        <li>Custom compliance</li>
+                    </ul>
+                    <a href="#contact" class="pricing-cta">Contact Sales</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="contact" class="section">
+        <div class="section-container">
+            <div class="cta-section">
+                <div class="cta-content">
+                    <h2 class="cta-title">Secure Your AI Model Supply Chain</h2>
+                    <p class="cta-subtitle">
+                        Join the enterprises taking AI security seriously. Get early access to FoundationGuard and protect your models before the next breach.
+                    </p>
+                    <div class="cta-buttons">
+                        <a href="mailto:founders@foundationguard.ai" class="btn-primary">
+                            Request Early Access →
+                        </a>
+                        <a href="#" class="btn-secondary">
+                            Schedule Demo
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <footer>
+        <div class="footer-container">
+            <div class="footer-links">
+                <a href="#">Privacy</a>
+                <a href="#">Terms</a>
+                <a href="#">Security</a>
+                <a href="mailto:founders@foundationguard.ai">Contact</a>
+            </div>
+            <div class="footer-copy">
+                © 2026 FoundationGuard AI. All rights reserved.
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
