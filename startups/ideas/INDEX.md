@@ -310,6 +310,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-05-15 | Morning | FoundationGuard AI — The Trust & Security Layer for AI Model Supply Chains | [Playbook](2026-05-15-morning.md) • [Landing](2026-05-15-morning-landing.html) • [PDF](2026-05-15-morning.pdf) |
 | 2026-05-15 | Afternoon | BodyOS — The Unified AI Operating System for Human Physiology | [Playbook](2026-05-15-afternoon.md) • [Landing](2026-05-15-afternoon-landing.html) • [PDF](2026-05-15-afternoon.pdf) |
 | 2026-05-16 | Evening | RentShield AI — The AI Operating System for Tenant Protection & Housing Rights | [Playbook](2026-05-16-evening.md) • [Landing](2026-05-16-evening-landing.html) • [PDF](2026-05-16-evening.pdf) |
+| 2026-05-16 | Afternoon | SkyGrid AI — The Operating System for Urban Air Mobility | [Playbook](2026-05-16-afternoon.md) • [Landing](2026-05-16-afternoon-landing.html) • [PDF](2026-05-16-afternoon.pdf) |
 
 <!-- New entries will be added above this line -->
 
