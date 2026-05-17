@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PlasticNet AI — The Intelligence Layer for Plastic Credit Markets</title>
+    <meta name="description" content="The definitive platform for plastic credit trading, verification, and circular plastics intelligence. Building the financial infrastructure for the $100B plastic economy.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00D4AA;
+            --primary-dark: #00B894;
+            --secondary: #0984E3;
+            --accent: #6C5CE7;
+            --dark: #0A1628;
+            --darker: #050D18;
+            --light: #F8FFFE;
+            --gray: #636E72;
+            --ocean-blue: #0077B6;
+            --ocean-dark: #023E8A;
+            --gradient-1: linear-gradient(135deg, #00D4AA 0%, #0984E3 50%, #6C5CE7 100%);
+            --gradient-2: linear-gradient(180deg, #0A1628 0%, #050D18 100%);
+            --gradient-ocean: linear-gradient(180deg, #023E8A 0%, #0077B6 50%, #00B4D8 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--darker);
+            color: var(--light);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Animated ocean/plastic background */
+        .ocean-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: var(--gradient-2);
+            overflow: hidden;
+        }
+
+        .ocean-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(ellipse at 20% 80%, rgba(0, 212, 170, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(9, 132, 227, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(108, 92, 231, 0.1) 0%, transparent 50%);
+            animation: oceanFlow 20s ease-in-out infinite;
+        }
+
+        @keyframes oceanFlow {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(-5%, -5%) rotate(2deg); }
+        }
+
+        /* Floating plastic particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(0, 212, 170, 0.3);
+            border-radius: 50%;
+            animation: float 15s ease-in-out infinite;
+        }
+
+        .particle:nth-child(1) { width: 8px; height: 8px; left: 10%; top: 20%; animation-delay: 0s; }
+        .particle:nth-child(2) { width: 6px; height: 6px; left: 20%; top: 60%; animation-delay: -2s; }
+        .particle:nth-child(3) { width: 10px; height: 10px; left: 35%; top: 40%; animation-delay: -4s; }
+        .particle:nth-child(4) { width: 5px; height: 5px; left: 50%; top: 80%; animation-delay: -6s; }
+        .particle:nth-child(5) { width: 7px; height: 7px; left: 65%; top: 25%; animation-delay: -8s; }
+        .particle:nth-child(6) { width: 9px; height: 9px; left: 80%; top: 55%; animation-delay: -10s; }
+        .particle:nth-child(7) { width: 6px; height: 6px; left: 90%; top: 75%; animation-delay: -12s; }
+        .particle:nth-child(8) { width: 8px; height: 8px; left: 75%; top: 10%; animation-delay: -14s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.3; }
+            50% { transform: translateY(-100px) rotate(180deg); opacity: 0.6; }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(5, 13, 24, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0, 212, 170, 0.1);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            -webkit-text-fill-color: white;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: rgba(248, 255, 254, 0.7);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .cta-nav {
+            padding: 0.75rem 1.5rem;
+            background: var(--gradient-1);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .cta-nav:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 212, 170, 0.3);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 120px 5% 80px;
+            position: relative;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(0, 212, 170, 0.1);
+            border: 1px solid rgba(0, 212, 170, 0.3);
+            border-radius: 50px;
+            font-size: 0.9rem;
+            color: var(--primary);
+            margin-bottom: 2rem;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(0, 212, 170, 0.4); }
+            50% { box-shadow: 0 0 0 10px rgba(0, 212, 170, 0); }
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            max-width: 900px;
+        }
+
+        .hero h1 span {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.1rem, 2vw, 1.4rem);
+            color: rgba(248, 255, 254, 0.7);
+            max-width: 700px;
+            margin-bottom: 3rem;
+            line-height: 1.7;
+        }
+
+        .hero-ctas {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            padding: 1rem 2.5rem;
+            background: var(--gradient-1);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px rgba(0, 212, 170, 0.3);
+        }
+
+        .btn-secondary {
+            padding: 1rem 2.5rem;
+            background: transparent;
+            border: 2px solid rgba(0, 212, 170, 0.5);
+            border-radius: 12px;
+            color: var(--primary);
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(0, 212, 170, 0.1);
+            border-color: var(--primary);
+        }
+
+        /* Stats Section */
+        .stats {
+            padding: 4rem 5%;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(0, 212, 170, 0.05);
+            border: 1px solid rgba(0, 212, 170, 0.1);
+            border-radius: 16px;
+            transition: transform 0.3s, border-color 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(0, 212, 170, 0.3);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            color: rgba(248, 255, 254, 0.6);
+            margin-top: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        /* Problem Section */
+        .problem {
+            padding: 100px 5%;
+            background: linear-gradient(180deg, transparent, rgba(0, 119, 182, 0.1), transparent);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-tag {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(0, 212, 170, 0.1);
+            border-radius: 50px;
+            color: var(--primary);
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .section-header h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            color: rgba(248, 255, 254, 0.6);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .problem-card {
+            background: rgba(10, 22, 40, 0.8);
+            border: 1px solid rgba(255, 107, 107, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 107, 107, 0.4);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .problem-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a5a);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .problem-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: #ff6b6b;
+        }
+
+        .problem-card p {
+            color: rgba(248, 255, 254, 0.7);
+            font-size: 0.95rem;
+        }
+
+        /* Solution Section */
+        .solution {
+            padding: 100px 5%;
+        }
+
+        .solution-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .solution-card {
+            background: linear-gradient(135deg, rgba(0, 212, 170, 0.1), rgba(9, 132, 227, 0.1));
+            border: 1px solid rgba(0, 212, 170, 0.2);
+            border-radius: 24px;
+            padding: 2.5rem;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .solution-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient-1);
+        }
+
+        .solution-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(0, 212, 170, 0.4);
+            box-shadow: 0 25px 50px rgba(0, 212, 170, 0.15);
+        }
+
+        .solution-icon {
+            width: 70px;
+            height: 70px;
+            background: var(--gradient-1);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .solution-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+        }
+
+        .solution-card p {
+            color: rgba(248, 255, 254, 0.7);
+            margin-bottom: 1.5rem;
+        }
+
+        .solution-features {
+            list-style: none;
+        }
+
+        .solution-features li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 0;
+            color: rgba(248, 255, 254, 0.8);
+            font-size: 0.95rem;
+        }
+
+        .solution-features li::before {
+            content: '✓';
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        /* Market Section */
+        .market {
+            padding: 100px 5%;
+            background: linear-gradient(180deg, transparent, rgba(108, 92, 231, 0.1), transparent);
+        }
+
+        .market-visual {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .market-circle {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: rgba(10, 22, 40, 0.8);
+            border: 1px solid rgba(108, 92, 231, 0.2);
+            border-radius: 24px;
+            transition: all 0.3s;
+        }
+
+        .market-circle:hover {
+            transform: scale(1.05);
+            border-color: rgba(108, 92, 231, 0.5);
+        }
+
+        .market-value {
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .market-label {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+
+        .market-desc {
+            color: rgba(248, 255, 254, 0.5);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        /* How It Works */
+        .how-it-works {
+            padding: 100px 5%;
+        }
+
+        .timeline {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 100%;
+            background: var(--gradient-1);
+            border-radius: 2px;
+        }
+
+        .timeline-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 4rem;
+        }
+
+        .timeline-item:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .timeline-content {
+            width: 45%;
+            padding: 2rem;
+            background: rgba(10, 22, 40, 0.8);
+            border: 1px solid rgba(0, 212, 170, 0.2);
+            border-radius: 20px;
+        }
+
+        .timeline-content h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .timeline-content p {
+            color: rgba(248, 255, 254, 0.7);
+        }
+
+        .timeline-number {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: 800;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+        }
+
+        /* Use Cases */
+        .use-cases {
+            padding: 100px 5%;
+            background: linear-gradient(180deg, transparent, rgba(0, 212, 170, 0.05), transparent);
+        }
+
+        .use-case-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .use-case-card {
+            background: rgba(10, 22, 40, 0.8);
+            border: 1px solid rgba(0, 212, 170, 0.15);
+            border-radius: 24px;
+            padding: 2.5rem;
+            transition: all 0.3s;
+        }
+
+        .use-case-card:hover {
+            border-color: rgba(0, 212, 170, 0.4);
+            transform: translateY(-5px);
+        }
+
+        .use-case-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .use-case-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-1);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+        }
+
+        .use-case-header h3 {
+            font-size: 1.3rem;
+        }
+
+        .use-case-card p {
+            color: rgba(248, 255, 254, 0.7);
+            margin-bottom: 1.5rem;
+        }
+
+        .use-case-result {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 212, 170, 0.1);
+            border-radius: 12px;
+        }
+
+        .use-case-result strong {
+            color: var(--primary);
+            font-size: 1.5rem;
+        }
+
+        /* Testimonials */
+        .testimonials {
+            padding: 100px 5%;
+        }
+
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .testimonial-card {
+            background: linear-gradient(135deg, rgba(0, 212, 170, 0.05), rgba(9, 132, 227, 0.05));
+            border: 1px solid rgba(0, 212, 170, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+        }
+
+        .testimonial-quote {
+            font-size: 1.1rem;
+            font-style: italic;
+            color: rgba(248, 255, 254, 0.9);
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .testimonial-avatar {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .testimonial-info h4 {
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .testimonial-info span {
+            color: rgba(248, 255, 254, 0.5);
+            font-size: 0.9rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 100px 5%;
+            text-align: center;
+            background: linear-gradient(180deg, transparent, rgba(0, 212, 170, 0.1));
+        }
+
+        .cta-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cta-content h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-content p {
+            color: rgba(248, 255, 254, 0.7);
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Footer */
+        footer {
+            padding: 60px 5%;
+            background: var(--darker);
+            border-top: 1px solid rgba(0, 212, 170, 0.1);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+        }
+
+        .footer-brand h3 {
+            font-size: 1.5rem;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .footer-brand p {
+            color: rgba(248, 255, 254, 0.5);
+            font-size: 0.9rem;
+        }
+
+        .footer-links h4 {
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .footer-links a {
+            display: block;
+            color: rgba(248, 255, 254, 0.6);
+            text-decoration: none;
+            padding: 0.4rem 0;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 3rem auto 0;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(0, 212, 170, 0.1);
+            text-align: center;
+            color: rgba(248, 255, 254, 0.4);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            
+            .timeline::before { left: 20px; }
+            
+            .timeline-item,
+            .timeline-item:nth-child(even) {
+                flex-direction: column;
+                align-items: flex-start;
+                padding-left: 60px;
+            }
+            
+            .timeline-content { width: 100%; }
+            
+            .timeline-number {
+                left: 20px;
+                transform: translateX(-50%);
+            }
+            
+            .market-visual {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-in {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+    </style>
+</head>
+<body>
+    <div class="ocean-bg"></div>
+    <div class="particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+
+    <nav>
+        <div class="logo">
+            <div class="logo-icon">♻️</div>
+            PlasticNet AI
+        </div>
+        <ul class="nav-links">
+            <li><a href="#solution">Solution</a></li>
+            <li><a href="#market">Market</a></li>
+            <li><a href="#how-it-works">How It Works</a></li>
+            <li><a href="#use-cases">Use Cases</a></li>
+        </ul>
+        <button class="cta-nav">Join Waitlist</button>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-badge">
+            🌊 Building the $100B Plastic Credit Market Infrastructure
+        </div>
+        <h1>The Intelligence Layer for <span>Plastic Credit Markets</span></h1>
+        <p class="hero-subtitle">
+            Verify, trade, and monetize circular plastics. PlasticNet AI is the Bloomberg + Verra + Stripe for the emerging plastic economy — enabling brands, recyclers, and governments to transform the $600B waste crisis into a functioning market.
+        </p>
+        <div class="hero-ctas">
+            <a href="#contact" class="btn-primary">
+                Request Demo
+                <span>→</span>
+            </a>
+            <a href="#solution" class="btn-secondary">Explore Platform</a>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="stat-card">
+            <div class="stat-number">400M</div>
+            <div class="stat-label">Tonnes plastic produced annually</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">9%</div>
+            <div class="stat-label">Global recycling rate</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">$100B</div>
+            <div class="stat-label">Projected plastic credit market by 2030</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">500+</div>
+            <div class="stat-label">Companies with recycled content pledges</div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="problem">
+        <div class="section-header">
+            <span class="section-tag">THE CRISIS</span>
+            <h2>The Plastic Problem is a Market Problem</h2>
+            <p>The world creates 400M tonnes of plastic yearly. Less than 9% is recycled. The infrastructure for a circular plastics economy doesn't exist.</p>
+        </div>
+        <div class="problem-grid">
+            <div class="problem-card">
+                <div class="problem-icon">🌊</div>
+                <h3>Environmental Catastrophe</h3>
+                <p>8 million tonnes enter oceans annually. Microplastics found in human blood, breast milk, and brains. The planet is drowning in plastic.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">⚖️</div>
+                <h3>Regulatory Tsunami</h3>
+                <p>EU Plastic Tax, EPR laws in 30+ countries, US state mandates. Brands face billions in compliance costs with no clear solution.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">🔍</div>
+                <h3>Verification Void</h3>
+                <p>No standardized plastic credit methodology. Rampant greenwashing. Brands can't prove their plastic claims are real.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">📊</div>
+                <h3>Market Chaos</h3>
+                <p>No transparent pricing. Recyclers underpaid. Brands overpay intermediaries. Quality mismatches everywhere.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="solution" id="solution">
+        <div class="section-header">
+            <span class="section-tag">THE PLATFORM</span>
+            <h2>One Platform. Complete Plastic Intelligence.</h2>
+            <p>PlasticNet AI provides the infrastructure for plastic credits to work — from verification to trading to compliance.</p>
+        </div>
+        <div class="solution-grid">
+            <div class="solution-card">
+                <div class="solution-icon">✓</div>
+                <h3>PlasticVerify</h3>
+                <p>AI-powered verification for plastic credits that actually mean something.</p>
+                <ul class="solution-features">
+                    <li>Mass balance tracking across supply chains</li>
+                    <li>Spectroscopic material identification</li>
+                    <li>Satellite imagery for waste monitoring</li>
+                    <li>Blockchain-anchored chain of custody</li>
+                    <li>Fraud detection via anomaly models</li>
+                </ul>
+            </div>
+            <div class="solution-card">
+                <div class="solution-icon">⚡</div>
+                <h3>PlasticExchange</h3>
+                <p>The first regulated marketplace for plastic credit trading.</p>
+                <ul class="solution-features">
+                    <li>Spot market for plastic credits</li>
+                    <li>Multiple credit types (Collection, Recycling, Content)</li>
+                    <li>Geographic & polymer-specific pricing</li>
+                    <li>Forward contracts for long-term offtake</li>
+                    <li>API-first automated compliance</li>
+                </ul>
+            </div>
+            <div class="solution-card">
+                <div class="solution-icon">📈</div>
+                <h3>PlasticIQ</h3>
+                <p>Market intelligence for the plastic economy.</p>
+                <ul class="solution-features">
+                    <li>Real-time pricing indices</li>
+                    <li>Regulatory tracker (30+ jurisdictions)</li>
+                    <li>Supply/demand forecasting</li>
+                    <li>Competitor benchmarking</li>
+                    <li>Investment & M&A intelligence</li>
+                </ul>
+            </div>
+            <div class="solution-card">
+                <div class="solution-icon">📋</div>
+                <h3>PlasticComply</h3>
+                <p>Automated EPR compliance across every jurisdiction.</p>
+                <ul class="solution-features">
+                    <li>Automated reporting for 30+ markets</li>
+                    <li>Fee calculation & payment orchestration</li>
+                    <li>Audit-ready documentation</li>
+                    <li>Gap analysis & credit procurement</li>
+                    <li>Managed compliance services</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Market Section -->
+    <section class="market" id="market">
+        <div class="section-header">
+            <span class="section-tag">THE OPPORTUNITY</span>
+            <h2>A Market Waiting to Be Built</h2>
+            <p>Plastic credits are the carbon credits of the 2020s. The market infrastructure doesn't exist yet. We're building it.</p>
+        </div>
+        <div class="market-visual">
+            <div class="market-circle">
+                <div class="market-value">$180B</div>
+                <div class="market-label">TAM</div>
+                <div class="market-desc">Total Addressable Market</div>
+            </div>
+            <div class="market-circle">
+                <div class="market-value">$45B</div>
+                <div class="market-label">SAM</div>
+                <div class="market-desc">Serviceable Market</div>
+            </div>
+            <div class="market-circle">
+                <div class="market-value">$2.5B</div>
+                <div class="market-label">SOM</div>
+                <div class="market-desc">2030 Obtainable Market</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works" id="how-it-works">
+        <div class="section-header">
+            <span class="section-tag">THE PROCESS</span>
+            <h2>From Waste to Value in 4 Steps</h2>
+            <p>PlasticNet AI transforms fragmented plastic waste streams into verifiable, tradeable assets.</p>
+        </div>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <h3>🔬 Verify</h3>
+                    <p>AI-powered material identification and mass balance tracking verify plastic collection and recycling at every step of the supply chain.</p>
+                </div>
+                <div class="timeline-number">1</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <h3>📝 Certify</h3>
+                    <p>Verified plastic actions are converted into standardized credits — collection credits, recycling credits, or recycled content credits.</p>
+                </div>
+                <div class="timeline-number">2</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <h3>💱 Trade</h3>
+                    <p>Credits are traded on PlasticExchange — spot, forward, or through automated compliance purchasing via API.</p>
+                </div>
+                <div class="timeline-number">3</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <h3>✅ Comply</h3>
+                    <p>Brands retire credits against EPR obligations, recycled content mandates, or voluntary sustainability commitments.</p>
+                </div>
+                <div class="timeline-number">4</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Use Cases -->
+    <section class="use-cases" id="use-cases">
+        <div class="section-header">
+            <span class="section-tag">USE CASES</span>
+            <h2>Who Uses PlasticNet AI</h2>
+            <p>From global brands to recyclers to governments — the entire plastic value chain.</p>
+        </div>
+        <div class="use-case-grid">
+            <div class="use-case-card">
+                <div class="use-case-header">
+                    <div class="use-case-icon">🏢</div>
+                    <h3>CPG Brands</h3>
+                </div>
+                <p>Major consumer goods companies use PlasticNet AI to meet recycled content commitments, automate EPR compliance, and prove sustainability claims.</p>
+                <div class="use-case-result">
+                    <strong>-60%</strong>
+                    <span>Reduction in compliance costs</span>
+                </div>
+            </div>
+            <div class="use-case-card">
+                <div class="use-case-header">
+                    <div class="use-case-icon">♻️</div>
+                    <h3>Recyclers</h3>
+                </div>
+                <p>Material recovery facilities monetize verified recycling through credit issuance, accessing transparent pricing and global demand.</p>
+                <div class="use-case-result">
+                    <strong>+40%</strong>
+                    <span>Revenue from verified recycling</span>
+                </div>
+            </div>
+            <div class="use-case-card">
+                <div class="use-case-header">
+                    <div class="use-case-icon">🏛️</div>
+                    <h3>Governments</h3>
+                </div>
+                <p>EPR scheme administrators integrate PlasticNet AI for automated fee collection, compliance monitoring, and market transparency.</p>
+                <div class="use-case-result">
+                    <strong>10x</strong>
+                    <span>Faster compliance verification</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials">
+        <div class="section-header">
+            <span class="section-tag">VISION</span>
+            <h2>Building the Circular Economy</h2>
+        </div>
+        <div class="testimonial-grid">
+            <div class="testimonial-card">
+                <p class="testimonial-quote">"The plastic crisis won't be solved by recycling alone. It requires markets. PlasticNet AI builds the infrastructure for those markets to function."</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">🌍</div>
+                    <div class="testimonial-info">
+                        <h4>Sustainability Director</h4>
+                        <span>Fortune 100 CPG Company</span>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <p class="testimonial-quote">"For the first time, we can prove exactly where our recycled plastic comes from and what happened to it. That's what regulators and consumers demand."</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">♻️</div>
+                    <div class="testimonial-info">
+                        <h4>CEO</h4>
+                        <span>Regional Recycling Network</span>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <p class="testimonial-quote">"Plastic credits are the carbon credits of the 2020s. The infrastructure PlasticNet AI is building will define how this market operates for decades."</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">📊</div>
+                    <div class="testimonial-info">
+                        <h4>Partner</h4>
+                        <span>Climate Tech VC</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section" id="contact">
+        <div class="cta-content">
+            <h2>Ready to Build the Future of Plastic Markets?</h2>
+            <p>Join the brands, recyclers, and governments building verified circular plastics infrastructure.</p>
+            <div class="cta-buttons">
+                <a href="mailto:founders@plasticnet.ai" class="btn-primary">
+                    Contact Us
+                    <span>→</span>
+                </a>
+                <a href="#" class="btn-secondary">Download Whitepaper</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h3>♻️ PlasticNet AI</h3>
+                <p>The Intelligence Layer for Plastic Credit Markets & Circular Plastics</p>
+            </div>
+            <div class="footer-links">
+                <h4>Platform</h4>
+                <a href="#">PlasticVerify</a>
+                <a href="#">PlasticExchange</a>
+                <a href="#">PlasticIQ</a>
+                <a href="#">PlasticComply</a>
+            </div>
+            <div class="footer-links">
+                <h4>Resources</h4>
+                <a href="#">Documentation</a>
+                <a href="#">API Reference</a>
+                <a href="#">Whitepaper</a>
+                <a href="#">Blog</a>
+            </div>
+            <div class="footer-links">
+                <h4>Company</h4>
+                <a href="#">About</a>
+                <a href="#">Careers</a>
+                <a href="#">Press</a>
+                <a href="mailto:founders@plasticnet.ai">Contact</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 PlasticNet AI. Building the financial infrastructure for the circular plastics economy.</p>
+            <p style="margin-top: 0.5rem; font-size: 0.8rem;">Billion Dollar Startup Ideas | Morning Drop | May 17, 2026 | Generated by The Godfather 🎩</p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Intersection Observer for animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-in');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.stat-card, .problem-card, .solution-card, .market-circle, .use-case-card, .testimonial-card').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
