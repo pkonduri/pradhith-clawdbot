@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReturnOS — The AI Operating System for Product Returns Intelligence</title>
+    <meta name="description" content="Turn your $400B returns crisis into a competitive advantage. AI-powered prediction, fraud prevention, and circular commerce.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #818cf8;
+            --secondary: #10b981;
+            --accent: #f59e0b;
+            --danger: #ef4444;
+            --dark: #0f172a;
+            --darker: #020617;
+            --gray-900: #1e293b;
+            --gray-800: #334155;
+            --gray-700: #475569;
+            --gray-600: #64748b;
+            --gray-400: #94a3b8;
+            --gray-300: #cbd5e1;
+            --gray-200: #e2e8f0;
+            --white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--darker);
+            color: var(--gray-200);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            background: radial-gradient(ellipse at 30% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                        radial-gradient(ellipse at 70% 60%, rgba(16, 185, 129, 0.1) 0%, transparent 40%),
+                        radial-gradient(ellipse at 50% 90%, rgba(245, 158, 11, 0.1) 0%, transparent 40%);
+            animation: bgPulse 20s ease-in-out infinite;
+        }
+
+        @keyframes bgPulse {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(-5%, 5%) scale(1.05); }
+            50% { transform: translate(5%, -5%) scale(1); }
+            75% { transform: translate(-3%, -3%) scale(1.03); }
+        }
+
+        /* Flow Lines Animation */
+        .flow-lines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.3;
+        }
+
+        .flow-line {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary-light), transparent);
+            animation: flowLine 4s linear infinite;
+        }
+
+        .flow-line:nth-child(1) { top: 20%; left: -100%; width: 40%; animation-delay: 0s; }
+        .flow-line:nth-child(2) { top: 40%; left: -100%; width: 30%; animation-delay: 1s; }
+        .flow-line:nth-child(3) { top: 60%; left: -100%; width: 50%; animation-delay: 2s; }
+        .flow-line:nth-child(4) { top: 80%; left: -100%; width: 35%; animation-delay: 3s; }
+
+        @keyframes flowLine {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(calc(100vw + 100%)); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 1.25rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(20px);
+            background: rgba(2, 6, 23, 0.8);
+            border-bottom: 1px solid rgba(99, 102, 241, 0.1);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-light), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            -webkit-text-fill-color: white;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--gray-400);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--white);
+        }
+
+        .btn {
+            padding: 0.75rem 1.75rem;
+            border-radius: 10px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: var(--white);
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 30px rgba(99, 102, 241, 0.5);
+        }
+
+        .btn-outline {
+            border: 2px solid var(--primary-light);
+            color: var(--primary-light);
+            background: transparent;
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: var(--white);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 8rem 2rem 4rem;
+            position: relative;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(99, 102, 241, 0.15);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 100px;
+            font-size: 0.875rem;
+            color: var(--primary-light);
+            margin-bottom: 2rem;
+        }
+
+        .hero-badge .dot {
+            width: 8px;
+            height: 8px;
+            background: var(--secondary);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        h1 {
+            font-size: clamp(3rem, 7vw, 5.5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.03em;
+        }
+
+        h1 span {
+            background: linear-gradient(135deg, var(--primary-light), var(--secondary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--gray-400);
+            max-width: 700px;
+            margin-bottom: 3rem;
+            line-height: 1.6;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        /* Stats Strip */
+        .stats-strip {
+            display: flex;
+            gap: 4rem;
+            margin-top: 4rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-light), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-value.danger {
+            background: linear-gradient(135deg, var(--danger), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--gray-500);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* Problem Section */
+        .section {
+            padding: 6rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--primary-light);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 1rem;
+        }
+
+        h2 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 800;
+            color: var(--white);
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            font-size: 1.25rem;
+            color: var(--gray-400);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Problem Grid */
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .problem-card {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.5), rgba(15, 23, 42, 0.5));
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .problem-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--danger), var(--accent));
+        }
+
+        .problem-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(239, 68, 68, 0.15);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .problem-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 0.75rem;
+        }
+
+        .problem-card p {
+            color: var(--gray-400);
+        }
+
+        .problem-stat {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .problem-stat-value {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--danger);
+        }
+
+        .problem-stat-label {
+            font-size: 0.875rem;
+            color: var(--gray-500);
+        }
+
+        /* Solution Section */
+        .solution-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .solution-card {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.6), rgba(15, 23, 42, 0.4));
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 24px;
+            padding: 2.5rem;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .solution-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(99, 102, 241, 0.5);
+            box-shadow: 0 20px 60px rgba(99, 102, 241, 0.15);
+        }
+
+        .solution-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .solution-card:hover::after {
+            opacity: 1;
+        }
+
+        .solution-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(16, 185, 129, 0.1));
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .solution-card h3 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 0.5rem;
+        }
+
+        .solution-card .tag {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--secondary);
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .solution-card p {
+            color: var(--gray-400);
+            margin-bottom: 1.5rem;
+        }
+
+        .solution-features {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .solution-feature {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--gray-300);
+            font-size: 0.9rem;
+        }
+
+        .solution-feature::before {
+            content: '✓';
+            color: var(--secondary);
+            font-weight: bold;
+        }
+
+        /* Architecture Section */
+        .architecture {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.3), rgba(15, 23, 42, 0.5));
+            border-radius: 30px;
+            padding: 4rem;
+            margin: 4rem 0;
+            border: 1px solid rgba(99, 102, 241, 0.1);
+        }
+
+        .arch-visual {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .arch-module {
+            background: rgba(2, 6, 23, 0.6);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .arch-module:hover {
+            border-color: var(--primary);
+            transform: scale(1.02);
+        }
+
+        .arch-module-icon {
+            font-size: 2rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .arch-module-name {
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 0.25rem;
+        }
+
+        .arch-module-desc {
+            font-size: 0.8rem;
+            color: var(--gray-500);
+        }
+
+        .arch-connector {
+            grid-column: span 3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .arch-connector-line {
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--primary), var(--secondary), var(--primary), transparent);
+            position: relative;
+        }
+
+        .arch-connector-label {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--darker);
+            padding: 0.5rem 1.5rem;
+            border-radius: 100px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--primary-light);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+        }
+
+        /* Network Effect */
+        .network-section {
+            text-align: center;
+            padding: 6rem 2rem;
+            position: relative;
+        }
+
+        .network-visual {
+            width: 300px;
+            height: 300px;
+            margin: 3rem auto;
+            position: relative;
+        }
+
+        .network-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: white;
+            box-shadow: 0 0 60px rgba(99, 102, 241, 0.5);
+            animation: networkPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes networkPulse {
+            0%, 100% { box-shadow: 0 0 60px rgba(99, 102, 241, 0.5); }
+            50% { box-shadow: 0 0 100px rgba(99, 102, 241, 0.8); }
+        }
+
+        .network-node {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background: rgba(30, 41, 59, 0.8);
+            border: 2px solid var(--primary-light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .network-node:nth-child(2) { top: 0; left: 50%; transform: translateX(-50%); }
+        .network-node:nth-child(3) { top: 25%; right: 0; }
+        .network-node:nth-child(4) { bottom: 25%; right: 0; }
+        .network-node:nth-child(5) { bottom: 0; left: 50%; transform: translateX(-50%); }
+        .network-node:nth-child(6) { bottom: 25%; left: 0; }
+        .network-node:nth-child(7) { top: 25%; left: 0; }
+
+        /* ROI Calculator */
+        .roi-section {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(16, 185, 129, 0.05));
+            border-radius: 30px;
+            padding: 4rem;
+            margin: 4rem 0;
+            border: 1px solid rgba(99, 102, 241, 0.2);
+        }
+
+        .roi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .roi-card {
+            background: rgba(2, 6, 23, 0.5);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .roi-card-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .roi-card-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--secondary), var(--primary-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .roi-card-label {
+            color: var(--gray-400);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Pricing */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .pricing-card {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.5), rgba(15, 23, 42, 0.5));
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 24px;
+            padding: 2.5rem;
+            position: relative;
+        }
+
+        .pricing-card.featured {
+            border-color: var(--primary);
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(15, 23, 42, 0.5));
+        }
+
+        .pricing-card.featured::before {
+            content: 'MOST POPULAR';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            padding: 0.35rem 1.25rem;
+            border-radius: 100px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .pricing-tier {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--primary-light);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-price {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--white);
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-price span {
+            font-size: 1rem;
+            font-weight: 400;
+            color: var(--gray-500);
+        }
+
+        .pricing-desc {
+            color: var(--gray-400);
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-features li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 0;
+            color: var(--gray-300);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .pricing-features li::before {
+            content: '✓';
+            color: var(--secondary);
+            font-weight: bold;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            text-align: center;
+            padding: 8rem 2rem;
+            position: relative;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 10%;
+            right: 10%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary-light), transparent);
+        }
+
+        .cta-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-subtitle {
+            font-size: 1.25rem;
+            color: var(--gray-400);
+            max-width: 600px;
+            margin: 0 auto 2.5rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 2rem 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--gray-500);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-light);
+        }
+
+        .footer-copy {
+            color: var(--gray-600);
+            font-size: 0.875rem;
+        }
+
+        /* Return Flow Animation */
+        .return-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin: 3rem 0;
+        }
+
+        .flow-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .flow-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(16, 185, 129, 0.1));
+            border: 2px solid var(--primary-light);
+            position: relative;
+        }
+
+        .flow-circle.active {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border: none;
+            box-shadow: 0 0 30px rgba(99, 102, 241, 0.5);
+        }
+
+        .flow-label {
+            font-size: 0.8rem;
+            color: var(--gray-400);
+            text-align: center;
+            max-width: 100px;
+        }
+
+        .flow-arrow {
+            font-size: 1.5rem;
+            color: var(--primary-light);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero {
+                padding: 6rem 1.5rem 3rem;
+            }
+
+            .stats-strip {
+                gap: 2rem;
+            }
+
+            .section {
+                padding: 4rem 1.5rem;
+            }
+
+            .architecture {
+                padding: 2rem;
+            }
+
+            .arch-visual {
+                grid-template-columns: 1fr;
+            }
+
+            .arch-connector {
+                grid-column: span 1;
+            }
+
+            .roi-section {
+                padding: 2rem;
+            }
+
+            .return-flow {
+                flex-direction: column;
+            }
+
+            .flow-arrow {
+                transform: rotate(90deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    <div class="flow-lines">
+        <div class="flow-line"></div>
+        <div class="flow-line"></div>
+        <div class="flow-line"></div>
+        <div class="flow-line"></div>
+    </div>
+
+    <nav>
+        <div class="logo">
+            <div class="logo-icon">↩️</div>
+            ReturnOS
+        </div>
+        <div class="nav-links">
+            <a href="#problem">Problem</a>
+            <a href="#solution">Solution</a>
+            <a href="#platform">Platform</a>
+            <a href="#pricing">Pricing</a>
+        </div>
+        <a href="#contact" class="btn btn-primary">Get Early Access</a>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-badge">
+            <span class="dot"></span>
+            Now accepting design partners
+        </div>
+        <h1>Turn Returns Into<br><span>Revenue</span></h1>
+        <p class="hero-subtitle">
+            The AI operating system that transforms retail's $400B returns crisis into your competitive advantage. Predict, prevent, recover.
+        </p>
+        <div class="hero-cta">
+            <a href="#contact" class="btn btn-primary">Request Demo →</a>
+            <a href="#solution" class="btn btn-outline">See How It Works</a>
+        </div>
+        
+        <div class="stats-strip">
+            <div class="stat-item">
+                <div class="stat-value danger">$400B+</div>
+                <div class="stat-label">Annual US Returns</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value danger">25%</div>
+                <div class="stat-label">Return Fraud Rate</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">87%</div>
+                <div class="stat-label">Prediction Accuracy</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">3.2x</div>
+                <div class="stat-label">Average ROI</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="problem">
+        <div class="section-header">
+            <div class="section-badge">The Crisis</div>
+            <h2>Returns Are Destroying Retail Margins</h2>
+            <p class="section-subtitle">Every return costs $50+ to process. Fraud is rampant. Reverse logistics is chaos. And it's getting worse.</p>
+        </div>
+
+        <div class="problem-grid">
+            <div class="problem-card">
+                <div class="problem-icon">📦</div>
+                <h3>Exploding Volume</h3>
+                <p>E-commerce return rates hit 30%+. AI agent commerce will push this to 50%.</p>
+                <div class="problem-stat">
+                    <div class="problem-stat-value">$50-80</div>
+                    <div class="problem-stat-label">Cost per return</div>
+                </div>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">🎭</div>
+                <h3>Sophisticated Fraud</h3>
+                <p>Wardrobing, receipt fraud, return rings. 25% of returns are fraudulent.</p>
+                <div class="problem-stat">
+                    <div class="problem-stat-value">$100B</div>
+                    <div class="problem-stat-label">Annual fraud losses</div>
+                </div>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">🗑️</div>
+                <h3>Environmental Disaster</h3>
+                <p>25% of returns go to landfill. 9.6 billion pounds annually. Unsustainable.</p>
+                <div class="problem-stat">
+                    <div class="problem-stat-value">9.6B lbs</div>
+                    <div class="problem-stat-label">To landfill yearly</div>
+                </div>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">📉</div>
+                <h3>Value Destruction</h3>
+                <p>Items lose 35-50% of value in returns process. Every day counts.</p>
+                <div class="problem-stat">
+                    <div class="problem-stat-value">35-50%</div>
+                    <div class="problem-stat-label">Value lost</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="solution">
+        <div class="section-header">
+            <div class="section-badge">The Solution</div>
+            <h2>AI-Powered Returns Intelligence</h2>
+            <p class="section-subtitle">Six integrated modules that transform every return into an opportunity.</p>
+        </div>
+
+        <div class="return-flow">
+            <div class="flow-step">
+                <div class="flow-circle">🎯</div>
+                <span class="flow-label">Predict</span>
+            </div>
+            <span class="flow-arrow">→</span>
+            <div class="flow-step">
+                <div class="flow-circle">🛡️</div>
+                <span class="flow-label">Prevent Fraud</span>
+            </div>
+            <span class="flow-arrow">→</span>
+            <div class="flow-step">
+                <div class="flow-circle active">↩️</div>
+                <span class="flow-label">Process</span>
+            </div>
+            <span class="flow-arrow">→</span>
+            <div class="flow-step">
+                <div class="flow-circle">🔧</div>
+                <span class="flow-label">Refurbish</span>
+            </div>
+            <span class="flow-arrow">→</span>
+            <div class="flow-step">
+                <div class="flow-circle">♻️</div>
+                <span class="flow-label">Resell</span>
+            </div>
+        </div>
+
+        <div class="solution-grid">
+            <div class="solution-card">
+                <div class="solution-icon">🎯</div>
+                <h3>Predict AI</h3>
+                <span class="tag">Return Forecasting</span>
+                <p>Know which purchases will return before they happen. Optimize inventory and customer experience.</p>
+                <div class="solution-features">
+                    <div class="solution-feature">87% prediction accuracy</div>
+                    <div class="solution-feature">Real-time checkout scoring</div>
+                    <div class="solution-feature">Size recommendation engine</div>
+                </div>
+            </div>
+            <div class="solution-card">
+                <div class="solution-icon">🛡️</div>
+                <h3>Shield AI</h3>
+                <span class="tag">Fraud Prevention</span>
+                <p>Stop fraudsters in real-time while rewarding good customers with instant refunds.</p>
+                <div class="solution-features">
+                    <div class="solution-feature">Real-time fraud detection</div>
+                    <div class="solution-feature">Cross-retailer intelligence</div>
+                    <div class="solution-feature">Adaptive policy enforcement</div>
+                </div>
+            </div>
+            <div class="solution-card">
+                <div class="solution-icon">🚚</div>
+                <h3>Route AI</h3>
+                <span class="tag">Reverse Logistics</span>
+                <p>Autonomous routing decisions that minimize cost and maximize recovery value.</p>
+                <div class="solution-features">
+                    <div class="solution-feature">Optimal disposition routing</div>
+                    <div class="solution-feature">Multi-facility orchestration</div>
+                    <div class="solution-feature">Real-time load balancing</div>
+                </div>
+            </div>
+            <div class="solution-card">
+                <div class="solution-icon">🔧</div>
+                <h3>Recover AI</h3>
+                <span class="tag">Refurbishment Intelligence</span>
+                <p>Computer vision grading and intelligent refurbishment workflows maximize recovery.</p>
+                <div class="solution-features">
+                    <div class="solution-feature">Automated condition grading</div>
+                    <div class="solution-feature">Refurbishment cost estimation</div>
+                    <div class="solution-feature">Secondary market optimization</div>
+                </div>
+            </div>
+            <div class="solution-card">
+                <div class="solution-icon">♻️</div>
+                <h3>Circle AI</h3>
+                <span class="tag">Circular Commerce</span>
+                <p>Enable sustainable commerce with trade-ins, rentals, and certified pre-owned programs.</p>
+                <div class="solution-features">
+                    <div class="solution-feature">Trade-in valuation</div>
+                    <div class="solution-feature">Rental lifecycle tracking</div>
+                    <div class="solution-feature">Carbon footprint reporting</div>
+                </div>
+            </div>
+            <div class="solution-card">
+                <div class="solution-icon">📊</div>
+                <h3>Insight AI</h3>
+                <span class="tag">Analytics & Reporting</span>
+                <p>Executive dashboards, root cause analysis, and predictive planning in one place.</p>
+                <div class="solution-features">
+                    <div class="solution-feature">Real-time dashboards</div>
+                    <div class="solution-feature">Product quality insights</div>
+                    <div class="solution-feature">Financial impact modeling</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="platform">
+        <div class="architecture">
+            <div class="section-header">
+                <div class="section-badge">Platform</div>
+                <h2>End-to-End Returns Operating System</h2>
+                <p class="section-subtitle">One platform that handles everything from prediction to circular commerce.</p>
+            </div>
+
+            <div class="arch-visual">
+                <div class="arch-module">
+                    <div class="arch-module-icon">🎯</div>
+                    <div class="arch-module-name">Predict AI</div>
+                    <div class="arch-module-desc">Return Forecasting</div>
+                </div>
+                <div class="arch-module">
+                    <div class="arch-module-icon">🛡️</div>
+                    <div class="arch-module-name">Shield AI</div>
+                    <div class="arch-module-desc">Fraud Prevention</div>
+                </div>
+                <div class="arch-module">
+                    <div class="arch-module-icon">🚚</div>
+                    <div class="arch-module-name">Route AI</div>
+                    <div class="arch-module-desc">Reverse Logistics</div>
+                </div>
+                <div class="arch-connector">
+                    <div class="arch-connector-line">
+                        <span class="arch-connector-label">Universal Integration Layer</span>
+                    </div>
+                </div>
+                <div class="arch-module">
+                    <div class="arch-module-icon">🔧</div>
+                    <div class="arch-module-name">Recover AI</div>
+                    <div class="arch-module-desc">Refurbishment</div>
+                </div>
+                <div class="arch-module">
+                    <div class="arch-module-icon">♻️</div>
+                    <div class="arch-module-name">Circle AI</div>
+                    <div class="arch-module-desc">Circular Commerce</div>
+                </div>
+                <div class="arch-module">
+                    <div class="arch-module-icon">📊</div>
+                    <div class="arch-module-name">Insight AI</div>
+                    <div class="arch-module-desc">Analytics</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="network-section">
+        <div class="section-badge">Network Effects</div>
+        <h2>The Universal Return Graph</h2>
+        <p class="section-subtitle">Cross-retailer intelligence that makes fraud detection exponentially more powerful.</p>
+        
+        <div class="network-visual">
+            <div class="network-center">🔗</div>
+            <div class="network-node">🏪</div>
+            <div class="network-node">🛒</div>
+            <div class="network-node">👔</div>
+            <div class="network-node">📱</div>
+            <div class="network-node">🏠</div>
+            <div class="network-node">⚡</div>
+        </div>
+        
+        <p class="section-subtitle" style="margin-top: 2rem;">
+            Privacy-preserving federated learning. More retailers = better fraud detection for everyone.
+        </p>
+    </section>
+
+    <section class="section">
+        <div class="roi-section">
+            <div class="section-header">
+                <div class="section-badge">ROI</div>
+                <h2>Returns That Pay For Themselves</h2>
+                <p class="section-subtitle">Most customers see positive ROI within 60 days.</p>
+            </div>
+
+            <div class="roi-grid">
+                <div class="roi-card">
+                    <div class="roi-card-icon">🛡️</div>
+                    <div class="roi-card-value">-65%</div>
+                    <div class="roi-card-label">Return Fraud</div>
+                </div>
+                <div class="roi-card">
+                    <div class="roi-card-icon">📉</div>
+                    <div class="roi-card-value">-40%</div>
+                    <div class="roi-card-label">Processing Costs</div>
+                </div>
+                <div class="roi-card">
+                    <div class="roi-card-icon">💰</div>
+                    <div class="roi-card-value">+35%</div>
+                    <div class="roi-card-label">Recovery Value</div>
+                </div>
+                <div class="roi-card">
+                    <div class="roi-card-icon">😊</div>
+                    <div class="roi-card-value">+22%</div>
+                    <div class="roi-card-label">Customer Satisfaction</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="pricing">
+        <div class="section-header">
+            <div class="section-badge">Pricing</div>
+            <h2>Transparent, Value-Based Pricing</h2>
+            <p class="section-subtitle">Start small, scale as you grow. Every plan includes our core AI modules.</p>
+        </div>
+
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <div class="pricing-tier">Starter</div>
+                <div class="pricing-price">$299<span>/mo</span></div>
+                <p class="pricing-desc">For growing e-commerce brands</p>
+                <ul class="pricing-features">
+                    <li>Up to 500 returns/month</li>
+                    <li>Predict AI</li>
+                    <li>Basic Shield AI</li>
+                    <li>Analytics dashboard</li>
+                    <li>Shopify integration</li>
+                </ul>
+                <a href="#contact" class="btn btn-outline" style="width: 100%; justify-content: center;">Start Free Trial</a>
+            </div>
+            <div class="pricing-card featured">
+                <div class="pricing-tier">Growth</div>
+                <div class="pricing-price">$999<span>/mo</span></div>
+                <p class="pricing-desc">For scaling omnichannel retailers</p>
+                <ul class="pricing-features">
+                    <li>Up to 5,000 returns/month</li>
+                    <li>Full Predict + Shield AI</li>
+                    <li>Route AI optimization</li>
+                    <li>Multi-platform support</li>
+                    <li>Priority support</li>
+                </ul>
+                <a href="#contact" class="btn btn-primary" style="width: 100%; justify-content: center;">Get Started →</a>
+            </div>
+            <div class="pricing-card">
+                <div class="pricing-tier">Enterprise</div>
+                <div class="pricing-price">Custom</div>
+                <p class="pricing-desc">For large retailers with complex needs</p>
+                <ul class="pricing-features">
+                    <li>Unlimited returns</li>
+                    <li>Full platform access</li>
+                    <li>Universal Return Graph</li>
+                    <li>Custom integrations</li>
+                    <li>Dedicated success team</li>
+                </ul>
+                <a href="#contact" class="btn btn-outline" style="width: 100%; justify-content: center;">Contact Sales</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section" id="contact">
+        <h2 class="cta-title">Ready to Transform Your Returns?</h2>
+        <p class="cta-subtitle">
+            Join the retailers who are turning their biggest cost center into a competitive advantage.
+        </p>
+        <div class="cta-buttons">
+            <a href="mailto:founders@returnos.ai" class="btn btn-primary">Request Demo →</a>
+            <a href="#solution" class="btn btn-outline">Learn More</a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-links">
+            <a href="#problem">Problem</a>
+            <a href="#solution">Solution</a>
+            <a href="#platform">Platform</a>
+            <a href="#pricing">Pricing</a>
+            <a href="mailto:founders@returnos.ai">Contact</a>
+        </div>
+        <p class="footer-copy">© 2026 ReturnOS. Transforming returns into revenue.</p>
+    </footer>
+</body>
+</html>
