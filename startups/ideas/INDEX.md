@@ -315,6 +315,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-05-17 | Morning | PlasticNet AI — The Intelligence Layer for Plastic Credit Markets | [Playbook](2026-05-17-morning.md) • [Landing](2026-05-17-morning-landing.html) • [PDF](2026-05-17-morning.pdf) |
 | 2026-05-17 | Afternoon | SightOS — The AI Operating System for Visual Health Intelligence | [Playbook](2026-05-17-afternoon.md) • [Landing](2026-05-17-afternoon-landing.html) • [PDF](2026-05-17-afternoon.pdf) |
 | 2026-05-18 | Evening | ImmuneForge AI — The AI Operating System for Personalized Immune System Intelligence | [Playbook](2026-05-18-evening.md) • [Landing](2026-05-18-evening-landing.html) • [PDF](2026-05-18-evening.pdf) |
+| 2026-05-18 | Afternoon | AgentCredit — The FICO Score for AI Agents | [Playbook](2026-05-18-afternoon.md) • [Landing](2026-05-18-afternoon-landing.html) • [PDF](2026-05-18-afternoon.pdf) |
 
 <!-- New entries will be added above this line -->
 
