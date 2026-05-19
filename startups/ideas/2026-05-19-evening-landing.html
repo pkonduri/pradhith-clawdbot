@@ -1,0 +1,1486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evidence.ai — The AI Operating System for Digital Forensics & Investigations</title>
+    <meta name="description" content="In the age of infinite synthetic content, truth needs an operating system. Evidence.ai is the AI-native platform for digital forensics, investigations, and evidence management.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00d4aa;
+            --primary-dark: #00b894;
+            --accent: #6c5ce7;
+            --warning: #fdcb6e;
+            --danger: #e17055;
+            --dark: #0a0a0f;
+            --darker: #050508;
+            --card: #12121a;
+            --card-hover: #1a1a25;
+            --border: #2d2d3a;
+            --text: #ffffff;
+            --text-secondary: #a0a0b0;
+            --gradient-1: linear-gradient(135deg, #00d4aa 0%, #00b894 50%, #6c5ce7 100%);
+            --gradient-2: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%);
+            --gradient-glow: radial-gradient(ellipse at center, rgba(0, 212, 170, 0.15) 0%, transparent 70%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--dark);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 212, 170, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 212, 170, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .bg-glow {
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: var(--gradient-glow);
+            animation: glowMove 20s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes glowMove {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(5%, 5%) rotate(120deg); }
+            66% { transform: translate(-5%, 5%) rotate(240deg); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1.5rem 2rem;
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.5rem;
+            font-weight: 800;
+            text-decoration: none;
+            color: var(--text);
+        }
+
+        .logo-icon {
+            width: 42px;
+            height: 42px;
+            background: var(--gradient-1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .btn {
+            padding: 12px 28px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-decoration: none;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--gradient-1);
+            color: var(--dark);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(0, 212, 170, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 8rem 2rem 4rem;
+            z-index: 1;
+        }
+
+        .hero-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(0, 212, 170, 0.1);
+            border: 1px solid rgba(0, 212, 170, 0.3);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-badge::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .hero h1 span {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            max-width: 500px;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 3rem;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .stat {
+            text-align: left;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* Hero Visual */
+        .hero-visual {
+            position: relative;
+        }
+
+        .evidence-terminal {
+            background: var(--darker);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 25px 100px rgba(0, 0, 0, 0.5);
+        }
+
+        .terminal-header {
+            padding: 1rem 1.5rem;
+            background: var(--card);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .terminal-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .terminal-dot.red { background: #e17055; }
+        .terminal-dot.yellow { background: #fdcb6e; }
+        .terminal-dot.green { background: #00d4aa; }
+
+        .terminal-title {
+            flex: 1;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .terminal-body {
+            padding: 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            line-height: 1.8;
+        }
+
+        .terminal-line {
+            margin-bottom: 0.5rem;
+            opacity: 0;
+            animation: terminalTyping 0.5s ease forwards;
+        }
+
+        .terminal-line:nth-child(1) { animation-delay: 0.2s; }
+        .terminal-line:nth-child(2) { animation-delay: 0.4s; }
+        .terminal-line:nth-child(3) { animation-delay: 0.6s; }
+        .terminal-line:nth-child(4) { animation-delay: 0.8s; }
+        .terminal-line:nth-child(5) { animation-delay: 1s; }
+        .terminal-line:nth-child(6) { animation-delay: 1.2s; }
+        .terminal-line:nth-child(7) { animation-delay: 1.4s; }
+        .terminal-line:nth-child(8) { animation-delay: 1.6s; }
+        .terminal-line:nth-child(9) { animation-delay: 1.8s; }
+
+        @keyframes terminalTyping {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .terminal-prompt { color: var(--primary); }
+        .terminal-cmd { color: var(--text); }
+        .terminal-output { color: var(--text-secondary); }
+        .terminal-success { color: var(--primary); }
+        .terminal-warning { color: var(--warning); }
+        .terminal-danger { color: var(--danger); }
+        .terminal-accent { color: var(--accent); }
+
+        .scan-animation {
+            position: relative;
+            padding: 1rem;
+            margin-top: 1rem;
+            background: rgba(0, 212, 170, 0.05);
+            border: 1px solid rgba(0, 212, 170, 0.2);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .scan-line {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            animation: scanLine 2s ease-in-out infinite;
+        }
+
+        @keyframes scanLine {
+            0% { top: 0; opacity: 1; }
+            100% { top: 100%; opacity: 0; }
+        }
+
+        .detection-result {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .detection-badge {
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .badge-authentic {
+            background: rgba(0, 212, 170, 0.2);
+            color: var(--primary);
+        }
+
+        .badge-synthetic {
+            background: rgba(225, 112, 85, 0.2);
+            color: var(--danger);
+        }
+
+        .confidence-bar {
+            flex: 1;
+            height: 6px;
+            background: var(--card);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .confidence-fill {
+            height: 100%;
+            background: var(--gradient-1);
+            animation: confidenceFill 2s ease forwards;
+        }
+
+        @keyframes confidenceFill {
+            from { width: 0; }
+            to { width: var(--confidence); }
+        }
+
+        /* Problem Section */
+        .problem {
+            position: relative;
+            padding: 8rem 2rem;
+            z-index: 1;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 4rem;
+        }
+
+        .section-label {
+            display: inline-block;
+            padding: 6px 14px;
+            background: rgba(108, 92, 231, 0.1);
+            border: 1px solid rgba(108, 92, 231, 0.3);
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            font-size: 1.15rem;
+            color: var(--text-secondary);
+        }
+
+        .problem-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .problem-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .problem-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--danger);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .problem-card:hover::before {
+            opacity: 1;
+        }
+
+        .problem-card:hover {
+            background: var(--card-hover);
+            transform: translateY(-4px);
+        }
+
+        .problem-icon {
+            width: 56px;
+            height: 56px;
+            background: rgba(225, 112, 85, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .problem-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .problem-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .problem-stat {
+            display: inline-block;
+            padding: 4px 10px;
+            background: rgba(225, 112, 85, 0.15);
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--danger);
+            margin-top: 1rem;
+        }
+
+        /* Solution Section */
+        .solution {
+            position: relative;
+            padding: 8rem 2rem;
+            background: var(--darker);
+            z-index: 1;
+        }
+
+        .solution-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .solution-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .solution-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-1);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .solution-card:hover::before {
+            opacity: 1;
+        }
+
+        .solution-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 60px rgba(0, 212, 170, 0.1);
+        }
+
+        .solution-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-1);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .solution-card h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .solution-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+        }
+
+        .solution-features {
+            list-style: none;
+        }
+
+        .solution-features li {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .solution-features li::before {
+            content: '✓';
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        /* Detection Demo */
+        .detection-demo {
+            position: relative;
+            padding: 8rem 2rem;
+            z-index: 1;
+        }
+
+        .demo-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .demo-header {
+            padding: 2rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .demo-header h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .demo-tabs {
+            display: flex;
+            gap: 8px;
+        }
+
+        .demo-tab {
+            padding: 8px 16px;
+            background: var(--dark);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .demo-tab.active {
+            background: var(--primary);
+            color: var(--dark);
+            border-color: var(--primary);
+        }
+
+        .demo-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .demo-input {
+            padding: 2rem;
+            border-right: 1px solid var(--border);
+        }
+
+        .demo-input h4 {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1rem;
+        }
+
+        .sample-content {
+            background: var(--dark);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1.5rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .demo-output {
+            padding: 2rem;
+        }
+
+        .demo-output h4 {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1rem;
+        }
+
+        .analysis-result {
+            background: var(--dark);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1.5rem;
+        }
+
+        .result-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .result-verdict {
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .verdict-synthetic {
+            color: var(--danger);
+        }
+
+        .result-metrics {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .metric {
+            background: var(--card);
+            border-radius: 8px;
+            padding: 1rem;
+        }
+
+        .metric-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-value {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .metric-bar {
+            height: 4px;
+            background: var(--border);
+            border-radius: 2px;
+            margin-top: 0.5rem;
+            overflow: hidden;
+        }
+
+        .metric-fill {
+            height: 100%;
+            border-radius: 2px;
+        }
+
+        .fill-high {
+            background: var(--danger);
+            width: 94%;
+        }
+
+        .fill-medium {
+            background: var(--warning);
+            width: 76%;
+        }
+
+        .fill-low {
+            background: var(--primary);
+            width: 82%;
+        }
+
+        /* Market Section */
+        .market {
+            position: relative;
+            padding: 8rem 2rem;
+            background: var(--darker);
+            z-index: 1;
+        }
+
+        .market-visual {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 3rem;
+        }
+
+        .market-total {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .market-total h3 {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.5rem;
+        }
+
+        .market-value {
+            font-size: 4rem;
+            font-weight: 900;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .market-segments {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+        }
+
+        .segment {
+            text-align: center;
+            padding: 1.5rem;
+            background: var(--dark);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            transition: all 0.3s;
+        }
+
+        .segment:hover {
+            border-color: var(--primary);
+            transform: translateY(-4px);
+        }
+
+        .segment-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .segment-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .segment-growth {
+            display: inline-block;
+            padding: 4px 8px;
+            background: rgba(0, 212, 170, 0.1);
+            border-radius: 4px;
+            font-size: 0.75rem;
+            color: var(--primary);
+        }
+
+        /* Customers Section */
+        .customers {
+            position: relative;
+            padding: 8rem 2rem;
+            z-index: 1;
+        }
+
+        .customer-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+
+        .customer-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .customer-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--primary);
+        }
+
+        .customer-icon {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 1.5rem;
+            background: var(--gradient-1);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+
+        .customer-card h3 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .customer-card p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .customer-cases {
+            font-size: 0.8rem;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        /* CTA Section */
+        .cta {
+            position: relative;
+            padding: 8rem 2rem;
+            text-align: center;
+            z-index: 1;
+        }
+
+        .cta-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-1);
+        }
+
+        .cta-container h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .cta-container p {
+            font-size: 1.15rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-large {
+            padding: 16px 36px;
+            font-size: 1.05rem;
+        }
+
+        /* Footer */
+        footer {
+            position: relative;
+            padding: 4rem 2rem 2rem;
+            background: var(--darker);
+            border-top: 1px solid var(--border);
+            z-index: 1;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .footer-tagline {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-subtitle {
+                margin: 0 auto 2rem;
+            }
+
+            .hero-cta {
+                justify-content: center;
+            }
+
+            .hero-stats {
+                justify-content: center;
+            }
+
+            .problem-grid,
+            .demo-content {
+                grid-template-columns: 1fr;
+            }
+
+            .solution-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .market-segments {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .customer-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .demo-input {
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero-stats {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+
+            .stat {
+                text-align: center;
+            }
+
+            .solution-grid,
+            .market-segments,
+            .customer-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                gap: 1.5rem;
+                text-align: center;
+            }
+
+            .cta-container {
+                padding: 2.5rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+    <div class="bg-glow"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-content">
+            <a href="#" class="logo">
+                <div class="logo-icon">🔍</div>
+                Evidence.ai
+            </a>
+            <div class="nav-links">
+                <a href="#problem">Problem</a>
+                <a href="#solution">Solution</a>
+                <a href="#demo">Demo</a>
+                <a href="#market">Market</a>
+                <a href="#contact" class="btn btn-primary">Request Access</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <div class="hero-badge">Now in Private Beta</div>
+                <h1>The AI Operating System for <span>Digital Forensics & Investigations</span></h1>
+                <p class="hero-subtitle">In the age of infinite synthetic content, truth needs an operating system. Evidence.ai brings AI-powered analysis to investigations.</p>
+                <div class="hero-cta">
+                    <a href="#contact" class="btn btn-primary">Request Demo →</a>
+                    <a href="#solution" class="btn btn-secondary">Learn More</a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <div class="stat-value">$48B+</div>
+                        <div class="stat-label">Market Opportunity</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">95%</div>
+                        <div class="stat-label">Synthetic Detection Accuracy</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">100x</div>
+                        <div class="stat-label">Faster Evidence Review</div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="evidence-terminal">
+                    <div class="terminal-header">
+                        <div class="terminal-dot red"></div>
+                        <div class="terminal-dot yellow"></div>
+                        <div class="terminal-dot green"></div>
+                        <div class="terminal-title">evidence.ai — Investigation Console</div>
+                    </div>
+                    <div class="terminal-body">
+                        <div class="terminal-line"><span class="terminal-prompt">$</span> <span class="terminal-cmd">evidence analyze --case FRAUD-2026-0519</span></div>
+                        <div class="terminal-line"><span class="terminal-output">Loading 2.4TB evidence from 12 sources...</span></div>
+                        <div class="terminal-line"><span class="terminal-success">✓</span> <span class="terminal-output">Ingested 847,293 documents</span></div>
+                        <div class="terminal-line"><span class="terminal-success">✓</span> <span class="terminal-output">Extracted 12,847 entities</span></div>
+                        <div class="terminal-line"><span class="terminal-warning">!</span> <span class="terminal-output">Detected 234 synthetic content items</span></div>
+                        <div class="terminal-line"><span class="terminal-output">Building evidence graph...</span></div>
+                        <div class="terminal-line"><span class="terminal-success">✓</span> <span class="terminal-output">Timeline reconstructed: 847 events</span></div>
+                        <div class="terminal-line"><span class="terminal-accent">→</span> <span class="terminal-output">3 high-confidence hypotheses generated</span></div>
+                        
+                        <div class="scan-animation">
+                            <div class="scan-line"></div>
+                            <div class="detection-result">
+                                <span class="detection-badge badge-synthetic">SYNTHETIC DETECTED</span>
+                                <div class="confidence-bar">
+                                    <div class="confidence-fill" style="--confidence: 94%"></div>
+                                </div>
+                                <span style="color: var(--danger); font-size: 0.85rem;">94%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="problem" id="problem">
+        <div class="section-header">
+            <span class="section-label">The Crisis</span>
+            <h2 class="section-title">Investigations Are Broken in the AI Age</h2>
+            <p class="section-subtitle">Traditional forensic tools were built for a pre-AI world. They can't keep up with synthetic content, massive data volumes, or sophisticated digital deception.</p>
+        </div>
+        <div class="problem-grid">
+            <div class="problem-card">
+                <div class="problem-icon">🤖</div>
+                <h3>Synthetic Content Explosion</h3>
+                <p>AI-generated text, images, audio, and video are flooding every platform. Deepfakes can fabricate evidence or alibis with near-perfect fidelity.</p>
+                <span class="problem-stat">Deepfakes up 900% YoY</span>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">📊</div>
+                <h3>Data Volume Overwhelm</h3>
+                <p>Average investigations involve terabytes of data. Human investigators can only review 50-100 documents per day. 95% of evidence goes unexamined.</p>
+                <span class="problem-stat">5TB+ per case average</span>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">🧩</div>
+                <h3>Fragmented Tooling</h3>
+                <p>Digital forensics, eDiscovery, and OSINT live in separate siloed tools. No unified intelligence layer connects these critical workflows.</p>
+                <span class="problem-stat">7+ tools per investigation</span>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">⚖️</div>
+                <h3>Chain of Custody Crisis</h3>
+                <p>AI-assisted evidence handling raises authentication questions. Courts increasingly scrutinizing digital evidence integrity and admissibility.</p>
+                <span class="problem-stat">23% of digital evidence challenged</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="solution" id="solution">
+        <div class="section-header">
+            <span class="section-label">The Platform</span>
+            <h2 class="section-title">AI-Native Investigation Intelligence</h2>
+            <p class="section-subtitle">Evidence.ai transforms how investigations are conducted with unified ingestion, synthetic detection, and AI-powered analysis.</p>
+        </div>
+        <div class="solution-grid">
+            <div class="solution-card">
+                <div class="solution-icon">📥</div>
+                <h3>Universal Ingestion</h3>
+                <p>Collect evidence from any source with forensic integrity.</p>
+                <ul class="solution-features">
+                    <li>Mobile & computer forensics</li>
+                    <li>Cloud services & social media</li>
+                    <li>Communications & blockchain</li>
+                    <li>Automatic normalization</li>
+                </ul>
+            </div>
+            <div class="solution-card">
+                <div class="solution-icon">🔬</div>
+                <h3>Synthetic Detection</h3>
+                <p>Identify AI-generated content across all modalities.</p>
+                <ul class="solution-features">
+                    <li>Deepfake detection (95%+ accuracy)</li>
+                    <li>LLM text fingerprinting</li>
+                    <li>Audio synthesis detection</li>
+                    <li>Provenance tracking</li>
+                </ul>
+            </div>
+            <div class="solution-card">
+                <div class="solution-icon">🧠</div>
+                <h3>Investigation Intelligence</h3>
+                <p>AI-powered analysis that finds what humans miss.</p>
+                <ul class="solution-features">
+                    <li>Pattern recognition</li>
+                    <li>Entity extraction & linking</li>
+                    <li>Timeline construction</li>
+                    <li>Hypothesis generation</li>
+                </ul>
+            </div>
+            <div class="solution-card">
+                <div class="solution-icon">🔗</div>
+                <h3>Connection Mapping</h3>
+                <p>Visual relationship graphs reveal hidden connections.</p>
+                <ul class="solution-features">
+                    <li>Entity relationship graphs</li>
+                    <li>Network analysis</li>
+                    <li>Hidden link discovery</li>
+                    <li>Strength scoring</li>
+                </ul>
+            </div>
+            <div class="solution-card">
+                <div class="solution-icon">🔒</div>
+                <h3>Evidence Vault</h3>
+                <p>Blockchain-anchored chain of custody for court admissibility.</p>
+                <ul class="solution-features">
+                    <li>Immutable audit trail</li>
+                    <li>Cryptographic hashing</li>
+                    <li>Role-based access</li>
+                    <li>Court-ready export</li>
+                </ul>
+            </div>
+            <div class="solution-card">
+                <div class="solution-icon">📋</div>
+                <h3>Lead Generation</h3>
+                <p>AI identifies and prioritizes investigative leads.</p>
+                <ul class="solution-features">
+                    <li>Automated lead discovery</li>
+                    <li>Priority scoring</li>
+                    <li>Evidence linking</li>
+                    <li>Action recommendations</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Detection Demo -->
+    <section class="detection-demo" id="demo">
+        <div class="section-header">
+            <span class="section-label">Live Demo</span>
+            <h2 class="section-title">See Synthetic Detection in Action</h2>
+            <p class="section-subtitle">Our multi-modal AI ensemble detects AI-generated content with forensic-grade accuracy and explainability.</p>
+        </div>
+        <div class="demo-container">
+            <div class="demo-header">
+                <h3>🔍 Synthetic Content Analyzer</h3>
+                <div class="demo-tabs">
+                    <div class="demo-tab active">Text</div>
+                    <div class="demo-tab">Image</div>
+                    <div class="demo-tab">Audio</div>
+                    <div class="demo-tab">Video</div>
+                </div>
+            </div>
+            <div class="demo-content">
+                <div class="demo-input">
+                    <h4>Sample Content</h4>
+                    <div class="sample-content">
+                        "I was at the office from 9 AM to 6 PM on March 15th, 2026. My colleagues John Smith and Sarah Johnson can verify my presence. We discussed the quarterly budget projections in our team meeting at 2 PM. I have calendar invites and email threads that confirm this timeline."
+                    </div>
+                </div>
+                <div class="demo-output">
+                    <h4>Analysis Results</h4>
+                    <div class="analysis-result">
+                        <div class="result-header">
+                            <span class="detection-badge badge-synthetic">AI GENERATED</span>
+                            <span class="result-verdict verdict-synthetic">94% Synthetic Probability</span>
+                        </div>
+                        <div class="result-metrics">
+                            <div class="metric">
+                                <div class="metric-label">Perplexity Score</div>
+                                <div class="metric-value">Low (12.3)</div>
+                                <div class="metric-bar"><div class="metric-fill fill-high"></div></div>
+                            </div>
+                            <div class="metric">
+                                <div class="metric-label">Burstiness</div>
+                                <div class="metric-value">Uniform</div>
+                                <div class="metric-bar"><div class="metric-fill fill-medium"></div></div>
+                            </div>
+                            <div class="metric">
+                                <div class="metric-label">Pattern Match</div>
+                                <div class="metric-value">Claude-3.5</div>
+                                <div class="metric-bar"><div class="metric-fill fill-low"></div></div>
+                            </div>
+                            <div class="metric">
+                                <div class="metric-label">Confidence</div>
+                                <div class="metric-value">High</div>
+                                <div class="metric-bar"><div class="metric-fill fill-high"></div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Market Section -->
+    <section class="market" id="market">
+        <div class="section-header">
+            <span class="section-label">The Opportunity</span>
+            <h2 class="section-title">A $48B+ Market Ripe for Disruption</h2>
+            <p class="section-subtitle">Legacy forensics and eDiscovery tools weren't built for the AI age. We're building the infrastructure for the next generation.</p>
+        </div>
+        <div class="market-visual">
+            <div class="market-total">
+                <h3>Total Addressable Market</h3>
+                <div class="market-value">$47.9B</div>
+            </div>
+            <div class="market-segments">
+                <div class="segment">
+                    <div class="segment-value">$15.2B</div>
+                    <div class="segment-label">Digital Forensics</div>
+                    <span class="segment-growth">+12% CAGR</span>
+                </div>
+                <div class="segment">
+                    <div class="segment-value">$16.1B</div>
+                    <div class="segment-label">eDiscovery</div>
+                    <span class="segment-growth">+9% CAGR</span>
+                </div>
+                <div class="segment">
+                    <div class="segment-value">$8.7B</div>
+                    <div class="segment-label">Corporate Investigations</div>
+                    <span class="segment-growth">+11% CAGR</span>
+                </div>
+                <div class="segment">
+                    <div class="segment-value">$7.9B</div>
+                    <div class="segment-label">Insurance Fraud</div>
+                    <span class="segment-growth">+15% CAGR</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Customers Section -->
+    <section class="customers">
+        <div class="section-header">
+            <span class="section-label">Who We Serve</span>
+            <h2 class="section-title">Built for Those Who Need Truth</h2>
+            <p class="section-subtitle">From law enforcement to enterprise legal teams, Evidence.ai serves those who can't afford to miss the truth.</p>
+        </div>
+        <div class="customer-grid">
+            <div class="customer-card">
+                <div class="customer-icon">🚔</div>
+                <h3>Law Enforcement</h3>
+                <p>State bureaus, metro PDs, federal task forces solving complex digital crimes.</p>
+                <span class="customer-cases">Criminal investigations, digital evidence</span>
+            </div>
+            <div class="customer-card">
+                <div class="customer-icon">⚖️</div>
+                <h3>Legal Teams</h3>
+                <p>Am Law 100 firms, litigation support, and corporate legal departments.</p>
+                <span class="customer-cases">eDiscovery, litigation support</span>
+            </div>
+            <div class="customer-card">
+                <div class="customer-icon">🏢</div>
+                <h3>Enterprise</h3>
+                <p>Internal investigations, compliance, due diligence, and brand protection.</p>
+                <span class="customer-cases">Corporate investigations, M&A</span>
+            </div>
+            <div class="customer-card">
+                <div class="customer-icon">🛡️</div>
+                <h3>Insurance</h3>
+                <p>P&C insurers, SIUs, and claims management detecting fraud.</p>
+                <span class="customer-cases">Fraud detection, claims investigation</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta" id="contact">
+        <div class="cta-container">
+            <h2>Truth Needs an Operating System</h2>
+            <p>Join the private beta and see how Evidence.ai transforms investigations for the AI age.</p>
+            <div class="cta-buttons">
+                <a href="mailto:founders@evidence.ai" class="btn btn-primary btn-large">Request Demo →</a>
+                <a href="#solution" class="btn btn-secondary btn-large">Learn More</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div>
+                <div class="footer-logo">
+                    <div class="logo-icon" style="width: 32px; height: 32px; font-size: 1rem;">🔍</div>
+                    Evidence.ai
+                </div>
+                <p class="footer-tagline">The truth is out there. We help you find it.</p>
+            </div>
+            <div class="footer-links">
+                <a href="#problem">Problem</a>
+                <a href="#solution">Solution</a>
+                <a href="#demo">Demo</a>
+                <a href="#market">Market</a>
+                <a href="mailto:founders@evidence.ai">Contact</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scroll for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Tab switching in demo
+        document.querySelectorAll('.demo-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.demo-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Navbar background on scroll
+        window.addEventListener('scroll', function() {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 50) {
+                nav.style.background = 'rgba(10, 10, 15, 0.95)';
+            } else {
+                nav.style.background = 'rgba(10, 10, 15, 0.8)';
+            }
+        });
+    </script>
+</body>
+</html>
