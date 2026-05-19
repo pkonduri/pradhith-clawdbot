@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TierZero AI — The Autonomous IT Support Platform</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-card: #1a1a24;
+            --accent-primary: #00d4ff;
+            --accent-secondary: #7c3aed;
+            --accent-gradient: linear-gradient(135deg, #00d4ff 0%, #7c3aed 50%, #ff006e 100%);
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0b0;
+            --text-muted: #6b6b7b;
+            --border-color: rgba(255,255,255,0.08);
+            --glow-cyan: rgba(0, 212, 255, 0.4);
+            --glow-purple: rgba(124, 58, 237, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .floating-orbs {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .orb-1 {
+            width: 600px;
+            height: 600px;
+            background: var(--glow-cyan);
+            top: -200px;
+            right: -200px;
+            animation-delay: 0s;
+        }
+
+        .orb-2 {
+            width: 500px;
+            height: 500px;
+            background: var(--glow-purple);
+            bottom: -150px;
+            left: -150px;
+            animation-delay: -7s;
+        }
+
+        .orb-3 {
+            width: 400px;
+            height: 400px;
+            background: rgba(255, 0, 110, 0.2);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation-delay: -14s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(50px, -50px) scale(1.1); }
+            50% { transform: translate(-30px, 30px) scale(0.95); }
+            75% { transform: translate(-50px, -30px) scale(1.05); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--accent-gradient);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            -webkit-text-fill-color: white;
+        }
+
+        .nav-cta {
+            padding: 0.75rem 1.5rem;
+            background: var(--accent-gradient);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px var(--glow-cyan);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 8rem 2rem 4rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--accent-primary);
+            margin-bottom: 2rem;
+            animation: pulse-glow 2s infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(0, 212, 255, 0.2); }
+            50% { box-shadow: 0 0 40px rgba(0, 212, 255, 0.4); }
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            max-width: 1000px;
+        }
+
+        .hero h1 span {
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.2rem, 2.5vw, 1.5rem);
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin-bottom: 3rem;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 3rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .hero-ctas {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .cta-primary {
+            padding: 1rem 2.5rem;
+            background: var(--accent-gradient);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .cta-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 50px var(--glow-cyan);
+        }
+
+        .cta-secondary {
+            padding: 1rem 2.5rem;
+            background: transparent;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .cta-secondary:hover {
+            border-color: var(--accent-primary);
+            background: rgba(0, 212, 255, 0.1);
+        }
+
+        /* Demo Terminal */
+        .demo-section {
+            padding: 6rem 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .terminal {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            box-shadow: 0 40px 80px rgba(0,0,0,0.5);
+        }
+
+        .terminal-header {
+            padding: 1rem 1.5rem;
+            background: var(--bg-card);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .terminal-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .terminal-dot.red { background: #ff5f57; }
+        .terminal-dot.yellow { background: #febc2e; }
+        .terminal-dot.green { background: #28c840; }
+
+        .terminal-title {
+            margin-left: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .terminal-body {
+            padding: 2rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 1.8;
+        }
+
+        .terminal-line {
+            margin-bottom: 1rem;
+            opacity: 0;
+            animation: typeIn 0.5s ease forwards;
+        }
+
+        .terminal-line:nth-child(1) { animation-delay: 0.2s; }
+        .terminal-line:nth-child(2) { animation-delay: 0.8s; }
+        .terminal-line:nth-child(3) { animation-delay: 1.4s; }
+        .terminal-line:nth-child(4) { animation-delay: 2s; }
+        .terminal-line:nth-child(5) { animation-delay: 2.6s; }
+        .terminal-line:nth-child(6) { animation-delay: 3.2s; }
+        .terminal-line:nth-child(7) { animation-delay: 3.8s; }
+
+        @keyframes typeIn {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .user-msg {
+            color: var(--accent-primary);
+        }
+
+        .ai-msg {
+            color: var(--text-secondary);
+        }
+
+        .ai-action {
+            color: #28c840;
+            padding-left: 1rem;
+            border-left: 2px solid #28c840;
+        }
+
+        .ai-result {
+            color: #febc2e;
+            font-weight: 500;
+        }
+
+        /* Problem Section */
+        .problem-section {
+            padding: 8rem 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent-primary);
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .problem-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 0, 110, 0.5);
+            box-shadow: 0 20px 40px rgba(255, 0, 110, 0.1);
+        }
+
+        .problem-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .problem-stat {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #ff006e;
+            margin-bottom: 0.5rem;
+        }
+
+        .problem-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .problem-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Solution Section */
+        .solution-section {
+            padding: 8rem 2rem;
+            background: linear-gradient(180deg, transparent 0%, rgba(0, 212, 255, 0.03) 50%, transparent 100%);
+            position: relative;
+            z-index: 1;
+        }
+
+        .solution-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .solution-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .solution-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--accent-gradient);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .solution-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .solution-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 30px 60px rgba(0, 212, 255, 0.1);
+        }
+
+        .solution-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--accent-gradient);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .solution-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+        }
+
+        .solution-card p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        /* Metrics Section */
+        .metrics-section {
+            padding: 8rem 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 768px) {
+            .metrics-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .metric-card {
+            text-align: center;
+            padding: 2rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .metric-card:hover {
+            transform: scale(1.05);
+            border-color: var(--accent-primary);
+        }
+
+        .metric-value {
+            font-size: 3rem;
+            font-weight: 900;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-label {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* How It Works */
+        .how-section {
+            padding: 8rem 2rem;
+            background: linear-gradient(180deg, transparent 0%, rgba(124, 58, 237, 0.03) 50%, transparent 100%);
+            position: relative;
+            z-index: 1;
+        }
+
+        .steps {
+            display: flex;
+            flex-direction: column;
+            gap: 3rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .step {
+            display: flex;
+            gap: 2rem;
+            align-items: flex-start;
+        }
+
+        .step-number {
+            width: 60px;
+            height: 60px;
+            min-width: 60px;
+            background: var(--accent-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 800;
+        }
+
+        .step-content h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .step-content p {
+            color: var(--text-secondary);
+        }
+
+        /* Market Section */
+        .market-section {
+            padding: 8rem 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .market-visual {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .market-bar {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .market-label {
+            width: 100px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .market-fill {
+            height: 50px;
+            background: var(--accent-gradient);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 1rem;
+            font-weight: 700;
+            transition: all 0.5s ease;
+        }
+
+        .market-bar:nth-child(1) .market-fill { width: 100%; }
+        .market-bar:nth-child(2) .market-fill { width: 45%; background: linear-gradient(135deg, #7c3aed 0%, #ff006e 100%); }
+        .market-bar:nth-child(3) .market-fill { width: 15%; background: linear-gradient(135deg, #ff006e 0%, #ff6b6b 100%); }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 8rem 2rem;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-box {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 4rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--accent-gradient);
+            opacity: 0.05;
+        }
+
+        .cta-box h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+
+        .cta-box p {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .cta-box .cta-primary {
+            position: relative;
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 2rem;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        footer p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem;
+            }
+
+            .hero {
+                padding: 6rem 1.5rem 3rem;
+            }
+
+            .hero-stats {
+                gap: 2rem;
+            }
+
+            .step {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            .market-bar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .market-label {
+                width: auto;
+            }
+
+            .market-fill {
+                width: 100% !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+    <div class="floating-orbs">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <nav>
+        <div class="logo">
+            <div class="logo-icon">⚡</div>
+            TierZero AI
+        </div>
+        <a href="#cta" class="nav-cta">Get Early Access</a>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-badge">
+            <span>🚀</span> Now accepting design partners
+        </div>
+        <h1>IT Support That <span>Actually Resolves</span> Tickets</h1>
+        <p class="hero-subtitle">AI agents that handle 85% of IT tickets autonomously. From password resets to access requests—resolved in minutes, not days.</p>
+        
+        <div class="hero-stats">
+            <div class="stat">
+                <div class="stat-value">85%</div>
+                <div class="stat-label">Autonomous Resolution</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">&lt;5min</div>
+                <div class="stat-label">Average Resolution Time</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">60%</div>
+                <div class="stat-label">Cost Reduction</div>
+            </div>
+        </div>
+
+        <div class="hero-ctas">
+            <a href="#cta" class="cta-primary">Request Demo →</a>
+            <a href="#how" class="cta-secondary">See How It Works</a>
+        </div>
+    </section>
+
+    <section class="demo-section">
+        <div class="terminal">
+            <div class="terminal-header">
+                <div class="terminal-dot red"></div>
+                <div class="terminal-dot yellow"></div>
+                <div class="terminal-dot green"></div>
+                <span class="terminal-title">TierZero AI — Live Resolution</span>
+            </div>
+            <div class="terminal-body">
+                <div class="terminal-line user-msg">👤 Employee: "I can't access the sales dashboard"</div>
+                <div class="terminal-line ai-msg">🤖 TierZero: Analyzing request...</div>
+                <div class="terminal-line ai-action">→ Checking user permissions in Okta</div>
+                <div class="terminal-line ai-action">→ Verifying SaaS application status</div>
+                <div class="terminal-line ai-action">→ Root cause: SSO token expired</div>
+                <div class="terminal-line ai-action">→ Triggering SSO re-authentication flow</div>
+                <div class="terminal-line ai-result">✅ Access restored. Resolution time: 47 seconds. Human involvement: 0</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="problem-section">
+        <div class="section-header">
+            <div class="section-label">The Problem</div>
+            <h2 class="section-title">IT Support is Broken</h2>
+            <p class="section-subtitle">Your IT team drowns in tickets while employees wait hours for simple fixes.</p>
+        </div>
+
+        <div class="problem-grid">
+            <div class="problem-card fade-in">
+                <div class="problem-icon">💸</div>
+                <div class="problem-stat">$200B+</div>
+                <h3>Spent Annually</h3>
+                <p>Global IT support services market—most of it on repetitive, automatable tasks.</p>
+            </div>
+            <div class="problem-card fade-in">
+                <div class="problem-icon">⏰</div>
+                <div class="problem-stat">24+ hrs</div>
+                <h3>Average Resolution</h3>
+                <p>Tier 1 tickets take a full day. Tier 2? Days. Employees lose productivity waiting.</p>
+            </div>
+            <div class="problem-card fade-in">
+                <div class="problem-icon">😤</div>
+                <div class="problem-stat">70%</div>
+                <h3>Repetitive Tickets</h3>
+                <p>IT staff spend most of their time on password resets and access requests.</p>
+            </div>
+            <div class="problem-card fade-in">
+                <div class="problem-icon">👻</div>
+                <div class="problem-stat">3.5M</div>
+                <h3>Unfilled Positions</h3>
+                <p>Global IT talent shortage means you can't just hire your way out.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="solution-section" id="solution">
+        <div class="section-header">
+            <div class="section-label">The Solution</div>
+            <h2 class="section-title">Meet Your AI IT Team</h2>
+            <p class="section-subtitle">TierZero AI doesn't route tickets. It resolves them.</p>
+        </div>
+
+        <div class="solution-grid">
+            <div class="solution-card fade-in">
+                <div class="solution-icon">🤖</div>
+                <h3>Autonomous Resolution Engine</h3>
+                <p>True AI agents that understand requests, diagnose issues, and execute fixes—all within your security guardrails.</p>
+            </div>
+            <div class="solution-card fade-in">
+                <div class="solution-icon">🧠</div>
+                <h3>Enterprise Knowledge Brain</h3>
+                <p>Ingests your documentation, learns from every ticket, and builds an ever-smarter knowledge graph of your environment.</p>
+            </div>
+            <div class="solution-card fade-in">
+                <div class="solution-icon">🔐</div>
+                <h3>Security-First Architecture</h3>
+                <p>Zero-trust execution, human-in-the-loop for sensitive actions, full audit trail. SOC 2 Type II compliant.</p>
+            </div>
+            <div class="solution-card fade-in">
+                <div class="solution-icon">📊</div>
+                <h3>Predictive Intelligence</h3>
+                <p>Identifies issues before users report them. Surfaces systemic problems. Recommends infrastructure improvements.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="metrics-section">
+        <div class="section-header">
+            <div class="section-label">The Impact</div>
+            <h2 class="section-title">Results That Matter</h2>
+        </div>
+
+        <div class="metrics-grid">
+            <div class="metric-card fade-in">
+                <div class="metric-value">85%</div>
+                <div class="metric-label">Tickets Resolved Autonomously</div>
+            </div>
+            <div class="metric-card fade-in">
+                <div class="metric-value">50x</div>
+                <div class="metric-label">Faster Than Human Agents</div>
+            </div>
+            <div class="metric-card fade-in">
+                <div class="metric-value">24/7</div>
+                <div class="metric-label">Always-On Coverage</div>
+            </div>
+            <div class="metric-card fade-in">
+                <div class="metric-value">60%</div>
+                <div class="metric-label">Support Cost Reduction</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="how-section" id="how">
+        <div class="section-header">
+            <div class="section-label">How It Works</div>
+            <h2 class="section-title">From Request to Resolution</h2>
+        </div>
+
+        <div class="steps">
+            <div class="step fade-in">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h3>Employee Submits Request</h3>
+                    <p>Via Slack, Teams, email, or any channel. Natural language, no forms needed. "I can't access Salesforce" is enough.</p>
+                </div>
+            </div>
+            <div class="step fade-in">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h3>AI Agent Investigates</h3>
+                    <p>TierZero checks permissions, system status, recent changes, and user context. It understands your environment.</p>
+                </div>
+            </div>
+            <div class="step fade-in">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h3>Autonomous Resolution</h3>
+                    <p>The agent executes the fix—reset tokens, adjust permissions, restart services—all within your defined guardrails.</p>
+                </div>
+            </div>
+            <div class="step fade-in">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <h3>Verified & Documented</h3>
+                    <p>Confirms the fix worked, documents everything for compliance, and learns from the resolution for next time.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="market-section">
+        <div class="section-header">
+            <div class="section-label">The Opportunity</div>
+            <h2 class="section-title">$200B+ Market, Ripe for Disruption</h2>
+        </div>
+
+        <div class="market-visual">
+            <div class="market-bar fade-in">
+                <div class="market-label">TAM</div>
+                <div class="market-fill">$227B</div>
+            </div>
+            <div class="market-bar fade-in">
+                <div class="market-label">SAM</div>
+                <div class="market-fill">$30B</div>
+            </div>
+            <div class="market-bar fade-in">
+                <div class="market-label">SOM (5yr)</div>
+                <div class="market-fill">$900M</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section" id="cta">
+        <div class="cta-box fade-in">
+            <h2>Ready to Transform IT Support?</h2>
+            <p>Join our design partner program and be among the first to experience autonomous IT support.</p>
+            <a href="mailto:founders@tierzero.ai" class="cta-primary">
+                Request Early Access →
+            </a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-logo">TierZero AI</div>
+        <p>© 2026 TierZero AI. The future of IT support is autonomous.</p>
+    </footer>
+
+    <script>
+        // Intersection Observer for fade-in animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
