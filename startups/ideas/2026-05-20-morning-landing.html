@@ -1,0 +1,1185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgentOps — The Operating System for Enterprise AI Agents</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --accent: #22d3ee;
+            --accent-glow: rgba(34, 211, 238, 0.4);
+            --dark: #0f0f23;
+            --darker: #080816;
+            --card: #16162d;
+            --card-border: #2a2a4a;
+            --text: #e2e8f0;
+            --text-muted: #94a3b8;
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--darker);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(99, 102, 241, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .floating-orbs {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .orb-1 {
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.3), transparent 70%);
+            top: -200px;
+            right: -200px;
+            animation-delay: 0s;
+        }
+
+        .orb-2 {
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(34, 211, 238, 0.2), transparent 70%);
+            bottom: -150px;
+            left: -150px;
+            animation-delay: -10s;
+        }
+
+        .orb-3 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.2), transparent 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation-delay: -5s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(50px, -50px) scale(1.1); }
+            50% { transform: translate(-30px, 30px) scale(0.9); }
+            75% { transform: translate(40px, 40px) scale(1.05); }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 20px 0;
+            background: rgba(8, 8, 22, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(99, 102, 241, 0.1);
+            z-index: 1000;
+        }
+
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: white;
+            -webkit-text-fill-color: white;
+        }
+
+        .nav-cta {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 12px 28px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(99, 102, 241, 0.4);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 120px 0 80px;
+            position: relative;
+        }
+
+        .hero-content {
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            padding: 8px 20px;
+            border-radius: 100px;
+            font-size: 0.9rem;
+            color: var(--accent);
+            margin-bottom: 30px;
+            animation: pulse-border 2s infinite;
+        }
+
+        @keyframes pulse-border {
+            0%, 100% { border-color: rgba(99, 102, 241, 0.3); }
+            50% { border-color: rgba(34, 211, 238, 0.6); }
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            letter-spacing: -0.02em;
+        }
+
+        .hero-title .gradient {
+            background: linear-gradient(135deg, var(--primary), var(--accent), var(--primary));
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradient-shift 3s linear infinite;
+        }
+
+        @keyframes gradient-shift {
+            0% { background-position: 0% center; }
+            100% { background-position: 200% center; }
+        }
+
+        .hero-subtitle {
+            font-size: 1.4rem;
+            color: var(--text-muted);
+            max-width: 700px;
+            margin: 0 auto 40px;
+            line-height: 1.7;
+        }
+
+        .hero-ctas {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 18px 36px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 30px rgba(99, 102, 241, 0.4);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 12px 40px rgba(99, 102, 241, 0.5);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text);
+            padding: 18px 36px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            border: 2px solid var(--card-border);
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            margin-top: 80px;
+            padding: 40px;
+            background: rgba(22, 22, 45, 0.6);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            backdrop-filter: blur(20px);
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-top: 5px;
+        }
+
+        /* Problem Section */
+        .problem {
+            padding: 120px 0;
+        }
+
+        .section-label {
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: var(--accent);
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .section-desc {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            line-height: 1.7;
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-top: 60px;
+        }
+
+        .problem-card {
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 30px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .problem-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--danger), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--danger);
+        }
+
+        .problem-card:hover::before {
+            opacity: 1;
+        }
+
+        .problem-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        .problem-card h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .problem-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Solution Section */
+        .solution {
+            padding: 120px 0;
+            background: linear-gradient(180deg, transparent, rgba(99, 102, 241, 0.03), transparent);
+        }
+
+        .solution-header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .solution-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 30px;
+        }
+
+        .solution-card {
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 40px;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .solution-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .solution-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--primary);
+            box-shadow: 0 20px 60px rgba(99, 102, 241, 0.2);
+        }
+
+        .solution-card:hover::after {
+            transform: scaleX(1);
+        }
+
+        .solution-number {
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            opacity: 0.3;
+            position: absolute;
+            top: 20px;
+            right: 30px;
+        }
+
+        .solution-card h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .solution-card p {
+            color: var(--text-muted);
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+
+        .solution-features {
+            list-style: none;
+        }
+
+        .solution-features li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .solution-features li::before {
+            content: '✓';
+            color: var(--success);
+            font-weight: bold;
+        }
+
+        /* Market Section */
+        .market {
+            padding: 120px 0;
+        }
+
+        .market-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+
+        .market-visual {
+            position: relative;
+        }
+
+        .market-chart {
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 40px;
+        }
+
+        .market-bar {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .market-bar-label {
+            width: 150px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .market-bar-track {
+            flex: 1;
+            height: 40px;
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .market-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 16px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            animation: bar-grow 1.5s ease-out forwards;
+            transform-origin: left;
+        }
+
+        @keyframes bar-grow {
+            from { transform: scaleX(0); }
+            to { transform: scaleX(1); }
+        }
+
+        .market-total {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid var(--card-border);
+            text-align: center;
+        }
+
+        .market-total-value {
+            font-size: 4rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--accent), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .market-total-label {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            margin-top: 8px;
+        }
+
+        /* Pricing Section */
+        .pricing {
+            padding: 120px 0;
+            background: linear-gradient(180deg, transparent, rgba(34, 211, 238, 0.02), transparent);
+        }
+
+        .pricing-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 40px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .pricing-card.featured {
+            border-color: var(--primary);
+            box-shadow: 0 0 60px rgba(99, 102, 241, 0.2);
+            transform: scale(1.05);
+        }
+
+        .pricing-card.featured::before {
+            content: 'Most Popular';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            padding: 6px 20px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .pricing-card.featured:hover {
+            transform: scale(1.05) translateY(-5px);
+        }
+
+        .pricing-tier {
+            font-size: 0.9rem;
+            color: var(--accent);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .pricing-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .pricing-price {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .pricing-price span {
+            font-size: 1rem;
+            font-weight: 400;
+            color: var(--text-muted);
+        }
+
+        .pricing-desc {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 30px;
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 30px;
+        }
+
+        .pricing-features li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 14px;
+            font-size: 0.95rem;
+        }
+
+        .pricing-features li::before {
+            content: '✓';
+            color: var(--success);
+            font-weight: bold;
+        }
+
+        .pricing-cta {
+            display: block;
+            text-align: center;
+            padding: 16px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .pricing-card.featured .pricing-cta {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+        }
+
+        .pricing-card:not(.featured) .pricing-cta {
+            background: transparent;
+            border: 2px solid var(--card-border);
+            color: var(--text);
+        }
+
+        .pricing-card:not(.featured) .pricing-cta:hover {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 120px 0;
+        }
+
+        .cta-box {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 30px;
+            padding: 80px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-box::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 50%);
+            animation: cta-shine 4s linear infinite;
+        }
+
+        @keyframes cta-shine {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .cta-box h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .cta-box p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto 40px;
+            position: relative;
+        }
+
+        .cta-box .btn-primary {
+            background: white;
+            color: var(--primary-dark);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        .cta-box .btn-primary:hover {
+            transform: translateY(-3px) scale(1.05);
+        }
+
+        /* Footer */
+        footer {
+            padding: 60px 0;
+            border-top: 1px solid var(--card-border);
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+
+        .footer-text {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .footer-meta {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 1px solid var(--card-border);
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .market-content {
+                grid-template-columns: 1fr;
+            }
+
+            .pricing-grid {
+                grid-template-columns: 1fr;
+                max-width: 400px;
+            }
+
+            .pricing-card.featured {
+                transform: none;
+                order: -1;
+            }
+
+            .pricing-card.featured:hover {
+                transform: translateY(-5px);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .stats-bar {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .cta-box {
+                padding: 50px 30px;
+            }
+
+            .hero-ctas {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn-primary, .btn-secondary {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+    <div class="floating-orbs">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <nav>
+        <div class="container">
+            <div class="logo">
+                <div class="logo-icon">⚡</div>
+                AgentOps
+            </div>
+            <a href="#pricing" class="nav-cta">Get Early Access</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    🚀 Infrastructure for the AI Agent Era
+                </div>
+                <h1 class="hero-title">
+                    The <span class="gradient">Operating System</span><br>
+                    for Enterprise AI Agents
+                </h1>
+                <p class="hero-subtitle">
+                    Deploy, monitor, govern, and secure every AI agent in your organization. 
+                    AgentOps is the Kubernetes for autonomous AI — the infrastructure layer 
+                    every enterprise needs.
+                </p>
+                <div class="hero-ctas">
+                    <a href="#pricing" class="btn-primary">
+                        Start Free Trial →
+                    </a>
+                    <a href="#solution" class="btn-secondary">
+                        📖 See How It Works
+                    </a>
+                </div>
+
+                <div class="stats-bar">
+                    <div class="stat">
+                        <div class="stat-value">$150B</div>
+                        <div class="stat-label">TAM by 2028</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">80%</div>
+                        <div class="stat-label">Lack Agent Governance</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">5×</div>
+                        <div class="stat-label">Agent Growth YoY</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">100%</div>
+                        <div class="stat-label">Compliance Coverage</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="problem" id="problem">
+        <div class="container">
+            <div class="section-label">The Problem</div>
+            <h2 class="section-title">AI Agents Are Everywhere.<br>Governance Is Nowhere.</h2>
+            <p class="section-desc">
+                Companies are deploying AI agents at breakneck speed. But without infrastructure 
+                for control, visibility, and compliance, they're flying blind.
+            </p>
+
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="problem-icon">👻</div>
+                    <h3>Shadow AI Agents</h3>
+                    <p>Employees spin up agents without IT oversight. You don't know what's running or what data it can access.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">🔍</div>
+                    <h3>Zero Observability</h3>
+                    <p>No visibility into what your agents are doing, why they made certain decisions, or how much they're costing.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">⚖️</div>
+                    <h3>Compliance Nightmares</h3>
+                    <p>Regulators demand AI audit trails. You have none. The EU AI Act fines are coming, and you're not ready.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">🔓</div>
+                    <h3>Security Black Holes</h3>
+                    <p>Agents with API access are attack vectors with no monitoring. One compromised agent = breach.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">💸</div>
+                    <h3>Cost Chaos</h3>
+                    <p>Millions spent on AI inference with no visibility into which agents consume what. CFOs want answers.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">🎲</div>
+                    <h3>Unpredictable Behavior</h3>
+                    <p>Agents act autonomously. When they go rogue, you find out from customers, not your monitoring.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="solution" id="solution">
+        <div class="container">
+            <div class="solution-header">
+                <div class="section-label">The Solution</div>
+                <h2 class="section-title">One Platform. Total Agent Control.</h2>
+                <p class="section-desc" style="margin: 0 auto;">
+                    AgentOps gives you the deployment, observability, governance, and security 
+                    infrastructure to run AI agents confidently at enterprise scale.
+                </p>
+            </div>
+
+            <div class="solution-grid">
+                <div class="solution-card">
+                    <span class="solution-number">01</span>
+                    <h3>🗂️ Agent Registry</h3>
+                    <p>Central catalog of every AI agent in your organization with full lifecycle management.</p>
+                    <ul class="solution-features">
+                        <li>Version control & rollback</li>
+                        <li>Deployment pipelines</li>
+                        <li>Agent "birth certificates"</li>
+                        <li>Permission tracking</li>
+                    </ul>
+                </div>
+
+                <div class="solution-card">
+                    <span class="solution-number">02</span>
+                    <h3>📊 Real-Time Observability</h3>
+                    <p>Trace every decision, track every token, detect every anomaly in real-time.</p>
+                    <ul class="solution-features">
+                        <li>Decision audit logs</li>
+                        <li>Token & cost tracking</li>
+                        <li>Anomaly detection</li>
+                        <li>Performance analytics</li>
+                    </ul>
+                </div>
+
+                <div class="solution-card">
+                    <span class="solution-number">03</span>
+                    <h3>⚖️ Governance & Compliance</h3>
+                    <p>Policy-as-code framework with pre-built templates for major regulations.</p>
+                    <ul class="solution-features">
+                        <li>SOC 2, GDPR, HIPAA ready</li>
+                        <li>Role-based access control</li>
+                        <li>Automated reporting</li>
+                        <li>Audit trail exports</li>
+                    </ul>
+                </div>
+
+                <div class="solution-card">
+                    <span class="solution-number">04</span>
+                    <h3>🔐 Security & Guardrails</h3>
+                    <p>Sandbox agents, detect threats, manage credentials, and kill rogue agents instantly.</p>
+                    <ul class="solution-features">
+                        <li>Agent sandboxing</li>
+                        <li>Prompt injection detection</li>
+                        <li>Credential vault</li>
+                        <li>Kill switches</li>
+                    </ul>
+                </div>
+
+                <div class="solution-card">
+                    <span class="solution-number">05</span>
+                    <h3>🔄 Agent Orchestration</h3>
+                    <p>Coordinate multi-agent workflows with intelligent resource allocation.</p>
+                    <ul class="solution-features">
+                        <li>Workflow coordination</li>
+                        <li>Inter-agent protocols</li>
+                        <li>Smart scheduling</li>
+                        <li>Failure handling</li>
+                    </ul>
+                </div>
+
+                <div class="solution-card">
+                    <span class="solution-number">06</span>
+                    <h3>🔌 Universal Integrations</h3>
+                    <p>Works with every major agent framework and enterprise system out of the box.</p>
+                    <ul class="solution-features">
+                        <li>LangChain, CrewAI, AutoGen</li>
+                        <li>OpenAI, Anthropic, Google</li>
+                        <li>SSO, SIEM, ITSM</li>
+                        <li>Custom API support</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="market" id="market">
+        <div class="container">
+            <div class="market-content">
+                <div>
+                    <div class="section-label">Market Opportunity</div>
+                    <h2 class="section-title">A $150B Market<br>With No Leader</h2>
+                    <p class="section-desc">
+                        The AI agent infrastructure market is exploding. Every enterprise 
+                        deploying AI agents will need governance, observability, and security. 
+                        That's every Fortune 500 company — and they're all looking for a solution.
+                    </p>
+                    <p class="section-desc" style="margin-top: 20px;">
+                        <strong style="color: var(--accent);">The window to own this category is 18 months.</strong>
+                        After that, the market consolidates or big tech bundles. We move now.
+                    </p>
+                </div>
+
+                <div class="market-visual">
+                    <div class="market-chart">
+                        <div class="market-bar">
+                            <span class="market-bar-label">Orchestration</span>
+                            <div class="market-bar-track">
+                                <div class="market-bar-fill" style="width: 30%;">$45B</div>
+                            </div>
+                        </div>
+                        <div class="market-bar">
+                            <span class="market-bar-label">Security</span>
+                            <div class="market-bar-track">
+                                <div class="market-bar-fill" style="width: 28%; animation-delay: 0.2s;">$42B</div>
+                            </div>
+                        </div>
+                        <div class="market-bar">
+                            <span class="market-bar-label">Governance</span>
+                            <div class="market-bar-track">
+                                <div class="market-bar-fill" style="width: 23%; animation-delay: 0.4s;">$35B</div>
+                            </div>
+                        </div>
+                        <div class="market-bar">
+                            <span class="market-bar-label">Observability</span>
+                            <div class="market-bar-track">
+                                <div class="market-bar-fill" style="width: 19%; animation-delay: 0.6s;">$28B</div>
+                            </div>
+                        </div>
+
+                        <div class="market-total">
+                            <div class="market-total-value">$150B</div>
+                            <div class="market-total-label">Total Addressable Market by 2028</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="pricing" id="pricing">
+        <div class="container">
+            <div class="pricing-header">
+                <div class="section-label">Pricing</div>
+                <h2 class="section-title">Start Free. Scale Infinitely.</h2>
+                <p class="section-desc" style="margin: 20px auto 0;">
+                    From individual developers to Fortune 500 enterprises. Pricing that grows with you.
+                </p>
+            </div>
+
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <div class="pricing-tier">Free</div>
+                    <div class="pricing-name">Community</div>
+                    <div class="pricing-price">$0 <span>/month</span></div>
+                    <div class="pricing-desc">For individuals exploring AI agents</div>
+                    <ul class="pricing-features">
+                        <li>Up to 5 agents</li>
+                        <li>Basic observability</li>
+                        <li>7-day log retention</li>
+                        <li>Community support</li>
+                        <li>Core integrations</li>
+                    </ul>
+                    <a href="#" class="pricing-cta">Start Free</a>
+                </div>
+
+                <div class="pricing-card featured">
+                    <div class="pricing-tier">Growth</div>
+                    <div class="pricing-name">Team</div>
+                    <div class="pricing-price">$500 <span>/month</span></div>
+                    <div class="pricing-desc">For teams building AI-native products</div>
+                    <ul class="pricing-features">
+                        <li>Up to 50 agents</li>
+                        <li>Full observability suite</li>
+                        <li>90-day log retention</li>
+                        <li>Compliance templates</li>
+                        <li>Priority email support</li>
+                        <li>All integrations</li>
+                    </ul>
+                    <a href="#" class="pricing-cta">Start Trial</a>
+                </div>
+
+                <div class="pricing-card">
+                    <div class="pricing-tier">Scale</div>
+                    <div class="pricing-name">Enterprise</div>
+                    <div class="pricing-price">Custom</div>
+                    <div class="pricing-desc">For organizations with serious requirements</div>
+                    <ul class="pricing-features">
+                        <li>Unlimited agents</li>
+                        <li>Custom compliance frameworks</li>
+                        <li>Unlimited retention</li>
+                        <li>SSO, RBAC, audit logs</li>
+                        <li>Dedicated support + SLAs</li>
+                        <li>On-prem deployment option</li>
+                    </ul>
+                    <a href="#" class="pricing-cta">Contact Sales</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta">
+        <div class="container">
+            <div class="cta-box">
+                <h2>The AI Agent Revolution Is Here.</h2>
+                <p>
+                    Someone needs to build the infrastructure to keep it from going off the rails. 
+                    Get early access to AgentOps and take control of your AI agents.
+                </p>
+                <a href="#" class="btn-primary">
+                    Get Early Access →
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-logo">⚡ AgentOps</div>
+            <p class="footer-text">
+                The operating system for enterprise AI agents.<br>
+                Deploy. Monitor. Govern. Secure.
+            </p>
+            <div class="footer-meta">
+                Generated by The Godfather 🎩 | Morning Drop | May 20, 2026<br>
+                <a href="2026-05-20-morning.md" style="color: var(--primary);">View Full Strategy</a> |
+                <a href="2026-05-20-morning.pdf" style="color: var(--primary);">Download PDF</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
