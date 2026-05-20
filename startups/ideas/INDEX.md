@@ -8,6 +8,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 
 | Date | Time | Idea | File |
 |------|------|------|------|
+| 2026-05-20 | Evening | SpatialAds — The Advertising Network for the AR Glasses Era | [Playbook](2026-05-20-evening.md) • [Landing](2026-05-20-evening-landing.html) • [PDF](2026-05-20-evening.pdf) |
 | 2026-05-19 | Morning | Provenance.ai — The AI Trust Layer for High-Value Asset Authentication | [Playbook](2026-05-19-morning.md) • [Landing](2026-05-19-morning-landing.html) • [PDF](2026-05-19-morning.pdf) |
 | 2026-05-19 | Afternoon | TierZero AI — The Autonomous IT Support Platform | [Playbook](2026-05-19-afternoon.md) • [Landing](2026-05-19-afternoon-landing.html) • [PDF](2026-05-19-afternoon.pdf) |
 | 2026-01-30 | Morning | AgentOps.ai — The Datadog for AI Agents | [Playbook](2026-01-30-morning.md) • [Landing](2026-01-30-morning-landing.html) • [PDF](2026-01-30-morning.pdf) |
