@@ -322,6 +322,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 | 2026-05-18 | Evening | ImmuneForge AI — The AI Operating System for Personalized Immune System Intelligence | [Playbook](2026-05-18-evening.md) • [Landing](2026-05-18-evening-landing.html) • [PDF](2026-05-18-evening.pdf) |
 | 2026-05-18 | Afternoon | AgentCredit — The FICO Score for AI Agents | [Playbook](2026-05-18-afternoon.md) • [Landing](2026-05-18-afternoon-landing.html) • [PDF](2026-05-18-afternoon.pdf) |
 | 2026-05-19 | Evening | Evidence.ai — The AI Operating System for Digital Forensics & Investigations | [Playbook](2026-05-19-evening.md) • [Landing](2026-05-19-evening-landing.html) • [PDF](2026-05-19-evening.pdf) |
+| 2026-05-21 | Evening | FloodMind AI — The Operating System for Global Flood Intelligence | [Playbook](2026-05-21-evening.md) • [Landing](2026-05-21-evening-landing.html) • [PDF](2026-05-21-evening.pdf) |
 
 <!-- New entries will be added above this line -->
 

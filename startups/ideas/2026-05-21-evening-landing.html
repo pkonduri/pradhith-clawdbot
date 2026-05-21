@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FloodMind AI — Global Flood Intelligence Platform</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --water-dark: #0a1628;
+            --water-deep: #0d2137;
+            --water-medium: #1a4570;
+            --water-light: #2d6aa0;
+            --water-bright: #4da6ff;
+            --water-glow: #6ec6ff;
+            --wave-teal: #00d4aa;
+            --alert-orange: #ff6b35;
+            --alert-red: #ff4757;
+            --safe-green: #2ed573;
+            --white: #ffffff;
+            --gray-100: #f8fafc;
+            --gray-200: #e2e8f0;
+            --gray-400: #94a3b8;
+            --gray-600: #475569;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--water-dark);
+            color: var(--white);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated Water Background */
+        .water-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(180deg, var(--water-dark) 0%, var(--water-deep) 50%, var(--water-medium) 100%);
+        }
+
+        .water-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at 20% 80%, rgba(0, 212, 170, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(77, 166, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(45, 106, 160, 0.15) 0%, transparent 70%);
+        }
+
+        /* Water Ripple Animation */
+        .ripples {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            border: 1px solid rgba(77, 166, 255, 0.2);
+            animation: ripple 8s infinite;
+        }
+
+        .ripple:nth-child(1) { left: 10%; top: 20%; animation-delay: 0s; }
+        .ripple:nth-child(2) { left: 70%; top: 60%; animation-delay: 2s; }
+        .ripple:nth-child(3) { left: 30%; top: 80%; animation-delay: 4s; }
+        .ripple:nth-child(4) { left: 80%; top: 30%; animation-delay: 6s; }
+        .ripple:nth-child(5) { left: 50%; top: 50%; animation-delay: 1s; }
+
+        @keyframes ripple {
+            0% {
+                width: 0;
+                height: 0;
+                opacity: 1;
+            }
+            100% {
+                width: 500px;
+                height: 500px;
+                opacity: 0;
+                margin-left: -250px;
+                margin-top: -250px;
+            }
+        }
+
+        /* Wave Animation at Bottom */
+        .waves {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 200px;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 200%;
+            height: 100%;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0,60 C150,120 350,0 600,60 C850,120 1050,0 1200,60 L1200,120 L0,120 Z' fill='rgba(26,69,112,0.3)'/%3E%3C/svg%3E");
+            background-size: 1200px 100%;
+            animation: wave 10s linear infinite;
+        }
+
+        .wave:nth-child(2) {
+            bottom: 10px;
+            opacity: 0.5;
+            animation-duration: 15s;
+            animation-direction: reverse;
+        }
+
+        .wave:nth-child(3) {
+            bottom: 20px;
+            opacity: 0.3;
+            animation-duration: 20s;
+        }
+
+        @keyframes wave {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(20px);
+            background: rgba(10, 22, 40, 0.8);
+            border-bottom: 1px solid rgba(77, 166, 255, 0.1);
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, var(--water-bright), var(--wave-teal));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 20px rgba(77, 166, 255, 0.3);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--gray-200);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--water-bright);
+        }
+
+        .nav-cta {
+            background: linear-gradient(135deg, var(--water-bright), var(--wave-teal));
+            color: var(--water-dark) !important;
+            padding: 0.75rem 1.75rem;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(77, 166, 255, 0.4);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 120px 5% 80px;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 1000px;
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(0, 212, 170, 0.15);
+            border: 1px solid rgba(0, 212, 170, 0.3);
+            padding: 0.5rem 1.25rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--wave-teal);
+            margin-bottom: 2rem;
+            animation: pulse-badge 2s infinite;
+        }
+
+        @keyframes pulse-badge {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(0, 212, 170, 0.4); }
+            50% { box-shadow: 0 0 0 10px rgba(0, 212, 170, 0); }
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--white) 0%, var(--water-glow) 50%, var(--wave-teal) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.35rem;
+            color: var(--gray-200);
+            max-width: 700px;
+            margin: 0 auto 2.5rem;
+            line-height: 1.7;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 4rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--water-bright), var(--wave-teal));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--gray-400);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .hero-ctas {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--water-bright), var(--wave-teal));
+            color: var(--water-dark);
+            padding: 1.1rem 2.5rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+            box-shadow: 0 8px 40px rgba(77, 166, 255, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 50px rgba(77, 166, 255, 0.5);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--white);
+            padding: 1.1rem 2.5rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-decoration: none;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px);
+        }
+
+        /* Alert Banner */
+        .alert-banner {
+            background: linear-gradient(90deg, var(--alert-orange), var(--alert-red));
+            padding: 1rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .alert-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 200%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            100% { transform: translateX(100%); }
+        }
+
+        .alert-text {
+            font-weight: 600;
+            font-size: 1rem;
+            position: relative;
+        }
+
+        /* Problem Section */
+        .problem-section {
+            padding: 120px 5%;
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 5rem;
+        }
+
+        .section-tag {
+            display: inline-block;
+            color: var(--alert-orange);
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            color: var(--gray-400);
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .problem-card {
+            background: linear-gradient(145deg, rgba(255, 107, 53, 0.1), rgba(255, 71, 87, 0.05));
+            border: 1px solid rgba(255, 107, 53, 0.2);
+            border-radius: 20px;
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 60px rgba(255, 107, 53, 0.2);
+        }
+
+        .problem-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--alert-orange), var(--alert-red));
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .problem-card h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            color: var(--alert-orange);
+        }
+
+        .problem-card p {
+            color: var(--gray-200);
+            font-size: 1rem;
+        }
+
+        /* Solution Section */
+        .solution-section {
+            padding: 120px 5%;
+            background: linear-gradient(180deg, transparent 0%, rgba(0, 212, 170, 0.05) 100%);
+        }
+
+        .solution-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .solution-card {
+            background: linear-gradient(145deg, rgba(0, 212, 170, 0.1), rgba(77, 166, 255, 0.05));
+            border: 1px solid rgba(0, 212, 170, 0.2);
+            border-radius: 24px;
+            padding: 3rem;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .solution-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 80px rgba(0, 212, 170, 0.2);
+            border-color: rgba(0, 212, 170, 0.4);
+        }
+
+        .solution-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--wave-teal), var(--water-bright));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 8px 30px rgba(0, 212, 170, 0.3);
+        }
+
+        .solution-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--wave-teal);
+        }
+
+        .solution-card p {
+            color: var(--gray-200);
+            font-size: 1.05rem;
+            line-height: 1.7;
+        }
+
+        /* Market Section */
+        .market-section {
+            padding: 120px 5%;
+        }
+
+        .market-content {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .market-highlight {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 3rem;
+            margin-bottom: 4rem;
+            flex-wrap: wrap;
+        }
+
+        .market-stat {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(77, 166, 255, 0.1);
+            border: 1px solid rgba(77, 166, 255, 0.2);
+            border-radius: 20px;
+            min-width: 200px;
+        }
+
+        .market-number {
+            font-size: 4rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--water-bright), var(--wave-teal));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .market-label {
+            font-size: 1rem;
+            color: var(--gray-400);
+            margin-top: 0.5rem;
+        }
+
+        .market-segments {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .segment {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 1.75rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .segment:hover {
+            background: rgba(77, 166, 255, 0.1);
+            border-color: rgba(77, 166, 255, 0.3);
+            transform: translateY(-5px);
+        }
+
+        .segment-value {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--water-bright);
+            margin-bottom: 0.5rem;
+        }
+
+        .segment-name {
+            color: var(--gray-200);
+            font-size: 0.95rem;
+        }
+
+        /* Tech Architecture */
+        .tech-section {
+            padding: 120px 5%;
+            background: linear-gradient(180deg, transparent 0%, rgba(13, 33, 55, 0.8) 100%);
+        }
+
+        .tech-visual {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(77, 166, 255, 0.2);
+            border-radius: 24px;
+            padding: 3rem;
+            position: relative;
+        }
+
+        .tech-layer {
+            background: rgba(77, 166, 255, 0.1);
+            border: 1px solid rgba(77, 166, 255, 0.3);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            transition: all 0.3s;
+        }
+
+        .tech-layer:hover {
+            background: rgba(77, 166, 255, 0.2);
+            transform: scale(1.02);
+        }
+
+        .tech-layer:last-child {
+            margin-bottom: 0;
+        }
+
+        .tech-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--water-bright), var(--wave-teal));
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .tech-info h4 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--water-bright);
+            margin-bottom: 0.5rem;
+        }
+
+        .tech-info p {
+            color: var(--gray-300);
+            font-size: 0.95rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 120px 5%;
+            text-align: center;
+            position: relative;
+        }
+
+        .cta-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-section h2 {
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--white), var(--water-glow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .cta-section p {
+            font-size: 1.3rem;
+            color: var(--gray-200);
+            margin-bottom: 2.5rem;
+        }
+
+        .cta-glow {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(0, 212, 170, 0.15) 0%, transparent 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 5% 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .footer-tagline {
+            color: var(--gray-400);
+            font-size: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--gray-400);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--water-bright);
+        }
+
+        .copyright {
+            color: var(--gray-600);
+            font-size: 0.85rem;
+        }
+
+        /* Floating Elements */
+        .float-element {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            background: rgba(77, 166, 255, 0.5);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+            z-index: -1;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(180deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero-stats {
+                gap: 2rem;
+            }
+
+            .stat-value {
+                font-size: 2rem;
+            }
+
+            .market-highlight {
+                flex-direction: column;
+            }
+
+            .tech-layer {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .problem-grid, .solution-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="water-bg"></div>
+    <div class="ripples">
+        <div class="ripple"></div>
+        <div class="ripple"></div>
+        <div class="ripple"></div>
+        <div class="ripple"></div>
+        <div class="ripple"></div>
+    </div>
+    <div class="waves">
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">
+            <div class="logo-icon">🌊</div>
+            FloodMind
+        </div>
+        <ul class="nav-links">
+            <li><a href="#problem">Problem</a></li>
+            <li><a href="#solution">Solution</a></li>
+            <li><a href="#market">Market</a></li>
+            <li><a href="#technology">Technology</a></li>
+            <li><a href="#contact" class="nav-cta">Get Early Access</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span>🚀</span> Launching Q3 2026
+            </div>
+            <h1>Predict Floods Before They Happen</h1>
+            <p>The AI operating system that transforms flood chaos into predictable, insurable, and preventable events. Street-level precision. 72+ hours advance warning.</p>
+            
+            <div class="hero-stats">
+                <div class="stat">
+                    <div class="stat-value">$100B+</div>
+                    <div class="stat-label">Annual Flood Damages</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">25M</div>
+                    <div class="stat-label">People Displaced Yearly</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">72h+</div>
+                    <div class="stat-label">Advance Warning</div>
+                </div>
+            </div>
+
+            <div class="hero-ctas">
+                <a href="#contact" class="btn-primary">
+                    Request Demo <span>→</span>
+                </a>
+                <a href="#solution" class="btn-secondary">
+                    See How It Works
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Alert Banner -->
+    <div class="alert-banner">
+        <div class="alert-text">⚡ Climate change is making floods 500% more frequent. Legacy prediction systems are failing.</div>
+    </div>
+
+    <!-- Problem Section -->
+    <section id="problem" class="problem-section">
+        <div class="section-header">
+            <div class="section-tag">The Crisis</div>
+            <h2 class="section-title">Floods Are Killing Outdated Predictions</h2>
+            <p class="section-subtitle">Current systems fail when we need them most</p>
+        </div>
+
+        <div class="problem-grid">
+            <div class="problem-card">
+                <div class="problem-icon">⏰</div>
+                <h3>6-Hour Warnings</h3>
+                <p>Current systems give city-level warnings just hours before impact. Not enough time to protect lives and assets.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">📍</div>
+                <h3>Decade-Old Maps</h3>
+                <p>FEMA flood maps are 10+ years old. They miss new developments, changed landscapes, and climate shifts.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">💸</div>
+                <h3>$50B Surprise Claims</h3>
+                <p>Insurers face billions in unexpected flood claims annually because risk models are fundamentally broken.</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">🏠</div>
+                <h3>$1T Mispriced Assets</h3>
+                <p>Over a trillion dollars in US real estate sits in flood zones with outdated or incorrect risk assessments.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section id="solution" class="solution-section">
+        <div class="section-header">
+            <div class="section-tag" style="color: var(--wave-teal)">The Platform</div>
+            <h2 class="section-title">FloodMind: AI-Powered Flood Intelligence</h2>
+            <p class="section-subtitle">From observation to prediction to autonomous response</p>
+        </div>
+
+        <div class="solution-grid">
+            <div class="solution-card">
+                <div class="solution-icon">🛰️</div>
+                <h3>FloodSense</h3>
+                <p>Real-time observation network fusing satellite imagery, IoT sensors, weather models, and crowdsourced signals for complete situational awareness.</p>
+            </div>
+            <div class="solution-card">
+                <div class="solution-icon">🧠</div>
+                <h3>FloodBrain</h3>
+                <p>Foundation AI model trained on 50 years of flood data with physics-informed neural networks for unprecedented prediction accuracy.</p>
+            </div>
+            <div class="solution-card">
+                <div class="solution-icon">🎯</div>
+                <h3>FloodCast</h3>
+                <p>Hyperlocal predictions at street-level resolution with probabilistic depth, velocity, and duration forecasts 72+ hours out.</p>
+            </div>
+            <div class="solution-card">
+                <div class="solution-icon">🛡️</div>
+                <h3>FloodShield</h3>
+                <p>Autonomous response coordination with smart evacuation routing, infrastructure activation, and targeted population alerts.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Market Section -->
+    <section id="market" class="market-section">
+        <div class="section-header">
+            <div class="section-tag" style="color: var(--water-bright)">The Opportunity</div>
+            <h2 class="section-title">$150B+ Total Addressable Market</h2>
+            <p class="section-subtitle">Flood intelligence across every major industry</p>
+        </div>
+
+        <div class="market-content">
+            <div class="market-highlight">
+                <div class="market-stat">
+                    <div class="market-number">$150B</div>
+                    <div class="market-label">TAM by 2030</div>
+                </div>
+                <div class="market-stat">
+                    <div class="market-number">85%</div>
+                    <div class="market-label">Gross Margin</div>
+                </div>
+                <div class="market-stat">
+                    <div class="market-number">10:1</div>
+                    <div class="market-label">LTV:CAC</div>
+                </div>
+            </div>
+
+            <div class="market-segments">
+                <div class="segment">
+                    <div class="segment-value">$25B</div>
+                    <div class="segment-name">Insurance Risk</div>
+                </div>
+                <div class="segment">
+                    <div class="segment-value">$40B</div>
+                    <div class="segment-name">Municipal Water</div>
+                </div>
+                <div class="segment">
+                    <div class="segment-value">$30B</div>
+                    <div class="segment-name">Real Estate Risk</div>
+                </div>
+                <div class="segment">
+                    <div class="segment-value">$20B</div>
+                    <div class="segment-name">Agriculture</div>
+                </div>
+                <div class="segment">
+                    <div class="segment-value">$25B</div>
+                    <div class="segment-name">Infrastructure</div>
+                </div>
+                <div class="segment">
+                    <div class="segment-value">$10B</div>
+                    <div class="segment-name">Emergency Mgmt</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technology Section -->
+    <section id="technology" class="tech-section">
+        <div class="section-header">
+            <div class="section-tag" style="color: var(--water-bright)">The Technology</div>
+            <h2 class="section-title">Built for Planetary Scale</h2>
+            <p class="section-subtitle">Multi-modal AI fusing physics with machine learning</p>
+        </div>
+
+        <div class="tech-visual">
+            <div class="tech-layer">
+                <div class="tech-icon">🛰️</div>
+                <div class="tech-info">
+                    <h4>Satellite Intelligence</h4>
+                    <p>Daily global coverage from Sentinel, Planet, and commercial constellations. SAR for all-weather water detection.</p>
+                </div>
+            </div>
+            <div class="tech-layer">
+                <div class="tech-icon">📡</div>
+                <div class="tech-info">
+                    <h4>IoT Sensor Mesh</h4>
+                    <p>1M+ water level sensors, soil moisture probes, and precipitation gauges streaming real-time data.</p>
+                </div>
+            </div>
+            <div class="tech-layer">
+                <div class="tech-icon">🧬</div>
+                <div class="tech-info">
+                    <h4>Foundation Model</h4>
+                    <p>Physics-informed neural network trained on 50 years of global flood events with conservation law constraints.</p>
+                </div>
+            </div>
+            <div class="tech-layer">
+                <div class="tech-icon">⚡</div>
+                <div class="tech-info">
+                    <h4>Real-Time Inference</h4>
+                    <p>Sub-second predictions at street-level resolution. Ensemble uncertainty quantification for calibrated probabilities.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="contact" class="cta-section">
+        <div class="cta-glow"></div>
+        <div class="cta-content">
+            <h2>Join the Flood Intelligence Revolution</h2>
+            <p>Be among the first insurers, cities, and enterprises to gain predictive flood intelligence. Early access partners get priority onboarding and custom integrations.</p>
+            <a href="mailto:founders@floodmind.ai" class="btn-primary">
+                Request Early Access <span>→</span>
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-logo">
+            <span>🌊</span> FloodMind AI
+        </div>
+        <p class="footer-tagline">Because every flood should be predictable.</p>
+        <div class="footer-links">
+            <a href="#">Product</a>
+            <a href="#">Solutions</a>
+            <a href="#">Pricing</a>
+            <a href="#">Documentation</a>
+            <a href="#">Careers</a>
+            <a href="#">Contact</a>
+        </div>
+        <p class="copyright">© 2026 FloodMind AI. Transforming flood chaos into intelligence.</p>
+    </footer>
+
+    <!-- Floating Elements -->
+    <div class="float-element" style="left: 10%; top: 30%; animation-delay: 0s;"></div>
+    <div class="float-element" style="left: 85%; top: 50%; animation-delay: 2s;"></div>
+    <div class="float-element" style="left: 25%; top: 70%; animation-delay: 4s;"></div>
+    <div class="float-element" style="left: 75%; top: 25%; animation-delay: 1s;"></div>
+    <div class="float-element" style="left: 50%; top: 85%; animation-delay: 3s;"></div>
+</body>
+</html>
