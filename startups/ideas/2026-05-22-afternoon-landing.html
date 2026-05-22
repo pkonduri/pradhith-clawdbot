@@ -1,0 +1,1566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChildOS — The AI Operating System for Modern Parenting</title>
+    <meta name="description" content="The intelligent co-pilot that transforms parenting from guesswork into confidence. AI-powered pediatric guidance, developmental tracking, and family wellness.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #7C3AED;
+            --primary-light: #A78BFA;
+            --primary-dark: #5B21B6;
+            --secondary: #F472B6;
+            --secondary-light: #FBCFE8;
+            --accent: #10B981;
+            --accent-light: #6EE7B7;
+            --dark: #1E1B4B;
+            --dark-soft: #312E81;
+            --light: #FAF5FF;
+            --white: #FFFFFF;
+            --gray-100: #F3F4F6;
+            --gray-200: #E5E7EB;
+            --gray-300: #D1D5DB;
+            --gray-500: #6B7280;
+            --gray-700: #374151;
+            --warning: #FBBF24;
+            --gradient-primary: linear-gradient(135deg, #7C3AED 0%, #EC4899 50%, #F472B6 100%);
+            --gradient-warm: linear-gradient(135deg, #FDF4FF 0%, #FAF5FF 50%, #F5F3FF 100%);
+            --gradient-glow: linear-gradient(135deg, rgba(124, 58, 237, 0.1) 0%, rgba(244, 114, 182, 0.1) 100%);
+            --shadow-soft: 0 4px 20px rgba(124, 58, 237, 0.15);
+            --shadow-medium: 0 8px 40px rgba(124, 58, 237, 0.2);
+            --shadow-glow: 0 0 60px rgba(124, 58, 237, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: var(--gradient-warm);
+            overflow: hidden;
+        }
+
+        .floating-shape {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.5;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .shape-1 {
+            width: 600px;
+            height: 600px;
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.3), rgba(244, 114, 182, 0.2));
+            top: -200px;
+            right: -200px;
+            animation-delay: 0s;
+        }
+
+        .shape-2 {
+            width: 500px;
+            height: 500px;
+            background: linear-gradient(135deg, rgba(244, 114, 182, 0.3), rgba(16, 185, 129, 0.2));
+            bottom: -150px;
+            left: -150px;
+            animation-delay: -5s;
+        }
+
+        .shape-3 {
+            width: 400px;
+            height: 400px;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(124, 58, 237, 0.3));
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation-delay: -10s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(50px, -50px) scale(1.1); }
+            50% { transform: translate(-30px, 30px) scale(0.95); }
+            75% { transform: translate(40px, 40px) scale(1.05); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(250, 245, 255, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(124, 58, 237, 0.1);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.75rem;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: var(--gradient-primary);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .logo-icon span {
+            -webkit-text-fill-color: white;
+        }
+
+        .nav-cta {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 0.875rem 2rem;
+            border-radius: 100px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary-light);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 120px 5% 80px;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .hero-text {
+            max-width: 600px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: white;
+            border-radius: 100px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow-soft);
+            border: 1px solid rgba(124, 58, 237, 0.2);
+        }
+
+        .hero-badge::before {
+            content: '👶';
+            font-size: 1rem;
+        }
+
+        h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            color: var(--dark);
+        }
+
+        h1 .highlight {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.35rem;
+            color: var(--gray-700);
+            margin-bottom: 2.5rem;
+            line-height: 1.7;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 3rem;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 2.5rem;
+        }
+
+        .stat {
+            text-align: left;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--gray-500);
+            font-weight: 500;
+        }
+
+        /* Hero Visual */
+        .hero-visual {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .phone-mockup {
+            position: relative;
+            width: 320px;
+            height: 650px;
+            background: linear-gradient(180deg, #1E1B4B 0%, #312E81 100%);
+            border-radius: 45px;
+            padding: 12px;
+            box-shadow: 
+                0 50px 100px rgba(124, 58, 237, 0.3),
+                0 0 0 2px rgba(255, 255, 255, 0.1) inset;
+            transform: perspective(1000px) rotateY(-10deg) rotateX(5deg);
+        }
+
+        .phone-screen {
+            width: 100%;
+            height: 100%;
+            background: var(--white);
+            border-radius: 35px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .phone-notch {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 30px;
+            background: #1E1B4B;
+            border-radius: 0 0 20px 20px;
+            z-index: 10;
+        }
+
+        .phone-content {
+            padding: 50px 20px 20px;
+            height: 100%;
+            background: linear-gradient(180deg, #FAF5FF 0%, #FFFFFF 100%);
+        }
+
+        .app-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .app-greeting {
+            font-size: 0.875rem;
+            color: var(--gray-500);
+        }
+
+        .app-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .app-avatar {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .app-card {
+            background: white;
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border: 1px solid rgba(124, 58, 237, 0.1);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .card-icon {
+            width: 36px;
+            height: 36px;
+            background: var(--gradient-glow);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+
+        .card-title {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .card-subtitle {
+            font-size: 0.7rem;
+            color: var(--gray-500);
+        }
+
+        .card-body {
+            font-size: 0.75rem;
+            color: var(--gray-700);
+            line-height: 1.5;
+        }
+
+        .insight-positive {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: var(--gray-200);
+            border-radius: 3px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient-primary);
+            border-radius: 3px;
+            width: 78%;
+        }
+
+        /* Floating Elements */
+        .floating-card {
+            position: absolute;
+            background: white;
+            border-radius: 16px;
+            padding: 1rem 1.25rem;
+            box-shadow: var(--shadow-medium);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            animation: pulse 3s ease-in-out infinite;
+            border: 1px solid rgba(124, 58, 237, 0.1);
+        }
+
+        .floating-card-1 {
+            top: 10%;
+            left: -60px;
+            animation-delay: 0s;
+        }
+
+        .floating-card-2 {
+            bottom: 20%;
+            right: -80px;
+            animation-delay: -1.5s;
+        }
+
+        .floating-card-3 {
+            top: 40%;
+            right: -100px;
+            animation-delay: -0.75s;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .floating-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .floating-icon.purple { background: linear-gradient(135deg, #EDE9FE, #DDD6FE); }
+        .floating-icon.pink { background: linear-gradient(135deg, #FCE7F3, #FBCFE8); }
+        .floating-icon.green { background: linear-gradient(135deg, #D1FAE5, #A7F3D0); }
+
+        .floating-text {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .floating-subtext {
+            font-size: 0.65rem;
+            color: var(--gray-500);
+        }
+
+        /* Problem Section */
+        .problem {
+            padding: 100px 5%;
+            background: white;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 4rem;
+        }
+
+        .section-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1rem;
+        }
+
+        h2 {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .section-subtitle {
+            font-size: 1.25rem;
+            color: var(--gray-600);
+            line-height: 1.7;
+        }
+
+        .crisis-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .crisis-card {
+            background: var(--light);
+            border-radius: 24px;
+            padding: 2.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(124, 58, 237, 0.1);
+        }
+
+        .crisis-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .crisis-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            background: var(--gradient-glow);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+        }
+
+        .crisis-stat {
+            font-size: 3rem;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .crisis-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 0.75rem;
+        }
+
+        .crisis-desc {
+            font-size: 0.95rem;
+            color: var(--gray-600);
+            line-height: 1.6;
+        }
+
+        /* Solution Section */
+        .solution {
+            padding: 100px 5%;
+            background: var(--gradient-warm);
+        }
+
+        .solution-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 24px;
+            padding: 2.5rem;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(124, 58, 237, 0.1);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .feature-card.featured {
+            grid-column: span 2;
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        .feature-card.featured .feature-title,
+        .feature-card.featured .feature-desc {
+            color: white;
+        }
+
+        .feature-card.featured .feature-icon {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-glow);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 1rem;
+        }
+
+        .feature-desc {
+            font-size: 1rem;
+            color: var(--gray-600);
+            line-height: 1.7;
+        }
+
+        .feature-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+        }
+
+        .feature-tag {
+            padding: 0.5rem 1rem;
+            background: rgba(124, 58, 237, 0.1);
+            border-radius: 100px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--primary);
+        }
+
+        .feature-card.featured .feature-tag {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        /* Daily Experience Section */
+        .experience {
+            padding: 100px 5%;
+            background: white;
+        }
+
+        .timeline {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: var(--gradient-primary);
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+
+        .timeline-item {
+            display: flex;
+            gap: 3rem;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .timeline-item:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .timeline-time {
+            flex: 1;
+            text-align: right;
+            padding-top: 0.5rem;
+        }
+
+        .timeline-item:nth-child(even) .timeline-time {
+            text-align: left;
+        }
+
+        .time-label {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .time-period {
+            font-size: 0.875rem;
+            color: var(--gray-500);
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: 50%;
+            top: 0.5rem;
+            width: 20px;
+            height: 20px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 0 0 6px rgba(124, 58, 237, 0.2);
+        }
+
+        .timeline-content {
+            flex: 1;
+            background: var(--light);
+            padding: 1.5rem;
+            border-radius: 16px;
+            border: 1px solid rgba(124, 58, 237, 0.1);
+        }
+
+        .timeline-emoji {
+            font-size: 2rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .timeline-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-desc {
+            font-size: 0.95rem;
+            color: var(--gray-600);
+            line-height: 1.6;
+            font-style: italic;
+        }
+
+        /* Market Section */
+        .market {
+            padding: 100px 5%;
+            background: var(--dark);
+            color: white;
+        }
+
+        .market h2 {
+            color: white;
+        }
+
+        .market .section-subtitle {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .market-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .market-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .market-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-5px);
+        }
+
+        .market-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .market-label {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 500;
+        }
+
+        /* Business Model */
+        .business {
+            padding: 100px 5%;
+            background: var(--light);
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            background: white;
+            border-radius: 24px;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .pricing-card.popular {
+            border-color: var(--primary);
+            position: relative;
+            transform: scale(1.05);
+        }
+
+        .pricing-card.popular::before {
+            content: 'Most Popular';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--gradient-primary);
+            color: white;
+            padding: 0.25rem 1rem;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .pricing-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-price {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .pricing-price span {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--gray-500);
+        }
+
+        .pricing-desc {
+            font-size: 0.875rem;
+            color: var(--gray-500);
+            margin-bottom: 1.5rem;
+        }
+
+        .pricing-features {
+            text-align: left;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-feature {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 0;
+            font-size: 0.9rem;
+            color: var(--gray-700);
+        }
+
+        .pricing-feature::before {
+            content: '✓';
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        /* Traction Section */
+        .traction {
+            padding: 100px 5%;
+            background: white;
+        }
+
+        .traction-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .traction-item {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .traction-value {
+            font-size: 3rem;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .traction-label {
+            font-size: 0.95rem;
+            color: var(--gray-600);
+            font-weight: 500;
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 120px 5%;
+            background: var(--gradient-primary);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 50%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cta h2 {
+            color: white;
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.35rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .cta .btn-primary {
+            background: white;
+            color: var(--primary);
+            font-size: 1.1rem;
+            padding: 1.25rem 3rem;
+        }
+
+        .cta .btn-primary:hover {
+            background: var(--light);
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 5% 2rem;
+            background: var(--dark);
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .footer-tagline {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-text {
+                max-width: 100%;
+            }
+
+            .hero-cta {
+                justify-content: center;
+            }
+
+            .hero-stats {
+                justify-content: center;
+            }
+
+            .hero-visual {
+                margin-top: 3rem;
+            }
+
+            .phone-mockup {
+                transform: none;
+            }
+
+            .floating-card {
+                display: none;
+            }
+
+            h1 {
+                font-size: 3rem;
+            }
+
+            h2 {
+                font-size: 2.25rem;
+            }
+
+            .crisis-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .feature-card.featured {
+                grid-column: span 1;
+            }
+
+            .market-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .pricing-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .pricing-card.popular {
+                transform: none;
+            }
+
+            .traction-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .timeline::before {
+                left: 20px;
+            }
+
+            .timeline-item {
+                flex-direction: column !important;
+                padding-left: 50px;
+            }
+
+            .timeline-time {
+                text-align: left !important;
+            }
+
+            .timeline-dot {
+                left: 20px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            nav {
+                padding: 1rem 5%;
+            }
+
+            .nav-cta .btn-outline {
+                display: none;
+            }
+
+            h1 {
+                font-size: 2.25rem;
+            }
+
+            h2 {
+                font-size: 1.75rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.1rem;
+            }
+
+            .hero-stats {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+
+            .market-grid,
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .traction-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .cta h2 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="bg-animation">
+        <div class="floating-shape shape-1"></div>
+        <div class="floating-shape shape-2"></div>
+        <div class="floating-shape shape-3"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">
+            <div class="logo-icon"><span>👶</span></div>
+            ChildOS
+        </div>
+        <div class="nav-cta">
+            <a href="#pricing" class="btn btn-outline">Pricing</a>
+            <a href="#cta" class="btn btn-primary">Join Waitlist</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <div class="hero-badge">The Future of Parenting is Here</div>
+                <h1>Your AI <span class="highlight">Co-Pilot</span> for Raising Happy Kids</h1>
+                <p class="hero-subtitle">The intelligent platform that transforms parenting from guesswork into confidence — with personalized guidance, developmental tracking, and 24/7 support.</p>
+                <div class="hero-cta">
+                    <a href="#cta" class="btn btn-primary">
+                        Get Early Access
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </a>
+                    <a href="#solution" class="btn btn-outline">See How It Works</a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <div class="stat-value">66%</div>
+                        <div class="stat-label">of parents report burnout</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">$200B+</div>
+                        <div class="stat-label">parenting market</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">24/7</div>
+                        <div class="stat-label">intelligent support</div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="phone-mockup">
+                    <div class="phone-screen">
+                        <div class="phone-notch"></div>
+                        <div class="phone-content">
+                            <div class="app-header">
+                                <div>
+                                    <div class="app-greeting">Good morning, Sarah</div>
+                                    <div class="app-title">Emma's Day</div>
+                                </div>
+                                <div class="app-avatar">👧</div>
+                            </div>
+                            <div class="app-card">
+                                <div class="card-header">
+                                    <div class="card-icon">😴</div>
+                                    <div>
+                                        <div class="card-title">Sleep Insight</div>
+                                        <div class="card-subtitle">Last night</div>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    Emma slept <span class="insight-positive">10.5 hours</span> — perfect for her age! Her sleep quality improved 12% this week.
+                                </div>
+                                <div class="progress-bar"><div class="progress-fill"></div></div>
+                            </div>
+                            <div class="app-card">
+                                <div class="card-header">
+                                    <div class="card-icon">📊</div>
+                                    <div>
+                                        <div class="card-title">Development</div>
+                                        <div class="card-subtitle">18 months</div>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    Motor skills on track. Try the "stacking cups" activity today to boost fine motor development.
+                                </div>
+                            </div>
+                            <div class="app-card">
+                                <div class="card-header">
+                                    <div class="card-icon">🍎</div>
+                                    <div>
+                                        <div class="card-title">Nutrition Tip</div>
+                                        <div class="card-subtitle">Personalized</div>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    Based on yesterday's activity, Emma needs extra protein today. Try scrambled eggs!
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="floating-card floating-card-1">
+                    <div class="floating-icon purple">🧠</div>
+                    <div>
+                        <div class="floating-text">Milestone Reached!</div>
+                        <div class="floating-subtext">First two-word phrase</div>
+                    </div>
+                </div>
+                <div class="floating-card floating-card-2">
+                    <div class="floating-icon pink">❤️</div>
+                    <div>
+                        <div class="floating-text">Health Check</div>
+                        <div class="floating-subtext">All vitals normal</div>
+                    </div>
+                </div>
+                <div class="floating-card floating-card-3">
+                    <div class="floating-icon green">✅</div>
+                    <div>
+                        <div class="floating-text">Pediatric Visit</div>
+                        <div class="floating-subtext">Scheduled for Tuesday</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="problem">
+        <div class="section-header">
+            <div class="section-label">💔 The Crisis</div>
+            <h2>Parenting Has Never Been Harder</h2>
+            <p class="section-subtitle">Modern parents face an impossible combination: both partners working, skyrocketing costs, pediatric shortages, and zero support infrastructure.</p>
+        </div>
+        <div class="crisis-grid">
+            <div class="crisis-card">
+                <div class="crisis-icon">😰</div>
+                <div class="crisis-stat">66%</div>
+                <div class="crisis-title">Parental Burnout</div>
+                <div class="crisis-desc">Two-thirds of parents report experiencing burnout symptoms, with 40% feeling like they're "failing."</div>
+            </div>
+            <div class="crisis-card">
+                <div class="crisis-icon">💰</div>
+                <div class="crisis-stat">$15K+</div>
+                <div class="crisis-title">Annual Childcare Costs</div>
+                <div class="crisis-desc">Higher than in-state college tuition in 33 states. 51% of Americans live in "childcare deserts."</div>
+            </div>
+            <div class="crisis-card">
+                <div class="crisis-icon">🏥</div>
+                <div class="crisis-stat">29 days</div>
+                <div class="crisis-title">Average Wait Time</div>
+                <div class="crisis-desc">The US faces a 15,000+ pediatrician shortage. Getting an appointment takes nearly a month.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="solution" id="solution">
+        <div class="solution-content">
+            <div class="section-header">
+                <div class="section-label">✨ The Solution</div>
+                <h2>Meet Your Family's AI Co-Pilot</h2>
+                <p class="section-subtitle">ChildOS is the intelligent platform that finally gives parents what they need: personalized, evidence-based guidance available 24/7.</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card featured">
+                    <div class="feature-icon">🧒</div>
+                    <div class="feature-title">ChildMind AI — Knows Your Child</div>
+                    <div class="feature-desc">Builds a comprehensive model of each child: development, health, behavior, and learning style. Provides guidance that's specific to YOUR child, not generic advice.</div>
+                    <div class="feature-list">
+                        <span class="feature-tag">Personalized Insights</span>
+                        <span class="feature-tag">Behavioral Patterns</span>
+                        <span class="feature-tag">Health History</span>
+                        <span class="feature-tag">Learning Style</span>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📈</div>
+                    <div class="feature-title">Developmental Intelligence</div>
+                    <div class="feature-desc">Continuous tracking across all domains with AI-powered early warning for delays. Personalized activities matched to your child's stage.</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🩺</div>
+                    <div class="feature-title">Pediatric AI Concierge</div>
+                    <div class="feature-desc">24/7 AI triage for health questions. "Is this rash serious?" Get instant, contextual answers from an AI that knows your child's history.</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">👩‍👧</div>
+                    <div class="feature-title">Childcare Intelligence</div>
+                    <div class="feature-desc">AI-powered matching based on your child's needs. Continuous quality monitoring. Backup care coordination when plans fall through.</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💚</div>
+                    <div class="feature-title">Family Wellness Hub</div>
+                    <div class="feature-desc">Parent mental health support, personalized sleep coaching, nutrition guidance, and co-parenting tools — because healthy parents raise healthy kids.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Daily Experience -->
+    <section class="experience">
+        <div class="section-header">
+            <div class="section-label">🌅 A Day With ChildOS</div>
+            <h2>Intelligent Support, All Day Long</h2>
+            <p class="section-subtitle">See how ChildOS becomes your trusted parenting partner from morning to night.</p>
+        </div>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-time">
+                    <div class="time-label">7:00 AM</div>
+                    <div class="time-period">Morning</div>
+                </div>
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="timeline-emoji">🌅</div>
+                    <div class="timeline-title">Sleep & Nutrition Insights</div>
+                    <div class="timeline-desc">"Emma slept 10.5 hours — great for her developmental stage! Based on yesterday's activity, she may need extra protein at breakfast."</div>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-time">
+                    <div class="time-label">10:30 AM</div>
+                    <div class="time-period">Mid-Morning</div>
+                </div>
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="timeline-emoji">🔍</div>
+                    <div class="timeline-title">Instant Health Triage</div>
+                    <div class="timeline-desc">"This looks like a common insect bite, not concerning given Emma's history. Here's what to monitor..."</div>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-time">
+                    <div class="time-label">2:00 PM</div>
+                    <div class="time-period">Afternoon</div>
+                </div>
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="timeline-emoji">🏫</div>
+                    <div class="timeline-title">Daycare Updates</div>
+                    <div class="timeline-desc">"Emma's daycare reports she's a bit fussy with slight fever. Based on local outbreak data, likely the cold virus circulating. Here's what to expect..."</div>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-time">
+                    <div class="time-label">8:30 PM</div>
+                    <div class="time-period">Evening</div>
+                </div>
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="timeline-emoji">🌙</div>
+                    <div class="timeline-title">Bedtime Support</div>
+                    <div class="timeline-desc">"Emma's had later naps this week, shifting her sleep pressure. Let's adjust her schedule. Remember the 'fading' technique that worked last month..."</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Market Section -->
+    <section class="market">
+        <div class="section-header">
+            <div class="section-label" style="color: var(--primary-light);">📊 Market Opportunity</div>
+            <h2>A $200B+ Category Ready for Disruption</h2>
+            <p class="section-subtitle">The parenting industry is massive, fragmented, and desperate for an intelligent solution.</p>
+        </div>
+        <div class="market-grid">
+            <div class="market-card">
+                <div class="market-value">$480B</div>
+                <div class="market-label">Childcare Services</div>
+            </div>
+            <div class="market-card">
+                <div class="market-value">$180B</div>
+                <div class="market-label">Pediatric Healthcare</div>
+            </div>
+            <div class="market-card">
+                <div class="market-value">$275B</div>
+                <div class="market-label">Early Childhood Education</div>
+            </div>
+            <div class="market-card">
+                <div class="market-value">$1.3T+</div>
+                <div class="market-label">Total Parenting Economy</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Business Model -->
+    <section class="business" id="pricing">
+        <div class="section-header">
+            <div class="section-label">💎 Pricing</div>
+            <h2>Simple Plans for Every Family</h2>
+            <p class="section-subtitle">Start free, upgrade when you're ready. No contracts, cancel anytime.</p>
+        </div>
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <div class="pricing-name">Essential</div>
+                <div class="pricing-price">$19<span>/mo</span></div>
+                <div class="pricing-desc">For new parents</div>
+                <div class="pricing-features">
+                    <div class="pricing-feature">AI guidance & Q&A</div>
+                    <div class="pricing-feature">Developmental tracking</div>
+                    <div class="pricing-feature">Symptom checker</div>
+                    <div class="pricing-feature">Daily insights</div>
+                </div>
+                <a href="#cta" class="btn btn-outline" style="width: 100%; justify-content: center;">Get Started</a>
+            </div>
+            <div class="pricing-card popular">
+                <div class="pricing-name">Premium</div>
+                <div class="pricing-price">$39<span>/mo</span></div>
+                <div class="pricing-desc">Most popular</div>
+                <div class="pricing-features">
+                    <div class="pricing-feature">Everything in Essential</div>
+                    <div class="pricing-feature">Telehealth visits included</div>
+                    <div class="pricing-feature">Sleep coaching</div>
+                    <div class="pricing-feature">Feeding support</div>
+                </div>
+                <a href="#cta" class="btn btn-primary" style="width: 100%; justify-content: center;">Get Started</a>
+            </div>
+            <div class="pricing-card">
+                <div class="pricing-name">Family</div>
+                <div class="pricing-price">$59<span>/mo</span></div>
+                <div class="pricing-desc">Multiple children</div>
+                <div class="pricing-features">
+                    <div class="pricing-feature">Everything in Premium</div>
+                    <div class="pricing-feature">Up to 4 children</div>
+                    <div class="pricing-feature">Co-parent tools</div>
+                    <div class="pricing-feature">Grandparent access</div>
+                </div>
+                <a href="#cta" class="btn btn-outline" style="width: 100%; justify-content: center;">Get Started</a>
+            </div>
+            <div class="pricing-card">
+                <div class="pricing-name">Concierge</div>
+                <div class="pricing-price">$199<span>/mo</span></div>
+                <div class="pricing-desc">White-glove service</div>
+                <div class="pricing-features">
+                    <div class="pricing-feature">Everything in Family</div>
+                    <div class="pricing-feature">Dedicated care coordinator</div>
+                    <div class="pricing-feature">Specialist access</div>
+                    <div class="pricing-feature">Priority support</div>
+                </div>
+                <a href="#cta" class="btn btn-outline" style="width: 100%; justify-content: center;">Contact Sales</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Traction Section -->
+    <section class="traction">
+        <div class="section-header">
+            <div class="section-label">🚀 Projections</div>
+            <h2>Built for Scale</h2>
+            <p class="section-subtitle">Exceptional unit economics with powerful network effects.</p>
+        </div>
+        <div class="traction-grid">
+            <div class="traction-item">
+                <div class="traction-value">28:1</div>
+                <div class="traction-label">LTV:CAC Ratio</div>
+            </div>
+            <div class="traction-item">
+                <div class="traction-value">78%</div>
+                <div class="traction-label">Gross Margin</div>
+            </div>
+            <div class="traction-item">
+                <div class="traction-value">$2.1K</div>
+                <div class="traction-label">Lifetime Value</div>
+            </div>
+            <div class="traction-item">
+                <div class="traction-value">5 yrs</div>
+                <div class="traction-label">Avg. Customer Life</div>
+            </div>
+            <div class="traction-item">
+                <div class="traction-value">$2.8B</div>
+                <div class="traction-label">Year 5 ARR Target</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta" id="cta">
+        <div class="cta-content">
+            <h2>Every Parent Deserves a Co-Pilot</h2>
+            <p>Join thousands of families transforming how they raise the next generation. Early access includes 3 months of Premium free.</p>
+            <a href="mailto:founder@childos.ai" class="btn btn-primary">
+                Join the Waitlist
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div>
+                <div class="footer-logo">👶 ChildOS</div>
+                <div class="footer-tagline">The AI Operating System for Modern Parenting</div>
+            </div>
+            <div class="footer-tagline">
+                © 2026 ChildOS. Raising happy kids, together.
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
