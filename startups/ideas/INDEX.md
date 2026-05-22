@@ -8,6 +8,8 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 
 | Date | Time | Idea | File |
 |------|------|------|------|
+| 2026-05-22 | Evening | MemoryVault — The Self-Hosted AI Brain for Your Digital Life | [Playbook](2026-05-22-evening.md) • [Landing](2026-05-22-evening-landing.html) • [PDF](2026-05-22-evening.pdf) |
+| 2026-05-21 | Evening | FloodMind AI — The Operating System for Global Flood Intelligence | [Playbook](2026-05-21-evening.md) • [Landing](2026-05-21-evening-landing.html) • [PDF](2026-05-21-evening.pdf) |
 | 2026-05-20 | Morning | AgentOps — The Operating System for Enterprise AI Agents | [Playbook](2026-05-20-morning.md) • [Landing](2026-05-20-morning-landing.html) • [PDF](2026-05-20-morning.pdf) |
 | 2026-05-20 | Afternoon | RetireWise AI — The AI Operating System for the Retirement Journey | [Playbook](2026-05-20-afternoon.md) • [Landing](2026-05-20-afternoon-landing.html) • [PDF](2026-05-20-afternoon.pdf) |
 | 2026-05-20 | Evening | SpatialAds — The Advertising Network for the AR Glasses Era | [Playbook](2026-05-20-evening.md) • [Landing](2026-05-20-evening-landing.html) • [PDF](2026-05-20-evening.pdf) |
