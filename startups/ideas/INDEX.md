@@ -8,6 +8,7 @@ Pradhith's running collection of startup ideas, strategies, and MVPs.
 
 | Date | Time | Idea | File |
 |------|------|------|------|
+| 2026-05-23 | Morning | AgriGenome AI — The AI Operating System for Climate-Adaptive Crop Design | [Playbook](2026-05-23-morning.md) • [Landing](2026-05-23-morning-landing.html) • [PDF](2026-05-23-morning.pdf) |
 | 2026-05-23 | Evening | RareCure AI — The Diagnostic & Treatment Intelligence Platform for Rare Diseases | [Playbook](2026-05-23-evening.md) • [Landing](2026-05-23-evening-landing.html) • [PDF](2026-05-23-evening.pdf) |
 | 2026-05-22 | Morning | BioShield AI — The AI Operating System for Global Biosecurity & Pandemic Prevention | [Playbook](2026-05-22-morning.md) • [Landing](2026-05-22-morning-landing.html) • [PDF](2026-05-22-morning.pdf) |
 | 2026-05-22 | Afternoon | ChildOS — The AI Operating System for Modern Parenting | [Playbook](2026-05-22-afternoon.md) • [Landing](2026-05-22-afternoon-landing.html) • [PDF](2026-05-22-afternoon.pdf) |
